@@ -1,0 +1,525 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.light-background {
+  background: #f2f2f2;
+}
+
+.primary-text {
+  color: #212121;
+}
+
+.warning {
+  color: #FF9800;
+}
+
+.warning-bg {
+  background: #FF9800;
+}
+
+.error {
+  color: #FF5252;
+}
+
+.error-bg {
+  background: #FF5252;
+}
+
+.success {
+  color: #4CAF50;
+}
+
+.success-bg {
+  background: #4CAF50;
+}
+
+.primary {
+  color: #607D8B;
+}
+
+.primary-bg {
+  background: #607D8B;
+}
+
+.primary-dark {
+  color: #455A64;
+}
+
+.primary-dark-bg {
+  background: #455A64;
+}
+
+.primary-light {
+  color: #CFD8DC;
+}
+
+.primary-light-bg {
+  background: #CFD8DC;
+}
+
+.accent {
+  color: #536DFE;
+}
+
+.accent-bg {
+  background: #536DFE;
+}
+
+.accent-text {
+  color: #FFFFFF;
+}
+
+.divider {
+  color: #BDBDBD;
+}
+
+.divider-bg {
+  background: #BDBDBD;
+}
+
+body {
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.row .column {
+  flex-grow: 1;
+  flex: 1;
+  padding: 1rem;
+}
+.row .column.grow-2 {
+  flex-grow: 2;
+}
+.row .column.grow-3 {
+  flex-grow: 3;
+}
+.row .column.grow-4 {
+  flex-grow: 4;
+}
+.row .column.grow-5 {
+  flex-grow: 5;
+}
+.row .column.grow-6 {
+  flex-grow: 6;
+}
+.row .column .column {
+  padding: 0;
+}
+.row .column .row {
+  margin-bottom: 0;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+p, li, td, th, div {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.h1, .h2, .h3, .h4, h1, h2, h3, h4 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  font-weight: bold;
+}
+
+h1, .h1 {
+  font-size: 2.5rem;
+}
+
+h2, .h2 {
+  font-size: 2rem;
+}
+
+h3, .h3 {
+  font-size: 1.75rem;
+}
+
+h4, .h4 {
+  font-size: 1.5rem;
+}
+
+ul, ol {
+  list-style-position: inside;
+}
+
+ul li {
+  list-style-type: disc;
+}
+ul li li {
+  list-style-type: circle;
+}
+
+ol li {
+  list-style-type: decimal;
+}
+ol li li {
+  list-style-type: lower-latin;
+}
+
+strong {
+  font-weight: bold;
+}
+
+hr {
+  border: 1px solid #BDBDBD;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.card {
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+  background: #f2f2f2;
+  border-radius: 0.4rem;
+}
+.card .header {
+  border-bottom: 1px solid #BDBDBD;
+  position: relative;
+  width: 100%;
+  padding-right: 1rem;
+  left: -1rem;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+.card .footer {
+  border-top: 1px solid #BDBDBD;
+  position: relative;
+  width: 100%;
+  padding-right: 1rem;
+  left: -1rem;
+  padding-left: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  font-weight: bold;
+}
+
+th, td {
+  padding: 0.75rem 0.6rem;
+}
+
+tr {
+  border-bottom: 1px solid #BDBDBD;
+}
+
+table.striped tr:nth-child(even) {
+  background: #EDEDED;
+}
+table.striped tr:nth-child(odd) {
+  background: #F1F1F1;
+}
+
+.column.no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.alert {
+  border-radius: 0.4rem;
+  padding: 0.5rem;
+}
+
+.alert-error {
+  background: #ff8585;
+  color: #eb0000;
+}
+
+.alert-warning {
+  background: #ffad33;
+  color: #995b00;
+}
+
+.alert-success {
+  background: #6ec071;
+  color: #2d682f;
+}
+
+input[type=text], input[type=password], input[type=range], textarea, select, .select .dropdown {
+  width: 100%;
+  border: 1px solid #BDBDBD;
+  border-radius: 0.2rem;
+  padding: 0.4rem;
+  box-sizing: border-box;
+}
+
+select {
+  padding: 0.2rem;
+}
+
+.select {
+  cursor: pointer;
+}
+.select .dropdown, .select .options {
+  background: white;
+}
+.select .options {
+  border: 1px solid #BDBDBD;
+  border-radius: 0.2rem;
+}
+.select .option {
+  padding: 0.4rem;
+}
+.select .option.selected {
+  background: #536DFE;
+  color: #FFFFFF;
+}
+.select .option:hover {
+  background: #536DFE;
+  color: #FFFFFF;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+}
+.icon.arrow-down {
+  content: url("../icons/chevron-down-outline.svg");
+}
+.icon.arrow-up {
+  content: url("../icons/chevron-up-outline.svg");
+}
+.icon.arrow-left {
+  content: url("../icons/chevron-left-outline.svg");
+}
+.icon.arrow-right {
+  content: url("../icons/chevron-right-outline.svg");
+}
+.icon.attachment {
+  content: url("../icons/attach-outline.svg");
+}
+.icon.close {
+  content: url("../icons/close-outline.svg");
+}
+.icon.copy {
+  content: url("../icons/copy-outline.svg");
+}
+.icon.edit {
+  content: url("../icons/edit-outline.svg");
+}
+.icon.mail {
+  content: url("../icons/email-outline.svg");
+}
+.icon.expand {
+  content: url("../icons/expand-outline.svg");
+}
+.icon.collapse {
+  content: url("../icons/collapse-outline.svg");
+}
+.icon.file {
+  content: url("../icons/file-outline.svg");
+}
+.icon.folder {
+  content: url("../icons/folder-outline.svg");
+}
+.icon.home {
+  content: url("../icons/home-outline.svg");
+}
+.icon.list {
+  content: url("../icons/list-outline.svg");
+}
+.icon.more {
+  content: url("../icons/more-horizontal-outline.svg");
+}
+.icon.settings {
+  content: url("../icons/settings-outline.svg");
+}
+.icon.send {
+  content: url("../icons/paper-plane-outline.svg");
+}
+.icon.user {
+  content: url("../icons/person-outline.svg");
+}
+.icon.print {
+  content: url("../icons/printer-outline.svg");
+}
+.icon.save {
+  content: url("../icons/save-outline.svg");
+}
+.icon.sync {
+  content: url("../icons/sync-outline.svg");
+}
+.icon.delete {
+  content: url("../icons/trash-2-outline.svg");
+}
+
+.scrollbar {
+  overflow-y: hidden;
+  position: relative;
+}
+
+.scroll {
+  position: absolute;
+  top: 0.5rem;
+  right: 0;
+  width: 12px;
+  height: calc(100% - 1rem);
+  border-radius: 10px;
+  background-color: #eee;
+}
+
+.anchor {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 10px;
+  background-color: #536DFE;
+  border-radius: 10px;
+}
+
+.anchor:hover,
+.anchor:active {
+  background-color: #0125ea;
+}
+
+button, .button {
+  padding: 1rem 2rem;
+  border-radius: 0.4rem;
+  background: #536DFE;
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+}
+button:hover, .button:hover {
+  background: #0125ea;
+}
+button.button-success, .button.button-success {
+  background: #4CAF50;
+}
+button.button-success:hover, .button.button-success:hover {
+  background: #449d48;
+}
+button.button-warning, .button.button-warning {
+  background: #FF9800;
+}
+button.button-warning:hover, .button.button-warning:hover {
+  background: #e68900;
+}
+button.button-error, .button.button-error {
+  background: #FF5252;
+}
+button.button-error:hover, .button.button-error:hover {
+  background: #ff0606;
+}
+button.button-light, .button.button-light {
+  background: #CFD8DC;
+  color: #607D8B;
+}
+button.button-light:hover, .button.button-light:hover {
+  background: #a3b4bc;
+  color: #FFFFFF;
+}
+
+.modal-background {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.modal {
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+  background: #f2f2f2;
+  border-radius: 0.4rem;
+  padding: 1rem;
+}
+.modal .header {
+  position: relative;
+  width: 100%;
+  padding-right: 1rem;
+  left: -1rem;
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+}
+.modal .footer {
+  position: relative;
+  width: 100%;
+  padding-right: 1rem;
+  left: -1rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  display: flex;
+}
+.modal .footer .buttons {
+  margin-left: auto;
+  order: 2;
+}
+.modal .close {
+  float: right;
+}
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,29 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing;
+  margin-bottom: $spacing;
+
+  .column {
+    flex-grow: 1;
+    flex: 1;
+    padding: $spacing;
+
+    @for $i from 2 through 6 {
+      &.grow-#{$i} {
+        flex-grow: $i;
+      }
+    }
+
+    .column {
+      padding: 0;
+    }
+
+    .row {
+      margin-bottom: 0;
+    }
+  }
+
+}
+
+

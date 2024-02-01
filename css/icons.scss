@@ -1,0 +1,96 @@
+.icon {
+  width: 25px;
+  height: 25px;
+
+  &.arrow-down {
+    content: url("../icons/chevron-down-outline.svg");
+  }
+
+  &.arrow-up {
+    content: url("../icons/chevron-up-outline.svg");
+  }
+
+  &.arrow-left {
+    content: url("../icons/chevron-left-outline.svg");
+  }
+
+  &.arrow-right {
+    content: url("../icons/chevron-right-outline.svg");
+  }
+
+  &.attachment {
+    content: url("../icons/attach-outline.svg");
+  }
+
+  &.close {
+    content: url("../icons/close-outline.svg");
+  }
+
+  &.copy {
+    content: url("../icons/copy-outline.svg");
+  }
+
+  &.edit {
+    content: url("../icons/edit-outline.svg");
+  }
+
+  &.mail {
+    content: url("../icons/email-outline.svg");
+  }
+
+  &.expand {
+    content: url("../icons/expand-outline.svg");
+  }
+
+  &.collapse {
+    content: url("../icons/collapse-outline.svg");
+  }
+
+  &.file {
+    content: url("../icons/file-outline.svg");
+  }
+
+  &.folder {
+    content: url("../icons/folder-outline.svg");
+  }
+
+  &.home {
+    content: url("../icons/home-outline.svg");
+  }
+
+  &.list {
+    content: url("../icons/list-outline.svg");
+  }
+
+  &.more {
+    content: url("../icons/more-horizontal-outline.svg");
+  }
+
+  &.settings {
+    content: url("../icons/settings-outline.svg");
+  }
+
+  &.send {
+    content: url("../icons/paper-plane-outline.svg");
+  }
+
+  &.user {
+    content: url("../icons/person-outline.svg");
+  }
+
+  &.print {
+    content: url("../icons/printer-outline.svg");
+  }
+
+  &.save {
+    content: url("../icons/save-outline.svg");
+  }
+
+  &.sync {
+    content: url("../icons/sync-outline.svg");
+  }
+
+  &.delete {
+    content: url("../icons/trash-2-outline.svg");
+  }
+}

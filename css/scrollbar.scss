@@ -1,0 +1,29 @@
+.scrollbar {
+  overflow-y: hidden;
+  position: relative;
+}
+
+.scroll {
+  position: absolute;
+  top: $spacing / 2;
+  right: 0;
+  width: 12px;
+  height: calc(100% - $spacing);
+  border-radius: 10px;
+  background-color: #eee;
+}
+
+.anchor {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 10px;
+  background-color: $accent;
+  border-radius: 10px;
+}
+
+.anchor:hover,
+.anchor:active {
+  background-color: darken($accent, 20%);
+}

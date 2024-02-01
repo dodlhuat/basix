@@ -1,0 +1,16 @@
+body {
+  margin-left: 2 * $spacing;
+  margin-right: 2 * $spacing;
+}
+
+.hidden {
+  display: none;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}

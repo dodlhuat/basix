@@ -1,0 +1,42 @@
+button, .button {
+  padding: $spacing $spacing * 2;
+  border-radius: $border-radius;
+  background: $accent;
+  color: $accent-text;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background: darken($accent, 20%);
+  }
+
+  &.button-success {
+    background: $success;
+    &:hover {
+      background: darken($success, 5%);
+    }
+  }
+
+  &.button-warning {
+    background: $warning;
+    &:hover {
+      background: darken($warning, 5%);
+    }
+  }
+
+  &.button-error {
+    background: $error;
+    &:hover {
+      background: darken($error, 15%);
+    }
+  }
+
+  &.button-light {
+    background: $primary-light;
+    color: $primary;
+    &:hover {
+      background: darken($primary-light, 15%);
+      color: $accent-text;
+    }
+  }
+}

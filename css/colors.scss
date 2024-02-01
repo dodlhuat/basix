@@ -1,0 +1,91 @@
+$primary-text: #212121;
+$secondary-text: #757575;
+$divider: #BDBDBD;
+$accent-text: #FFFFFF;
+
+$error: #FF5252;
+$warning: #FF9800;
+$success: #4CAF50;
+
+$primary: #607D8B;
+$primary-dark: #455A64;
+$primary-light: #CFD8DC;
+$accent: #536DFE;
+
+$light-background: #f2f2f2;
+
+.light-background {
+  background: $light-background;
+}
+
+.primary-text {
+  color: $primary-text;
+}
+
+.warning {
+  color: $warning;
+}
+
+.warning-bg {
+  background: $warning;
+}
+
+.error {
+  color: $error;
+}
+
+.error-bg {
+  background: $error;
+}
+
+.success {
+  color: $success;
+}
+
+.success-bg {
+  background: $success;
+}
+
+.primary {
+  color: $primary;
+}
+
+.primary-bg {
+  background: $primary;
+}
+
+.primary-dark {
+  color: $primary-dark
+}
+
+.primary-dark-bg {
+  background: $primary-dark
+}
+
+.primary-light {
+  color: $primary-light
+}
+
+.primary-light-bg {
+  background: $primary-light
+}
+
+.accent {
+  color: $accent
+}
+
+.accent-bg {
+  background: $accent
+}
+
+.accent-text {
+  color: $accent-text;
+}
+
+.divider {
+  color: $divider;
+}
+
+.divider-bg {
+  background: $divider;
+}

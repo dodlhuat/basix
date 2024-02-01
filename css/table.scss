@@ -1,0 +1,30 @@
+table {
+  width: 100%;
+}
+
+th {
+  font-weight: bold;
+}
+
+th, td {
+  padding: .75rem .6rem;
+}
+
+tr {
+  border-bottom: 1px solid $divider;
+}
+
+table.striped {
+  tr:nth-child(even) {
+    background: #EDEDED
+  }
+
+  tr:nth-child(odd) {
+    background: #F1F1F1;
+  }
+}
+
+.column.no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}

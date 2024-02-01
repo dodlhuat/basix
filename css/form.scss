@@ -1,0 +1,38 @@
+input[type=text], input[type=password], input[type=range], textarea, select, .select .dropdown {
+  width: 100%;
+  border: 1px solid $divider;
+  border-radius: $border-radius / 2;
+  padding: $border-radius;
+  box-sizing: border-box;
+}
+
+select {
+  padding: $border-radius / 2;
+}
+
+.select {
+  cursor: pointer;
+
+  .dropdown, .options {
+    background: white;
+  }
+
+  .options {
+    border: 1px solid $divider;
+    border-radius: $border-radius / 2;
+  }
+
+  .option {
+    padding: $border-radius;
+
+    &.selected {
+      background: $accent;
+      color: $accent-text;
+    }
+  }
+
+  .option:hover {
+    background: $accent;
+    color: $accent-text;
+  }
+}
