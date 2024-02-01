@@ -1,4 +1,14 @@
+html, body {
+  overflow: auto;
+}
+
 body {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.content {
   margin-left: 2 * $spacing;
   margin-right: 2 * $spacing;
 }
