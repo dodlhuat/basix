@@ -1,0 +1,49 @@
+.toast {
+  display: inline-block;
+  box-shadow: 0 1px 2px rgba(56, 65, 74, .15);
+  background: $light-background;
+  border-radius: $border-radius;
+  padding: $spacing / 2;
+  min-width: 150px;
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+
+  &.success {
+    border-top: 4px solid $success;
+    color: inherit;
+  }
+
+  &.warning {
+    border-top: 4px solid $warning;
+    color: inherit;
+  }
+
+  &.error {
+    border-top: 4px solid $error;
+    color: inherit;
+  }
+
+  .close {
+    cursor: pointer;
+    float: right;
+    z-index: 999;
+    position: relative;
+  }
+
+  .header {
+    position: relative;
+    width: 100%;
+    padding-right: $spacing / 2;
+    left: -1 * $spacing / 2;
+    padding-left: $spacing / 2;
+    padding-bottom: $spacing / 2;
+    border-bottom: 1px solid $divider;
+    font-weight: bold;
+  }
+
+  .content {
+    padding-top: $spacing / 2;
+    margin: 0;
+  }
+}

@@ -615,4 +615,67 @@ button.button-light:hover, .button.button-light:hover {
   background: #536DFE;
 }
 
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #536DFE;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.toast {
+  display: inline-block;
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+  background: #f2f2f2;
+  border-radius: 0.4rem;
+  padding: 0.5rem;
+  min-width: 150px;
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+}
+.toast.success {
+  border-top: 4px solid #4CAF50;
+  color: inherit;
+}
+.toast.warning {
+  border-top: 4px solid #FF9800;
+  color: inherit;
+}
+.toast.error {
+  border-top: 4px solid #FF5252;
+  color: inherit;
+}
+.toast .close {
+  cursor: pointer;
+  float: right;
+  z-index: 999;
+  position: relative;
+}
+.toast .header {
+  position: relative;
+  width: 100%;
+  padding-right: 0.5rem;
+  left: -0.5rem;
+  padding-left: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #BDBDBD;
+  font-weight: bold;
+}
+.toast .content {
+  padding-top: 0.5rem;
+  margin: 0;
+}
+
 /*# sourceMappingURL=style.css.map */

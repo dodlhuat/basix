@@ -16,6 +16,7 @@ include only the data required. It is using plain javascript and therefore is no
 * Table
 * Modal
 * Icons (https://akveo.github.io/eva-icons/#/)
+* Spinner
 
 ## Usage
 
