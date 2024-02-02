@@ -1,0 +1,9 @@
+.progress-bar {
+  background: $primary-light;
+  border-radius: $border-radius;
+
+  .progress {
+    border-radius: $border-radius;
+    background: $accent;
+  }
+}

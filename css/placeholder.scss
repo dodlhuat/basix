@@ -1,0 +1,26 @@
+.placeholder {
+  animation: placeholder-fade 2s ease-in-out infinite;
+  display: inline-block;
+  cursor: wait;
+  background-color: currentcolor;
+  opacity: .5;
+  min-height: $spacing / 2;
+  margin-right: $spacing / 2;
+
+  @for $i from 1 through 12 {
+    &.w-#{$i} {
+      width: 100% / (12 / $i);
+    }
+  }
+}
+
+@-webkit-keyframes placeholder-fade {
+  50% {
+    opacity:.2
+  }
+}
+@keyframes placeholder-fade {
+  50% {
+    opacity:.2
+  }
+}

@@ -9,7 +9,7 @@ const modal = {
         utils.getElement('body').append(div);
 
         utils.getElement('.modal-wrapper .close').removeEventListener('click', hideModal);
-        utils.getElement('.modal-wrapper .close').addEventListener('click', hideModal)
+        utils.getElement('.modal-wrapper .close').addEventListener('click', hideModal);
     },
     hide() {
         utils.getElement('.modal-wrapper').remove();
