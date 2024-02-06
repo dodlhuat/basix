@@ -427,34 +427,36 @@ select {
   content: url("../icons/trash-2-outline.svg");
 }
 
-.scrollbar {
-  overflow-y: hidden;
+.scrollable {
+  scrollbar-width: none;
   position: relative;
 }
 
-.scroll {
+.scroll-content {
+  overflow: scroll;
+  scrollbar-width: none;
+  position: relative;
+}
+
+.scroll-wrapper {
+  float: right;
   position: absolute;
   top: 0.5rem;
-  right: 0;
-  width: 12px;
+  right: 0.5rem;
   height: calc(100% - 1rem);
-  border-radius: 10px;
-  background-color: #CFD8DC;
 }
 
-.anchor {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 12px;
-  height: 10px;
-  background-color: #536DFE;
-  border-radius: 10px;
+.scroll-bar {
+  width: 6px;
+  height: 100%;
 }
 
-.anchor:hover,
-.anchor:active {
-  background-color: #0125ea;
+.scroll-anchor {
+  background-color: grey;
+  width: 6px;
+  height: 30px;
+  position: relative;
+  display: block;
 }
 
 button, .button {

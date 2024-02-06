@@ -1,131 +1,74 @@
 import {utils} from "./utils.js";
 
-// TODO: funktion drauß machen damit man mehrere haben kann
-/*
-das hier einfügen direkt als erstes im container
-<div class="scroll-wrapper"><div class="scroll"><span class="anchor"></span></div></div>
- */
-
-const scrollbar = {
-    init(selector) {
-        document.querySelectorAll(selector).forEach(element => {
-            scrollbar.activate(element);
-        });
-    },
-    activate(container) {
-        const controls = document.createElement('div');
-        controls.className = 'scroll-wrapper';
-        controls.innerHTML = '<div class="scroll hidden"><span class="anchor"></span></div>';
-
-
-        const content = container.children;
-        // subtract 1 rem margin
-        const containerHeight = container.offsetHeight - convertRemToPixels(1);
-        let contentHeight = 0;
-        for (let i = 0; i < content.length; i++) {
-            contentHeight += content[i].scrollHeight;
-        }
-        if (contentHeight === 0) {
-            contentHeight = container.scrollHeight - convertRemToPixels(1);
-        }
-
-        if (containerHeight >= contentHeight) {
-            // no scrollbar if not needed
-            return;
-        }
-        container.prepend(controls);
-
-        const anchor = container.querySelector('.anchor');
-        anchor.dataset.height = Math.floor(containerHeight / contentHeight * containerHeight);
-        anchor.style.height = anchor.dataset.height + 'px';
-
-        let flag_mouseDown = false;
-        let oldMousePosition = 0;
-        let oldAnchorPosition = 0;
-
-        const scrollBarContainer = container.querySelector('.scroll');
-        scrollBarContainer.addEventListener('mousedown', function(e) {
-            if (e.target.nodeName === 'DIV') {
-                let distance = e.clientY - container.offsetTop - anchor.offsetHeight / 2;
-                if (distance < 0) {
-                    distance = 0;
-                } else if (distance + anchor.offsetHeight > containerHeight) {
-                    distance = containerHeight - anchor.offsetHeight;
-                }
-                anchor.style.top = distance + 'px';
-                moveContent(anchor, containerHeight, contentHeight, content);
-            } else if (e.target.nodeName === 'SPAN') {
-                flag_mouseDown = true;
-                oldMousePosition = e.clientY;
-                oldAnchorPosition = anchor.offsetTop;
-            }
-        });
-        scrollBarContainer.addEventListener('mouseup', function(e) {
-            flag_mouseDown = false;
-            oldMousePosition = e.clientY;
-            oldAnchorPosition = anchor.offsetTop;
-        });
-        scrollBarContainer.addEventListener('mousemove', function(e) {
-            if (!flag_mouseDown) {
-                return;
-            }
-            let distance = e.clientY - oldMousePosition;
-            oldMousePosition = e.clientY;
-            moveAnchor(oldAnchorPosition, distance, anchor, containerHeight, contentHeight, content);
-        });
-        container.addEventListener("wheel", (event) => {
-            let position = parseInt(anchor.dataset.position);
-            if (isNaN(position)) {
-                position = 1;
-            }
-            if (event.deltaY > 0) {
-                if (position === 0) {
-                    ++position;
-                }
-            } else {
-                if (anchor.offsetHeight + position === containerHeight) {
-                    --position;
-                }
-            }
-            if (position > 0 && anchor.offsetHeight + position < containerHeight) {
-                event.preventDefault();
-            }
-            moveAnchor(oldAnchorPosition, event.deltaY / 15, anchor, containerHeight, contentHeight, content);
-        });
-        container.addEventListener("mouseover", function () {
-            // todo: animation oder nur kleiner werden lassen
-            scrollBarContainer.classList.remove('hidden')
-        });
-        container.addEventListener("mouseout", function () {
-            scrollBarContainer.classList.add('hidden')
-        });
-    }
+const getAnchorHeight = function (containerHeight, contentHeight) {
+    return Math.floor(containerHeight / contentHeight * containerHeight);
 }
 
-const convertRemToPixels = function(rem) {
+const convertRemToPixels = function (rem) {
     return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
 }
 
-const moveContent = function(anchor, containerHeight, contentHeight, content) {
-    let position = anchor.offsetTop / (containerHeight - anchor.offsetHeight);
-    let newPosition = (0 - position * (contentHeight - containerHeight)) + 'px';
-    for (let i = 0; i < content.length; i++) {
-        content[i].style.marginTop = newPosition;
-    }
-};
+const moveAnchor = function (event) {
+    const content = event.currentTarget;
+    let topPosition = Math.round((content.scrollTop * content.options.scrollMultiplier) * 100) / 100;
+    content.options.anchor.style.top = topPosition + 'px';
+    return topPosition;
+}
 
-const moveAnchor = function(oldAnchorPosition, distance, anchor, containerHeight, contentHeight, content) {
-    oldAnchorPosition = anchor.offsetTop;
-    let newPosition = oldAnchorPosition + distance;
+const buildControls = function (container) {
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'scroll-content';
+    contentDiv.innerHTML = container.innerHTML;
+    const controls = document.createElement('div');
+    controls.className = 'scroll-wrapper';
+    controls.innerHTML = '<div class="scroll-bar"><span class="scroll-anchor"></span></div>';
+    container.innerHTML = '';
+    container.append(contentDiv);
 
-    if (newPosition < 0) {
-        newPosition = 0;
-    } else if (newPosition + anchor.offsetHeight > containerHeight) {
-        newPosition = containerHeight - anchor.offsetHeight;
+    const content = container.querySelector('.scroll-content');
+    if (content.scrollHeight <= container.offsetHeight) {
+        return false;
     }
-    anchor.style.top = newPosition + 'px';
-    anchor.dataset.position = newPosition
-    moveContent(anchor, containerHeight, contentHeight, content);
+    container.append(controls);
+    content.style.height = container.offsetHeight - convertRemToPixels(2) + 'px';
+    return content;
+}
+
+const scrollbar = {
+    init() {
+        const selector = '.scrollable';
+        document.querySelectorAll(selector).forEach(container => {
+            const content = buildControls(container);
+
+            if (!content) return false;
+
+            const anchorHeight = getAnchorHeight(container.offsetHeight, content.scrollHeight);
+            const anchor = container.querySelector('.scroll-anchor');
+            anchor.style.height = anchorHeight + 'px';
+
+            const scrollBar = container.querySelector('.scroll-bar');
+            const scrollBarHeight = scrollBar.offsetHeight;
+
+            const maxScroll = content.scrollHeight - content.offsetHeight;
+            const scrollMultiplier = (1 / maxScroll) * (scrollBarHeight - anchorHeight);
+
+            content.options = {
+                scrollMultiplier,
+                anchor
+            }
+
+            content.removeEventListener('scroll', moveAnchor)
+            content.addEventListener('scroll', moveAnchor);
+        });
+        let doIt = 0;
+        window.onresize = function () {
+            clearTimeout(doIt);
+            doIt = setTimeout(scrollbar.resize, 100);
+        }
+    },
+    resize() {
+        console.warn('resize event');
+    }
 }
 
 export {scrollbar}

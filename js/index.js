@@ -8,8 +8,12 @@ utils.ready(function () {
     const multi_selectpicker = select.init('#multi-select');
     scrollbar.init('.scrollbar');
 
-    utils.getElement('.show-modal').addEventListener('click', function () {
-        const buttons = '<div class="buttons">\<button class="button-light">Close</button><button>Save Changes</button></div>';
-        modal.show('bluffi', 'blaffi', buttons);
-    })
+    const elements = utils.getElement('.show-modal');
+    if (elements.length > 0) {
+        utils.getElement('.show-modal').addEventListener('click', function () {
+            const buttons = '<div class="buttons">\<button class="button-light">Close</button><button>Save Changes</button></div>';
+            modal.show('bluffi', 'blaffi', buttons);
+        })
+    }
+
 });

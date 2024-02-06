@@ -1,29 +1,31 @@
-.scrollbar {
-  overflow-y: hidden;
+.scrollable {
+  scrollbar-width: none;
   position: relative;
 }
 
-.scroll {
-  position: absolute;
-  top: $spacing / 2;
-  right: 0;
-  width: 12px;
-  height: calc(100% - $spacing);
-  border-radius: 10px;
-  background-color: $primary-light;
+.scroll-content {
+  overflow: scroll;
+  scrollbar-width: none;
+  position: relative;
 }
 
-.anchor {
+.scroll-wrapper {
+  float: right;
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 12px;
-  height: 10px;
-  background-color: $accent;
-  border-radius: 10px;
+  top: 0.5rem;
+  right: 0.5rem;
+  height: calc(100% - 1rem);
 }
 
-.anchor:hover,
-.anchor:active {
-  background-color: darken($accent, 20%);
+.scroll-bar {
+  width: 6px;
+  height: 100%;
+}
+
+.scroll-anchor {
+  background-color: grey;
+  width: 6px;
+  height: 30px;
+  position: relative;
+  display: block;
 }
