@@ -23,7 +23,13 @@
       margin-bottom: 0;
     }
   }
-
 }
 
-
+@media screen and (max-width:768px) {
+  .row {
+    flex-wrap: wrap;
+    .column {
+      flex-basis: 100%;
+    }
+  }
+}

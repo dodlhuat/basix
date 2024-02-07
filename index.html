@@ -2,13 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
     <title>Title</title>
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <script src="js/index.js" type="module"></script>
 </head>
 <body class="primary-light-bg primary">
 
-<div class="content">
+<div class="navigation-controls">
+    <input type="checkbox" id="navigation"/>
+    <label for="navigation">
+        <span class="icon white center arrow-right"></span>
+    </label>
+</div>
+
+
+<nav class="push-menu">
+    <ul>
+        <li>
+            <a href="">Home</a>
+        </li>
+        <li>
+            <a href="">Latest News</a>
+        </li>
+        <li>
+            <a href="">What We Do</a>
+        </li>
+        <li>
+            <a href="">Another Link</a>
+        </li>
+        <li>
+            <a href="">Contact</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="content push-content">
     <h2>grid</h2>
     <div class="row">
         <div class="column grow-2 card">
@@ -320,11 +349,7 @@
     </div>
     <h3>toast</h3>
     <p>toasts can have an additonal markup to show a colored bar on top. success, warning, error.</p>
-    <div class="toast">
-        <div class="icon close"></div>
-        <div class="header">toast header</div>
-        <div class="content">toast content</div>
-    </div>
+    <button class="show-toast">Show Toast</button>
     <h3>tooltip</h3>
     <h3>icons</h3>
     <p>those are eva icons <a href="https://akveo.github.io/eva-icons/#/" target="_blank">https://akveo.github.io/eva-icons/</a>.
@@ -363,7 +388,9 @@
     </div>
     <h3>spinner</h3>
     <div class="row">
-        <div class="column card"><div class="spinner"></div></div>
+        <div class="column card">
+            <div class="spinner"></div>
+        </div>
     </div>
 </div>
 

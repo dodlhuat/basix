@@ -1,4 +1,4 @@
-import {utils} from "./utils";
+import {utils} from "./utils.js";
 
 const closure_icon = '<div class="icon close"></div>';
 const toast = {
@@ -11,10 +11,22 @@ const toast = {
 
         div.innerHTML = buildTemplate(content, header, closeable);
         utils.getElement('body').append(div);
+        setTimeout(() => {
+            utils.getElement('.toast').classList.add('show');
+            utils.getElement('.toast .close').removeEventListener('click', hideToast);
+            utils.getElement('.toast .close').addEventListener('click', hideToast);
+        }, 150);
     },
     hide() {
-
+        utils.getElement('.toast').classList.remove('show');
+        setTimeout(() => {
+            utils.getElement('.toast').remove();
+        }, 150);
     }
+}
+
+const hideToast = function () {
+    toast.hide();
 }
 
 const buildTemplate = function (content, header, closeable) {

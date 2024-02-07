@@ -38,6 +38,10 @@ const utils = {
 
     isList(element) {
         return NodeList.prototype.isPrototypeOf(element);
+    },
+
+    isHidden(element) {
+        return (element.offsetParent === null)
     }
 }
 

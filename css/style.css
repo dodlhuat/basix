@@ -181,8 +181,16 @@ body {
   margin-bottom: 0;
 }
 
+@media screen and (max-width: 768px) {
+  .row {
+    flex-wrap: wrap;
+  }
+  .row .column {
+    flex-basis: 100%;
+  }
+}
 body {
-  font-family: sans-serif;
+  font-family: "helvetica neue", helvetica, arial, sans-serif;
 }
 
 p, li, td, th, div {
@@ -354,8 +362,16 @@ select {
 }
 
 .icon {
-  width: 25px;
-  height: 25px;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.icon.white {
+  filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(180deg) brightness(101%) contrast(101%);
+}
+.icon.center {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: -1px;
 }
 .icon.arrow-down {
   content: url("../icons/chevron-down-outline.svg");
@@ -511,6 +527,8 @@ button.button-light:hover, .button.button-light:hover {
   height: 100%;
   background: black;
   opacity: 0.5;
+  position: relative;
+  z-index: 999;
 }
 
 .modal {
@@ -522,7 +540,7 @@ button.button-light:hover, .button.button-light:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1;
+  z-index: 1000;
 }
 .modal .header {
   position: relative;
@@ -644,8 +662,13 @@ button.button-light:hover, .button.button-light:hover {
   padding: 0.5rem;
   min-width: 150px;
   position: fixed;
-  left: 1rem;
+  left: -200px;
   bottom: 1rem;
+  z-index: 1;
+  transition: all 150ms ease-in;
+}
+.toast.show {
+  left: 1rem;
 }
 .toast.success {
   border-top: 4px solid #4CAF50;
@@ -678,6 +701,80 @@ button.button-light:hover, .button.button-light:hover {
 .toast .content {
   padding-top: 0.5rem;
   margin: 0;
+}
+
+.push-content {
+  transition: all 200ms ease-in;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  margin: 0 0 0 -250px;
+  -moz-transition: all 200ms ease-in;
+  -webkit-transition: all 200ms ease-in;
+  -o-transition: all 200ms ease-in;
+  transition: all 200ms ease-in;
+}
+
+nav ul {
+  width: 250px;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background: #455A64;
+  overflow: hidden;
+}
+
+nav li {
+  margin: 0;
+}
+
+nav a {
+  color: #CFD8DC;
+  font-size: 1em;
+  text-decoration: none;
+  display: block;
+  padding: 1rem 1.5rem;
+  letter-spacing: 2px;
+  border-bottom: 1px solid #607D8B;
+}
+
+nav a:hover {
+  background: #536DFE;
+}
+
+.navigation-controls label {
+  display: block;
+  background: #536DFE;
+  width: 42px;
+  height: 42px;
+  color: #fff;
+  text-align: center;
+  line-height: 42px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: all 200ms ease-in;
+  z-index: 500;
+}
+.navigation-controls input[type=checkbox] {
+  display: none;
+}
+.navigation-controls input[type=checkbox]:checked ~ label {
+  left: 250px;
+}
+
+nav.pushed {
+  margin: 0;
+}
+
+.push-content.pushed {
+  transform: translate3d(250px, 0, 0);
 }
 
 /*# sourceMappingURL=style.css.map */

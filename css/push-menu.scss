@@ -1,0 +1,77 @@
+.push-content {
+  transition: all 200ms ease-in;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  margin: 0 0 0 -250px;
+  -moz-transition: all 200ms ease-in;
+  -webkit-transition: all 200ms ease-in;
+  -o-transition: all 200ms ease-in;
+  transition: all 200ms ease-in;
+}
+
+nav ul {
+  width: 250px;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background: $primary-dark;
+  overflow: hidden;
+}
+
+nav li {
+  margin: 0;
+}
+
+nav a {
+  color: $primary-light;
+  font-size: 1em;
+  text-decoration: none;
+  display: block;
+  padding: $spacing $spacing * 1.5;
+  letter-spacing: 2px;
+  border-bottom: 1px solid $primary;
+}
+
+nav a:hover {
+  background: $accent;
+}
+
+.navigation-controls {
+  label {
+    display: block;
+    background: $accent;
+    width: 42px;
+    height: 42px;
+    color: #fff;
+    text-align: center;
+    line-height: 42px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: all 200ms ease-in;
+    z-index: 500;
+  }
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  input[type="checkbox"]:checked ~ label {
+    left: 250px;
+  }
+}
+
+nav.pushed {
+  margin: 0;
+}
+
+.push-content.pushed {
+  transform: translate3d(250px, 0, 0);
+}
