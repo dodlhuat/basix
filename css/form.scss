@@ -23,12 +23,13 @@ select {
     border-radius: $border-radius / 2;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 250ms ease-in;
+    transition: max-height 200ms ease-in;
     position: absolute;
     width: calc(100% - 2px);
 
     &.open {
       max-height: 500px;
+      z-index: 1;
     }
   }
 
