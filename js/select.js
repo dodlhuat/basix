@@ -30,7 +30,14 @@ let select = {
 
             utils.getElement(selector + ' .selected-text').innerText = selected_value;
 
-            element.remove()
+            element.remove();
+
+            div.removeEventListener('mouseover', show);
+            div.addEventListener('mouseover', show);
+
+            div.removeEventListener('mouseleave', hide);
+            div.addEventListener('mouseleave', hide);
+            // div.querySelector('.options')
         }
 
         return this;
@@ -38,6 +45,14 @@ let select = {
 };
 
 // TODO: selektieren, deselektieren, werte zurückgeben
+
+const show = function(event) {
+    this.querySelector('.options').classList.add('open')
+}
+
+const hide = function(event) {
+    this.querySelector('.options').classList.remove('open')
+}
 
 const buildOption = function (text, value, selected) {
     const selected_string = selected ? ' data-selected="true"' : '';

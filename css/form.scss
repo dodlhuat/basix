@@ -12,6 +12,7 @@ select {
 
 .select {
   cursor: pointer;
+  position: relative;
 
   .dropdown, .options {
     background: white;
@@ -20,6 +21,15 @@ select {
   .options {
     border: 1px solid $divider;
     border-radius: $border-radius / 2;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 250ms ease-in;
+    position: absolute;
+    width: calc(100% - 2px);
+
+    &.open {
+      max-height: 500px;
+    }
   }
 
   .option {
