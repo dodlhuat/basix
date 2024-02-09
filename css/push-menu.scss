@@ -1,5 +1,6 @@
 .push-content {
   transition: all 200ms ease-in;
+  margin-left: $spacing * 1.5 + 2 * $spacing;
 }
 
 nav {
@@ -46,9 +47,9 @@ nav a:hover {
 .navigation-controls {
   label {
     display: block;
-    background: $accent;
-    width: 42px;
-    height: 42px;
+    background: $primary-dark;
+    width: $spacing * 1.5;
+    height: 100%;
     color: #fff;
     text-align: center;
     line-height: 42px;

@@ -715,6 +715,7 @@ button.button-light:hover, .button.button-light:hover {
 
 .push-content {
   transition: all 200ms ease-in;
+  margin-left: 2.625rem;
 }
 
 nav {
@@ -760,9 +761,9 @@ nav a:hover {
 
 .navigation-controls label {
   display: block;
-  background: #536DFE;
-  width: 42px;
-  height: 42px;
+  background: #455A64;
+  width: 1.125rem;
+  height: 100%;
   color: #fff;
   text-align: center;
   line-height: 42px;
