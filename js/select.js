@@ -54,9 +54,8 @@ const selectOption = function(event) {
     // console.log(event.target.dataset.value);
     // console.log(event.target.innerText);
     const isMultiple = event.currentTarget.parentNode.dataset.multiple == 'true'
-    // TODO: multi select
+    const selectedText = event.currentTarget.parentNode.querySelector('.selected-text');
     if (!isMultiple) {
-        const selectedText = event.currentTarget.parentNode.querySelector('.selected-text');
         selectedText.innerText = event.target.innerText;
         event.currentTarget.parentNode.querySelectorAll('.option').forEach(option => {
             const value = option.dataset.value;
@@ -66,6 +65,22 @@ const selectOption = function(event) {
                 option.classList.remove('selected')
             }
         })
+        event.currentTarget.parentNode.querySelector('.options').classList.remove('open')
+    } else {
+        const selectedElements = [];
+        event.currentTarget.parentNode.querySelectorAll('.option').forEach(option => {
+            const value = option.dataset.value;
+            if (value === event.target.dataset.value && !option.classList.contains('selected')) {
+                option.classList.add('selected')
+                selectedElements.push(option.innerText)
+            } else if (value !== event.target.dataset.value && option.classList.contains('selected')) {
+                selectedElements.push(option.innerText)
+            } else {
+                option.classList.remove('selected')
+            }
+        })
+        console.log(selectedElements);
+        selectedText.innerText = selectedElements.join(', ');
     }
 }
 
