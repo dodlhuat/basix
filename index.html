@@ -230,20 +230,31 @@
             </div>
             <div class="row">
                 <div class="column">
-                    <input type="checkbox" id="checkbox-1" name="checkbox-1" value="1">
-                    <label for="checkbox-1"> I am a checkbox</label>
-
-                    <input type="checkbox" id="checkbox-2" name="checkbox-2" value="2">
-                    <label for="checkbox-2"> I am another checkbox</label>
+                    <p class="warning"><strong>TODO:</strong> line height</p>
+                    <div class="block">
+                        <input class="styled-checkbox" id="checkbox-1" type="checkbox" value="1">
+                        <label for="checkbox-1">Checkbox</label>
+                    </div>
+                    <div class="block">
+                        <input class="styled-checkbox" id="checkbox-2" type="checkbox" value="2" disabled>
+                        <label for="checkbox-2">A disabled checkbox</label>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="column">
-                    <input type="radio" id="radio-1" name="radio" value="1">
-                    <label for="radio-1"> I am a radio button</label>
-
-                    <input type="radio" id="radio-2" name="radio" value="2">
-                    <label for="radio-2"> I am another radio button</label>
+                    <label class="radio-button-container">One
+                        <input type="radio" checked="checked" name="radio">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio-button-container">Two
+                        <input type="radio" name="radio">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio-button-container">Three
+                        <input type="radio" name="radio">
+                        <span class="checkmark"></span>
+                    </label>
                 </div>
             </div>
             <div class="row">
@@ -254,7 +265,9 @@
             </div>
             <div class="row">
                 <div class="column">
-                    TODO: <strong>switch</strong>
+                    <div class="switch">
+                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                    </div>
                 </div>
             </div>
         </form>
@@ -347,6 +360,9 @@
             </div>
         </div>
     </div>
+    <h3>tooltip</h3>
+    <span hover-tooltip="Tooltip on the top" tooltip-position="top">Top</span><br>
+    <span hover-tooltip="Tooltip on the bottom" tooltip-position="bottom">Bottom</span>
     <h3>toast</h3>
     <p>toasts can have an additonal markup to show a colored bar on top. success, warning, error.</p>
     <button class="show-toast">Show Toast</button>
@@ -391,6 +407,7 @@
         <div class="column card">
             <div class="spinner"></div>
         </div>
+        <div class="column grow-4"></div>
     </div>
 </div>
 
