@@ -352,7 +352,6 @@ select {
   background: white;
 }
 .select .options {
-  border: 1px solid #BDBDBD;
   border-radius: 0.2rem;
   max-height: 0;
   overflow: hidden;
@@ -363,6 +362,7 @@ select {
 }
 .select .options.open {
   max-height: 500px;
+  border: 1px solid #BDBDBD;
 }
 .select .option {
   padding: 0.4rem;

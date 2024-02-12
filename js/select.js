@@ -43,16 +43,19 @@ let select = {
             div.querySelector('.options').removeEventListener('click', selectOption);
             div.querySelector('.options').addEventListener('click', selectOption);
         }
-
-        return this;
-    }
+    },
+    value(selector) {
+        const element = document.querySelector(selector);
+        let response = [];
+        element.querySelectorAll('.option.selected').forEach(option => {
+            response.push(option.dataset.value);
+        })
+        if (response.length === 1) return response[0];
+        return response;
+    },
 };
 
-// TODO: selektieren, deselektieren, werte zurückgeben
-
 const selectOption = function(event) {
-    // console.log(event.target.dataset.value);
-    // console.log(event.target.innerText);
     const isMultiple = event.currentTarget.parentNode.dataset.multiple == 'true'
     const selectedText = event.currentTarget.parentNode.querySelector('.selected-text');
     if (!isMultiple) {
@@ -79,7 +82,6 @@ const selectOption = function(event) {
                 option.classList.remove('selected')
             }
         })
-        console.log(selectedElements);
         selectedText.innerText = selectedElements.join(', ');
     }
 }

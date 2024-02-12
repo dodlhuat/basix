@@ -6,8 +6,9 @@ import {menu} from "./push-menu.js";
 import {toast} from "./toast.js";
 
 utils.ready(function () {
-    const single_selectpicker = select.init('#single-select');
-    const multi_selectpicker = select.init('#multi-select');
+    select.init('#single-select');
+    select.init('#multi-select');
+
     scrollbar.init('.scrollbar');
 
     const elements = utils.getElement('.show-modal');
@@ -24,5 +25,7 @@ utils.ready(function () {
 
 
     menu.init();
+
+    console.log(select.value('#single-select'));
 
 });

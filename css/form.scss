@@ -19,7 +19,6 @@ select {
   }
 
   .options {
-    border: 1px solid $divider;
     border-radius: $border-radius / 2;
     max-height: 0;
     overflow: hidden;
@@ -30,6 +29,7 @@ select {
 
     &.open {
       max-height: 500px;
+      border: 1px solid $divider;
     }
   }
 
