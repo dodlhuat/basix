@@ -18,6 +18,7 @@ let select = {
                 }
             }
             if (selected_value === '') {
+                // todo: if single select select first value, if multi select show "nothing selected"
                 selected_value = utils.text(options[0])
             }
             html += '</div>'
@@ -26,6 +27,7 @@ let select = {
             div.className = 'select';
             div.id = selector.substring(1)
             div.innerHTML = html;
+            div.dataset.multiple = document.querySelector(selector).hasAttribute('multiple')
             element.parentNode.insertBefore(div, element);
 
             utils.getElement(selector + ' .selected-text').innerText = selected_value;
@@ -37,7 +39,9 @@ let select = {
 
             div.removeEventListener('mouseleave', hide);
             div.addEventListener('mouseleave', hide);
-            // div.querySelector('.options')
+
+            div.querySelector('.options').removeEventListener('click', selectOption);
+            div.querySelector('.options').addEventListener('click', selectOption);
         }
 
         return this;
@@ -45,6 +49,25 @@ let select = {
 };
 
 // TODO: selektieren, deselektieren, werte zurückgeben
+
+const selectOption = function(event) {
+    // console.log(event.target.dataset.value);
+    // console.log(event.target.innerText);
+    const isMultiple = event.currentTarget.parentNode.dataset.multiple == 'true'
+    // TODO: multi select
+    if (!isMultiple) {
+        const selectedText = event.currentTarget.parentNode.querySelector('.selected-text');
+        selectedText.innerText = event.target.innerText;
+        event.currentTarget.parentNode.querySelectorAll('.option').forEach(option => {
+            const value = option.dataset.value;
+            if (value == event.target.dataset.value) {
+                option.classList.add('selected')
+            } else {
+                option.classList.remove('selected')
+            }
+        })
+    }
+}
 
 const show = function(event) {
     this.querySelector('.options').classList.add('open')
@@ -55,8 +78,8 @@ const hide = function(event) {
 }
 
 const buildOption = function (text, value, selected) {
-    const selected_string = selected ? ' data-selected="true"' : '';
-    return '<div class="option" data-value="' + value + '"' + selected_string + '>' + text + '</div>'
+    const selected_class = selected ? ' selected' : '';
+    return '<div class="option' + selected_class + '" data-value="' + value + '">' + text + '</div>'
 }
 
 export {select};

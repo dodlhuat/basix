@@ -26,10 +26,10 @@ select {
     transition: max-height 200ms ease-in;
     position: absolute;
     width: calc(100% - 2px);
+    z-index: 1;
 
     &.open {
       max-height: 500px;
-      z-index: 1;
     }
   }
 
