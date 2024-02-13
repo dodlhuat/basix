@@ -7,26 +7,39 @@
   min-width: 150px;
   position: fixed;
   left: -200px;
-  bottom: 1rem;
+  bottom: $spacing;
   z-index: 1;
   transition: all 150ms ease-in;
 
+  .bar {
+    display: block;
+    height: 4px;
+    width: 100%;
+    background: $primary;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    transition: width 250ms linear;
+  }
+
   &.show {
-    left: 1rem;
+    left: $spacing * 2;
   }
 
   &.success {
-    border-top: 4px solid $success;
+    border-color: $success;
     color: inherit;
   }
 
   &.warning {
-    border-top: 4px solid $warning;
+    border-color: $warning;
     color: inherit;
   }
 
   &.error {
-    border-top: 4px solid $error;
+    border-color: $error;
     color: inherit;
   }
 

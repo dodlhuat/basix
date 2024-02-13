@@ -681,23 +681,35 @@ button.button-light:hover, .button.button-light:hover {
   min-width: 150px;
   position: fixed;
   left: -200px;
-  bottom: 1rem;
+  bottom: 0.75rem;
   z-index: 1;
   transition: all 150ms ease-in;
 }
+.toast .bar {
+  display: block;
+  height: 4px;
+  width: 100%;
+  background: #607D8B;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-top-left-radius: 0.4rem;
+  border-top-right-radius: 0.4rem;
+  transition: width 250ms linear;
+}
 .toast.show {
-  left: 1rem;
+  left: 1.5rem;
 }
 .toast.success {
-  border-top: 4px solid #4CAF50;
+  border-color: #4CAF50;
   color: inherit;
 }
 .toast.warning {
-  border-top: 4px solid #FF9800;
+  border-color: #FF9800;
   color: inherit;
 }
 .toast.error {
-  border-top: 4px solid #FF5252;
+  border-color: #FF5252;
   color: inherit;
 }
 .toast .close {

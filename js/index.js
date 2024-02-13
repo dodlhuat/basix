@@ -20,7 +20,7 @@ utils.ready(function () {
     }
 
     utils.getElement('.show-toast').addEventListener('click', function () {
-        toast.show('some content', 'some header');
+        toast.show('some content', 'some header', 'default', true, 3000);
     });
 
 
