@@ -2,6 +2,11 @@
   width: $spacing * 1.5;
   height: $spacing * 1.5;
 
+  &.big {
+    width: $spacing * 2.5;
+    height: $spacing * 2.5;
+  }
+
   &.white {
     filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(180deg) brightness(101%) contrast(101%);
   }
@@ -10,6 +15,14 @@
     display: inline-block;
     vertical-align: middle;
     margin-left: -1px;
+  }
+
+  &.menu {
+    content: url("../icons/menu-outline.svg");
+  }
+
+  &.menu-arrow {
+    content: url("../icons/menu-arrow-outline.svg");
   }
 
   &.arrow-down {

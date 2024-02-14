@@ -1,6 +1,5 @@
 .push-content {
   transition: all 200ms ease-in;
-  margin-left: $spacing * 1.5 + 2 * $spacing;
 }
 
 nav {
@@ -75,4 +74,55 @@ nav.pushed {
 
 .push-content.pushed {
   transform: translate3d(250px, 0, 0);
+}
+
+.header {
+  position: fixed;
+  background: white;
+  width: 100%;
+  right: 0;
+  transition: width 200ms ease-in;
+  height: $spacing * 3;
+  display: flex;
+  z-index: 2;
+  gap: $spacing;
+
+  & > div:first-child {
+    margin-left: $spacing;
+  }
+
+  & > div:last-child {
+    margin-right: $spacing;
+  }
+
+  & > div {
+    display: flex;
+    align-items: center;
+    line-height: $spacing * 3;
+  }
+
+  .last {
+    margin-left: auto;
+  }
+
+  &.pushed {
+    width: calc(100% - 250px);
+  }
+
+  .navigation-controls {
+    height: $spacing * 2.5;
+
+    label {
+      display: block;
+      position: relative;
+      background: initial;
+      line-height: inherit;
+      width: inherit;
+      height: inherit;
+    }
+
+    input[type="checkbox"]:checked ~ label {
+      left: 0;
+    }
+  }
 }

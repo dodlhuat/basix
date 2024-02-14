@@ -134,6 +134,7 @@ body {
 .content {
   margin-left: 1.5rem;
   margin-right: 1.5rem;
+  margin-top: 2.25rem;
 }
 
 .hidden {
@@ -380,6 +381,10 @@ select {
   width: 1.125rem;
   height: 1.125rem;
 }
+.icon.big {
+  width: 1.875rem;
+  height: 1.875rem;
+}
 .icon.white {
   filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(180deg) brightness(101%) contrast(101%);
 }
@@ -387,6 +392,12 @@ select {
   display: inline-block;
   vertical-align: middle;
   margin-left: -1px;
+}
+.icon.menu {
+  content: url("../icons/menu-outline.svg");
+}
+.icon.menu-arrow {
+  content: url("../icons/menu-arrow-outline.svg");
 }
 .icon.arrow-down {
   content: url("../icons/chevron-down-outline.svg");
@@ -735,7 +746,6 @@ button.button-light:hover, .button.button-light:hover {
 
 .push-content {
   transition: all 200ms ease-in;
-  margin-left: 2.625rem;
 }
 
 nav {
@@ -806,6 +816,49 @@ nav.pushed {
 
 .push-content.pushed {
   transform: translate3d(250px, 0, 0);
+}
+
+.header {
+  position: fixed;
+  background: white;
+  width: 100%;
+  right: 0;
+  transition: width 200ms ease-in;
+  height: 2.25rem;
+  display: flex;
+  z-index: 2;
+  gap: 0.75rem;
+}
+.header > div:first-child {
+  margin-left: 0.75rem;
+}
+.header > div:last-child {
+  margin-right: 0.75rem;
+}
+.header > div {
+  display: flex;
+  align-items: center;
+  line-height: 2.25rem;
+}
+.header .last {
+  margin-left: auto;
+}
+.header.pushed {
+  width: calc(100% - 250px);
+}
+.header .navigation-controls {
+  height: 1.875rem;
+}
+.header .navigation-controls label {
+  display: block;
+  position: relative;
+  background: initial;
+  line-height: inherit;
+  width: inherit;
+  height: inherit;
+}
+.header .navigation-controls input[type=checkbox]:checked ~ label {
+  left: 0;
 }
 
 .styled-checkbox {
