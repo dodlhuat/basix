@@ -134,7 +134,7 @@ body {
 .content {
   margin-left: 1.5rem;
   margin-right: 1.5rem;
-  margin-top: 2.25rem;
+  margin-top: 3rem;
 }
 
 .hidden {
@@ -709,7 +709,7 @@ button.button-light:hover, .button.button-light:hover {
   transition: width 250ms linear;
 }
 .toast.show {
-  left: 1.5rem;
+  left: 0.75rem;
 }
 .toast.success {
   border-color: #4CAF50;
@@ -820,7 +820,7 @@ nav.pushed {
 
 .header {
   position: fixed;
-  background: white;
+  background: #f2f2f2;
   width: 100%;
   right: 0;
   transition: width 200ms ease-in;
@@ -828,6 +828,7 @@ nav.pushed {
   display: flex;
   z-index: 2;
   gap: 0.75rem;
+  border-bottom: 3px solid #607D8B;
 }
 .header > div:first-child {
   margin-left: 0.75rem;
@@ -1009,9 +1010,10 @@ nav.pushed {
   color: #fff;
   content: attr(title);
   padding: 13px;
-  width: 200px;
-  left: -50%;
+  width: max-content;
+  left: 0;
   bottom: 37px;
+  max-width: 200px;
 }
 
 .tooltip:hover:before {

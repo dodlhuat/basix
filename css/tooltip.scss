@@ -12,9 +12,10 @@
   color: #fff;
   content: attr(title);
   padding: 13px;
-  width: 200px;
-  left: -50%;
+  width: max-content;
+  left: 0;
   bottom: 37px;
+  max-width: 200px;
 }
 
 .tooltip:hover:before {
