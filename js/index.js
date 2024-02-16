@@ -11,15 +11,15 @@ utils.ready(function () {
 
     scrollbar.init('.scrollbar');
 
-    const elements = utils.getElement('.show-modal');
+    const elements = document.querySelectorAll('.show-modal');
     if (elements !== undefined) {
-        utils.getElement('.show-modal').addEventListener('click', function () {
+        document.querySelector('.show-modal').addEventListener('click', function () {
             const buttons = '<div class="buttons">\<button class="button-light">Close</button><button>Save Changes</button></div>';
             modal.show('bluffi', '<strong>blaffi</strong>', buttons);
         })
     }
 
-    utils.getElement('.show-toast').addEventListener('click', function () {
+    document.querySelector('.show-toast').addEventListener('click', function () {
         toast.show('some content', 'some header', 'default', true, 3000);
     });
 

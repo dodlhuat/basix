@@ -818,7 +818,7 @@ nav.pushed {
   transform: translate3d(250px, 0, 0);
 }
 
-.header {
+.main-header {
   position: fixed;
   background: #f2f2f2;
   width: 100%;
@@ -830,27 +830,27 @@ nav.pushed {
   gap: 0.75rem;
   border-bottom: 3px solid #607D8B;
 }
-.header > div:first-child {
+.main-header > div:first-child {
   margin-left: 0.75rem;
 }
-.header > div:last-child {
+.main-header > div:last-child {
   margin-right: 0.75rem;
 }
-.header > div {
+.main-header > div {
   display: flex;
   align-items: center;
   line-height: 2.25rem;
 }
-.header .last {
+.main-header .last {
   margin-left: auto;
 }
-.header.pushed {
+.main-header.pushed {
   width: calc(100% - 250px);
 }
-.header .navigation-controls {
+.main-header .navigation-controls {
   height: 1.875rem;
 }
-.header .navigation-controls label {
+.main-header .navigation-controls label {
   display: block;
   position: relative;
   background: initial;
@@ -858,7 +858,7 @@ nav.pushed {
   width: inherit;
   height: inherit;
 }
-.header .navigation-controls input[type=checkbox]:checked ~ label {
+.main-header .navigation-controls input[type=checkbox]:checked ~ label {
   left: 0;
 }
 

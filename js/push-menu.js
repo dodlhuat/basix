@@ -18,7 +18,7 @@ const pushToggle = function () {
     const menu = document.querySelector('.push-menu');
     const pushed = content.classList.contains('pushed');
     const control_icon = document.querySelector('.navigation-controls .icon');
-    const header = document.querySelector('.header');
+    const header = document.querySelector('.main-header');
     if (pushed) {
         content.classList.remove('pushed');
         menu.classList.remove('pushed');

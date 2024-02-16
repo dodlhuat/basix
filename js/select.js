@@ -2,13 +2,13 @@ import {utils} from "./utils.js";
 
 let select = {
     init(selector) {
-        const element = utils.getElement(selector);
+        const element = document.querySelector(selector);
         if (utils.isList(element)) {
             console.error('only allowed for single elements')
         } else {
             let html = '<div class="dropdown"><span class="selected-text"></span> <span class="icon arrow-down float-right"></span></div>';
             html += '<div class="options">';
-            const options = utils.getElement(selector + ' option');
+            const options = document.querySelectorAll(selector + ' option');
             let selected_value = ''
             for (let i = 0; i < options.length; i++) {
                 const selected = options[i].hasAttribute('selected')
@@ -30,7 +30,7 @@ let select = {
             div.dataset.multiple = document.querySelector(selector).hasAttribute('multiple')
             element.parentNode.insertBefore(div, element);
 
-            utils.getElement(selector + ' .selected-text').innerText = selected_value;
+            document.querySelector(selector + ' .selected-text').innerText = selected_value;
 
             element.remove();
 

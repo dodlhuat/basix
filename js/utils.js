@@ -17,14 +17,6 @@ const utils = {
         return element.innerText;
     },
 
-    getElement(selector) {
-        const elements = document.querySelectorAll(selector);
-        if (elements.length === 1) {
-            return elements[0];
-        }
-        return elements;
-    },
-
     text(element) {
         return element.innerText;
     },

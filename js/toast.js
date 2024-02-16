@@ -10,11 +10,11 @@ const toast = {
         }
 
         div.innerHTML = buildTemplate(content, header, closeable);
-        utils.getElement('body').append(div);
+        document.querySelector('body').append(div);
         setTimeout(() => {
-            utils.getElement('.toast').classList.add('show');
-            utils.getElement('.toast .close').removeEventListener('click', hideToast);
-            utils.getElement('.toast .close').addEventListener('click', hideToast);
+            document.querySelector('.toast').classList.add('show');
+            document.querySelector('.toast .close').removeEventListener('click', hideToast);
+            document.querySelector('.toast .close').addEventListener('click', hideToast);
 
             if (ms !== undefined) {
                 timer(ms);
@@ -22,9 +22,9 @@ const toast = {
         }, 150);
     },
     hide() {
-        utils.getElement('.toast').classList.remove('show');
+        document.querySelector('.toast').classList.remove('show');
         setTimeout(() => {
-            utils.getElement('.toast').remove();
+            document.querySelector('.toast').remove();
         }, 150);
     }
 }
