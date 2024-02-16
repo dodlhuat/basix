@@ -3,22 +3,50 @@
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript and therefore is not dependant on any plugin.
 
-## Available Components
+### Benefits
 
-* CSS Reset
-* Basic Typography
-* Flex Grid
-* Alerts
-* Buttons
-* Cards
-* Forms
-* Custom Scrollbar (vertical)
-* Table
-* Modal
-* Icons (https://akveo.github.io/eva-icons/#/)
-* Spinner
+* lightweight
+* customizable
+* no dependencies, completely vanilla javascript (or css only)
 
 ## Usage
 
 Take a look at style.scss for a glimpse on a full import. reset, parameters, colors & defaults are mandatory, anything
-else can be added as needed. 
+else can be added as needed.
+
+To use the import functionality of javascript files you need to import your main script as a module. And either build
+your own css or inclulde the existing full style.css (or min)
+
+``` html
+<link rel="stylesheet" href="css/style.css" type="text/css">
+<script src="js/index.js" type="module"></script>
+```
+# Available Components
+## Alert
+Alerts can have either the alert-error, alert-warning or alert-success class to change color accordingly 
+``` html
+<div class="alert alert-error"><strong>Error: </strong> This is an error alert!</div>
+```
+## Button
+Buttons can have either no class (default styling) or the button-error, button-warning, button-success colors
+``` html
+<button class="button-error">Error</button>
+```
+## Card
+## Checkbox
+## Colors
+## Form
+## Grid
+## Icons
+## Modal
+## Placeholder
+## Progress Bar
+## Push Menu
+## Radio Buttons
+## Scrollbar
+## Spinner
+## Switch
+## Table
+## Toast
+## Tooltip
+## Typography
