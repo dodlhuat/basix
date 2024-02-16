@@ -33,16 +33,23 @@ let select = {
             document.querySelector(selector + ' .selected-text').innerText = selected_value;
 
             element.remove();
-
-            div.removeEventListener('mouseover', show);
-            div.addEventListener('mouseover', show);
-
-            div.removeEventListener('mouseleave', hide);
-            div.addEventListener('mouseleave', hide);
-
-            div.querySelector('.options').removeEventListener('click', selectOption);
-            div.querySelector('.options').addEventListener('click', selectOption);
+            this.listen(div);
         }
+    },
+    listen(element) {
+        const parent = element.querySelector('.options').getAttribute('data-parent')
+        if (parent != null) {
+            element.querySelector('.options').style.top = document.querySelector('#' + parent).clientHeight + 'px';
+        }
+
+        element.removeEventListener('mouseover', show);
+        element.addEventListener('mouseover', show);
+
+        element.removeEventListener('mouseleave', hide);
+        element.addEventListener('mouseleave', hide);
+
+        element.querySelector('.options').removeEventListener('click', selectOption);
+        element.querySelector('.options').addEventListener('click', selectOption);
     },
     value(selector) {
         const element = document.querySelector(selector);
@@ -59,15 +66,17 @@ const selectOption = function(event) {
     const isMultiple = event.currentTarget.parentNode.dataset.multiple == 'true'
     const selectedText = event.currentTarget.parentNode.querySelector('.selected-text');
     if (!isMultiple) {
-        selectedText.innerText = event.target.innerText;
-        event.currentTarget.parentNode.querySelectorAll('.option').forEach(option => {
-            const value = option.dataset.value;
-            if (value == event.target.dataset.value) {
-                option.classList.add('selected')
-            } else {
-                option.classList.remove('selected')
-            }
-        })
+        if (selectedText != null) {
+            selectedText.innerText = event.target.innerText;
+            event.currentTarget.parentNode.querySelectorAll('.option').forEach(option => {
+                const value = option.dataset.value;
+                if (value == event.target.dataset.value) {
+                    option.classList.add('selected')
+                } else {
+                    option.classList.remove('selected')
+                }
+            })
+        }
         event.currentTarget.parentNode.querySelector('.options').classList.remove('open')
     } else {
         const selectedElements = [];

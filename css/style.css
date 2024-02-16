@@ -360,6 +360,10 @@ select {
   position: absolute;
   width: calc(100% - 2px);
   z-index: 1;
+  min-width: 200px;
+}
+.select .options[data-position=right] {
+  right: 0;
 }
 .select .options.open {
   max-height: 500px;

@@ -8,6 +8,7 @@ import {toast} from "./toast.js";
 utils.ready(function () {
     select.init('#single-select');
     select.init('#multi-select');
+    select.listen(document.querySelector('.user.select'))
 
     scrollbar.init('.scrollbar');
 

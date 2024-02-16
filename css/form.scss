@@ -26,6 +26,11 @@ select {
     position: absolute;
     width: calc(100% - 2px);
     z-index: 1;
+    min-width: 200px;
+
+    &[data-position=right] {
+      right: 0;
+    }
 
     &.open {
       max-height: 500px;
