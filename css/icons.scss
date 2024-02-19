@@ -1,123 +1,22 @@
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../font/material-icons.woff2') format('woff2');
+}
+
 .icon {
-  width: $spacing * 1.5;
-  height: $spacing * 1.5;
-
-  &.big {
-    width: $spacing * 2.5;
-    height: $spacing * 2.5;
-  }
-
-  &.white {
-    filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(180deg) brightness(101%) contrast(101%);
-  }
-
-  &.center {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: -1px;
-  }
-
-  &.menu {
-    content: url("../icons/menu-outline.svg");
-  }
-
-  &.menu-arrow {
-    content: url("../icons/menu-arrow-outline.svg");
-  }
-
-  &.arrow-down {
-    content: url("../icons/chevron-down-outline.svg");
-  }
-
-  &.arrow-up {
-    content: url("../icons/chevron-up-outline.svg");
-  }
-
-  &.arrow-left {
-    content: url("../icons/chevron-left-outline.svg");
-  }
-
-  &.arrow-right {
-    content: url("../icons/chevron-right-outline.svg");
-  }
-
-  &.attachment {
-    content: url("../icons/attach-outline.svg");
-  }
-
-  &.close {
-    content: url("../icons/close-outline.svg");
-  }
-
-  &.copy {
-    content: url("../icons/copy-outline.svg");
-  }
-
-  &.edit {
-    content: url("../icons/edit-outline.svg");
-  }
-
-  &.mail {
-    content: url("../icons/email-outline.svg");
-  }
-
-  &.expand {
-    content: url("../icons/expand-outline.svg");
-  }
-
-  &.collapse {
-    content: url("../icons/collapse-outline.svg");
-  }
-
-  &.file {
-    content: url("../icons/file-outline.svg");
-  }
-
-  &.folder {
-    content: url("../icons/folder-outline.svg");
-  }
-
-  &.home {
-    content: url("../icons/home-outline.svg");
-  }
-
-  &.list {
-    content: url("../icons/list-outline.svg");
-  }
-
-  &.more {
-    content: url("../icons/more-horizontal-outline.svg");
-  }
-
-  &.settings {
-    content: url("../icons/settings-outline.svg");
-  }
-
-  &.send {
-    content: url("../icons/paper-plane-outline.svg");
-  }
-
-  &.user {
-    content: url("../icons/person-outline.svg");
-  }
-
-  &.print {
-    content: url("../icons/printer-outline.svg");
-  }
-
-  &.save {
-    content: url("../icons/save-outline.svg");
-  }
-
-  &.sync {
-    content: url("../icons/sync-outline.svg");
-  }
-
-  &.delete {
-    content: url("../icons/trash-2-outline.svg");
-  }
-
-  &.checkmark {
-    content: url("../icons/checkmark-outline.svg");
-  }
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
 }

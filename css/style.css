@@ -381,99 +381,26 @@ select {
   color: #FFFFFF;
 }
 
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../font/material-icons.woff2") format("woff2");
+}
 .icon {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.icon.big {
-  width: 1.875rem;
-  height: 1.875rem;
-}
-.icon.white {
-  filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(180deg) brightness(101%) contrast(101%);
-}
-.icon.center {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
   display: inline-block;
-  vertical-align: middle;
-  margin-left: -1px;
-}
-.icon.menu {
-  content: url("../icons/menu-outline.svg");
-}
-.icon.menu-arrow {
-  content: url("../icons/menu-arrow-outline.svg");
-}
-.icon.arrow-down {
-  content: url("../icons/chevron-down-outline.svg");
-}
-.icon.arrow-up {
-  content: url("../icons/chevron-up-outline.svg");
-}
-.icon.arrow-left {
-  content: url("../icons/chevron-left-outline.svg");
-}
-.icon.arrow-right {
-  content: url("../icons/chevron-right-outline.svg");
-}
-.icon.attachment {
-  content: url("../icons/attach-outline.svg");
-}
-.icon.close {
-  content: url("../icons/close-outline.svg");
-}
-.icon.copy {
-  content: url("../icons/copy-outline.svg");
-}
-.icon.edit {
-  content: url("../icons/edit-outline.svg");
-}
-.icon.mail {
-  content: url("../icons/email-outline.svg");
-}
-.icon.expand {
-  content: url("../icons/expand-outline.svg");
-}
-.icon.collapse {
-  content: url("../icons/collapse-outline.svg");
-}
-.icon.file {
-  content: url("../icons/file-outline.svg");
-}
-.icon.folder {
-  content: url("../icons/folder-outline.svg");
-}
-.icon.home {
-  content: url("../icons/home-outline.svg");
-}
-.icon.list {
-  content: url("../icons/list-outline.svg");
-}
-.icon.more {
-  content: url("../icons/more-horizontal-outline.svg");
-}
-.icon.settings {
-  content: url("../icons/settings-outline.svg");
-}
-.icon.send {
-  content: url("../icons/paper-plane-outline.svg");
-}
-.icon.user {
-  content: url("../icons/person-outline.svg");
-}
-.icon.print {
-  content: url("../icons/printer-outline.svg");
-}
-.icon.save {
-  content: url("../icons/save-outline.svg");
-}
-.icon.sync {
-  content: url("../icons/sync-outline.svg");
-}
-.icon.delete {
-  content: url("../icons/trash-2-outline.svg");
-}
-.icon.checkmark {
-  content: url("../icons/checkmark-outline.svg");
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
 }
 
 .scrollable {
@@ -795,10 +722,9 @@ nav a:hover {
 
 .navigation-controls label {
   display: block;
-  background: #455A64;
   width: 1.125rem;
   height: 100%;
-  color: #fff;
+  color: #455A64;
   text-align: center;
   line-height: 42px;
   position: fixed;

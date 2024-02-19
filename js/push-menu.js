@@ -23,14 +23,12 @@ const pushToggle = function () {
         content.classList.remove('pushed');
         menu.classList.remove('pushed');
         header.classList.remove('pushed');
-        control_icon.classList.remove('menu-arrow');
-        control_icon.classList.add('menu');
+        control_icon.innerText = 'menu'
     } else {
         content.classList.add('pushed');
         menu.classList.add('pushed');
         header.classList.add('pushed');
-        control_icon.classList.remove('menu');
-        control_icon.classList.add('menu-arrow');
+        control_icon.innerText = 'menu_open'
     }
 }
 

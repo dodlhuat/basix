@@ -46,10 +46,9 @@ nav a:hover {
 .navigation-controls {
   label {
     display: block;
-    background: $primary-dark;
     width: $spacing * 1.5;
     height: 100%;
-    color: #fff;
+    color: $primary-dark;
     text-align: center;
     line-height: 42px;
     position: fixed;
