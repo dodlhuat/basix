@@ -501,6 +501,7 @@ button.button-light:hover, .button.button-light:hover {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
+  min-width: 50%;
 }
 .modal .header {
   position: relative;
@@ -784,7 +785,6 @@ nav.pushed {
   display: block;
   position: relative;
   background: initial;
-  line-height: inherit;
   width: inherit;
   height: inherit;
 }

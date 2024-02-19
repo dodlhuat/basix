@@ -15,7 +15,7 @@ utils.ready(function () {
     const elements = document.querySelectorAll('.show-modal');
     if (elements !== undefined) {
         document.querySelector('.show-modal').addEventListener('click', function () {
-            const buttons = '<div class="buttons">\<button class="button-light">Close</button><button>Save Changes</button></div>';
+            const buttons = '<div class="buttons">\<button class="button-light">Close</button>&nbsp;<button>Save Changes</button></div>';
             modal.show('bluffi', '<strong>blaffi</strong>', buttons);
         })
     }

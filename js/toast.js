@@ -1,6 +1,6 @@
 import {utils} from "./utils.js";
 
-const closure_icon = '<div class="icon close"></div>';
+const closure_icon = '<div class="icon close">close</div>';
 const toast = {
     show(content, header, type, closeable, ms) {
         let div = document.createElement('div');
@@ -45,8 +45,11 @@ const timer = function (ms, timing) {
     setTimeout(() => {
         timing += stepSize;
         const width = 100 - ((100 / ms) * timing);
-        document.querySelector('.toast .bar').style.width = width + '%';
-        timer(ms, timing);
+        const element = document.querySelector('.toast .bar');
+        if (element) {
+            document.querySelector('.toast .bar').style.width = width + '%';
+            timer(ms, timing);
+        }
     }, stepSize);
 }
 

@@ -1,4 +1,4 @@
-const closure_icon = '<div class="icon close"></div>';
+const closure_icon = '<div class="icon close">close</div>';
 const modal = {
     show(content, header, footer, closeable) {
         let div = document.createElement('div');
