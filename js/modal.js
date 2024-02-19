@@ -1,5 +1,3 @@
-import {utils} from "./utils.js";
-
 const closure_icon = '<div class="icon close"></div>';
 const modal = {
     show(content, header, footer, closeable) {
