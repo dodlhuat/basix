@@ -1,6 +1,7 @@
 .alert {
   border-radius: $border-radius;
   padding: $spacing / 2;
+  border-left: $spacing / 2 solid;
 }
 
 .alert-error {
