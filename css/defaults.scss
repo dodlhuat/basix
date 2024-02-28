@@ -35,3 +35,17 @@ body {
   align-items: center;
   display: flex;
 }
+
+.horizontal-align-center {
+  text-align: center;
+}
+
+code.code {
+  background: $divider;
+  display: block;
+  padding: $spacing * 2;
+  font-family: monospace;
+  border-radius: $border-radius;
+  margin: $spacing 0;
+  font-size: $spacing * 1.3;
+}

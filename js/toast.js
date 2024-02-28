@@ -1,6 +1,6 @@
 import {utils} from "./utils.js";
 
-const closure_icon = '<div class="icon close">close</div>';
+const closure_icon = '<div class="icon icon-close close"></div>';
 const toast = {
     show(content, header, type, closeable, ms) {
         let div = document.createElement('div');

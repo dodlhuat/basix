@@ -3,7 +3,7 @@ body {
 }
 
 p, li, td, th, div {
-  font-size: 1rem;
+  font-size: $spacing * 1.5;
   line-height: 1.5;
 }
 

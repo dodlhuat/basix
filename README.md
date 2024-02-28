@@ -1,7 +1,9 @@
-# Basix
+# Basix 0.9
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript and therefore is not dependant on any plugin.
+
+A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blank">http://www.andibauer.at/basix/</a>
 
 ### Benefits
 
