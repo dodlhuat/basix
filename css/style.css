@@ -1286,7 +1286,7 @@ nav.pushed {
 .chips .chip {
   margin: 0 5px 3px 0;
   display: inline-block;
-  background: #e0e0e0;
+  background: #e5e5e5;
   padding: 5px 13px;
   border-radius: 32px;
   font-size: 13px;
@@ -1295,12 +1295,15 @@ nav.pushed {
 .chips .chip.clickable {
   cursor: pointer;
 }
+.chips .chip.clickable:hover {
+  background: #cccccc;
+}
 .chips .chip.closeable {
   padding-right: 33px;
 }
 .chips .chip.closeable button {
   padding: 0;
-  background: #aaa;
+  background: #cccccc;
   color: #455A64;
   display: inline-block;
   border: 0;
@@ -1313,11 +1316,12 @@ nav.pushed {
   right: 13px;
 }
 .chips .chip.closeable button:hover {
-  background: #9d9d9d;
+  background: #bfbfbf;
 }
 .chips .chip.closeable button .icon {
   font-size: 15px;
-  margin-top: 3px;
+  top: 1px;
+  position: relative;
 }
 
 .tree {
