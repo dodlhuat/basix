@@ -1,0 +1,45 @@
+@import "colors";
+@import "parameters";
+
+.modal.datepicker {
+  padding: 0;
+
+  .datepicker-header {
+    background: $primary;
+    color: $primary-light;
+    padding: $spacing;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+
+    .info-text {
+      font-size: 12px;
+    }
+
+    .selected-date {
+      font-size: 24px;
+    }
+  }
+
+  .datepicker-controls {
+    padding: $spacing;
+    display: flex;
+    flex-direction: row;
+    gap: $spacing;
+  }
+
+  .datepicker-calendar {
+    padding: $spacing;
+
+    .datepicker-row {
+      display: flex;
+      flex-direction: row;
+      gap: $spacing;
+    }
+
+    .datepicker-column {
+      flex-grow: 1;
+      flex: 1;
+    }
+  }
+}
+

@@ -29,18 +29,28 @@
   }
 
   &.success {
-    border-color: $success;
     color: inherit;
+
+    .bar {
+      background: $success;
+    }
   }
 
   &.warning {
-    border-color: $warning;
     color: inherit;
+
+    .bar {
+      background: $warning;
+    }
+
   }
 
   &.error {
-    border-color: $error;
     color: inherit;
+
+    .bar {
+      background: $error;
+    }
   }
 
   .close {

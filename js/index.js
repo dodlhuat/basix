@@ -21,11 +21,13 @@ utils.ready(function () {
     }
 
     document.querySelector('.show-toast').addEventListener('click', function () {
-        toast.show('some content', 'some header', 'default', true, 3000);
+        toast.show('some content', 'some header', 'success', true, 3000);
     });
 
 
     menu.init();
+
+    utils.showCode();
 
     console.log(select.value('#single-select'));
 

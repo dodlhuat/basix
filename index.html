@@ -402,7 +402,18 @@
     <h3>toast</h3>
     <div class="row card">
         <div class="column">
-            <p>toasts can have an additonal markup to show a colored bar on top. success, warning, error.</p>
+            <p>toasts can have an additonal markup to show a colored bar on top: default, success, warning, error.</p>
+            <code class="code">
+                <div class="code-header">JAVASCRIPT</div>
+                <div class="code-content">toast.show('some content', 'some header', 'success', true, 3000);</div>
+            </code>
+            <strong>Parameters:</strong>
+            content (string | mandatory)<br>
+            header (string | optional)<br>
+            markup (enum: default, success, warning, error | optional)<br>
+            closeable (boolean | optional | default: true)<br>
+            auto-closure (integer | optional | in ms)
+            <br>
             <button class="show-toast">Show Toast</button>
         </div>
     </div>
@@ -412,9 +423,13 @@
         <div class="row">
             <div class="column">
                 <strong>Info: </strong>Basix is using a reduced font of google material icon font with just a minimum of
-                icons. Just bear in mind that the reduced version is only 5.5KB in size while the full version is 242.5KB.<br>
+                icons. Just bear in mind that the reduced version is only 5.5KB in size while the full version is
+                242.5KB.<br>
                 To show an icon use the "icon" class and the desired icon element class.<br>
-                <code class="code">&lt;span class="icon icon-delete">&lt;/span></code>
+                <code class="code">
+                    <div class="code-header">HTML</div>
+                    <div class="code-content"><span class="icon icon-delete"></span></div>
+                </code>
                 <br>The following icons are available in the reduce set:
             </div>
         </div>
@@ -422,7 +437,8 @@
             <div class="row">
                 <div class="column">icon-delete<br><span class="icon icon-delete"></span></div>
                 <div class="column">icon-search<br><span class="icon icon-search"></span></div>
-                <div class="column">icon-splitscreen_vertical_add<br><span class="icon icon-splitscreen_vertical_add"></span></div>
+                <div class="column">icon-splitscreen_vertical_add<br><span
+                        class="icon icon-splitscreen_vertical_add"></span></div>
                 <div class="column">icon-splitscreen_add<br><span class="icon icon-splitscreen_add"></span></div>
                 <div class="column">icon-push_pin<br><span class="icon icon-push_pin"></span></div>
             </div>
@@ -441,14 +457,17 @@
                 <div class="column">icon-add_box<br><span class="icon icon-add_box"></span></div>
             </div>
             <div class="row">
-                <div class="column">icon-disabled_by_default<br><span class="icon icon-disabled_by_default"></span></div>
+                <div class="column">icon-disabled_by_default<br><span class="icon icon-disabled_by_default"></span>
+                </div>
                 <div class="column">icon-help_center<br><span class="icon icon-help_center"></span></div>
                 <div class="column">icon-pages<br><span class="icon icon-pages"></span></div>
-                <div class="column">icon-add_photo_alternate<br><span class="icon icon-add_photo_alternate"></span></div>
+                <div class="column">icon-add_photo_alternate<br><span class="icon icon-add_photo_alternate"></span>
+                </div>
                 <div class="column">icon-calendar_today<br><span class="icon icon-calendar_today"></span></div>
             </div>
             <div class="row">
-                <div class="column">icon-assignment_turned_in<br><span class="icon icon-assignment_turned_in"></span></div>
+                <div class="column">icon-assignment_turned_in<br><span class="icon icon-assignment_turned_in"></span>
+                </div>
                 <div class="column">icon-finance<br><span class="icon icon-finance"></span></div>
                 <div class="column">icon-save<br><span class="icon icon-save"></span></div>
                 <div class="column">icon-folder<br><span class="icon icon-folder"></span></div>
@@ -469,15 +488,18 @@
                 <div class="column">icon-filter_alt_off<br><span class="icon icon-filter_alt_off"></span></div>
             </div>
             <div class="row">
-                <div class="column">icon-notifications_active<br><span class="icon icon-notifications_active"></span></div>
+                <div class="column">icon-notifications_active<br><span class="icon icon-notifications_active"></span>
+                </div>
                 <div class="column">icon-more_horiz<br><span class="icon icon-more_horiz"></span></div>
                 <div class="column">icon-more_vert<br><span class="icon icon-more_vert"></span></div>
                 <div class="column">icon-navigate_before<br><span class="icon icon-navigate_before"></span></div>
                 <div class="column">icon-navigate_next<br><span class="icon icon-navigate_next"></span></div>
             </div>
             <div class="row">
-                <div class="column">icon-keyboard_double_arrow_left<br><span class="icon icon-keyboard_double_arrow_left"></span></div>
-                <div class="column">icon-keyboard_double_arrow_right<br><span class="icon icon-keyboard_double_arrow_right"></span></div>
+                <div class="column">icon-keyboard_double_arrow_left<br><span
+                        class="icon icon-keyboard_double_arrow_left"></span></div>
+                <div class="column">icon-keyboard_double_arrow_right<br><span
+                        class="icon icon-keyboard_double_arrow_right"></span></div>
                 <div class="column">icon-first_page<br><span class="icon icon-first_page"></span></div>
                 <div class="column">icon-last_page<br><span class="icon icon-last_page"></span></div>
                 <div class="column">icon-expand_less<br><span class="icon icon-expand_less"></span></div>
@@ -487,10 +509,12 @@
                 <div class="column">icon-zoom_in_map<br><span class="icon icon-zoom_in_map"></span></div>
                 <div class="column">icon-zoom_out_map<br><span class="icon icon-zoom_out_map"></span></div>
                 <div class="column">icon-drag_pan<br><span class="icon icon-drag_pan"></span></div>
-                <div class="column">icon-format_list_bulleted<br><span class="icon icon-format_list_bulleted"></span></div>
+                <div class="column">icon-format_list_bulleted<br><span class="icon icon-format_list_bulleted"></span>
+                </div>
             </div>
             <div class="row">
-                <div class="column">icon-format_list_numbered<br><span class="icon icon-format_list_numbered"></span></div>
+                <div class="column">icon-format_list_numbered<br><span class="icon icon-format_list_numbered"></span>
+                </div>
                 <div class="column">icon-check<br><span class="icon icon-check"></span></div>
                 <div class="column">icon-remove<br><span class="icon icon-remove"></span></div>
                 <div class="column">icon-add<br><span class="icon icon-add"></span></div>
@@ -534,6 +558,15 @@
             <div class="spinner"></div>
         </div>
         <div class="column grow-4"></div>
+    </div>
+
+    <h3>javascript utils functions</h3>
+    <div class="row card">
+        <div class="column">
+            <strong>utils.showCode()</strong><br>
+            can be used to escape html code in code blocks to be shown. this will simply replace all "<" elements with
+            its html entity.
+        </div>
     </div>
 
 </div>

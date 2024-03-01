@@ -34,6 +34,13 @@ const utils = {
 
     isHidden(element) {
         return (element.offsetParent === null)
+    },
+
+    showCode() {
+        document.querySelectorAll('code .code-content').forEach(codeblock => {
+            const content = codeblock.innerHTML;
+            codeblock.innerHTML = content.replaceAll('<', '&lt;');
+        });
     }
 }
 
