@@ -21,24 +21,43 @@
   }
 
   .datepicker-controls {
-    padding: $spacing;
     display: flex;
     flex-direction: row;
     gap: $spacing;
   }
 
-  .datepicker-calendar {
+  .datepicker-calendar, .datepicker-controls, .datepicker-years, .datepicker-buttons {
     padding: $spacing;
+  }
 
-    .datepicker-row {
-      display: flex;
-      flex-direction: row;
-      gap: $spacing;
-    }
+  .datepicker-row {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing;
+  }
 
-    .datepicker-column {
-      flex-grow: 1;
-      flex: 1;
+  .datepicker-column {
+    flex: 1;
+    height: 32px;
+
+    .day {
+      cursor: pointer;
+      border-radius: 50%;
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      padding-top: 3px;
+      padding-left: 1px;
+      border: 1px solid transparent;
+
+      &:hover {
+        border-color: $divider;
+      }
+
+      &.selected {
+        background: $primary;
+        color: $primary-light;
+      }
     }
   }
 }

@@ -20,12 +20,15 @@
 .scroll-bar {
   width: 6px;
   height: 100%;
+  background: lighten($primary, 45%);
+  border-radius: $border-radius;
 }
 
 .scroll-anchor {
-  background-color: grey;
+  background-color: $primary;
   width: 6px;
   height: 30px;
   position: relative;
   display: block;
+  border-radius: $border-radius;
 }

@@ -758,26 +758,29 @@ select {
 .scroll-bar {
   width: 6px;
   height: 100%;
+  background: #e4eaec;
+  border-radius: 0.4rem;
 }
 
 .scroll-anchor {
-  background-color: grey;
+  background-color: #607D8B;
   width: 6px;
   height: 30px;
   position: relative;
   display: block;
+  border-radius: 0.4rem;
 }
 
 button, .button {
   padding: 0.75rem 1.5rem;
   border-radius: 0.4rem;
-  background: #536DFE;
+  background: #607D8B;
   color: #FFFFFF;
   border: none;
   cursor: pointer;
 }
 button:hover, .button:hover {
-  background: #0125ea;
+  background: #36474f;
 }
 button.button-success, .button.button-success {
   background: #4CAF50;

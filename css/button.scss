@@ -1,13 +1,13 @@
 button, .button {
   padding: $spacing $spacing * 2;
   border-radius: $border-radius;
-  background: $accent;
+  background: $primary;
   color: $accent-text;
   border: none;
   cursor: pointer;
 
   &:hover {
-    background: darken($accent, 20%);
+    background: darken($primary, 20%);
   }
 
   &.button-success {
