@@ -60,8 +60,8 @@ const template = '<div class="modal datepicker">\n' +
     '        </div>\n' +
     '        <div class="datepicker-years text-center hidden"></div>\n' +
     '        <div class="datepicker-buttons">\n' +
-    '            <button>Cancel</button>\n' +
-    '            <button>Select</button>\n' +
+    '            <button class="datepicker-cancel">Cancel</button>\n' +
+    '            <button class="datepicker-select">Select</button>\n' +
     '        </div>\n' +
     '    </div>' +
     '    <div class="modal-background"></div>';
@@ -142,7 +142,21 @@ const add = function () {
 const show = function() {
     document.querySelector('.month-year-picker').removeEventListener('click', clickYearSelector);
     document.querySelector('.month-year-picker').addEventListener('click', clickYearSelector);
+
+    document.querySelector('.datepicker-select').removeEventListener('click', clickSelect);
+    document.querySelector('.datepicker-select').addEventListener('click', clickSelect);
+
     document.querySelector('.modal-wrapper').classList.remove('hidden')
+}
+
+const pad = function (number) {
+    const s = "0" + number;
+    return s.substring(s.length - 2);
+}
+
+const clickSelect = function () {
+    selectedInput.value = selectedDate.year + '-' + pad(selectedDate.month + 1) + '-' + pad(selectedDate.day);
+    hide();
 }
 
 const hide = function () {

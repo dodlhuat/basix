@@ -4,6 +4,7 @@ import {scrollbar} from "./scrollbar.js";
 import {modal} from "./modal.js";
 import {menu} from "./push-menu.js";
 import {toast} from "./toast.js";
+import {datepicker} from "./datepicker.js";
 
 utils.ready(function () {
     select.init('#single-select');
@@ -28,6 +29,8 @@ utils.ready(function () {
     menu.init();
 
     utils.showCode();
+
+    datepicker.init();
 
     console.log(select.value('#single-select'));
 

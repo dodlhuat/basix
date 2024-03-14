@@ -1396,4 +1396,140 @@ nav.pushed {
   height: 15px;
 }
 
+.light-background {
+  background: #f2f2f2;
+}
+
+.primary-text {
+  color: #212121;
+}
+
+.warning {
+  color: #FF9800;
+}
+
+.warning-bg {
+  background: #FF9800;
+}
+
+.error {
+  color: #FF5252;
+}
+
+.error-bg {
+  background: #FF5252;
+}
+
+.success {
+  color: #4CAF50;
+}
+
+.success-bg {
+  background: #4CAF50;
+}
+
+.primary {
+  color: #607D8B;
+}
+
+.primary-bg {
+  background: #607D8B;
+}
+
+.primary-dark {
+  color: #455A64;
+}
+
+.primary-dark-bg {
+  background: #455A64;
+}
+
+.primary-light {
+  color: #CFD8DC;
+}
+
+.primary-light-bg {
+  background: #CFD8DC;
+}
+
+.accent {
+  color: #536DFE;
+}
+
+.accent-bg {
+  background: #536DFE;
+}
+
+.accent-text {
+  color: #FFFFFF;
+}
+
+.divider {
+  color: #BDBDBD;
+}
+
+.divider-bg {
+  background: #BDBDBD;
+}
+
+.modal.datepicker {
+  padding: 0;
+}
+.modal.datepicker .datepicker-header {
+  background: #607D8B;
+  color: #CFD8DC;
+  padding: 0.75rem;
+  border-top-left-radius: 0.4rem;
+  border-top-right-radius: 0.4rem;
+}
+.modal.datepicker .datepicker-header .info-text {
+  font-size: 12px;
+}
+.modal.datepicker .datepicker-header .selected-date {
+  font-size: 24px;
+}
+.modal.datepicker .datepicker-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+}
+.modal.datepicker .datepicker-controls > div {
+  cursor: pointer;
+}
+.modal.datepicker .datepicker-calendar, .modal.datepicker .datepicker-controls, .modal.datepicker .datepicker-years, .modal.datepicker .datepicker-buttons {
+  padding: 0.75rem;
+}
+.modal.datepicker .datepicker-row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+}
+.modal.datepicker .datepicker-column {
+  flex: 1;
+  height: 32px;
+}
+.modal.datepicker .datepicker-column .day {
+  cursor: pointer;
+  border-radius: 50%;
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  padding-top: 3px;
+  padding-left: 1px;
+}
+.modal.datepicker .datepicker-column .day:hover {
+  font-weight: bold;
+}
+.modal.datepicker .datepicker-column .day.selected {
+  background: #607D8B;
+  color: #CFD8DC;
+}
+.modal.datepicker .datepicker-years .datepicker-column {
+  cursor: pointer;
+  display: inline-block;
+}
+.modal.datepicker .datepicker-years .datepicker-column:hover {
+  font-weight: bold;
+}
+
 /*# sourceMappingURL=style.css.map */
