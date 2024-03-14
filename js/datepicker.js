@@ -1,3 +1,5 @@
+import {utils} from "./utils.js";
+
 let months = [
     'January',
     'February',
@@ -37,7 +39,32 @@ const datepickerColumn = '<div class="datepicker-column">[element]</div>';
 const datepickerElement = '<span class="day" data-index="[index]" data-day="[day]" data-month="[month]" data-year="[year]">[day]</span>';
 const datepickerRow = '<div class="datepicker-row">';
 const datepickerRowClosed = '</div>';
+let selectedDate = {day: 0, month: 0, year: 0}
+let currentMonth = 0;
+let currentYear = 0;
+let selectedInput = undefined;
 
+const template = '<div class="modal datepicker">\n' +
+    '        <div class="datepicker-header">\n' +
+    '            <div class="info-text">Select Date</div>\n' +
+    '            <div class="selected-date"><span class="day-name"></span>, <span class="date"></span></div>\n' +
+    '        </div>\n' +
+    '        <div class="datepicker-controls">\n' +
+    '            <div class="month-year-picker"><span class="month-name"></span> <span class="year"></span></div>\n' +
+    '            <div class="icon icon-navigate_before"></div>\n' +
+    '            <div class="icon icon-navigate_next"></div>\n' +
+    '        </div>\n' +
+    '        <div class="datepicker-calendar text-center">\n' +
+    '            <div class="datepicker-day-names"></div>\n' +
+    '            <div class="datepicker-days"></div>\n' +
+    '        </div>\n' +
+    '        <div class="datepicker-years text-center hidden"></div>\n' +
+    '        <div class="datepicker-buttons">\n' +
+    '            <button>Cancel</button>\n' +
+    '            <button>Select</button>\n' +
+    '        </div>\n' +
+    '    </div>' +
+    '    <div class="modal-background"></div>';
 
 const startWith = 1;
 
@@ -48,19 +75,18 @@ const daysData = {
 
 const datepicker = {
     init() {
-        buildWeekNames();
-        const today = new Date();
-        buildYearNames(today.getFullYear());
-
-        this.setDate(today.getMonth() + 1, today.getFullYear())
-        document.querySelector('.day[data-day="' + today.getDate() + '"]').click();
-
-        this.setDay(today.getDate(), today.getMonth(), today.getFullYear());
+        document.querySelectorAll('.datepicker-input').forEach(datepickerElement => {
+            datepickerElement.removeEventListener('click', clickDatepicker);
+            datepickerElement.addEventListener('click', clickDatepicker);
+        });
     },
 
     setDate(month, year) {
         const daysString = getMonth(month, year);
         const monthName = getMonthName(month);
+
+        currentYear = year;
+        currentMonth = month;
 
         document.querySelectorAll('.datepicker-days .day').forEach(dayElement => {
             dayElement.removeEventListener('click', clickEvent);
@@ -71,14 +97,18 @@ const datepicker = {
         document.querySelector('.datepicker-controls .year').innerText = year;
 
         document.querySelectorAll('.datepicker-days .day').forEach(dayElement => {
+            dayElement.removeEventListener('click', clickEvent);
             dayElement.addEventListener('click', clickEvent);
         })
-
     },
 
     setDay(day, month, year) {
         const date = new Date(year, month, day);
         const dayIndex = daysData[startWith].indexOf(date.getDay());
+
+        selectedDate.day = day;
+        selectedDate.month = month;
+        selectedDate.year = year;
 
         document.querySelector('.datepicker-header .day-name').innerText = daysLong[dayIndex];
         document.querySelector('.datepicker-header .date').innerText = date.toLocaleDateString();
@@ -98,8 +128,45 @@ const datepicker = {
 }
 
 document.querySelectorAll('.datepicker-days .day').forEach(dayElement => {
+    dayElement.removeEventListener('click', clickEvent);
     dayElement.addEventListener('click', clickEvent)
 })
+
+const add = function () {
+    let div = document.createElement('div');
+    div.className = 'modal-wrapper hidden'
+    div.innerHTML = template;
+    document.querySelector('body').append(div);
+}
+
+const show = function() {
+    document.querySelector('.month-year-picker').removeEventListener('click', clickYearSelector);
+    document.querySelector('.month-year-picker').addEventListener('click', clickYearSelector);
+    document.querySelector('.modal-wrapper').classList.remove('hidden')
+}
+
+const hide = function () {
+    document.querySelector('.modal-wrapper').remove();
+}
+
+const clickDatepicker = function (event) {
+    add();
+    selectedInput = event.target;
+
+    buildWeekNames();
+    let today = new Date();
+    if (selectedInput.value !== '') {
+        today = new Date(selectedInput.value);
+    }
+
+    datepicker.setDate(today.getMonth() + 1, today.getFullYear())
+    document.querySelector('.day[data-day="' + today.getDate() + '"]').click();
+
+    datepicker.setDay(today.getDate(), today.getMonth(), today.getFullYear());
+
+    selectedInput.blur();
+    show();
+}
 
 const clickEvent = function (event) {
     const [day, month, year] = [parseInt(event.target.innerText), parseInt(event.target.getAttribute('data-month')), parseInt(event.target.getAttribute('data-year'))];
@@ -108,15 +175,34 @@ const clickEvent = function (event) {
         selectedElement.classList.remove('selected');
     }
     event.target.classList.add('selected');
-    datepicker.setDay(day, month, year);
+    datepicker.setDay(day, (month - 1), year);
+}
+
+const clickYearSelector = function (event) {
+    const currentYear = parseInt(event.target.parentElement.querySelector('.year').innerText);
+    buildYearNames(currentYear);
+    document.querySelector('.datepicker-calendar').classList.add('hidden');
+    document.querySelector('.datepicker-years').classList.remove('hidden');
+
+    document.querySelectorAll('.datepicker-years .datepicker-column').forEach(dayElement => {
+        dayElement.removeEventListener('click', selectYearEvent);
+        dayElement.addEventListener('click', selectYearEvent)
+    })
+}
+
+const selectYearEvent = function (event) {
+    const selectedYear = parseInt(event.target.innerText);
+
+    datepicker.setDate(currentMonth, selectedYear)
+
+    document.querySelector('.datepicker-years').classList.add('hidden');
+    document.querySelector('.datepicker-calendar').classList.remove('hidden');
 }
 
 
 const getMonth = function (month, year) {
     let daysString = datepickerRow;
-
     --month;
-
     let date = new Date(year, (month + 1), 0);
     const daysInMonth = date.getDate();
     date = new Date(year, month, 1);
@@ -170,7 +256,7 @@ const getMonth = function (month, year) {
             }
         }
         daysString += datepickerRowClosed;
-    } else  {
+    } else {
         // remove started row
         daysString = daysString.substring(datepickerRow.length * -1);
     }
@@ -183,7 +269,7 @@ const getMonthName = function (month) {
     return months[--month];
 }
 
-const buildWeekNames = function() {
+const buildWeekNames = function () {
     let columns = '';
     for (const dayName in daysShort) {
         columns += datepickerColumn.replace('[element]', daysShort[dayName]);
@@ -196,7 +282,6 @@ const buildYearNames = function (start) {
     const end_year = start + 11;
     let years = datepickerRow;
     for (let year = start_year; year <= end_year; year++) {
-        console.log(year);
         const diff = year - start;
         if (diff % 4 === 0) {
             years += datepickerRowClosed;
@@ -208,10 +293,15 @@ const buildYearNames = function (start) {
     document.querySelector('.datepicker-years').innerHTML = years;
 }
 
+
+
 datepicker.setTranslation({
     daysShort: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
     daysLong: ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag']
 });
-datepicker.init();
+
+utils.ready(function () {
+    datepicker.init();
+});
 
 export {datepicker}
