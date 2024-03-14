@@ -88,10 +88,6 @@ const datepicker = {
         currentYear = year;
         currentMonth = month;
 
-        document.querySelectorAll('.datepicker-days .day').forEach(dayElement => {
-            dayElement.removeEventListener('click', clickEvent);
-        })
-
         document.querySelector('.datepicker-calendar .datepicker-days').innerHTML = daysString;
         document.querySelector('.datepicker-controls .month-name').innerText = monthName;
         document.querySelector('.datepicker-controls .year').innerText = year;
@@ -146,7 +142,32 @@ const show = function() {
     document.querySelector('.datepicker-select').removeEventListener('click', clickSelect);
     document.querySelector('.datepicker-select').addEventListener('click', clickSelect);
 
+    // icon-navigate_before
+    document.querySelector('.datepicker .icon-navigate_before').removeEventListener('click', clickPrevioiusMonth);
+    document.querySelector('.datepicker .icon-navigate_before').addEventListener('click', clickPrevioiusMonth);
+    // icon-navigate_next
+    document.querySelector('.datepicker .icon-navigate_next').removeEventListener('click', clickNextMonth);
+    document.querySelector('.datepicker .icon-navigate_next').addEventListener('click', clickNextMonth);
+
     document.querySelector('.modal-wrapper').classList.remove('hidden')
+}
+
+const clickNextMonth = function() {
+    currentMonth++;
+    if (currentMonth > 12) {
+        currentMonth = 1;
+        currentYear++;
+    }
+    datepicker.setDate(currentMonth, currentYear);
+}
+
+const clickPrevioiusMonth = function() {
+    currentMonth--;
+    if (currentMonth === 0) {
+        currentMonth = 12;
+        currentYear--;
+    }
+    datepicker.setDate(currentMonth, currentYear);
 }
 
 const pad = function (number) {
