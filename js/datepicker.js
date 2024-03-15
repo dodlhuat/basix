@@ -142,10 +142,9 @@ const show = function() {
     document.querySelector('.datepicker-select').removeEventListener('click', clickSelect);
     document.querySelector('.datepicker-select').addEventListener('click', clickSelect);
 
-    // icon-navigate_before
     document.querySelector('.datepicker .icon-navigate_before').removeEventListener('click', clickPrevioiusMonth);
     document.querySelector('.datepicker .icon-navigate_before').addEventListener('click', clickPrevioiusMonth);
-    // icon-navigate_next
+
     document.querySelector('.datepicker .icon-navigate_next').removeEventListener('click', clickNextMonth);
     document.querySelector('.datepicker .icon-navigate_next').addEventListener('click', clickNextMonth);
 
