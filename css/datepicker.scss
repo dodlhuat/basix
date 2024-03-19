@@ -1,6 +1,19 @@
 @import "colors";
 @import "parameters";
 
+.datepicker-icon {
+  position: absolute;
+  margin-left: -29px;
+  margin-top: 1px;
+  background: lightgrey;
+  padding: 3px;
+  padding-left: 4px;
+  font-size: 21px;
+
+  border-bottom-right-radius: $border-radius / 2;
+  border-top-right-radius: $border-radius / 2;
+}
+
 .modal.datepicker {
   padding: 0;
 

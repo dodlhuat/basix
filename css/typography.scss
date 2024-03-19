@@ -8,8 +8,7 @@ p, li, td, th, div {
 }
 
 .h1, .h2, .h3, .h4, h1, h2, h3, h4 {
-  margin-top: 0;
-  margin-bottom: .5rem;
+  margin: 0  0 $spacing / 1.5 0;
   line-height: 1.2;
   font-weight: bold;
 }
@@ -32,6 +31,7 @@ h4, .h4 {
 
 ul, ol {
   list-style-position: inside;
+  margin-bottom: $spacing / 1.5;
 }
 
 ul li {

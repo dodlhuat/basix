@@ -170,6 +170,7 @@ code.code {
   font-family: monospace;
   border-radius: 0.4rem;
   font-size: 0.975rem;
+  margin: 0.75rem 0;
 }
 code.code .code-header {
   display: block;
@@ -182,6 +183,7 @@ code.code .code-header {
 }
 code.code .code-content {
   padding: 1.5rem;
+  white-space: break-spaces;
 }
 
 .row {
@@ -238,8 +240,7 @@ p, li, td, th, div {
 }
 
 .h1, .h2, .h3, .h4, h1, h2, h3, h4 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
   line-height: 1.2;
   font-weight: bold;
 }
@@ -262,6 +263,7 @@ h4, .h4 {
 
 ul, ol {
   list-style-position: inside;
+  margin-bottom: 0.5rem;
 }
 
 ul li {
@@ -1347,6 +1349,9 @@ nav.pushed {
 .tree {
   position: relative;
 }
+.tree .icon-spacer {
+  margin-right: 4px;
+}
 .tree .li-content {
   display: flex;
   flex-direction: row;
@@ -1355,7 +1360,7 @@ nav.pushed {
 }
 .tree .li-content .folder-name {
   margin-top: 2px;
-  margin-left: 4px;
+  margin-left: 6px;
 }
 .tree .li-content .folder-content {
   flex-basis: 100%;
@@ -1470,6 +1475,18 @@ nav.pushed {
 
 .divider-bg {
   background: #BDBDBD;
+}
+
+.datepicker-icon {
+  position: absolute;
+  margin-left: -29px;
+  margin-top: 1px;
+  background: lightgrey;
+  padding: 3px;
+  padding-left: 4px;
+  font-size: 21px;
+  border-bottom-right-radius: 0.2rem;
+  border-top-right-radius: 0.2rem;
 }
 
 .modal.datepicker {
