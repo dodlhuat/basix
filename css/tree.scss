@@ -1,6 +1,14 @@
 
 .tree {
   position: relative;
+  
+  .icon-folder_open, .icon-folder, .folder-name {
+    cursor: pointer;
+  }
+
+  .icon-spacer {
+    margin-right: 4px;
+  }
 
   .li-content {
     display: flex;
@@ -8,9 +16,13 @@
     align-items: center;
     flex-wrap: wrap;
 
+    &.hidden {
+      display: none;
+    }
+
     .folder-name {
       margin-top: 2px;
-      margin-left: 4px;
+      margin-left: 6px;
     }
 
     .folder-content {

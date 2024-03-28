@@ -164,6 +164,12 @@ body {
   text-align: center;
 }
 
+.center {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
 code.code {
   background: #BDBDBD;
   display: block;
@@ -958,6 +964,73 @@ button.button-light:hover, .button.button-light:hover {
     transform: rotate(360deg);
   }
 }
+.loading, .loading:before, .loading:after {
+  border-radius: 50%;
+  background-color: #536DFE;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
+
+.loading {
+  position: relative;
+  background-color: #536dfe;
+  opacity: 1;
+  animation: spScaleAlpha 1s infinite linear;
+}
+
+.loading:before, .loading:after {
+  content: "";
+  position: absolute;
+  opacity: 0.25;
+}
+
+.loading:before {
+  left: 30px;
+  animation: spScaleAlphaBefore 1s infinite linear;
+}
+
+.loading:after {
+  left: -30px;
+  animation: spScaleAlphaAfter 1s infinite linear;
+}
+
+@keyframes spScaleAlpha {
+  0% {
+    opacity: 1;
+  }
+  33% {
+    opacity: 0.25;
+  }
+  66% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes spScaleAlphaBefore {
+  0% {
+    opacity: 0.25;
+  }
+  33% {
+    opacity: 1;
+  }
+  66% {
+    opacity: 0.25;
+  }
+}
+@keyframes spScaleAlphaAfter {
+  33% {
+    opacity: 0.25;
+  }
+  66% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.25;
+  }
+}
 .toast {
   display: inline-block;
   box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
@@ -1349,6 +1422,9 @@ nav.pushed {
 .tree {
   position: relative;
 }
+.tree .icon-folder_open, .tree .icon-folder, .tree .folder-name {
+  cursor: pointer;
+}
 .tree .icon-spacer {
   margin-right: 4px;
 }
@@ -1357,6 +1433,9 @@ nav.pushed {
   flex-direction: row;
   align-items: center;
   flex-wrap: wrap;
+}
+.tree .li-content.hidden {
+  display: none;
 }
 .tree .li-content .folder-name {
   margin-top: 2px;

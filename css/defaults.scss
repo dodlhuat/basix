@@ -41,6 +41,12 @@ body {
   text-align: center;
 }
 
+.center {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
 code.code {
   background: $divider;
   display: block;
