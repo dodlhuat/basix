@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/form-builder.css" type="text/css">
+    <script type="module">
+        import {utils} from "./js/utils.js";
+        import {formbuilder} from "./js/form-builder.js";
+
+        utils.ready(function () {
+            formbuilder.init()
+        });
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="content push-content">
+    <div class="row">
+        <div class="column card grow-2">
+            <h2>Form</h2>
+            <div class="row">
+                <div class="column">
+                    <div class="dropzone"></div>
+                </div>
+                <div class="column">
+                    <div class="dropzone"></div>
+                </div>
+            </div>
+        </div>
+        <div class="column card">
+            <h2>Elements</h2>
+            <div class="draggable" draggable="true">
+                <p>Text Element: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                    invidunt ut</p>
+            </div>
+            <hr>
+            <div class="draggable" draggable="true">
+                <span class="label">Text Input</span>
+                <input type="text" id="text-input">
+            </div>
+            <hr>
+            <div class="draggable" draggable="true">
+                <span class="label">Text Area</span>
+                <textarea id="text-area"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
