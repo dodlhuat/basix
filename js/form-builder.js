@@ -1,5 +1,6 @@
-let draggedElement = null;
+let dragged_element = null;
 let action = 'copy';
+let row_count = 1;
 
 let formbuilder = {
     init() {
@@ -8,15 +9,27 @@ let formbuilder = {
             element.addEventListener("dragstart", dragAction);
         });
         initDropzones();
+    },
+    addRow() {
+        document.querySelector('.form-content').innerHTML += buildRowElement();
+    },
+    addColumn() {
+
+    },
+    removeRow() {
+
+    },
+    removeColumn() {
+
     }
 }
 
 const moveAction = function (event) {
-    draggedElement = event.target;
+    dragged_element = event.target;
     action = 'move';
 }
 const dragAction = function (event) {
-    draggedElement = event.target;
+    dragged_element = event.target;
     action = 'copy';
 }
 const addMoveListeners = function () {
@@ -26,11 +39,25 @@ const addMoveListeners = function () {
     });
 }
 
+const buildRowElement = function() {
+    const row = document.createElement('div');
+    row_count++;
+    row.setAttribute('data-row-id', String(row_count));
+    row.className = 'row';
+    const col = document.createElement('div');
+    col.className = 'column';
+    const dropzone = document.createElement('div');
+    dropzone.className = 'dropzone';
+    col.innerHTML = dropzone.outerHTML;
+    row.innerHTML = col.outerHTML;
+    return row.outerHTML;
+}
+
 const dropEvent = function (event) {
     event.preventDefault();
-    let node = draggedElement;
+    let node = dragged_element;
     if (action === 'copy') {
-        node = draggedElement.cloneNode(true);
+        node = dragged_element.cloneNode(true);
     }
     node.classList.remove('draggable');
     node.classList.add('movable');

@@ -1,5 +1,11 @@
-.dropzone {
-  border: 1px dashed black;
-  min-height: 200px;
-  padding: 0.5rem;
+.form-content {
+  .dropzone {
+    border: 1px dashed black;
+    min-height: 200px;
+    padding: 0.5rem;
+  }
+}
+
+.row .column .form-content .row {
+  margin-bottom: 1rem;
 }

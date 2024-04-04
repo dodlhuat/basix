@@ -12,6 +12,10 @@
 
         utils.ready(function () {
             formbuilder.init()
+
+            document.querySelector('.add-row').addEventListener('click', function() {
+                formbuilder.addRow();
+            })
         });
     </script>
 </head>
@@ -20,12 +24,19 @@
     <div class="row">
         <div class="column card grow-2">
             <h2>Form</h2>
+            <div class="form-content">
+                <div class="row" data-row-id="1">
+                    <div class="column">
+                        <div class="dropzone"></div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="column">
-                    <div class="dropzone"></div>
-                </div>
-                <div class="column">
-                    <div class="dropzone"></div>
+                    <button class="add-row">add row</button>
+                    <button>remove row</button>
+                    <button>add column</button>
+                    <button>remove column</button>
                 </div>
             </div>
         </div>
