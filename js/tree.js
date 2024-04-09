@@ -10,9 +10,15 @@ const tree = {
         selector_element.classList.add('tree');
         selector_element.innerHTML = tree;
 
-        document.querySelectorAll('.tree li').forEach(function (folder) {
+        document.querySelectorAll('.tree .li-content').forEach(function (folder) {
             folder.addEventListener('click', function () {
-                console.log('li clicked');
+                const children = this.closest('li').querySelector('ul');
+                const folder = this.querySelector('.icon');
+                if (children !== null) {
+                    children.classList.toggle('hidden');
+                    folder.classList.toggle('icon-folder');
+                    folder.classList.toggle('icon-folder_open');
+                }
             })
         })
     }

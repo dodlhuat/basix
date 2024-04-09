@@ -39,7 +39,6 @@ const utils = {
     showCode() {
         document.querySelectorAll('code .code-content').forEach(codeblock => {
             const content = codeblock.innerHTML;
-            console.log(codeblock.innerHTML);
             codeblock.innerHTML = content
                 .replaceAll('<', '&lt;')
                 .replaceAll('>', '&gt;');
