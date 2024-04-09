@@ -21,6 +21,11 @@ let formbuilder = {
     },
     removeColumn() {
 
+    },
+    load(file_name) {
+        load(file_name).then((data) => {
+            console.log(data);
+        });
     }
 }
 
@@ -39,7 +44,19 @@ const addMoveListeners = function () {
     });
 }
 
-const buildRowElement = function() {
+const load = async function (file_name) {
+    const url = new URL(file_name,
+        document.currentScript && document.currentScript.src || location.href)
+    // fetch and parse template as string
+    let template = await fetch(url)
+    template = await template.text()
+    template = new DOMParser().parseFromString(template, 'text/html')
+        .querySelector('template')
+    if (!template) throw new TypeError('No template element found')
+    return template.innerHTML.trim()
+}
+
+const buildRowElement = function () {
     const row = document.createElement('div');
     row_count++;
     row.setAttribute('data-row-id', String(row_count));

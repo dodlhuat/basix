@@ -13,6 +13,8 @@
         utils.ready(function () {
             formbuilder.init()
 
+            formbuilder.load('./templates/text-input.html');
+
             document.querySelector('.add-row').addEventListener('click', function() {
                 formbuilder.addRow();
             })
