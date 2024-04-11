@@ -12,23 +12,46 @@ const tree = {
 
         document.querySelectorAll('.tree .li-content').forEach(function (folder) {
             folder.addEventListener('click', function () {
-                const children = this.closest('li').querySelector('ul');
+                const li_element = this.closest('li');
+                const children = li_element.querySelector('ul');
                 const folder = this.querySelector('.icon');
-                if (children !== null) {
-                    children.classList.toggle('hidden');
+                const folder_content = li_element.querySelector('.folder-content');
+                if (children !== null || folder_content !== null) {
+                    if (children !== null) children.classList.toggle('hidden');
+                    if (folder_content !== null) folder_content.classList.toggle('hidden');
                     folder.classList.toggle('icon-folder');
                     folder.classList.toggle('icon-folder_open');
+                    li_element.classList.toggle('opened')
                 }
             })
         })
     }
 }
 
+const buildContent = function (data) {
+    const div = document.createElement('div');
+    div.classList.add('folder-content', 'hidden');
+
+    const spacer = document.createElement('div');
+    spacer.classList.add('row', 'spacing-top');
+
+    data.forEach(function (item, index) {
+        const element = document.createElement('div');
+        element.classList.add('column', 'vertical-align-center');
+        element.innerHTML = item;
+        spacer.innerHTML += element.outerHTML;
+    });
+
+    div.innerHTML = spacer.outerHTML;
+
+    return div.outerHTML;
+}
+
 const buildTree = function (data, hidden) {
     let tree = '';
     data.forEach(function (element, index) {
         tree += '<li>';
-        tree += getFolder(element.name, hidden);
+        tree += getFolder(element.name, element.content);
         if (element.children.length > 0) {
             tree += '<ul class="hidden">';
             tree += buildTree(element.children);
@@ -39,10 +62,15 @@ const buildTree = function (data, hidden) {
     return tree;
 }
 
-const getFolder = function (name) {
+const getFolder = function (name, content) {
     let folder = '';
     folder += getFolderIcon();
     folder += getFolderNameElement(name);
+    if (content !== undefined) {
+        if (Array.isArray(content) && content.length > 0) {
+            folder += buildContent(content);
+        }
+    }
 
     let div = document.createElement('div');
     div.className = 'li-content'
