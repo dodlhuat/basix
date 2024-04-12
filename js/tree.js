@@ -11,22 +11,24 @@ const tree = {
         selector_element.innerHTML = tree;
 
         document.querySelectorAll('.tree .li-content').forEach(function (folder) {
-            folder.addEventListener('click', function () {
-                const li_element = this.closest('li');
-                const children = li_element.querySelector('ul');
-                const folder = this.querySelector('.icon');
-                const folder_content = li_element.querySelector('.folder-content');
-                if (children !== null || folder_content !== null) {
-                    if (children !== null) children.classList.toggle('hidden');
-                    if (folder_content !== null) folder_content.classList.toggle('hidden');
-                    folder.classList.toggle('icon-folder');
-                    folder.classList.toggle('icon-folder_open');
-                    li_element.classList.toggle('opened')
-                }
-            })
+            folder.addEventListener('click', folderClickEvent);
         })
     }
 }
+
+const folderClickEvent = function () {
+    const li_element = this.closest('li');
+    const children = li_element.querySelector('ul');
+    const folder = this.querySelector('.icon');
+    const folder_content = li_element.querySelector('.folder-content');
+    if (children !== null || folder_content !== null) {
+        if (children !== null) children.classList.toggle('hidden');
+        if (folder_content !== null) folder_content.classList.toggle('hidden');
+        folder.classList.toggle('icon-folder');
+        folder.classList.toggle('icon-folder_open');
+        li_element.classList.toggle('opened')
+    }
+};
 
 const buildContent = function (data) {
     const div = document.createElement('div');
@@ -37,6 +39,7 @@ const buildContent = function (data) {
 
     data.forEach(function (item, index) {
         const element = document.createElement('div');
+        // TODO: vertical align center needs to be a setting as it will mess up html content
         element.classList.add('column', 'vertical-align-center');
         element.innerHTML = item;
         spacer.innerHTML += element.outerHTML;
@@ -50,14 +53,15 @@ const buildContent = function (data) {
 const buildTree = function (data, hidden) {
     let tree = '';
     data.forEach(function (element, index) {
-        tree += '<li>';
-        tree += getFolder(element.name, element.content);
+        const li = document.createElement('li');
+        li.innerHTML += getFolder(element.name, element.content);
         if (element.children.length > 0) {
-            tree += '<ul class="hidden">';
-            tree += buildTree(element.children);
-            tree += '</ul>';
+            const ul = document.createElement('ul');
+            ul.className = 'hidden'
+            ul.innerHTML += buildTree(element.children);
+            li.innerHTML += ul.outerHTML;
         }
-        tree += '</li>';
+        tree += li.outerHTML;
     });
     return tree;
 }

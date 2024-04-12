@@ -5,6 +5,7 @@ import {modal} from "./modal.js";
 import {menu} from "./push-menu.js";
 import {toast} from "./toast.js";
 import {datepicker} from "./datepicker.js";
+import {tree} from "./tree.js";
 
 utils.ready(function () {
     select.init('#single-select');
@@ -33,5 +34,53 @@ utils.ready(function () {
     datepicker.init();
 
     console.log(select.value('#single-select'));
+
+    const data = [
+        {
+            "name": "Eins",
+            "content": [
+                "<span class=\"icon icon-article icon-spacer\"></span> filename.txt",
+                "146kb",
+                "Rev1.0",
+                "2024-01-01 12.27:02"
+            ],
+            "children": []
+        },
+        {
+            "name": "Zwei",
+            "content": [
+                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+            ],
+            "children": [
+                {
+                    "name": "Zwei.Eins",
+                    "content": [],
+                    "children": []
+                },
+                {
+                    "name": "Zwei.Zwei",
+                    "content": [],
+                    "children": [
+                        {
+                            "name": "Zwei.Zwei.Null",
+                            "content": [],
+                            "children": []
+                        },
+                        {
+                            "name": "Zwei.Zwei.Eins",
+                            "content": [],
+                            "children": []
+                        },
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Drei",
+            "content": [],
+            "children": []
+        }
+    ];
+    tree.init('.built-tree', data);
 
 });

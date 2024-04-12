@@ -1443,6 +1443,7 @@ nav.pushed {
 }
 .tree .li-content .folder-content {
   flex-basis: 100%;
+  padding-left: 1rem;
 }
 .tree ul {
   padding-left: 1rem;
@@ -1454,15 +1455,6 @@ nav.pushed {
   padding-top: 5px;
   padding-bottom: 0;
   padding-left: 0;
-}
-.tree ul li:before {
-  font-family: "Material Symbols Outlined 24pt";
-  content: "\e409";
-  float: left;
-  margin-top: 2px;
-}
-.tree ul li.opened:before {
-  content: "\e5cf";
 }
 
 .light-background {

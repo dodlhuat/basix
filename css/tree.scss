@@ -27,6 +27,7 @@
 
     .folder-content {
       flex-basis: 100%;
+      padding-left: 1rem;
     }
   }
 
@@ -40,18 +41,6 @@
       padding-top: 5px;
       padding-bottom: 0;
       padding-left: 0;
-      &:before {
-        font-family: "Material Symbols Outlined 24pt";
-        content: "\e409";
-        float: left;
-        margin-top: 2px;
-      }
-    }
-
-    li.opened {
-      &:before {
-        content: "\e5cf";
-      }
     }
   }
 }
