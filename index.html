@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
     <title>Basix</title>
-    <link rel="stylesheet" href="css/style.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
     <script src="js/index.js" type="module"></script>
 </head>
 <body class="primary-light-bg primary">
@@ -298,40 +298,78 @@
 
     <h2>scrollbar</h2>
     <div class="row card">
-        <div class="column scrollable" style="height: 100px">
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                sed
-                diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
-                eos
-                et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-                Lorem
-                ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                tempor
-                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et
-                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-                Stet
-                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+        <div class="column scroll-container" style="height: 100px">
+            <div class="viewport">
+                <div class="content">
+                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                        sed
+                        diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                        At vero
+                        eos
+                        et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+                        est
+                        Lorem
+                        ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                        eirmod
+                        tempor
+                        invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                        justo duo
+                        dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
+                        sit amet.
+                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                        ut
+                        labore et
+                        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+                        rebum.
+                        Stet
+                        clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
-                Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum
-                dolore eu
-                feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum
-                zzril
-                delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing
-                elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-
+                        Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel
+                        illum
+                        dolore eu
+                        feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent
+                        luptatum
+                        zzril
+                        delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer
+                        adipiscing
+                        elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                </div>
+                <div class="scrollbar" aria-hidden="true">
+                    <div class="track">
+                        <div class="thumb" role="presentation" aria-hidden="true"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="column scrollable" style="height: 100px;">
-            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-            dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+        <div class="column scroll-container" style="height: 100px;">
+            <div class="viewport">
+                <div class="content">
+                    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
+                    duo
+                    dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+                    amet.
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                </div>
+                <div class="scrollbar" aria-hidden="true">
+                    <div class="track">
+                        <div class="thumb" role="presentation" aria-hidden="true"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="column scrollable" style="height: 100px;">
-            invidunt ut labore et dolore magna aliquyam erat
+        <div class="column scroll-container" style="height: 100px;">
+            <div class="viewport">
+                <div class="content">
+                    invidunt ut labore et dolore magna aliquyam erat
+                </div>
+            </div>
+            <div class="scrollbar" aria-hidden="true">
+                <div class="track">
+                    <div class="thumb" role="presentation" aria-hidden="true"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -567,12 +605,12 @@
     <div class="row">
         <div class="column card">
             <label for="datepicker-with-value">Datepicker with value</label>
-            <input type="text" id="datepicker-with-value" class="datepicker-input" value="2023-03-12" />
+            <input type="text" id="datepicker-with-value" class="datepicker-input" value="2023-03-12"/>
             <span class="icon icon-calendar_today datepicker-icon"></span>
         </div>
         <div class="column card">
             <label for="datepicker-without-value">Datepicker without value</label>
-            <input type="text" id="datepicker-without-value" class="datepicker-input" />
+            <input type="text" id="datepicker-without-value" class="datepicker-input"/>
         </div>
     </div>
 
@@ -591,52 +629,57 @@
             <code class="code">
                 <div class="code-header">JAVASCRIPT</div>
                 <div class="code-content">const data = [
-    {
-        "name": "Eins",
-        "content": [
-            "&lt;span class=\"icon icon-article icon-spacer\">&lt;/span> filename.txt",
-            "146kb",
-            "Rev1.0",
-            "2024-01-01 12.27:02"
-        ],
-        "children": []
-    },
-    {
-         "name": "Zwei",
-         "content": [
-             "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-         ],
-         "children": [
-             {
-                 "name": "Zwei.Eins",
-                 "content": [],
-                 "children": []
-             },
-             {
-                  "name": "Zwei.Zwei",
-                  "content": [],
-                  "children": [
-                      {
-                          "name": "Zwei.Zwei.Null",
-                          "content": [],
-                          "children": []
-                      },
-                      {
-                          "name": "Zwei.Zwei.Eins",
-                          "content": [],
-                          "children": []
-                      },
-                  ]
-             }
-         ]
-    },
-    {
-        "name": "Drei",
-        "content": [],
-        "children": []
-    }
-];
-tree.init('.built-tree', data);
+                    {
+                    "name": "Eins",
+                    "content": [
+                    "&lt;span class=\"icon icon-article icon-spacer\">&lt;/span> filename.txt",
+                    "146kb",
+                    "Rev1.0",
+                    "2024-01-01 12.27:02"
+                    ],
+                    "children": []
+                    },
+                    {
+                    "name": "Zwei",
+                    "content": [
+                    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+                    ],
+                    "children": [
+                    {
+                    "name": "Zwei.Eins",
+                    "content": [],
+                    "children": []
+                    },
+                    {
+                    "name": "Zwei.Zwei",
+                    "content": [],
+                    "children": [
+                    {
+                    "name": "Zwei.Zwei.Null",
+                    "content": [],
+                    "children": []
+                    },
+                    {
+                    "name": "Zwei.Zwei.Eins",
+                    "content": [],
+                    "children": []
+                    },
+                    ]
+                    }
+                    ]
+                    },
+                    {
+                    "name": "Drei",
+                    "content": [],
+                    "children": []
+                    }
+                    ];
+                    tree.init('.built-tree', data);
                 </div>
             </code>
         </div>
@@ -648,17 +691,18 @@ tree.init('.built-tree', data);
             <code class="code">
                 <div class="code-header">HTML</div>
                 <div class="code-content">&lt;!DOCTYPE html>
-&lt;html lang="en">
-    &lt;head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
-        <title>Title</title>
-        <link rel="stylesheet" href="css/style.css" type="text/css">
-    &lt;/head>
-    &lt;body class="primary-light-bg primary">
-        <div class="content push-content"></div>
-    &lt;/body>
-&lt;/html></div>
+                    &lt;html lang="en">
+                    &lt;head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+                    <title>Title</title>
+                    <link rel="stylesheet" href="css/style.css" type="text/css">
+                    &lt;/head>
+                    &lt;body class="primary-light-bg primary">
+                    <div class="content push-content"></div>
+                    &lt;/body>
+                    &lt;/html>
+                </div>
             </code>
         </div>
     </div>

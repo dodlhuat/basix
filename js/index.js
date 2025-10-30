@@ -1,6 +1,6 @@
 import {utils} from "./utils.js";
 import {select} from "./select.js";
-import {scrollbar} from "./scrollbar.js";
+import {Scrollbar} from "./scrollbar.js";
 import {modal} from "./modal.js";
 import {menu} from "./push-menu.js";
 import {toast} from "./toast.js";
@@ -11,8 +11,7 @@ utils.ready(function () {
     select.init('#single-select');
     select.init('#multi-select');
     select.listen(document.querySelector('.user.select'))
-
-    scrollbar.init('.scrollbar');
+    Scrollbar.initAll('.scroll-container');
 
     const elements = document.querySelectorAll('.show-modal');
     if (elements !== undefined) {

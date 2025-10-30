@@ -1,34 +1,67 @@
-.scrollable {
-  scrollbar-width: none;
+:root {
+  --track-width: 12px;
+  --track-radius: 8px;
+  --thumb-min: 28px;
+  --track-gap: 8px;
+}
+
+.scroll-container {
   position: relative;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+
+  .viewport {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    padding-right: calc(var(--track-width) + var(--track-gap));
+    box-sizing: content-box;
+
+    .content {
+      margin: 0;
+    }
+  }
+
+  .viewport::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  .viewport {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: var(--track-width);
+    pointer-events: none;
+  }
+
+  .track {
+    position: relative;
+    height: 100%;
+    border-radius: var(--track-radius);
+    width: 100%;
+    pointer-events: auto;
+  }
+
+  .thumb {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    top: 0px;
+    height: 40px;
+    border-radius: calc(var(--track-radius) - 2px);
+    background: $primary;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: none;
+  }
 }
 
-.scroll-content {
-  overflow: scroll;
-  scrollbar-width: none;
-  position: relative;
-}
-
-.scroll-wrapper {
-  float: right;
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  height: calc(100% - 1rem);
-}
-
-.scroll-bar {
-  width: 6px;
-  height: 100%;
-  background: lighten($primary, 45%);
-  border-radius: $border-radius;
-}
-
-.scroll-anchor {
-  background-color: $primary;
-  width: 6px;
-  height: 30px;
-  position: relative;
-  display: block;
-  border-radius: $border-radius;
-}
