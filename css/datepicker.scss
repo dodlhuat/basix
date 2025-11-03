@@ -1,5 +1,6 @@
 @import "colors";
 @import "parameters";
+@import "properties";
 
 .datepicker-icon {
   position: absolute;
@@ -10,16 +11,16 @@
   padding-left: 4px;
   font-size: 21px;
 
-  border-bottom-right-radius: $border-radius / 2;
-  border-top-right-radius: $border-radius / 2;
+  border-bottom-right-radius: calc($border-radius / 2);
+  border-top-right-radius: calc($border-radius / 2);
 }
 
 .modal.datepicker {
   padding: 0;
 
   .datepicker-header {
-    background: $primary;
-    color: $primary-light;
+    background: var(--primary);
+    color: var(--primary-light);
     padding: $spacing;
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
@@ -71,8 +72,8 @@
       }
 
       &.selected {
-        background: $primary;
-        color: $primary-light;
+        background: var(--primary);
+        color: var(--primary-light);
       }
     }
   }

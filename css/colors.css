@@ -1,3 +1,124 @@
+:root {
+  --primary-text: #212121;
+  --secondary-text: #757575;
+  --divider: #BDBDBD;
+  --accent-text: #FFFFFF;
+  --error: #FF5252;
+  --error-lighten: lighten(#FF5252, 10%);
+  --error-darken: darken(#FF5252, 20%);
+  --warning: #FF9800;
+  --warning-lighten: lighten(#FF9800, 10%);
+  --warning-darken: darken(#FF9800, 20%);
+  --success: #4CAF50;
+  --success-lighten: lighten(#4CAF50, 10%);
+  --success-darken: darken(#4CAF50, 20%);
+  --primary: #080808;
+  --primary-darken: darken(#212121, 20%);
+  --primary-dark: #455A64;
+  --primary-light: #CFD8DC;
+  --primary-light-darken: darken(#CFD8DC, 20%);
+  --accent: #536DFE;
+  --light-background: #f2f2f2;
+  --disabled: #b8b8b8;
+}
 
+[data-theme=dark] {
+  --primary-text: #D3DAD9;
+  --secondary-text: #757575;
+  --divider: #BDBDBD;
+  --accent-text: #FFFFFF;
+  --error: #FF5252;
+  --error-lighten: lighten(#FF5252, 10%);
+  --error-darken: darken(#FF5252, 20%);
+  --warning: #FF9800;
+  --warning-lighten: lighten(#FF9800, 10%);
+  --warning-darken: darken(#FF9800, 20%);
+  --success: #4CAF50;
+  --success-lighten: lighten(#4CAF50, 10%);
+  --success-darken: darken(#4CAF50, 20%);
+  --primary: #b7c3c1;
+  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-dark: #455A64;
+  --primary-light: #37353E;
+  --accent: #536DFE;
+  --light-background: #44444E;
+  --disabled: #b8b8b8;
+}
+
+.light-background {
+  background: var(--light-background);
+}
+
+.primary-text {
+  color: var(--primary-text);
+}
+
+.warning {
+  color: var(--warning);
+}
+
+.warning-bg {
+  background: var(--warning);
+}
+
+.error {
+  color: var(--error);
+}
+
+.error-bg {
+  background: var(--error);
+}
+
+.success {
+  color: var(--success);
+}
+
+.success-bg {
+  background: var(--success);
+}
+
+.primary {
+  color: var(--primary);
+}
+
+.primary-bg {
+  background: var(--primary);
+}
+
+.primary-dark {
+  color: var(--primary-dark);
+}
+
+.primary-dark-bg {
+  background: var(--primary-dark);
+}
+
+.primary-light {
+  color: var(--primary-light);
+}
+
+.primary-light-bg {
+  background: var(--primary-light);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.accent-bg {
+  background: var(--accent);
+}
+
+.accent-text {
+  color: var(--accent-text);
+}
+
+.divider {
+  color: var(--divider);
+}
+
+.divider-bg {
+  background: var(--divider);
+}
 
 /*# sourceMappingURL=colors.css.map */

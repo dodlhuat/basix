@@ -1,3 +1,6 @@
+@import "properties";
+@import "parameters";
+
 .styled-checkbox {
   position: absolute;
   opacity: 0;
@@ -7,15 +10,15 @@
     cursor: pointer;
     padding: 0;
     display: flex;
-    margin-bottom: $spacing / 2;
+    margin-bottom: calc($spacing / 2);
   }
 
   & + label:before {
     content: '';
     margin-right: 10px;
     display: inline-block;
-    width: $spacing * 1.5;
-    height: $spacing * 1.5;
+    width: calc($spacing * 1.5);
+    height: calc($spacing * 1.5);
     transition: border 0.3s;
     border: 2px solid rgba(0, 0, 0, 0.25)
   }
@@ -25,17 +28,17 @@
   }
 
   &:checked + label:before {
-    background: $accent;
+    background: var(--accent);
   }
 
   &:disabled + label {
-    color: $disabled;
+    color: var(--disabled);
     cursor: auto;
   }
 
   &:disabled + label:before {
     box-shadow: none;
-    background: $disabled;
+    background: var(--disabled);
   }
 
   &:checked + label:after {

@@ -4,12 +4,12 @@
   cursor: wait;
   background-color: currentcolor;
   opacity: .5;
-  min-height: $spacing / 2;
-  margin-right: $spacing / 2;
+  min-height: calc($spacing / 2);
+  margin-right: calc($spacing / 2);
 
   @for $i from 1 through 12 {
     &.w-#{$i} {
-      width: 100% / (12 / $i);
+      width: calc(100% / (12 / $i));
     }
   }
 }

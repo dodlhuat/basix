@@ -6,12 +6,14 @@ import {menu} from "./push-menu.js";
 import {toast} from "./toast.js";
 import {datepicker} from "./datepicker.js";
 import {tree} from "./tree.js";
+import {Theme} from "./theme.js";
 
 utils.ready(function () {
     select.init('#single-select');
     select.init('#multi-select');
     select.listen(document.querySelector('.user.select'))
     Scrollbar.initAll('.scroll-container');
+    Theme.init();
 
     const elements = document.querySelectorAll('.show-modal');
     if (elements !== undefined) {

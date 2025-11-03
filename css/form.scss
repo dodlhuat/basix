@@ -1,13 +1,15 @@
+@import "properties";
+
 input[type=text], input[type=password], input[type=range], textarea, select, .select .dropdown {
   width: 100%;
-  border: 1px solid $divider;
-  border-radius: $border-radius / 2;
+  border: 1px solid var(--divider);
+  border-radius: calc($border-radius / 2);
   padding: $border-radius;
   box-sizing: border-box;
 }
 
 select {
-  padding: $border-radius / 2;
+  padding: calc($border-radius / 2);
 }
 
 .select {
@@ -19,7 +21,7 @@ select {
   }
 
   .options {
-    border-radius: $border-radius / 2;
+    border-radius: calc($border-radius / 2);
     max-height: 0;
     overflow: hidden;
     transition: max-height 200ms ease-in;
@@ -34,7 +36,7 @@ select {
 
     &.open {
       max-height: 500px;
-      border: 1px solid $divider;
+      border: 1px solid var(--divider);
     }
   }
 
@@ -42,13 +44,13 @@ select {
     padding: $border-radius;
 
     &.selected {
-      background: $accent;
-      color: $accent-text;
+      background: var(--accent);
+      color: var(--accent-text);
     }
   }
 
   .option:hover {
-    background: $accent;
-    color: $accent-text;
+    background: var(--accent);
+    color: var(--accent-text);
   }
 }

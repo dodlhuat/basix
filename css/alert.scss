@@ -1,20 +1,22 @@
+@import "properties";
+
 .alert {
   border-radius: $border-radius;
-  padding: $spacing / 2;
-  border-left: $spacing / 2 solid;
+  padding: calc($spacing / 2);
+  border-left: calc($spacing / 2) solid;
 }
 
 .alert-error {
-  background: lighten($error, 10%);
-  color: darken($error, 20%);
+  background: var(--error-lighten);
+  color: var(--error-darken);
 }
 
 .alert-warning {
-  background: lighten($warning, 10%);
-  color: darken($warning, 20%);
+  background: var(--warning-lighten);
+  color: var(--warning-darken);
 }
 
 .alert-success {
-  background: lighten($success, 10%);
-  color: darken($success, 20%);
+  background: var(--success-lighten);
+  color: var(--success-darken);
 }

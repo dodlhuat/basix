@@ -1,3 +1,5 @@
+@import "properties";
+
 .switch {
   input[type=checkbox] {
     position: absolute;
@@ -28,7 +30,7 @@
   }
 
   input:checked + label {
-    background: $accent;
+    background: var(--accent);
   }
 
   input:checked + label:after {

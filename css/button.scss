@@ -1,42 +1,44 @@
+@import "properties";
+
 button, .button {
   padding: $spacing $spacing * 2;
   border-radius: $border-radius;
-  background: $primary;
-  color: $accent-text;
+  background: var(--primary);
+  color: var(--accent-text);
   border: none;
   cursor: pointer;
 
   &:hover {
-    background: darken($primary, 20%);
+    background: var(--primary-darken);
   }
 
   &.button-success {
-    background: $success;
+    background: var(--success);
     &:hover {
-      background: darken($success, 5%);
+      background: var(--success-darken);
     }
   }
 
   &.button-warning {
-    background: $warning;
+    background: var(--warning);
     &:hover {
-      background: darken($warning, 5%);
+      background: var(--warning-darken);
     }
   }
 
   &.button-error {
-    background: $error;
+    background: var(--error);
     &:hover {
-      background: darken($error, 15%);
+      background: var(--error-darken)
     }
   }
 
   &.button-light {
-    background: $primary-light;
-    color: $primary;
+    background: var(--primary-light);
+    color: var(--primary);
     &:hover {
-      background: darken($primary-light, 15%);
-      color: $accent-text;
+      background: var(--primary-light-darken);
+      color: var(--accent-text);
     }
   }
 }

@@ -1,3 +1,5 @@
+@import "properties";
+
 table {
   width: 100%;
 }
@@ -11,7 +13,7 @@ th, td {
 }
 
 tr {
-  border-bottom: 1px solid $divider;
+  border-bottom: 1px solid var(--divider);
 }
 
 table.striped {

@@ -1,14 +1,16 @@
+@import "properties";
+
 body {
   font-family: 'helvetica neue', helvetica, arial, sans-serif;
 }
 
 p, li, td, th, div {
-  font-size: $spacing * 1.5;
+  font-size: calc($spacing * 1.5);
   line-height: 1.5;
 }
 
 .h1, .h2, .h3, .h4, h1, h2, h3, h4 {
-  margin: 0  0 $spacing / 1.5 0;
+  margin: 0 0 calc($spacing / 1.5) 0;
   line-height: 1.2;
   font-weight: bold;
 }
@@ -31,7 +33,7 @@ h4, .h4 {
 
 ul, ol {
   list-style-position: inside;
-  margin-bottom: $spacing / 1.5;
+  margin-bottom: calc($spacing / 1.5);
 }
 
 ul li {
@@ -55,9 +57,9 @@ strong {
 }
 
 hr {
-  border: 1px solid $divider;
-  margin-top: 1.5 * $spacing;
-  margin-bottom: 1.5 * $spacing;
+  border: 1px solid var(--divider);
+  margin-top: calc(1.5 * $spacing);
+  margin-bottom: calc(1.5 * $spacing);
 }
 
 .text-center {

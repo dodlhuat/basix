@@ -1,93 +1,77 @@
-$primary-text: #212121;
-$secondary-text: #757575;
-$divider: #BDBDBD;
-$accent-text: #FFFFFF;
-
-$error: #FF5252;
-$warning: #FF9800;
-$success: #4CAF50;
-
-$primary: #607D8B;
-$primary-dark: #455A64;
-$primary-light: #CFD8DC;
-$accent: #536DFE;
-
-$light-background: #f2f2f2;
-
-$disabled: #b8b8b8;
+@import "properties";
 
 .light-background {
-  background: $light-background;
+  background: var(--light-background);
 }
 
 .primary-text {
-  color: $primary-text;
+  color: var(--primary-text);
 }
 
 .warning {
-  color: $warning;
+  color: var(--warning);
 }
 
 .warning-bg {
-  background: $warning;
+  background: var(--warning);
 }
 
 .error {
-  color: $error;
+  color: var(--error);
 }
 
 .error-bg {
-  background: $error;
+  background: var(--error);
 }
 
 .success {
-  color: $success;
+  color: var(--success);
 }
 
 .success-bg {
-  background: $success;
+  background: var(--success);
 }
 
 .primary {
-  color: $primary;
+  color: var(--primary);
 }
 
 .primary-bg {
-  background: $primary;
+  background: var(--primary);
 }
 
 .primary-dark {
-  color: $primary-dark
+  color: var(--primary-dark);
 }
 
 .primary-dark-bg {
-  background: $primary-dark
+  background: var(--primary-dark);
 }
 
 .primary-light {
-  color: $primary-light
+  color: var(--primary-light);
 }
 
 .primary-light-bg {
-  background: $primary-light
+  background: var(--primary-light);
 }
 
 .accent {
-  color: $accent
+  color: var(--accent);
 }
 
 .accent-bg {
-  background: $accent
+  background: var(--accent);
 }
 
 .accent-text {
-  color: $accent-text;
+  color: var(--accent-text);
 }
 
 .divider {
-  color: $divider;
+  color: var(--divider);
 }
 
 .divider-bg {
-  background: $divider;
+  background: var(--divider);
 }

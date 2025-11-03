@@ -5,11 +5,10 @@
   margin-bottom: $spacing;
 
   &.spacing-top {
-    padding-top: $spacing / 2;
+    padding-top: calc($spacing / 2);
   }
 
   .column {
-    flex-grow: 1;
     flex: 1;
     padding: $spacing;
 

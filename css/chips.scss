@@ -1,8 +1,10 @@
+@import "properties";
+
 .chips {
   .chip {
     margin: 0 5px 3px 0;
     display: inline-block;
-    background: darken($light-background, 5%);
+    background: var(--light-background-darken);
     padding: 5px 13px;
     border-radius: 32px;
     font-size: 13px;
@@ -12,7 +14,7 @@
       cursor: pointer;
 
       &:hover {
-        background: darken($light-background, 15%);
+        background: var(--light-background-darken);
       }
     }
 
@@ -21,8 +23,8 @@
 
       button {
         padding: 0;
-        background: darken($light-background, 15%);
-        color: $primary-dark;
+        background: var(--light-background-darken);
+        color: var(--primary-dark);
         display: inline-block;
         border: 0;
         height: 20px;
@@ -35,7 +37,7 @@
         right: 13px;
 
         &:hover {
-          background: darken($light-background, 20%);
+          background: var(--light-background-darken);
         }
 
         .icon {

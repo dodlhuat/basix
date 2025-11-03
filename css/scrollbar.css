@@ -1,17 +1,108 @@
-/* Error: Undefined variable.
- *    ,
- * 61 |     background: $primary;
- *    |                 ^^^^^^^^
- *    '
- *   scrollbar.scss 61:17  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Undefined variable.\a    \2577 \a 61 \2502      background: $primary;\a    \2502                  ^^^^^^^^\a    \2575 \a   scrollbar.scss 61:17  root stylesheet";
+:root {
+  --primary-text: #212121;
+  --secondary-text: #757575;
+  --divider: #BDBDBD;
+  --accent-text: #FFFFFF;
+  --error: #FF5252;
+  --error-lighten: lighten(#FF5252, 10%);
+  --error-darken: darken(#FF5252, 20%);
+  --warning: #FF9800;
+  --warning-lighten: lighten(#FF9800, 10%);
+  --warning-darken: darken(#FF9800, 20%);
+  --success: #4CAF50;
+  --success-lighten: lighten(#4CAF50, 10%);
+  --success-darken: darken(#4CAF50, 20%);
+  --primary: #080808;
+  --primary-darken: darken(#212121, 20%);
+  --primary-dark: #455A64;
+  --primary-light: #CFD8DC;
+  --primary-light-darken: darken(#CFD8DC, 20%);
+  --accent: #536DFE;
+  --light-background: #f2f2f2;
+  --disabled: #b8b8b8;
 }
+
+[data-theme=dark] {
+  --primary-text: #D3DAD9;
+  --secondary-text: #757575;
+  --divider: #BDBDBD;
+  --accent-text: #FFFFFF;
+  --error: #FF5252;
+  --error-lighten: lighten(#FF5252, 10%);
+  --error-darken: darken(#FF5252, 20%);
+  --warning: #FF9800;
+  --warning-lighten: lighten(#FF9800, 10%);
+  --warning-darken: darken(#FF9800, 20%);
+  --success: #4CAF50;
+  --success-lighten: lighten(#4CAF50, 10%);
+  --success-darken: darken(#4CAF50, 20%);
+  --primary: #b7c3c1;
+  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-dark: #455A64;
+  --primary-light: #37353E;
+  --accent: #536DFE;
+  --light-background: #44444E;
+  --disabled: #b8b8b8;
+}
+
+:root {
+  --track-width: 12px;
+  --track-radius: 8px;
+  --thumb-min: 28px;
+  --track-gap: 8px;
+}
+
+.scroll-container {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+.scroll-container .viewport {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  padding-right: calc(var(--track-width) + var(--track-gap));
+  box-sizing: content-box;
+}
+.scroll-container .viewport .content {
+  margin: 0;
+}
+.scroll-container .viewport::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.scroll-container .viewport {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scroll-container .scrollbar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+  width: var(--track-width);
+  pointer-events: none;
+}
+.scroll-container .track {
+  position: relative;
+  height: 100%;
+  border-radius: var(--track-radius);
+  width: 100%;
+  pointer-events: auto;
+}
+.scroll-container .thumb {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 0px;
+  height: 40px;
+  border-radius: calc(var(--track-radius) - 2px);
+  background: var(--primary);
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+/*# sourceMappingURL=scrollbar.css.map */

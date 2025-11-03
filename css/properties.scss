@@ -12,7 +12,7 @@
   --success: #4CAF50;
   --success-lighten: lighten(#4CAF50, 10%);
   --success-darken: darken(#4CAF50, 20%);
-  --primary: #080808;
+  --primary: #{darken(#212121, 10%)};
   --primary-darken: darken(#212121, 20%);
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
@@ -22,7 +22,8 @@
   --disabled: #b8b8b8;
 }
 
-[data-theme=dark] {
+[data-theme="dark"] {
+  // TODO: farben anpassen
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
   --divider: #BDBDBD;
@@ -36,7 +37,7 @@
   --success: #4CAF50;
   --success-lighten: lighten(#4CAF50, 10%);
   --success-darken: darken(#4CAF50, 20%);
-  --primary: #b7c3c1;
+  --primary: #{darken(#D3DAD9, 10%)};
   --primary-darken: darken(#D3DAD9, 20%);
   --primary-dark: #455A64;
   --primary-light: #37353E;
@@ -44,33 +45,3 @@
   --light-background: #44444E;
   --disabled: #b8b8b8;
 }
-
-table {
-  width: 100%;
-}
-
-th {
-  font-weight: bold;
-}
-
-th, td {
-  padding: 0.75rem 0.6rem;
-}
-
-tr {
-  border-bottom: 1px solid var(--divider);
-}
-
-table.striped tr:nth-child(even) {
-  background: #EDEDED;
-}
-table.striped tr:nth-child(odd) {
-  background: #F1F1F1;
-}
-
-.column.no-padding {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-/*# sourceMappingURL=table.css.map */

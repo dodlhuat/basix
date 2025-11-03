@@ -1,3 +1,17 @@
+/* Error: Undefined variable.
+ *   ,
+ * 6 |   border-radius: calc($border-radius / 2);
+ *   |                       ^^^^^^^^^^^^^^
+ *   '
+ *   form.scss 6:23  root stylesheet */
 
-
-/*# sourceMappingURL=form.css.map */
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Undefined variable.\a   \2577 \a 6 \2502    border-radius: calc($border-radius / 2);\a   \2502                        ^^^^^^^^^^^^^^\a   \2575 \a   form.scss 6:23  root stylesheet";
+}

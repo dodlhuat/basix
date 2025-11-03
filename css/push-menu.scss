@@ -1,3 +1,5 @@
+@import "properties";
+
 .push-content {
   transition: all 200ms ease-in;
 }
@@ -21,7 +23,7 @@ nav ul {
   padding: 0;
   margin: 0;
   list-style: none;
-  background: $primary-dark;
+  background: var(--primary-dark);
   overflow: hidden;
 }
 
@@ -30,25 +32,25 @@ nav li {
 }
 
 nav a {
-  color: $primary-light;
+  color: var(--primary-light);
   font-size: 1em;
   text-decoration: none;
   display: block;
-  padding: $spacing $spacing * 1.5;
+  padding: $spacing calc($spacing * 1.5);
   letter-spacing: 2px;
-  border-bottom: 1px solid $primary;
+  border-bottom: 1px solid var(--primary);
 }
 
 nav a:hover {
-  background: $accent;
+  background: var(--accent);
 }
 
 .navigation-controls {
   label {
     display: block;
-    width: $spacing * 1.5;
+    width: calc($spacing * 1.5);
     height: 100%;
-    color: $primary-dark;
+    color: var(--primary-dark);
     text-align: center;
     line-height: 42px;
     position: fixed;
@@ -77,15 +79,15 @@ nav.pushed {
 
 .main-header {
   position: fixed;
-  background: $light-background;
+  background: var(--light-background);
   width: 100%;
   right: 0;
   transition: width 200ms ease-in;
-  height: $spacing * 3;
+  height: calc($spacing * 3);
   display: flex;
   z-index: 2;
   gap: $spacing;
-  border-bottom: 3px solid $primary;
+  border-bottom: 3px solid var(--primary);
 
   & > div:first-child {
     margin-left: $spacing;
@@ -98,7 +100,7 @@ nav.pushed {
   & > div {
     display: flex;
     align-items: center;
-    line-height: $spacing * 3;
+    line-height: calc($spacing * 3);
   }
 
   .last {
@@ -110,7 +112,7 @@ nav.pushed {
   }
 
   .navigation-controls {
-    height: $spacing * 2.5;
+    height: calc($spacing * 2.5);
 
     label {
       display: block;

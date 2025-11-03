@@ -1,3 +1,5 @@
+@import "properties";
+
 :root {
   --track-width: 12px;
   --track-radius: 8px;
@@ -58,7 +60,7 @@
     top: 0px;
     height: 40px;
     border-radius: calc(var(--track-radius) - 2px);
-    background: $primary;
+    background: var(--primary);
     cursor: pointer;
     pointer-events: auto;
     touch-action: none;
