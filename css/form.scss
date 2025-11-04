@@ -6,6 +6,7 @@ input[type=text], input[type=password], input[type=range], textarea, select, .se
   border-radius: calc($border-radius / 2);
   padding: $border-radius;
   box-sizing: border-box;
+  background-color: var(--accent-text);
 }
 
 select {
@@ -17,7 +18,7 @@ select {
   position: relative;
 
   .dropdown, .options {
-    background: white;
+    background: var(--accent-text);
   }
 
   .options {

@@ -4,7 +4,7 @@
   .chip {
     margin: 0 5px 3px 0;
     display: inline-block;
-    background: var(--light-background-darken);
+    background: var(--primary-light-darken);
     padding: 5px 13px;
     border-radius: 32px;
     font-size: 13px;
@@ -14,7 +14,7 @@
       cursor: pointer;
 
       &:hover {
-        background: var(--light-background-darken);
+        background: var(--primary-light-darken);
       }
     }
 
@@ -23,7 +23,7 @@
 
       button {
         padding: 0;
-        background: var(--light-background-darken);
+        background: var(--primary-light-darken);
         color: var(--primary-dark);
         display: inline-block;
         border: 0;
@@ -37,7 +37,7 @@
         right: 13px;
 
         &:hover {
-          background: var(--light-background-darken);
+          background: var(--primary-light-darken);
         }
 
         .icon {

@@ -47,23 +47,23 @@ table {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -72,19 +72,19 @@ table {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -170,23 +170,23 @@ table {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -195,19 +195,19 @@ table {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -331,23 +331,23 @@ code.code .code-content {
 }
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -356,19 +356,19 @@ code.code .code-content {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -442,23 +442,23 @@ hr {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -467,19 +467,19 @@ hr {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -515,23 +515,23 @@ hr {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -540,19 +540,19 @@ hr {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -577,10 +577,10 @@ tr {
 }
 
 table.striped tr:nth-child(even) {
-  background: #EDEDED;
+  background: var(--divider);
 }
 table.striped tr:nth-child(odd) {
-  background: #F1F1F1;
+  background: var(--secondary-text);
 }
 
 .column.no-padding {
@@ -590,23 +590,23 @@ table.striped tr:nth-child(odd) {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -615,19 +615,19 @@ table.striped tr:nth-child(odd) {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -658,23 +658,23 @@ table.striped tr:nth-child(odd) {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -683,19 +683,19 @@ table.striped tr:nth-child(odd) {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -709,6 +709,7 @@ input[type=text], input[type=password], input[type=range], textarea, select, .se
   border-radius: 0.2rem;
   padding: 0.4rem;
   box-sizing: border-box;
+  background-color: var(--accent-text);
 }
 
 select {
@@ -720,7 +721,7 @@ select {
   position: relative;
 }
 .select .dropdown, .select .options {
-  background: white;
+  background: var(--accent-text);
 }
 .select .options {
   border-radius: 0.2rem;
@@ -1074,23 +1075,23 @@ select {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -1099,19 +1100,19 @@ select {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -1128,7 +1129,7 @@ select {
 
 .scroll-container {
   position: relative;
-  background: white;
+  background: var(--accent-text);
   border-radius: 8px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   overflow: hidden;
@@ -1181,23 +1182,23 @@ select {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -1206,19 +1207,19 @@ select {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -1266,23 +1267,23 @@ button.button-light:hover, .button.button-light:hover {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -1291,19 +1292,19 @@ button.button-light:hover, .button.button-light:hover {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -1432,23 +1433,23 @@ button.button-light:hover, .button.button-light:hover {
 }
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -1457,19 +1458,19 @@ button.button-light:hover, .button.button-light:hover {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -1488,23 +1489,23 @@ button.button-light:hover, .button.button-light:hover {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -1513,19 +1514,19 @@ button.button-light:hover, .button.button-light:hover {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -1621,23 +1622,23 @@ button.button-light:hover, .button.button-light:hover {
 }
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -1646,19 +1647,19 @@ button.button-light:hover, .button.button-light:hover {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -1735,23 +1736,23 @@ button.button-light:hover, .button.button-light:hover {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -1760,19 +1761,19 @@ button.button-light:hover, .button.button-light:hover {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -1898,23 +1899,23 @@ nav.pushed {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -1923,19 +1924,19 @@ nav.pushed {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -1989,23 +1990,23 @@ nav.pushed {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -2014,19 +2015,19 @@ nav.pushed {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -2093,23 +2094,23 @@ nav.pushed {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -2118,19 +2119,19 @@ nav.pushed {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -2203,23 +2204,23 @@ nav.pushed {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -2228,19 +2229,19 @@ nav.pushed {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -2251,7 +2252,7 @@ nav.pushed {
 .chips .chip {
   margin: 0 5px 3px 0;
   display: inline-block;
-  background: var(--light-background-darken);
+  background: var(--primary-light-darken);
   padding: 5px 13px;
   border-radius: 32px;
   font-size: 13px;
@@ -2261,14 +2262,14 @@ nav.pushed {
   cursor: pointer;
 }
 .chips .chip.clickable:hover {
-  background: var(--light-background-darken);
+  background: var(--primary-light-darken);
 }
 .chips .chip.closeable {
   padding-right: 33px;
 }
 .chips .chip.closeable button {
   padding: 0;
-  background: var(--light-background-darken);
+  background: var(--primary-light-darken);
   color: var(--primary-dark);
   display: inline-block;
   border: 0;
@@ -2281,7 +2282,7 @@ nav.pushed {
   right: 13px;
 }
 .chips .chip.closeable button:hover {
-  background: var(--light-background-darken);
+  background: var(--primary-light-darken);
 }
 .chips .chip.closeable button .icon {
   font-size: 15px;
@@ -2329,23 +2330,23 @@ nav.pushed {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -2354,19 +2355,19 @@ nav.pushed {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;
@@ -2452,23 +2453,23 @@ nav.pushed {
 
 :root {
   --primary-text: #212121;
-  --secondary-text: #757575;
+  --secondary-text: #CFD8DC;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
   --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
   --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
   --primary: #080808;
-  --primary-darken: darken(#212121, 20%);
+  --primary-darken: black;
   --primary-dark: #455A64;
   --primary-light: #CFD8DC;
-  --primary-light-darken: darken(#CFD8DC, 20%);
+  --primary-light-darken: #94a8b1;
   --accent: #536DFE;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
@@ -2477,19 +2478,19 @@ nav.pushed {
 [data-theme=dark] {
   --primary-text: #D3DAD9;
   --secondary-text: #757575;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: lighten(#FF5252, 10%);
-  --error-darken: darken(#FF5252, 20%);
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
   --warning: #FF9800;
-  --warning-lighten: lighten(#FF9800, 10%);
-  --warning-darken: darken(#FF9800, 20%);
-  --success: #4CAF50;
-  --success-lighten: lighten(#4CAF50, 10%);
-  --success-darken: darken(#4CAF50, 20%);
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
   --primary: #b7c3c1;
-  --primary-darken: darken(#D3DAD9, 20%);
+  --primary-darken: #9caba9;
   --primary-dark: #455A64;
   --primary-light: #37353E;
   --accent: #536DFE;

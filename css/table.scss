@@ -18,11 +18,11 @@ tr {
 
 table.striped {
   tr:nth-child(even) {
-    background: #EDEDED
+    background: var(--divider)
   }
 
   tr:nth-child(odd) {
-    background: #F1F1F1;
+    background: var(--secondary-text);
   }
 }
 
