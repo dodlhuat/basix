@@ -1,17 +1,86 @@
-/* Error: Undefined variable.
- *   ,
- * 4 |   padding: $spacing $spacing * 2;
- *   |            ^^^^^^^^
- *   '
- *   button.scss 4:12  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Undefined variable.\a   \2577 \a 4 \2502    padding: $spacing $spacing * 2;\a   \2502             ^^^^^^^^\a   \2575 \a   button.scss 4:12  root stylesheet";
+:root {
+  --primary-text: #212121;
+  --secondary-text: #CFD8DC;
+  --divider: #BDBDBD;
+  --accent-text: #FFFFFF;
+  --error: #FF5252;
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
+  --warning: #FF9800;
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #4CAF50;
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
+  --primary: #080808;
+  --primary-darken: black;
+  --primary-dark: #455A64;
+  --primary-light: #CFD8DC;
+  --primary-light-darken: #94a8b1;
+  --accent: #536DFE;
+  --light-background: #f2f2f2;
+  --disabled: #b8b8b8;
 }
+
+[data-theme=dark] {
+  --primary-text: #D3DAD9;
+  --secondary-text: #757575;
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
+  --warning: #FF9800;
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
+  --primary: #b7c3c1;
+  --primary-darken: #9caba9;
+  --primary-dark: #948e8f;
+  --primary-light: #37353E;
+  --accent: #536DFE;
+  --light-background: #44444E;
+  --disabled: #b8b8b8;
+}
+
+button, .button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.4rem;
+  background: var(--primary);
+  color: var(--accent-text);
+  border: none;
+  cursor: pointer;
+}
+button:hover, .button:hover {
+  background: var(--primary-darken);
+}
+button.button-success, .button.button-success {
+  background: var(--success);
+}
+button.button-success:hover, .button.button-success:hover {
+  background: var(--success-darken);
+}
+button.button-warning, .button.button-warning {
+  background: var(--warning);
+}
+button.button-warning:hover, .button.button-warning:hover {
+  background: var(--warning-darken);
+}
+button.button-error, .button.button-error {
+  background: var(--error);
+}
+button.button-error:hover, .button.button-error:hover {
+  background: var(--error-darken);
+}
+button.button-light, .button.button-light {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+button.button-light:hover, .button.button-light:hover {
+  background: var(--primary-light-darken);
+  color: var(--accent-text);
+}
+
+/*# sourceMappingURL=button.css.map */

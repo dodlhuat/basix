@@ -319,4 +319,12 @@
   content: "\e7ac";
 }
 
+.icon-light:before {
+  content: "\e81a";
+}
+
+.icon-dark:before {
+  content: "\ef44";
+}
+
 /*# sourceMappingURL=icons.css.map */

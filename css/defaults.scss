@@ -1,4 +1,5 @@
 @import "properties";
+@import "parameters";
 
 html, body {
   overflow: auto;
@@ -71,4 +72,8 @@ code.code {
     padding: calc($spacing * 2);
     white-space: break-spaces;
   }
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

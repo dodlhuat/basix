@@ -1,17 +1,116 @@
-/* Error: Undefined variable.
- *   ,
- * 8 |   font-size: calc($spacing * 1.5);
- *   |                   ^^^^^^^^
- *   '
- *   typography.scss 8:19  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Undefined variable.\a   \2577 \a 8 \2502    font-size: calc($spacing * 1.5);\a   \2502                    ^^^^^^^^\a   \2575 \a   typography.scss 8:19  root stylesheet";
+:root {
+  --primary-text: #212121;
+  --secondary-text: #CFD8DC;
+  --divider: #BDBDBD;
+  --accent-text: #FFFFFF;
+  --error: #FF5252;
+  --error-lighten: #ff8585;
+  --error-darken: #eb0000;
+  --warning: #FF9800;
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #4CAF50;
+  --success-lighten: #6ec071;
+  --success-darken: #2d682f;
+  --primary: #080808;
+  --primary-darken: black;
+  --primary-dark: #455A64;
+  --primary-light: #CFD8DC;
+  --primary-light-darken: #94a8b1;
+  --accent: #536DFE;
+  --light-background: #f2f2f2;
+  --disabled: #b8b8b8;
 }
+
+[data-theme=dark] {
+  --primary-text: #D3DAD9;
+  --secondary-text: #757575;
+  --divider: #948e8f;
+  --accent-text: #8b8b8b;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
+  --warning: #FF9800;
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
+  --primary: #b7c3c1;
+  --primary-darken: #9caba9;
+  --primary-dark: #948e8f;
+  --primary-light: #37353E;
+  --accent: #536DFE;
+  --light-background: #44444E;
+  --disabled: #b8b8b8;
+}
+
+body {
+  font-family: "helvetica neue", helvetica, arial, sans-serif;
+}
+
+p, li, td, th, div, h1, h2, h3, h4, h5 {
+  color: var(--primary-dark);
+}
+
+p, li, td, th, div {
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+.h1, .h2, .h3, .h4, h1, h2, h3, h4 {
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+  font-weight: bold;
+}
+
+h1, .h1 {
+  font-size: 2.5rem;
+}
+
+h2, .h2 {
+  font-size: 2rem;
+}
+
+h3, .h3 {
+  font-size: 1.75rem;
+}
+
+h4, .h4 {
+  font-size: 1.5rem;
+}
+
+ul, ol {
+  list-style-position: inside;
+  margin-bottom: 0.5rem;
+}
+
+ul li {
+  list-style-type: disc;
+}
+ul li li {
+  list-style-type: circle;
+}
+
+ol li {
+  list-style-type: decimal;
+}
+ol li li {
+  list-style-type: lower-latin;
+}
+
+strong {
+  font-weight: bold;
+}
+
+hr {
+  border: 1px solid var(--divider);
+  margin-top: 1.125rem;
+  margin-bottom: 1.125rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/*# sourceMappingURL=typography.css.map */

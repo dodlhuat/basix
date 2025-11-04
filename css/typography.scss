@@ -1,7 +1,12 @@
 @import "properties";
+@import "parameters";
 
 body {
   font-family: 'helvetica neue', helvetica, arial, sans-serif;
+}
+
+p, li, td, th, div, h1, h2, h3, h4, h5 {
+  color: var(--primary-dark);
 }
 
 p, li, td, th, div {

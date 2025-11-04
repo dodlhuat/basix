@@ -85,7 +85,7 @@ table {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -208,7 +208,7 @@ table {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -284,6 +284,10 @@ code.code .code-header {
 code.code .code-content {
   padding: 1.5rem;
   white-space: break-spaces;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .row {
@@ -369,7 +373,7 @@ code.code .code-content {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -378,6 +382,10 @@ code.code .code-content {
 
 body {
   font-family: "helvetica neue", helvetica, arial, sans-serif;
+}
+
+p, li, td, th, div, h1, h2, h3, h4, h5 {
+  color: var(--primary-dark);
 }
 
 p, li, td, th, div {
@@ -480,7 +488,7 @@ hr {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -553,7 +561,7 @@ hr {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -628,7 +636,7 @@ table.striped tr:nth-child(odd) {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -696,7 +704,7 @@ table.striped tr:nth-child(odd) {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -1073,6 +1081,14 @@ select {
   content: "\e7ac";
 }
 
+.icon-light:before {
+  content: "\e81a";
+}
+
+.icon-dark:before {
+  content: "\ef44";
+}
+
 :root {
   --primary-text: #212121;
   --secondary-text: #CFD8DC;
@@ -1113,7 +1129,7 @@ select {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -1220,7 +1236,7 @@ select {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -1305,7 +1321,7 @@ button.button-light:hover, .button.button-light:hover {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -1471,7 +1487,7 @@ button.button-light:hover, .button.button-light:hover {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -1527,7 +1543,7 @@ button.button-light:hover, .button.button-light:hover {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -1660,7 +1676,7 @@ button.button-light:hover, .button.button-light:hover {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -1774,7 +1790,7 @@ button.button-light:hover, .button.button-light:hover {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -1937,7 +1953,7 @@ nav.pushed {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -2028,7 +2044,7 @@ nav.pushed {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -2132,7 +2148,7 @@ nav.pushed {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -2242,7 +2258,7 @@ nav.pushed {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -2368,7 +2384,7 @@ nav.pushed {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;
@@ -2491,7 +2507,7 @@ nav.pushed {
   --success-darken: #0f4130;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
-  --primary-dark: #455A64;
+  --primary-dark: #948e8f;
   --primary-light: #37353E;
   --accent: #536DFE;
   --light-background: #44444E;

@@ -3,13 +3,12 @@ class Theme {
         const KEY = 'theme';
         const root = document.documentElement;
         const toggleBtn = document.getElementById('theme-toggle');
-        const label = document.getElementById('theme-label');
         const icon = document.getElementById('theme-icon');
         const status = document.getElementById('status');
 
         // Sanity check
-        if (!toggleBtn || !label || !icon) {
-            console.error('Theme toggle: missing DOM elements', {toggleBtn, label, icon});
+        if (!toggleBtn || !icon) {
+            console.error('Theme toggle: missing DOM elements', {toggleBtn, icon});
             if (status) status.textContent = 'Error: missing toggle elements (check IDs).';
             return;
         }
@@ -39,10 +38,8 @@ class Theme {
             root.setAttribute('data-theme', theme);
             const isDark = theme === 'dark';
             toggleBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
-            label.textContent = isDark ? 'Dark' : 'Light';
-            icon.textContent = isDark ? '🌙' : '🌞';
-            if (status) status.textContent = `Theme applied: ${theme}`;
-            console.log('Theme applied:', theme);
+            icon.classList.toggle('icon-dark');
+            icon.classList.toggle('icon-light');
         }
 
         // initial
