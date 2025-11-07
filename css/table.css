@@ -45,32 +45,124 @@
   --disabled: #b8b8b8;
 }
 
+/* Controls */
+.table-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.table-controls .search {
+  flex: 1;
+  min-width: 160px;
+}
+
+/* Table */
 table {
   width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+}
+table button, table button:hover, table button:focus {
+  background: none;
 }
 
-th {
-  font-weight: bold;
+thead th {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid var(--divider);
+  font-weight: 600;
+}
+thead th span {
+  color: var(--primary);
 }
 
-th, td {
-  padding: 0.75rem 0.6rem;
-}
-
-tr {
+tbody td {
+  padding: 10px;
   border-bottom: 1px solid var(--divider);
 }
 
-table.striped tr:nth-child(even) {
-  background: var(--divider);
-}
-table.striped tr:nth-child(odd) {
-  background: var(--secondary-text);
+/* Sort button inside th */
+.th-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
 }
 
-.column.no-padding {
-  padding-left: 0;
-  padding-right: 0;
+.sort-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.sort-active {
+  color: var(--accent);
+}
+
+/* Highlighted text */
+mark.match {
+  background: var(--warning);
+  color: inherit;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--accent-text);
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.page-btn[aria-current=true] {
+  background: var(--accent);
+  color: white;
+  border-color: transparent;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Small helpers */
+.muted {
+  color: var(--primary-light-darken);
+  font-size: 13px;
+}
+
+.controls-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .table-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .controls-right {
+    justify-content: space-between;
+  }
 }
 
 /*# sourceMappingURL=table.css.map */

@@ -1,6 +1,6 @@
 @import "properties";
 
-input[type=text], input[type=password], input[type=range], textarea, select, .select .dropdown {
+textarea, select, .select .dropdown, input {
   width: 100%;
   border: 1px solid var(--divider);
   border-radius: calc($border-radius / 2);

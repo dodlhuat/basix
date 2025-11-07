@@ -1,32 +1,124 @@
 @import "properties";
+@import "parameters";
 
+
+/* Controls */
+.table-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px
+}
+
+.table-controls .search {
+  flex: 1;
+  min-width: 160px
+}
+
+/* Table */
 table {
   width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+
+  button, button:hover, button:focus {
+    background: none;
+  }
 }
 
-th {
-  font-weight: bold;
-}
-
-th, td {
-  padding: .75rem .6rem;
-}
-
-tr {
+thead th {
+  text-align: left;
+  padding: 10px;
   border-bottom: 1px solid var(--divider);
-}
-
-table.striped {
-  tr:nth-child(even) {
-    background: var(--divider)
-  }
-
-  tr:nth-child(odd) {
-    background: var(--secondary-text);
+  font-weight: 600;
+  span {
+    color: var(--primary);
   }
 }
 
-.column.no-padding {
-  padding-left: 0;
-  padding-right: 0;
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid var(--divider)
+}
+
+/* Sort button inside th */
+.th-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer
+}
+
+.sort-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle
+}
+
+.sort-active {
+  color: var(--accent)
+}
+
+/* Highlighted text */
+mark.match {
+  background: var(--warning);
+  color: inherit;
+  padding: 0 2px;
+  border-radius: 2px
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap
+}
+
+.page-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--accent-text);
+  color: var(--primary);
+  cursor: pointer
+}
+
+.page-btn[aria-current="true"] {
+  background: var(--accent);
+  color: white;
+  border-color: transparent
+}
+
+.page-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed
+}
+
+/* Small helpers */
+.muted {
+  color: var(--primary-light-darken);
+  font-size: 13px
+}
+
+.controls-right {
+  display: flex;
+  gap: 8px;
+  align-items: center
+}
+
+@media (max-width: 640px) {
+  .table-controls {
+    flex-direction: column;
+    align-items: stretch
+  }
+  .controls-right {
+    justify-content: space-between
+  }
 }

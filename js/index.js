@@ -7,6 +7,7 @@ import {toast} from "./toast.js";
 import {datepicker} from "./datepicker.js";
 import {tree} from "./tree.js";
 import {Theme} from "./theme.js";
+import {Table} from "./table.js";
 
 utils.ready(function () {
     select.init('#single-select');
@@ -14,6 +15,7 @@ utils.ready(function () {
     select.listen(document.querySelector('.user.select'))
     Scrollbar.initAll('.scroll-container');
     Theme.init();
+    Table.initAll();
 
     const elements = document.querySelectorAll('.show-modal');
     if (elements !== undefined) {
