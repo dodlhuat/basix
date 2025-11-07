@@ -1,17 +1,75 @@
-/* Error: Undefined variable.
- *   ,
- * 4 |   border-radius: $border-radius;
- *   |                  ^^^^^^^^^^^^^^
- *   '
- *   alert.scss 4:18  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Undefined variable.\a   \2577 \a 4 \2502    border-radius: $border-radius;\a   \2502                   ^^^^^^^^^^^^^^\a   \2575 \a   alert.scss 4:18  root stylesheet";
+:root {
+  --primary-text: #212121;
+  --secondary-text: #545454;
+  --divider: #BDBDBD;
+  --accent-text: #FFFFFF;
+  --error: #b13535;
+  --error-lighten: #e29d9d;
+  --error-darken: #d06262;
+  --warning: #b8871f;
+  --warning-lighten: #ebca85;
+  --warning-darken: #dfae44;
+  --success: #1b7f5c;
+  --success-lighten: #58dbad;
+  --success-darken: #28be8a;
+  --primary: #bababa;
+  --primary-darken: #a0a0a0;
+  --primary-dark: #d3d3d3;
+  --primary-light: #ffffff;
+  --primary-light-darken: #cccccc;
+  --accent: #4a4fb9;
+  --accent-darken: #2c2f71;
+  --accent-lighten: #9497d5;
+  --light-background: #f2f2f2;
+  --disabled: #b8b8b8;
 }
+
+[data-theme=dark] {
+  --primary-text: #8b8b8b;
+  --secondary-text: #3f3f3f;
+  --divider: #3f3f3f;
+  --accent-text: #282828;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
+  --warning: #FF9800;
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
+  --primary: #b7c3c1;
+  --primary-darken: #9caba9;
+  --primary-dark: #575757;
+  --primary-light: #282828;
+  --primary-light-darken: black;
+  --accent: #4a4fb9;
+  --accent-darken: #2c2f71;
+  --accent-lighten: #9497d5;
+  --light-background: #575757;
+  --disabled: #b8b8b8;
+}
+
+.alert {
+  border-radius: 0.4rem;
+  padding: 0.375rem;
+  border-left: 0.375rem solid;
+  color: var(--secondary-text);
+}
+
+.alert-error {
+  background: var(--error-lighten);
+  border-color: var(--error-darken);
+}
+
+.alert-warning {
+  background: var(--warning-lighten);
+  border-color: var(--warning-darken);
+}
+
+.alert-success {
+  background: var(--success-lighten);
+  border-color: var(--success-darken);
+}
+
+/*# sourceMappingURL=alert.css.map */

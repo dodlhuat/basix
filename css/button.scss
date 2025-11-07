@@ -4,33 +4,40 @@
 button, .button {
   padding: $spacing $spacing * 2;
   border-radius: $border-radius;
-  background: var(--primary);
+  background: var(--primary-darken);
   color: var(--accent-text);
   border: none;
   cursor: pointer;
 
+  &.button-primary {
+    background: var(--accent);
+    &:hover {
+      background: var(--accent-lighten);
+    }
+  }
+
   &:hover {
-    background: var(--primary-darken);
+    background: var(--primary);
   }
 
   &.button-success {
     background: var(--success);
     &:hover {
-      background: var(--success-darken);
+      background: var(--success-lighten);
     }
   }
 
   &.button-warning {
     background: var(--warning);
     &:hover {
-      background: var(--warning-darken);
+      background: var(--warning-lighten);
     }
   }
 
   &.button-error {
     background: var(--error);
     &:hover {
-      background: var(--error-darken)
+      background: var(--error-lighten)
     }
   }
 

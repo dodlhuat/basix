@@ -1,33 +1,35 @@
 :root {
   --primary-text: #212121;
-  --secondary-text: #CFD8DC;
+  --secondary-text: #{lighten(#212121, 20%)};
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
-  --error: #FF5252;
-  --error-lighten: #{lighten(#FF5252, 10%)};
-  --error-darken: #{darken(#FF5252, 20%)};
-  --warning: #FF9800;
-  --warning-lighten: #{lighten(#FF9800, 10%)};
-  --warning-darken: #{darken(#FF9800, 20%)};
-  --success: #4CAF50;
-  --success-lighten: #{lighten(#4CAF50, 10%)};
-  --success-darken: #{darken(#4CAF50, 20%)};
-  --primary: #{darken(#455A64, 10%)};
-  --primary-darken: #{darken(#455A64, 20%)};
-  --primary-dark: #455A64;
-  --primary-light: #CFD8DC;
-  --primary-light-darken: #{darken(#CFD8DC, 20%)};
-  --accent: #536DFE;
+  --error: #b13535;
+  --error-lighten: #e29d9d;
+  --error-darken: #d06262;
+  --warning: #b8871f;
+  --warning-lighten: #ebca85;
+  --warning-darken: #dfae44;
+  --success: #1b7f5c;
+  --success-lighten: #58dbad;
+  --success-darken: #28be8a;
+  --primary: #{darken(#d3d3d3, 10%)};
+  --primary-darken: #{darken(#d3d3d3, 20%)};
+  --primary-dark: #d3d3d3;
+  --primary-light: #ffffff;
+  --primary-light-darken: #{darken(#ffffff, 20%)};
+  --accent: #4a4fb9;
+  --accent-darken: #{darken(#4a4fb9, 20%)};
+  --accent-lighten: #{lighten(#4a4fb9, 20%)};
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
 }
 
 [data-theme="dark"] {
   // TODO: farben anpassen
-  --primary-text: #D3DAD9;
-  --secondary-text: #757575;
-  --divider: #948e8f;
-  --accent-text: #8b8b8b;
+  --primary-text: #8b8b8b;
+  --secondary-text: #3f3f3f;
+  --divider: #3f3f3f;
+  --accent-text: #282828;
   --error: #9c2121;
   --error-lighten: #{lighten(#9c2121, 10%)};
   --error-darken: #{darken(#9c2121, 10%)};
@@ -39,9 +41,12 @@
   --success-darken: #{darken(#22946e, 20%)};
   --primary: #{darken(#D3DAD9, 10%)};
   --primary-darken: #{darken(#D3DAD9, 20%)};
-  --primary-dark: #948e8f;
-  --primary-light: #37353E;
-  --accent: #536DFE;
-  --light-background: #44444E;
+  --primary-dark: #575757;
+  --primary-light: #282828;
+  --primary-light-darken: #{darken(#282828, 20%)};
+  --accent: #4a4fb9;
+  --accent-darken: #{darken(#4a4fb9, 20%)};
+  --accent-lighten: #{lighten(#4a4fb9, 20%)};
+  --light-background: #575757;
   --disabled: #b8b8b8;
 }

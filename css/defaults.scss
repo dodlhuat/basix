@@ -60,11 +60,11 @@ code.code {
 
   .code-header {
     display: block;
-    background: var(--primary);
+    background: var(--primary-light-darken);
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
     padding: calc($spacing / 2) calc($spacing * 2);
-    color: var(--primary-light);
+    color: var(--primary-text);
     font-weight: bold;
   }
 

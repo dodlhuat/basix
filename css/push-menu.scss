@@ -1,4 +1,5 @@
 @import "properties";
+@import "parameters";
 
 .push-content {
   transition: all 200ms ease-in;
@@ -32,7 +33,7 @@ nav li {
 }
 
 nav a {
-  color: var(--primary-light);
+  color: var(--primary-text);
   font-size: 1em;
   text-decoration: none;
   display: block;
@@ -43,6 +44,7 @@ nav a {
 
 nav a:hover {
   background: var(--accent);
+  color: var(--primary-light-darken);
 }
 
 .navigation-controls {
@@ -50,7 +52,7 @@ nav a:hover {
     display: block;
     width: calc($spacing * 1.5);
     height: 100%;
-    color: var(--primary-dark);
+    color: var(--primary-text);
     text-align: center;
     line-height: 42px;
     position: fixed;
