@@ -1,5 +1,5 @@
 import {utils} from "./utils.js";
-import {select} from "./select.js";
+import {Select} from "./select.js";
 import {Scrollbar} from "./scrollbar.js";
 import {modal} from "./modal.js";
 import {menu} from "./push-menu.js";
@@ -10,9 +10,8 @@ import {Theme} from "./theme.js";
 import {Table} from "./table.js";
 
 utils.ready(function () {
-    select.init('#single-select');
-    select.init('#multi-select');
-    select.listen(document.querySelector('.user.select'))
+    Select.initAll();
+    Select.listen(document.querySelector('.user.select'))
     Scrollbar.initAll('.scroll-container');
     Theme.init();
     Table.initAll();
@@ -29,14 +28,9 @@ utils.ready(function () {
         toast.show('some content', 'some header', 'success', true, 3000);
     });
 
-
     menu.init();
-
     utils.showCode();
-
     Datepicker.initAll();
-
-    console.log(select.value('#single-select'));
 
     const data = [
         {

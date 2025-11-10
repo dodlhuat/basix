@@ -125,4 +125,12 @@ code.code .code-content {
   cursor: pointer;
 }
 
+.spacing-right {
+  margin-right: 0.75rem;
+}
+
+.flex {
+  display: flex;
+}
+
 /*# sourceMappingURL=defaults.css.map */

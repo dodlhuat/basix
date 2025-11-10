@@ -300,6 +300,14 @@ code.code .code-content {
   cursor: pointer;
 }
 
+.spacing-right {
+  margin-right: 0.75rem;
+}
+
+.flex {
+  display: flex;
+}
+
 .row {
   display: flex;
   flex-direction: row;
@@ -2137,6 +2145,7 @@ nav.pushed {
 .styled-checkbox {
   position: absolute;
   opacity: 0;
+  width: auto;
 }
 .styled-checkbox + label {
   position: relative;
@@ -2153,6 +2162,7 @@ nav.pushed {
   height: 1.125rem;
   transition: border 0.3s;
   border: 2px solid rgba(0, 0, 0, 0.25);
+  margin-top: 2px;
 }
 .styled-checkbox:hover + label:before {
   border-color: rgba(0, 0, 0, 0.5);
@@ -2245,6 +2255,7 @@ nav.pushed {
   position: absolute;
   opacity: 0;
   cursor: pointer;
+  width: auto;
 }
 
 .checkmark {
@@ -2342,6 +2353,7 @@ nav.pushed {
 .switch input[type=checkbox] {
   position: absolute;
   opacity: 0;
+  width: auto;
 }
 .switch label {
   cursor: pointer;

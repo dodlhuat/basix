@@ -77,3 +77,11 @@ code.code {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.spacing-right {
+  margin-right: $spacing;
+}
+
+.flex {
+  display: flex;
+}
