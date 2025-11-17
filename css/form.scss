@@ -14,45 +14,87 @@ select {
   padding: calc($border-radius / 2);
 }
 
-.select {
-  cursor: pointer;
-  position: relative;
+.select-group {
+  .dropdown {
+    position: relative;
+    background-color: var(--accent-text);
+  }
 
-  .dropdown, .options {
+  .dropdown-selected {
+    border: 1px solid var(--divider);
+    padding: $border-radius;
+    border-radius: calc($border-radius / 2);
+    cursor: pointer;
     background: var(--accent-text);
   }
 
-  .options {
-    border-radius: calc($border-radius / 2);
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 200ms ease-in;
+  .dropdown-selected:after {
+    content: "▼";
+    float: right;
+    color: var(--primary-text);
+  }
+
+  .dropdown-options {
     position: absolute;
-    width: calc(100% - 2px);
-    z-index: 1;
-    min-width: 200px;
-
-    &[data-position=right] {
-      right: 0;
-    }
-
-    &.open {
-      max-height: 500px;
-      border: 1px solid var(--divider);
-    }
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    border: 1px solid var(--divider);
+    border-radius: calc($border-radius / 2);
+    display: none;
+    flex-direction: column;
+    z-index: 10;
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: var(--accent-text);
   }
 
-  .option {
-    padding: $border-radius;
-
-    &.selected {
-      background: var(--accent);
-      color: var(--accent-text);
-    }
+  .dropdown-option {
+    padding: 10px;
+    cursor: pointer;
   }
 
-  .option:hover {
+  .dropdown-option:hover {
+    background: var(--divider);
+  }
+
+  .dropdown-option.selected {
     background: var(--accent);
     color: var(--accent-text);
+  }
+
+  .dropdown.open .dropdown-options {
+    display: flex;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .dropdown-options {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: none;
+      border-radius: 0;
+      padding-top: 60px;
+      font-size: 1.2rem;
+    }
+
+    .dropdown-options::before {
+      content: "Select options";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-weight: bold;
+    }
   }
 }

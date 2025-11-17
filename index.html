@@ -19,17 +19,9 @@
         </div>
     </div>
     <div class="last">
-        <div class="darkmode-picker cursor-pointer spacing-right">
+        <div class="darkmode-picker cursor-pointer">
             <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode">
                 <span id="theme-icon" class="icon icon-light"></span>
-            </div>
-        </div>
-        <div class="user select flex" id="user-select">
-            <span class="icon icon-person"></span>
-            <div class="options" data-parent="user-select" data-position="right">
-                <div class="option">Option One</div>
-                <div class="option">Option Two</div>
-                <div class="option">Option Three</div>
             </div>
         </div>
     </div>
@@ -260,7 +252,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="column">
+                <div class="column select-group">
                     <label for="single-select">Single Select</label>
                     <select id="single-select">
                         <option value="1">One</option>
@@ -268,9 +260,9 @@
                         <option value="3">Three</option>
                     </select>
                 </div>
-                <div class="column">
+                <div class="column select-group">
                     <label for="multi-select">Multi Select</label>
-                    <select name="multi-select" id="multi-select" multiple class="hidden">
+                    <select name="multi-select" id="multi-select" multiple>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>

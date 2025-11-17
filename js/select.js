@@ -1,148 +1,107 @@
-import {utils} from "./utils.js";
-
 class Select {
-    static initAll() {
-        const elements = document.querySelectorAll('select');
-        let counter = 1;
-        elements.forEach(element => {
-            const selectClass = 'select_' + counter;
-            element.classList.add(selectClass);
-            Select.init('.' + selectClass);
-            counter++;
-        });
+    constructor(selector) {
+        this.selector = selector;
+        this.is_multiselect = Select.init(selector);
+        return this;
     }
+
+    value() {
+        const data = Array.from(document.querySelector(this.selector).options).filter(function (option) {
+            return option.selected;
+        }).map(function (option) {
+            return option.value;
+        });
+        if (this.is_multiselect) return data;
+        return data[0];
+    }
+
     static init(selector) {
-        const element = document.querySelector(selector);
-        if (utils.isList(element)) {
-            console.error('only allowed for single elements')
-        } else {
-            let html = '<div class="dropdown"><span class="selected-text"></span> <span class="icon arrow-down float-right"></span></div>';
-            html += '<div class="options">';
-            const options = document.querySelectorAll(selector + ' option');
-            let selected_value = '';
-            let anySelected = false;
-            for (let i = 0; i < options.length; i++) {
-                const isSelected = options[i].hasAttribute('selected');
-                html += Select.buildOption(utils.text(options[i]), utils.value(options[i]), isSelected);
-                if (isSelected) {
-                    selected_value = utils.text(options[i]);
-                    anySelected = true;
-                }
-            }
-            const isMultiple = document.querySelector(selector).hasAttribute('multiple');
-            if (selected_value === '') {
-                if (isMultiple) {
-                    selected_value = 'nothing selected';
-                } else if (options.length > 0) {
-                    selected_value = utils.text(options[0]);
-                }
-            }
-            html += '</div>';
+        let element = document.querySelector(selector);
+        if (element) Select.#transformSelect(element);
 
-            let div = document.createElement('div');
-            div.className = 'select';
-            div.classList.add(selector.substring(1));
-            div.innerHTML = html;
-            div.dataset.multiple = String(isMultiple);
-            element.parentNode.insertBefore(div, element);
+        let dropdown = element.closest('.select-group').querySelector('.dropdown');
 
-            // TODO: replace label with simple div!
+        const selected = dropdown.querySelector('.dropdown-selected');
+        const options = dropdown.querySelector('.dropdown-options');
+        const multi = dropdown.dataset.multi === 'true';
 
-            document.querySelector(selector + ' .selected-text').innerText = selected_value;
-
-            // If no option was selected originally and this is a single select, mark first as selected
-            if (!isMultiple && !anySelected) {
-                const firstOption = div.querySelector('.option');
-                if (firstOption) firstOption.classList.add('selected');
-            }
-
-            element.remove();
-            Select.listen(div);
-        }
-    }
-
-    // Attach listeners for a rendered custom select element
-    static listen(element) {
-        const parent = element.querySelector('.options').getAttribute('data-parent');
-        if (parent != null) {
-            element.querySelector('.options').style.top = document.querySelector('#' + parent).clientHeight + 'px';
-        }
-
-        element.removeEventListener('mouseover', Select.show);
-        element.addEventListener('mouseover', Select.show);
-
-        element.removeEventListener('mouseleave', Select.hide);
-        element.addEventListener('mouseleave', Select.hide);
-
-        const options = element.querySelector('.options');
-        if (options) {
-            options.removeEventListener('click', Select.selectOption);
-            options.addEventListener('click', Select.selectOption);
-        }
-    }
-
-    // Get current value(s) from a rendered custom select by its selector
-    static value(selector) {
-        const element = document.querySelector(selector);
-        let response = [];
-        element.querySelectorAll('.option.selected').forEach(option => {
-            response.push(option.dataset.value);
-        });
-        if (response.length === 1) return response[0];
-        return response;
-    }
-
-    // Event handlers and helpers
-    static selectOption(event) {
-        const isMultiple = event.currentTarget.parentNode.dataset.multiple == 'true';
-        const selectedText = event.currentTarget.parentNode.querySelector('.selected-text');
-        if (!isMultiple) {
-            if (selectedText != null) {
-                selectedText.innerText = event.target.innerText;
-                event.currentTarget.parentNode.querySelectorAll('.option').forEach(option => {
-                    const value = option.dataset.value;
-                    if (value == event.target.dataset.value) {
-                        option.classList.add('selected');
-                    } else {
-                        option.classList.remove('selected');
-                    }
-                });
-            }
-            event.currentTarget.parentNode.querySelector('.options').classList.remove('open');
-        } else {
-            const selectedElements = [];
-            event.currentTarget.parentNode.querySelectorAll('.option').forEach(option => {
-                const value = option.dataset.value;
-                if (value === event.target.dataset.value) {
-                    // toggle selection state for clicked option
-                    if (option.classList.contains('selected')) {
-                        option.classList.remove('selected');
-                    } else {
-                        option.classList.add('selected');
-                    }
-                }
-                if (option.classList.contains('selected')) {
-                    selectedElements.push(option.innerText);
-                }
+        selected.addEventListener('click', () => {
+            // Close others
+            document.querySelectorAll('.dropdown').forEach(d => {
+                if (d !== dropdown) d.classList.remove('open');
             });
-            selectedText.innerText = selectedElements.length > 0 ? selectedElements.join(', ') : 'nothing selected';
-        }
+            dropdown.classList.toggle('open');
+        });
+        options.addEventListener('click', e => {
+            if (!e.target.classList.contains('dropdown-option')) return;
+            const option = e.target;
+            if (multi) {
+                option.classList.toggle('selected');
+                const values = [...options.querySelectorAll('.selected')].map(o => o.textContent);
+                selected.textContent = values.length ? values.join(', ') : 'Select options';
+                const selectedValues = [...options.querySelectorAll('.selected')].map(o => o.dataset.value);
+                Array.from(element.options).forEach(opt => opt.selected = selectedValues.includes(opt.value));
+            } else {
+                options.querySelectorAll('.dropdown-option').forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                selected.textContent = option.textContent;
+                dropdown.classList.remove('open');
+                element.value = option.dataset.value;
+            }
+        });
+
+        // Close on outside click
+        document.addEventListener('click', e => {
+            if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
+        });
+
+        return multi;
     }
 
-    static show(event) {
-        this.querySelector('.options').classList.add('open');
-    }
+    static #transformSelect(select) {
+        const parent = select.closest('.select-group');
+        const label = parent.querySelector('label');
+        const isMulti = select.hasAttribute('multiple');
+        const labelText = label ? label.textContent.trim() : 'Select';
 
-    static hide(event) {
-        this.querySelector('.options').classList.remove('open');
-    }
+        // Create wrapper for the original select
+        const hiddenWrapper = document.createElement('div');
+        hiddenWrapper.classList.add('hidden');
 
-    static buildOption(text, value, selected) {
-        const selected_class = selected ? ' selected' : '';
-        return '<div class="option' + selected_class + '" data-value="' + value + '">' + text + '</div>';
+        // Move label and select inside hidden wrapper
+        hiddenWrapper.appendChild(label);
+        hiddenWrapper.appendChild(select);
+
+        // Create dropdown structure
+        const dropdown = document.createElement('div');
+        dropdown.className = 'dropdown';
+        dropdown.dataset.multi = isMulti;
+
+        const dropdownSelected = document.createElement('div');
+        dropdownSelected.className = 'dropdown-selected';
+        dropdownSelected.textContent = labelText;
+
+        const dropdownOptions = document.createElement('div');
+        dropdownOptions.className = 'dropdown-options';
+
+        // Create options
+        [...select.options].forEach(opt => {
+            const optDiv = document.createElement('div');
+            optDiv.className = 'dropdown-option';
+            optDiv.dataset.value = opt.value;
+            optDiv.textContent = opt.textContent;
+            dropdownOptions.appendChild(optDiv);
+        });
+
+        // Assemble dropdown
+        dropdown.appendChild(dropdownSelected);
+        dropdown.appendChild(dropdownOptions);
+
+        // Replace original content
+        parent.innerHTML = '';
+        parent.appendChild(hiddenWrapper);
+        parent.appendChild(dropdown);
     }
 }
 
-// Backwards compatible export
-const select = Select;
-export { Select, select };
+export {Select};

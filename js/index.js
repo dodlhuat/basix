@@ -10,11 +10,12 @@ import {Theme} from "./theme.js";
 import {Table} from "./table.js";
 
 utils.ready(function () {
-    Select.initAll();
-    Select.listen(document.querySelector('.user.select'))
     Scrollbar.initAll('.scroll-container');
     Theme.init();
     Table.initAll();
+
+    let single = new Select('#single-select');
+    let multi = new Select('#multi-select');
 
     const elements = document.querySelectorAll('.show-modal');
     if (elements !== undefined) {

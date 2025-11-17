@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :root {
   --primary-text: #212121;
   --secondary-text: #545454;
@@ -63,40 +64,77 @@ select {
   padding: 0.2rem;
 }
 
-.select {
-  cursor: pointer;
+.select-group .dropdown {
   position: relative;
+  background-color: var(--accent-text);
 }
-.select .dropdown, .select .options {
+.select-group .dropdown-selected {
+  border: 1px solid var(--divider);
+  padding: 0.4rem;
+  border-radius: 0.2rem;
+  cursor: pointer;
   background: var(--accent-text);
 }
-.select .options {
-  border-radius: 0.2rem;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 200ms ease-in;
+.select-group .dropdown-selected:after {
+  content: "▼";
+  float: right;
+  color: var(--primary-text);
+}
+.select-group .dropdown-options {
   position: absolute;
-  width: calc(100% - 2px);
-  z-index: 1;
-  min-width: 200px;
-}
-.select .options[data-position=right] {
+  top: calc(100% + 5px);
+  left: 0;
   right: 0;
-}
-.select .options.open {
-  max-height: 500px;
   border: 1px solid var(--divider);
+  border-radius: 0.2rem;
+  display: none;
+  flex-direction: column;
+  z-index: 10;
+  max-height: 250px;
+  overflow-y: auto;
+  background-color: var(--accent-text);
 }
-.select .option {
-  padding: 0.4rem;
+.select-group .dropdown-option {
+  padding: 10px;
+  cursor: pointer;
 }
-.select .option.selected {
+.select-group .dropdown-option:hover {
+  background: var(--divider);
+}
+.select-group .dropdown-option.selected {
   background: var(--accent);
   color: var(--accent-text);
 }
-.select .option:hover {
-  background: var(--accent);
-  color: var(--accent-text);
+.select-group .dropdown.open .dropdown-options {
+  display: flex;
+}
+.select-group .hidden {
+  display: none;
+}
+@media (max-width: 768px) {
+  .select-group .dropdown-options {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: none;
+    border-radius: 0;
+    padding-top: 60px;
+    font-size: 1.2rem;
+  }
+  .select-group .dropdown-options::before {
+    content: "Select options";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-weight: bold;
+  }
 }
 
 /*# sourceMappingURL=form.css.map */
