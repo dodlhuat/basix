@@ -14,8 +14,9 @@ utils.ready(function () {
     Theme.init();
     Table.initAll();
 
-    let single = new Select('#single-select');
-    let multi = new Select('#multi-select');
+    new Select('#single-select');
+    new Select('#multi-select');
+    new Select('.table-controls .input');
 
     const elements = document.querySelectorAll('.show-modal');
     if (elements !== undefined) {

@@ -17,7 +17,14 @@ class Select {
 
     static init(selector) {
         let element = document.querySelector(selector);
-        if (element) Select.#transformSelect(element);
+        if (element) {
+            if (!Select.#transformSelect(element)) {
+                return;
+            }
+        } else {
+            console.error('select element not found');
+            return;
+        }
 
         let dropdown = element.closest('.select-group').querySelector('.dropdown');
 
@@ -60,6 +67,10 @@ class Select {
 
     static #transformSelect(select) {
         const parent = select.closest('.select-group');
+        if (!parent) {
+            console.error('select-group not defined');
+            return;
+        }
         const label = parent.querySelector('label');
         const isMulti = select.hasAttribute('multiple');
         const labelText = label ? label.textContent.trim() : 'Select';
@@ -108,6 +119,7 @@ class Select {
         parent.innerHTML = '';
         parent.appendChild(hiddenWrapper);
         parent.appendChild(dropdown);
+        return true;
     }
 }
 
