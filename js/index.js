@@ -2,7 +2,7 @@ import {utils} from "./utils.js";
 import {Select} from "./select.js";
 import {Scrollbar} from "./scrollbar.js";
 import {Modal} from "./modal.js";
-import {menu} from "./push-menu.js";
+import {PushMenu} from "./push-menu.js";
 import {toast} from "./toast.js";
 import {Datepicker} from "./datepicker.js";
 import {tree} from "./tree.js";
@@ -32,7 +32,7 @@ utils.ready(function () {
         toast.show('some content', 'some header', 'success', true, 3000);
     });
 
-    menu.init();
+    PushMenu.init();
     utils.showCode();
     Datepicker.initAll();
 

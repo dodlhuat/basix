@@ -1,44 +1,51 @@
-const request = {
-    get(url, parameters, success, error) {
-        const checked = checkSuccessError(success, error);
-        if (parameters.data !== undefined) {
-            url += '?' + new URLSearchParams(parameters.data);
+class Request {
+    constructor(url, parameters, success, error) {
+        this.url = url;
+        this.parameters = parameters;
+        this.success = success;
+        this.error = error;
+    }
+
+    get() {
+        const checked = this.#checkSuccessError(this.success, this.error);
+        if (this.parameters.data !== undefined) {
+            this.url += '?' + new URLSearchParams(this.parameters.data);
         }
-        fetch(url)
+        fetch(this.url)
             .then(function(response) {
                 return response.json();
             })
             .then(checked.success)
             .catch(checked.error);
-    },
-    post(url, parameters, success, error) {
-        const checked = checkSuccessError(success, error);
-        fetch(url,
+    }
+    post() {
+        const checked = this.#checkSuccessError(this.success, this.error);
+        fetch(this.url,
             {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(parameters.data)
+                body: JSON.stringify(this.parameters.data)
             })
             .then(checked.success)
             .catch(checked.error);
     }
-}
 
-const checkSuccessError = (success, error) => {
-    if (success === undefined) {
-        success = function(data) {
-            console.log(data);
-        };
-    }
-    if (error === undefined) {
-        error = function(error) {
-            console.error(error);
+    #checkSuccessError(success, error) {
+        if (success === undefined) {
+            success = function(data) {
+                console.log(data);
+            };
         }
+        if (error === undefined) {
+            error = function(error) {
+                console.error(error);
+            }
+        }
+        return {success, error};
     }
-    return {success, error};
 }
 
-export {request}
+export {Request}
