@@ -50,9 +50,9 @@ class Select {
             }
         });
 
-        // Close on outside click
-        document.addEventListener('click', e => {
-            if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
+        // event listener on dropdown-options-icon
+        options.querySelector('.dropdown-options-icon').addEventListener('click', (e) => {
+            dropdown.classList.remove('open');
         });
 
         return multi;
@@ -83,6 +83,13 @@ class Select {
 
         const dropdownOptions = document.createElement('div');
         dropdownOptions.className = 'dropdown-options';
+
+        // add menu for dropdown on mobile devices
+        const optionsMenu = document.createElement('div');
+        optionsMenu.className = 'dropdown-options-menu';
+        optionsMenu.classList.add('hidden');
+        optionsMenu.innerHTML = 'Select options<span class="dropdown-options-icon icon icon-close"></span>';
+        dropdownOptions.appendChild(optionsMenu);
 
         // Create options
         [...select.options].forEach(opt => {

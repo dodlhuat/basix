@@ -112,6 +112,25 @@ select {
   display: none;
 }
 @media (max-width: 768px) {
+  .select-group .dropdown-options-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-weight: bold;
+  }
+  .select-group .dropdown-options-menu.hidden {
+    display: block;
+  }
+  .select-group .dropdown-options-menu .dropdown-options-icon {
+    position: absolute;
+    right: 45px;
+    cursor: pointer;
+  }
   .select-group .dropdown-options {
     position: fixed;
     top: 0;
@@ -122,18 +141,6 @@ select {
     border-radius: 0;
     padding-top: 60px;
     font-size: 1.2rem;
-  }
-  .select-group .dropdown-options::before {
-    content: "Select options";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: #333;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    font-weight: bold;
   }
 }
 
