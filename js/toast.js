@@ -1,69 +1,74 @@
-import {utils} from "./utils.js";
+class Toast {
+    constructor(content, header, type, closeable) {
+        this.content = content;
+        this.header = header;
+        this.type = type;
+        this.closeable = closeable;
+        this.closure_icon = '<div class="icon icon-close close"></div>';
+        this.template = this.#buildTemplate(this.content, this.header, this.closeable);
+    }
 
-const closure_icon = '<div class="icon icon-close close"></div>';
-const toast = {
-    show(content, header, type, closeable, ms) {
+    show(ms) {
         let div = document.createElement('div');
         div.className = 'toast';
-        if (type !== undefined) {
-            div.classList.add(type);
+        if (this.type !== undefined) {
+            div.classList.add(this.type);
         }
 
-        div.innerHTML = buildTemplate(content, header, closeable);
+        div.innerHTML = this.template;
         document.querySelector('body').append(div);
         setTimeout(() => {
             document.querySelector('.toast').classList.add('show');
-            document.querySelector('.toast .close').removeEventListener('click', hideToast);
-            document.querySelector('.toast .close').addEventListener('click', hideToast);
+            document.querySelector('.toast .close').removeEventListener('click', this.hide);
+            document.querySelector('.toast .close').addEventListener('click', this.hide);
 
             if (ms !== undefined) {
-                timer(ms);
+                this.#timer(ms);
             }
         }, 150);
-    },
+    }
     hide() {
         document.querySelector('.toast').classList.remove('show');
         setTimeout(() => {
-            document.querySelector('.toast').remove();
+            const toast = document.querySelector('.toast');
+            if (toast) toast.remove();
         }, 150);
     }
-}
 
-const hideToast = function () {
-    toast.hide();
-}
-
-const timer = function (ms, timing) {
-    const stepSize = 250;
-    if (timing === undefined) {
-        timing = 0;
-    }
-    if (timing >= ms) {
-        hideToast();
-        return false;
-    }
-    setTimeout(() => {
-        timing += stepSize;
-        const width = 100 - ((100 / ms) * timing);
-        const element = document.querySelector('.toast .bar');
-        if (element) {
-            document.querySelector('.toast .bar').style.width = width + '%';
-            timer(ms, timing);
+    #timer(ms, timing) {
+        const stepSize = 250;
+        if (timing === undefined) {
+            timing = 0;
         }
-    }, stepSize);
+        if (timing >= ms) {
+            this.hide();
+            return false;
+        }
+        setTimeout(() => {
+            timing += stepSize;
+            const width = 100 - ((100 / ms) * timing);
+            const element = document.querySelector('.toast .bar');
+            if (element) {
+                document.querySelector('.toast .bar').style.width = width + '%';
+                this.#timer(ms, timing);
+            }
+        }, stepSize);
+    }
+
+    #buildTemplate(content, header, closeable) {
+        let template = '<div class="bar"></div>';
+        if (closeable === undefined) {
+            closeable = true;
+        }
+        if (closeable) {
+            template += this.closure_icon;
+        }
+        template += '<div class="header">' + header + '</div>';
+        template += '<div class="content">' + content + '</div>';
+        return template;
+    }
 }
 
-const buildTemplate = function (content, header, closeable) {
-    let template = '<div class="bar"></div>';
-    if (closeable === undefined) {
-        closeable = true;
-    }
-    if (closeable) {
-        template += closure_icon;
-    }
-    template += '<div class="header">' + header + '</div>';
-    template += '<div class="content">' + content + '</div>';
-    return template;
-}
 
-export {toast};
+
+export {Toast};

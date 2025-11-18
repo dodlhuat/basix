@@ -3,7 +3,7 @@ import {Select} from "./select.js";
 import {Scrollbar} from "./scrollbar.js";
 import {Modal} from "./modal.js";
 import {PushMenu} from "./push-menu.js";
-import {toast} from "./toast.js";
+import {Toast} from "./toast.js";
 import {Datepicker} from "./datepicker.js";
 import {tree} from "./tree.js";
 import {Theme} from "./theme.js";
@@ -29,7 +29,8 @@ utils.ready(function () {
     }
 
     document.querySelector('.show-toast').addEventListener('click', function () {
-        toast.show('some content', 'some header', 'success', true, 3000);
+        let toast = new Toast('some content', 'some header', 'success', true)
+        toast.show(3000);
     });
 
     PushMenu.init();
