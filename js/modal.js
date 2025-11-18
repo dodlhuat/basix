@@ -1,41 +1,47 @@
 const closure_icon = '<div class="icon icon-close close"></div>';
-const modal = {
-    show(content, header, footer, closeable) {
+
+class Modal {
+    constructor(content, header, footer, closeable) {
+        if (closeable === undefined) {
+            closeable = true;
+        }
+        this.content = content;
+        this.header = header;
+        this.footer = footer;
+        this.closeable = closeable;
+        this.template = this.#buildTemplate();
+    }
+
+    show() {
         let div = document.createElement('div');
         div.className = 'modal-wrapper'
-        div.innerHTML = buildTemplate(content, header, footer, closeable);
+        div.innerHTML = this.template;
         document.querySelector('body').append(div);
 
-        document.querySelector('.modal-wrapper .close').removeEventListener('click', hideModal);
-        document.querySelector('.modal-wrapper .close').addEventListener('click', hideModal);
-    },
+        document.querySelector('.modal-wrapper .close').removeEventListener('click', this.hide);
+        document.querySelector('.modal-wrapper .close').addEventListener('click', this.hide);
+    }
+
     hide() {
         document.querySelector('.modal-wrapper').remove();
     }
+
+    #buildTemplate() {
+        let template = '<div class="modal">';
+        if (this.closeable) {
+            template += closure_icon;
+        }
+        if (this.header !== undefined) {
+            template += '<div class="header">' + this.header + '</div>';
+        }
+        template += this.content;
+        if (this.footer !== undefined) {
+            template += '<div class="footer">' + this.footer + '</div>';
+        }
+        template += '</div>';
+        template += '<div class="modal-background"></div>'
+        return template;
+    }
 }
 
-const hideModal = function () {
-    modal.hide();
-}
-
-const buildTemplate = function (content, header, footer, closeable) {
-    let template = '<div class="modal">';
-    if (closeable === undefined) {
-        closeable = true;
-    }
-    if (closeable) {
-        template += closure_icon;
-    }
-    if (header !== undefined) {
-        template += '<div class="header">' + header + '</div>';
-    }
-    template += content;
-    if (footer !== undefined) {
-        template += '<div class="footer">' + footer + '</div>';
-    }
-    template += '</div>';
-    template += '<div class="modal-background"></div>'
-    return template;
-}
-
-export {modal};
+export {Modal};

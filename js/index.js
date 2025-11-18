@@ -1,7 +1,7 @@
 import {utils} from "./utils.js";
 import {Select} from "./select.js";
 import {Scrollbar} from "./scrollbar.js";
-import {modal} from "./modal.js";
+import {Modal} from "./modal.js";
 import {menu} from "./push-menu.js";
 import {toast} from "./toast.js";
 import {Datepicker} from "./datepicker.js";
@@ -21,7 +21,10 @@ utils.ready(function () {
     if (elements !== undefined) {
         document.querySelector('.show-modal').addEventListener('click', function () {
             const buttons = '<div class="buttons">\<button class="button-light">Close</button>&nbsp;<button>Save Changes</button></div>';
-            modal.show('bluffi', '<strong>blaffi</strong>', buttons);
+            let modal = new Modal('bluffi', '<strong>blaffi</strong>', buttons);
+            modal.show();
+
+            console.warn('buttons have no bound listeners');
         })
     }
 
