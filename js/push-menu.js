@@ -1,6 +1,6 @@
 class PushMenu {
     static init() {
-        document.querySelector('.navigation').addEventListener('change', function (event) {
+        document.querySelector('.navigation').addEventListener('change', function () {
             const content = document.querySelector('.push-content');
             const pushed = content.classList.contains('pushed');
             if (!pushed) {
