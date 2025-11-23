@@ -50,70 +50,11 @@
   --disabled: #b8b8b8;
 }
 
-body {
-  font-family: "helvetica neue", helvetica, arial, sans-serif;
+.progress-bar {
+  background: var(--primary-light);
+  border-radius: 0.4rem;
 }
-
-p, li, td, th, div, h1, h2, h3, h4, h5 {
-  color: var(--primary-text);
-}
-
-p, li, td, th, div {
-  font-size: 1.125rem;
-  line-height: 1.5;
-}
-
-.h1, .h2, .h3, .h4, h1, h2, h3, h4 {
-  margin: 0 0 0.5rem 0;
-  line-height: 1.2;
-  font-weight: bold;
-}
-
-h1, .h1 {
-  font-size: 2.5rem;
-}
-
-h2, .h2 {
-  font-size: 2rem;
-}
-
-h3, .h3 {
-  font-size: 1.75rem;
-}
-
-h4, .h4 {
-  font-size: 1.5rem;
-}
-
-ul, ol {
-  list-style-position: inside;
-  margin-bottom: 0.5rem;
-}
-
-ul li {
-  list-style-type: disc;
-}
-ul li li {
-  list-style-type: circle;
-}
-
-ol li {
-  list-style-type: decimal;
-}
-ol li li {
-  list-style-type: lower-latin;
-}
-
-strong {
-  font-weight: bold;
-}
-
-hr {
-  border: 1px solid var(--divider);
-  margin-top: 1.125rem;
-  margin-bottom: 1.125rem;
-}
-
-.text-center {
-  text-align: center;
-}/*# sourceMappingURL=typography.css.map */
+.progress-bar .progress {
+  border-radius: 0.4rem;
+  background: var(--accent);
+}/*# sourceMappingURL=progress.css.map */

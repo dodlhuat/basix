@@ -1,381 +1,78 @@
 <!doctype html>
 <html lang="de">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>WYSIWYG HTML-Editor (plain JavaScript)</title>
-    <style>
-        :root {
-            --bg: #f6f8fa;
-            --panel: #ffffff;
-            --muted: #6b7280;
-            --accent: #2563eb
-        }
-
-        body {
-            margin: 0;
-            font-family: Inter, system-ui, Segoe UI, Arial;
-            background: var(--bg);
-            color: #0f1724
-        }
-
-        .app {
-            max-width: 1100px;
-            margin: 24px auto;
-            padding: 12px
-        }
-
-        header {
-            display: flex;
-            align-items: center;
-            gap: 12px
-        }
-
-        header h1 {
-            font-size: 18px;
-            margin: 0
-        }
-
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin: 12px 0
-        }
-
-        .btn {
-            background: var(--panel);
-            border: 1px solid #e6e9ee;
-            padding: 8px;
-            border-radius: 6px;
-            cursor: pointer
-        }
-
-        .btn.active {
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, .12)
-        }
-
-        .btn input {
-            display: none
-        }
-
-        .editor-area {
-            display: flex;
-            gap: 12px
-        }
-
-        .editor {
-            flex: 1;
-            min-height: 360px;
-            border: 1px solid #e6e9ee;
-            border-radius: 8px;
-            background: white;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column
-        }
-
-        .editable {
-            flex: 1;
-            padding: 16px;
-            outline: none;
-            overflow: auto
-        }
-
-        .status {
-            padding: 8px;
-            font-size: 13px;
-            color: var(--muted);
-            border-top: 1px solid #f0f2f5
-        }
-
-        .side {
-            width: 360px;
-            min-width: 240px
-        }
-
-        .panel {
-            background: var(--panel);
-            border: 1px solid #e6e9ee;
-            border-radius: 8px;
-            padding: 12px
-        }
-
-        textarea.code {
-            width: 100%;
-            height: 300px;
-            border: 1px solid #e6e9ee;
-            border-radius: 6px;
-            padding: 8px;
-            font-family: monospace
-        }
-
-        .small {
-            font-size: 13px;
-            color: var(--muted)
-        }
-
-        @media (max-width: 900px) {
-            .editor-area {
-                flex-direction: column
-            }
-
-            .side {
-                width: 100%
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/editor.css">
 </head>
+
 <body>
-<div class="app">
-    <header>
-        <h1>WYSIWYG HTML-Editor — Plain JavaScript</h1>
-        <div class="small">(keine Bibliotheken; sicherer Export; Code-Ansicht)</div>
-    </header>
+    <div class="app">
+        <header>
+            <h1>WYSIWYG HTML-Editor — Plain JavaScript</h1>
+            <div class="small">(keine Bibliotheken; sicherer Export; Code-Ansicht)</div>
+        </header>
 
-    <div class="toolbar" role="toolbar" aria-label="Editor-Werkzeuge">
-        <button class="btn" data-cmd="bold" title="Fett (Ctrl/Cmd+B)">B</button>
-        <button class="btn" data-cmd="italic" title="Kursiv (Ctrl/Cmd+I)">I</button>
-        <button class="btn" data-cmd="underline" title="Unterstrichen">U</button>
-        <button class="btn" data-cmd="strikeThrough" title="Durchgestrichen">S</button>
-        <button class="btn" data-cmd="insertUnorderedList" title="Aufzählung">• Liste</button>
-        <button class="btn" data-cmd="insertOrderedList" title="Nummerierte Liste">1. Liste</button>
-        <button class="btn" data-cmd="formatBlock" data-value="h1" title="Überschrift 1">H1</button>
-        <button class="btn" data-cmd="formatBlock" data-value="h2" title="Überschrift 2">H2</button>
-        <button class="btn" data-cmd="formatBlock" data-value="p" title="Absatz">¶</button>
-        <button class="btn" id="linkBtn" title="Link einfügen">🔗</button>
-        <button class="btn" id="imageBtn" title="Bild einfügen">🖼️</button>
-        <input type="file" id="imageFile" accept="image/*" style="display:none">
-        <button class="btn" id="cleanBtn" title="Formatierung entfernen">🧹 Clean</button>
-        <button class="btn" id="undoBtn" title="Rückgängig (Ctrl/Cmd+Z)">↶</button>
-        <button class="btn" id="redoBtn" title="Wiederholen (Ctrl/Cmd+Y)">↷</button>
-        <button class="btn" id="toggleCodeBtn" title="Code-Ansicht umschalten">&lt;/&gt;</button>
-        <button class="btn" id="saveBtn" title="Als HTML herunterladen">💾 Speichern</button>
-        <button class="btn" id="clearBtn" title="Inhalt löschen">🗑️</button>
-    </div>
-
-    <div class="editor-area">
-        <div class="editor panel">
-            <div id="editable" class="editable" contenteditable="true" spellcheck="true"
-                 aria-label="Bearbeitungsbereich">
-                <h1>Willkommen</h1>
-                <p>Das ist ein einfacher WYSIWYG-Editor mit reinem JavaScript. Schreibe Text, formatiere ihn und schalte
-                    in die Code-Ansicht um.</p>
-            </div>
-            <div class="status">Tipps: <span class="small">Strg/Cmd+B = Fett • Strg/Cmd+K = Link • Strg/Cmd+S = Speichern</span>
-            </div>
+        <div class="toolbar" role="toolbar" aria-label="Editor-Werkzeuge">
+            <button class="btn" data-cmd="bold" title="Fett (Ctrl/Cmd+B)">B</button>
+            <button class="btn" data-cmd="italic" title="Kursiv (Ctrl/Cmd+I)">I</button>
+            <button class="btn" data-cmd="underline" title="Unterstrichen">U</button>
+            <button class="btn" data-cmd="strikeThrough" title="Durchgestrichen">S</button>
+            <button class="btn" data-cmd="insertUnorderedList" title="Aufzählung">• Liste</button>
+            <button class="btn" data-cmd="insertOrderedList" title="Nummerierte Liste">1. Liste</button>
+            <button class="btn" data-cmd="formatBlock" data-value="h1" title="Überschrift 1">H1</button>
+            <button class="btn" data-cmd="formatBlock" data-value="h2" title="Überschrift 2">H2</button>
+            <button class="btn" data-cmd="formatBlock" data-value="p" title="Absatz">¶</button>
+            <button class="btn" id="linkBtn" title="Link einfügen">🔗</button>
+            <button class="btn" id="imageBtn" title="Bild einfügen">🖼️</button>
+            <input type="file" id="imageFile" accept="image/*" style="display:none">
+            <button class="btn" id="cleanBtn" title="Formatierung entfernen">🧹 Clean</button>
+            <button class="btn" id="undoBtn" title="Rückgängig (Ctrl/Cmd+Z)">↶</button>
+            <button class="btn" id="redoBtn" title="Wiederholen (Ctrl/Cmd+Y)">↷</button>
+            <button class="btn" id="toggleCodeBtn" title="Code-Ansicht umschalten">&lt;/&gt;</button>
+            <button class="btn" id="saveBtn" title="Als HTML herunterladen">💾 Speichern</button>
+            <button class="btn" id="clearBtn" title="Inhalt löschen">🗑️</button>
         </div>
 
-        <aside class="side">
-            <div class="panel">
-                <h3>Code-Ansicht</h3>
-                <textarea id="code" class="code" placeholder="HTML wird hier angezeigt"></textarea>
-                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
-                    <button class="btn" id="applyCodeBtn">Auf Inhalt anwenden</button>
-                    <button class="btn" id="sanitizeBtn">Säubern (Script entfernen)</button>
-                    <button class="btn" id="minifyBtn">Minify (einzeilig)</button>
+        <div class="editor-area">
+            <div class="editor panel">
+                <div id="editable" class="editable" contenteditable="true" spellcheck="true"
+                    aria-label="Bearbeitungsbereich">
+                    <h1>Willkommen</h1>
+                    <p>Das ist ein einfacher WYSIWYG-Editor mit reinem JavaScript. Schreibe Text, formatiere ihn und
+                        schalte
+                        in die Code-Ansicht um.</p>
+                </div>
+                <div class="status">Tipps: <span class="small">Strg/Cmd+B = Fett • Strg/Cmd+K = Link • Strg/Cmd+S =
+                        Speichern</span>
                 </div>
             </div>
 
-            <div class="panel" style="margin-top:12px">
-                <h3>Vorschau</h3>
-                <div id="preview" class="panel" style="height:160px;overflow:auto"></div>
-            </div>
-        </aside>
+            <aside class="side">
+                <div class="panel">
+                    <h3>Code-Ansicht</h3>
+                    <textarea id="code" class="code" placeholder="HTML wird hier angezeigt"></textarea>
+                    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+                        <button class="btn" id="applyCodeBtn">Auf Inhalt anwenden</button>
+                        <button class="btn" id="sanitizeBtn">Säubern (Script entfernen)</button>
+                        <button class="btn" id="minifyBtn">Minify (einzeilig)</button>
+                    </div>
+                </div>
+
+                <div class="panel" style="margin-top:12px">
+                    <h3>Vorschau</h3>
+                    <div id="preview" class="panel" style="height:160px;overflow:auto"></div>
+                </div>
+            </aside>
+        </div>
     </div>
-</div>
 
-<script>
-    // --- Helfer ---
-    const editable = document.getElementById('editable');
-    const code = document.getElementById('code');
-    const preview = document.getElementById('preview');
-    let isCodeView = false;
-
-    // Safes HTML: entfernt <script> und on* attributes
-    function sanitizeHTML(html) {
-        // Grundlegende Säuberung (nicht perfekt, aber schützt gegen inline scripts)
-        // Entfernt <script> tags
-        html = html.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
-        // Entfernt on* event attributes (onclick, onerror, ...)
-        html = html.replace(/\son[a-zA-Z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
-        return html;
-    }
-
-    function updateCodeView() {
-        code.value = editable.innerHTML.trim();
-    }
-
-    function updatePreview() {
-        preview.innerHTML = editable.innerHTML;
-    }
-
-    // Initial sync
-    updateCodeView();
-    updatePreview();
-
-    // --- Toolbar actions ---
-    function exec(command, value = null) {
-        if (command === 'formatBlock' && value) {
-            document.execCommand('formatBlock', false, '<' + value + '>');
-        } else {
-            document.execCommand(command, false, value);
-        }
-        updateCodeView();
-        updatePreview();
-    }
-
-    // Buttons with data-cmd
-    document.querySelectorAll('[data-cmd]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const cmd = btn.dataset.cmd;
-            const val = btn.dataset.value || null;
-            exec(cmd, val);
-            editable.focus();
-        });
-    });
-
-    // Link
-    document.getElementById('linkBtn').addEventListener('click', () => {
-        const url = prompt('URL eingeben (mit http:// oder https://)', 'https://');
-        if (url) exec('createLink', url);
-    });
-
-    // Image via file
-    const imageFile = document.getElementById('imageFile');
-    document.getElementById('imageBtn').addEventListener('click', () => imageFile.click());
-    imageFile.addEventListener('change', (e) => {
-        const f = e.target.files[0];
-        if (!f) return;
-        const reader = new FileReader();
-        reader.onload = () => exec('insertImage', reader.result);
-        reader.readAsDataURL(f);
-    });
-
-    // Clean formatting
-    document.getElementById('cleanBtn').addEventListener('click', () => {
-        // remove formatting by replacing selection with its plain text
-        const sel = window.getSelection();
-        if (sel.rangeCount === 0) return;
-        const range = sel.getRangeAt(0);
-        const text = range.toString();
-        range.deleteContents();
-        range.insertNode(document.createTextNode(text));
-        updateCodeView();
-        updatePreview();
-    });
-
-    // Undo/Redo
-    document.getElementById('undoBtn').addEventListener('click', () => {
-        exec('undo');
-    });
-    document.getElementById('redoBtn').addEventListener('click', () => {
-        exec('redo');
-    });
-
-    // Toggle code view
-    document.getElementById('toggleCodeBtn').addEventListener('click', () => {
-        isCodeView = !isCodeView;
-        if (isCodeView) {
-            updateCodeView();
-            code.style.display = 'block';
-        } else {
-            code.style.display = 'none';
-        }
-    });
-    // Start hidden
-    code.style.display = 'block'; // show so user can edit immediately; toggle if wanted
-
-    // Apply code to editor
-    document.getElementById('applyCodeBtn').addEventListener('click', () => {
-        editable.innerHTML = sanitizeHTML(code.value);
-        updatePreview();
-    });
-
-    // Sanitize button
-    document.getElementById('sanitizeBtn').addEventListener('click', () => {
-        code.value = sanitizeHTML(code.value);
-        editable.innerHTML = code.value;
-        updatePreview();
-    });
-
-    // Minify
-    document.getElementById('minifyBtn').addEventListener('click', () => {
-        code.value = code.value.replace(/\n/g, '').replace(/>\s+</g, '><').trim();
-    });
-
-    // Save HTML to file
-    document.getElementById('saveBtn').addEventListener('click', () => {
-        const blob = new Blob(['<!doctype html>\n<html lang="de">\n<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Export</title></head>\n<body>\n' + sanitizeHTML(editable.innerHTML) + '\n</body>\n</html>'], {type: 'text/html'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'document.html';
-        a.click();
-        URL.revokeObjectURL(a.href);
-    });
-
-    // Clear content
-    document.getElementById('clearBtn').addEventListener('click', () => {
-        if (confirm('Inhalt wirklich löschen?')) {
-            editable.innerHTML = '';
-            updateCodeView();
-            updatePreview();
-        }
-    });
-
-    // Sync editable -> code & preview on input
-    editable.addEventListener('input', () => {
-        updateCodeView();
-        updatePreview();
-    });
-
-    // Paste handling: remove styles on paste
-    editable.addEventListener('paste', (e) => {
-        e.preventDefault();
-        const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-        document.execCommand('insertText', false, text);
-    });
-
-    // Keyboard shortcuts
-    window.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
-            e.preventDefault();
-            exec('bold');
-        }
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'i') {
-            e.preventDefault();
-            exec('italic');
-        }
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-            e.preventDefault();
-            const url = prompt('URL eingeben', 'https://');
-            if (url) exec('createLink', url);
-        }
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-            e.preventDefault();
-            document.getElementById('saveBtn').click();
-        }
-    });
-
-    // Keep buttons' active state in sync
-    function refreshState() {
-        document.querySelectorAll('[data-cmd]').forEach(btn => {
-            const cmd = btn.dataset.cmd;
-            let on = false;
-            try {
-                on = document.queryCommandState(cmd);
-            } catch (e) {
-            }
-            btn.classList.toggle('active', on);
-        });
-    }
-
-    editable.addEventListener('keyup', refreshState);
-    editable.addEventListener('mouseup', refreshState);
-
-    // Update preview initially
-    updatePreview();
-
-</script>
+    <script type="module">
+        import { Editor } from './js/editor.js';
+        new Editor();
+    </script>
 </body>
+
 </html>

@@ -50,70 +50,36 @@
   --disabled: #b8b8b8;
 }
 
-body {
-  font-family: "helvetica neue", helvetica, arial, sans-serif;
+.switch input[type=checkbox] {
+  position: absolute;
+  opacity: 0;
+  width: auto;
 }
-
-p, li, td, th, div, h1, h2, h3, h4, h5 {
-  color: var(--primary-text);
+.switch label {
+  cursor: pointer;
+  width: 3rem;
+  height: 1.5rem;
+  background: grey;
+  display: block;
+  border-radius: 1.5rem;
+  position: relative;
+  text-indent: 3.5rem;
 }
-
-p, li, td, th, div {
-  font-size: 1.125rem;
-  line-height: 1.5;
+.switch label:after {
+  content: "";
+  position: absolute;
+  top: 0.25rem;
+  left: 5px;
+  width: 1rem;
+  height: 1rem;
+  background: #fff;
+  border-radius: 90px;
+  transition: 0.3s;
 }
-
-.h1, .h2, .h3, .h4, h1, h2, h3, h4 {
-  margin: 0 0 0.5rem 0;
-  line-height: 1.2;
-  font-weight: bold;
+.switch input:checked + label {
+  background: var(--accent);
 }
-
-h1, .h1 {
-  font-size: 2.5rem;
-}
-
-h2, .h2 {
-  font-size: 2rem;
-}
-
-h3, .h3 {
-  font-size: 1.75rem;
-}
-
-h4, .h4 {
-  font-size: 1.5rem;
-}
-
-ul, ol {
-  list-style-position: inside;
-  margin-bottom: 0.5rem;
-}
-
-ul li {
-  list-style-type: disc;
-}
-ul li li {
-  list-style-type: circle;
-}
-
-ol li {
-  list-style-type: decimal;
-}
-ol li li {
-  list-style-type: lower-latin;
-}
-
-strong {
-  font-weight: bold;
-}
-
-hr {
-  border: 1px solid var(--divider);
-  margin-top: 1.125rem;
-  margin-bottom: 1.125rem;
-}
-
-.text-center {
-  text-align: center;
-}/*# sourceMappingURL=typography.css.map */
+.switch input:checked + label:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}/*# sourceMappingURL=switch.css.map */

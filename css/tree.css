@@ -1,0 +1,37 @@
+.tree {
+  position: relative;
+}
+.tree .icon-folder_open, .tree .icon-folder, .tree .folder-name {
+  cursor: pointer;
+}
+.tree .icon-spacer {
+  margin-right: 4px;
+}
+.tree .li-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.tree .li-content.hidden {
+  display: none;
+}
+.tree .li-content .folder-name {
+  margin-top: 2px;
+  margin-left: 6px;
+}
+.tree .li-content .folder-content {
+  flex-basis: 100%;
+  padding-left: 1rem;
+}
+.tree ul {
+  padding-left: 1rem;
+  margin-bottom: 0;
+}
+.tree ul li {
+  list-style-type: none;
+  position: relative;
+  padding-top: 5px;
+  padding-bottom: 0;
+  padding-left: 0;
+}/*# sourceMappingURL=tree.css.map */

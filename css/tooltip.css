@@ -1,0 +1,30 @@
+.tooltip {
+  display: inline;
+  position: relative;
+}
+
+.tooltip:hover:after {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  background: #444;
+  border-radius: 8px;
+  color: #fff;
+  content: attr(title);
+  padding: 13px;
+  width: -moz-max-content;
+  width: max-content;
+  left: 0;
+  bottom: 37px;
+  max-width: 200px;
+}
+
+.tooltip:hover:before {
+  border: solid;
+  border-color: #444 transparent;
+  border-width: 12px 6px 0 6px;
+  content: "";
+  left: 45%;
+  bottom: 25px;
+  position: absolute;
+}/*# sourceMappingURL=tooltip.css.map */

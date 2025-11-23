@@ -1,0 +1,165 @@
+:root {
+  --primary-text: #212121;
+  --secondary-text: #545454;
+  --divider: #BDBDBD;
+  --accent-text: #FFFFFF;
+  --error: #b13535;
+  --error-lighten: #e29d9d;
+  --error-darken: #d06262;
+  --warning: #b8871f;
+  --warning-lighten: #ebca85;
+  --warning-darken: #dfae44;
+  --success: #1b7f5c;
+  --success-lighten: #58dbad;
+  --success-darken: #28be8a;
+  --primary: #bababa;
+  --primary-darken: #a0a0a0;
+  --primary-dark: #d3d3d3;
+  --primary-light: #ffffff;
+  --primary-light-darken: #cccccc;
+  --accent: #4a4fb9;
+  --accent-darken: #2c2f71;
+  --accent-lighten: #9497d5;
+  --light-background: #f2f2f2;
+  --disabled: #b8b8b8;
+}
+
+[data-theme=dark] {
+  --primary-text: #8b8b8b;
+  --secondary-text: #3f3f3f;
+  --divider: #3f3f3f;
+  --accent-text: #282828;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
+  --warning: #FF9800;
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
+  --primary: #b7c3c1;
+  --primary-darken: #9caba9;
+  --primary-dark: #575757;
+  --primary-light: #282828;
+  --primary-light-darken: black;
+  --accent: #4a4fb9;
+  --accent-darken: #2c2f71;
+  --accent-lighten: #9497d5;
+  --light-background: #575757;
+  --disabled: #b8b8b8;
+}
+
+.push-content {
+  transition: all 200ms ease-in;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  margin: 0 0 0 -250px;
+  transition: all 200ms ease-in;
+}
+
+nav ul {
+  width: 250px;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background: var(--primary-dark);
+  overflow: hidden;
+}
+
+nav li {
+  margin: 0;
+}
+
+nav a {
+  color: var(--primary-text);
+  font-size: 1em;
+  text-decoration: none;
+  display: block;
+  padding: 0.75rem 1.125rem;
+  letter-spacing: 2px;
+  border-bottom: 1px solid var(--primary);
+}
+
+nav a:hover {
+  background: var(--accent);
+  color: var(--primary-light-darken);
+}
+
+.navigation-controls label {
+  display: block;
+  width: 1.125rem;
+  height: 100%;
+  color: var(--primary-text);
+  text-align: center;
+  line-height: 42px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: all 200ms ease-in;
+  z-index: 500;
+}
+.navigation-controls input[type=checkbox] {
+  display: none;
+}
+.navigation-controls input[type=checkbox]:checked ~ label {
+  left: 250px;
+}
+
+nav.pushed {
+  margin: 0;
+}
+
+.push-content.pushed {
+  transform: translate3d(250px, 0, 0);
+}
+
+.main-header {
+  position: fixed;
+  background: var(--light-background);
+  width: 100%;
+  right: 0;
+  transition: width 200ms ease-in;
+  height: 2.25rem;
+  display: flex;
+  z-index: 2;
+  gap: 0.75rem;
+  border-bottom: 3px solid var(--primary);
+}
+.main-header > div:first-child {
+  margin-left: 0.75rem;
+}
+.main-header > div:last-child {
+  margin-right: 0.75rem;
+}
+.main-header > div {
+  display: flex;
+  align-items: center;
+  line-height: 2.25rem;
+}
+.main-header .last {
+  margin-left: auto;
+}
+.main-header.pushed {
+  width: calc(100% - 250px);
+}
+.main-header .navigation-controls {
+  height: 1.875rem;
+}
+.main-header .navigation-controls label {
+  display: block;
+  position: relative;
+  background: initial;
+  width: inherit;
+  height: inherit;
+}
+.main-header .navigation-controls input[type=checkbox]:checked ~ label {
+  left: 0;
+}/*# sourceMappingURL=push-menu.css.map */

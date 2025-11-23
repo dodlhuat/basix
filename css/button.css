@@ -92,6 +92,4 @@ button.button-light, .button.button-light {
 button.button-light:hover, .button.button-light:hover {
   background: var(--primary-light-darken);
   color: var(--accent-text);
-}
-
-/*# sourceMappingURL=button.css.map */
+}/*# sourceMappingURL=button.css.map */

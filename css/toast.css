@@ -50,70 +50,69 @@
   --disabled: #b8b8b8;
 }
 
-body {
-  font-family: "helvetica neue", helvetica, arial, sans-serif;
+.toast {
+  display: inline-block;
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+  background: var(--light-background);
+  border-radius: 0.4rem;
+  padding: 0.375rem;
+  min-width: 150px;
+  position: fixed;
+  left: -200px;
+  bottom: 0.75rem;
+  z-index: 1;
+  transition: all 150ms ease-in;
 }
-
-p, li, td, th, div, h1, h2, h3, h4, h5 {
-  color: var(--primary-text);
+.toast .bar {
+  display: block;
+  height: 4px;
+  width: 100%;
+  background: var(--primary);
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-top-left-radius: 0.4rem;
+  border-top-right-radius: 0.4rem;
+  transition: width 250ms linear;
 }
-
-p, li, td, th, div {
-  font-size: 1.125rem;
-  line-height: 1.5;
+.toast.show {
+  left: 0.75rem;
 }
-
-.h1, .h2, .h3, .h4, h1, h2, h3, h4 {
-  margin: 0 0 0.5rem 0;
-  line-height: 1.2;
+.toast.success {
+  color: inherit;
+}
+.toast.success .bar {
+  background: var(--success);
+}
+.toast.warning {
+  color: inherit;
+}
+.toast.warning .bar {
+  background: var(--warning);
+}
+.toast.error {
+  color: inherit;
+}
+.toast.error .bar {
+  background: var(--error);
+}
+.toast .close {
+  cursor: pointer;
+  float: right;
+  z-index: 999;
+  position: relative;
+}
+.toast .header {
+  position: relative;
+  width: 100%;
+  padding-right: 0.375rem;
+  left: -0.375rem;
+  padding-left: 0.375rem;
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid var(--divider);
   font-weight: bold;
 }
-
-h1, .h1 {
-  font-size: 2.5rem;
-}
-
-h2, .h2 {
-  font-size: 2rem;
-}
-
-h3, .h3 {
-  font-size: 1.75rem;
-}
-
-h4, .h4 {
-  font-size: 1.5rem;
-}
-
-ul, ol {
-  list-style-position: inside;
-  margin-bottom: 0.5rem;
-}
-
-ul li {
-  list-style-type: disc;
-}
-ul li li {
-  list-style-type: circle;
-}
-
-ol li {
-  list-style-type: decimal;
-}
-ol li li {
-  list-style-type: lower-latin;
-}
-
-strong {
-  font-weight: bold;
-}
-
-hr {
-  border: 1px solid var(--divider);
-  margin-top: 1.125rem;
-  margin-bottom: 1.125rem;
-}
-
-.text-center {
-  text-align: center;
-}/*# sourceMappingURL=typography.css.map */
+.toast .content {
+  padding-top: 0.375rem;
+  margin: 0;
+}/*# sourceMappingURL=toast.css.map */

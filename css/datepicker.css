@@ -1,0 +1,251 @@
+:root {
+  --primary-text: #212121;
+  --secondary-text: #545454;
+  --divider: #BDBDBD;
+  --accent-text: #FFFFFF;
+  --error: #b13535;
+  --error-lighten: #e29d9d;
+  --error-darken: #d06262;
+  --warning: #b8871f;
+  --warning-lighten: #ebca85;
+  --warning-darken: #dfae44;
+  --success: #1b7f5c;
+  --success-lighten: #58dbad;
+  --success-darken: #28be8a;
+  --primary: #bababa;
+  --primary-darken: #a0a0a0;
+  --primary-dark: #d3d3d3;
+  --primary-light: #ffffff;
+  --primary-light-darken: #cccccc;
+  --accent: #4a4fb9;
+  --accent-darken: #2c2f71;
+  --accent-lighten: #9497d5;
+  --light-background: #f2f2f2;
+  --disabled: #b8b8b8;
+}
+
+[data-theme=dark] {
+  --primary-text: #8b8b8b;
+  --secondary-text: #3f3f3f;
+  --divider: #3f3f3f;
+  --accent-text: #282828;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
+  --warning: #FF9800;
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
+  --primary: #b7c3c1;
+  --primary-darken: #9caba9;
+  --primary-dark: #575757;
+  --primary-light: #282828;
+  --primary-light-darken: black;
+  --accent: #4a4fb9;
+  --accent-darken: #2c2f71;
+  --accent-lighten: #9497d5;
+  --light-background: #575757;
+  --disabled: #b8b8b8;
+}
+
+.light-background {
+  background: var(--light-background);
+}
+
+.primary-text {
+  color: var(--primary-text);
+}
+
+.warning {
+  color: var(--warning);
+}
+
+.warning-bg {
+  background: var(--warning);
+}
+
+.error {
+  color: var(--error);
+}
+
+.error-bg {
+  background: var(--error);
+}
+
+.success {
+  color: var(--success);
+}
+
+.success-bg {
+  background: var(--success);
+}
+
+.primary {
+  color: var(--primary);
+}
+
+.primary-bg {
+  background: var(--primary);
+}
+
+.primary-dark {
+  color: var(--primary-dark);
+}
+
+.primary-dark-bg {
+  background: var(--primary-dark);
+}
+
+.primary-light {
+  color: var(--primary-light);
+}
+
+.primary-light-bg {
+  background: var(--primary-light);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.accent-bg {
+  background: var(--accent);
+}
+
+.accent-text {
+  color: var(--accent-text);
+}
+
+.divider {
+  color: var(--divider);
+}
+
+.divider-bg {
+  background: var(--divider);
+}
+
+:root {
+  --primary-text: #212121;
+  --secondary-text: #545454;
+  --divider: #BDBDBD;
+  --accent-text: #FFFFFF;
+  --error: #b13535;
+  --error-lighten: #e29d9d;
+  --error-darken: #d06262;
+  --warning: #b8871f;
+  --warning-lighten: #ebca85;
+  --warning-darken: #dfae44;
+  --success: #1b7f5c;
+  --success-lighten: #58dbad;
+  --success-darken: #28be8a;
+  --primary: #bababa;
+  --primary-darken: #a0a0a0;
+  --primary-dark: #d3d3d3;
+  --primary-light: #ffffff;
+  --primary-light-darken: #cccccc;
+  --accent: #4a4fb9;
+  --accent-darken: #2c2f71;
+  --accent-lighten: #9497d5;
+  --light-background: #f2f2f2;
+  --disabled: #b8b8b8;
+}
+
+[data-theme=dark] {
+  --primary-text: #8b8b8b;
+  --secondary-text: #3f3f3f;
+  --divider: #3f3f3f;
+  --accent-text: #282828;
+  --error: #9c2121;
+  --error-lighten: #c62a2a;
+  --error-darken: #721818;
+  --warning: #FF9800;
+  --warning-lighten: #ffad33;
+  --warning-darken: #995b00;
+  --success: #22946e;
+  --success-lighten: #2cbd8d;
+  --success-darken: #0f4130;
+  --primary: #b7c3c1;
+  --primary-darken: #9caba9;
+  --primary-dark: #575757;
+  --primary-light: #282828;
+  --primary-light-darken: black;
+  --accent: #4a4fb9;
+  --accent-darken: #2c2f71;
+  --accent-lighten: #9497d5;
+  --light-background: #575757;
+  --disabled: #b8b8b8;
+}
+
+.datepicker-icon {
+  position: absolute;
+  margin-left: -29px;
+  margin-top: 1px;
+  background: lightgrey;
+  padding: 3px;
+  padding-left: 4px;
+  font-size: 21px;
+  border-bottom-right-radius: 0.2rem;
+  border-top-right-radius: 0.2rem;
+}
+
+.modal.datepicker {
+  padding: 0;
+}
+.modal.datepicker .datepicker-header {
+  background: var(--primary);
+  color: var(--primary-light);
+  padding: 0.75rem;
+  border-top-left-radius: 0.4rem;
+  border-top-right-radius: 0.4rem;
+}
+.modal.datepicker .datepicker-header .info-text {
+  font-size: 12px;
+}
+.modal.datepicker .datepicker-header .selected-date {
+  font-size: 24px;
+}
+.modal.datepicker .datepicker-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+}
+.modal.datepicker .datepicker-controls > div {
+  cursor: pointer;
+}
+.modal.datepicker .datepicker-calendar, .modal.datepicker .datepicker-controls, .modal.datepicker .datepicker-years, .modal.datepicker .datepicker-buttons {
+  padding: 0.75rem;
+}
+.modal.datepicker .datepicker-row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+}
+.modal.datepicker .datepicker-column {
+  flex: 1;
+  height: 32px;
+}
+.modal.datepicker .datepicker-column .day {
+  cursor: pointer;
+  border-radius: 50%;
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  padding-top: 3px;
+  padding-left: 1px;
+}
+.modal.datepicker .datepicker-column .day:hover {
+  font-weight: bold;
+}
+.modal.datepicker .datepicker-column .day.selected {
+  background: var(--primary);
+  color: var(--primary-light);
+}
+.modal.datepicker .datepicker-years .datepicker-column {
+  cursor: pointer;
+  display: inline-block;
+}
+.modal.datepicker .datepicker-years .datepicker-column:hover {
+  font-weight: bold;
+}/*# sourceMappingURL=datepicker.css.map */
