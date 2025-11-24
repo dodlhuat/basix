@@ -1,51 +1,51 @@
 :root {
-  --primary-text: #212121;
-  --secondary-text: #545454;
+  --primary-text: #1A1A1A;
+  --secondary-text: #4A4A4A;
   --divider: #BDBDBD;
   --accent-text: #FFFFFF;
-  --error: #b13535;
-  --error-lighten: #e29d9d;
-  --error-darken: #d06262;
-  --warning: #b8871f;
-  --warning-lighten: #ebca85;
-  --warning-darken: #dfae44;
-  --success: #1b7f5c;
-  --success-lighten: #58dbad;
-  --success-darken: #28be8a;
+  --error: #D64545;
+  --error-lighten: #df6f6f;
+  --error-darken: #be2a2a;
+  --warning: #C28A00;
+  --warning-lighten: #f5ae00;
+  --warning-darken: #8f6600;
+  --success: #2E8B57;
+  --success-lighten: #3bb16f;
+  --success-darken: #21653f;
   --primary: #bababa;
   --primary-darken: #a0a0a0;
   --primary-dark: #d3d3d3;
   --primary-light: #ffffff;
   --primary-light-darken: #cccccc;
-  --accent: #4a4fb9;
-  --accent-darken: #2c2f71;
-  --accent-lighten: #9497d5;
+  --accent: #1F6FEB;
+  --accent-darken: #0d4397;
+  --accent-lighten: #7dabf3;
   --light-background: #f2f2f2;
   --disabled: #b8b8b8;
 }
 
 [data-theme=dark] {
-  --primary-text: #8b8b8b;
-  --secondary-text: #3f3f3f;
-  --divider: #3f3f3f;
-  --accent-text: #282828;
-  --error: #9c2121;
-  --error-lighten: #c62a2a;
-  --error-darken: #721818;
-  --warning: #FF9800;
-  --warning-lighten: #ffad33;
-  --warning-darken: #995b00;
-  --success: #22946e;
-  --success-lighten: #2cbd8d;
-  --success-darken: #0f4130;
+  --primary-text: #E4E6EB;
+  --secondary-text: #B0B3B8;
+  --divider: #3A3B3C;
+  --accent-text: #7a7f88;
+  --error: #D64545;
+  --error-lighten: #df6f6f;
+  --error-darken: #be2a2a;
+  --warning: #C28A00;
+  --warning-lighten: #f5ae00;
+  --warning-darken: #8f6600;
+  --success: #2E8B57;
+  --success-lighten: #3bb16f;
+  --success-darken: #21653f;
   --primary: #b7c3c1;
   --primary-darken: #9caba9;
   --primary-dark: #575757;
-  --primary-light: #282828;
+  --primary-light: #18191A;
   --primary-light-darken: black;
-  --accent: #4a4fb9;
-  --accent-darken: #2c2f71;
-  --accent-lighten: #9497d5;
+  --accent: #1F6FEB;
+  --accent-darken: #0d4397;
+  --accent-lighten: #7dabf3;
   --light-background: #575757;
   --disabled: #b8b8b8;
 }
@@ -131,4 +131,6 @@ code.code .code-content {
 
 .flex {
   display: flex;
-}/*# sourceMappingURL=defaults.css.map */
+}
+
+/*# sourceMappingURL=defaults.css.map */
