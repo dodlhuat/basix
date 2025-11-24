@@ -2,63 +2,559 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
-    <title>Title</title>
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <link rel="stylesheet" href="css/form-builder.css" type="text/css">
-    <script type="module">
-        import {utils} from "./js/utils.js";
-        import {formbuilder} from "./js/form-builder.js";
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Builder</title>
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --bg-color: #f3f4f6;
+            --sidebar-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --text-color: #1f2937;
+        }
 
-        utils.ready(function () {
-            formbuilder.init()
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden;
+        }
 
-            formbuilder.load('./templates/text-input.html');
+        .container {
+            display: flex;
+            height: 100%;
+        }
 
-            document.querySelector('.add-row').addEventListener('click', function() {
-                formbuilder.addRow();
-            })
-        });
-    </script>
+        .dropzone {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .dropzone.drag-over {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #9ca3af;
+            margin-top: 50px;
+            pointer-events: none;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .draggable-item {
+            padding: 10px 15px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: grab;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+        }
+
+        .draggable-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            min-height: 50px;
+            border: 1px dashed transparent;
+            transition: border-color 0.2s;
+        }
+
+        .row:hover {
+            border-color: #d1d5db;
+        }
+
+        .component {
+            flex: 1;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 80px;
+        }
+
+        /* Drop Indicators */
+        .drop-indicator {
+            position: absolute;
+            background-color: var(--primary-color);
+            z-index: 10;
+            pointer-events: none;
+            border-radius: 2px;
+        }
+
+        .drop-indicator.top {
+            top: -5px;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .drop-indicator.bottom {
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .drop-indicator.left {
+            top: 0;
+            bottom: 0;
+            left: -5px;
+            width: 4px;
+        }
+
+        .drop-indicator.right {
+            top: 0;
+            bottom: 0;
+            right: -5px;
+            width: 4px;
+        }
+
+        /* Component Menu */
+        .menu-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            transition: background-color 0.2s;
+            z-index: 20;
+        }
+
+        .menu-btn:hover {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .menu-dropdown {
+            position: absolute;
+            top: 30px;
+            right: 5px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 30;
+            min-width: 120px;
+            display: none;
+            flex-direction: column;
+            padding: 4px 0;
+        }
+
+        .menu-dropdown.show {
+            display: flex;
+        }
+
+        .menu-item {
+            padding: 8px 12px;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-color);
+            width: 100%;
+        }
+
+        .menu-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .menu-item.delete {
+            color: #ef4444;
+        }
+
+        .menu-item.delete:hover {
+            background-color: #fee2e2;
+        }
+
+        /* Nested Layouts */
+        .card-content {
+            min-height: 60px;
+            padding: 10px;
+            background-color: #f9fafb;
+            border: 1px dashed #e5e7eb;
+            border-radius: 4px;
+            margin-top: 10px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card-content.drag-over {
+            background-color: rgba(59, 130, 246, 0.05);
+            border-color: var(--primary-color);
+        }
+
+        .component.dragging {
+            opacity: 0.5;
+            border: 1px dashed var(--primary-color);
+        }
+    </style>
 </head>
-<body class="primary-light-bg primary">
-<div class="content push-content">
-    <div class="row">
-        <div class="column card grow-2">
-            <h2>Form</h2>
-            <div class="form-content">
-                <div class="row" data-row-id="1">
-                    <div class="column">
-                        <div class="dropzone"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="column">
-                    <button class="add-row">add row</button>
-                    <button>remove row</button>
-                    <button>add column</button>
-                    <button>remove column</button>
-                </div>
-            </div>
-        </div>
-        <div class="column card">
-            <h2>Elements</h2>
-            <div class="draggable" draggable="true">
-                <p>Text Element: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                    invidunt ut</p>
-            </div>
-            <hr>
-            <div class="draggable" draggable="true">
-                <span class="label">Text Input</span>
-                <input type="text" id="text-input">
-            </div>
-            <hr>
-            <div class="draggable" draggable="true">
-                <span class="label">Text Area</span>
-                <textarea id="text-area"></textarea>
-            </div>
-        </div>
+<body>
+<div class="container">
+    <div class="dropzone" id="dropzone">
+        <div class="empty-message">Drag items here to start building</div>
+    </div>
+    <div class="sidebar">
+        <h3>Library</h3>
+        <div class="draggable-item" draggable="true" data-type="text">Text Block</div>
+        <div class="draggable-item" draggable="true" data-type="image">Image Placeholder</div>
+        <div class="draggable-item" draggable="true" data-type="button">Button</div>
+        <div class="draggable-item" draggable="true" data-type="card">Card</div>
     </div>
 </div>
+<script>
+    const draggables = document.querySelectorAll('.draggable-item');
+    const dropzone = document.getElementById('dropzone');
+
+    let draggedItem = null;
+    let currentDropTarget = null;
+    let dropPosition = null; // 'top', 'bottom', 'left', 'right', 'none'
+    let indicator = null;
+
+    // Initialize drag events for library items
+    draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', (e) => {
+            draggedItem = draggable;
+            e.dataTransfer.effectAllowed = 'copy';
+            e.dataTransfer.setData('text/plain', draggable.dataset.type);
+            // Create a ghost image if needed, or let browser handle it
+        });
+
+        draggable.addEventListener('dragend', () => {
+            draggedItem = null;
+            removeIndicator();
+        });
+    });
+
+    // Dropzone events
+    dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault(); // Allow drop
+
+        // Check if we are over a nested dropzone (card-content)
+        const nestedDropzone = e.target.closest('.card-content');
+        if (nestedDropzone) {
+            // If we are over a component INSIDE the nested dropzone, handle it normally
+            // But we need to make sure we don't trigger the parent dropzone logic if we are deep inside
+            e.stopPropagation(); // Stop bubbling to main dropzone
+
+            const target = e.target.closest('.component');
+            if (target && target.closest('.card-content') === nestedDropzone) {
+                handleDragOverComponent(e, target);
+            } else {
+                // Over empty space in nested dropzone
+                nestedDropzone.classList.add('drag-over');
+                handleDragOverEmpty(e);
+            }
+            return;
+        }
+
+        const target = e.target.closest('.component');
+
+        if (target) {
+            handleDragOverComponent(e, target);
+        } else {
+            // Dragging over empty space in dropzone
+            dropzone.classList.add('drag-over');
+            handleDragOverEmpty(e);
+        }
+    });
+
+    dropzone.addEventListener('dragleave', (e) => {
+        const nestedDropzone = e.target.closest('.card-content');
+        if (nestedDropzone) {
+            nestedDropzone.classList.remove('drag-over');
+        } else {
+            dropzone.classList.remove('drag-over');
+        }
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        removeIndicator();
+        dropzone.classList.remove('drag-over');
+        document.querySelectorAll('.card-content').forEach(el => el.classList.remove('drag-over'));
+
+        const type = e.dataTransfer.getData('text/plain');
+        const isMove = e.dataTransfer.getData('application/x-layout-builder-move');
+
+        if (!type) return;
+
+        // Check for nested drop
+        const nestedDropzone = e.target.closest('.card-content');
+        let targetZone = dropzone;
+
+        if (nestedDropzone) {
+            e.stopPropagation();
+            targetZone = nestedDropzone;
+        }
+
+        let componentToInsert;
+
+        if (isMove === 'true' && draggedItem) {
+            componentToInsert = draggedItem;
+            // Prevent dropping into itself
+            if (componentToInsert.contains(targetZone) || componentToInsert === currentDropTarget) {
+                // Reset state
+                currentDropTarget = null;
+                dropPosition = null;
+                return;
+            }
+        } else {
+            componentToInsert = createComponent(type);
+        }
+
+        if (currentDropTarget && dropPosition) {
+            insertComponent(componentToInsert, currentDropTarget, dropPosition, targetZone);
+        } else {
+            // Append to end if no specific target
+            const row = createRow();
+            row.appendChild(componentToInsert);
+            targetZone.appendChild(row);
+
+            // Remove empty message if it exists
+            const emptyMsg = targetZone.querySelector('.empty-message');
+            if (emptyMsg) emptyMsg.remove();
+        }
+
+        if (isMove === 'true') {
+            cleanupEmptyRows();
+            checkEmptyDropzone();
+        }
+
+        // Reset state
+        currentDropTarget = null;
+        dropPosition = null;
+    });
+
+    function handleDragOverComponent(e, target) {
+        const rect = target.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const w = rect.width;
+        const h = rect.height;
+
+        // Define zones (simple logic: 20% edge for each side)
+        const edgeThreshold = 0.2;
+
+        removeIndicator();
+        currentDropTarget = target;
+
+        // Prioritize Left/Right for row flow, Top/Bottom for new rows
+        // We can use a "cross" partition or just edges.
+        // Let's use a simple distance check to nearest edge.
+
+        const distTop = y;
+        const distBottom = h - y;
+        const distLeft = x;
+        const distRight = w - x;
+
+        const min = Math.min(distTop, distBottom, distLeft, distRight);
+
+        if (min === distTop) {
+            dropPosition = 'top';
+            showIndicator(target, 'top');
+        } else if (min === distBottom) {
+            dropPosition = 'bottom';
+            showIndicator(target, 'bottom');
+        } else if (min === distLeft) {
+            dropPosition = 'left';
+            showIndicator(target, 'left');
+        } else if (min === distRight) {
+            dropPosition = 'right';
+            showIndicator(target, 'right');
+        }
+    }
+
+    function handleDragOverEmpty(e) {
+        // If we are not over a component, we might be just appending to the list
+        removeIndicator();
+        currentDropTarget = null;
+        dropPosition = null;
+    }
+
+    function showIndicator(target, position) {
+        indicator = document.createElement('div');
+        indicator.classList.add('drop-indicator', position);
+        target.appendChild(indicator);
+    }
+
+    function removeIndicator() {
+        if (indicator && indicator.parentNode) {
+            indicator.parentNode.removeChild(indicator);
+        }
+        indicator = null;
+    }
+
+    function createComponent(type) {
+        const div = document.createElement('div');
+        div.classList.add('component');
+        div.draggable = true; // Allow reordering later
+        div.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+
+        // Add drag events to new component for reordering
+        div.addEventListener('dragstart', (e) => {
+            draggedItem = div;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', type);
+            e.dataTransfer.setData('application/x-layout-builder-move', 'true');
+            e.stopPropagation();
+
+            setTimeout(() => div.classList.add('dragging'), 0);
+        });
+
+        div.addEventListener('dragend', () => {
+            draggedItem = null;
+            div.classList.remove('dragging');
+            removeIndicator();
+            dropzone.classList.remove('drag-over');
+            document.querySelectorAll('.card-content').forEach(el => el.classList.remove('drag-over'));
+        });
+
+        // Add Menu
+        const menuBtn = document.createElement('button');
+        menuBtn.classList.add('menu-btn');
+        menuBtn.innerHTML = '&#8942;'; // Three dots
+        menuBtn.onclick = (e) => {
+            e.stopPropagation();
+            toggleMenu(div);
+        };
+
+        const menuDropdown = document.createElement('div');
+        menuDropdown.classList.add('menu-dropdown');
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('menu-item', 'delete');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.onclick = (e) => {
+            e.stopPropagation();
+            div.remove();
+            cleanupEmptyRows();
+            checkEmptyDropzone();
+        };
+
+        menuDropdown.appendChild(deleteBtn);
+        div.appendChild(menuBtn);
+        div.appendChild(menuDropdown);
+
+        // Nested Layout for Card
+        if (type === 'card') {
+            const content = document.createElement('div');
+            content.classList.add('card-content');
+            // Add empty message for card
+            const emptyMsg = document.createElement('div');
+            emptyMsg.classList.add('empty-message');
+            emptyMsg.textContent = 'Drop items here';
+            emptyMsg.style.marginTop = '0'; // Adjust for smaller space
+            emptyMsg.style.fontSize = '12px';
+            content.appendChild(emptyMsg);
+
+            div.appendChild(content);
+            div.style.flexDirection = 'column';
+            div.style.alignItems = 'stretch';
+            div.style.justifyContent = 'flex-start';
+        }
+
+        return div;
+    }
+
+    function toggleMenu(component) {
+        // Close all other menus
+        document.querySelectorAll('.menu-dropdown').forEach(menu => {
+            if (menu.parentElement !== component) {
+                menu.classList.remove('show');
+            }
+        });
+
+        const menu = component.querySelector('.menu-dropdown');
+        menu.classList.toggle('show');
+    }
+
+    // Close menus when clicking outside
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.menu-dropdown').forEach(menu => {
+            menu.classList.remove('show');
+        });
+    });
+
+    function createRow() {
+        const div = document.createElement('div');
+        div.classList.add('row');
+        return div;
+    }
+
+    function insertComponent(component, target, position, zone) {
+        const targetRow = target.closest('.row');
+        const targetZone = zone || dropzone; // Default to main dropzone if not specified
+
+        if (position === 'left') {
+            targetRow.insertBefore(component, target);
+        } else if (position === 'right') {
+            targetRow.insertBefore(component, target.nextSibling);
+        } else if (position === 'top') {
+            const newRow = createRow();
+            newRow.appendChild(component);
+            targetZone.insertBefore(newRow, targetRow);
+        } else if (position === 'bottom') {
+            const newRow = createRow();
+            newRow.appendChild(component);
+            targetZone.insertBefore(newRow, targetRow.nextSibling);
+        }
+    }
+
+    function cleanupEmptyRows() {
+        document.querySelectorAll('.row').forEach(row => {
+            if (row.children.length === 0) row.remove();
+        });
+    }
+
+    function checkEmptyDropzone() {
+        if (dropzone.children.length === 0 || (dropzone.children.length === 1 && dropzone.children[0].classList.contains('empty-message'))) {
+            if (!dropzone.querySelector('.empty-message')) {
+                const msg = document.createElement('div');
+                msg.classList.add('empty-message');
+                msg.textContent = 'Drag items here to start building';
+                dropzone.appendChild(msg);
+            }
+        }
+    }
+
+</script>
 </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Chart</title>
+    <link rel="stylesheet" href="css/chart.css">
+</head>
+
+<body>
+<div id="chart-container"></div>
+
+<script src="js/chart.js"></script>
+<script>
+    const data = [
+        { id: 1, position: 1, name: 'Alltagswissen', value: 41 },
+        { id: 2, position: 2, name: 'Realitätssicherheit', value: 48 },
+        { id: 3, position: 3, name: 'Angewandtes Rechnen', value: 59 },
+        { id: 4, position: 4, name: 'Soziale und Sachliche Folgerichtigkeit', value: 44 },
+        { id: 5, position: 5, name: 'Unmittelbares Reproduzieren - numerisch', description: 'vorwärts', value: 46 },
+        { id: 6, position: 5, name: 'Unmittelbares Reproduzieren - numerisch', description: 'rückwärts', value: 41 },
+        { id: 7, position: 6, name: 'Synonyme Finden', value: 48 },
+        { id: 8, position: 7, name: 'Kodieren und Assoziieren', description: 'Kodiermenge', value: 48 },
+        { id: 9, position: 7, name: 'Kodieren und Assoziieren', description: 'Assoziationen', value: 54 },
+        { id: 10, position: 8, name: 'Antizipieren und Kombinieren - figural', value: 38 },
+        { id: 11, position: 9, name: 'Funktionen Abstrahieren', value: 42 },
+        { id: 12, position: 10, name: 'Analysieren und Synthetisieren - abstrakt', value: 43 },
+        { id: 13, position: 11, name: 'Soziales Erfassen und Sachliches Reflektieren', value: 45 },
+        { id: 14, position: 12, name: 'Formale Folgerichtigkeit', value: 47 },
+    ];
+
+    // Initialize Chart
+    document.addEventListener('DOMContentLoaded', () => {
+        window.chart = new Chart('chart-container', data);
+        window.chart.render();
+    });
+</script>
+</body>
+</html>

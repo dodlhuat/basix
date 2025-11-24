@@ -1,0 +1,171 @@
+:root {
+  --chart-bg: #ffffff;
+  --zone-left-bg: #e0f7fa;
+  --zone-mid-bg: #fff9c4;
+  --zone-right-bg: #fbe9e7;
+  --grid-line-color: #bdbdbd;
+  --row-hover-bg: #f5f5f5;
+  --line-color: #1976d2;
+  --point-color: #d32f2f;
+  --text-color: #333;
+  --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  margin: 20px;
+  background-color: #f0f2f5;
+}
+
+#chart-container {
+  position: relative;
+  background-color: var(--chart-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* overflow: hidden; Removed to prevent clipping of large circles */
+  padding-top: 40px;
+  /* Space for header/scale if needed */
+  padding-bottom: 20px;
+}
+
+/* Background Zones Layer */
+.chart-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.zone {
+  height: 100%;
+  border-right: 1px dashed rgba(0, 0, 0, 0.05);
+  /* Optional zone separator */
+}
+
+.zone-left {
+  background-color: var(--zone-left-bg);
+}
+
+.zone-mid {
+  background-color: var(--zone-mid-bg);
+}
+
+.zone-right {
+  background-color: var(--zone-right-bg);
+}
+
+/* Grid Lines Layer */
+.grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.grid-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: var(--grid-line-color);
+}
+
+.grid-label {
+  position: absolute;
+  top: 10px;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #666;
+}
+
+/* Content Layer */
+.chart-content {
+  position: relative;
+  z-index: 2;
+}
+
+.chart-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s;
+  height: 40px;
+  /* Fixed height for easier calculation */
+  box-sizing: border-box;
+}
+
+.chart-row:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.row-info {
+  width: 350px;
+  /* Fixed width for info column */
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-color);
+  z-index: 3;
+  /* Above lines */
+}
+
+.row-name {
+  font-weight: bold;
+}
+
+.row-meta {
+  font-size: 11px;
+  color: #777;
+}
+
+/* SVG Layer for Line */
+.chart-svg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  /* Nuclear option for visibility */
+  pointer-events: none;
+  overflow: visible;
+  /* Allow points to extend beyond container if needed */
+}
+
+.chart-polyline {
+  fill: none;
+  stroke: var(--line-color);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart-point {
+  fill: var(--point-color);
+  stroke: white;
+  stroke-width: 2;
+}
+
+/* Tooltip Styles */
+.chart-tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 10000;
+  /* Ensure it's on top of everything */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+/*# sourceMappingURL=chart.css.map */

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Table Component</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --border-color: #e5e7eb;
+            --bg-hover: #f9fafb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--text-primary);
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Controls */
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .page-size-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            background-color: white;
+        }
+
+        /* Table Styles */
+        .table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        thead {
+            background-color: #f9fafb;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            padding: 12px 16px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        th:hover {
+            background-color: #f3f4f6;
+        }
+
+        th.sort-asc::after {
+            content: " ▲";
+            font-size: 0.7em;
+        }
+
+        th.sort-desc::after {
+            content: " ▼";
+            font-size: 0.7em;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: var(--bg-hover);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .pagination-info {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background-color: var(--bg-hover);
+        }
+
+        .page-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                max-width: 100%;
+            }
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+
+            thead {
+                display: none;
+                /* Hide headers on mobile */
+            }
+
+            tr {
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                margin-bottom: 12px;
+                padding: 12px;
+                background: white;
+            }
+
+            td {
+                border: none;
+                padding: 8px 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: right;
+                border-bottom: 1px solid #f3f4f6;
+            }
+
+            td:last-child {
+                border-bottom: none;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--text-secondary);
+                text-align: left;
+                margin-right: 12px;
+            }
+
+            .table-wrapper {
+                border: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>User Directory</h1>
+
+    <!-- Example 1: JS Initialized Table -->
+    <h2>JS Initialized</h2>
+    <div id="table-container"></div>
+
+    <!-- Example 2: HTML Initialized Table -->
+    <h2>HTML Initialized</h2>
+    <div id="html-table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Stock</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Laptop</td>
+                <td>$999</td>
+                <td>Electronics</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>Smartphone</td>
+                <td>$699</td>
+                <td>Electronics</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <td>Desk Chair</td>
+                <td>$150</td>
+                <td>Furniture</td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <td>Coffee Table</td>
+                <td>$200</td>
+                <td>Furniture</td>
+                <td>15</td>
+            </tr>
+            <tr>
+                <td>Headphones</td>
+                <td>$199</td>
+                <td>Electronics</td>
+                <td>75</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    class Table {
+        constructor(containerId, options = {}) {
+            this.container = document.getElementById(containerId);
+            if (!this.container) {
+                console.error(`Container with id "${containerId}" not found.`);
+                return;
+            }
+
+            this.data = options.data || [];
+            this.columns = options.columns || [];
+            this.pageSize = options.pageSize || 10;
+            this.currentPage = 1;
+            this.sortColumn = null;
+            this.sortDirection = 'asc'; // 'asc' or 'desc'
+            this.filterText = '';
+
+            if (this.data.length === 0 && this.container.querySelector('table')) {
+                this.parseTableFromDOM();
+            }
+
+            this.init();
+        }
+
+        parseTableFromDOM() {
+            const table = this.container.querySelector('table');
+            const thead = table.querySelector('thead');
+            const tbody = table.querySelector('tbody');
+
+            if (!thead || !tbody) return;
+
+            // Parse Columns
+            const ths = thead.querySelectorAll('th');
+            this.columns = Array.from(ths).map((th, index) => {
+                return {
+                    key: `col${index}`,
+                    label: th.textContent.trim(),
+                    sortable: true
+                };
+            });
+
+            // Parse Data
+            const trs = tbody.querySelectorAll('tr');
+            this.data = Array.from(trs).map(tr => {
+                const row = {};
+                const tds = tr.querySelectorAll('td');
+                tds.forEach((td, index) => {
+                    if (this.columns[index]) {
+                        row[this.columns[index].key] = td.textContent.trim();
+                    }
+                });
+                return row;
+            });
+
+            // Clear the existing static table
+            this.container.innerHTML = '';
+        }
+
+        init() {
+            this.renderControls();
+            this.renderTableStructure();
+            this.render();
+        }
+
+        renderControls() {
+            const controlsDiv = document.createElement('div');
+            controlsDiv.className = 'table-controls';
+
+            // Search Input
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.placeholder = 'Search...';
+            searchInput.className = 'search-input';
+            searchInput.addEventListener('input', (e) => this.handleSearch(e.target.value));
+            controlsDiv.appendChild(searchInput);
+
+            // Page Size Select
+            const pageSizeSelect = document.createElement('select');
+            pageSizeSelect.className = 'page-size-select';
+            [5, 10, 20, 50].forEach(size => {
+                const option = document.createElement('option');
+                option.value = size;
+                option.textContent = `${size} per page`;
+                if (size === this.pageSize) option.selected = true;
+                pageSizeSelect.appendChild(option);
+            });
+            pageSizeSelect.addEventListener('change', (e) => this.handlePageSizeChange(parseInt(e.target.value)));
+            controlsDiv.appendChild(pageSizeSelect);
+
+            this.container.appendChild(controlsDiv);
+        }
+
+        renderTableStructure() {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'table-wrapper';
+
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            // Header Row
+            const tr = document.createElement('tr');
+            this.columns.forEach(col => {
+                const th = document.createElement('th');
+                th.textContent = col.label;
+                th.dataset.key = col.key;
+                if (col.sortable !== false) {
+                    th.addEventListener('click', () => this.handleSort(col.key));
+                }
+                tr.appendChild(th);
+            });
+            thead.appendChild(tr);
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            wrapper.appendChild(table);
+            this.container.appendChild(wrapper);
+
+            // Pagination Container
+            const paginationDiv = document.createElement('div');
+            paginationDiv.className = 'pagination';
+            this.container.appendChild(paginationDiv);
+
+            this.tableBody = tbody;
+            this.tableHeader = thead;
+            this.paginationContainer = paginationDiv;
+        }
+
+        getFilteredAndSortedData() {
+            let processedData = [...this.data];
+
+            // Filter
+            if (this.filterText) {
+                const lowerFilter = this.filterText.toLowerCase();
+                processedData = processedData.filter(row => {
+                    return this.columns.some(col => {
+                        const val = String(row[col.key] || '').toLowerCase();
+                        return val.includes(lowerFilter);
+                    });
+                });
+            }
+
+            // Sort
+            if (this.sortColumn) {
+                processedData.sort((a, b) => {
+                    const valA = a[this.sortColumn];
+                    const valB = b[this.sortColumn];
+
+                    if (valA < valB) return this.sortDirection === 'asc' ? -1 : 1;
+                    if (valA > valB) return this.sortDirection === 'asc' ? 1 : -1;
+                    return 0;
+                });
+            }
+
+            return processedData;
+        }
+
+        render() {
+            const processedData = this.getFilteredAndSortedData();
+            const totalItems = processedData.length;
+            const totalPages = Math.ceil(totalItems / this.pageSize);
+
+            // Ensure current page is valid
+            if (this.currentPage > totalPages) this.currentPage = Math.max(1, totalPages);
+            if (this.currentPage < 1 && totalPages > 0) this.currentPage = 1;
+
+            const startIndex = (this.currentPage - 1) * this.pageSize;
+            const endIndex = Math.min(startIndex + this.pageSize, totalItems);
+            const pageData = processedData.slice(startIndex, endIndex);
+
+            this.renderBody(pageData);
+            this.renderPagination(totalItems, totalPages, startIndex, endIndex);
+            this.updateHeaderSortIcons();
+        }
+
+        renderBody(data) {
+            this.tableBody.innerHTML = '';
+
+            if (data.length === 0) {
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                td.colSpan = this.columns.length;
+                td.textContent = 'No results found';
+                td.style.textAlign = 'center';
+                tr.appendChild(td);
+                this.tableBody.appendChild(tr);
+                return;
+            }
+
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                this.columns.forEach(col => {
+                    const td = document.createElement('td');
+                    td.textContent = row[col.key];
+                    td.setAttribute('data-label', col.label); // For mobile view
+                    tr.appendChild(td);
+                });
+                this.tableBody.appendChild(tr);
+            });
+        }
+
+        updateHeaderSortIcons() {
+            const ths = this.tableHeader.querySelectorAll('th');
+            ths.forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+                if (th.dataset.key === this.sortColumn) {
+                    th.classList.add(this.sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                }
+            });
+        }
+
+        renderPagination(totalItems, totalPages, startIndex, endIndex) {
+            this.paginationContainer.innerHTML = '';
+
+            if (totalItems === 0) return;
+
+            // Info Text
+            const info = document.createElement('div');
+            info.className = 'pagination-info';
+            info.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${totalItems} entries`;
+            this.paginationContainer.appendChild(info);
+
+            // Buttons
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = 'pagination-buttons';
+
+            // Previous
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.textContent = 'Previous';
+            prevBtn.disabled = this.currentPage === 1;
+            prevBtn.addEventListener('click', () => this.setPage(this.currentPage - 1));
+            buttonsDiv.appendChild(prevBtn);
+
+            // Page Numbers (Simple implementation: show all or limited range)
+            // For simplicity, let's show max 5 page buttons around current page
+            let startPage = Math.max(1, this.currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const btn = document.createElement('button');
+                btn.className = `page-btn ${i === this.currentPage ? 'active' : ''}`;
+                btn.textContent = i;
+                btn.addEventListener('click', () => this.setPage(i));
+                buttonsDiv.appendChild(btn);
+            }
+
+            // Next
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.textContent = 'Next';
+            nextBtn.disabled = this.currentPage === totalPages;
+            nextBtn.addEventListener('click', () => this.setPage(this.currentPage + 1));
+            buttonsDiv.appendChild(nextBtn);
+
+            this.paginationContainer.appendChild(buttonsDiv);
+        }
+
+        handleSearch(text) {
+            this.filterText = text;
+            this.currentPage = 1; // Reset to first page on search
+            this.render();
+        }
+
+        handleSort(key) {
+            if (this.sortColumn === key) {
+                this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                this.sortColumn = key;
+                this.sortDirection = 'asc';
+            }
+            this.render();
+        }
+
+        handlePageSizeChange(size) {
+            this.pageSize = size;
+            this.currentPage = 1;
+            this.render();
+        }
+
+        setPage(page) {
+            this.currentPage = page;
+            this.render();
+        }
+    }
+
+</script>
+<script>
+    // Generate dummy data
+    const generateData = (count) => {
+        const data = [];
+        const firstNames = ['John', 'Jane', 'Mike', 'Sarah', 'Robert', 'Emily', 'David', 'Emma', 'James', 'Olivia'];
+        const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+        const roles = ['Admin', 'User', 'Editor', 'Viewer', 'Manager', 'Developer'];
+        const statuses = ['Active', 'Inactive', 'Pending', 'Banned'];
+
+        for (let i = 1; i <= count; i++) {
+            data.push({
+                id: i,
+                name: `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`,
+                email: `user${i}@example.com`,
+                role: roles[Math.floor(Math.random() * roles.length)],
+                status: statuses[Math.floor(Math.random() * statuses.length)],
+                lastLogin: new Date(Date.now() - Math.floor(Math.random() * 10000000000)).toLocaleDateString()
+            });
+        }
+        return data;
+    };
+
+    const columns = [
+        {key: 'id', label: 'ID'},
+        {key: 'name', label: 'Name'},
+        {key: 'email', label: 'Email'},
+        {key: 'role', label: 'Role'},
+        {key: 'status', label: 'Status'},
+        {key: 'lastLogin', label: 'Last Login'}
+    ];
+
+    const data = generateData(50);
+
+    // Initialize Table 1 (JS Data)
+    document.addEventListener('DOMContentLoaded', () => {
+        new Table('table-container', {
+            data: data,
+            columns: columns,
+            pageSize: 10
+        });
+
+        // Initialize Table 2 (HTML Data)
+        new Table('html-table-container', {
+            pageSize: 3
+        });
+    });
+</script>
+</body>
+
+</html>

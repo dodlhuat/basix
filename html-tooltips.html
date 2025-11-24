@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <title>Plain JS Tooltip (HTML content, top/bottom)</title>
     <style>
+        :root {
+            --arrow-x: 10px;
+        }
         /* Basic page demo styling */
         body {
             font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -354,11 +357,5 @@
         window.__Tooltip = {showTooltip, hideTooltip};
     })();
 </script>
-
-<p style="margin-top:40px;color:#475569; font-size:13px">Notes: Fixes made: tooltip now uses <code>position:
-    fixed</code> (so calculations are viewport-based), measurement phase avoids using transition-visible state, arrow
-    horizontal position uses a CSS variable, and positioning logic prefers the side that fits or the side with more
-    space. If you still see overlap, try changing the demo page zoom or test near top/bottom edges — I included a long
-    content sample to exercise both placements.</p>
 </body>
 </html>
