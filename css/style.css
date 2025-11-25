@@ -740,94 +740,124 @@ code.code .code-content {
 /* Controls */
 .table-controls {
   display: flex;
-  gap: 12px;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 16px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
+  gap: 12px;
+}
+.table-controls .search-input {
+  padding: 8px 12px;
+  border: 1px solid var(--divider);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  width: 100%;
+  max-width: 300px;
+}
+.table-controls .page-size-select {
+  padding: 8px 12px;
+  border: 1px solid var(--divider);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background-color: white;
 }
 
-.table-controls .search {
-  flex: 1;
-  min-width: 160px;
+/* Table Styles */
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
 }
 
-/* Table */
 table {
   width: 100%;
   border-collapse: collapse;
-  background: transparent;
-}
-table button, table button:hover, table button:focus {
-  background: none;
-}
-
-thead th {
   text-align: left;
-  padding: 10px;
-  border-bottom: 1px solid var(--divider);
-  font-weight: 600;
-}
-thead th span {
-  color: var(--primary);
+  font-size: 0.875rem;
 }
 
-tbody td {
-  padding: 10px;
+thead {
+  background-color: var(--primary-light);
   border-bottom: 1px solid var(--divider);
 }
 
-/* Sort button inside th */
-.th-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  border: 0;
-  padding: 0;
-  font: inherit;
+th {
+  padding: 12px 16px;
+  font-weight: 500;
+  color: var(--secondary-text);
   cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
 }
 
-.sort-icon {
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-  vertical-align: middle;
+th:hover {
+  background-color: #f3f4f6;
 }
 
-.sort-active {
-  color: var(--accent);
+th.sort-asc::after {
+  content: " ▲";
+  font-size: 0.7em;
 }
 
-/* Highlighted text */
-mark.match {
-  background: var(--warning);
-  color: inherit;
-  padding: 0 2px;
-  border-radius: 2px;
+th.sort-desc::after {
+  content: " ▼";
+  font-size: 0.7em;
+}
+
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--divider);
+  color: var(--primary-text);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover {
+  background-color: var(--primary-dark);
 }
 
 /* Pagination */
 .pagination {
   display: flex;
-  gap: 8px;
+  justify-content: space-between;
   align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--divider);
   flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pagination-info {
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+}
+
+.pagination-buttons {
+  display: flex;
+  gap: 4px;
 }
 
 .page-btn {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--accent-text);
-  color: var(--primary);
+  padding: 6px 12px;
+  border: 1px solid var(--divider);
+  background: var(--secondary-text);
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--primary-dark);
 }
 
-.page-btn[aria-current=true] {
-  background: var(--accent);
+.page-btn:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+}
+
+.page-btn.active {
+  background-color: var(--accent);
   color: white;
-  border-color: transparent;
+  border-color: var(--accent);
 }
 
 .page-btn:disabled {
@@ -835,25 +865,54 @@ mark.match {
   cursor: not-allowed;
 }
 
-/* Small helpers */
-.muted {
-  color: var(--primary-light-darken);
-  font-size: 13px;
-}
-
-.controls-right {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-@media (max-width: 640px) {
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
   .table-controls {
     flex-direction: column;
     align-items: stretch;
   }
-  .controls-right {
+  .search-input {
+    max-width: 100%;
+  }
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+  thead {
+    display: none;
+    /* Hide headers on mobile */
+  }
+  tr {
+    border: 1px solid var(--divider);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 12px;
+  }
+  td {
+    border: none;
+    padding: 8px 0;
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  td:last-child {
+    border-bottom: none;
+  }
+  td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--secondary-text);
+    text-align: left;
+    margin-right: 12px;
+  }
+  .table-wrapper {
+    border: none;
   }
 }
 :root {

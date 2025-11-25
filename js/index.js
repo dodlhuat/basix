@@ -12,11 +12,11 @@ import {Table} from "./table.js";
 utils.ready(function () {
     Scrollbar.initAll('.scroll-container');
     Theme.init();
-    Table.initAll();
+
+    new Table('#demo-table', {pageSize: 5});
 
     new Select('#single-select');
     new Select('#multi-select');
-    new Select('.table-controls .input');
 
     const elements = document.querySelectorAll('.show-modal');
     if (elements !== undefined) {

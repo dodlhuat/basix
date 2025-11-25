@@ -1,323 +1,290 @@
 class Table {
-    constructor(table, opts = {}) {
-        if (!(table instanceof HTMLTableElement)) throw new Error('TableEnhancer: pass an HTMLTableElement')
-        this.table = table
-        this.thead = table.tHead
-        this.tbody = table.tBodies[0]
-        // read original row data as array of cell texts
-        this._origRows = Array.from(this.tbody.rows).map(r => Array.from(r.cells).map(td => td.textContent.trim()))
-
-        // options
-        this.opts = Object.assign({
-            pageSize: 5,
-            pageSizeOptions: [5, 10, 20, 50],
-            searchable: true,
-            debounceMs: 220,
-            container: table.parentElement
-        }, opts)
-
-        this.state = {
-            query: '',
-            pageSize: this.opts.pageSize,
-            page: 1,
-            filteredIdx: this._origRows.map((_, i) => i),
-            sort: {col: null, dir: null} // dir: 'asc' | 'desc' | null
+    constructor(container, options = {}) {
+        this.container = document.querySelector(container);
+        if (!this.container) {
+            console.error(`Container with "${container}" not found.`);
+            return;
         }
 
-        this._renderControls()
-        this._setupSortableHeaders()
-        this._apply()
-    }
+        this.data = options.data || [];
+        this.columns = options.columns || [];
+        this.pageSize = options.pageSize || 10;
+        this.currentPage = 1;
+        this.sortColumn = null;
+        this.sortDirection = 'asc'; // 'asc' or 'desc'
+        this.filterText = '';
 
-    _renderControls() {
-        const root = document.createElement('div')
-        root.className = 'table-controls'
-
-        // Search
-        if (this.opts.searchable) {
-            const input = document.createElement('input')
-            input.placeholder = 'Search...'
-            input.className = 'input search'
-            this._debounced((e) => {
-                this.state.query = e.target.value;
-                this.state.page = 1;
-                this._apply()
-            }, this.opts.debounceMs, input)
-            this.searchInput = input
-            root.appendChild(input)
+        if (this.data.length === 0 && this.container.querySelector('table')) {
+            this.parseTableFromDOM();
         }
 
-        const right = document.createElement('div')
-        right.className = 'controls-right'
-
-        const sizeSelect = document.createElement('select')
-        this.opts.pageSizeOptions.forEach(n => {
-            const o = document.createElement('option');
-            o.value = n;
-            o.textContent = `${n} / page`;
-            sizeSelect.appendChild(o)
-        })
-        sizeSelect.value = this.state.pageSize
-        sizeSelect.className = 'input'
-        sizeSelect.addEventListener('change', e => {
-            this.state.pageSize = Number(e.target.value);
-            this.state.page = 1;
-            this._apply()
-        })
-        this.sizeSelect = sizeSelect
-
-        const pagination = document.createElement('div')
-        pagination.className = 'pagination'
-        this.pagination = pagination
-
-        right.appendChild(sizeSelect)
-        right.appendChild(pagination)
-
-        root.appendChild(right)
-        this.opts.container.insertBefore(root, this.table)
+        this.init();
     }
 
-    _debounced(fn, ms, el) {
-        // helper to attach debounced input handler
-        let t
-        el.addEventListener('input', (e) => {
-            clearTimeout(t)
-            const ev = e
-            t = setTimeout(() => fn(ev), ms)
-        })
-    }
+    parseTableFromDOM() {
+        const table = this.container.querySelector('table');
+        const thead = table.querySelector('thead');
+        const tbody = table.querySelector('tbody');
 
-    _setupSortableHeaders() {
-        // wrap headers with buttons and add click handlers for sorting
-        const headers = Array.from(this.thead.rows[0].cells)
-        headers.forEach((th, colIdx) => {
-            // create button
-            const btn = document.createElement('button')
-            btn.type = 'button'
-            btn.className = 'th-btn'
-            btn.setAttribute('data-col', colIdx)
+        if (!thead || !tbody) return;
 
-            // preserve header text
-            const span = document.createElement('span')
-            span.textContent = th.textContent.trim()
+        // Parse Columns
+        const ths = thead.querySelectorAll('th');
+        this.columns = Array.from(ths).map((th, index) => {
+            return {
+                key: `col${index}`,
+                label: th.textContent.trim(),
+                sortable: true
+            };
+        });
 
-            // svg icon (neutral)
-            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-            svg.setAttribute('viewBox', '0 0 24 24')
-            svg.classList.add('sort-icon')
-            svg.innerHTML = '<path d="M7 14l5-5 5 5H7zM7 10l5 5 5-5H7z" fill="currentColor" opacity="0.25"/>'
-
-            btn.appendChild(span)
-            btn.appendChild(svg)
-
-            // clear th and append button
-            th.textContent = ''
-            th.appendChild(btn)
-
-            btn.addEventListener('click', () => {
-                // cycle: null -> asc -> desc -> null
-                const current = this.state.sort
-                if (current.col !== colIdx) this.state.sort = {col: colIdx, dir: 'asc'}
-                else if (current.dir === 'asc') this.state.sort.dir = 'desc'
-                else this.state.sort = {col: null, dir: null}
-                this.state.page = 1
-                this._apply()
-                this._updateHeaderIcons()
-            })
-        })
-    }
-
-    _updateHeaderIcons() {
-        const headers = Array.from(this.thead.rows[0].cells)
-        headers.forEach((th, i) => {
-            const btn = th.querySelector('.th-btn')
-            const icon = btn.querySelector('.sort-icon')
-            const path = icon.querySelector('path')
-            if (this.state.sort.col === i) {
-                if (this.state.sort.dir === 'asc') {
-                    path.setAttribute('d', 'M12 5l6 6H6l6-6z')
-                    icon.style.opacity = '1'
-                    btn.classList.add('sort-active')
-                } else if (this.state.sort.dir === 'desc') {
-                    path.setAttribute('d', 'M12 19l-6-6h12l-6 6z')
-                    icon.style.opacity = '1'
-                    btn.classList.add('sort-active')
+        // Parse Data
+        const trs = tbody.querySelectorAll('tr');
+        this.data = Array.from(trs).map(tr => {
+            const row = {};
+            const tds = tr.querySelectorAll('td');
+            tds.forEach((td, index) => {
+                if (this.columns[index]) {
+                    row[this.columns[index].key] = td.textContent.trim();
                 }
-            } else {
-                // neutral
-                path.setAttribute('d', 'M7 14l5-5 5 5H7zM7 10l5 5 5-5H7z')
-                icon.style.opacity = '0.25'
-                btn.classList.remove('sort-active')
-            }
-        })
+            });
+            return row;
+        });
+
+        // Clear the existing static table
+        this.container.innerHTML = '';
     }
 
-    _apply() {
-        // 1) filter based on query (global across all columns)
-        const q = this.state.query.trim().toLowerCase()
-        if (!q) {
-            this.state.filteredIdx = this._origRows.map((_, i) => i)
+    init() {
+        this.renderControls();
+        this.renderTableStructure();
+        this.render();
+    }
+
+    renderControls() {
+        const controlsDiv = document.createElement('div');
+        controlsDiv.className = 'table-controls';
+
+        // Search Input
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.placeholder = 'Search...';
+        searchInput.className = 'search-input';
+        searchInput.addEventListener('input', (e) => this.handleSearch(e.target.value));
+        controlsDiv.appendChild(searchInput);
+
+        // Page Size Select
+        const pageSizeSelect = document.createElement('select');
+        pageSizeSelect.className = 'page-size-select';
+        [5, 10, 20, 50].forEach(size => {
+            const option = document.createElement('option');
+            option.value = size;
+            option.textContent = `${size} per page`;
+            if (size === this.pageSize) option.selected = true;
+            pageSizeSelect.appendChild(option);
+        });
+        pageSizeSelect.addEventListener('change', (e) => this.handlePageSizeChange(parseInt(e.target.value)));
+        controlsDiv.appendChild(pageSizeSelect);
+
+        this.container.appendChild(controlsDiv);
+    }
+
+    renderTableStructure() {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-wrapper';
+
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        const tbody = document.createElement('tbody');
+
+        // Header Row
+        const tr = document.createElement('tr');
+        this.columns.forEach(col => {
+            const th = document.createElement('th');
+            th.textContent = col.label;
+            th.dataset.key = col.key;
+            if (col.sortable !== false) {
+                th.addEventListener('click', () => this.handleSort(col.key));
+            }
+            tr.appendChild(th);
+        });
+        thead.appendChild(tr);
+
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        wrapper.appendChild(table);
+        this.container.appendChild(wrapper);
+
+        // Pagination Container
+        const paginationDiv = document.createElement('div');
+        paginationDiv.className = 'pagination';
+        this.container.appendChild(paginationDiv);
+
+        this.tableBody = tbody;
+        this.tableHeader = thead;
+        this.paginationContainer = paginationDiv;
+    }
+
+    getFilteredAndSortedData() {
+        let processedData = [...this.data];
+
+        // Filter
+        if (this.filterText) {
+            const lowerFilter = this.filterText.toLowerCase();
+            processedData = processedData.filter(row => {
+                return this.columns.some(col => {
+                    const val = String(row[col.key] || '').toLowerCase();
+                    return val.includes(lowerFilter);
+                });
+            });
+        }
+
+        // Sort
+        if (this.sortColumn) {
+            processedData.sort((a, b) => {
+                const valA = a[this.sortColumn];
+                const valB = b[this.sortColumn];
+
+                if (valA < valB) return this.sortDirection === 'asc' ? -1 : 1;
+                if (valA > valB) return this.sortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+
+        return processedData;
+    }
+
+    render() {
+        const processedData = this.getFilteredAndSortedData();
+        const totalItems = processedData.length;
+        const totalPages = Math.ceil(totalItems / this.pageSize);
+
+        // Ensure current page is valid
+        if (this.currentPage > totalPages) this.currentPage = Math.max(1, totalPages);
+        if (this.currentPage < 1 && totalPages > 0) this.currentPage = 1;
+
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = Math.min(startIndex + this.pageSize, totalItems);
+        const pageData = processedData.slice(startIndex, endIndex);
+
+        this.renderBody(pageData);
+        this.renderPagination(totalItems, totalPages, startIndex, endIndex);
+        this.updateHeaderSortIcons();
+    }
+
+    renderBody(data) {
+        this.tableBody.innerHTML = '';
+
+        if (data.length === 0) {
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.colSpan = this.columns.length;
+            td.textContent = 'No results found';
+            td.style.textAlign = 'center';
+            tr.appendChild(td);
+            this.tableBody.appendChild(tr);
+            return;
+        }
+
+        data.forEach(row => {
+            const tr = document.createElement('tr');
+            this.columns.forEach(col => {
+                const td = document.createElement('td');
+                td.textContent = row[col.key];
+                td.setAttribute('data-label', col.label); // For mobile view
+                tr.appendChild(td);
+            });
+            this.tableBody.appendChild(tr);
+        });
+    }
+
+    updateHeaderSortIcons() {
+        const ths = this.tableHeader.querySelectorAll('th');
+        ths.forEach(th => {
+            th.classList.remove('sort-asc', 'sort-desc');
+            if (th.dataset.key === this.sortColumn) {
+                th.classList.add(this.sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+            }
+        });
+    }
+
+    renderPagination(totalItems, totalPages, startIndex, endIndex) {
+        this.paginationContainer.innerHTML = '';
+
+        if (totalItems === 0) return;
+
+        // Info Text
+        const info = document.createElement('div');
+        info.className = 'pagination-info';
+        info.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${totalItems} entries`;
+        this.paginationContainer.appendChild(info);
+
+        // Buttons
+        const buttonsDiv = document.createElement('div');
+        buttonsDiv.className = 'pagination-buttons';
+
+        // Previous
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'page-btn';
+        prevBtn.textContent = 'Previous';
+        prevBtn.disabled = this.currentPage === 1;
+        prevBtn.addEventListener('click', () => this.setPage(this.currentPage - 1));
+        buttonsDiv.appendChild(prevBtn);
+
+        // Page Numbers (Simple implementation: show all or limited range)
+        // For simplicity, let's show max 5 page buttons around current page
+        let startPage = Math.max(1, this.currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 4);
+
+        if (endPage - startPage < 4) {
+            startPage = Math.max(1, endPage - 4);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const btn = document.createElement('button');
+            btn.className = `page-btn ${i === this.currentPage ? 'active' : ''}`;
+            btn.textContent = i;
+            btn.addEventListener('click', () => this.setPage(i));
+            buttonsDiv.appendChild(btn);
+        }
+
+        // Next
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'page-btn';
+        nextBtn.textContent = 'Next';
+        nextBtn.disabled = this.currentPage === totalPages;
+        nextBtn.addEventListener('click', () => this.setPage(this.currentPage + 1));
+        buttonsDiv.appendChild(nextBtn);
+
+        this.paginationContainer.appendChild(buttonsDiv);
+    }
+
+    handleSearch(text) {
+        this.filterText = text;
+        this.currentPage = 1; // Reset to first page on search
+        this.render();
+    }
+
+    handleSort(key) {
+        if (this.sortColumn === key) {
+            this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
-            this.state.filteredIdx = this._origRows
-                .map((cells, i) => ({cells, i}))
-                .filter(o => o.cells.join('\u0000').toLowerCase().includes(q))
-                .map(o => o.i)
+            this.sortColumn = key;
+            this.sortDirection = 'asc';
         }
-
-        // 2) sort the filtered indices if a sort is active (applies to filtered rows only)
-        if (this.state.sort.col !== null && this.state.sort.dir) {
-            const col = this.state.sort.col
-            const dir = this.state.sort.dir
-            this.state.filteredIdx.sort((a, b) => {
-                const va = (this._origRows[a][col] || '').toLowerCase()
-                const vb = (this._origRows[b][col] || '').toLowerCase()
-                if (va === vb) return 0
-                if (va < vb) return dir === 'asc' ? -1 : 1
-                return dir === 'asc' ? 1 : -1
-            })
-        }
-
-        // pagination
-        const totalItems = this.state.filteredIdx.length
-        const pageSize = Math.max(1, Number(this.state.pageSize) || 1)
-        const totalPages = Math.max(1, Math.ceil(totalItems / pageSize))
-        this.state.page = Math.min(Math.max(1, this.state.page), totalPages)
-
-        // render body and pagination
-        this._renderBody()
-        this._renderPagination(totalPages)
-        this._updateHeaderIcons()
+        this.render();
     }
 
-    _renderBody() {
-        const start = (this.state.page - 1) * this.state.pageSize
-        const end = start + this.state.pageSize
-        const slice = this.state.filteredIdx.slice(start, end)
-
-        this.tbody.innerHTML = ''
-
-        for (const idx of slice) {
-            const tr = document.createElement('tr')
-            for (const text of this._origRows[idx]) {
-                const td = document.createElement('td')
-                td.innerHTML = this._highlight(text, this.state.query)
-                tr.appendChild(td)
-            }
-            this.tbody.appendChild(tr)
-        }
-
-        if (slice.length === 0) {
-            const tr = document.createElement('tr')
-            const td = document.createElement('td')
-            td.colSpan = (this.thead ? this.thead.rows[0].cells.length : 1)
-            td.className = 'muted'
-            td.textContent = 'No results found.'
-            tr.appendChild(td)
-            this.tbody.appendChild(tr)
-        }
+    handlePageSizeChange(size) {
+        this.pageSize = size;
+        this.currentPage = 1;
+        this.render();
     }
 
-    _highlight(text, q) {
-        if (!q) return this._escapeHtml(text)
-        // simple case-insensitive highlight
-        const esc = q.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')
-        const re = new RegExp('(' + esc + ')', 'ig')
-        return this._escapeHtml(text).replace(re, '<mark class="match">$1</mark>')
-    }
-
-    _escapeHtml(str) {
-        return String(str).replace(/[&<>"']/g, (s) => ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": "&#39;"
-        })[s])
-    }
-
-    _renderPagination(totalPages) {
-        this.pagination.innerHTML = ''
-        const createBtn = (label, disabled, props = {}) => {
-            const b = document.createElement('button')
-            b.type = 'button'
-            b.className = 'page-btn'
-            b.textContent = label
-            if (disabled) b.disabled = true
-            Object.entries(props).forEach(([k, v]) => b.setAttribute(k, v))
-            return b
-        }
-
-        const prev = createBtn('Prev', this.state.page <= 1)
-        prev.addEventListener('click', () => {
-            if (this.state.page > 1) {
-                this.state.page--;
-                this._apply()
-            }
-        })
-        this.pagination.appendChild(prev)
-
-        const addPage = (p) => {
-            const btn = createBtn(String(p), false, {'aria-current': this.state.page === p ? 'true' : 'false'})
-            btn.addEventListener('click', () => {
-                this.state.page = p;
-                this._apply()
-            })
-            this.pagination.appendChild(btn)
-        }
-
-        const range = this._pageRange(totalPages, this.state.page, 2)
-        for (const r of range) {
-            if (r === '...') {
-                const span = document.createElement('span');
-                span.className = 'muted';
-                span.textContent = '...';
-                this.pagination.appendChild(span)
-            } else addPage(r)
-        }
-
-        const next = createBtn('Next', this.state.page >= totalPages)
-        next.addEventListener('click', () => {
-            if (this.state.page < totalPages) {
-                this.state.page++;
-                this._apply()
-            }
-        })
-        this.pagination.appendChild(next)
-
-        const info = document.createElement('div')
-        info.className = 'muted'
-        info.style.marginLeft = '8px'
-        const startItem = (this.state.filteredIdx.length === 0) ? 0 : ((this.state.page - 1) * this.state.pageSize + 1)
-        const endItem = Math.min(this.state.filteredIdx.length, this.state.page * this.state.pageSize)
-        info.textContent = `${startItem}-${endItem} of ${this.state.filteredIdx.length}`
-        this.pagination.appendChild(info)
-    }
-
-    _pageRange(total, current, delta = 2) {
-        const left = Math.max(1, current - delta)
-        const right = Math.min(total, current + delta)
-        const range = []
-        if (left > 1) {
-            range.push(1);
-            if (left > 2) range.push('...')
-        }
-        for (let i = left; i <= right; i++) range.push(i)
-        if (right < total) {
-            if (right < total - 1) range.push('...');
-            range.push(total)
-        }
-        return range
-    }
-
-    refresh() {
-        this._origRows = Array.from(this.tbody.rows).map(r => Array.from(r.cells).map(td => td.textContent.trim()))
-        this.state.page = 1
-        this._apply()
-    }
-
-    static initAll() {
-        document.querySelectorAll('table[data-enhance]').forEach(t => new Table(t, {pageSize: 5}))
+    setPage(page) {
+        this.currentPage = page;
+        this.render();
     }
 }
 
-export {Table}
+export {Table};
