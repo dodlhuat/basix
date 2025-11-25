@@ -9,16 +9,16 @@
 }
 
 .alert-error {
-  background: var(--error-lighten);
+  background: var(--error);
   border-color: var(--error-darken);
 }
 
 .alert-warning {
-  background: var(--warning-lighten);
+  background: var(--warning);
   border-color: var(--warning-darken);
 }
 
 .alert-success {
-  background: var(--success-lighten);
+  background: var(--success);
   border-color: var(--success-darken);
 }

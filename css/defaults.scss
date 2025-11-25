@@ -60,7 +60,7 @@ code.code {
 
   .code-header {
     display: block;
-    background: var(--primary-light-darken);
+    background: var(--disabled);
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
     padding: calc($spacing / 2) calc($spacing * 2);

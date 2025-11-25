@@ -1,26 +1,15 @@
 :root {
   --primary-text: #1A1A1A;
   --secondary-text: #4A4A4A;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
+  --divider: #DADDE1;
+  --accent-text: #0056D6;
   --error: #D64545;
-  --error-lighten: #df6f6f;
-  --error-darken: #be2a2a;
   --warning: #C28A00;
-  --warning-lighten: #f5ae00;
-  --warning-darken: #8f6600;
   --success: #2E8B57;
-  --success-lighten: #3bb16f;
-  --success-darken: #21653f;
-  --primary: #bababa;
-  --primary-darken: #a0a0a0;
-  --primary-dark: #d3d3d3;
-  --primary-light: #ffffff;
-  --primary-light-darken: #cccccc;
-  --accent: #1F6FEB;
-  --accent-darken: #0d4397;
-  --accent-lighten: #7dabf3;
-  --light-background: #f2f2f2;
+  --background: #FFFFFF;
+  --secondary-background: #f2f2f2;
+  --accent-color: #1F6FEB;
+  --accent-color-lighten: #4e8def;
   --disabled: #b8b8b8;
 }
 
@@ -28,32 +17,21 @@
   --primary-text: #E4E6EB;
   --secondary-text: #B0B3B8;
   --divider: #3A3B3C;
-  --accent-text: #7a7f88;
-  --error: #D64545;
-  --error-lighten: #df6f6f;
-  --error-darken: #be2a2a;
-  --warning: #C28A00;
-  --warning-lighten: #f5ae00;
-  --warning-darken: #8f6600;
-  --success: #2E8B57;
-  --success-lighten: #3bb16f;
-  --success-darken: #21653f;
-  --primary: #b7c3c1;
-  --primary-darken: #9caba9;
-  --primary-dark: #575757;
-  --primary-light: #18191A;
-  --primary-light-darken: black;
-  --accent: #1F6FEB;
-  --accent-darken: #0d4397;
-  --accent-lighten: #7dabf3;
-  --light-background: #575757;
+  --accent-text: #6EA8FF;
+  --error: #FF6B6B;
+  --warning: #F7B500;
+  --success: #5CC689;
+  --background: #18191A;
+  --secondary-background: #494c4f;
+  --accent-color: #1F6FEB;
+  --accent-color-lighten: #4e8def;
   --disabled: #b8b8b8;
 }
 
 .chips .chip {
   margin: 0 5px 3px 0;
   display: inline-block;
-  background: var(--primary-light-darken);
+  background: var(--divider);
   padding: 5px 13px;
   border-radius: 32px;
   font-size: 13px;
@@ -63,15 +41,15 @@
   cursor: pointer;
 }
 .chips .chip.clickable:hover {
-  background: var(--primary-light-darken);
+  background: var(--divider);
 }
 .chips .chip.closeable {
   padding-right: 33px;
 }
 .chips .chip.closeable button {
   padding: 0;
-  background: var(--primary-light-darken);
-  color: var(--primary-dark);
+  background: var(--divider);
+  color: var(--secondary-text);
   display: inline-block;
   border: 0;
   height: 20px;
@@ -83,7 +61,7 @@
   right: 13px;
 }
 .chips .chip.closeable button:hover {
-  background: var(--primary-light-darken);
+  background: var(--divider);
 }
 .chips .chip.closeable button .icon {
   font-size: 15px;

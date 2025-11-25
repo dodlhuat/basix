@@ -1,11 +1,7 @@
 @import "properties";
 
-.light-background {
-  background: var(--light-background);
-}
-
-.primary-text {
-  color: var(--primary-text);
+body {
+  background: var(--background);
 }
 
 .warning {
@@ -30,48 +26,4 @@
 
 .success-bg {
   background: var(--success);
-}
-
-.primary {
-  color: var(--primary);
-}
-
-.primary-bg {
-  background: var(--primary);
-}
-
-.primary-dark {
-  color: var(--primary-dark);
-}
-
-.primary-dark-bg {
-  background: var(--primary-dark);
-}
-
-.primary-light {
-  color: var(--primary-light);
-}
-
-.primary-light-bg {
-  background: var(--primary-light);
-}
-
-.accent {
-  color: var(--accent);
-}
-
-.accent-bg {
-  background: var(--accent);
-}
-
-.accent-text {
-  color: var(--accent-text);
-}
-
-.divider {
-  color: var(--divider);
-}
-
-.divider-bg {
-  background: var(--divider);
 }

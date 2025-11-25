@@ -1,52 +1,29 @@
 :root {
   --primary-text: #1A1A1A;
   --secondary-text: #4A4A4A;
-  --divider: #BDBDBD;
-  --accent-text: #FFFFFF;
+  --divider: #DADDE1;
+  --accent-text: #0056D6;
   --error: #D64545;
-  --error-lighten: #{lighten(#D64545, 10%)};
-  --error-darken: #{darken(#D64545, 10%)};
   --warning: #C28A00;
-  --warning-lighten: #{lighten(#C28A00, 10%)};
-  --warning-darken: #{darken(#C28A00, 10%)};
   --success: #2E8B57;
-  --success-lighten: #{lighten(#2E8B57, 10%)};
-  --success-darken: #{darken(#2E8B57, 10%)};
-  --primary: #{darken(#d3d3d3, 10%)};
-  --primary-darken: #{darken(#d3d3d3, 20%)};
-  --primary-dark: #d3d3d3;
-  --primary-light: #ffffff;
-  --primary-light-darken: #{darken(#ffffff, 20%)};
-  --accent: #1F6FEB;
-  --accent-darken: #{darken(#1F6FEB, 20%)};
-  --accent-lighten: #{lighten(#1F6FEB, 20%)};
-  --light-background: #f2f2f2;
+  --background: #FFFFFF;
+  --secondary-background: #{darken(#FFFFFF, 5%)};
+  --accent-color: #1F6FEB;
+  --accent-color-lighten: #{lighten(#1F6FEB, 10%)};
   --disabled: #b8b8b8;
 }
 
 [data-theme="dark"] {
-  // TODO: farben anpassen
   --primary-text: #E4E6EB;
   --secondary-text: #B0B3B8;
   --divider: #3A3B3C;
-  --accent-text: #{darken(#B0B3B8, 20%)};
-  --error: #D64545;
-  --error-lighten: #{lighten(#D64545, 10%)};
-  --error-darken: #{darken(#D64545, 10%)};
-  --warning: #C28A00;
-  --warning-lighten: #{lighten(#C28A00, 10%)};
-  --warning-darken: #{darken(#C28A00, 10%)};
-  --success: #2E8B57;
-  --success-lighten: #{lighten(#2E8B57, 10%)};
-  --success-darken: #{darken(#2E8B57, 10%)};
-  --primary: #{darken(#D3DAD9, 10%)};
-  --primary-darken: #{darken(#D3DAD9, 20%)};
-  --primary-dark: #575757;
-  --primary-light: #18191A;
-  --primary-light-darken: #{darken(#18191A, 20%)};
-  --accent: #1F6FEB;
-  --accent-darken: #{darken(#1F6FEB, 20%)};
-  --accent-lighten: #{lighten(#1F6FEB, 20%)};
-  --light-background: #575757;
+  --accent-text: #6EA8FF;
+  --error: #FF6B6B;
+  --warning: #F7B500;
+  --success: #5CC689;
+  --background: #18191A;
+  --secondary-background: #{lighten(#18191A, 20%)};
+  --accent-color: #1F6FEB;
+  --accent-color-lighten: #{lighten(#1F6FEB, 10%)};
   --disabled: #b8b8b8;
 }
