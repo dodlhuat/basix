@@ -14,6 +14,41 @@ utils.ready(function () {
     Theme.init();
 
     new Table('#demo-table', {pageSize: 5});
+    const generateData = (count) => {
+        const data = [];
+        const firstNames = ['John', 'Jane', 'Mike', 'Sarah', 'Robert', 'Emily', 'David', 'Emma', 'James', 'Olivia'];
+        const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
+        const roles = ['Admin', 'User', 'Editor', 'Viewer', 'Manager', 'Developer'];
+        const statuses = ['Active', 'Inactive', 'Pending', 'Banned'];
+
+        for (let i = 1; i <= count; i++) {
+            data.push({
+                id: i,
+                name: `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`,
+                email: `user${i}@example.com`,
+                role: roles[Math.floor(Math.random() * roles.length)],
+                status: statuses[Math.floor(Math.random() * statuses.length)],
+                lastLogin: new Date(Date.now() - Math.floor(Math.random() * 10000000000)).toLocaleDateString()
+            });
+        }
+        return data;
+    };
+
+    const columns = [
+        {key: 'id', label: 'ID'},
+        {key: 'name', label: 'Name'},
+        {key: 'email', label: 'Email'},
+        {key: 'role', label: 'Role'},
+        {key: 'status', label: 'Status'},
+        {key: 'lastLogin', label: 'Last Login'}
+    ];
+
+    const tableData = generateData(50);
+    new Table('#demo-table-js', {
+        data: tableData,
+        columns: columns,
+        pageSize: 10
+    });
 
     new Select('#single-select');
     new Select('#multi-select');
