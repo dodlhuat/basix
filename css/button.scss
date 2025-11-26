@@ -4,40 +4,44 @@
 button, .button {
   padding: $spacing $spacing * 2;
   border-radius: $border-radius;
-  background: var(--secondary-text);
+  background: var(--divider);
   color: var(--primary-text);
   border: none;
   cursor: pointer;
 
   &.button-primary {
     background: var(--accent-color);
-    &:hover {
-      background: var(--accent-color-lighten);
-    }
+    color: var(--divider);
   }
 
   &:hover {
-    background: var(--divider);
+    filter: brightness(115%);
   }
 
   &.button-success {
     background: var(--success);
-    &:hover {
-      background: var(--success-lighten);
-    }
+    color: var(--divider);
   }
 
   &.button-warning {
     background: var(--warning);
-    &:hover {
-      background: var(--warning-lighten);
-    }
+    color: var(--divider);
   }
 
   &.button-error {
     background: var(--error);
+    color: var(--divider);
+  }
+}
+
+[data-theme="dark"] {
+  button, .button {
     &:hover {
-      background: var(--error-lighten)
+      filter: brightness(85%);
+    }
+
+    &.button-primary {
+      color: var(--primary-text);
     }
   }
 }

@@ -37,7 +37,7 @@
 
 .scroll-container {
   position: relative;
-  background: var(--light-background);
+  background: var(--secondary-background);
   border-radius: 8px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   overflow: hidden;
@@ -82,7 +82,7 @@
   top: 0px;
   height: 40px;
   border-radius: calc(var(--track-radius) - 2px);
-  background: var(--primary);
+  background: var(--secondary-text);
   cursor: pointer;
   pointer-events: auto;
   touch-action: none;

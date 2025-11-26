@@ -12,6 +12,10 @@ body {
   min-height: 100vh;
 }
 
+a {
+  cursor: pointer;
+}
+
 .content {
   margin-left: calc(2 * $spacing);
   margin-right: calc(2 * $spacing);

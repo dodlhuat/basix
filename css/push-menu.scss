@@ -81,7 +81,7 @@ nav.pushed {
 
 .main-header {
   position: fixed;
-  background: var(--light-background);
+  background: var(--secondary-background);
   width: 100%;
   right: 0;
   transition: width 200ms ease-in;
@@ -89,7 +89,7 @@ nav.pushed {
   display: flex;
   z-index: 2;
   gap: $spacing;
-  border-bottom: 3px solid var(--primary);
+  border-bottom: 3px solid var(--secondary-text);
 
   & > div:first-child {
     margin-left: $spacing;

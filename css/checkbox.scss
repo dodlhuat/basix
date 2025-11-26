@@ -30,7 +30,7 @@
   }
 
   &:checked + label:before {
-    background: var(--accent);
+    background: var(--accent-color);
   }
 
   &:disabled + label {

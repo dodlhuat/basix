@@ -35,7 +35,7 @@ textarea, select, .select .dropdown, input {
   border-radius: 0.2rem;
   padding: 0.4rem;
   box-sizing: border-box;
-  background-color: var(--accent-text);
+  background-color: var(--background);
 }
 
 select {
@@ -44,14 +44,14 @@ select {
 
 .select-group .dropdown {
   position: relative;
-  background-color: var(--accent-text);
+  background-color: var(--background);
 }
 .select-group .dropdown-selected {
   border: 1px solid var(--divider);
   padding: 0.4rem;
   border-radius: 0.2rem;
   cursor: pointer;
-  background: var(--accent-text);
+  background: var(--background);
 }
 .select-group .dropdown-selected:after {
   content: "▼";
@@ -70,7 +70,7 @@ select {
   z-index: 10;
   max-height: 250px;
   overflow-y: auto;
-  background-color: var(--accent-text);
+  background-color: var(--background);
 }
 .select-group .dropdown-option {
   padding: 10px;
@@ -80,8 +80,8 @@ select {
   background: var(--divider);
 }
 .select-group .dropdown-option.selected {
-  background: var(--accent);
-  color: var(--accent-text);
+  background: var(--secondary-background);
+  color: var(--secondary-text);
 }
 .select-group .dropdown.open .dropdown-options {
   display: flex;

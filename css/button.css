@@ -31,37 +31,36 @@
 button, .button {
   padding: 0.75rem 1.5rem;
   border-radius: 0.4rem;
-  background: var(--secondary-text);
+  background: var(--divider);
   color: var(--primary-text);
   border: none;
   cursor: pointer;
 }
 button.button-primary, .button.button-primary {
   background: var(--accent-color);
-}
-button.button-primary:hover, .button.button-primary:hover {
-  background: var(--accent-color-lighten);
+  color: var(--divider);
 }
 button:hover, .button:hover {
-  background: var(--divider);
+  filter: brightness(115%);
 }
 button.button-success, .button.button-success {
   background: var(--success);
-}
-button.button-success:hover, .button.button-success:hover {
-  background: var(--success-lighten);
+  color: var(--divider);
 }
 button.button-warning, .button.button-warning {
   background: var(--warning);
-}
-button.button-warning:hover, .button.button-warning:hover {
-  background: var(--warning-lighten);
+  color: var(--divider);
 }
 button.button-error, .button.button-error {
   background: var(--error);
+  color: var(--divider);
 }
-button.button-error:hover, .button.button-error:hover {
-  background: var(--error-lighten);
+
+[data-theme=dark] button:hover, [data-theme=dark] .button:hover {
+  filter: brightness(85%);
+}
+[data-theme=dark] button.button-primary, [data-theme=dark] .button.button-primary {
+  color: var(--primary-text);
 }
 
 /*# sourceMappingURL=button.css.map */

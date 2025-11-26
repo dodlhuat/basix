@@ -37,7 +37,7 @@
 
 .radio-button-container input:checked ~ .checkmark {
   background-color: rgba(0, 0, 0, 0);
-  border-color: var(--accent);
+  border-color: var(--accent-color);
 }
 
 .checkmark:after {
@@ -56,5 +56,5 @@
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--accent-color);
 }
