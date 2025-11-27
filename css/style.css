@@ -675,17 +675,20 @@ tr:hover {
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.875rem;
-  color: var(--primary-dark);
+  color: var(--primary-text);
 }
 
 .page-btn:hover:not(:disabled) {
-  background-color: var(--primary-dark);
+  background-color: var(--divider);
 }
 
 .page-btn.active {
-  background-color: var(--accent);
+  background-color: var(--accent-color);
   color: white;
-  border-color: var(--accent);
+  border-color: var(--accent-color-lighten);
+}
+.page-btn.active :hover:not(:disabled) {
+  background-color: red;
 }
 
 .page-btn:disabled {
@@ -1465,19 +1468,19 @@ button.button-error, .button.button-error {
 .modal .header {
   position: relative;
   width: 100%;
-  padding-right: 0.75rem;
   left: -0.75rem;
-  padding-left: 0.75rem;
-  padding-bottom: 0.75rem;
+  top: -0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.4rem 0.4rem 0 0;
 }
 .modal .footer {
   position: relative;
   width: 100%;
-  padding-right: 0.75rem;
   left: -0.75rem;
-  padding-left: 0.75rem;
-  padding-top: 0.75rem;
   display: flex;
+  bottom: -0.75rem;
+  padding: 0.75rem;
+  border-radius: 0 0 0.4rem 0.4rem;
 }
 .modal .footer .buttons {
   margin-left: auto;

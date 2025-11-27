@@ -113,17 +113,21 @@ tr:hover {
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.875rem;
-  color: var(--primary-dark);
+  color: var(--primary-text);
 }
 
 .page-btn:hover:not(:disabled) {
-  background-color: var(--primary-dark);
+  background-color: var(--divider);
 }
 
 .page-btn.active {
-  background-color: var(--accent);
+  background-color: var(--accent-color);
   color: white;
-  border-color: var(--accent);
+  border-color: var(--accent-color-lighten);
+
+  :hover:not(:disabled) {
+    background-color: red;
+  }
 }
 
 .page-btn:disabled {

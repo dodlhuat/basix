@@ -61,19 +61,19 @@
 .modal .header {
   position: relative;
   width: 100%;
-  padding-right: 0.75rem;
   left: -0.75rem;
-  padding-left: 0.75rem;
-  padding-bottom: 0.75rem;
+  top: -0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.4rem 0.4rem 0 0;
 }
 .modal .footer {
   position: relative;
   width: 100%;
-  padding-right: 0.75rem;
   left: -0.75rem;
-  padding-left: 0.75rem;
-  padding-top: 0.75rem;
   display: flex;
+  bottom: -0.75rem;
+  padding: 0.75rem;
+  border-radius: 0 0 0.4rem 0.4rem;
 }
 .modal .footer .buttons {
   margin-left: auto;
