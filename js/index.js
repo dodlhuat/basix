@@ -4,7 +4,7 @@ import {Scrollbar} from "./scrollbar.js";
 import {Modal} from "./modal.js";
 import {PushMenu} from "./push-menu.js";
 import {Toast} from "./toast.js";
-import {Datepicker} from "./datepicker.js";
+import {DatePicker} from "./datepicker.js";
 import {tree} from "./tree.js";
 import {Theme} from "./theme.js";
 import {Table} from "./table.js";
@@ -71,7 +71,41 @@ utils.ready(function () {
 
     PushMenu.init();
     utils.showCode();
-    Datepicker.initAll();
+
+    // Initialize Single Date Picker
+    new DatePicker('#datepicker-single', {
+        mode: 'single',
+        onSelect: (date) => {
+            console.log('Single selected:', date);
+        }
+    });
+
+    // Initialize Range Date Picker
+    new DatePicker('#datepicker-range', {
+        mode: 'range',
+        onSelect: (range) => {
+            console.log('Range selected:', range);
+        }
+    });
+
+    // Initialize Localized Date Picker
+    new DatePicker('#datepicker-localized', {
+        mode: 'single',
+        startDay: 1, // Monday
+        locales: {
+            days: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            months: [
+                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ]
+        },
+        format: (date) => {
+            return date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        },
+        onSelect: (date) => {
+            console.log('Localized selected:', date);
+        }
+    });
 
     const data = [
         {

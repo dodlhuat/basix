@@ -10,6 +10,7 @@
   --secondary-background: #f2f2f2;
   --accent-color: #1F6FEB;
   --accent-color-lighten: #4e8def;
+  --accent-color-text: #DADDE1;
   --disabled: #b8b8b8;
 }
 
@@ -25,13 +26,14 @@
   --secondary-background: #494c4f;
   --accent-color: #1F6FEB;
   --accent-color-lighten: #4e8def;
+  --accent-color-text: #DADDE1;
   --disabled: #b8b8b8;
 }
 
 .spinner {
   width: 48px;
   height: 48px;
-  border: 5px solid var(--accent-darken);
+  border: 5px solid var(--accent-color);
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
@@ -49,7 +51,7 @@
 }
 .loading, .loading:before, .loading:after {
   border-radius: 50%;
-  background-color: var(--accent-darken);
+  background-color: var(--accent-color);
   width: 18px;
   height: 18px;
   display: inline-block;
@@ -57,7 +59,7 @@
 
 .loading {
   position: relative;
-  background-color: rgba(var(--accent-darken), 1);
+  background-color: rgba(var(--accent-color), 1);
   opacity: 1;
   animation: spScaleAlpha 1s infinite linear;
 }

@@ -3,7 +3,7 @@
 .spinner {
   width: 48px;
   height: 48px;
-  border: 5px solid var(--accent-darken);
+  border: 5px solid var(--accent-color);
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
@@ -22,7 +22,7 @@
 
 .loading, .loading:before, .loading:after {
   border-radius: 50%;
-  background-color: var(--accent-darken);
+  background-color: var(--accent-color);
   width: 18px;
   height: 18px;
   display: inline-block;
@@ -30,7 +30,7 @@
 
 .loading {
   position: relative;
-  background-color: rgba(var(--accent-darken), 1);
+  background-color: rgba(var(--accent-color), 1);
   opacity: 1;
   animation: spScaleAlpha 1s infinite linear;
 }

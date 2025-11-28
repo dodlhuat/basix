@@ -1,341 +1,437 @@
-let months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-];
+class DatePicker {
+    constructor(selector, options = {}) {
+        this.input = document.querySelector(selector);
+        if (!this.input) {
+            console.error(`DatePicker: Input element not found for selector "${selector}"`);
+            return;
+        }
 
-let daysShort = [
-    'M',
-    'T',
-    'W',
-    'T',
-    'F',
-    'S',
-    'S',
-];
+        this.options = {
+            mode: 'single', // 'single' or 'range'
+            startDay: 0, // 0 = Sunday, 1 = Monday, etc.
+            locales: {
+                days: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                months: [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ]
+            },
+            format: (date) => date.toDateString(),
+            onSelect: () => {
+            },
+            ...options
+        };
 
-let daysLong = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-];
+        this.currentDate = new Date();
+        this.selectedDate = null;
+        this.rangeStart = null;
+        this.rangeEnd = null;
 
-const datepickerColumn = '<div class="datepicker-column">[element]</div>';
-const datepickerElement = '<span class="day" data-index="[index]" data-day="[day]" data-month="[month]" data-year="[year]">[day]</span>';
-const datepickerRow = '<div class="datepicker-row">';
-const datepickerRowClosed = '</div>';
+        // Initialize with current month/year
+        this.viewYear = this.currentDate.getFullYear();
+        this.viewMonth = this.currentDate.getMonth();
 
-const template = '<div class="modal datepicker">\n' +
-    '        <div class="datepicker-header">\n' +
-    '            <div class="info-text">Select Date</div>\n' +
-    '            <div class="selected-date"><span class="day-name"></span>, <span class="date"></span></div>\n' +
-    '        </div>\n' +
-    '        <div class="datepicker-controls">\n' +
-    '            <div class="month-year-picker"><span class="month-name"></span> <span class="year"></span></div>\n' +
-    '            <div class="icon icon-navigate_before"></div>\n' +
-    '            <div class="icon icon-navigate_next"></div>\n' +
-    '        </div>\n' +
-    '        <div class="datepicker-calendar text-center">\n' +
-    '            <div class="datepicker-day-names"></div>\n' +
-    '            <div class="datepicker-days"></div>\n' +
-    '        </div>\n' +
-    '        <div class="datepicker-years text-center hidden"></div>\n' +
-    '        <div class="datepicker-buttons">\n' +
-    '            <button class="datepicker-cancel">Cancel</button>\n' +
-    '            <button class="datepicker-select">Select</button>\n' +
-    '        </div>\n' +
-    '    </div>' +
-    '    <div class="modal-background"></div>';
+        // View Mode: 'days', 'months', 'years'
+        this.viewMode = 'days';
+        this.yearRangeStart = this.viewYear - (this.viewYear % 12); // For year grid pagination
 
-const startWith = 1;
-
-const daysData = {
-    1: [1, 2, 3, 4, 5, 6, 0],
-    0: [0, 1, 2, 3, 4, 5, 6]
-};
-
-class Datepicker {
-    constructor(input) {
-        this.input = input;
-        this.selectedDate = { day: 0, month: 0, year: 0 };
-        this.currentMonth = 0;
-        this.currentYear = 0;
-
-        // bind handlers
-        this.onClickDatepicker = this.onClickDatepicker.bind(this);
-        this.onClickDay = this.onClickDay.bind(this);
-        this.onClickNextMonth = this.onClickNextMonth.bind(this);
-        this.onClickPrevMonth = this.onClickPrevMonth.bind(this);
-        this.onClickSelect = this.onClickSelect.bind(this);
-        this.onClickYearSelector = this.onClickYearSelector.bind(this);
-        this.onSelectYear = this.onSelectYear.bind(this);
+        this.init();
     }
 
-    static initAll(selector = '.datepicker-input') {
-        document.querySelectorAll(selector).forEach(el => {
-            const instance = new Datepicker(el);
-            el.removeEventListener('click', instance.onClickDatepicker);
-            el.addEventListener('click', instance.onClickDatepicker);
+    init() {
+        this.createCalendarElement();
+        this.attachEvents();
+        this.render();
+    }
+
+    createCalendarElement() {
+        this.calendar = document.createElement('div');
+        this.calendar.className = 'datepicker';
+        document.body.appendChild(this.calendar);
+
+        // Create backdrop for mobile
+        this.backdrop = document.createElement('div');
+        this.backdrop.className = 'datepicker-backdrop';
+        document.body.appendChild(this.backdrop);
+
+        this.backdrop.addEventListener('click', () => this.hide());
+    }
+
+    attachEvents() {
+        // Input events
+        const toggle = (e) => {
+            e.preventDefault(); // Prevent default to avoid double firing
+            e.stopPropagation();
+
+            if (this.calendar.classList.contains('visible')) {
+                this.hide();
+            } else {
+                this.show();
+            }
+        };
+
+        // Use click for desktop and touchstart for mobile
+        this.input.addEventListener('click', toggle);
+        // this.input.addEventListener('touchstart', toggle); // Click handles touch on most modern browsers well enough for inputs
+
+        // Use the backdrop for closing on mobile
+        this.backdrop.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.hide();
         });
-    }
 
-    static setTranslation(parameters) {
-        if (parameters.daysShort !== undefined && parameters.daysShort.length === 7) {
-            daysShort = parameters.daysShort;
-        }
-        if (parameters.daysLong !== undefined && parameters.daysLong.length === 7) {
-            daysLong = parameters.daysLong;
-        }
-        if (parameters.months !== undefined && parameters.months.length === 12) {
-            months = parameters.months;
-        }
-    }
+        this.handleDocumentClick = (e) => {
+            if (this.calendar.classList.contains('mobile')) return; // Mobile handled by backdrop
 
-    // UI helpers
-    addModal() {
-        const div = document.createElement('div');
-        div.className = 'modal-wrapper hidden';
-        div.innerHTML = template;
-        document.querySelector('body').append(div);
+            if (!this.calendar.contains(e.target) && e.target !== this.input) {
+                this.hide();
+            }
+        };
     }
 
     show() {
-        document.querySelector('.month-year-picker').removeEventListener('click', this.onClickYearSelector);
-        document.querySelector('.month-year-picker').addEventListener('click', this.onClickYearSelector);
+        const isMobile = window.innerWidth <= 640;
 
-        document.querySelector('.datepicker-select').removeEventListener('click', this.onClickSelect);
-        document.querySelector('.datepicker-select').addEventListener('click', this.onClickSelect);
+        if (isMobile) {
+            this.calendar.classList.add('mobile');
+            this.backdrop.classList.add('visible');
+            document.body.style.overflow = 'hidden'; // Lock scroll
 
-        document.querySelector('.datepicker .icon-navigate_before').removeEventListener('click', this.onClickPrevMonth);
-        document.querySelector('.datepicker .icon-navigate_before').addEventListener('click', this.onClickPrevMonth);
+            // Reset inline styles that might interfere
+            this.calendar.style.top = '';
+            this.calendar.style.left = '';
+        } else {
+            this.calendar.classList.remove('mobile');
+            this.backdrop.classList.remove('visible');
+            document.body.style.overflow = '';
 
-        document.querySelector('.datepicker .icon-navigate_next').removeEventListener('click', this.onClickNextMonth);
-        document.querySelector('.datepicker .icon-navigate_next').addEventListener('click', this.onClickNextMonth);
+            // Position the calendar
+            const rect = this.input.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
-        document.querySelector('.modal-wrapper').classList.remove('hidden');
+            this.calendar.style.top = `${rect.bottom + scrollTop + 5}px`;
+            this.calendar.style.left = `${rect.left + scrollLeft}px`;
+
+            // Basic viewport check (right edge)
+            if (rect.left + 320 > window.innerWidth) {
+                this.calendar.style.left = `${rect.right + scrollLeft - 320}px`;
+            }
+
+            // Add document listener for desktop
+            setTimeout(() => {
+                document.addEventListener('click', this.handleDocumentClick);
+            }, 0);
+        }
+
+        this.calendar.classList.add('visible');
     }
 
     hide() {
-        const wrapper = document.querySelector('.modal-wrapper');
-        if (wrapper) wrapper.remove();
+        this.calendar.classList.remove('visible');
+        this.backdrop.classList.remove('visible');
+        document.body.style.overflow = '';
+
+        // Remove document listeners
+        document.removeEventListener('click', this.handleDocumentClick);
+        // document.removeEventListener('touchstart', this.handleDocumentClick);
     }
 
-    pad(number) {
-        const s = '0' + number;
-        return s.substring(s.length - 2);
-    }
+    render() {
+        this.calendar.innerHTML = '';
 
-    onClickSelect() {
-        this.input.value = this.selectedDate.year + '-' + this.pad(this.selectedDate.month + 1) + '-' + this.pad(this.selectedDate.day);
-        this.hide();
-    }
+        const header = this.createHeader();
+        let content;
 
-    onClickNextMonth() {
-        this.currentMonth++;
-        if (this.currentMonth > 12) {
-            this.currentMonth = 1;
-            this.currentYear++;
-        }
-        this.setDate(this.currentMonth, this.currentYear);
-    }
-
-    onClickPrevMonth() {
-        this.currentMonth--;
-        if (this.currentMonth === 0) {
-            this.currentMonth = 12;
-            this.currentYear--;
-        }
-        this.setDate(this.currentMonth, this.currentYear);
-    }
-
-    onClickDatepicker(event) {
-        this.addModal();
-        this.input = event.target;
-
-        this.buildWeekNames();
-        let today = new Date();
-        if (this.input.value !== '') {
-            today = new Date(this.input.value);
+        if (this.viewMode === 'days') {
+            content = this.createGrid();
+        } else if (this.viewMode === 'months') {
+            content = this.createMonthGrid();
+        } else if (this.viewMode === 'years') {
+            content = this.createYearGrid();
         }
 
-        this.setDate(today.getMonth() + 1, today.getFullYear());
-        const preselect = document.querySelector('.day[data-day="' + today.getDate() + '"]');
-        if (preselect) preselect.click();
-
-        this.setDay(today.getDate(), today.getMonth(), today.getFullYear());
-
-        this.input.blur();
-        this.show();
+        this.calendar.appendChild(header);
+        this.calendar.appendChild(content);
     }
 
-    onClickDay(event) {
-        const [day, month, year] = [parseInt(event.target.innerText), parseInt(event.target.getAttribute('data-month')), parseInt(event.target.getAttribute('data-year'))];
-        const selectedElement = document.querySelector('.datepicker-days .day.selected');
-        if (selectedElement !== null) {
-            selectedElement.classList.remove('selected');
+    createHeader() {
+        const header = document.createElement('div');
+        header.className = 'datepicker-header';
+
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'datepicker-nav';
+        prevBtn.innerHTML = '&lt;';
+        prevBtn.onclick = (e) => {
+            e.stopPropagation();
+            this.navigate(-1);
+        };
+
+        const title = document.createElement('div');
+        title.className = 'datepicker-title';
+
+        if (this.viewMode === 'days') {
+            const monthBtn = document.createElement('button');
+            monthBtn.className = 'datepicker-title-btn';
+            monthBtn.textContent = this.options.locales.months[this.viewMonth];
+            monthBtn.onclick = (e) => {
+                e.stopPropagation();
+                this.viewMode = 'months';
+                this.render();
+            };
+
+            const yearBtn = document.createElement('button');
+            yearBtn.className = 'datepicker-title-btn';
+            yearBtn.textContent = this.viewYear;
+            yearBtn.onclick = (e) => {
+                e.stopPropagation();
+                this.viewMode = 'years';
+                this.yearRangeStart = this.viewYear - (this.viewYear % 12);
+                this.render();
+            };
+
+            title.appendChild(monthBtn);
+            title.appendChild(yearBtn);
+        } else if (this.viewMode === 'months') {
+            const yearBtn = document.createElement('button');
+            yearBtn.className = 'datepicker-title-btn';
+            yearBtn.textContent = this.viewYear;
+            yearBtn.onclick = (e) => {
+                e.stopPropagation();
+                this.viewMode = 'years';
+                this.yearRangeStart = this.viewYear - (this.viewYear % 12);
+                this.render();
+            };
+            title.appendChild(yearBtn);
+        } else if (this.viewMode === 'years') {
+            const rangeText = document.createElement('span');
+            rangeText.style.fontWeight = '600';
+            rangeText.textContent = `${this.yearRangeStart} - ${this.yearRangeStart + 11}`;
+            title.appendChild(rangeText);
         }
-        event.target.classList.add('selected');
-        this.setDay(day, (month - 1), year);
+
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'datepicker-nav';
+        nextBtn.innerHTML = '&gt;';
+        nextBtn.onclick = (e) => {
+            e.stopPropagation();
+            this.navigate(1);
+        };
+
+        header.appendChild(prevBtn);
+        header.appendChild(title);
+        header.appendChild(nextBtn);
+
+        return header;
     }
 
-    onClickYearSelector(event) {
-        const currentYear = parseInt(event.target.parentElement.querySelector('.year').innerText);
-        this.buildYearNames(currentYear);
-        document.querySelector('.datepicker-calendar').classList.add('hidden');
-        document.querySelector('.datepicker-years').classList.remove('hidden');
+    navigate(delta) {
+        if (this.viewMode === 'days') {
+            this.changeMonth(delta);
+        } else if (this.viewMode === 'months') {
+            this.viewYear += delta;
+            this.render();
+        } else if (this.viewMode === 'years') {
+            this.yearRangeStart += (delta * 12);
+            this.render();
+        }
+    }
 
-        document.querySelectorAll('.datepicker-years .datepicker-column').forEach(dayElement => {
-            dayElement.removeEventListener('click', this.onSelectYear);
-            dayElement.addEventListener('click', this.onSelectYear);
+    createMonthGrid() {
+        const grid = document.createElement('div');
+        grid.className = 'datepicker-grid-months';
+
+        this.options.locales.months.forEach((month, index) => {
+            const el = document.createElement('div');
+            el.className = 'datepicker-month';
+            el.textContent = month.substring(0, 3); // Short name
+
+            if (index === this.viewMonth) {
+                el.classList.add('selected');
+            }
+            if (index === new Date().getMonth() && this.viewYear === new Date().getFullYear()) {
+                el.classList.add('current');
+            }
+
+            el.onclick = (e) => {
+                e.stopPropagation();
+                this.viewMonth = index;
+                this.viewMode = 'days';
+                this.render();
+            };
+            grid.appendChild(el);
         });
+
+        return grid;
     }
 
-    onSelectYear(event) {
-        const selectedYear = parseInt(event.target.innerText);
-        this.setDate(this.currentMonth, selectedYear);
-        document.querySelector('.datepicker-years').classList.add('hidden');
-        document.querySelector('.datepicker-calendar').classList.remove('hidden');
+    createYearGrid() {
+        const grid = document.createElement('div');
+        grid.className = 'datepicker-grid-years';
+
+        for (let i = 0; i < 12; i++) {
+            const year = this.yearRangeStart + i;
+            const el = document.createElement('div');
+            el.className = 'datepicker-year';
+            el.textContent = year;
+
+            if (year === this.viewYear) {
+                el.classList.add('selected');
+            }
+            if (year === new Date().getFullYear()) {
+                el.classList.add('current');
+            }
+
+            el.onclick = (e) => {
+                e.stopPropagation();
+                this.viewYear = year;
+                this.viewMode = 'months'; // Go to months after selecting year
+                this.render();
+            };
+            grid.appendChild(el);
+        }
+
+        return grid;
     }
 
-    setDate(month, year) {
-        const daysString = this.getMonth(month, year);
-        const monthName = this.getMonthName(month);
+    createGrid() {
+        const grid = document.createElement('div');
+        grid.className = 'datepicker-grid';
 
-        this.currentYear = year;
-        this.currentMonth = month;
+        // Day Headers (adjusted for startDay)
+        const days = this.options.locales.days;
+        const startDay = this.options.startDay;
+        const adjustedDays = [...days.slice(startDay), ...days.slice(0, startDay)];
 
-        document.querySelector('.datepicker-calendar .datepicker-days').innerHTML = daysString;
-        document.querySelector('.datepicker-controls .month-name').innerText = monthName;
-        document.querySelector('.datepicker-controls .year').innerText = year;
-
-        document.querySelectorAll('.datepicker-days .day').forEach(dayElement => {
-            dayElement.removeEventListener('click', this.onClickDay);
-            dayElement.addEventListener('click', this.onClickDay);
+        adjustedDays.forEach(day => {
+            const el = document.createElement('div');
+            el.className = 'datepicker-day-header';
+            el.textContent = day;
+            grid.appendChild(el);
         });
-    }
 
-    setDay(day, month, year) {
-        const date = new Date(year, month, day);
-        const dayIndex = daysData[startWith].indexOf(date.getDay());
+        // Days
+        const firstDayOfMonth = new Date(this.viewYear, this.viewMonth, 1).getDay();
+        const daysInMonth = new Date(this.viewYear, this.viewMonth + 1, 0).getDate();
 
-        this.selectedDate.day = day;
-        this.selectedDate.month = month;
-        this.selectedDate.year = year;
+        // Calculate offset based on startDay
+        const offset = (firstDayOfMonth - startDay + 7) % 7;
 
-        document.querySelector('.datepicker-header .day-name').innerText = daysLong[dayIndex];
-        document.querySelector('.datepicker-header .date').innerText = date.toLocaleDateString();
-    }
-
-    getMonth(month, year) {
-        let daysString = datepickerRow;
-        --month;
-        let date = new Date(year, (month + 1), 0);
-        const daysInMonth = date.getDate();
-        date = new Date(year, month, 1);
-        const firstDay = date.getDay();
-
-        let current = 0;
-        let startIndex = 0; // index of day
-        let daysIndex = 0;
-
-        for (const dayIndex in daysData[startWith]) {
-            if (parseInt(dayIndex) === firstDay) {
-                startIndex = parseInt(dayIndex);
-                break;
-            }
+        // Previous month filler
+        const prevMonthDays = new Date(this.viewYear, this.viewMonth, 0).getDate();
+        for (let i = offset - 1; i >= 0; i--) {
+            const day = document.createElement('div');
+            day.className = 'datepicker-day other-month';
+            day.textContent = prevMonthDays - i;
+            grid.appendChild(day);
         }
 
-        for (const [index, dayIndex] of daysData[startWith].entries()) {
-            if (dayIndex !== startIndex) {
-                daysString += datepickerColumn.replace('[element]', '');
-            }
-            if (dayIndex === startIndex) {
-                daysIndex = index;
-                break;
-            }
-        }
-        do {
-            current++;
-            let el = datepickerElement
-                .replace('[day]', current)
-                .replace('[day]', current)
-                .replace('[index]', daysIndex)
-                .replace('[month]', (month + 1))
-                .replace('[year]', year);
-            daysString += datepickerColumn.replace('[element]', el);
-            if (daysIndex < daysData[startWith].length - 1) {
-                daysIndex++;
-            } else {
-                daysIndex = 0;
-                daysString += datepickerRowClosed;
-                daysString += datepickerRow;
-            }
-        } while (current < daysInMonth);
+        // Current month days
+        for (let i = 1; i <= daysInMonth; i++) {
+            const day = document.createElement('div');
+            day.className = 'datepicker-day';
+            day.textContent = i;
 
-        if (daysIndex > 0) {
-            for (const dayIndex in daysData[startWith]) {
-                if (daysIndex <= daysData[startWith].length - 1) {
-                    daysString += datepickerColumn.replace('[element]', '');
-                    daysIndex++;
-                } else {
-                    break;
+            const date = new Date(this.viewYear, this.viewMonth, i);
+            date.setHours(0, 0, 0, 0); // Normalize time
+
+            // Check if today
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (date.getTime() === today.getTime()) {
+                day.classList.add('today');
+            }
+
+            // Selection Logic Styling
+            if (this.options.mode === 'single') {
+                if (this.selectedDate && date.getTime() === this.selectedDate.getTime()) {
+                    day.classList.add('selected');
+                }
+            } else if (this.options.mode === 'range') {
+                const t = date.getTime();
+                const start = this.rangeStart ? this.rangeStart.getTime() : null;
+                const end = this.rangeEnd ? this.rangeEnd.getTime() : null;
+
+                if (start && t === start) {
+                    day.classList.add('range-start');
+                }
+                if (end && t === end) {
+                    day.classList.add('range-end');
+                }
+                if (start && end && t > start && t < end) {
+                    day.classList.add('in-range');
+                }
+                // Handle visual case where only start is selected but it acts as both
+                if (start && !end && t === start) {
+                    day.classList.add('selected'); // Or some other style to indicate it's the start
                 }
             }
-            daysString += datepickerRowClosed;
+
+            day.onclick = (e) => {
+                e.stopPropagation();
+                this.handleDateClick(date);
+            };
+            grid.appendChild(day);
+        }
+
+        return grid;
+    }
+
+    changeMonth(delta) {
+        this.viewMonth += delta;
+        if (this.viewMonth > 11) {
+            this.viewMonth = 0;
+            this.viewYear++;
+        } else if (this.viewMonth < 0) {
+            this.viewMonth = 11;
+            this.viewYear--;
+        }
+        this.render();
+    }
+
+    handleDateClick(date) {
+        // Normalize date just in case
+        date.setHours(0, 0, 0, 0);
+
+        if (this.options.mode === 'single') {
+            this.selectedDate = date;
+            this.updateInput(this.options.format(this.selectedDate));
+            this.options.onSelect(this.selectedDate);
+            this.hide();
         } else {
-            // remove started row
-            daysString = daysString.substring(datepickerRow.length * -1);
-        }
-
-        return daysString;
-    }
-
-    getMonthName(month) {
-        return months[--month];
-    }
-
-    buildWeekNames() {
-        let columns = '';
-        for (const dayName in daysShort) {
-            columns += datepickerColumn.replace('[element]', daysShort[dayName]);
-        }
-        document.querySelector('.datepicker-calendar .datepicker-day-names').innerHTML = datepickerRow + columns + datepickerRowClosed;
-    }
-
-    buildYearNames(start) {
-        const start_year = start - 8;
-        const end_year = start + 11;
-        let years = datepickerRow;
-        for (let year = start_year; year <= end_year; year++) {
-            const diff = year - start;
-            if (diff % 4 === 0) {
-                years += datepickerRowClosed;
-                years += datepickerRow;
+            if (!this.rangeStart || (this.rangeStart && this.rangeEnd)) {
+                // Start new range
+                this.rangeStart = date;
+                this.rangeEnd = null;
+                this.updateInput(this.options.format(this.rangeStart) + ' - ...');
+            } else {
+                // Complete range
+                if (date.getTime() < this.rangeStart.getTime()) {
+                    this.rangeEnd = this.rangeStart;
+                    this.rangeStart = date;
+                } else {
+                    this.rangeEnd = date;
+                }
+                const startDate = `${this.options.format(this.rangeStart)}`;
+                const endDate = `${this.options.format(this.rangeEnd)}`;
+                if (startDate === endDate) {
+                    this.updateInput(startDate);
+                } else {
+                    this.updateInput(`${startDate} - ${endDate}`);
+                }
+                this.hide(); // Close on range completion
             }
-            years += datepickerColumn.replace('[element]', year);
+            this.options.onSelect({start: this.rangeStart, end: this.rangeEnd});
         }
-        years += datepickerRowClosed;
-        document.querySelector('.datepicker-years').innerHTML = years;
+        this.render();
+    }
+
+    updateInput(value) {
+        if (this.input) {
+            this.input.value = value;
+        }
     }
 }
 
-// Optional: default German translation as before
-Datepicker.setTranslation({
-    daysShort: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
-    daysLong: ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag']
-});
-
-export { Datepicker }
+export {DatePicker};

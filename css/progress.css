@@ -10,6 +10,7 @@
   --secondary-background: #f2f2f2;
   --accent-color: #1F6FEB;
   --accent-color-lighten: #4e8def;
+  --accent-color-text: #DADDE1;
   --disabled: #b8b8b8;
 }
 
@@ -25,16 +26,17 @@
   --secondary-background: #494c4f;
   --accent-color: #1F6FEB;
   --accent-color-lighten: #4e8def;
+  --accent-color-text: #DADDE1;
   --disabled: #b8b8b8;
 }
 
 .progress-bar {
-  background: var(--primary-light);
+  background: var(--background);
   border-radius: 0.4rem;
 }
 .progress-bar .progress {
   border-radius: 0.4rem;
-  background: var(--accent);
+  background: var(--accent-color);
 }
 
 /*# sourceMappingURL=progress.css.map */

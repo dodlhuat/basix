@@ -2,11 +2,11 @@
 @import "parameters";
 
 .progress-bar {
-  background: var(--primary-light);
+  background: var(--background);
   border-radius: $border-radius;
 
   .progress {
     border-radius: $border-radius;
-    background: var(--accent);
+    background: var(--accent-color);
   }
 }

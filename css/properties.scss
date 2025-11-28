@@ -10,6 +10,7 @@
   --secondary-background: #{darken(#FFFFFF, 5%)};
   --accent-color: #1F6FEB;
   --accent-color-lighten: #{lighten(#1F6FEB, 10%)};
+  --accent-color-text: #DADDE1;
   --disabled: #b8b8b8;
 }
 
@@ -25,5 +26,6 @@
   --secondary-background: #{lighten(#18191A, 20%)};
   --accent-color: #1F6FEB;
   --accent-color-lighten: #{lighten(#1F6FEB, 10%)};
+  --accent-color-text: #DADDE1;
   --disabled: #b8b8b8;
 }
