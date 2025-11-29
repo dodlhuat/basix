@@ -41,9 +41,6 @@ nav {
   width: 250px;
   height: 100%;
   margin: 0 0 0 -250px;
-  -moz-transition: all 200ms ease-in;
-  -webkit-transition: all 200ms ease-in;
-  -o-transition: all 200ms ease-in;
   transition: all 200ms ease-in;
 }
 
@@ -145,6 +142,4 @@ nav.pushed {
 }
 .main-header .navigation-controls input[type=checkbox]:checked ~ label {
   left: 0;
-}
-
-/*# sourceMappingURL=push-menu.css.map */
+}/*# sourceMappingURL=push-menu.css.map */

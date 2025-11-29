@@ -48,7 +48,9 @@
   border-radius: 0.4rem;
   width: 320px;
   padding: 1rem;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   box-shadow: var(--shadow);
   display: none;
   /* Hidden by default */
@@ -228,9 +230,6 @@
 
 /* Mobile Responsiveness */
 @media (max-width: 640px) {
-  body {
-    padding: 1rem;
-  }
   .datepicker-backdrop {
     position: fixed;
     top: 0;
@@ -274,6 +273,4 @@
     padding: 0.75rem 0;
     /* Larger touch targets */
   }
-}
-
-/*# sourceMappingURL=datepicker.css.map */
+}/*# sourceMappingURL=datepicker.css.map */

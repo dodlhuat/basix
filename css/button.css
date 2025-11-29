@@ -63,6 +63,4 @@ button.button-error, .button.button-error {
 }
 [data-theme=dark] button.button-primary, [data-theme=dark] .button.button-primary {
   color: var(--primary-text);
-}
-
-/*# sourceMappingURL=button.css.map */
+}/*# sourceMappingURL=button.css.map */

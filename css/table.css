@@ -80,7 +80,9 @@ th {
   font-weight: 500;
   color: var(--secondary-text);
   cursor: pointer;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   white-space: nowrap;
 }
 
@@ -211,6 +213,4 @@ tr:hover {
   .table-wrapper {
     border: none;
   }
-}
-
-/*# sourceMappingURL=table.css.map */
+}/*# sourceMappingURL=table.css.map */

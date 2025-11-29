@@ -62,6 +62,4 @@
 .switch input:checked + label:after {
   left: calc(100% - 5px);
   transform: translateX(-100%);
-}
-
-/*# sourceMappingURL=switch.css.map */
+}/*# sourceMappingURL=switch.css.map */
