@@ -7,7 +7,7 @@
   --warning: #C28A00;
   --success: #2E8B57;
   --background: #FFFFFF;
-  --secondary-background: #f2f2f2;
+  --secondary-background: #fafafa;
   --accent-color: #1F6FEB;
   --accent-color-lighten: #4e8def;
   --accent-color-text: #DADDE1;
@@ -39,15 +39,20 @@
 
 .alert-error {
   background: var(--error);
-  border-color: var(--error-darken);
+  border-left: 0.375rem solid color-mix(in srgb, var(--error) 80%, black);
+  color: var(--divider);
 }
 
 .alert-warning {
   background: var(--warning);
-  border-color: var(--warning-darken);
+  border-left: 0.375rem solid color-mix(in srgb, var(--warning) 80%, black);
+  color: var(--divider);
 }
 
 .alert-success {
   background: var(--success);
-  border-color: var(--success-darken);
-}/*# sourceMappingURL=alert.css.map */
+  border-left: 0.375rem solid color-mix(in srgb, var(--success) 80%, black);
+  color: var(--divider);
+}
+
+/*# sourceMappingURL=alert.css.map */

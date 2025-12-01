@@ -10,15 +10,18 @@
 
 .alert-error {
   background: var(--error);
-  border-color: var(--error-darken);
+  border-left: calc($spacing / 2) solid color-mix(in srgb, var(--error) 80%, black);
+  color: var(--divider);
 }
 
 .alert-warning {
   background: var(--warning);
-  border-color: var(--warning-darken);
+  border-left: calc($spacing / 2) solid color-mix(in srgb, var(--warning) 80%, black);
+  color: var(--divider);
 }
 
 .alert-success {
   background: var(--success);
-  border-color: var(--success-darken);
+  border-left: calc($spacing / 2) solid color-mix(in srgb, var(--success) 80%, black);
+  color: var(--divider);
 }

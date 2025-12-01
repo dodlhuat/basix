@@ -7,7 +7,7 @@
   --warning: #C28A00;
   --success: #2E8B57;
   --background: #FFFFFF;
-  --secondary-background: #f2f2f2;
+  --secondary-background: #fafafa;
   --accent-color: #1F6FEB;
   --accent-color-lighten: #4e8def;
   --accent-color-text: #DADDE1;
@@ -37,4 +37,6 @@
 .progress-bar .progress {
   border-radius: 0.4rem;
   background: var(--accent-color);
-}/*# sourceMappingURL=progress.css.map */
+}
+
+/*# sourceMappingURL=progress.css.map */

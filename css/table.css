@@ -8,7 +8,7 @@
   --warning: #C28A00;
   --success: #2E8B57;
   --background: #FFFFFF;
-  --secondary-background: #f2f2f2;
+  --secondary-background: #fafafa;
   --accent-color: #1F6FEB;
   --accent-color-lighten: #4e8def;
   --accent-color-text: #DADDE1;
@@ -80,9 +80,7 @@ th {
   font-weight: 500;
   color: var(--secondary-text);
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   white-space: nowrap;
 }
 
@@ -139,15 +137,15 @@ tr:hover {
 .page-btn {
   padding: 6px 12px;
   border: 1px solid var(--divider);
-  background: var(--secondary-text);
+  background: var(--divider);
+  color: var(--primary-text);
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.875rem;
-  color: var(--primary-text);
 }
 
 .page-btn:hover:not(:disabled) {
-  background-color: var(--divider);
+  filter: brightness(105%);
 }
 
 .page-btn.active {
@@ -155,13 +153,16 @@ tr:hover {
   color: white;
   border-color: var(--accent-color-lighten);
 }
-.page-btn.active :hover:not(:disabled) {
-  background-color: red;
+.page-btn.active:hover:not(:disabled) {
+  filter: brightness(115%);
 }
 
 .page-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.page-btn:disabled:hover {
+  filter: none;
 }
 
 /* Mobile Responsive Styles */
@@ -213,4 +214,6 @@ tr:hover {
   .table-wrapper {
     border: none;
   }
-}/*# sourceMappingURL=table.css.map */
+}
+
+/*# sourceMappingURL=table.css.map */

@@ -14,7 +14,7 @@
       cursor: pointer;
 
       &:hover {
-        background: var(--divider);
+        filter: brightness(105%);
       }
     }
 
@@ -37,7 +37,7 @@
         right: 13px;
 
         &:hover {
-          background: var(--divider);
+          filter: brightness(105%);
         }
 
         .icon {

@@ -7,7 +7,7 @@
   --warning: #C28A00;
   --success: #2E8B57;
   --background: #FFFFFF;
-  --secondary-background: #f2f2f2;
+  --secondary-background: #fafafa;
   --accent-color: #1F6FEB;
   --accent-color-lighten: #4e8def;
   --accent-color-text: #DADDE1;
@@ -43,7 +43,7 @@
   cursor: pointer;
 }
 .chips .chip.clickable:hover {
-  background: var(--divider);
+  filter: brightness(105%);
 }
 .chips .chip.closeable {
   padding-right: 33px;
@@ -63,10 +63,12 @@
   right: 13px;
 }
 .chips .chip.closeable button:hover {
-  background: var(--divider);
+  filter: brightness(105%);
 }
 .chips .chip.closeable button .icon {
   font-size: 15px;
   top: 1px;
   position: relative;
-}/*# sourceMappingURL=chips.css.map */
+}
+
+/*# sourceMappingURL=chips.css.map */

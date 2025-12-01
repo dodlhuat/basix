@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Layout Builder</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
     <style>
         :root {
             --primary-color: #3b82f6;
@@ -11,20 +12,6 @@
             --sidebar-bg: #ffffff;
             --border-color: #e5e7eb;
             --text-color: #1f2937;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .container {
-            display: flex;
-            height: 100%;
         }
 
         .dropzone {
@@ -227,16 +214,18 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="dropzone" id="dropzone">
-        <div class="empty-message">Drag items here to start building</div>
-    </div>
-    <div class="sidebar">
-        <h3>Library</h3>
-        <div class="draggable-item" draggable="true" data-type="text">Text Block</div>
-        <div class="draggable-item" draggable="true" data-type="image">Image Placeholder</div>
-        <div class="draggable-item" draggable="true" data-type="button">Button</div>
-        <div class="draggable-item" draggable="true" data-type="card">Card</div>
+<div class="content push-content">
+    <div class="row">
+        <div class="dropzone column grow-2" id="dropzone">
+            <div class="empty-message">Drag items here to start building</div>
+        </div>
+        <div class="sidebar column">
+            <h3>Library</h3>
+            <div class="draggable-item" draggable="true" data-type="text">Text Block</div>
+            <div class="draggable-item" draggable="true" data-type="image">Image Placeholder</div>
+            <div class="draggable-item" draggable="true" data-type="button">Button</div>
+            <div class="draggable-item" draggable="true" data-type="card">Card</div>
+        </div>
     </div>
 </div>
 <script>

@@ -1,14 +1,18 @@
 const closure_icon = '<div class="icon icon-close close"></div>';
 
 class Modal {
-    constructor(content, header, footer, closeable) {
+    constructor(content, header, footer, closeable, type) {
         if (closeable === undefined) {
             closeable = true;
+        }
+        if (type === undefined) {
+            type = 'default';
         }
         this.content = content;
         this.header = header;
         this.footer = footer;
         this.closeable = closeable;
+        this.type = type;
         this.template = this.#buildTemplate();
     }
 
@@ -32,7 +36,7 @@ class Modal {
             template += closure_icon;
         }
         if (this.header !== undefined) {
-            template += '<div class="header">' + this.header + '</div>';
+            template += '<div class="header ' + this.type + '-bg">' + this.header + '</div>';
         }
         template += this.content;
         if (this.footer !== undefined) {

@@ -57,7 +57,7 @@ utils.ready(function () {
     if (elements !== undefined) {
         document.querySelector('.show-modal').addEventListener('click', function () {
             const buttons = '<div class="buttons">\<button class="button-light">Close</button>&nbsp;<button>Save Changes</button></div>';
-            let modal = new Modal('bluffi', '<strong>blaffi</strong>', buttons);
+            let modal = new Modal('bluffi', '<strong>blaffi</strong>', buttons, true, 'default');
             modal.show();
 
             console.warn('buttons have no bound listeners');

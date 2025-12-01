@@ -109,15 +109,15 @@ tr:hover {
 .page-btn {
   padding: 6px 12px;
   border: 1px solid var(--divider);
-  background: var(--secondary-text);
+  background: var(--divider);
+  color: var(--primary-text);
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.875rem;
-  color: var(--primary-text);
 }
 
 .page-btn:hover:not(:disabled) {
-  background-color: var(--divider);
+  filter: brightness(105%);
 }
 
 .page-btn.active {
@@ -125,14 +125,18 @@ tr:hover {
   color: white;
   border-color: var(--accent-color-lighten);
 
-  :hover:not(:disabled) {
-    background-color: red;
+  &:hover:not(:disabled) {
+    filter: brightness(115%);
   }
 }
 
 .page-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+
+  &:hover {
+    filter: none;
+  }
 }
 
 /* Mobile Responsive Styles */
