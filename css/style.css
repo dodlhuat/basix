@@ -2207,6 +2207,7 @@ nav.pushed {
   border-radius: 1.5rem;
   position: relative;
   text-indent: 3.5rem;
+  white-space: nowrap;
 }
 .switch label:after {
   content: "";
