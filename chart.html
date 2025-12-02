@@ -33,7 +33,21 @@
     <div class="row">
         <div class="column card input-values">
             <label for="input-alltagswissen">Alltagswissen</label>
-            <input id="input-alltagswissen" type="number">
+            <input id="input-alltagswissen" type="number" data-id="1">
+        </div>
+        <div class="column grow-2"></div>
+    </div>
+    <div class="row">
+        <div class="column card input-values">
+            <label for="input-realitaetssicherheit">Realitätssicherheit</label>
+            <input id="input-realitaetssicherheit" type="number" data-id="2">
+        </div>
+        <div class="column grow-2"></div>
+    </div>
+    <div class="row">
+        <div class="column card input-values">
+            <label for="input-angewandtes-rechnen">Angewandtes Rechnen</label>
+            <input id="input-angewandtes-rechnen" type="number" data-id="3">
         </div>
         <div class="column grow-2"></div>
     </div>
@@ -68,39 +82,50 @@
         window.chart = new Chart('chart-container', data);
         window.chart.render();
         let switchState = false;
+        document.querySelectorAll('.input-values input').forEach(input => {
+            const dataId = input.dataset.id;
+            console.log(dataId);
+            addListeners(input, dataId);
+        });
 
-        document.getElementById('input-alltagswissen').addEventListener("keydown", function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault(); // optional: prevents form submit
-                handleInputChange(1, this.value);
-            }
-        });
-        document.getElementById('input-alltagswissen').addEventListener("blur", function () {
-            handleInputChange(1, this.value);
-        });
+        // document.getElementById('input-alltagswissen').addEventListener("keydown", function (event) {
+        //     if (event.key === "Enter") {
+        //         event.preventDefault(); // optional: prevents form submit
+        //         handleInputChange(1, this.value);
+        //     }
+        // });
+        // document.getElementById('input-alltagswissen').addEventListener("blur", function () {
+        //     handleInputChange(1, this.value);
+        // });
+
         document.getElementById('switch').addEventListener('change', function () {
             document.querySelector("label[for='switch']").textContent = this.checked ? 'Prozentrang' : 'T Werte';
             switchState = this.checked;
 
             document.querySelectorAll('.input-values input').forEach(input => {
                 if (switchState) {
-                    console.log('nach prozent');
                     input.value = tWertZuProzentrang(input.value);
                 } else {
-                    console.log('nach t wert');
                     input.value = prozentrangZuTWert(input.value);
                 }
             });
         });
 
-        function handleInputChange(row, value) {
-            console.log(switchState);
+        function addListeners(element, id) {
+            element.addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // optional: prevents form submit
+                    handleInputChange(id, this.value);
+                }
+            });
+            element.addEventListener("blur", function () {
+                handleInputChange(id, this.value);
+            });
+        }
 
+        function handleInputChange(row, value) {
             let tValue = switchState ? prozentrangZuTWert(value) : value;
-            console.log(tValue);
-            console.log(Math.round(tValue));
-            console.log(value);
-            chart.updateRowValue(row, Math.round(tValue));
+            chart.updateRowValue(parseInt(row), Math.round(tValue));
         }
     });
 
