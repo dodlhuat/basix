@@ -31,12 +31,13 @@ select {
     background: var(--background);
     height: $form-height;
     line-height: $form-height;
-  }
 
-  .dropdown-selected:after {
-    content: "▼";
-    float: right;
-    color: var(--primary-text);
+    &:after {
+      font-family: "Material Symbols Outlined 24pt", serif;
+      content: "\e5cf";
+      float: right;
+      color: var(--primary-text);
+    }
   }
 
   .dropdown-options {

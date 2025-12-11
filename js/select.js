@@ -62,6 +62,13 @@ class Select {
             dropdown.classList.remove('open');
         });
 
+        // close dropdown when clicking outside of the dropdown (not the options or selected)
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('open');
+            }
+        });
+
         return multi;
     }
 

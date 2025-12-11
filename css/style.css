@@ -888,7 +888,8 @@ select {
   line-height: 3rem;
 }
 .select-group .dropdown-selected:after {
-  content: "▼";
+  font-family: "Material Symbols Outlined 24pt", serif;
+  content: "\e5cf";
   float: right;
   color: var(--primary-text);
 }

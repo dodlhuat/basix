@@ -1,4 +1,3 @@
-@charset "UTF-8";
 :root {
   --primary-text: #1A1A1A;
   --secondary-text: #4A4A4A;
@@ -61,7 +60,8 @@ select {
   line-height: 3rem;
 }
 .select-group .dropdown-selected:after {
-  content: "▼";
+  font-family: "Material Symbols Outlined 24pt", serif;
+  content: "\e5cf";
   float: right;
   color: var(--primary-text);
 }
