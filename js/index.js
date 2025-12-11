@@ -8,6 +8,7 @@ import {DatePicker} from "./datepicker.js";
 import {tree} from "./tree.js";
 import {Theme} from "./theme.js";
 import {Table} from "./table.js";
+import {FlyoutMenu} from "./flyout-menu.js";
 
 utils.ready(function () {
     Scrollbar.initAll('.scroll-container');
@@ -65,11 +66,32 @@ utils.ready(function () {
     }
 
     document.querySelector('.show-toast').addEventListener('click', function () {
-        let toast = new Toast('some content', 'some header', 'success', true)
+        let toast = new Toast('some content. maybe even more text in here!', 'some header', 'success', true)
         toast.show(3000);
     });
 
     PushMenu.init();
+
+    // flyout menu
+    const menu = new FlyoutMenu({
+        direction: 'right',
+        triggerSelector: '.trigger-flyout-menu',
+    });
+
+    // Demo Controls: Switch Direction
+    const directionBtns = document.querySelectorAll('.direction-btn');
+    directionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active class from all buttons
+            directionBtns.forEach(b => b.classList.remove('active'));
+            // Add active class to clicked button
+            btn.classList.add('active');
+
+            // Update menu direction
+            const direction = btn.dataset.direction;
+            menu.setDirection(direction);
+        });
+    });
     utils.showCode();
 
     // Initialize Single Date Picker

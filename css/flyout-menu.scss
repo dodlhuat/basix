@@ -1,0 +1,413 @@
+:root {
+  --primary-color: #8b5cf6;
+  --bg-color: #0f172a;
+  --text-color: #f8fafc;
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --menu-width: 320px;
+  --transition-speed: 0.4s;
+  --font-family: 'Outfit', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Header */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.menu-trigger {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.menu-trigger:hover {
+  transform: scale(1.1);
+  color: var(--primary-color);
+}
+
+/* Main Content */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Controls */
+.controls {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.direction-btn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-color);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: all 0.2s;
+}
+
+.direction-btn:hover,
+.direction-btn.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.main-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #c084fc, #6366f1);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.main-content p {
+  color: #94a3b8;
+  font-size: 1.2rem;
+}
+
+/* Flyout Overlay */
+.flyout-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-speed), visibility var(--transition-speed);
+  z-index: 40;
+}
+
+.flyout-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Flyout Menu Base */
+.flyout-menu {
+  position: fixed;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  transition: transform var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Directional Variants */
+.flyout-from-right {
+  top: 0;
+  right: 0;
+  width: var(--menu-width);
+  height: 100%;
+  border-left: 1px solid var(--glass-border);
+  transform: translateX(100%);
+}
+
+.flyout-from-left {
+  top: 0;
+  left: 0;
+  width: var(--menu-width);
+  height: 100%;
+  border-right: 1px solid var(--glass-border);
+  transform: translateX(-100%);
+}
+
+.flyout-from-top {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  min-height: 50vh;
+  border-bottom: 1px solid var(--glass-border);
+  transform: translateY(-100%);
+}
+
+/* Top Flyout Specifics */
+.flyout-from-top .flyout-links {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+  /* Align to top so submenus hang down */
+}
+
+.flyout-from-top .flyout-links>li {
+  margin-bottom: 0;
+  position: relative;
+  /* For absolute submenu positioning */
+  overflow: visible;
+  /* Allow submenu to spill out */
+}
+
+.flyout-from-top .flyout-links>li>a,
+.flyout-from-top .flyout-links>li>.submenu-toggle {
+  font-size: 1.5rem;
+  /* Slightly smaller for horizontal layout */
+  justify-content: center;
+}
+
+.flyout-from-top .submenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  min-width: 200px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+
+  /* Hidden by default */
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 100;
+  max-height: none;
+  /* Override base max-height animation */
+  overflow: visible;
+}
+
+.flyout-from-top .submenu.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  margin-top: 0.5rem;
+}
+
+.flyout-from-top .submenu li {
+  margin-bottom: 0.5rem;
+}
+
+.flyout-from-top .submenu a {
+  font-size: 1.1rem;
+  justify-content: center;
+}
+
+/* Top Flyout - Nested Submenu (Level 2+) */
+.flyout-from-top .submenu .submenu {
+  top: 0;
+  left: 100%;
+  transform: translateX(10px);
+  margin-top: 0;
+  min-width: 200px;
+}
+
+.flyout-from-top .submenu .submenu.is-open {
+  transform: translateX(0);
+}
+
+.flyout-from-top .submenu li {
+  position: relative;
+  /* Ensure nested submenu positions relative to this li */
+  overflow: visible;
+  /* Allow submenu to spill out */
+}
+
+.flyout-menu.is-open {
+  transform: translate(0, 0);
+}
+
+/* Flyout Header */
+.flyout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.flyout-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.close-menu {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.close-menu:hover {
+  transform: rotate(90deg);
+  color: var(--primary-color);
+}
+
+/* Flyout Links */
+.flyout-links {
+  list-style: none;
+  flex-grow: 1;
+}
+
+.flyout-links li {
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.flyout-links a,
+.submenu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
+  transition-delay: var(--delay);
+}
+
+.flyout-menu.is-open .flyout-links a,
+.flyout-menu.is-open .submenu-toggle {
+  transform: translateY(0);
+}
+
+.flyout-links a:hover,
+.submenu-toggle:hover {
+  color: var(--primary-color);
+}
+
+.chevron {
+  transition: transform 0.3s;
+  opacity: 0.7;
+}
+
+.submenu-toggle.active .chevron {
+  transform: rotate(180deg);
+}
+
+/* Submenu */
+.submenu {
+  list-style: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 0;
+}
+
+.submenu.is-open {
+  max-height: 2000px;
+  /* Arbitrary large height, increased for nesting */
+  margin-top: 1rem;
+  transition: max-height 0.5s ease-in;
+}
+
+.submenu li {
+  margin-bottom: 0.5rem;
+}
+
+.submenu a {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #cbd5e1;
+  transform: none !important;
+  /* Override slide-in for submenu items */
+  transition-delay: 0s !important;
+}
+
+.submenu .submenu-toggle {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #cbd5e1;
+  transform: none !important;
+  transition-delay: 0s !important;
+  padding: 0;
+  margin: 0;
+}
+
+/* Flyout Footer */
+.flyout-footer {
+  padding-top: 2rem;
+  border-top: 1px solid var(--glass-border);
+  color: #64748b;
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s, transform 0.4s;
+  transition-delay: var(--delay);
+}
+
+.flyout-menu.is-open .flyout-footer {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  :root {
+    --menu-width: 85%;
+  }
+
+  .main-content h1 {
+    font-size: 2rem;
+  }
+}

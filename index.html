@@ -47,7 +47,52 @@
     </ul>
 </nav>
 
+<div class="flyout-overlay" id="flyoutOverlay"></div>
+<div class="flyout-menu" id="flyoutMenu">
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li>
+            About
+            <ul>
+                <li><a href="#">Our Story</a></li>
+                <li><a href="#">Team</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+        </li>
+        <li>
+            Services
+            <ul>
+                <li>
+                    Web Design
+                    <ul>
+                        <li><a href="#">eCommerce</a></li>
+                        <li><a href="#">Landing Pages</a></li>
+                        <li><a href="#">Portfolios</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Development</a></li>
+                <li><a href="#">SEO</a></li>
+            </ul>
+        </li>
+        <li><a href="#">Portfolio</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+
 <div class="content push-content">
+    <h2 id="menu">
+        <h3>Push Menu</h3>
+        <h3>Flyout Menu</h3>
+        <div class="controls">
+            <p>Choose Flyout Direction:</p>
+            <div class="button-group">
+                <button class="direction-btn active" data-direction="right">Right</button>
+                <button class="direction-btn" data-direction="left">Left</button>
+                <button class="direction-btn" data-direction="top">Top</button>
+                <button class="trigger-flyout-menu">Show</button>
+            </div>
+        </div>
+    </h2>
     <h2 id="grid">grid</h2>
     <div class="row">
         <div class="column grow-2 card">
@@ -631,11 +676,13 @@
         </div>
         <div class="column card">
             <label for="datepicker-range">Datepicker Range</label>
-            <input type="text" id="datepicker-range" class="datepicker-input" placeholder="Select a date range" readonly>
+            <input type="text" id="datepicker-range" class="datepicker-input" placeholder="Select a date range"
+                   readonly>
         </div>
         <div class="column card">
             <label for="datepicker-localized">Datepicker Translated & Start on Monday</label>
-            <input type="text" id="datepicker-localized" class="datepicker-input" placeholder="Seleccionar fecha" readonly>
+            <input type="text" id="datepicker-localized" class="datepicker-input" placeholder="Seleccionar fecha"
+                   readonly>
         </div>
     </div>
 

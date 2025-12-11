@@ -5,9 +5,12 @@ textarea, select, .select .dropdown, input {
   width: 100%;
   border: 1px solid var(--divider);
   border-radius: calc($border-radius / 2);
-  padding: $border-radius;
+  padding: calc($border-radius * 2);
   box-sizing: border-box;
   background-color: var(--background);
+  min-height: $form-height;
+  font-size: calc($spacing * 1.5);
+  color: var(--primary-text);
 }
 
 select {
@@ -22,10 +25,12 @@ select {
 
   .dropdown-selected {
     border: 1px solid var(--divider);
-    padding: $border-radius;
+    padding: 0 calc($border-radius * 2);
     border-radius: calc($border-radius / 2);
     cursor: pointer;
     background: var(--background);
+    height: $form-height;
+    line-height: $form-height;
   }
 
   .dropdown-selected:after {

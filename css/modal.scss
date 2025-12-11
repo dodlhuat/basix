@@ -38,6 +38,7 @@
     top: calc(-1 * $spacing);
     padding: $spacing;
     border-radius: $border-radius $border-radius 0 0;
+    box-sizing: content-box;
   }
 
   .footer {
@@ -48,6 +49,7 @@
     bottom: calc(-1 * $spacing);
     padding: $spacing;
     border-radius: 0 0 $border-radius $border-radius;
+    box-sizing: content-box;
 
     .buttons {
       margin-left: auto;

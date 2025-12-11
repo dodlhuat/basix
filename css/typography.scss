@@ -1,8 +1,13 @@
 @import "properties";
 @import "parameters";
 
+@font-face {
+  font-family: "Outfit";
+  src: url("../fonts/Outfit-VariableFont_wght.woff2") format("woff2");
+}
+
 body {
-  font-family: 'helvetica neue', helvetica, arial, sans-serif;
+  font-family: 'Outfit', helvetica, arial, sans-serif;
 }
 
 p, li, td, th, div, h1, h2, h3, h4, h5 {

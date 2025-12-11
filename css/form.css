@@ -35,9 +35,12 @@ textarea, select, .select .dropdown, input {
   width: 100%;
   border: 1px solid var(--divider);
   border-radius: 0.2rem;
-  padding: 0.4rem;
+  padding: 0.8rem;
   box-sizing: border-box;
   background-color: var(--background);
+  min-height: 3rem;
+  font-size: 1.125rem;
+  color: var(--primary-text);
 }
 
 select {
@@ -50,10 +53,12 @@ select {
 }
 .select-group .dropdown-selected {
   border: 1px solid var(--divider);
-  padding: 0.4rem;
+  padding: 0 0.8rem;
   border-radius: 0.2rem;
   cursor: pointer;
   background: var(--background);
+  height: 3rem;
+  line-height: 3rem;
 }
 .select-group .dropdown-selected:after {
   content: "▼";
