@@ -2827,8 +2827,6 @@ body {
   border-bottom: 1px solid var(--glass-border);
   transform: translateY(-100%);
 }
-
-/* Top Flyout Specifics */
 .flyout-from-top .flyout-links {
   display: flex;
   flex-direction: row;
@@ -2836,25 +2834,18 @@ body {
   flex-wrap: wrap;
   gap: 2rem;
   align-items: flex-start;
-  /* Align to top so submenus hang down */
 }
-
 .flyout-from-top .flyout-links > li {
   margin-bottom: 0;
   position: relative;
-  /* For absolute submenu positioning */
   overflow: visible;
-  /* Allow submenu to spill out */
 }
-
-.flyout-from-top .flyout-links > li > a,
+.flyout-from-top .flyout-links > li a,
 .flyout-from-top .flyout-links > li > .submenu-toggle {
   font-size: 1.5rem;
-  /* Slightly smaller for horizontal layout */
   justify-content: center;
 }
-
-.flyout-from-top .submenu {
+.flyout-from-top .flyout-links > li .submenu {
   position: absolute;
   top: 100%;
   left: 50%;
@@ -2869,50 +2860,27 @@ body {
   margin-top: 0.5rem;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   text-align: center;
-  /* Hidden by default */
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
   z-index: 100;
   max-height: none;
-  /* Override base max-height animation */
   overflow: visible;
 }
-
-.flyout-from-top .submenu.is-open {
+.flyout-from-top .flyout-links > li .submenu.is-open {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
   margin-top: 0.5rem;
 }
-
-.flyout-from-top .submenu li {
+.flyout-from-top .flyout-links > li .submenu li {
   margin-bottom: 0.5rem;
+  position: relative;
+  overflow: visible;
 }
-
-.flyout-from-top .submenu a {
+.flyout-from-top .flyout-links > li .submenu li a {
   font-size: 1.1rem;
   justify-content: center;
-}
-
-/* Top Flyout - Nested Submenu (Level 2+) */
-.flyout-from-top .submenu .submenu {
-  top: 0;
-  left: 100%;
-  transform: translateX(10px);
-  margin-top: 0;
-  min-width: 200px;
-}
-
-.flyout-from-top .submenu .submenu.is-open {
-  transform: translateX(0);
-}
-
-.flyout-from-top .submenu li {
-  position: relative;
-  /* Ensure nested submenu positions relative to this li */
-  overflow: visible;
-  /* Allow submenu to spill out */
 }
 
 .flyout-menu.is-open {
