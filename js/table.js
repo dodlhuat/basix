@@ -1,3 +1,5 @@
+import {Select} from "./select.js";
+
 class Table {
     constructor(container, options = {}) {
         this.container = document.querySelector(container);
@@ -74,6 +76,13 @@ class Table {
         controlsDiv.appendChild(searchInput);
 
         // Page Size Select
+        const selectGroup = document.createElement('div');
+        selectGroup.className = 'select-group';
+
+        const label = document.createElement('label');
+        label.textContent = 'Page Size';
+        selectGroup.appendChild(label);
+
         const pageSizeSelect = document.createElement('select');
         pageSizeSelect.className = 'page-size-select';
         [5, 10, 20, 50].forEach(size => {
@@ -84,9 +93,13 @@ class Table {
             pageSizeSelect.appendChild(option);
         });
         pageSizeSelect.addEventListener('change', (e) => this.handlePageSizeChange(parseInt(e.target.value)));
-        controlsDiv.appendChild(pageSizeSelect);
+        this.assignUniqueId(pageSizeSelect, 'page-size-select-0');
+
+        selectGroup.appendChild(pageSizeSelect);
+        controlsDiv.appendChild(selectGroup);
 
         this.container.appendChild(controlsDiv);
+        new Select('#' + pageSizeSelect.id);
     }
 
     renderTableStructure() {
@@ -284,6 +297,30 @@ class Table {
     setPage(page) {
         this.currentPage = page;
         this.render();
+    }
+
+    assignUniqueId(element, baseId) {
+        if (!element || !baseId) return null;
+
+        let id = baseId;
+        let counter = 1;
+
+        // If baseId already ends with a number, split it
+        const match = baseId.match(/^(.*?)(\d+)$/);
+        if (match) {
+            id = match[1];
+            counter = parseInt(match[2], 10);
+        }
+
+        let uniqueId = baseId;
+
+        while (document.getElementById(uniqueId)) {
+            counter++;
+            uniqueId = `${id}${counter}`;
+        }
+
+        element.id = uniqueId;
+        return uniqueId;
     }
 }
 

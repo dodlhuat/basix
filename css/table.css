@@ -40,21 +40,6 @@
   flex-wrap: wrap;
   gap: 12px;
 }
-.table-controls .search-input {
-  padding: 8px 12px;
-  border: 1px solid var(--divider);
-  border-radius: 6px;
-  font-size: 0.875rem;
-  width: 100%;
-  max-width: 300px;
-}
-.table-controls .page-size-select {
-  padding: 8px 12px;
-  border: 1px solid var(--divider);
-  border-radius: 6px;
-  font-size: 0.875rem;
-  background-color: white;
-}
 
 /* Table Styles */
 .table-wrapper {
@@ -170,9 +155,6 @@ tr:hover {
   .table-controls {
     flex-direction: column;
     align-items: stretch;
-  }
-  .search-input {
-    max-width: 100%;
   }
   table,
   thead,
