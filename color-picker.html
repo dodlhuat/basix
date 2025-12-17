@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --font-family: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .color-picker {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Color Area (Saturation/Brightness) */
+        .color-area {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: crosshair;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .color-cursor {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border: 2px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            top: 0;
+            left: 100%; /* Start at top right (red) */
+        }
+
+        /* Controls (Sliders + Preview) */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .sliders {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .slider-row label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .slider-container {
+            height: 12px;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .hue-slider-container {
+            background: linear-gradient(to right,
+            #f00 0%, #ff0 17%, #0f0 33%,
+            #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
+        }
+
+        .alpha-slider-container {
+            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
+            linear-gradient(-45deg, #ccc 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ccc 75%),
+            linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            outline: none;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            margin-top: -2px; /* Center thumb vertically if needed */
+        }
+
+        .slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .preview {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
+            linear-gradient(-45deg, #ccc 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ccc 75%),
+            linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .color-preview {
+            width: 100%;
+            height: 100%;
+            background-color: #ff0000;
+        }
+
+        /* Inputs */
+        .inputs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .hex-group {
+            flex: 2;
+        }
+
+        .rgb-group {
+            flex: 1;
+        }
+
+        .input-group label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-family: monospace;
+            font-size: 0.875rem;
+            text-align: center;
+            color: var(--text-color);
+            background: #f9fafb;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            .color-picker {
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .color-area {
+                height: 250px; /* Taller on mobile for easier touch */
+            }
+
+            .slider::-webkit-slider-thumb {
+                width: 24px; /* Larger touch target */
+                height: 24px;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div id="color-picker" class="color-picker">
+        <div class="color-area">
+            <canvas id="color-block"></canvas>
+            <div id="color-cursor" class="color-cursor"></div>
+        </div>
+
+        <div class="controls">
+            <div class="sliders">
+                <div class="slider-row">
+                    <label for="hue-slider">Hue</label>
+                    <div class="slider-container hue-slider-container">
+                        <input type="range" min="0" max="360" value="0" id="hue-slider" class="slider hue-slider">
+                    </div>
+                </div>
+                <div class="slider-row">
+                    <label for="alpha-slider">Alpha</label>
+                    <div class="slider-container alpha-slider-container">
+                        <input type="range" min="0" max="1" step="0.01" value="1" id="alpha-slider"
+                               class="slider alpha-slider">
+                    </div>
+                </div>
+            </div>
+            <div class="preview">
+                <div id="color-preview" class="color-preview"></div>
+            </div>
+        </div>
+
+        <div class="inputs">
+            <div class="input-group hex-group">
+                <label>HEX</label>
+                <input type="text" id="hex-input" value="#FF0000">
+            </div>
+            <div class="input-group rgb-group">
+                <label>R</label>
+                <input type="number" id="r-input" min="0" max="255" value="255">
+            </div>
+            <div class="input-group rgb-group">
+                <label>G</label>
+                <input type="number" id="g-input" min="0" max="255" value="0">
+            </div>
+            <div class="input-group rgb-group">
+                <label>B</label>
+                <input type="number" id="b-input" min="0" max="255" value="0">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    class ColorPicker {
+        constructor(container) {
+            this.container = container;
+
+            // Elements
+            this.canvas = container.querySelector('#color-block');
+            this.ctx = this.canvas.getContext('2d');
+            this.cursor = container.querySelector('#color-cursor');
+            this.hueSlider = container.querySelector('#hue-slider');
+            this.alphaSlider = container.querySelector('#alpha-slider');
+            this.preview = container.querySelector('#color-preview');
+
+            this.hexInput = container.querySelector('#hex-input');
+            this.rInput = container.querySelector('#r-input');
+            this.gInput = container.querySelector('#g-input');
+            this.bInput = container.querySelector('#b-input');
+
+            // State
+            this.hue = 0;
+            this.saturation = 100;
+            this.brightness = 100;
+            this.alpha = 1;
+
+            this.isDragging = false;
+
+            this.init();
+        }
+
+        init() {
+            // Set canvas size
+            this.resizeCanvas();
+            window.addEventListener('resize', () => this.resizeCanvas());
+
+            // Draw initial state
+            this.drawColorBlock();
+            this.updateColorFromHSB();
+
+            // Event Listeners
+            this.setupEventListeners();
+        }
+
+        resizeCanvas() {
+            const rect = this.canvas.parentElement.getBoundingClientRect();
+            this.canvas.width = rect.width;
+            this.canvas.height = rect.height;
+            this.drawColorBlock();
+            this.updateCursorPosition();
+        }
+
+        setupEventListeners() {
+            // Color Area Interactions (Mouse & Touch)
+            const startDrag = (e) => {
+                this.isDragging = true;
+                this.handleColorAreaInteraction(e);
+            };
+
+            const moveDrag = (e) => {
+                if (this.isDragging) {
+                    this.handleColorAreaInteraction(e);
+                }
+            };
+
+            const endDrag = () => {
+                this.isDragging = false;
+            };
+
+            this.canvas.addEventListener('mousedown', startDrag);
+            this.canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent scrolling
+                startDrag(e);
+            }, {passive: false});
+
+            window.addEventListener('mousemove', moveDrag);
+            window.addEventListener('touchmove', (e) => {
+                if (this.isDragging) e.preventDefault();
+                moveDrag(e);
+            }, {passive: false});
+
+            window.addEventListener('mouseup', endDrag);
+            window.addEventListener('touchend', endDrag);
+
+            // Sliders
+            this.hueSlider.addEventListener('input', (e) => {
+                this.hue = parseInt(e.target.value);
+                this.drawColorBlock();
+                this.updateColorFromHSB();
+            });
+
+            this.alphaSlider.addEventListener('input', (e) => {
+                this.alpha = parseFloat(e.target.value);
+                this.updateColorFromHSB();
+            });
+
+            // Inputs
+            this.hexInput.addEventListener('change', (e) => this.handleHexInput(e.target.value));
+            this.rInput.addEventListener('change', () => this.handleRGBInput());
+            this.gInput.addEventListener('change', () => this.handleRGBInput());
+            this.bInput.addEventListener('change', () => this.handleRGBInput());
+        }
+
+        handleColorAreaInteraction(e) {
+            const rect = this.canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            let x = clientX - rect.left;
+            let y = clientY - rect.top;
+
+            // Clamp values
+            x = Math.max(0, Math.min(x, rect.width));
+            y = Math.max(0, Math.min(y, rect.height));
+
+            // Calculate Saturation and Brightness
+            this.saturation = (x / rect.width) * 100;
+            this.brightness = 100 - ((y / rect.height) * 100);
+
+            this.updateCursorPosition();
+            this.updateColorFromHSB();
+        }
+
+        updateCursorPosition() {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = (this.saturation / 100) * rect.width;
+            const y = (1 - (this.brightness / 100)) * rect.height;
+
+            this.cursor.style.left = `${x}px`;
+            this.cursor.style.top = `${y}px`;
+
+            // Change cursor border color for visibility
+            this.cursor.style.borderColor = this.brightness > 50 ? 'black' : 'white';
+        }
+
+        drawColorBlock() {
+            const width = this.canvas.width;
+            const height = this.canvas.height;
+            const ctx = this.ctx;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Horizontal gradient (White to Color)
+            const gradH = ctx.createLinearGradient(0, 0, width, 0);
+            gradH.addColorStop(0, '#fff');
+            gradH.addColorStop(1, `hsl(${this.hue}, 100%, 50%)`);
+            ctx.fillStyle = gradH;
+            ctx.fillRect(0, 0, width, height);
+
+            // Vertical gradient (Transparent to Black)
+            const gradV = ctx.createLinearGradient(0, 0, 0, height);
+            gradV.addColorStop(0, 'rgba(0,0,0,0)');
+            gradV.addColorStop(1, '#000');
+            ctx.fillStyle = gradV;
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        updateColorFromHSB() {
+            const {r, g, b} = this.hsbToRgb(this.hue, this.saturation, this.brightness);
+            const hex = this.rgbToHex(r, g, b);
+
+            this.updateInputs(r, g, b, hex);
+            this.updatePreview(r, g, b, this.alpha);
+        }
+
+        updateInputs(r, g, b, hex) {
+            this.hexInput.value = hex;
+            this.rInput.value = r;
+            this.gInput.value = g;
+            this.bInput.value = b;
+        }
+
+        updatePreview(r, g, b, a) {
+            const color = `rgba(${r}, ${g}, ${b}, ${a})`;
+            this.preview.style.backgroundColor = color;
+
+            // Update alpha slider background to show effect
+            const alphaContainer = this.container.querySelector('.alpha-slider-container');
+            // We want a gradient from transparent color to opaque color
+            // But to see the checkerboard, we need the gradient to be over it.
+            // Actually, standard is usually: gradient from transparent to full color?
+            // Or just the color with varying alpha?
+            // Let's make the slider track show the color fading to transparent.
+            // Simplest: Linear gradient from rgba(r,g,b,0) to rgba(r,g,b,1)
+            alphaContainer.style.background = `
+            linear-gradient(45deg, #ccc 25%, transparent 25%),
+            linear-gradient(-45deg, #ccc 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ccc 75%),
+            linear-gradient(-45deg, transparent 75%, #ccc 75%),
+            linear-gradient(to right, rgba(${r},${g},${b},0), rgba(${r},${g},${b},1))
+        `;
+            alphaContainer.style.backgroundSize = '10px 10px, 10px 10px, 10px 10px, 10px 10px, 100% 100%';
+            alphaContainer.style.backgroundPosition = '0 0, 0 5px, 5px -5px, -5px 0px, 0 0';
+            alphaContainer.style.backgroundBlendMode = 'normal, normal, normal, normal, normal'; // Default
+
+            // Actually, CSS multiple backgrounds stack top to bottom.
+            // So the gradient needs to be first (top), then the checkerboard.
+            alphaContainer.style.background = `
+            linear-gradient(to right, rgba(${r},${g},${b},0), rgba(${r},${g},${b},1)),
+            linear-gradient(45deg, #ccc 25%, transparent 25%),
+            linear-gradient(-45deg, #ccc 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ccc 75%),
+            linear-gradient(-45deg, transparent 75%, #ccc 75%)
+        `;
+            alphaContainer.style.backgroundSize = '100% 100%, 10px 10px, 10px 10px, 10px 10px, 10px 10px';
+            alphaContainer.style.backgroundPosition = '0 0, 0 0, 0 5px, 5px -5px, -5px 0px';
+        }
+
+        handleHexInput(hex) {
+            if (/^#[0-9A-F]{6}$/i.test(hex)) {
+                const {r, g, b} = this.hexToRgb(hex);
+                this.setFromRGB(r, g, b);
+            }
+        }
+
+        handleRGBInput() {
+            let r = parseInt(this.rInput.value);
+            let g = parseInt(this.gInput.value);
+            let b = parseInt(this.bInput.value);
+
+            // Clamp
+            r = Math.max(0, Math.min(255, isNaN(r) ? 0 : r));
+            g = Math.max(0, Math.min(255, isNaN(g) ? 0 : g));
+            b = Math.max(0, Math.min(255, isNaN(b) ? 0 : b));
+
+            this.setFromRGB(r, g, b);
+        }
+
+        setFromRGB(r, g, b) {
+            const {h, s, v} = this.rgbToHsb(r, g, b);
+            this.hue = h;
+            this.saturation = s;
+            this.brightness = v;
+
+            this.hueSlider.value = this.hue;
+
+            this.drawColorBlock();
+            this.updateCursorPosition();
+            this.updateColorFromHSB();
+        }
+
+        // Utils
+        hsbToRgb(h, s, v) {
+            s /= 100;
+            v /= 100;
+            let c = v * s;
+            let x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+            let m = v - c;
+            let r = 0, g = 0, b = 0;
+
+            if (0 <= h && h < 60) {
+                r = c;
+                g = x;
+                b = 0;
+            } else if (60 <= h && h < 120) {
+                r = x;
+                g = c;
+                b = 0;
+            } else if (120 <= h && h < 180) {
+                r = 0;
+                g = c;
+                b = x;
+            } else if (180 <= h && h < 240) {
+                r = 0;
+                g = x;
+                b = c;
+            } else if (240 <= h && h < 300) {
+                r = x;
+                g = 0;
+                b = c;
+            } else if (300 <= h && h < 360) {
+                r = c;
+                g = 0;
+                b = x;
+            }
+
+            return {
+                r: Math.round((r + m) * 255),
+                g: Math.round((g + m) * 255),
+                b: Math.round((b + m) * 255)
+            };
+        }
+
+        rgbToHsb(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            let cmin = Math.min(r, g, b),
+                cmax = Math.max(r, g, b),
+                delta = cmax - cmin,
+                h = 0,
+                s = 0,
+                v = 0;
+
+            if (delta === 0) h = 0;
+            else if (cmax === r) h = ((g - b) / delta) % 6;
+            else if (cmax === g) h = (b - r) / delta + 2;
+            else h = (r - g) / delta + 4;
+
+            h = Math.round(h * 60);
+            if (h < 0) h += 360;
+
+            v = Math.round(cmax * 100);
+            s = cmax === 0 ? 0 : Math.round((delta / cmax) * 100);
+
+            return {h, s, v};
+        }
+
+        rgbToHex(r, g, b) {
+            const toHex = (c) => {
+                const hex = c.toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            };
+            return '#' + toHex(r) + toHex(g) + toHex(b);
+        }
+
+        hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+    }
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const picker = new ColorPicker(document.getElementById('color-picker'));
+    });
+</script>
+</body>
+</html>
