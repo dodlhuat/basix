@@ -9,6 +9,7 @@ import {tree} from "./tree.js";
 import {Theme} from "./theme.js";
 import {Table} from "./table.js";
 import {FlyoutMenu} from "./flyout-menu.js";
+import {Tabs} from "./tabs.js";
 
 utils.ready(function () {
     Scrollbar.initAll('.scroll-container');
@@ -34,6 +35,15 @@ utils.ready(function () {
         }
         return data;
     };
+
+    const horizontalTabs = new Tabs('.horizontal', {
+        layout: 'horizontal'
+    });
+
+    // Initialize Vertical Tabs
+    const verticalTabs = new Tabs('.vertical', {
+        layout: 'vertical'
+    });
 
     const columns = [
         {key: 'id', label: 'ID'},

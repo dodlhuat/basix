@@ -1,0 +1,130 @@
+@import "properties";
+
+.tabs-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  li {
+    list-style: none;
+  }
+
+  &.tabs-vertical {
+    flex-direction: row;
+    min-height: 300px;
+  }
+}
+
+.tabs-header {
+  border-bottom: 1px solid var(--divider);
+}
+
+.tabs-list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+}
+
+.tab-item {
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--secondary-text);
+  white-space: nowrap;
+  user-select: none;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+
+  &:hover {
+    color: var(--accent-color);
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  &.active {
+    color: var(--accent-color);
+    background-color: var(--divider);
+    border-bottom-color: var(--accent-color);
+  }
+}
+
+.tabs-content {
+  padding: 24px;
+}
+
+.tab-panel {
+  display: none;
+  animation: fadeIn 0.3s ease;
+
+  &.active {
+    display: block;
+  }
+}
+
+.tabs-container.tabs-vertical {
+  .tabs-header {
+    border-bottom: none;
+    border-right: 1px solid var(--divider);
+    min-width: 200px;
+  }
+
+  .tabs-list {
+    flex-direction: column;
+  }
+
+  .tab-item {
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: none;
+    border-left: 3px solid transparent;
+
+    &.active {
+      border-left-color: var(--accent-color);
+      font-weight: 600;
+    }
+  }
+
+  .tabs-content {
+    flex: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .tabs-container.tabs-vertical {
+    flex-direction: column;
+
+    .tabs-header {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    .tabs-list {
+      flex-direction: row;
+      overflow-x: auto;
+    }
+
+    .tab-item {
+      width: auto;
+      flex-shrink: 0;
+      border-left: none;
+      border-bottom: 2px solid transparent;
+
+      &.active {
+        border-bottom-color: var(--accent-color);
+      }
+    }
+  }
+}
