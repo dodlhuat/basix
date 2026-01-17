@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS-Only Accordion Demo</title>
+    <link rel="stylesheet" href="css/accordion.css">
+</head>
+
+<body>
+
+    <h1 style="text-align: center; margin-bottom: 2rem;">CSS-Only Accordion</h1>
+
+    <div class="accordion">
+
+        <!-- Item 1 -->
+        <div class="accordion-item">
+            <input type="radio" name="accordion" id="acc1" class="accordion-input" checked>
+            <label for="acc1" class="accordion-label">
+                What is this?
+            </label>
+            <div class="accordion-content">
+                <div class="accordion-body">
+                    <div>
+                        <p>This is a pure CSS accordion component. It uses the "Radio Button Hack" to manage state
+                            without a single line of JavaScript.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="accordion-item">
+            <input type="radio" name="accordion" id="acc2" class="accordion-input">
+            <label for="acc2" class="accordion-label">
+                How does it work?
+            </label>
+            <div class="accordion-content">
+                <div class="accordion-body">
+                    <div>
+                        <p>It links <code>&lt;label&gt;</code> elements to hidden radio buttons. When a radio button is
+                            checked, the adjacent sibling combinator (<code>+</code> or <code>~</code>) is used to
+                            change the styles of the content div, specifically animating the
+                            <code>grid-template-rows</code> property from 0fr to 1fr.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="accordion-item">
+            <input type="radio" name="accordion" id="acc3" class="accordion-input">
+            <label for="acc3" class="accordion-label">
+                Is it accessible?
+            </label>
+            <div class="accordion-content">
+                <div class="accordion-body">
+                    <div>
+                        <p>It's reasonably accessible as it uses semantic form elements. Users can tab through the
+                            headers (radio inputs) and select them with the keyboard. However, for full ARIA support, a
+                            small amount of JS is usually recommended to manage aria-expanded attributes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

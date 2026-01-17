@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Context Menu</title>
+    <link rel="stylesheet" href="css/context-menu.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 2rem;
+            background-color: #f7f9fc;
+        }
+
+        .grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .file-item {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: context-menu;
+            user-select: none;
+            transition: box-shadow 0.2s;
+        }
+
+        .file-item:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .log-area {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #fff;
+            border: 1px solid #ccc;
+            height: 100px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Right-Click Items</h1>
+    <p>Right-click on the boxes below to see the custom menu.</p>
+
+    <div class="grid">
+        <div class="file-item" data-id="1" data-name="Document.txt">Document.txt</div>
+        <div class="file-item" data-id="2" data-name="Image.png">Image.png</div>
+        <div class="file-item" data-id="3" data-name="Script.js">Script.js</div>
+    </div>
+
+    <div class="log-area" id="logs">Log:</div>
+
+    <script src="js/context-menu.js"></script>
+    <script>
+        const logger = document.getElementById('logs');
+        const log = (msg) => {
+            const div = document.createElement('div');
+            div.textContent = `> ${msg}`;
+            logger.appendChild(div);
+            logger.scrollTop = logger.scrollHeight;
+        };
+
+        const menuItems = [
+            {
+                label: 'View Details',
+                action: (target) => log(`View Details for: ${target.dataset.name} (ID: ${target.dataset.id})`)
+            },
+            {
+                label: 'Rename',
+                action: (target) => log(`Rename requested for: ${target.dataset.name}`)
+            },
+            'separator',
+            {
+                label: 'Delete',
+                action: (target) => log(`Deleting: ${target.dataset.name}`)
+            }
+        ];
+
+        // Initialize Context Menu
+        const myContextMenu = new ContextMenu('.file-item', menuItems);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+/* content of css/chat.css */
+:root {
+    --chat-bg: #e5ddd5;
+    --msg-incoming-bg: #ffffff;
+    --msg-outgoing-bg: #dcf8c6;
+    --msg-text: #303030;
+    --msg-meta: #999;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--chat-bg);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    background: transparent;
+    /* Or a specific chat wallpaper */
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 10px;
+}
+
+.message {
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    position: relative;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--msg-text);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word;
+}
+
+/* Metadata (time) */
+.message-meta {
+    display: block;
+    font-size: 11px;
+    color: var(--msg-meta);
+    text-align: right;
+    margin-top: 4px;
+}
+
+/* Incoming Message */
+.message-incoming {
+    align-self: flex-start;
+    background-color: var(--msg-incoming-bg);
+    border-top-left-radius: 0;
+}
+
+.message-incoming::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -8px;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-top-color: var(--msg-incoming-bg);
+    border-right: 0;
+    margin-top: -0px;
+    /* Adjust if needed based on border radius */
+}
+
+/* Outgoing Message */
+.message-outgoing {
+    align-self: flex-end;
+    background-color: var(--msg-outgoing-bg);
+    border-top-right-radius: 0;
+}
+
+.message-outgoing::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -8px;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-top-color: var(--msg-outgoing-bg);
+    border-left: 0;
+}

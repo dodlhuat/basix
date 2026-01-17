@@ -1,0 +1,39 @@
+/* content of css/context-menu.css */
+.context-menu {
+    position: absolute;
+    z-index: 1000;
+    width: 200px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: none;
+    /* Hidden by default */
+    padding: 4px 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+.context-menu.visible {
+    display: block;
+}
+
+.context-menu-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.context-menu-item:hover {
+    background-color: #f0f2f5;
+    color: #000;
+}
+
+.context-menu-separator {
+    height: 1px;
+    background-color: #eee;
+    margin: 4px 0;
+}

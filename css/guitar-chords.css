@@ -1,0 +1,251 @@
+.controls-container {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.chord-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.fretboard-container {
+    overflow-x: auto;
+    padding: 1rem 0;
+}
+
+.fretboard {
+    display: flex;
+    flex-direction: column;
+    background-color: #5d4037;
+    /* Fretboard wood color */
+    padding: 20px;
+    border-radius: 4px;
+    position: relative;
+    min-width: 800px;
+}
+
+.string {
+    display: flex;
+    position: relative;
+    height: 40px;
+    /* Spacing between strings */
+    align-items: center;
+}
+
+.string::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    /* String thickness */
+    background-color: #c0c0c0;
+    /* String color */
+    z-index: 1;
+    transform: translateY(-50%);
+}
+
+/* Make lower strings thicker */
+.string:nth-child(1)::before {
+    height: 4px;
+}
+
+.string:nth-child(2)::before {
+    height: 3.5px;
+}
+
+.string:nth-child(3)::before {
+    height: 3px;
+}
+
+.string:nth-child(4)::before {
+    height: 2.5px;
+}
+
+.string:nth-child(5)::before {
+    height: 2px;
+}
+
+.string:nth-child(6)::before {
+    height: 1.5px;
+}
+
+.fret {
+    flex: 1;
+    border-right: 4px solid #aaa;
+    /* Fret wire */
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.fret.nut {
+    border-right: 8px solid #ddd;
+    /* Nut */
+    flex: 0 0 50px;
+    /* Nut width */
+    background-color: #3e2723;
+}
+
+.note-marker {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    /* Let clicks pass through to fret */
+}
+
+.fret.active .note-marker {
+    opacity: 1;
+}
+
+/* Fret markers (dots) */
+.fretboard::after {
+    content: '';
+    position: absolute;
+    /* This is tricky with flexbox, might need a different approach for dots 
+       or just put them on specific frets in JS or specific nth-child CSS 
+    */
+}
+
+/* Simple single dots */
+.string:nth-child(3) .fret:nth-child(4)::after,
+/* 3rd fret */
+.string:nth-child(3) .fret:nth-child(6)::after,
+/* 5th fret */
+.string:nth-child(3) .fret:nth-child(8)::after,
+/* 7th fret */
+.string:nth-child(3) .fret:nth-child(10)::after
+
+/* 9th fret */
+    {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    z-index: 0;
+    top: 100%;
+    /* Position below the 3rd string (between 3 and 4 visually) */
+    transform: translate(50%, -50%);
+    /* Center on the fret wire? No, center in fret */
+    left: 50%;
+    transform: translate(-50%, 20px);
+    /* Push down to between strings */
+}
+
+/* Double dot at 12th fret */
+.string:nth-child(2) .fret:nth-child(13)::after,
+.string:nth-child(4) .fret:nth-child(13)::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    z-index: 0;
+    left: 50%;
+    transform: translate(-50%, 20px);
+}
+
+@media (max-width: 768px) {
+    .controls-container {
+        gap: 1rem;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .control-group {
+        width: 100%;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .button-group button {
+        flex: 1;
+    }
+
+    .fretboard-container {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        /* Hide overflow as requested */
+    }
+
+
+    .fretboard {
+        min-width: 0;
+        /* Allow it to shrink to fit screen */
+        width: 100%;
+        padding: 10px 0;
+        /* Reduce padding */
+        box-sizing: border-box;
+        /* Ensure padding is included */
+    }
+
+    .fret-numbers {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+/* Fret Numbers Styles */
+.fret-numbers {
+    display: flex;
+    height: 30px;
+    align-items: center;
+    margin-top: 5px;
+    padding-left: 20px;
+    /* Match fretboard padding */
+    padding-right: 20px;
+}
+
+.fret-number {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    /* Increased size */
+    color: var(--primary-text);
+    /* Higher contrast */
+    font-weight: bold;
+    border-right: 4px solid transparent;
+    /* Match fret wire width to align perfectly */
+    box-sizing: border-box;
+    /* Ensure border is calculated in size if we switch that on */
+}
+
+/* Ensure frets also use consistent box sizing if not already */
+.fret {
+    box-sizing: border-box;
+}
