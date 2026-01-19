@@ -9,6 +9,10 @@ button, .button {
   border: none;
   cursor: pointer;
 
+  &.active {
+    background: var(--accent-color-lighten);
+  }
+
   &.button-primary {
     background: var(--accent-color);
     color: var(--divider);

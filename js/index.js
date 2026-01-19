@@ -89,7 +89,7 @@ utils.ready(function () {
     });
 
     // Demo Controls: Switch Direction
-    const directionBtns = document.querySelectorAll('.direction-btn');
+    const directionBtns = document.querySelectorAll('.flyout-controls > button');
     directionBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             // Remove active class from all buttons

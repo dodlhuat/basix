@@ -34,17 +34,16 @@ nav li {
 
 nav a {
   color: var(--primary-text);
-  font-size: 1em;
+  font-size: 1.8em;
   text-decoration: none;
   display: block;
   padding: $spacing calc($spacing * 1.5);
   letter-spacing: 2px;
   border-bottom: 1px solid var(--primary);
-}
 
-nav a:hover {
-  background: var(--accent);
-  color: var(--primary-light-darken);
+  &:hover {
+    color: var(--accent-text);
+  }
 }
 
 .navigation-controls {

@@ -8,7 +8,7 @@ class FlyoutMenu {
             closeSelector: '.close-menu',
             submenuToggleSelector: '.submenu-toggle',
             linkSelector: '.flyout-links > li > a',
-            direction: 'right', // right, left, top
+            direction: 'right', // right, left
             title: 'Menu',
             footerText: '&copy; 2025 Brand Inc.',
             enableHeader: true,
@@ -198,11 +198,11 @@ class FlyoutMenu {
     }
 
     setDirection(direction) {
-        const validDirections = ['left', 'right', 'top'];
+        const validDirections = ['left', 'right'];
         if (!validDirections.includes(direction)) return;
 
         // Remove all direction classes
-        this.flyoutMenu.classList.remove('flyout-from-right', 'flyout-from-left', 'flyout-from-top');
+        this.flyoutMenu.classList.remove('flyout-from-right', 'flyout-from-left');
 
         // Add new direction class
         this.flyoutMenu.classList.add(`flyout-from-${direction}`);
