@@ -1,4 +1,4 @@
-# Basix 0.9.4
+# Basix 0.9.5
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript and therefore is not dependent on any plugin.
@@ -8,6 +8,15 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ### TODO
 
 * editor
+* carousel
+* chat
+* color picker
+* html tooltips
+* timeline
+* uploader
+* gallery
+* simple table
+* documentation
 
 ### Benefits
 
@@ -28,6 +37,7 @@ your own css or inclulde the existing full style.css (or min)
 <script src="js/index.js" type="module"></script>
 ```
 # Available Components
+## Accordion
 ## Alert
 Alerts can have either the alert-error, alert-warning or alert-success class to change color accordingly 
 ``` html

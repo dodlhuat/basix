@@ -1,88 +1,90 @@
 /* content of css/timeline.css */
 :root {
-    --timeline-line-color: #e9ecef;
-    --timeline-dot-color: #dee2e6;
-    --timeline-dot-active: #0d6efd;
-    --timeline-bg: #fff;
-    --timeline-text: #495057;
-    --timeline-date: #868e96;
+  --timeline-line-color: #e9ecef;
+  --timeline-dot-color: #dee2e6;
+  --timeline-dot-active: #0d6efd;
+  --timeline-bg: #fff;
+  --timeline-text: #495057;
+  --timeline-date: #868e96;
 }
 
 .timeline {
-    position: relative;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px 0;
-    list-style: none;
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+  list-style: none;
 }
 
 /* The vertical line */
 .timeline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 20px;
-    /* Adjust based on dot size/position */
-    width: 2px;
-    background: var(--timeline-line-color);
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  /* Adjust based on dot size/position */
+  width: 2px;
+  background: var(--timeline-line-color);
 }
 
 .timeline-item {
-    position: relative;
-    margin-bottom: 2rem;
-    padding-left: 50px;
-    /* Space for line and dot */
+  position: relative;
+  margin-bottom: 2rem;
+  padding-left: 50px;
+  /* Space for line and dot */
 }
 
 /* The dot on the line */
 .timeline-item::before {
-    content: '';
-    position: absolute;
-    left: 11px;
-    /* Center on the line (20px line position - width/2 + line_width/2) */
-    top: 5px;
-    /* Adjust to align with title */
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--timeline-bg);
-    border: 3px solid var(--timeline-dot-color);
-    z-index: 1;
+  content: "";
+  position: absolute;
+  left: 11px;
+  /* Center on the line (20px line position - width/2 + line_width/2) */
+  top: 5px;
+  /* Adjust to align with title */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--timeline-bg);
+  border: 3px solid var(--timeline-dot-color);
+  z-index: 1;
 }
 
 /* Active/Highlight state example */
 .timeline-item.active::before {
-    border-color: var(--timeline-dot-active);
-    background-color: #e7f1ff;
+  border-color: var(--timeline-dot-active);
+  background-color: #e7f1ff;
 }
 
 .timeline-content {
-    background: var(--timeline-bg);
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid #f1f3f5;
+  background: var(--timeline-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f3f5;
 }
 
 .timeline-date {
-    font-size: 0.85rem;
-    color: var(--timeline-date);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    display: block;
+  font-size: 0.85rem;
+  color: var(--timeline-date);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
 .timeline-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem 0;
-    color: #212529;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: #212529;
 }
 
 .timeline-body {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: var(--timeline-text);
-    margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--timeline-text);
+  margin: 0;
 }
+
+/*# sourceMappingURL=timeline.css.map */

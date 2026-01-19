@@ -3065,7 +3065,6 @@ body {
 
 .tab-panel {
   display: none;
-  animation: fadeIn 0.3s ease;
 }
 .tab-panel.active {
   display: block;
@@ -3093,16 +3092,6 @@ body {
   flex: 1;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 @media (max-width: 768px) {
   .tabs-container.tabs-vertical {
     flex-direction: column;
@@ -3236,6 +3225,77 @@ body {
 
 .accordion-input:checked ~ .accordion-content .accordion-body > div {
   border-top-color: #f1f1f1;
+}
+
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+  list-style: none;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  width: 2px;
+  background: var(--divider);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+  padding-left: 50px;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid var(--divider);
+  z-index: 1;
+  background: var(--background);
+}
+
+.timeline-item.active::before {
+  border-color: var(--accent-color);
+  background-color: #e7f1ff;
+}
+
+.timeline-content {
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--divider);
+}
+
+.timeline-date {
+  font-size: 0.85rem;
+  color: var(--disabled);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.timeline-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: var(--primary-text);
+}
+
+.timeline-body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--secondary-text);
+  margin: 0;
 }
 
 /*# sourceMappingURL=style.css.map */
