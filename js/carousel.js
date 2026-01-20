@@ -1,4 +1,4 @@
-class Carousel {
+export class Carousel {
     constructor(elementOrSelector, options = {}) {
         this.root = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
@@ -65,12 +65,12 @@ class Carousel {
         // Create Navigation Buttons
         this.prevButton = document.createElement('button');
         this.prevButton.classList.add('carousel-button', 'carousel-button--left');
-        this.prevButton.innerHTML = '&lt;'; // Or an SVG Icon
+        this.prevButton.innerHTML = '<span class="icon-navigate_before icon"></span>'; // Or an SVG Icon
         this.prevButton.setAttribute('aria-label', 'Previous Slide');
 
         this.nextButton = document.createElement('button');
         this.nextButton.classList.add('carousel-button', 'carousel-button--right');
-        this.nextButton.innerHTML = '&gt;';
+        this.nextButton.innerHTML = '<span class="icon-navigate_next icon"></span>';
         this.nextButton.setAttribute('aria-label', 'Next Slide');
 
         this.root.appendChild(this.prevButton);

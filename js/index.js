@@ -10,6 +10,7 @@ import {Theme} from "./theme.js";
 import {Table} from "./table.js";
 import {FlyoutMenu} from "./flyout-menu.js";
 import {Tabs} from "./tabs.js";
+import {Carousel} from "./carousel.js";
 
 utils.ready(function () {
     Scrollbar.initAll('.scroll-container');
@@ -43,6 +44,10 @@ utils.ready(function () {
     // Initialize Vertical Tabs
     const verticalTabs = new Tabs('.vertical', {
         layout: 'vertical'
+    });
+
+    const carousel = new Carousel('#carouselIdHere', {
+        loop: true
     });
 
     const columns = [

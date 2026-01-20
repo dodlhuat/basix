@@ -1,18 +1,11 @@
-/* content of css/carousel.css */
-:root {
-  --carousel-nav-color: #333;
-  --carousel-nav-bg: rgba(255, 255, 255, 0.7);
-  --carousel-dot-active: #0d6efd;
-}
+@import "properties";
+@import "parameters";
 
 .carousel {
   position: relative;
   width: 100%;
-  max-width: 800px;
-  /* Example max width */
   margin: 0 auto;
   overflow: hidden;
-  /* Hide slides off screen */
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -33,42 +26,27 @@
 
 .carousel-slide {
   min-width: 100%;
-  /* Each slide takes full width of container */
   box-sizing: border-box;
-  /* styling for demo content */
-  height: 400px;
+  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  background-color: #eee;
-  color: #555;
   user-select: none;
-  /* Prevent text selection during swipe */
 }
 
-.carousel-slide:nth-child(odd) {
-  background-color: #e0e0e0;
-}
-
-/* Navigation Buttons */
 .carousel-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--carousel-nav-bg);
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
   cursor: pointer;
-  color: var(--carousel-nav-color);
   font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
   transition: background 0.3s;
+  padding: 10px;
 }
 
 .carousel-button:hover {
@@ -83,7 +61,6 @@
   right: 10px;
 }
 
-/* Pagination Dots */
 .carousel-nav {
   display: flex;
   justify-content: center;
@@ -97,7 +74,6 @@
 .carousel-indicator {
   border: none;
   width: 30px;
-  /* Capsule shape for clicking ease */
   height: 5px;
   background: rgba(0, 0, 0, 0.3);
   margin: 0 5px;
@@ -107,7 +83,5 @@
 }
 
 .carousel-indicator.current-slide {
-  background: var(--carousel-dot-active);
+  background: var(--accent-color);
 }
-
-/*# sourceMappingURL=carousel.css.map */

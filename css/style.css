@@ -3298,6 +3298,38 @@ body {
   margin: 0;
 }
 
+:root {
+  --primary-text: #1A1A1A;
+  --secondary-text: #4A4A4A;
+  --divider: #DADDE1;
+  --accent-text: #0056D6;
+  --error: #D64545;
+  --warning: #C28A00;
+  --success: #2E8B57;
+  --secondary-background: #FFFFFF;
+  --background: #fafafa;
+  --accent-color: #1F6FEB;
+  --accent-color-lighten: #4e8def;
+  --accent-color-text: #DADDE1;
+  --disabled: #b8b8b8;
+}
+
+[data-theme=dark] {
+  --primary-text: #E4E6EB;
+  --secondary-text: #B0B3B8;
+  --divider: #3A3B3C;
+  --accent-text: #6EA8FF;
+  --error: #FF6B6B;
+  --warning: #F7B500;
+  --success: #5CC689;
+  --background: #18191A;
+  --secondary-background: #494c4f;
+  --accent-color: #1F6FEB;
+  --accent-color-lighten: #4e8def;
+  --accent-color-text: #DADDE1;
+  --disabled: #b8b8b8;
+}
+
 .chat-container {
   width: 100%;
   display: flex;
@@ -3363,6 +3395,123 @@ body {
   border: 8px solid transparent;
   border-top-color: var(--accent-color-lighten);
   border-left: 0;
+}
+
+:root {
+  --primary-text: #1A1A1A;
+  --secondary-text: #4A4A4A;
+  --divider: #DADDE1;
+  --accent-text: #0056D6;
+  --error: #D64545;
+  --warning: #C28A00;
+  --success: #2E8B57;
+  --secondary-background: #FFFFFF;
+  --background: #fafafa;
+  --accent-color: #1F6FEB;
+  --accent-color-lighten: #4e8def;
+  --accent-color-text: #DADDE1;
+  --disabled: #b8b8b8;
+}
+
+[data-theme=dark] {
+  --primary-text: #E4E6EB;
+  --secondary-text: #B0B3B8;
+  --divider: #3A3B3C;
+  --accent-text: #6EA8FF;
+  --error: #FF6B6B;
+  --warning: #F7B500;
+  --success: #5CC689;
+  --background: #18191A;
+  --secondary-background: #494c4f;
+  --accent-color: #1F6FEB;
+  --accent-color-lighten: #4e8def;
+  --accent-color-text: #DADDE1;
+  --disabled: #b8b8b8;
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-track-container {
+  overflow: hidden;
+  width: 100%;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  box-sizing: border-box;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  user-select: none;
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.3s;
+  padding: 10px;
+}
+
+.carousel-button:hover {
+  background: white;
+}
+
+.carousel-button--left {
+  left: 10px;
+}
+
+.carousel-button--right {
+  right: 10px;
+}
+
+.carousel-nav {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  z-index: 10;
+}
+
+.carousel-indicator {
+  border: none;
+  width: 30px;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.carousel-indicator.current-slide {
+  background: var(--accent-color);
 }
 
 /*# sourceMappingURL=style.css.map */
