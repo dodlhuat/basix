@@ -1621,9 +1621,19 @@ button.button-error, .button.button-error {
 }
 .progress-bar .progress {
   border-radius: 0.4rem;
-  background: var(--accent-color);
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, rgba(255, 255, 255, 0.15) 25%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, rgba(255, 255, 255, 0.15) 75%), var(--accent-color);
+  background-size: 40px 40px;
+  animation: stripes 2.5s linear infinite;
 }
 
+@keyframes stripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px 0;
+  }
+}
 :root {
   --primary-text: #1A1A1A;
   --secondary-text: #4A4A4A;

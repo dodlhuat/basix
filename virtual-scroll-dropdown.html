@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Dropdown Demo</title>
+    <style>
+        /* Base Styles */
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            /* Default max width */
+            font-family: system-ui, -apple-system, sans-serif;
+            user-select: none;
+            display: inline-block;
+        }
+
+        .dropdown-trigger {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s;
+        }
+
+        .dropdown-trigger:focus,
+        .custom-dropdown.open .dropdown-trigger {
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        .trigger-text {
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .trigger-text:not(.has-value) {
+            color: #999;
+        }
+
+        .trigger-arrow {
+            font-size: 0.8em;
+            color: #666;
+            margin-left: 8px;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+
+            /* Hidden by default */
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .dropdown-menu.open {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Search */
+        .dropdown-search {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dropdown-search input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+            /* Important for padding */
+        }
+
+        /* List Wrapper for Virtual Scroll */
+        .dropdown-list-wrapper {
+            max-height: 250px;
+            /* Viewport height for options */
+            overflow-y: auto;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+            /* Smooth scroll iOS */
+        }
+
+        .dropdown-list-scroller {
+            position: relative;
+            /* Height will be set dynamically via spacer if needed,
+               but here we rely on the implementation:
+               We have a spacer div for total height, and absolute content.
+            */
+        }
+
+        .virtual-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .dropdown-item {
+            padding: 0 12px;
+            cursor: pointer;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f5f9ff;
+            color: #3498db;
+        }
+
+        .dropdown-item.selected {
+            background-color: #e6f3ff;
+            color: #2980b9;
+            font-weight: 500;
+        }
+
+        .dropdown-item input[type="checkbox"] {
+            margin-right: 10px;
+            pointer-events: none;
+            /* Let click pass to item */
+        }
+
+        /* Mobile Friendly Adjustments */
+        @media (max-width: 600px) {
+
+            /* If desired, on mobile we can make it full width */
+            .custom-dropdown {
+                max-width: 100%;
+            }
+
+            /* Optional: Bottom Sheet style for mobile */
+            /*
+            .dropdown-menu.open {
+                position: fixed;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                max-height: 50vh;
+                border-radius: 8px 8px 0 0;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            }
+            */
+        }
+    </style>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .log {
+            margin-top: 10px;
+            font-family: monospace;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Custom Dropdown Component</h1>
+
+    <!-- Instance 1: searchable single select -->
+    <div class="section">
+        <h2>1. Searchable Single Select (10,000 items)</h2>
+        <p>This list uses virtual scrolling to handle 10k items efficiently.</p>
+        <div id="dropdown-single"></div>
+        <div id="log-single" class="log">Selection: None</div>
+    </div>
+
+    <!-- Instance 2: Multi select -->
+    <div class="section">
+        <h2>2. Multi Select with Search</h2>
+        <p>Select multiple options.</p>
+        <div id="dropdown-multi"></div>
+        <div id="log-multi" class="log">Selection: []</div>
+    </div>
+</div>
+
+<script>
+    /**
+     * CustomDropdown Class
+     * A flexible, mobile-friendly dropdown with virtual scrolling and search.
+     */
+    class CustomDropdown {
+        /**
+         * @param {Object} config
+         * @param {string|HTMLElement} config.container - Container element or selector
+         * @param {Array<{label: string, value: any}>} config.options - List of options
+         * @param {boolean} [config.multiSelect=false] - Enable multi-selection
+         * @param {boolean} [config.searchable=false] - Enable search functionality
+         * @param {string} [config.placeholder="Select..."] - Placeholder text
+         * @param {number} [config.renderLimit=20] - Number of items to render in DOM
+         * @param {number} [config.itemHeight=40] - Estimated height of each item in px
+         * @param {Function} [config.onSelect] - Callback when selection changes
+         */
+        constructor(config) {
+            this.container = typeof config.container === 'string'
+                ? document.querySelector(config.container)
+                : config.container;
+
+            if (!this.container) throw new Error('Container element not found');
+
+            this.options = config.options || [];
+            this.multiSelect = config.multiSelect || false;
+            this.searchable = config.searchable || false;
+            this.placeholder = config.placeholder || 'Select...';
+            this.renderLimit = config.renderLimit || 20; // Number of items in the viewport buffer
+            this.itemHeight = config.itemHeight || 40;
+            this.onSelect = config.onSelect || null;
+
+            // State
+            this.selectedValues = new Set();
+            this.filteredOptions = [...this.options];
+            this.isOpen = false;
+            this.scrollTop = 0;
+
+            this.init();
+        }
+
+        init() {
+            this.container.classList.add('custom-dropdown');
+
+            // Create internal structure
+            this.renderBase();
+
+            // Bind events
+            this.bindEvents();
+
+            // Initial render
+            this.updateTrigger();
+        }
+
+        renderBase() {
+            this.container.innerHTML = `
+            <div class="dropdown-trigger" tabindex="0">
+                <span class="trigger-text">${this.placeholder}</span>
+                <span class="trigger-arrow">▼</span>
+            </div>
+            <div class="dropdown-menu">
+                ${this.searchable ? '<div class="dropdown-search"><input type="text" placeholder="Search..."></div>' : ''}
+                <div class="dropdown-list-wrapper">
+                    <div class="dropdown-list-scroller">
+                        <!-- Spacer for virtual scroll height -->
+                        <div class="virtual-spacer"></div>
+                        <!-- Items container -->
+                        <div class="virtual-content"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            this.trigger = this.container.querySelector('.dropdown-trigger');
+            this.triggerText = this.container.querySelector('.trigger-text');
+            this.menu = this.container.querySelector('.dropdown-menu');
+            this.listWrapper = this.container.querySelector('.dropdown-list-wrapper');
+            this.scroller = this.container.querySelector('.dropdown-list-scroller');
+            this.spacer = this.container.querySelector('.virtual-spacer');
+            this.content = this.container.querySelector('.virtual-content');
+
+            if (this.searchable) {
+                this.searchInput = this.container.querySelector('.dropdown-search input');
+            }
+        }
+
+        bindEvents() {
+            // Toggle menu
+            this.trigger.addEventListener('click', () => this.toggle());
+
+            // Close on click outside
+            document.addEventListener('click', (e) => {
+                if (!this.container.contains(e.target)) {
+                    this.close();
+                }
+            });
+
+            // Search
+            if (this.searchable) {
+                this.searchInput.addEventListener('input', (e) => this.handleSearch(e.target.value));
+            }
+
+            // Virtual Scroll
+            this.listWrapper.addEventListener('scroll', (e) => {
+                this.scrollTop = e.target.scrollTop;
+                this.renderList();
+            });
+        }
+
+        toggle() {
+            this.isOpen ? this.close() : this.open();
+        }
+
+        open() {
+            this.isOpen = true;
+            this.container.classList.add('open');
+            this.menu.classList.add('open');
+            this.renderList(); // Initial render of list
+            if (this.searchable) {
+                this.searchInput.focus();
+            }
+        }
+
+        close() {
+            this.isOpen = false;
+            this.container.classList.remove('open');
+            this.menu.classList.remove('open');
+        }
+
+        handleSearch(query) {
+            if (!query) {
+                this.filteredOptions = [...this.options];
+            } else {
+                const lowerQuery = query.toLowerCase();
+                this.filteredOptions = this.options.filter(opt =>
+                    opt.label.toLowerCase().includes(lowerQuery)
+                );
+            }
+            this.listWrapper.scrollTop = 0; // Reset scroll
+            this.scrollTop = 0;
+            this.renderList();
+        }
+
+        renderList() {
+            const totalHeight = this.filteredOptions.length * this.itemHeight;
+            this.spacer.style.height = `${totalHeight}px`;
+
+            const startIdx = Math.floor(this.scrollTop / this.itemHeight);
+            // Render a buffer around the viewport
+            const buffer = 5;
+            const renderStart = Math.max(0, startIdx - buffer);
+            const renderEnd = Math.min(this.filteredOptions.length, startIdx + this.renderLimit + buffer);
+
+            const offsetY = renderStart * this.itemHeight;
+            this.content.style.transform = `translateY(${offsetY}px)`;
+
+            const visibleOptions = this.filteredOptions.slice(renderStart, renderEnd);
+
+            this.content.innerHTML = visibleOptions.map((opt, idx) => {
+                const realIdx = renderStart + idx;
+                const isSelected = this.selectedValues.has(opt.value);
+                return `
+                <div class="dropdown-item ${isSelected ? 'selected' : ''}"
+                     data-value="${opt.value}"
+                     data-idx="${realIdx}"
+                     style="height: ${this.itemHeight}px; line-height: ${this.itemHeight}px;">
+                    ${this.multiSelect ? `<input type="checkbox" ${isSelected ? 'checked' : ''} readonly>` : ''}
+                    <span class="item-label">${opt.label}</span>
+                </div>
+            `;
+            }).join('');
+
+            // Re-bind click events to new items
+            this.content.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    // Prevent bubbling if clicking checkbox directly (optional, but good for UX)
+                    e.stopPropagation();
+                    this.handleSelect(item.dataset.value);
+                });
+            });
+        }
+
+        handleSelect(valueString) {
+            // value is stored as string in DOM, need to match type if original was number?
+            // For simplicity, we compare loosely or find original option
+            const selectedOpt = this.filteredOptions.find(o => String(o.value) === valueString);
+            if (!selectedOpt) return;
+
+            const val = selectedOpt.value;
+
+            if (this.multiSelect) {
+                if (this.selectedValues.has(val)) {
+                    this.selectedValues.delete(val);
+                } else {
+                    this.selectedValues.add(val);
+                }
+                // Re-render only current view to reflect checkbox
+                this.renderList();
+            } else {
+                this.selectedValues.clear();
+                this.selectedValues.add(val);
+                this.close();
+            }
+
+            this.updateTrigger();
+
+            if (this.onSelect) {
+                this.onSelect(Array.from(this.selectedValues));
+            }
+        }
+
+        updateTrigger() {
+            if (this.selectedValues.size === 0) {
+                this.triggerText.textContent = this.placeholder;
+                this.triggerText.classList.remove('has-value');
+            } else {
+                this.triggerText.classList.add('has-value');
+                if (this.multiSelect) {
+                    this.triggerText.textContent = `${this.selectedValues.size} item(s) selected`;
+                } else {
+                    // Find label of the single selected value
+                    // Search in full options, not just filtered
+                    const val = this.selectedValues.values().next().value;
+                    const opt = this.options.find(o => o.value === val);
+                    this.triggerText.textContent = opt ? opt.label : val;
+                }
+            }
+        }
+    }
+
+    // Export
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = CustomDropdown;
+    }
+
+</script>
+<script>
+    // Generate 10,000 items
+    const generateItems = (count, prefix) => {
+        return Array.from({ length: count }, (_, i) => ({
+            label: `${prefix} Item ${i + 1}`,
+            value: `${prefix.toLowerCase()}_${i + 1}`
+        }));
+    };
+
+    const bigData = generateItems(10000, 'Option');
+    const smallData = generateItems(50, 'Choice');
+
+    // 1. Single Select
+    const singleDropdown = new CustomDropdown({
+        container: '#dropdown-single',
+        options: bigData,
+        searchable: true,
+        placeholder: 'Search 10k items...',
+        renderLimit: 15,
+        onSelect: (val) => {
+            console.log('Single Select:', val);
+            document.getElementById('log-single').textContent = `Selection: ${JSON.stringify(val)}`;
+        }
+    });
+
+    // 2. Multi Select
+    const multiDropdown = new CustomDropdown({
+        container: '#dropdown-multi',
+        options: smallData,
+        searchable: true,
+        multiSelect: true,
+        placeholder: 'Choose multiple...',
+        renderLimit: 10,
+        onSelect: (vals) => {
+            console.log('Multi Select:', vals);
+            document.getElementById('log-multi').textContent = `Selection: [${vals.length} selected] ${JSON.stringify(vals)}`;
+        }
+    });
+
+</script>
+
+</body>
+
+</html>
