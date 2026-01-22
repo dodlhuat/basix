@@ -5,27 +5,26 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: $spacing;
   gap: 10px;
 }
 
 .message {
   max-width: 75%;
-  padding: 8px 12px;
+  padding: $spacing calc($spacing * 1.5);
   border-radius: 8px;
   position: relative;
-  font-size: 15px;
-  line-height: 1.4;
+  line-height: calc($spacing * 1.2);
   color: var(--primary-text);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: $shadow;
   word-wrap: break-word;
 }
 
 /* Metadata (time) */
 .message-meta {
   display: block;
-  font-size: 11px;
-  color: var(--secondary-text);
+  font-size: calc($spacing * 0.8);
+  color: var(--primary-text);
   text-align: right;
   margin-top: 4px;
 }

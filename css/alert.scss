@@ -6,6 +6,7 @@
   padding: calc($spacing / 2);
   border-left: calc($spacing / 2) solid;
   color: var(--primary-text);
+  box-shadow: $shadow;
 }
 
 .alert-error {

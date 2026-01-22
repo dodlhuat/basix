@@ -1,18 +1,11 @@
 @import "parameters";
 @import "properties";
 
-:root {
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --z-index-popup: 1000;
-  --z-index-backdrop: 999;
-}
-
 .container {
   max-width: 800px;
   margin: 0 auto;
 }
 
-/* Date Picker Styles */
 .datepicker {
   background: var(--background);
   border: 1px solid var(--divider);
@@ -20,11 +13,10 @@
   width: 320px;
   padding: 1rem;
   user-select: none;
-  box-shadow: var(--shadow);
+  box-shadow: $shadow;
   display: none;
-  /* Hidden by default */
   position: absolute;
-  z-index: var(--z-index-popup);
+  z-index: 1000;
   box-sizing: border-box;
 }
 
@@ -56,7 +48,7 @@
 
 .datepicker-title {
   display: flex;
-  gap: 0.5rem;
+  gap: calc($spacing / 2);
   font-weight: 600;
 }
 
@@ -67,8 +59,8 @@
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 0.25rem;
+  padding: calc($spacing / 4);
+  border-radius: calc($spacing / 4);
 }
 
 .datepicker-select:hover {
@@ -78,7 +70,7 @@
 .datepicker-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0.25rem;
+  gap: calc($spacing / 4);
   text-align: center;
 }
 
@@ -86,12 +78,12 @@
   font-size: 0.875rem;
   color: var(--text-muted);
   font-weight: 500;
-  padding: 0.5rem 0;
+  padding: calc($spacing / 2) 0;
 }
 
 .datepicker-day {
-  padding: 0.5rem 0;
-  font-size: 0.9rem;
+  padding: calc($spacing / 2) 0;
+  font-size: $spacing;
   cursor: pointer;
   border-radius: $border-radius;
   transition: all 0.2s;
@@ -139,7 +131,6 @@
   color: var(--accent-color-text);
 }
 
-/* Month/Year Views */
 .datepicker-grid-months,
 .datepicker-grid-years {
   display: grid;
@@ -185,9 +176,9 @@
   border: none;
   font-family: inherit;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: $spacing;
   cursor: pointer;
-  padding: 0.25rem 0.5rem;
+  padding: calc($spacing / 4) calc($spacing / 2);
   border-radius: $border-radius;
   color: var(--primary-text);
   transition: background-color 0.2s;
@@ -206,7 +197,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: var(--z-index-backdrop);
+    z-index: 999;
     display: none;
   }
 
@@ -222,10 +213,9 @@
     width: 100%;
     max-width: 100%;
     border-radius: $border-radius $border-radius 0 0;
-    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: $shadow;
     animation: slideUp 0.3s ease-out;
     transform: none !important;
-    /* Override inline styles */
   }
 
   @keyframes slideUp {
@@ -240,12 +230,10 @@
 
   .datepicker {
     width: 100%;
-    /* Fallback if positioning fails or for small screens if we want modal-like behavior */
     max-width: 320px;
   }
 
   .datepicker-day {
-    padding: 0.75rem 0;
-    /* Larger touch targets */
+    padding: calc($spacing * 0.75) 0;
   }
 }

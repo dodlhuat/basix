@@ -9,7 +9,7 @@ textarea, select, .select .dropdown, input {
   box-sizing: border-box;
   background-color: var(--background);
   min-height: $form-height;
-  font-size: calc($spacing * 1.5);
+  font-size: $spacing;
   color: var(--primary-text);
 }
 
