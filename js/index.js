@@ -11,6 +11,7 @@ import {Table} from "./table.js";
 import {FlyoutMenu} from "./flyout-menu.js";
 import {Tabs} from "./tabs.js";
 import {Carousel} from "./carousel.js";
+import {CodeViewer} from "./code-viewer.js";
 
 utils.ready(function () {
     Scrollbar.initAll('.scroll-container');
@@ -107,7 +108,6 @@ utils.ready(function () {
             menu.setDirection(direction);
         });
     });
-    utils.showCode();
 
     // Initialize Single Date Picker
     new DatePicker('#datepicker-single', {
@@ -191,5 +191,15 @@ utils.ready(function () {
         }
     ];
     tree.init('.built-tree', data);
+
+    const usageTabs = `new Tabs('.horizontal', {
+                    layout: 'horizontal'
+                    defaultTab: 0
+                    });`;
+    new CodeViewer('#usage-tabs', {
+        code: usageTabs,
+        language: 'javascript',
+        title: 'JavaScript'
+    });
 
 });

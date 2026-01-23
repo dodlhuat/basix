@@ -395,12 +395,7 @@
                     <div class="accordion-content">
                         <div class="accordion-body">
                             <div>
-                                <p>It links <code>&lt;label&gt;</code> elements to hidden radio buttons. When a radio
-                                    button is
-                                    checked, the adjacent sibling combinator (<code>+</code> or <code>~</code>) is used
-                                    to
-                                    change the styles of the content div, specifically animating the
-                                    <code>grid-template-rows</code> property from 0fr to 1fr.</p>
+                                <p>It links label elements to hidden radio buttons.</p>
                             </div>
                         </div>
                     </div>
@@ -489,14 +484,8 @@
                 </div>
             </div>
             <h3>usage</h3>
-            <code class="code">
-                <div class="code-header">JAVASCRIPT</div>
-                <div class="code-content">new Tabs('.horizontal', {
-                    layout: 'horizontal'
-                    defaultTab: 0
-                    });
-                </div>
-            </code>
+            <div id="usage-tabs" class="code-container"></div>
+
             <h4>options</h4>
             <table>
                 <thead>
@@ -760,10 +749,6 @@
     <div class="row card">
         <div class="column">
             <p>toasts can have an additonal markup to show a colored bar on top: default, success, warning, error.</p>
-            <code class="code">
-                <div class="code-header">JAVASCRIPT</div>
-                <div class="code-content">toast.show('some content', 'some header', 'success', true, 3000);</div>
-            </code>
             <strong>Parameters:</strong>
             content (string | mandatory)<br>
             header (string | optional)<br>
@@ -783,10 +768,6 @@
                 icons. Just bear in mind that the reduced version is only 5.5KB in size while the full version is
                 242.5KB.<br>
                 To show an icon use the "icon" class and the desired icon element class.<br>
-                <code class="code">
-                    <div class="code-header">HTML</div>
-                    <div class="code-content"><span class="icon icon-delete"></span></div>
-                </code>
                 <br>The following icons are available in the reduce set:
             </div>
         </div>
@@ -956,85 +937,13 @@
             </p>
             <h3>Demo Tree</h3>
             <div class="built-tree"></div>
-            <p><br></p>
-            <code class="code">
-                <div class="code-header">JAVASCRIPT</div>
-                <div class="code-content">const data = [
-                    {
-                    "name": "Eins",
-                    "content": [
-                    "&lt;span class=\"icon icon-article icon-spacer\">&lt;/span> filename.txt",
-                    "146kb",
-                    "Rev1.0",
-                    "2024-01-01 12.27:02"
-                    ],
-                    "children": []
-                    },
-                    {
-                    "name": "Zwei",
-                    "content": [
-                    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
-                    ],
-                    "children": [
-                    {
-                    "name": "Zwei.Eins",
-                    "content": [],
-                    "children": []
-                    },
-                    {
-                    "name": "Zwei.Zwei",
-                    "content": [],
-                    "children": [
-                    {
-                    "name": "Zwei.Zwei.Null",
-                    "content": [],
-                    "children": []
-                    },
-                    {
-                    "name": "Zwei.Zwei.Eins",
-                    "content": [],
-                    "children": []
-                    },
-                    ]
-                    }
-                    ]
-                    },
-                    {
-                    "name": "Drei",
-                    "content": [],
-                    "children": []
-                    }
-                    ];
-                    tree.init('.built-tree', data);
-                </div>
-            </code>
         </div>
     </div>
 
     <h3>Starter Template</h3>
     <div class="row">
         <div class="column card">
-            <code class="code">
-                <div class="code-header">HTML</div>
-                <div class="code-content">&lt;!DOCTYPE html>
-                    &lt;html lang="en">
-                    &lt;head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
-                    <title>Title</title>
-                    <link rel="stylesheet" href="css/style.css" type="text/css">
-                    &lt;/head>
-                    &lt;body class="primary-light-bg primary">
-                    <div class="content push-content"></div>
-                    &lt;/body>
-                    &lt;/html>
-                </div>
-            </code>
+            tbd
         </div>
     </div>
 

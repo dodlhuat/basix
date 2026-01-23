@@ -80,6 +80,8 @@ export class CodeViewer {
     }
 
     highlight(code, lang) {
+        // TODO: rewrite!!!
+
         let highlighted = this.escapeHtml(code);
 
         const replaceAll = rules => {
