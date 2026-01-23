@@ -270,6 +270,7 @@ code.code .code-content {
   }
   .row .column {
     flex-basis: 100%;
+    overflow: hidden;
   }
 }
 :root {
@@ -1928,14 +1929,15 @@ nav a:hover {
   color: var(--accent-text);
 }
 
+.navigation-controls {
+  line-height: inherit;
+}
 .navigation-controls label {
   display: block;
   width: 1.5rem;
   height: 100%;
   color: var(--primary-text);
   text-align: center;
-  line-height: 42px;
-  position: fixed;
   top: 0;
   left: 0;
   transition: all 200ms ease-in;

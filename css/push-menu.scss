@@ -47,14 +47,13 @@ nav a {
 }
 
 .navigation-controls {
+  line-height: inherit;
   label {
     display: block;
     width: calc($spacing * 1.5);
     height: 100%;
     color: var(--primary-text);
     text-align: center;
-    line-height: 42px;
-    position: fixed;
     top: 0;
     left: 0;
     transition: all 200ms ease-in;
