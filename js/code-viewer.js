@@ -82,34 +82,42 @@ export class CodeViewer {
     highlight(code, lang) {
         let highlighted = this.escapeHtml(code);
 
-        if (lang === 'javascript' || lang === 'js') {
-            // Keywords
-            highlighted = highlighted.replace(/\b(const|let|var|function|class|return|if|else|for|while|import|export|from|async|await|new|this)\b/g, '<span class="cv-keyword">$1</span>');
-            // Functions
-            highlighted = highlighted.replace(/\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(?=\()/g, '<span class="cv-function">$1</span>');
-            // Strings
-            highlighted = highlighted.replace(/'([^']*)'/g, '<span class="cv-string">\'$1\'</span>');
-            highlighted = highlighted.replace(/"([^"]*)"/g, '<span class="cv-string">"$1"</span>');
-            // Comments
-            highlighted = highlighted.replace(/(\/\/.*)/g, '<span class="cv-comment">$1</span>');
+        const replaceAll = rules => {
+            for (const [regex, cls] of rules) {
+                highlighted = highlighted.replace(regex, match =>
+                    `<span class="${cls}">${match}</span>`
+                );
+            }
+        };
+
+        if (lang === 'js' || lang === 'javascript') {
+            replaceAll([
+                [/\b(const|let|var|function|class|return|if|else|for|while|import|export|from|async|await|new|this|try|catch|throw)\b/g, 'cv-keyword'],
+                [/\b(true|false|null|undefined)\b/g, 'cv-literal'],
+                [/\b\d+(\.\d+)?\b/g, 'cv-number'],
+                [/(['"`])(?:\\.|(?!\1).)*\1/g, 'cv-string'],
+                [/(\/\/.*|\/\*[\s\S]*?\*\/)/g, 'cv-comment'],
+                [/\b([a-zA-Z_$][\w$]*)\s*(?=\()/g, 'cv-function']
+            ]);
+
         } else if (lang === 'css') {
-            // Selectors (start of line or after })
-            highlighted = highlighted.replace(/([#.]?[\w-]+)(?=\s*\{)/g, '<span class="cv-selector">$1</span>');
-            // Properties
-            highlighted = highlighted.replace(/([\w-]+)(?=\s*:)/g, '<span class="cv-attribute">$1</span>');
-            // Values (not perfect)
-            highlighted = highlighted.replace(/:\s*([^;]+);/g, ': <span class="cv-number">$1</span>;');
+            replaceAll([
+                [/(\/\*[\s\S]*?\*\/)/g, 'cv-comment'],
+                [/([#.][\w-]+)(?=\s*\{)/g, 'cv-selector'],
+                [/([\w-]+)(?=\s*:)/g, 'cv-attribute'],
+                [/\b\d+(\.\d+)?(px|em|rem|%)?\b/g, 'cv-number']
+            ]);
+
         } else if (lang === 'html') {
-            // Tags
-            highlighted = highlighted.replace(/&lt;(\/?[a-z0-9]+)(?![^&]*;)/gi, '&lt;<span class="cv-tag">$1</span>');
-            // Attributes
-            highlighted = highlighted.replace(/\s([a-z-]+)=/gi, ' <span class="cv-attribute">$1</span>=');
-            // Attribute values
-            highlighted = highlighted.replace(/="([^"]*)"/g, '="<span class="cv-string">$1</span>"');
-            // Comments
-            highlighted = highlighted.replace(/(&lt;!--.*?--&gt;)/s, '<span class="cv-comment">$1</span>');
+            replaceAll([
+                [/(&lt;!--[\s\S]*?--&gt;)/g, 'cv-comment'],
+                [/&lt;(\/?[a-z0-9-]+)/gi, 'cv-tag'],
+                [/\s([a-z-]+)=/gi, 'cv-attribute'],
+                [/="([^"]*)"/g, 'cv-string']
+            ]);
         }
 
         return highlighted;
     }
+
 }
