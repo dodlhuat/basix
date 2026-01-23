@@ -1,125 +1,186 @@
 export class CodeViewer {
-    constructor(container, options = {}) {
-        this.container = typeof container === 'string' ? document.querySelector(container) : container;
-        this.code = options.code || '';
-        this.language = options.language || 'javascript';
-        this.title = options.title || this.language;
-
-        if (!this.container) {
-            console.error('CodeViewer: Container not found');
-            return;
-        }
-
+    constructor(selector, code, language = 'javascript') {
+        this.container = document.querySelector(selector);
+        this.code = code;
+        this.language = language.toLowerCase();
         this.render();
     }
 
-    render() {
-        this.container.innerHTML = '';
-
-        const wrapper = document.createElement('div');
-        wrapper.className = 'code-viewer';
-
-        const header = document.createElement('div');
-        header.className = 'code-viewer-header';
-
-        const langLabel = document.createElement('span');
-        langLabel.className = 'code-viewer-lang';
-        langLabel.textContent = this.title;
-
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'code-viewer-copy-btn';
-        copyBtn.textContent = 'Copy';
-        copyBtn.onclick = () => this.copyToClipboard(copyBtn);
-
-        header.appendChild(langLabel);
-        header.appendChild(copyBtn);
-
-        const pre = document.createElement('pre');
-        pre.className = 'code-viewer-content';
-
-        const codeEl = document.createElement('code');
-        codeEl.innerHTML = this.highlight(this.code, this.language);
-
-        pre.appendChild(codeEl);
-
-        wrapper.appendChild(header);
-        wrapper.appendChild(pre);
-        this.container.appendChild(wrapper);
+    highlight(code) {
+        switch(this.language) {
+            case 'javascript':
+            case 'js':
+                return this.highlightJavaScript(code);
+            case 'html':
+                return this.highlightHTML(code);
+            case 'css':
+                return this.highlightCSS(code);
+            default:
+                return this.escape(code);
+        }
     }
 
-    copyToClipboard(btn) {
-        navigator.clipboard.writeText(this.code).then(() => {
+    escape(str) {
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
 
-            btn.textContent = 'Copied!';
+    highlightJavaScript(code) {
+        // Strings VOR dem Escaping schützen
+        const strings = [];
 
-            const feedback = document.createElement('div');
-            feedback.className = 'copy-feedback';
-            feedback.textContent = 'Copied to clipboard!';
-            this.container.querySelector('.code-viewer').appendChild(feedback);
+        // Template literals (backticks)
+        code = code.replace(/`(?:[^`\\]|\\[\s\S])*`/g, (match) => {
+            strings.push(match);
+            return `###STRING${strings.length - 1}###`;
+        });
+        // Double quotes
+        code = code.replace(/"(?:[^"\\]|\\[\s\S])*"/g, (match) => {
+            strings.push(match);
+            return `###STRING${strings.length - 1}###`;
+        });
+        // Single quotes
+        code = code.replace(/'(?:[^'\\]|\\[\s\S])*'/g, (match) => {
+            strings.push(match);
+            return `###STRING${strings.length - 1}###`;
+        });
+
+        // Kommentare VOR dem Escaping schützen
+        const comments = [];
+        code = code.replace(/(\/\/.*$)/gm, (match) => {
+            comments.push(match);
+            return `###COMMENT${comments.length - 1}###`;
+        });
+        code = code.replace(/(\/\*[\s\S]*?\*\/)/g, (match) => {
+            comments.push(match);
+            return `###COMMENT${comments.length - 1}###`;
+        });
+
+        // JETZT erst escapen
+        code = this.escape(code);
+
+        // Keywords
+        const keywords = 'const|let|var|function|class|if|else|for|while|return|new|this|super|extends|import|export|from|default|async|await|try|catch|throw|switch|case|break|continue';
+        code = code.replace(new RegExp(`\\b(${keywords})\\b`, 'g'), '<span class="keyword">$1</span>');
+
+        // Numbers
+        code = code.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="number">$1</span>');
+
+        // Strings wiederherstellen (escaped)
+        strings.forEach((str, i) => {
+            code = code.replace(`###STRING${i}###`, '<span class="string">' + this.escape(str) + '</span>');
+        });
+
+        // Kommentare wiederherstellen (escaped)
+        comments.forEach((comment, i) => {
+            code = code.replace(`###COMMENT${i}###`, '<span class="comment">' + this.escape(comment) + '</span>');
+        });
+
+        return code;
+    }
+
+    highlightHTML(code) {
+        code = this.escape(code);
+
+        // Kommentare zuerst markieren
+        code = code.replace(/(&lt;!--[\s\S]*?--&gt;)/g, '###COMMENT_START###$1###COMMENT_END###');
+
+        // Tags mit Attributen
+        code = code.replace(/(&lt;\/?)([a-zA-Z0-9]+)([^&]*?)(&gt;)/g, (match, open, tagName, attrs, close) => {
+            // Attribute highlighten
+            attrs = attrs.replace(/\s+([a-zA-Z-]+)(=?)(&quot;[^&]*?&quot;|&#039;[^&]*?&#039;)?/g, (m, attrName, eq, attrValue) => {
+                let result = ' <span class="attribute">' + attrName + '</span>';
+                if (eq) result += eq;
+                if (attrValue) result += '<span class="string">' + attrValue + '</span>';
+                return result;
+            });
+
+            return open + '<span class="tag">' + tagName + '</span>' + attrs + '<span class="punctuation">' + close + '</span>';
+        });
+
+        // Kommentare wiederherstellen
+        code = code.replace(/###COMMENT_START###(.*?)###COMMENT_END###/g, '<span class="comment">$1</span>');
+
+        return code;
+    }
+
+    highlightCSS(code) {
+        code = this.escape(code);
+
+        // Kommentare schützen
+        const comments = [];
+        code = code.replace(/(\/\*[\s\S]*?\*\/)/g, (match) => {
+            comments.push(match);
+            return `###COMMENT${comments.length - 1}###`;
+        });
+
+        // Strings schützen
+        const strings = [];
+        code = code.replace(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')/g, (match) => {
+            strings.push(match);
+            return `###STRING${strings.length - 1}###`;
+        });
+
+        // Selektoren (alles vor {)
+        code = code.replace(/^([^{]+)(?={)/gm, (match) => {
+            return '<span class="selector">' + match.trim() + '</span>';
+        });
+
+        // Properties (name vor :)
+        code = code.replace(/([a-z-]+)(\s*):/gi, '<span class="property">$1</span>$2:');
+
+        // Numbers mit Einheiten
+        code = code.replace(/:\s*([0-9.]+(?:px|em|rem|%|vh|vw|s|ms)?)/g, ': <span class="number">$1</span>');
+
+        // Strings wiederherstellen
+        strings.forEach((str, i) => {
+            code = code.replace(`###STRING${i}###`, '<span class="string">' + str + '</span>');
+        });
+
+        // Kommentare wiederherstellen
+        comments.forEach((comment, i) => {
+            code = code.replace(`###COMMENT${i}###`, '<span class="comment">' + comment + '</span>');
+        });
+
+        return code;
+    }
+
+    async copyCode() {
+        try {
+            await navigator.clipboard.writeText(this.code);
+            const btn = this.container.querySelector('.copy-button');
+            btn.textContent = 'Kopiert!';
+            btn.classList.add('copied');
 
             setTimeout(() => {
-                btn.textContent = 'Copy';
-                if (feedback.parentNode) {
-                    feedback.parentNode.removeChild(feedback);
-                }
+                btn.textContent = 'Kopieren';
+                btn.classList.remove('copied');
             }, 2000);
-        }).catch(err => {
-            console.error('Failed to copy: ', err);
-            btn.textContent = 'Error';
-            setTimeout(() => btn.textContent = 'Copy', 2000);
-        });
-    }
-
-    escapeHtml(unsafe) {
-        return unsafe
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-    highlight(code, lang) {
-        // TODO: rewrite!!!
-
-        let highlighted = this.escapeHtml(code);
-
-        const replaceAll = rules => {
-            for (const [regex, cls] of rules) {
-                highlighted = highlighted.replace(regex, match =>
-                    `<span class="${cls}">${match}</span>`
-                );
-            }
-        };
-
-        if (lang === 'js' || lang === 'javascript') {
-            replaceAll([
-                [/\b(const|let|var|function|class|return|if|else|for|while|import|export|from|async|await|new|this|try|catch|throw)\b/g, 'cv-keyword'],
-                [/\b(true|false|null|undefined)\b/g, 'cv-literal'],
-                [/\b\d+(\.\d+)?\b/g, 'cv-number'],
-                [/(['"`])(?:\\.|(?!\1).)*\1/g, 'cv-string'],
-                [/(\/\/.*|\/\*[\s\S]*?\*\/)/g, 'cv-comment'],
-                [/\b([a-zA-Z_$][\w$]*)\s*(?=\()/g, 'cv-function']
-            ]);
-
-        } else if (lang === 'css') {
-            replaceAll([
-                [/(\/\*[\s\S]*?\*\/)/g, 'cv-comment'],
-                [/([#.][\w-]+)(?=\s*\{)/g, 'cv-selector'],
-                [/([\w-]+)(?=\s*:)/g, 'cv-attribute'],
-                [/\b\d+(\.\d+)?(px|em|rem|%)?\b/g, 'cv-number']
-            ]);
-
-        } else if (lang === 'html') {
-            replaceAll([
-                [/(&lt;!--[\s\S]*?--&gt;)/g, 'cv-comment'],
-                [/&lt;(\/?[a-z0-9-]+)/gi, 'cv-tag'],
-                [/\s([a-z-]+)=/gi, 'cv-attribute'],
-                [/="([^"]*)"/g, 'cv-string']
-            ]);
+        } catch (err) {
+            console.error('Fehler beim Kopieren:', err);
         }
-
-        return highlighted;
     }
 
+    render() {
+        const highlighted = this.highlight(this.code);
+
+        this.container.innerHTML = `
+                    <div class="code-display">
+                        <div class="code-header">
+                            <span class="code-language">${this.language}</span>
+                            <button class="copy-button">Kopieren</button>
+                        </div>
+                        <div class="code-content">
+                            <pre>${highlighted}</pre>
+                        </div>
+                    </div>
+                `;
+
+        this.container.querySelector('.copy-button')
+            .addEventListener('click', () => this.copyCode());
+    }
 }

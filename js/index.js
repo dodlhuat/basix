@@ -193,13 +193,9 @@ utils.ready(function () {
     tree.init('.built-tree', data);
 
     const usageTabs = `new Tabs('.horizontal', {
-                    layout: 'horizontal'
-                    defaultTab: 0
-                    });`;
-    new CodeViewer('#usage-tabs', {
-        code: usageTabs,
-        language: 'javascript',
-        title: 'JavaScript'
-    });
+    layout: 'horizontal'
+    defaultTab: 0
+});`;
+    new CodeViewer('#usage-tabs', usageTabs, 'js');
 
 });
