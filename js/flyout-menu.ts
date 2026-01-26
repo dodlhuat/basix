@@ -18,8 +18,8 @@ class FlyoutMenu {
     private readonly flyoutMenu: HTMLElement | null;
     private flyoutOverlay: HTMLElement | null;
     private closeBtn: HTMLElement | null = null;
-    private submenuToggles: NodeListOf<HTMLElement> = document.querySelectorAll('');
-    private menuLinks: NodeListOf<HTMLAnchorElement> = document.querySelectorAll('');
+    private submenuToggles: NodeListOf<HTMLElement> | null = null;
+    private menuLinks: NodeListOf<HTMLAnchorElement> | null = null;
 
     constructor(options: FlyoutMenuOptions = {}) {
         this.options = {
@@ -157,12 +157,12 @@ class FlyoutMenu {
         this.flyoutOverlay?.addEventListener('click', this.close);
 
         // Submenus
-        this.submenuToggles.forEach(toggle => {
+        this.submenuToggles?.forEach(toggle => {
             toggle.addEventListener('click', (e) => this.handleSubmenu(e, toggle));
         });
 
         // Close on Link Click
-        this.menuLinks.forEach(link => {
+        this.menuLinks?.forEach(link => {
             link.addEventListener('click', this.close);
         });
 
@@ -234,11 +234,11 @@ class FlyoutMenu {
         this.closeBtn?.removeEventListener('click', this.close);
         this.flyoutOverlay?.removeEventListener('click', this.close);
 
-        this.submenuToggles.forEach(toggle => {
+        this.submenuToggles?.forEach(toggle => {
             toggle.removeEventListener('click', (e) => this.handleSubmenu(e, toggle));
         });
 
-        this.menuLinks.forEach(link => {
+        this.menuLinks?.forEach(link => {
             link.removeEventListener('click', this.close);
         });
 

@@ -1,8 +1,8 @@
 class FlyoutMenu {
     constructor(options = {}) {
         this.closeBtn = null;
-        this.submenuToggles = document.querySelectorAll('');
-        this.menuLinks = document.querySelectorAll('');
+        this.submenuToggles = null;
+        this.menuLinks = null;
         this.options = {
             triggerSelector: '.menu-trigger',
             menuSelector: '#flyoutMenu',
@@ -119,11 +119,11 @@ class FlyoutMenu {
         this.closeBtn?.addEventListener('click', this.close);
         this.flyoutOverlay?.addEventListener('click', this.close);
         // Submenus
-        this.submenuToggles.forEach(toggle => {
+        this.submenuToggles?.forEach(toggle => {
             toggle.addEventListener('click', (e) => this.handleSubmenu(e, toggle));
         });
         // Close on Link Click
-        this.menuLinks.forEach(link => {
+        this.menuLinks?.forEach(link => {
             link.addEventListener('click', this.close);
         });
         // Keyboard navigation
@@ -183,10 +183,10 @@ class FlyoutMenu {
         this.menuTrigger?.removeEventListener('click', this.open);
         this.closeBtn?.removeEventListener('click', this.close);
         this.flyoutOverlay?.removeEventListener('click', this.close);
-        this.submenuToggles.forEach(toggle => {
+        this.submenuToggles?.forEach(toggle => {
             toggle.removeEventListener('click', (e) => this.handleSubmenu(e, toggle));
         });
-        this.menuLinks.forEach(link => {
+        this.menuLinks?.forEach(link => {
             link.removeEventListener('click', this.close);
         });
         document.removeEventListener('keydown', this.handleKeydown);
