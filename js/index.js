@@ -12,6 +12,7 @@ import {FlyoutMenu} from "./flyout-menu.js";
 import {Tabs} from "./tabs.js";
 import {Carousel} from "./carousel.js";
 import {CodeViewer} from "./code-viewer.js";
+import {FileUploader} from "./file-uploader.js";
 
 utils.ready(function () {
     Scrollbar.initAll('.scroll-container');
@@ -137,7 +138,7 @@ utils.ready(function () {
             ]
         },
         format: (date) => {
-            return date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            return date.toLocaleDateString('es-ES', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
         },
         onSelect: (date) => {
             console.log('Localized selected:', date);
@@ -197,5 +198,7 @@ utils.ready(function () {
     defaultTab: 0
 });`;
     new CodeViewer('#usage-tabs', usageTabs, 'js');
+
+    new FileUploader(document.querySelector('.uploader-content'));
 
 });

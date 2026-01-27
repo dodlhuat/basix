@@ -707,7 +707,7 @@
             <div class="footer">Card Footer</div>
         </div>
     </div>
-    
+
     <h3>modal</h3>
     <button class="show-modal">Show Modal</button>
     <br><br>
@@ -937,6 +937,41 @@
             </p>
             <h3>Demo Tree</h3>
             <div class="built-tree"></div>
+        </div>
+    </div>
+
+    <h3>uploader</h3>
+    <div class="card row">
+        <div class="column uploader-content">
+            <div class="header">
+                <h2>Upload Files</h2>
+                <p>Select or drag files to upload</p>
+            </div>
+            <div id="drop-zone" class="drop-zone">
+                <input type="file" id="file-input" multiple hidden>
+                <div class="drop-zone-content">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="upload-icon">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                    </div>
+                    <p class="primary-text">Click to upload or drag and drop</p>
+                    <p class="secondary-text">SVG, PNG, JPG or GIF (max. 800x400px)</p>
+                </div>
+            </div>
+
+            <div id="file-list" class="file-list">
+                <!-- Files will be added here dynamically -->
+            </div>
+
+            <div class="actions">
+                <button id="upload-btn" disabled>Upload Files</button>
+            </div>
         </div>
     </div>
 

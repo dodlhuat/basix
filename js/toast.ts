@@ -1,96 +1,142 @@
+type ToastType = 'success' | 'error' | 'warning' | 'info';
+
+interface ToastOptions {
+    content: string;
+    header?: string;
+    type?: ToastType;
+    closeable?: boolean;
+}
+
 class Toast {
-    constructor(contentOrOptions, header = '', type, closeable = true) {
-        this.closureIcon = '<div class="icon icon-close close"></div>';
-        this.toastElement = null;
-        this.timerId = null;
-        this.hide = () => {
-            if (this.timerId !== null) {
-                clearTimeout(this.timerId);
-                this.timerId = null;
-            }
-            this.toastElement?.classList.remove('show');
-            setTimeout(() => {
-                const closeButton = this.toastElement?.querySelector('.close');
-                if (closeButton) {
-                    closeButton.removeEventListener('click', this.handleClose);
-                }
-                this.toastElement?.remove();
-                this.toastElement = null;
-            }, 150);
-        };
-        this.handleClose = () => {
-            this.hide();
-        };
+    private readonly content: string;
+    private readonly header: string;
+    private readonly type?: ToastType;
+    private readonly closeable: boolean;
+    private readonly closureIcon: string = '<div class="icon icon-close close"></div>';
+    private readonly template: string;
+    private toastElement: HTMLDivElement | null = null;
+    private timerId: number | null = null;
+
+    constructor(options: ToastOptions);
+    constructor(content: string, header?: string, type?: ToastType, closeable?: boolean);
+    constructor(
+        contentOrOptions: string | ToastOptions,
+        header: string = '',
+        type?: ToastType,
+        closeable: boolean = true
+    ) {
         if (typeof contentOrOptions === 'object') {
             this.content = contentOrOptions.content;
             this.header = contentOrOptions.header ?? '';
             this.type = contentOrOptions.type;
             this.closeable = contentOrOptions.closeable ?? true;
-        }
-        else {
+        } else {
             this.content = contentOrOptions;
             this.header = header;
             this.type = type;
             this.closeable = closeable;
         }
+
         this.template = this.buildTemplate();
     }
-    show(ms) {
+
+    public show(ms?: number): void {
         // Remove any existing toast first
         this.hide();
+
         const div = document.createElement('div');
         div.className = 'toast';
+
         if (this.type) {
             div.classList.add(this.type);
         }
+
         div.innerHTML = this.template;
         document.body.appendChild(div);
         this.toastElement = div;
+
         // Use requestAnimationFrame for smoother animation
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 this.toastElement?.classList.add('show');
-                const closeButton = this.toastElement?.querySelector('.close');
+
+                const closeButton = this.toastElement?.querySelector<HTMLElement>('.close');
                 if (closeButton) {
                     closeButton.addEventListener('click', this.handleClose);
                 }
+
                 if (ms !== undefined && ms > 0) {
                     this.startTimer(ms);
                 }
             });
         });
     }
-    startTimer(ms, elapsed = 0) {
+
+    public hide = (): void => {
+        if (this.timerId !== null) {
+            clearTimeout(this.timerId);
+            this.timerId = null;
+        }
+
+        this.toastElement?.classList.remove('show');
+
+        setTimeout(() => {
+            const closeButton = this.toastElement?.querySelector<HTMLElement>('.close');
+            if (closeButton) {
+                closeButton.removeEventListener('click', this.handleClose);
+            }
+
+            this.toastElement?.remove();
+            this.toastElement = null;
+        }, 150);
+    };
+
+    private handleClose = (): void => {
+        this.hide();
+    };
+
+    private startTimer(ms: number, elapsed: number = 0): void {
         const stepSize = 250;
+
         if (elapsed >= ms) {
             this.hide();
             return;
         }
+
         this.timerId = window.setTimeout(() => {
             elapsed += stepSize;
             const width = 100 - (100 / ms) * elapsed;
-            const barElement = this.toastElement?.querySelector('.bar');
+
+            const barElement = this.toastElement?.querySelector<HTMLElement>('.bar');
             if (barElement) {
                 barElement.style.width = `${width}%`;
                 this.startTimer(ms, elapsed);
             }
         }, stepSize);
     }
-    buildTemplate() {
-        const parts = ['<div class="bar"></div>'];
+
+    private buildTemplate(): string {
+        const parts: string[] = ['<div class="bar"></div>'];
+
         if (this.closeable) {
             parts.push(this.closureIcon);
         }
+
         if (this.header) {
             parts.push(`<div class="header">${this.escapeHtml(this.header)}</div>`);
         }
+
         parts.push(`<div class="content">${this.escapeHtml(this.content)}</div>`);
+
         return parts.join('');
     }
-    escapeHtml(text) {
+
+    private escapeHtml(text: string): string {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
 }
+
 export { Toast };
+export type { ToastOptions, ToastType };
