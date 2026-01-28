@@ -28,13 +28,13 @@ export class Carousel {
         };
 
         if (!element) {
-            console.error('Carousel element not found');
+            console.error('element not found');
             this.root = document.createElement('div');
             return;
         }
 
         this.root = element;
-        
+
         this.init();
     }
 

@@ -449,4 +449,4 @@ class Table {
     }
 }
 
-export { Table };
+export { Table, TableRow, TableColumn, TableOptions };

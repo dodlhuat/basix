@@ -6,25 +6,28 @@ import { PushMenu } from "./push-menu";
 import { Toast } from "./toast";
 import { DatePicker } from "./datepicker";
 import { Theme } from "./theme";
-import { Table } from "./table";
+import { Table, TableColumn, TableRow } from "./table";
 import { FlyoutMenu } from "./flyout-menu";
 import { Tabs } from "./tabs";
 import { Carousel } from "./carousel";
 import { CodeViewer } from "./code-viewer";
 import { FileUploader } from "./file-uploader";
+
 // Generate sample table data
-const generateData = (count) => {
-    const data = [];
+const generateData = (count: number): TableRow[] => {
+    const data: TableRow[] = [];
     const firstNames = ['John', 'Jane', 'Mike', 'Sarah', 'Robert', 'Emily', 'David', 'Emma', 'James', 'Olivia'];
     const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
     const roles = ['Admin', 'User', 'Editor', 'Viewer', 'Manager', 'Developer'];
     const statuses = ['Active', 'Inactive', 'Pending', 'Banned'];
+
     for (let i = 1; i <= count; i++) {
         const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
         const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
         const role = roles[Math.floor(Math.random() * roles.length)];
         const status = statuses[Math.floor(Math.random() * statuses.length)];
         const lastLoginDate = new Date(Date.now() - Math.floor(Math.random() * 10000000000));
+
         data.push({
             id: i,
             name: `${firstName} ${lastName}`,
@@ -34,30 +37,38 @@ const generateData = (count) => {
             lastLogin: lastLoginDate.toLocaleDateString()
         });
     }
+    
     return data;
 };
+
 // Initialize all components when DOM is ready
 utils.ready(() => {
     // Initialize scrollbars
     Scrollbar.initAll('.scroll-container');
+    
     // Initialize theme
     Theme.init();
+
     // Initialize basic table
     new Table('#demo-table', { pageSize: 5 });
+
     // Initialize horizontal tabs
     const horizontalTabs = new Tabs('.horizontal', {
         layout: 'horizontal'
     });
+
     // Initialize vertical tabs
     const verticalTabs = new Tabs('.vertical', {
         layout: 'vertical'
     });
+
     // Initialize carousel
     const carousel = new Carousel('#carouselIdHere', {
         loop: true
     });
+
     // Initialize advanced table with data
-    const columns = [
+    const columns: TableColumn[] = [
         { key: 'id', label: 'ID' },
         { key: 'name', label: 'Name' },
         { key: 'email', label: 'Email' },
@@ -65,15 +76,18 @@ utils.ready(() => {
         { key: 'status', label: 'Status' },
         { key: 'lastLogin', label: 'Last Login' }
     ];
+
     const tableData = generateData(50);
     new Table('#demo-table-js', {
         data: tableData,
         columns: columns,
         pageSize: 10
     });
+
     // Initialize select components
     new Select('#single-select');
     new Select('#multi-select');
+
     // Initialize modal
     const modalTrigger = document.querySelector('.show-modal');
     if (modalTrigger) {
@@ -81,39 +95,52 @@ utils.ready(() => {
             const buttons = '<div class="buttons"><button class="button-light">Close</button>&nbsp;<button>Save Changes</button></div>';
             const modal = new Modal('bluffi', '<strong>blaffi</strong>', buttons, true, 'default');
             modal.show();
+
             console.warn('Buttons have no bound listeners');
         });
     }
+
     // Initialize toast
     const toastTrigger = document.querySelector('.show-toast');
     if (toastTrigger) {
         toastTrigger.addEventListener('click', () => {
-            const toast = new Toast('some content. maybe even more text in here!', 'some header', 'success', true);
+            const toast = new Toast(
+                'some content. maybe even more text in here!',
+                'some header',
+                'success',
+                true
+            );
             toast.show(3000);
         });
     }
+
     // Initialize push menu
     PushMenu.init();
+
     // Initialize flyout menu
     const menu = new FlyoutMenu({
         direction: 'right',
         triggerSelector: '.trigger-flyout-menu',
     });
+
     // Flyout menu controls: Switch direction
-    const directionBtns = document.querySelectorAll('.flyout-controls > button');
+    const directionBtns = document.querySelectorAll<HTMLButtonElement>('.flyout-controls > button');
     directionBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             // Remove active class from all buttons
             directionBtns.forEach(b => b.classList.remove('active'));
+            
             // Add active class to clicked button
             btn.classList.add('active');
+
             // Update menu direction
-            const direction = btn.dataset.direction;
+            const direction = btn.dataset.direction as 'left' | 'right' | undefined;
             if (direction) {
                 menu.setDirection(direction);
             }
         });
     });
+
     // Initialize single date picker
     new DatePicker('#datepicker-single', {
         mode: 'single',
@@ -121,6 +148,7 @@ utils.ready(() => {
             console.log('Single selected:', date);
         }
     });
+
     // Initialize range date picker
     new DatePicker('#datepicker-range', {
         mode: 'range',
@@ -128,6 +156,7 @@ utils.ready(() => {
             console.log('Range selected:', range);
         }
     });
+
     // Initialize localized date picker
     new DatePicker('#datepicker-localized', {
         mode: 'single',
@@ -151,14 +180,17 @@ utils.ready(() => {
             console.log('Localized selected:', date);
         }
     });
+
     // Initialize code viewer with usage example
     const usageTabs = `new Tabs('.horizontal', {
     layout: 'horizontal',
     defaultTab: 0
 });`;
+    
     new CodeViewer('#usage-tabs', usageTabs, 'js');
+
     // Initialize file uploader
-    const uploaderElement = document.querySelector('.uploader-content');
+    const uploaderElement = document.querySelector<HTMLElement>('.uploader-content');
     if (uploaderElement) {
         new FileUploader(uploaderElement);
     }

@@ -9,7 +9,7 @@ export class Carousel {
             autoPlayInterval: options.autoPlayInterval ?? 3000
         };
         if (!element) {
-            console.error('Carousel element not found');
+            console.error('element not found');
             this.root = document.createElement('div');
             return;
         }
