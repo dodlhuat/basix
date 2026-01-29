@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masonry Gallery Component</title>
+    <style>
+        :root {
+            --gap: 16px;
+            --column-min-width: 250px;
+            --bg-color: #f4f4f4;
+            --card-bg: #fff;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        /* Container for the columns */
+        .masonry-container {
+            display: flex;
+            gap: var(--gap);
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        /* Individual columns */
+        .masonry-column {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+            flex: 1;
+            min-width: 0; /* Prevents flex items from overflowing */
+        }
+
+        /* Image Card Styling */
+        .masonry-item {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .masonry-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.15);
+        }
+
+        .masonry-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+
+        .masonry-item img.loaded {
+            opacity: 1;
+        }
+
+        .masonry-item-info {
+            padding: 15px;
+        }
+
+        .masonry-item-title {
+            margin: 0 0 5px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .masonry-item-desc {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Loading Indicator */
+        .loader {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loader.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #09f;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Masonry Gallery</h1>
+
+    <div id="gallery" class="masonry-container">
+        <!-- Columns will be injected here by JavaScript -->
+    </div>
+
+    <div id="loader" class="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        class MasonryGallery {
+            constructor(containerId, options = {}) {
+                this.container = document.getElementById(containerId);
+                this.loader = document.querySelector(options.loaderSelector || '.loader');
+                this.options = {
+                    gap: options.gap || 16,
+                    minColumnWidth: options.minColumnWidth || 250,
+                    fetchBatchSize: options.fetchBatchSize || 10,
+                    scrollThreshold: options.scrollThreshold || 100, // px from bottom
+                    ...options
+                };
+
+                this.columns = [];
+                this.isFetching = false;
+                this.page = 1;
+
+                this.init();
+            }
+
+            init() {
+                this.setupLayout();
+                this.loadMoreImages();
+                this.addEventListeners();
+            }
+
+            setupLayout() {
+                // Determine number of columns
+                const containerWidth = this.container.getBoundingClientRect().width;
+                const numColumns = Math.max(1, Math.floor(containerWidth / this.options.minColumnWidth));
+                
+                // If columns changed, reset
+                if (this.columns.length !== numColumns) {
+                    this.container.innerHTML = '';
+                    this.columns = [];
+                    for (let i = 0; i < numColumns; i++) {
+                        const col = document.createElement('div');
+                        col.className = 'masonry-column';
+                        this.container.appendChild(col);
+                        this.columns.push(col);
+                    }
+                }
+            }
+
+            addEventListeners() {
+                let resizeTimeout;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        // We use reLayout to handle both column adjustment and item redistribution
+                        this.reLayout();
+                    }, 200);
+                });
+
+                window.addEventListener('scroll', () => {
+                   this.handleScroll();
+                });
+            }
+
+            reLayout() {
+                // Collect all items
+                const items = [];
+                this.columns.forEach(col => {
+                    while (col.firstChild) {
+                        items.push(col.firstChild);
+                        col.removeChild(col.firstChild);
+                    }
+                });
+
+                // Re-setup columns
+                const containerWidth = this.container.parentNode.getBoundingClientRect().width; // use parent to measure available space
+                // Actually container might be 0 height if empty, so parent or just use window logic if full width
+                 // Better logic for cols:
+                const availableWidth = Math.min(1200, window.innerWidth - 40); // 40px padding approximation
+                const numColumns = Math.max(1, Math.floor(availableWidth / this.options.minColumnWidth));
+
+                if (this.columns.length !== numColumns) {
+                     this.container.innerHTML = '';
+                     this.columns = [];
+                     for (let i = 0; i < numColumns; i++) {
+                         const col = document.createElement('div');
+                         col.className = 'masonry-column';
+                         this.container.appendChild(col);
+                         this.columns.push(col);
+                     }
+                }
+                
+                // Distribute again
+                items.forEach(item => {
+                    this.addToShortestColumn(item);
+                });
+            }
+
+            handleScroll() {
+                if (this.isFetching) return;
+                
+                const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+                if (scrollTop + clientHeight >= scrollHeight - this.options.scrollThreshold) {
+                    this.loadMoreImages();
+                }
+            }
+
+            async loadMoreImages() {
+                if (this.isFetching) return;
+                this.isFetching = true;
+                this.toggleLoader(true);
+
+                try {
+                    // Simulating API fetch
+                    const newImages = await this.fetchMockImages(this.options.fetchBatchSize);
+                    this.renderImages(newImages);
+                } catch (error) {
+                    console.error("Error loading images:", error);
+                } finally {
+                    this.isFetching = false;
+                    this.toggleLoader(false);
+                }
+            }
+
+            toggleLoader(show) {
+                if (this.loader) {
+                    if (show) this.loader.classList.add('active');
+                    else this.loader.classList.remove('active');
+                }
+            }
+
+            fetchMockImages(count) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        const images = [];
+                        for (let i = 0; i < count; i++) {
+                            // Random aspect ratios for masonry effect
+                            const width = 400;
+                            const height = Math.floor(Math.random() * (600 - 300 + 1)) + 300;
+                            const id = Math.floor(Math.random() * 1000);
+                            images.push({
+                                src: `https://picsum.photos/${width}/${height}?random=${this.page * count + i}`,
+                                title: `Image ${this.page * count + i + 1}`,
+                                desc: `A random caption for image ${id}`
+                            });
+                        }
+                        this.page++;
+                        resolve(images);
+                    }, 800); // Fake network delay
+                });
+            }
+
+            renderImages(imageDataList) {
+                imageDataList.forEach(data => {
+                    const item = this.createCard(data);
+                    this.addToShortestColumn(item);
+                    
+                    // Trigger reflow/animation after short delay
+                    requestAnimationFrame(() => {
+                        const img = item.querySelector('img');
+                        if (img) {
+                           img.onload = () => img.classList.add('loaded');
+                           // fallback if loaded from cache
+                           if(img.complete) img.classList.add('loaded');
+                        }
+                    });
+                });
+            }
+
+            createCard(data) {
+                const div = document.createElement('div');
+                div.className = 'masonry-item';
+                div.innerHTML = `
+                    <img src="${data.src}" alt="${data.title}" loading="lazy">
+                    <div class="masonry-item-info">
+                        <h3 class="masonry-item-title">${data.title}</h3>
+                        <p class="masonry-item-desc">${data.desc}</p>
+                    </div>
+                `;
+                return div;
+            }
+
+            addToShortestColumn(element) {
+                if (this.columns.length === 0) return;
+
+                // Find column with smallest height
+                let shortestCol = this.columns[0];
+                let minHeight = shortestCol.offsetHeight;
+
+                for (let i = 1; i < this.columns.length; i++) {
+                    const h = this.columns[i].offsetHeight;
+                    if (h < minHeight) {
+                        minHeight = h;
+                        shortestCol = this.columns[i];
+                    }
+                }
+
+                shortestCol.appendChild(element);
+            }
+        }
+
+        // Initialize the gallery
+        document.addEventListener('DOMContentLoaded', () => {
+            const gallery = new MasonryGallery('gallery', {
+                gap: 16,
+                minColumnWidth: 300,
+                fetchBatchSize: 12
+            });
+        });
+
+    </script>
+</body>
+</html>
