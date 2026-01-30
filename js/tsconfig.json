@@ -4,8 +4,15 @@
     "module": "ESNext",
     "outDir": ".",
     "rootDir": ".",
-    "strict": true
+    "strict": true,
+    "types": [],
   },
-  "include": ["*.ts"],
-  "exclude": ["dist"]
+  "include": [
+    "*.ts"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "../node_modules"
+  ]
 }

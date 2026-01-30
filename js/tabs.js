@@ -1,8 +1,10 @@
 class Tabs {
-    constructor(containerSelector, options = {}) {
-        const element = document.querySelector(containerSelector);
+    constructor(elementOrSelector, options = {}) {
+        const element = typeof elementOrSelector === 'string'
+            ? document.querySelector(elementOrSelector)
+            : elementOrSelector;
         if (!element) {
-            throw new Error(`Tabs: Container not found for selector "${containerSelector}"`);
+            throw new Error(`Tabs: Element not found for selector "${elementOrSelector}"`);
         }
         this.container = element;
         // Set default options

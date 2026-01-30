@@ -1,5 +1,5 @@
 class FileUploader {
-    constructor(container, config = {}) {
+    constructor(elementOrSelector, config = {}) {
         this.files = new Map();
         this.abortControllers = new Map();
         this.preventDefaults = (e) => {
@@ -42,6 +42,12 @@ class FileUploader {
                 this.resetUploadState();
             }, 1000);
         };
+        const container = typeof elementOrSelector === 'string'
+            ? document.querySelector(elementOrSelector)
+            : elementOrSelector;
+        if (!container) {
+            throw new Error(`FileUploader: Element not found for selector "${elementOrSelector}"`);
+        }
         this.container = container;
         const dropZone = container.querySelector('#drop-zone');
         const fileInput = container.querySelector('#file-input');

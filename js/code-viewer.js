@@ -1,8 +1,10 @@
 class CodeViewer {
-    constructor(selector, code, language = 'javascript') {
-        const element = document.querySelector(selector);
+    constructor(elementOrSelector, code, language = 'javascript') {
+        const element = typeof elementOrSelector === 'string'
+            ? document.querySelector(elementOrSelector)
+            : elementOrSelector;
         if (!element) {
-            throw new Error(`CodeViewer: Element not found for selector "${selector}"`);
+            throw new Error(`CodeViewer: Element not found for selector "${elementOrSelector}"`);
         }
         this.container = element;
         this.code = code;

@@ -31,14 +31,16 @@ class Table {
     private tableHeader!: HTMLTableSectionElement;
     private paginationContainer!: HTMLDivElement;
 
-    constructor(container: string, options: TableOptions = {}) {
-        const element = document.querySelector(container);
+    constructor(elementOrSelector: string | HTMLElement, options: TableOptions = {}) {
+        const element = typeof elementOrSelector === 'string'
+            ? document.querySelector<HTMLElement>(elementOrSelector)
+            : elementOrSelector;
 
         if (!element) {
-            throw new Error(`Table: Container not found for selector "${container}"`);
+            throw new Error(`Table: Element not found for selector "${elementOrSelector}"`);
         }
 
-        this.container = element as HTMLElement;
+        this.container = element;
         this.data = options.data || [];
         this.columns = options.columns || [];
         this.pageSize = options.pageSize || 10;

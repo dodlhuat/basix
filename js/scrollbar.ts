@@ -31,9 +31,13 @@ class Scrollbar {
     private readonly boundViewportScroll!: () => void;
     private readonly boundUpdateThumb!: () => void;
 
-    constructor(container: HTMLElement) {
-        if (!(container instanceof HTMLElement)) {
-            throw new Error('Container must be an HTMLElement');
+    constructor(elementOrSelector: string | HTMLElement) {
+        const container = typeof elementOrSelector === 'string'
+            ? document.querySelector<HTMLElement>(elementOrSelector)
+            : elementOrSelector;
+
+        if (!container) {
+            throw new Error(`Scrollbar: Element not found for selector "${elementOrSelector}"`);
         }
 
         // Return existing instance if already initialized
@@ -287,8 +291,8 @@ class Scrollbar {
         return Array.from(containers).map(container => new Scrollbar(container));
     }
 
-    public static initOne(container: HTMLElement): Scrollbar {
-        return new Scrollbar(container);
+    public static initOne(elementOrSelector: string | HTMLElement): Scrollbar {
+        return new Scrollbar(elementOrSelector);
     }
 
     public static getInstance(container: HTMLElement): Scrollbar | undefined {

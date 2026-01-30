@@ -31,10 +31,13 @@ class TreeComponent {
   private data: TreeNode[];
   private selectedNode: TreeNode | null;
 
-  constructor(containerId: string, data: TreeNode[]) {
-    const container = document.getElementById(containerId);
+  constructor(elementOrSelector: string | HTMLElement, data: TreeNode[]) {
+    const container = typeof elementOrSelector === 'string'
+      ? document.querySelector<HTMLElement>(elementOrSelector)
+      : elementOrSelector;
+
     if (!container) {
-      throw new Error(`TreeComponent: Element not found for id "${containerId}"`);
+      throw new Error(`TreeComponent: Element not found for selector "${elementOrSelector}"`);
     }
     
     this.container = container;

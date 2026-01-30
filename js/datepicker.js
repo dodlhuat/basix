@@ -1,8 +1,10 @@
 class DatePicker {
-    constructor(selector, options = {}) {
-        this.input = document.querySelector(selector);
+    constructor(elementOrSelector, options = {}) {
+        this.input = typeof elementOrSelector === 'string'
+            ? document.querySelector(elementOrSelector)
+            : elementOrSelector;
         if (!this.input) {
-            throw new Error(`DatePicker: Input element not found for selector "${selector}"`);
+            throw new Error(`DatePicker: Element not found for selector "${elementOrSelector}"`);
         }
         this.options = {
             mode: 'single',

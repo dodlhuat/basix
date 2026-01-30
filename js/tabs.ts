@@ -15,14 +15,16 @@ class Tabs {
     private tabPanels: NodeListOf<Element>;
     private currentTab: number;
 
-    constructor(containerSelector: string, options: TabsOptions = {}) {
-        const element = document.querySelector(containerSelector);
+    constructor(elementOrSelector: string | HTMLElement, options: TabsOptions = {}) {
+        const element = typeof elementOrSelector === 'string'
+            ? document.querySelector<HTMLElement>(elementOrSelector)
+            : elementOrSelector;
 
         if (!element) {
-            throw new Error(`Tabs: Container not found for selector "${containerSelector}"`);
+            throw new Error(`Tabs: Element not found for selector "${elementOrSelector}"`);
         }
 
-        this.container = element as HTMLElement;
+        this.container = element;
 
         // Set default options
         const layout = options.layout || 'horizontal';

@@ -1,42 +1,52 @@
 class Select {
-    constructor(selector) {
-        this.selector = selector;
-        const result = Select.init(selector);
+    constructor(elementOrSelector) {
+        const element = typeof elementOrSelector === 'string'
+            ? document.querySelector(elementOrSelector)
+            : elementOrSelector;
+        if (!element) {
+            throw new Error(`Select: Element not found for selector "${elementOrSelector}"`);
+        }
+        this.element = element;
+        const result = Select.initElement(element);
         if (result === null) {
-            throw new Error(`Select: Element not found for selector "${selector}"`);
+            throw new Error(`Select: Failed to initialize select for "${elementOrSelector}"`);
         }
         this.isMultiselect = result;
     }
     value() {
-        const element = document.querySelector(this.selector);
-        if (!element) {
+        if (!this.element) {
             return undefined;
         }
-        const selectedValues = Array.from(element.options)
+        const selectedValues = Array.from(this.element.options)
             .filter(option => option.selected)
             .map(option => option.value);
         return this.isMultiselect ? selectedValues : selectedValues[0];
     }
-    static init(selector) {
-        const element = document.querySelector(selector);
+    static init(elementOrSelector) {
+        const element = typeof elementOrSelector === 'string'
+            ? document.querySelector(elementOrSelector)
+            : elementOrSelector;
         if (!element) {
             return null;
         }
+        return Select.initElement(element);
+    }
+    static initElement(element) {
         if (!Select.transformSelect(element)) {
             return null;
         }
         const selectGroup = element.closest('.select-group');
         if (!selectGroup) {
-            throw new Error(`Select: Parent .select-group not found for "${selector}"`);
+            throw new Error(`Select: Parent .select-group not found for "${element}"`);
         }
         const dropdown = selectGroup.querySelector('.dropdown');
         if (!dropdown) {
-            throw new Error(`Select: Dropdown element not found for "${selector}"`);
+            throw new Error(`Select: Dropdown element not found for "${element}"`);
         }
         const selected = dropdown.querySelector('.dropdown-selected');
         const options = dropdown.querySelector('.dropdown-options');
         if (!selected || !options) {
-            throw new Error(`Select: Required dropdown elements not found for "${selector}"`);
+            throw new Error(`Select: Required dropdown elements not found for "${element}"`);
         }
         const isMulti = dropdown.dataset.multi === 'true';
         // Toggle dropdown on selected element click

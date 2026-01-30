@@ -34,11 +34,13 @@ class DatePicker {
   private handleDocumentClick!: (e: Event) => void;
 
 
-  constructor(selector: string, options: DatePickerOptions = {}) {
-    this.input = document.querySelector<HTMLInputElement>(selector);
+  constructor(elementOrSelector: string | HTMLInputElement, options: DatePickerOptions = {}) {
+    this.input = typeof elementOrSelector === 'string'
+      ? document.querySelector<HTMLInputElement>(elementOrSelector)
+      : elementOrSelector;
 
     if (!this.input) {
-      throw new Error(`DatePicker: Input element not found for selector "${selector}"`);
+      throw new Error(`DatePicker: Element not found for selector "${elementOrSelector}"`);
     }
 
     this.options = {

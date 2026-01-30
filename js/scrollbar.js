@@ -1,11 +1,14 @@
 class Scrollbar {
-    constructor(container) {
+    constructor(elementOrSelector) {
         this.dragging = false;
         this.activePointerId = null;
         this.startPointerY = 0;
         this.startThumbTop = 0;
-        if (!(container instanceof HTMLElement)) {
-            throw new Error('Container must be an HTMLElement');
+        const container = typeof elementOrSelector === 'string'
+            ? document.querySelector(elementOrSelector)
+            : elementOrSelector;
+        if (!container) {
+            throw new Error(`Scrollbar: Element not found for selector "${elementOrSelector}"`);
         }
         // Return existing instance if already initialized
         const existingInstance = Scrollbar.instances.get(container);
@@ -199,8 +202,8 @@ class Scrollbar {
         const containers = document.querySelectorAll(selector);
         return Array.from(containers).map(container => new Scrollbar(container));
     }
-    static initOne(container) {
-        return new Scrollbar(container);
+    static initOne(elementOrSelector) {
+        return new Scrollbar(elementOrSelector);
     }
     static getInstance(container) {
         return Scrollbar.instances.get(container);

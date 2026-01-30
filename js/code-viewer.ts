@@ -5,11 +5,13 @@ class CodeViewer {
     private code: string;
     private language: string;
 
-    constructor(selector: string, code: string, language: SupportedLanguage = 'javascript') {
-        const element = document.querySelector<HTMLElement>(selector);
-        
+    constructor(elementOrSelector: string | HTMLElement, code: string, language: SupportedLanguage = 'javascript') {
+        const element = typeof elementOrSelector === 'string'
+            ? document.querySelector<HTMLElement>(elementOrSelector)
+            : elementOrSelector;
+
         if (!element) {
-            throw new Error(`CodeViewer: Element not found for selector "${selector}"`);
+            throw new Error(`CodeViewer: Element not found for selector "${elementOrSelector}"`);
         }
         
         this.container = element;

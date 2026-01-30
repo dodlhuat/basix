@@ -1,58 +1,70 @@
 class Select {
-    private readonly selector: string;
+    private readonly element: HTMLSelectElement;
     private readonly isMultiselect: boolean;
 
-    constructor(selector: string) {
-        this.selector = selector;
-        const result = Select.init(selector);
+    constructor(elementOrSelector: string | HTMLSelectElement) {
+        const element = typeof elementOrSelector === 'string'
+            ? document.querySelector<HTMLSelectElement>(elementOrSelector)
+            : elementOrSelector;
+
+        if (!element) {
+            throw new Error(`Select: Element not found for selector "${elementOrSelector}"`);
+        }
+
+        this.element = element;
+        const result = Select.initElement(element);
 
         if (result === null) {
-            throw new Error(`Select: Element not found for selector "${selector}"`);
+            throw new Error(`Select: Failed to initialize select for "${elementOrSelector}"`);
         }
 
         this.isMultiselect = result;
     }
 
     public value(): string | string[] | undefined {
-        const element = document.querySelector(this.selector) as HTMLSelectElement | null;
-
-        if (!element) {
+        if (!this.element) {
             return undefined;
         }
 
-        const selectedValues = Array.from(element.options)
+        const selectedValues = Array.from(this.element.options)
             .filter(option => option.selected)
             .map(option => option.value);
 
         return this.isMultiselect ? selectedValues : selectedValues[0];
     }
 
-    public static init(selector: string): boolean | null {
-        const element = document.querySelector(selector) as HTMLSelectElement | null;
+    public static init(elementOrSelector: string | HTMLSelectElement): boolean | null {
+        const element = typeof elementOrSelector === 'string'
+            ? document.querySelector<HTMLSelectElement>(elementOrSelector)
+            : elementOrSelector;
 
         if (!element) {
             return null;
         }
 
+        return Select.initElement(element);
+    }
+
+    private static initElement(element: HTMLSelectElement): boolean | null {
         if (!Select.transformSelect(element)) {
             return null;
         }
 
         const selectGroup = element.closest('.select-group');
         if (!selectGroup) {
-            throw new Error(`Select: Parent .select-group not found for "${selector}"`);
+            throw new Error(`Select: Parent .select-group not found for "${element}"`);
         }
 
         const dropdown = selectGroup.querySelector('.dropdown') as HTMLElement | null;
         if (!dropdown) {
-            throw new Error(`Select: Dropdown element not found for "${selector}"`);
+            throw new Error(`Select: Dropdown element not found for "${element}"`);
         }
 
         const selected = dropdown.querySelector('.dropdown-selected') as HTMLElement | null;
         const options = dropdown.querySelector('.dropdown-options') as HTMLElement | null;
 
         if (!selected || !options) {
-            throw new Error(`Select: Required dropdown elements not found for "${selector}"`);
+            throw new Error(`Select: Required dropdown elements not found for "${element}"`);
         }
 
         const isMulti = dropdown.dataset.multi === 'true';

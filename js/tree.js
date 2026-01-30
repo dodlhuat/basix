@@ -10,10 +10,12 @@ class TreeNode {
     }
 }
 class TreeComponent {
-    constructor(containerId, data) {
-        const container = document.getElementById(containerId);
+    constructor(elementOrSelector, data) {
+        const container = typeof elementOrSelector === 'string'
+            ? document.querySelector(elementOrSelector)
+            : elementOrSelector;
         if (!container) {
-            throw new Error(`TreeComponent: Element not found for id "${containerId}"`);
+            throw new Error(`TreeComponent: Element not found for selector "${elementOrSelector}"`);
         }
         this.container = container;
         this.data = data;

@@ -1,9 +1,11 @@
 import { Select } from "./select.js";
 class Table {
-    constructor(container, options = {}) {
-        const element = document.querySelector(container);
+    constructor(elementOrSelector, options = {}) {
+        const element = typeof elementOrSelector === 'string'
+            ? document.querySelector(elementOrSelector)
+            : elementOrSelector;
         if (!element) {
-            throw new Error(`Table: Container not found for selector "${container}"`);
+            throw new Error(`Table: Element not found for selector "${elementOrSelector}"`);
         }
         this.container = element;
         this.data = options.data || [];

@@ -27,7 +27,15 @@ class FileUploader {
     private allowedTypes?: string[];
     private abortControllers: Map<string, AbortController> = new Map();
 
-    constructor(container: HTMLElement, config: FileUploaderConfig = {}) {
+    constructor(elementOrSelector: string | HTMLElement, config: FileUploaderConfig = {}) {
+        const container = typeof elementOrSelector === 'string'
+            ? document.querySelector<HTMLElement>(elementOrSelector)
+            : elementOrSelector;
+
+        if (!container) {
+            throw new Error(`FileUploader: Element not found for selector "${elementOrSelector}"`);
+        }
+
         this.container = container;
 
         const dropZone = container.querySelector<HTMLElement>('#drop-zone');
