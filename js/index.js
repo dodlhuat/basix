@@ -12,6 +12,7 @@ import { Tabs } from "./tabs";
 import { Carousel } from "./carousel";
 import { CodeViewer } from "./code-viewer";
 import { FileUploader } from "./file-uploader";
+import { TreeComponent, TreeNode } from "./tree";
 // Generate sample table data
 const generateData = (count) => {
     const data = [];
@@ -162,4 +163,40 @@ utils.ready(() => {
     if (uploaderElement) {
         new FileUploader(uploaderElement);
     }
+    const sampleData = [
+        new TreeNode('Documents', 'folder', [
+            new TreeNode('Work', 'folder', [
+                new TreeNode('presentation.pptx', 'file'),
+                new TreeNode('report.docx', 'file'),
+                new TreeNode('budget.xlsx', 'file')
+            ]),
+            new TreeNode('Personal', 'folder', [
+                new TreeNode('resume.pdf', 'file'),
+                new TreeNode('vacation-photos', 'folder', [
+                    new TreeNode('beach.jpg', 'file'),
+                    new TreeNode('mountain.jpg', 'file')
+                ])
+            ])
+        ]),
+        new TreeNode('Projects', 'folder', [
+            new TreeNode('website', 'folder', [
+                new TreeNode('index.html', 'file'),
+                new TreeNode('styles.css', 'file'),
+                new TreeNode('script.js', 'file')
+            ]),
+            new TreeNode('app', 'folder', [
+                new TreeNode('src', 'folder', [
+                    new TreeNode('main.js', 'file'),
+                    new TreeNode('utils.js', 'file')
+                ]),
+                new TreeNode('package.json', 'file')
+            ])
+        ]),
+        new TreeNode('Downloads', 'folder', [
+            new TreeNode('installer.exe', 'file'),
+            new TreeNode('readme.txt', 'file')
+        ]),
+        new TreeNode('README.md', 'file')
+    ];
+    const tree = new TreeComponent('tree-root', sampleData);
 });
