@@ -1,4 +1,4 @@
-export class Editor {
+class Editor {
     private readonly editable: HTMLElement;
     private code: HTMLTextAreaElement;
     private preview: HTMLElement;
@@ -7,9 +7,17 @@ export class Editor {
     private redoStack: string[] = [];
 
     constructor() {
-        this.editable = document.getElementById('editable') as HTMLElement;
-        this.code = document.getElementById('code') as HTMLTextAreaElement;
-        this.preview = document.getElementById('preview') as HTMLElement;
+        const editable = document.getElementById('editable');
+        const code = document.getElementById('code');
+        const preview = document.getElementById('preview');
+
+        if (!editable || !code || !preview) {
+            throw new Error('Editor: Required elements not found (#editable, #code, #preview)');
+        }
+
+        this.editable = editable;
+        this.code = code as HTMLTextAreaElement;
+        this.preview = preview;
         this.isCodeView = false;
 
         this.init();
@@ -427,3 +435,4 @@ export class Editor {
         });
     }
 }
+export { Editor };

@@ -5,7 +5,7 @@ interface ScrollOptions {
 }
 
 class Scroll {
-    static to(target: string | Element, options: ScrollOptions = {}): void {
+    public static to(target: string | Element, options: ScrollOptions = {}): void {
         const fixed_header = document.querySelector('.main-header') as HTMLElement | null;
         const offset = fixed_header ? fixed_header.offsetHeight : 0;
 
@@ -43,4 +43,5 @@ declare global {
 
 window.Scroll = Scroll;
 
-export default Scroll;
+export { Scroll };
+export type { ScrollOptions };

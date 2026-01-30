@@ -1,19 +1,19 @@
-export type NodeType = 'file' | 'folder';
+type NodeType = 'file' | 'folder';
 
-export interface TreeNodeConfig {
+interface TreeNodeConfig {
   label: string;
   type?: NodeType;
   children?: TreeNode[];
 }
 
-export class TreeNode {
-  label: string;
-  type: NodeType;
-  children: TreeNode[];
-  expanded: boolean;
-  selected: boolean;
-  element: HTMLDivElement | null;
-  childrenContainer: HTMLUListElement | null;
+class TreeNode {
+  public label: string;
+  public type: NodeType;
+  public children: TreeNode[];
+  public expanded: boolean;
+  public selected: boolean;
+  public element: HTMLDivElement | null;
+  public childrenContainer: HTMLUListElement | null;
 
   constructor(label: string, type: NodeType = 'file', children: TreeNode[] = []) {
     this.label = label;
@@ -26,7 +26,7 @@ export class TreeNode {
   }
 }
 
-export class TreeComponent {
+class TreeComponent {
   private container: HTMLElement;
   private data: TreeNode[];
   private selectedNode: TreeNode | null;
@@ -34,7 +34,7 @@ export class TreeComponent {
   constructor(containerId: string, data: TreeNode[]) {
     const container = document.getElementById(containerId);
     if (!container) {
-      throw new Error(`Element with id "${containerId}" not found`);
+      throw new Error(`TreeComponent: Element not found for id "${containerId}"`);
     }
     
     this.container = container;
@@ -47,7 +47,7 @@ export class TreeComponent {
     this.render();
   }
 
-  render(): void {
+  public render(): void {
     this.container.innerHTML = '';
     this.data.forEach(node => {
       this.renderNode(node, this.container);
@@ -152,7 +152,7 @@ export class TreeComponent {
     }
   }
 
-  selectNode(node: TreeNode): void {
+  public selectNode(node: TreeNode): void {
     if (this.selectedNode?.element) {
       this.selectedNode.element.classList.remove('selected');
       this.selectedNode.selected = false;
@@ -166,7 +166,7 @@ export class TreeComponent {
     console.log('Selected:', node.label);
   }
 
-  expandAll(): void {
+  public expandAll(): void {
     this.traverseNodes(this.data, (node) => {
       if (node.type === 'folder') {
         node.expanded = true;
@@ -176,7 +176,7 @@ export class TreeComponent {
     });
   }
 
-  collapseAll(): void {
+  public collapseAll(): void {
     this.traverseNodes(this.data, (node) => {
       if (node.type === 'folder') {
         node.expanded = false;
@@ -195,11 +195,11 @@ export class TreeComponent {
     });
   }
 
-  getSelectedNode(): TreeNode | null {
+  public getSelectedNode(): TreeNode | null {
     return this.selectedNode;
   }
 
-  findNodeByLabel(label: string): TreeNode | null {
+  public findNodeByLabel(label: string): TreeNode | null {
     let result: TreeNode | null = null;
     
     this.traverseNodes(this.data, (node) => {
@@ -211,3 +211,5 @@ export class TreeComponent {
     return result;
   }
 }
+export { TreeComponent, TreeNode };
+export type { NodeType, TreeNodeConfig };

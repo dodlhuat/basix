@@ -1,6 +1,6 @@
 type SupportedLanguage = 'javascript' | 'js' | 'html' | 'css';
 
-export class CodeViewer {
+class CodeViewer {
     private container: HTMLElement;
     private code: string;
     private language: string;
@@ -9,7 +9,7 @@ export class CodeViewer {
         const element = document.querySelector<HTMLElement>(selector);
         
         if (!element) {
-            throw new Error(`Element with selector "${selector}" not found`);
+            throw new Error(`CodeViewer: Element not found for selector "${selector}"`);
         }
         
         this.container = element;
@@ -182,3 +182,5 @@ export class CodeViewer {
         }
     }
 }
+export { CodeViewer };
+export type { SupportedLanguage };

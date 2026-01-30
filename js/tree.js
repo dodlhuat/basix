@@ -1,4 +1,4 @@
-export class TreeNode {
+class TreeNode {
     constructor(label, type = 'file', children = []) {
         this.label = label;
         this.type = type;
@@ -9,11 +9,11 @@ export class TreeNode {
         this.childrenContainer = null;
     }
 }
-export class TreeComponent {
+class TreeComponent {
     constructor(containerId, data) {
         const container = document.getElementById(containerId);
         if (!container) {
-            throw new Error(`Element with id "${containerId}" not found`);
+            throw new Error(`TreeComponent: Element not found for id "${containerId}"`);
         }
         this.container = container;
         this.data = data;
@@ -157,3 +157,4 @@ export class TreeComponent {
         return result;
     }
 }
+export { TreeComponent, TreeNode };

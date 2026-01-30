@@ -35,8 +35,7 @@ class Table {
         const element = document.querySelector(container);
 
         if (!element) {
-            console.error(`Container "${container}" not found.`);
-            throw new Error(`Container "${container}" not found.`);
+            throw new Error(`Table: Container not found for selector "${container}"`);
         }
 
         this.container = element as HTMLElement;

@@ -4,14 +4,19 @@ class Select {
 
     constructor(selector: string) {
         this.selector = selector;
-        this.isMultiselect = Select.init(selector);
+        const result = Select.init(selector);
+
+        if (result === null) {
+            throw new Error(`Select: Element not found for selector "${selector}"`);
+        }
+
+        this.isMultiselect = result;
     }
 
-    value(): string | string[] | undefined {
+    public value(): string | string[] | undefined {
         const element = document.querySelector(this.selector) as HTMLSelectElement | null;
 
         if (!element) {
-            console.error('Select element not found');
             return undefined;
         }
 
@@ -22,36 +27,32 @@ class Select {
         return this.isMultiselect ? selectedValues : selectedValues[0];
     }
 
-    static init(selector: string): boolean {
+    public static init(selector: string): boolean | null {
         const element = document.querySelector(selector) as HTMLSelectElement | null;
 
         if (!element) {
-            console.error('Select element not found');
-            return false;
+            return null;
         }
 
         if (!Select.transformSelect(element)) {
-            return false;
+            return null;
         }
 
         const selectGroup = element.closest('.select-group');
         if (!selectGroup) {
-            console.error('Select group not found');
-            return false;
+            throw new Error(`Select: Parent .select-group not found for "${selector}"`);
         }
 
         const dropdown = selectGroup.querySelector('.dropdown') as HTMLElement | null;
         if (!dropdown) {
-            console.error('Dropdown not found');
-            return false;
+            throw new Error(`Select: Dropdown element not found for "${selector}"`);
         }
 
         const selected = dropdown.querySelector('.dropdown-selected') as HTMLElement | null;
         const options = dropdown.querySelector('.dropdown-options') as HTMLElement | null;
 
         if (!selected || !options) {
-            console.error('Dropdown elements not found');
-            return false;
+            throw new Error(`Select: Required dropdown elements not found for "${selector}"`);
         }
 
         const isMulti = dropdown.dataset.multi === 'true';
@@ -145,7 +146,6 @@ class Select {
         const parent = select.closest('.select-group') as HTMLElement | null;
 
         if (!parent) {
-            console.error('select-group not found');
             return false;
         }
 

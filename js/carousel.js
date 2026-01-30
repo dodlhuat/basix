@@ -1,4 +1,4 @@
-export class Carousel {
+class Carousel {
     constructor(elementOrSelector, options = {}) {
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
@@ -9,9 +9,7 @@ export class Carousel {
             autoPlayInterval: options.autoPlayInterval ?? 3000
         };
         if (!element) {
-            console.error('element not found');
-            this.root = document.createElement('div');
-            return;
+            throw new Error(`Carousel: Element not found for selector "${elementOrSelector}"`);
         }
         this.root = element;
         this.init();
@@ -132,3 +130,4 @@ export class Carousel {
         }, this.options.autoPlayInterval);
     }
 }
+export { Carousel };

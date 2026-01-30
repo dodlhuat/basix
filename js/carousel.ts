@@ -4,7 +4,7 @@ interface CarouselOptions {
     autoPlayInterval?: number;
 }
 
-export class Carousel {
+class Carousel {
     private root: HTMLElement;
     private options: CarouselOptions;
     private track!: HTMLUListElement;
@@ -28,9 +28,7 @@ export class Carousel {
         };
 
         if (!element) {
-            console.error('element not found');
-            this.root = document.createElement('div');
-            return;
+            throw new Error(`Carousel: Element not found for selector "${elementOrSelector}"`);
         }
 
         this.root = element;
@@ -171,3 +169,5 @@ export class Carousel {
         }, this.options.autoPlayInterval);
     }
 }
+export { Carousel };
+export type { CarouselOptions };

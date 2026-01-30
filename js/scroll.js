@@ -24,4 +24,4 @@ class Scroll {
     }
 }
 window.Scroll = Scroll;
-export default Scroll;
+export { Scroll };

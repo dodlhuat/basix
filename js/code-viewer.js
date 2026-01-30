@@ -1,8 +1,8 @@
-export class CodeViewer {
+class CodeViewer {
     constructor(selector, code, language = 'javascript') {
         const element = document.querySelector(selector);
         if (!element) {
-            throw new Error(`Element with selector "${selector}" not found`);
+            throw new Error(`CodeViewer: Element not found for selector "${selector}"`);
         }
         this.container = element;
         this.code = code;
@@ -143,3 +143,4 @@ export class CodeViewer {
         }
     }
 }
+export { CodeViewer };

@@ -28,8 +28,7 @@ class FlyoutMenu {
     }
     init() {
         if (!this.flyoutMenu) {
-            console.error('FlyoutMenu: Menu element not found.');
-            return;
+            throw new Error(`FlyoutMenu: Menu element not found for selector "${this.options.menuSelector}"`);
         }
         this.hydrateMenu();
         if (this.options.enableHeader)

@@ -5,13 +5,8 @@ class PushMenu {
             return;
         }
         this.refresh();
-        if (!this.elements.navigation) {
-            console.error('PushMenu: Navigation element not found');
-            return;
-        }
-        if (!this.elements.content) {
-            console.error('PushMenu: Content element not found');
-            return;
+        if (!this.elements.navigation || !this.elements.content) {
+            throw new Error('PushMenu: Required elements not found (.navigation, .push-content)');
         }
         this.elements.navigation.addEventListener('change', this.handleNavigationChange.bind(this));
         this.initialized = true;
@@ -28,8 +23,7 @@ class PushMenu {
     }
     static pushToggle() {
         if (!this.elements.content || !this.elements.menu) {
-            console.error('PushMenu: Required elements not found');
-            return;
+            throw new Error('PushMenu: Required elements not found (.push-content, .push-menu)');
         }
         const isPushed = this.elements.content.classList.contains('pushed');
         this.toggleClass(this.elements.content, 'pushed', !isPushed);

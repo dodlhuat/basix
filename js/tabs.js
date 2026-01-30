@@ -2,8 +2,7 @@ class Tabs {
     constructor(containerSelector, options = {}) {
         const element = document.querySelector(containerSelector);
         if (!element) {
-            console.error(`Tabs container not found: ${containerSelector}`);
-            throw new Error(`Tabs container not found: ${containerSelector}`);
+            throw new Error(`Tabs: Container not found for selector "${containerSelector}"`);
         }
         this.container = element;
         // Set default options

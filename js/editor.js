@@ -1,10 +1,16 @@
-export class Editor {
+class Editor {
     constructor() {
         this.undoStack = [];
         this.redoStack = [];
-        this.editable = document.getElementById('editable');
-        this.code = document.getElementById('code');
-        this.preview = document.getElementById('preview');
+        const editable = document.getElementById('editable');
+        const code = document.getElementById('code');
+        const preview = document.getElementById('preview');
+        if (!editable || !code || !preview) {
+            throw new Error('Editor: Required elements not found (#editable, #code, #preview)');
+        }
+        this.editable = editable;
+        this.code = code;
+        this.preview = preview;
         this.isCodeView = false;
         this.init();
     }
@@ -383,3 +389,4 @@ export class Editor {
         });
     }
 }
+export { Editor };

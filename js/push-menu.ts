@@ -17,7 +17,7 @@ class PushMenu {
 
     private static initialized = false;
 
-    static init(): void {
+    public static init(): void {
         if (this.initialized) {
             console.warn('PushMenu: Already initialized');
             return;
@@ -25,14 +25,8 @@ class PushMenu {
 
         this.refresh();
 
-        if (!this.elements.navigation) {
-            console.error('PushMenu: Navigation element not found');
-            return;
-        }
-
-        if (!this.elements.content) {
-            console.error('PushMenu: Content element not found');
-            return;
+        if (!this.elements.navigation || !this.elements.content) {
+            throw new Error('PushMenu: Required elements not found (.navigation, .push-content)');
         }
 
         this.elements.navigation.addEventListener('change', this.handleNavigationChange.bind(this));
@@ -52,10 +46,9 @@ class PushMenu {
         this.pushToggle();
     }
 
-    static pushToggle(): void {
+    public static pushToggle(): void {
         if (!this.elements.content || !this.elements.menu) {
-            console.error('PushMenu: Required elements not found');
-            return;
+            throw new Error('PushMenu: Required elements not found (.push-content, .push-menu)');
         }
 
         const isPushed = this.elements.content.classList.contains('pushed');
@@ -90,23 +83,23 @@ class PushMenu {
         navigation?.click();
     };
 
-    static open(): void {
+    public static open(): void {
         if (!this.elements.content?.classList.contains('pushed')) {
             this.pushToggle();
         }
     }
 
-    static close(): void {
+    public static close(): void {
         if (this.elements.content?.classList.contains('pushed')) {
             this.pushToggle();
         }
     }
 
-    static isOpen(): boolean {
+    public static isOpen(): boolean {
         return this.elements.content?.classList.contains('pushed') ?? false;
     }
 
-    static destroy(): void {
+    public static destroy(): void {
         if (!this.initialized) return;
 
         this.elements.navigation?.removeEventListener('change', this.handleNavigationChange);
@@ -125,7 +118,7 @@ class PushMenu {
         this.initialized = false;
     }
 
-    static refresh(): void {
+    public static refresh(): void {
         this.elements.navigation = document.querySelector('.navigation');
         this.elements.content = document.querySelector('.push-content');
         this.elements.menu = document.querySelector('.push-menu');

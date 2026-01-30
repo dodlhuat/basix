@@ -15,7 +15,7 @@ class Theme {
     /**
      * Initializes the theme system with toggle functionality and system preference detection
      */
-    static init(): void {
+    public static init(): void {
         this.root = document.documentElement;
 
         // Get DOM elements

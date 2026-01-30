@@ -1,12 +1,15 @@
 class Select {
     constructor(selector) {
         this.selector = selector;
-        this.isMultiselect = Select.init(selector);
+        const result = Select.init(selector);
+        if (result === null) {
+            throw new Error(`Select: Element not found for selector "${selector}"`);
+        }
+        this.isMultiselect = result;
     }
     value() {
         const element = document.querySelector(this.selector);
         if (!element) {
-            console.error('Select element not found');
             return undefined;
         }
         const selectedValues = Array.from(element.options)
@@ -17,27 +20,23 @@ class Select {
     static init(selector) {
         const element = document.querySelector(selector);
         if (!element) {
-            console.error('Select element not found');
-            return false;
+            return null;
         }
         if (!Select.transformSelect(element)) {
-            return false;
+            return null;
         }
         const selectGroup = element.closest('.select-group');
         if (!selectGroup) {
-            console.error('Select group not found');
-            return false;
+            throw new Error(`Select: Parent .select-group not found for "${selector}"`);
         }
         const dropdown = selectGroup.querySelector('.dropdown');
         if (!dropdown) {
-            console.error('Dropdown not found');
-            return false;
+            throw new Error(`Select: Dropdown element not found for "${selector}"`);
         }
         const selected = dropdown.querySelector('.dropdown-selected');
         const options = dropdown.querySelector('.dropdown-options');
         if (!selected || !options) {
-            console.error('Dropdown elements not found');
-            return false;
+            throw new Error(`Select: Required dropdown elements not found for "${selector}"`);
         }
         const isMulti = dropdown.dataset.multi === 'true';
         // Toggle dropdown on selected element click
@@ -102,7 +101,6 @@ class Select {
     static transformSelect(select) {
         const parent = select.closest('.select-group');
         if (!parent) {
-            console.error('select-group not found');
             return false;
         }
         const label = parent.querySelector('label');
