@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <title>Basix</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="js/index.js" type="module"></script>
+</head>
+<body class="primary-light-bg primary">
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+        <h1>Basix Component Demos</h1>
+        <p>This page demonstrates all available components in the Basix library, including both TypeScript components and CSS-only components.</p>
+
+        <h2 style="margin-top: 2rem; padding-top: 1rem; border-top: 3px solid #333;">CSS-Only Components</h2>
+        <p>These components require no JavaScript - just HTML markup with the appropriate CSS classes.</p>
+
+        <!-- Alert Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Alert</h2>
+            <p class="description">The <strong>Alert</strong> component displays contextual feedback messages. Available variants: default, <code>.alert-success</code>, <code>.alert-warning</code>, and <code>.alert-error</code>. Pure CSS - just add the class to any element.</p>
+            <div class="alert" style="margin-bottom: 0.5rem;">This is a default alert message.</div>
+            <div class="alert alert-success" style="margin-bottom: 0.5rem;">This is a success alert message.</div>
+            <div class="alert alert-warning" style="margin-bottom: 0.5rem;">This is a warning alert message.</div>
+            <div class="alert alert-error">This is an error alert message.</div>
+        </section>
+
+        <!-- Button Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Button</h2>
+            <p class="description">The <strong>Button</strong> component provides styled buttons with variants. Use <code>&lt;button&gt;</code> or <code>.button</code> class. Variants: <code>.button-primary</code>, <code>.button-success</code>, <code>.button-warning</code>, <code>.button-error</code>, and <code>.active</code> state.</p>
+            <button>Default Button</button>
+            <button class="button-primary">Primary Button</button>
+            <button class="button-success">Success Button</button>
+            <button class="button-warning">Warning Button</button>
+            <button class="button-error">Error Button</button>
+            <button class="active">Active Button</button>
+        </section>
+
+        <!-- Card Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Card</h2>
+            <p class="description">The <strong>Card</strong> component creates contained content sections with optional header and footer. Use <code>.card</code> class with optional <code>.header</code> and <code>.footer</code> divs inside.</p>
+            <div class="card" style="padding: 1rem; max-width: 400px;">
+                <div class="header"><strong>Card Header</strong></div>
+                <p>This is the card content. Cards are great for grouping related information together.</p>
+                <div class="footer">Card Footer</div>
+            </div>
+        </section>
+
+        <!-- Chips Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Chips</h2>
+            <p class="description">The <strong>Chips</strong> component displays small interactive elements like tags or filters. Use <code>.chips</code> container with <code>.chip</code> items. Add <code>.clickable</code> for hover effects or <code>.closeable</code> for a close button.</p>
+            <div class="chips">
+                <span class="chip">Tag 1</span>
+                <span class="chip">Tag 2</span>
+                <span class="chip clickable">Clickable</span>
+                <span class="chip closeable">Closeable <button><span class="icon icon-close"></span></button></span>
+            </div>
+        </section>
+
+        <!-- Checkbox Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Checkbox</h2>
+            <p class="description">The <strong>Checkbox</strong> component provides custom-styled checkboxes. Use <code>input.styled-checkbox</code> followed by a <code>&lt;label&gt;</code>. Supports <code>:checked</code> and <code>:disabled</code> states.</p>
+            <div>
+                <input type="checkbox" id="checkbox1" class="styled-checkbox">
+                <label for="checkbox1">Option 1</label>
+            </div>
+            <div>
+                <input type="checkbox" id="checkbox2" class="styled-checkbox" checked>
+                <label for="checkbox2">Option 2 (checked)</label>
+            </div>
+            <div>
+                <input type="checkbox" id="checkbox3" class="styled-checkbox" disabled>
+                <label for="checkbox3">Option 3 (disabled)</label>
+            </div>
+        </section>
+
+        <!-- Radio Button Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Radio Button</h2>
+            <p class="description">The <strong>Radio Button</strong> component provides custom-styled radio inputs. Wrap each radio in a <code>.radio-button-container</code> label with a <code>.checkmark</code> span.</p>
+            <label class="radio-button-container">Option A
+                <input type="radio" name="radio-demo" checked>
+                <span class="checkmark"></span>
+            </label>
+            <label class="radio-button-container">Option B
+                <input type="radio" name="radio-demo">
+                <span class="checkmark"></span>
+            </label>
+            <label class="radio-button-container">Option C
+                <input type="radio" name="radio-demo">
+                <span class="checkmark"></span>
+            </label>
+        </section>
+
+        <!-- Switch Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Switch</h2>
+            <p class="description">The <strong>Switch</strong> component creates iOS-style toggle switches. Wrap a checkbox input and label in a <code>.switch</code> container.</p>
+            <div class="switch" style="margin-bottom: 0.5rem;">
+                <input type="checkbox" id="switch1">
+                <label for="switch1">Enable notifications</label>
+            </div>
+            <div class="switch">
+                <input type="checkbox" id="switch2" checked>
+                <label for="switch2">Dark mode (on)</label>
+            </div>
+        </section>
+
+        <!-- Spinner Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Spinner</h2>
+            <p class="description">The <strong>Spinner</strong> component shows loading indicators. Use <code>.spinner</code> for a rotating ring or <code>.loading</code> for a three-dot pulsing animation.</p>
+            <div style="display: flex; align-items: center; gap: 2rem;">
+                <div>
+                    <p><strong>Spinner:</strong></p>
+                    <span class="spinner"></span>
+                </div>
+                <div>
+                    <p><strong>Loading dots:</strong></p>
+                    <span class="loading"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Bar Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Progress Bar</h2>
+            <p class="description">The <strong>Progress Bar</strong> component displays task completion. Use <code>.progress-bar</code> container with a <code>.progress</code> div inside. Set width via inline style or class.</p>
+            <div class="progress-bar" style="height: 20px; margin-bottom: 0.5rem;">
+                <div class="progress" style="width: 25%; height: 100%;"></div>
+            </div>
+            <div class="progress-bar" style="height: 20px; margin-bottom: 0.5rem;">
+                <div class="progress" style="width: 50%; height: 100%;"></div>
+            </div>
+            <div class="progress-bar" style="height: 20px;">
+                <div class="progress" style="width: 75%; height: 100%;"></div>
+            </div>
+        </section>
+
+        <!-- Tooltip Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Tooltip</h2>
+            <p class="description">The <strong>Tooltip</strong> component shows contextual information on hover. Add <code>.tooltip</code> class and use the <code>title</code> attribute for tooltip text.</p>
+            <p>
+                Hover over <span class="tooltip" title="This is a tooltip! It can contain helpful information.">this text</span> to see the tooltip.
+            </p>
+        </section>
+
+        <!-- Accordion Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Accordion</h2>
+            <p class="description">The <strong>Accordion</strong> component creates collapsible content sections. Uses hidden radio/checkbox inputs with labels. Structure: <code>.accordion</code> > <code>.accordion-item</code> > <code>.accordion-input</code> + <code>.accordion-label</code> + <code>.accordion-content</code>.</p>
+            <div class="accordion" style="max-width: 500px;">
+                <div class="accordion-item">
+                    <input type="radio" name="accordion-demo" id="acc1" class="accordion-input" checked>
+                    <label for="acc1" class="accordion-label">Section 1</label>
+                    <div class="accordion-content">
+                        <div class="accordion-body"><div>This is the content for section 1. Accordions are great for FAQs or organizing content.</div></div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <input type="radio" name="accordion-demo" id="acc2" class="accordion-input">
+                    <label for="acc2" class="accordion-label">Section 2</label>
+                    <div class="accordion-content">
+                        <div class="accordion-body"><div>This is the content for section 2. Click the headers to expand/collapse.</div></div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <input type="radio" name="accordion-demo" id="acc3" class="accordion-input">
+                    <label for="acc3" class="accordion-label">Section 3</label>
+                    <div class="accordion-content">
+                        <div class="accordion-body"><div>This is the content for section 3. Only one section can be open at a time with radio inputs.</div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Timeline</h2>
+            <p class="description">The <strong>Timeline</strong> component displays chronological events. Use <code>.timeline</code> list with <code>.timeline-item</code> items containing <code>.timeline-content</code>, <code>.timeline-date</code>, <code>.timeline-title</code>, and <code>.timeline-body</code>.</p>
+            <ul class="timeline" style="max-width: 600px;">
+                <li class="timeline-item active">
+                    <div class="timeline-content">
+                        <span class="timeline-date">January 2024</span>
+                        <h4 class="timeline-title">Project Started</h4>
+                        <p class="timeline-body">Initial planning and requirements gathering phase.</p>
+                    </div>
+                </li>
+                <li class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-date">March 2024</span>
+                        <h4 class="timeline-title">Development Phase</h4>
+                        <p class="timeline-body">Core features implementation began.</p>
+                    </div>
+                </li>
+                <li class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-date">June 2024</span>
+                        <h4 class="timeline-title">Beta Release</h4>
+                        <p class="timeline-body">First public beta version released for testing.</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Grid Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Grid</h2>
+            <p class="description">The <strong>Grid</strong> component provides a flexbox-based layout system. Use <code>.row</code> with <code>.column</code> children. Columns can use <code>.grow-2</code> through <code>.grow-6</code> for proportional sizing. Responsive - stacks on mobile.</p>
+            <div class="row">
+                <div class="column" style="background: #e0e0e0; text-align: center;">Column 1</div>
+                <div class="column" style="background: #d0d0d0; text-align: center;">Column 2</div>
+                <div class="column" style="background: #e0e0e0; text-align: center;">Column 3</div>
+            </div>
+            <div class="row">
+                <div class="column" style="background: #e0e0e0; text-align: center;">1x</div>
+                <div class="column grow-2" style="background: #d0d0d0; text-align: center;">2x (grow-2)</div>
+                <div class="column" style="background: #e0e0e0; text-align: center;">1x</div>
+            </div>
+        </section>
+
+        <!-- Placeholder Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Placeholder</h2>
+            <p class="description">The <strong>Placeholder</strong> component creates skeleton loading states. Use <code>.placeholder</code> with width classes <code>.w-1</code> through <code>.w-12</code> (12-column grid). Animates with a pulsing fade effect.</p>
+            <div style="max-width: 400px;">
+                <span class="placeholder w-8"></span><br>
+                <span class="placeholder w-12"></span><br>
+                <span class="placeholder w-10"></span><br>
+                <span class="placeholder w-6"></span>
+            </div>
+        </section>
+
+        <!-- Chat Bubbles Component (CSS-only) -->
+        <section class="demo-section">
+            <h2>Chat Bubbles</h2>
+            <p class="description">The <strong>Chat Bubbles</strong> component styles messaging interfaces. Use <code>.chat-container</code> with <code>.message</code> elements. Add <code>.message-incoming</code> or <code>.message-outgoing</code> for alignment. Include <code>.message-meta</code> for timestamps.</p>
+            <div class="chat-container" style="max-width: 500px; background: var(--secondary-background); border-radius: 8px;">
+                <div class="message message-incoming">
+                    Hey! How are you doing?
+                    <span class="message-meta">10:30 AM</span>
+                </div>
+                <div class="message message-outgoing">
+                    I'm great, thanks for asking! Working on some new components.
+                    <span class="message-meta">10:32 AM</span>
+                </div>
+                <div class="message message-incoming">
+                    That sounds awesome! Can't wait to see them.
+                    <span class="message-meta">10:33 AM</span>
+                </div>
+            </div>
+        </section>
+
+        <h2 style="margin-top: 3rem; padding-top: 1rem; border-top: 3px solid #333;">TypeScript Components</h2>
+        <p>These components require JavaScript initialization for full functionality.</p>
+
+        <!-- Tabs Component -->
+        <section class="demo-section">
+            <h2>Tabs</h2>
+            <p class="description">The <strong>Tabs</strong> component creates accessible tabbed interfaces. Supports horizontal/vertical layouts, keyboard navigation (arrow keys, Home, End), and ARIA attributes. Initialize with <code>new Tabs(selector, options)</code>.</p>
+            <div id="tabs-demo" class="tabs">
+                <div class="tab-menu">
+                    <div class="tab-item">Tab 1</div>
+                    <div class="tab-item">Tab 2</div>
+                    <div class="tab-item">Tab 3</div>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-panel">Content for Tab 1</div>
+                    <div class="tab-panel">Content for Tab 2</div>
+                    <div class="tab-panel">Content for Tab 3</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Table Component -->
+        <section class="demo-section">
+            <h2>Table</h2>
+            <p class="description">The <strong>Table</strong> component provides sortable, searchable, and paginated data tables. It can parse existing HTML tables or accept data programmatically. Initialize with <code>new Table(selector, { data, columns, pageSize })</code>.</p>
+            <div id="table-demo">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>City</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Alice</td><td>28</td><td>New York</td></tr>
+                        <tr><td>Bob</td><td>34</td><td>Los Angeles</td></tr>
+                        <tr><td>Charlie</td><td>22</td><td>Chicago</td></tr>
+                        <tr><td>Diana</td><td>31</td><td>Houston</td></tr>
+                        <tr><td>Eve</td><td>27</td><td>Phoenix</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Toast Component -->
+        <section class="demo-section">
+            <h2>Toast</h2>
+            <p class="description">The <strong>Toast</strong> component displays non-blocking notification messages. Supports types (success, error, warning, info), auto-dismiss with progress bar, and optional close button. Create with <code>new Toast({ content, header, type, closeable })</code> then call <code>.show(ms)</code>.</p>
+            <button id="toast-success-btn" class="btn">Show Success Toast</button>
+            <button id="toast-error-btn" class="btn">Show Error Toast</button>
+            <button id="toast-warning-btn" class="btn">Show Warning Toast</button>
+            <button id="toast-info-btn" class="btn">Show Info Toast</button>
+        </section>
+
+        <!-- Modal Component -->
+        <section class="demo-section">
+            <h2>Modal</h2>
+            <p class="description">The <strong>Modal</strong> component creates dialog overlays with header, content, and footer sections. Supports types (success, error, warning, info), close on Escape key, and backdrop click. Initialize with <code>new Modal({ content, header, footer, type })</code> then call <code>.show()</code>.</p>
+            <button id="modal-btn" class="btn">Open Modal</button>
+        </section>
+
+        <!-- Select Component -->
+        <section class="demo-section">
+            <h2>Select</h2>
+            <p class="description">The <strong>Select</strong> component transforms native <code>&lt;select&gt;</code> elements into custom styled dropdowns. Supports single and multi-select modes. Wrap your select in a <code>.select-group</code> and initialize with <code>new Select(selector)</code>.</p>
+            <div class="select-group" style="max-width: 300px;">
+                <label>Choose an option</label>
+                <select id="select-demo">
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                    <option value="4">Option 4</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- DatePicker Component -->
+        <section class="demo-section">
+            <h2>DatePicker</h2>
+            <p class="description">The <strong>DatePicker</strong> component provides a calendar interface for date selection. Supports single date or date range modes, customizable locales, and mobile-responsive design. Initialize with <code>new DatePicker(inputSelector, { mode, locales, onSelect })</code>.</p>
+            <input type="text" id="datepicker-demo" placeholder="Select a date" readonly style="padding: 0.5rem; width: 200px;">
+        </section>
+
+        <!-- Carousel Component -->
+        <section class="demo-section">
+            <h2>Carousel</h2>
+            <p class="description">The <strong>Carousel</strong> component creates image/content sliders with navigation buttons and dot indicators. Supports loop mode, autoplay, and touch/swipe gestures. Initialize with <code>new Carousel(selector, { loop, autoPlay, autoPlayInterval })</code>.</p>
+            <div id="carousel-demo" class="carousel" style="max-width: 600px;">
+                <div class="carousel-slide" style="padding: 3rem; text-align: center;">Slide 1</div>
+                <div class="carousel-slide" style="padding: 3rem; text-align: center;">Slide 2</div>
+                <div class="carousel-slide" style="padding: 3rem; text-align: center;">Slide 3</div>
+            </div>
+        </section>
+
+        <!-- Tree Component -->
+        <section class="demo-section">
+            <h2>Tree</h2>
+            <p class="description">The <strong>TreeComponent</strong> renders hierarchical data as an expandable/collapsible tree. Supports file/folder icons, selection, and programmatic expand/collapse. Create nodes with <code>new TreeNode(label, type, children)</code> and initialize with <code>new TreeComponent(selector, nodes)</code>.</p>
+            <ul id="tree-demo" class="tree"></ul>
+        </section>
+
+        <!-- CodeViewer Component -->
+        <section class="demo-section">
+            <h2>CodeViewer</h2>
+            <p class="description">The <strong>CodeViewer</strong> component displays syntax-highlighted code with a copy button. Supports JavaScript, HTML, and CSS highlighting. Initialize with <code>new CodeViewer(selector, codeString, language)</code>.</p>
+            <div id="codeviewer-demo"></div>
+        </section>
+
+        <!-- FileUploader Component -->
+        <section class="demo-section">
+            <h2>FileUploader</h2>
+            <p class="description">The <strong>FileUploader</strong> component provides drag-and-drop file upload functionality with progress indication. Supports file validation (size, type), multiple files, and upload cancellation. Requires specific HTML structure with <code>#drop-zone</code>, <code>#file-input</code>, <code>#file-list</code>, and <code>#upload-btn</code>.</p>
+            <div id="fileuploader-demo" class="file-uploader">
+                <div id="drop-zone" class="drop-zone">
+                    <p>Drag & drop files here or click to browse</p>
+                    <input type="file" id="file-input" multiple hidden>
+                </div>
+                <div id="file-list" class="file-list"></div>
+                <button id="upload-btn" class="btn" disabled>Upload Files</button>
+            </div>
+        </section>
+
+        <!-- Scrollbar Component -->
+        <section class="demo-section">
+            <h2>Scrollbar</h2>
+            <p class="description">The <strong>Scrollbar</strong> component creates custom-styled scrollbars. Supports pointer/touch dragging, track clicking, and automatic thumb sizing. Requires HTML structure with <code>.viewport</code>, <code>.content</code>, <code>.track</code>, and <code>.thumb</code> elements.</p>
+            <div id="scrollbar-demo" class="custom-scrollbar" style="height: 150px; border: 1px solid #ccc; position: relative;">
+                <div class="viewport" style="height: 100%; overflow: hidden;">
+                    <div class="content" style="padding: 1rem;">
+                        <p>Scrollable content line 1</p>
+                        <p>Scrollable content line 2</p>
+                        <p>Scrollable content line 3</p>
+                        <p>Scrollable content line 4</p>
+                        <p>Scrollable content line 5</p>
+                        <p>Scrollable content line 6</p>
+                        <p>Scrollable content line 7</p>
+                        <p>Scrollable content line 8</p>
+                    </div>
+                </div>
+                <div class="track" style="position: absolute; right: 0; top: 0; bottom: 0; width: 8px; background: #eee;">
+                    <div class="thumb" style="position: absolute; width: 100%; background: #888; border-radius: 4px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FlyoutMenu Component -->
+        <section class="demo-section">
+            <h2>FlyoutMenu</h2>
+            <p class="description">The <strong>FlyoutMenu</strong> component creates slide-in navigation menus with nested submenus. Supports left/right direction, header/footer, keyboard navigation (Escape to close), and automatic HTML hydration. Initialize with <code>new FlyoutMenu({ triggerSelector, menuSelector, direction })</code>.</p>
+            <button class="btn menu-trigger">Open Flyout Menu</button>
+            <div id="flyoutMenu" class="flyout-menu">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li>Products
+                        <ul>
+                            <li><a href="#">Product A</a></li>
+                            <li><a href="#">Product B</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div id="flyoutOverlay" class="flyout-overlay"></div>
+        </section>
+
+        <!-- Theme Component -->
+        <section class="demo-section">
+            <h2>Theme</h2>
+            <p class="description">The <strong>Theme</strong> component manages light/dark mode switching. Persists preference to localStorage, respects system preference, and supports keyboard shortcut (Ctrl/Cmd+J). Requires elements with IDs <code>#theme-toggle</code> and <code>#theme-icon</code>. Initialize with <code>Theme.init()</code>.</p>
+            <button id="theme-toggle" class="btn" aria-label="Toggle theme">
+                <span id="theme-icon" class="icon icon-light"></span>
+                Toggle Theme
+            </button>
+        </section>
+
+        <!-- PushMenu Component -->
+        <section class="demo-section">
+            <h2>PushMenu</h2>
+            <p class="description">The <strong>PushMenu</strong> component creates a sidebar navigation that "pushes" the main content when opened. Uses a checkbox-based toggle mechanism. Requires elements with classes <code>.navigation</code>, <code>.push-content</code>, <code>.push-menu</code>. Initialize with <code>PushMenu.init()</code>.</p>
+            <p><em>Note: PushMenu requires specific page layout structure and is best demonstrated in a full-page context.</em></p>
+        </section>
+
+        <!-- Editor Component -->
+        <section class="demo-section">
+            <h2>Editor</h2>
+            <p class="description">The <strong>Editor</strong> component is a rich text (WYSIWYG) editor with formatting toolbar. Supports bold, italic, underline, links, images, lists, undo/redo, code view, and HTML export. Requires elements with IDs <code>#editable</code>, <code>#code</code>, <code>#preview</code>. Initialize with <code>new Editor()</code>.</p>
+            <p><em>Note: Editor requires specific toolbar and content structure. See the source for full implementation details.</em></p>
+        </section>
+
+        <h2 style="margin-top: 3rem; padding-top: 1rem; border-top: 3px solid #333;">Additional CSS Utilities</h2>
+
+        <!-- Typography -->
+        <section class="demo-section">
+            <h2>Typography</h2>
+            <p class="description">The <strong>Typography</strong> styles provide consistent text formatting. Headings (<code>h1-h4</code> or <code>.h1-.h4</code>), paragraphs, lists, and utility classes like <code>.text-center</code> are included.</p>
+            <h1 class="h1">Heading 1</h1>
+            <h2 class="h2">Heading 2</h2>
+            <h3 class="h3">Heading 3</h3>
+            <h4 class="h4">Heading 4</h4>
+            <p>Regular paragraph text with <strong>bold</strong> and normal content.</p>
+            <ul>
+                <li>Unordered list item 1</li>
+                <li>Unordered list item 2
+                    <ul><li>Nested item</li></ul>
+                </li>
+            </ul>
+            <ol>
+                <li>Ordered list item 1</li>
+                <li>Ordered list item 2</li>
+            </ol>
+            <hr>
+            <p class="text-center">Centered text using .text-center</p>
+        </section>
+
+        <!-- Form Elements -->
+        <section class="demo-section">
+            <h2>Form Elements</h2>
+            <p class="description">The <strong>Form</strong> styles provide consistent styling for inputs, textareas, and native selects. All form elements get proper spacing, borders, and focus states.</p>
+            <div style="max-width: 400px;">
+                <div style="margin-bottom: 1rem;">
+                    <label>Text Input</label>
+                    <input type="text" placeholder="Enter text...">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label>Textarea</label>
+                    <textarea rows="3" placeholder="Enter longer text..."></textarea>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script type="module">
+        import { Tabs } from './js/tabs.js';
+        import { Table } from './js/table.js';
+        import { Toast } from './js/toast.js';
+        import { Modal } from './js/modal.js';
+        import { Select } from './js/select.js';
+        import { DatePicker } from './js/datepicker.js';
+        import { Carousel } from './js/carousel.js';
+        import { TreeComponent, TreeNode } from './js/tree.js';
+        import { CodeViewer } from './js/code-viewer.js';
+        import { FileUploader } from './js/file-uploader.js';
+        import { Scrollbar } from './js/scrollbar.js';
+        import { FlyoutMenu } from './js/flyout-menu.js';
+        import { Theme } from './js/theme.js';
+
+        // Initialize Tabs
+        new Tabs('#tabs-demo', { defaultTab: 0 });
+
+        // Initialize Table
+        new Table('#table-demo', { pageSize: 5 });
+
+        // Toast buttons
+        document.getElementById('toast-success-btn').addEventListener('click', () => {
+            new Toast({ content: 'Operation completed successfully!', header: 'Success', type: 'success' }).show(3000);
+        });
+        document.getElementById('toast-error-btn').addEventListener('click', () => {
+            new Toast({ content: 'Something went wrong.', header: 'Error', type: 'error' }).show(3000);
+        });
+        document.getElementById('toast-warning-btn').addEventListener('click', () => {
+            new Toast({ content: 'Please check your input.', header: 'Warning', type: 'warning' }).show(3000);
+        });
+        document.getElementById('toast-info-btn').addEventListener('click', () => {
+            new Toast({ content: 'Here is some information.', header: 'Info', type: 'info' }).show(3000);
+        });
+
+        // Modal button
+        document.getElementById('modal-btn').addEventListener('click', () => {
+            new Modal({
+                content: '<p>This is the modal content. You can put any HTML here.</p>',
+                header: 'Modal Title',
+                footer: '<button class="btn" onclick="document.querySelector(\'.modal-wrapper .close\').click()">Close</button>',
+                type: 'info'
+            }).show();
+        });
+
+        // Initialize Select
+        new Select('#select-demo');
+
+        // Initialize DatePicker
+        new DatePicker('#datepicker-demo', {
+            mode: 'single',
+            format: (date) => date.toLocaleDateString()
+        });
+
+        // Initialize Carousel
+        new Carousel('#carousel-demo', { loop: true });
+
+        // Initialize Tree
+        const treeData = [
+            new TreeNode('Documents', 'folder', [
+                new TreeNode('report.pdf', 'file'),
+                new TreeNode('notes.txt', 'file')
+            ]),
+            new TreeNode('Images', 'folder', [
+                new TreeNode('photo.jpg', 'file'),
+                new TreeNode('logo.png', 'file')
+            ]),
+            new TreeNode('readme.md', 'file')
+        ];
+        new TreeComponent('#tree-demo', treeData);
+
+        // Initialize CodeViewer
+        const sampleCode = `function greet(name) {
+    console.log("Hello, " + name + "!");
+}
+greet("World");`;
+        new CodeViewer('#codeviewer-demo', sampleCode, 'javascript');
+
+        // Initialize FileUploader
+        new FileUploader('#fileuploader-demo');
+
+        // Initialize Scrollbar
+        new Scrollbar('#scrollbar-demo');
+
+        // Initialize FlyoutMenu
+        new FlyoutMenu({
+            triggerSelector: '.menu-trigger',
+            menuSelector: '#flyoutMenu',
+            overlaySelector: '#flyoutOverlay',
+            direction: 'right',
+            title: 'Navigation'
+        });
+
+        // Initialize Theme
+        Theme.init();
+    </script>
+
+    <style>
+        .demo-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #ddd;
+        }
+        .demo-section h2 {
+            margin-bottom: 0.5rem;
+        }
+        .demo-section .description {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+        .demo-section code {
+            background: #f4f4f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 4px;
+        }
+        .btn:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</body>
+</html>
