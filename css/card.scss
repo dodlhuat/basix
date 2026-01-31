@@ -1,5 +1,6 @@
-@import "properties";
-@import "defaults";
+@use "properties";
+@use "defaults";
+@use "parameters" as *;
 
 .card {
   box-shadow: $shadow;

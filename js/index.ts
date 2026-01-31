@@ -1,18 +1,18 @@
-import { utils } from "./utils";
-import { Select } from "./select";
-import { Scrollbar } from "./scrollbar";
-import { Modal } from "./modal";
-import { PushMenu } from "./push-menu";
-import { Toast } from "./toast";
-import { DatePicker } from "./datepicker";
-import { Theme } from "./theme";
-import { Table, TableColumn, TableRow } from "./table";
-import { FlyoutMenu } from "./flyout-menu";
-import { Tabs } from "./tabs";
-import { Carousel } from "./carousel";
-import { CodeViewer } from "./code-viewer";
-import { FileUploader } from "./file-uploader";
-import { TreeComponent, TreeNode } from "./tree";
+import { utils } from "./utils.js";
+import { Select } from "./select.js";
+import { Scrollbar } from "./scrollbar.js";
+import { Modal } from "./modal.js";
+import { PushMenu } from "./push-menu.js";
+import { Toast } from "./toast.js";
+import { DatePicker } from "./datepicker.js";
+import { Theme } from "./theme.js";
+import { Table, TableColumn, TableRow } from "./table.js";
+import { FlyoutMenu } from "./flyout-menu.js";
+import { Tabs } from "./tabs.js";
+import { Carousel } from "./carousel.js";
+import { CodeViewer } from "./code-viewer.js";
+import { FileUploader } from "./file-uploader.js";
+import { TreeComponent, TreeNode } from "./tree.js";
 
 // Generate sample table data
 const generateData = (count: number): TableRow[] => {
@@ -231,5 +231,5 @@ utils.ready(() => {
         ]),
         new TreeNode('README.md', 'file')
     ];
-    const tree = new TreeComponent('tree-root', sampleData);
+    const tree = new TreeComponent('#tree-root', sampleData);
 });

@@ -1,33 +1,33 @@
 :root {
-  --primary-text: #1A1A1A;
-  --secondary-text: #4A4A4A;
-  --divider: #DADDE1;
-  --accent-text: #0056D6;
+  --primary-text: #1E1F24;
+  --secondary-text: #62636C;
+  --divider: #D8D9E0;
+  --accent-text: #3D63DD;
   --error: #D64545;
   --warning: #C28A00;
   --success: #2E8B57;
-  --secondary-background: #FFFFFF;
-  --background: #fafafa;
-  --accent-color: #1F6FEB;
-  --accent-color-lighten: #4e8def;
-  --accent-color-text: #DADDE1;
-  --disabled: #b8b8b8;
+  --secondary-background: #E7E8EC;
+  --background: #F9F9FB;
+  --accent-color: #3D63DD;
+  --accent-color-lighten: #87A5EF;
+  --accent-color-text: #D8D9E0;
+  --disabled: #D8D9E0;
 }
 
 [data-theme=dark] {
-  --primary-text: #E4E6EB;
-  --secondary-text: #B0B3B8;
-  --divider: #3A3B3C;
-  --accent-text: #6EA8FF;
+  --primary-text: #EEEEF0;
+  --secondary-text: #B2B3BD;
+  --divider: #393A40;
+  --accent-text: #0E496D;
   --error: #FF6B6B;
   --warning: #F7B500;
   --success: #5CC689;
-  --background: #18191A;
-  --secondary-background: #494c4f;
-  --accent-color: #1F6FEB;
-  --accent-color-lighten: #4e8def;
-  --accent-color-text: #DADDE1;
-  --disabled: #b8b8b8;
+  --background: #111113;
+  --secondary-background: #19191B;
+  --accent-color: #1B7BB4;
+  --accent-color-lighten: #175982;
+  --accent-color-text: #B2B3BD;
+  --disabled: #303136;
 }
 
 html, body {
@@ -46,9 +46,9 @@ a {
 }
 
 .content {
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  margin-top: 3rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-top: 4rem;
 }
 
 .hidden {
@@ -88,20 +88,20 @@ code.code {
   display: block;
   font-family: monospace;
   border-radius: 0.4rem;
-  font-size: 0.975rem;
-  margin: 0.75rem 0;
+  font-size: 1.3rem;
+  margin: 1rem 0;
 }
 code.code .code-header {
   display: block;
   background: var(--disabled);
   border-top-left-radius: 0.4rem;
   border-top-right-radius: 0.4rem;
-  padding: 0.375rem 1.5rem;
+  padding: 0.5rem 2rem;
   color: var(--primary-text);
   font-weight: bold;
 }
 code.code .code-content {
-  padding: 1.5rem;
+  padding: 2rem;
   white-space: break-spaces;
 }
 
@@ -110,11 +110,9 @@ code.code .code-content {
 }
 
 .spacing-right {
-  margin-right: 0.75rem;
+  margin-right: 1rem;
 }
 
 .flex {
   display: flex;
-}
-
-/*# sourceMappingURL=defaults.css.map */
+}/*# sourceMappingURL=defaults.css.map */

@@ -1,39 +1,33 @@
 :root {
-  --primary-text: #1A1A1A;
-  --secondary-text: #4A4A4A;
-  --divider: #DADDE1;
-  --accent-text: #0056D6;
+  --primary-text: #1E1F24;
+  --secondary-text: #62636C;
+  --divider: #D8D9E0;
+  --accent-text: #3D63DD;
   --error: #D64545;
   --warning: #C28A00;
   --success: #2E8B57;
-  --secondary-background: #FFFFFF;
-  --background: #fafafa;
-  --accent-color: #1F6FEB;
-  --accent-color-lighten: #4e8def;
-  --accent-color-text: #DADDE1;
-  --disabled: #b8b8b8;
+  --secondary-background: #E7E8EC;
+  --background: #F9F9FB;
+  --accent-color: #3D63DD;
+  --accent-color-lighten: #87A5EF;
+  --accent-color-text: #D8D9E0;
+  --disabled: #D8D9E0;
 }
 
 [data-theme=dark] {
-  --primary-text: #E4E6EB;
-  --secondary-text: #B0B3B8;
-  --divider: #3A3B3C;
-  --accent-text: #6EA8FF;
+  --primary-text: #EEEEF0;
+  --secondary-text: #B2B3BD;
+  --divider: #393A40;
+  --accent-text: #0E496D;
   --error: #FF6B6B;
   --warning: #F7B500;
   --success: #5CC689;
-  --background: #18191A;
-  --secondary-background: #494c4f;
-  --accent-color: #1F6FEB;
-  --accent-color-lighten: #4e8def;
-  --accent-color-text: #DADDE1;
-  --disabled: #b8b8b8;
-}
-
-:root {
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --z-index-popup: 1000;
-  --z-index-backdrop: 999;
+  --background: #111113;
+  --secondary-background: #19191B;
+  --accent-color: #1B7BB4;
+  --accent-color-lighten: #175982;
+  --accent-color-text: #B2B3BD;
+  --disabled: #303136;
 }
 
 .container {
@@ -41,19 +35,19 @@
   margin: 0 auto;
 }
 
-/* Date Picker Styles */
 .datepicker {
   background: var(--background);
   border: 1px solid var(--divider);
   border-radius: 0.4rem;
   width: 320px;
   padding: 1rem;
-  user-select: none;
-  box-shadow: var(--shadow);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
   display: none;
-  /* Hidden by default */
   position: absolute;
-  z-index: var(--z-index-popup);
+  z-index: 1000;
   box-sizing: border-box;
 }
 
@@ -120,7 +114,7 @@
 
 .datepicker-day {
   padding: 0.5rem 0;
-  font-size: 0.9rem;
+  font-size: 1rem;
   cursor: pointer;
   border-radius: 0.4rem;
   transition: all 0.2s;
@@ -168,7 +162,6 @@
   color: var(--accent-color-text);
 }
 
-/* Month/Year Views */
 .datepicker-grid-months,
 .datepicker-grid-years {
   display: grid;
@@ -235,7 +228,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: var(--z-index-backdrop);
+    z-index: 999;
     display: none;
   }
   .datepicker-backdrop.visible {
@@ -249,10 +242,9 @@
     width: 100%;
     max-width: 100%;
     border-radius: 0.4rem 0.4rem 0 0;
-    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
     animation: slideUp 0.3s ease-out;
     transform: none !important;
-    /* Override inline styles */
   }
   @keyframes slideUp {
     from {
@@ -264,13 +256,9 @@
   }
   .datepicker {
     width: 100%;
-    /* Fallback if positioning fails or for small screens if we want modal-like behavior */
     max-width: 320px;
   }
   .datepicker-day {
     padding: 0.75rem 0;
-    /* Larger touch targets */
   }
-}
-
-/*# sourceMappingURL=datepicker.css.map */
+}/*# sourceMappingURL=datepicker.css.map */

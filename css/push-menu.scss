@@ -1,5 +1,5 @@
-@import "properties";
-@import "parameters";
+@use "properties";
+@use "parameters" as *;
 
 .push-content {
   transition: all 200ms ease-in;
@@ -88,6 +88,7 @@ nav.pushed {
   z-index: 2;
   gap: $spacing;
   border-bottom: 3px solid var(--secondary-text);
+  top: 0;
 
   & > div:first-child {
     margin-left: $spacing;

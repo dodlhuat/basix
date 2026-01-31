@@ -1,0 +1,97 @@
+.code-display {
+  background: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 20px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.code-header {
+  background: #2d2d2d;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3d3d3d;
+}
+
+.code-language {
+  color: #888;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.copy-button {
+  background: #4a4a4a;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.copy-button:hover {
+  background: #5a5a5a;
+}
+
+.copy-button.copied {
+  background: #28a745;
+}
+
+.code-content {
+  padding: 15px;
+  overflow-x: auto;
+}
+
+.code-content pre {
+  margin: 0;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #d4d4d4;
+}
+
+/* Syntax Highlighting */
+.keyword {
+  color: #569cd6;
+}
+
+.string {
+  color: #ce9178;
+}
+
+.comment {
+  color: #6a9955;
+  font-style: italic;
+}
+
+.function {
+  color: #dcdcaa;
+}
+
+.number {
+  color: #b5cea8;
+}
+
+.property {
+  color: #9cdcfe;
+}
+
+.tag {
+  color: #4ec9b0;
+}
+
+.attribute {
+  color: #9cdcfe;
+}
+
+.selector {
+  color: #d7ba7d;
+}
+
+.punctuation {
+  color: #d4d4d4;
+}/*# sourceMappingURL=code-viewer.css.map */

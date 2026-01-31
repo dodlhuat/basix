@@ -1,0 +1,50 @@
+.placeholder {
+  animation: placeholder-fade 2s ease-in-out infinite;
+  display: inline-block;
+  cursor: wait;
+  background-color: currentcolor;
+  opacity: 0.5;
+  min-height: 0.5rem;
+  margin-right: 0.5rem;
+}
+.placeholder.w-1 {
+  width: 8.3333333333%;
+}
+.placeholder.w-2 {
+  width: 16.6666666667%;
+}
+.placeholder.w-3 {
+  width: 25%;
+}
+.placeholder.w-4 {
+  width: 33.3333333333%;
+}
+.placeholder.w-5 {
+  width: 41.6666666667%;
+}
+.placeholder.w-6 {
+  width: 50%;
+}
+.placeholder.w-7 {
+  width: 58.3333333333%;
+}
+.placeholder.w-8 {
+  width: 66.6666666667%;
+}
+.placeholder.w-9 {
+  width: 75%;
+}
+.placeholder.w-10 {
+  width: 83.3333333333%;
+}
+.placeholder.w-11 {
+  width: 91.6666666667%;
+}
+.placeholder.w-12 {
+  width: 100%;
+}
+@keyframes placeholder-fade {
+  50% {
+    opacity: 0.2;
+  }
+}/*# sourceMappingURL=placeholder.css.map */

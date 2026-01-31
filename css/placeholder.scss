@@ -1,3 +1,5 @@
+@use "parameters" as *;
+
 .placeholder {
   animation: placeholder-fade 2s ease-in-out infinite;
   display: inline-block;

@@ -1,20 +1,42 @@
-/* content of css/carousel.css */
 :root {
-  --carousel-nav-color: #333;
-  --carousel-nav-bg: rgba(255, 255, 255, 0.7);
-  --carousel-dot-active: #0d6efd;
+  --primary-text: #1E1F24;
+  --secondary-text: #62636C;
+  --divider: #D8D9E0;
+  --accent-text: #3D63DD;
+  --error: #D64545;
+  --warning: #C28A00;
+  --success: #2E8B57;
+  --secondary-background: #E7E8EC;
+  --background: #F9F9FB;
+  --accent-color: #3D63DD;
+  --accent-color-lighten: #87A5EF;
+  --accent-color-text: #D8D9E0;
+  --disabled: #D8D9E0;
+}
+
+[data-theme=dark] {
+  --primary-text: #EEEEF0;
+  --secondary-text: #B2B3BD;
+  --divider: #393A40;
+  --accent-text: #0E496D;
+  --error: #FF6B6B;
+  --warning: #F7B500;
+  --success: #5CC689;
+  --background: #111113;
+  --secondary-background: #19191B;
+  --accent-color: #1B7BB4;
+  --accent-color-lighten: #175982;
+  --accent-color-text: #B2B3BD;
+  --disabled: #303136;
 }
 
 .carousel {
   position: relative;
   width: 100%;
-  max-width: 800px;
-  /* Example max width */
   margin: 0 auto;
   overflow: hidden;
-  /* Hide slides off screen */
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
 }
 
 .carousel-track-container {
@@ -33,46 +55,32 @@
 
 .carousel-slide {
   min-width: 100%;
-  /* Each slide takes full width of container */
   box-sizing: border-box;
-  /* styling for demo content */
-  height: 400px;
+  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  background-color: #eee;
-  color: #555;
-  user-select: none;
-  /* Prevent text selection during swipe */
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
-.carousel-slide:nth-child(odd) {
-  background-color: #e0e0e0;
-}
-
-/* Navigation Buttons */
 .carousel-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--carousel-nav-bg);
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
   cursor: pointer;
-  color: var(--carousel-nav-color);
-  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
   transition: background 0.3s;
+  padding: 10px;
 }
 
 .carousel-button:hover {
-  background: white;
+  background: var(--secondary-background);
 }
 
 .carousel-button--left {
@@ -83,7 +91,6 @@
   right: 10px;
 }
 
-/* Pagination Dots */
 .carousel-nav {
   display: flex;
   justify-content: center;
@@ -95,11 +102,11 @@
 }
 
 .carousel-indicator {
+  padding: 0;
   border: none;
-  width: 30px;
-  /* Capsule shape for clicking ease */
+  width: 20px;
   height: 5px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--disabled);
   margin: 0 5px;
   border-radius: 4px;
   cursor: pointer;
@@ -107,7 +114,5 @@
 }
 
 .carousel-indicator.current-slide {
-  background: var(--carousel-dot-active);
-}
-
-/*# sourceMappingURL=carousel.css.map */
+  background: var(--accent-color);
+}/*# sourceMappingURL=carousel.css.map */

@@ -1,37 +1,199 @@
-.tree {
+:root {
+  --primary-text: #1E1F24;
+  --secondary-text: #62636C;
+  --divider: #D8D9E0;
+  --accent-text: #3D63DD;
+  --error: #D64545;
+  --warning: #C28A00;
+  --success: #2E8B57;
+  --secondary-background: #E7E8EC;
+  --background: #F9F9FB;
+  --accent-color: #3D63DD;
+  --accent-color-lighten: #87A5EF;
+  --accent-color-text: #D8D9E0;
+  --disabled: #D8D9E0;
+}
+
+[data-theme=dark] {
+  --primary-text: #EEEEF0;
+  --secondary-text: #B2B3BD;
+  --divider: #393A40;
+  --accent-text: #0E496D;
+  --error: #FF6B6B;
+  --warning: #F7B500;
+  --success: #5CC689;
+  --background: #111113;
+  --secondary-background: #19191B;
+  --accent-color: #1B7BB4;
+  --accent-color-lighten: #175982;
+  --accent-color-text: #B2B3BD;
+  --disabled: #303136;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+ul.tree {
+  list-style: none;
+}
+ul.tree li {
+  list-style: none;
+}
+
+.tree-node {
   position: relative;
+  margin: 4px 0;
 }
-.tree .icon-folder_open, .tree .icon-folder, .tree .folder-name {
-  cursor: pointer;
-}
-.tree .icon-spacer {
-  margin-right: 4px;
-}
-.tree .li-content {
+
+.tree-item {
+  position: relative;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  flex-wrap: wrap;
+  min-height: 52px;
+  padding: 14px 16px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
 }
-.tree .li-content.hidden {
-  display: none;
+.tree-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent-color-lighten);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
-.tree .li-content .folder-name {
-  margin-top: 2px;
-  margin-left: 6px;
+.tree-item:hover::before {
+  opacity: 1;
 }
-.tree .li-content .folder-content {
-  flex-basis: 100%;
-  padding-left: 1rem;
+.tree-item.selected {
+  background: var(--accent-color);
 }
-.tree ul {
-  padding-left: 1rem;
-  margin-bottom: 0;
+.tree-item.expanded > .tree-icon svg.chevron {
+  transform: rotate(90deg);
 }
-.tree ul li {
-  list-style-type: none;
+.tree-item.file .tree-label {
+  color: var(--secondary-text);
+  font-weight: 400;
+}
+.tree-item.file.selected .tree-label {
+  color: var(--accent-color-text);
+}
+.tree-item.folder > .tree-icon svg {
+  fill: none;
+}
+
+.tree-icon {
   position: relative;
-  padding-top: 5px;
-  padding-bottom: 0;
-  padding-left: 0;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tree-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: var(--primary-text);
+  stroke-width: 2;
+  fill: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tree-label {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  color: var(--primary-text);
+}
+
+.tree-children {
+  list-style: none;
+  margin-left: 24px;
+  padding-left: 16px;
+  border-left: 2px solid var(--primary-text);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tree-children.expanded {
+  max-height: 2000px;
+  opacity: 1;
+  margin: 8px 0;
+}
+.tree-children .tree-node {
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.tree-children .tree-node:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.tree-children .tree-node:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.tree-children .tree-node:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.tree-children .tree-node:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.tree-children .tree-node:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+@media (max-width: 768px) {
+  .tree-item {
+    min-height: 56px;
+    padding: 16px;
+  }
+  .tree-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .tree-label {
+    font-size: 16px;
+  }
+  .tree-children {
+    margin-left: 20px;
+    padding-left: 12px;
+  }
+}
+@media (max-width: 480px) {
+  .tree-item {
+    min-height: 60px;
+    padding: 18px 14px;
+  }
+  .tree-label {
+    font-size: 15px;
+  }
 }/*# sourceMappingURL=tree.css.map */

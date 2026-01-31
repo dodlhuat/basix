@@ -1,33 +1,33 @@
 :root {
-  --primary-text: #1A1A1A;
-  --secondary-text: #4A4A4A;
-  --divider: #DADDE1;
-  --accent-text: #0056D6;
+  --primary-text: #1E1F24;
+  --secondary-text: #62636C;
+  --divider: #D8D9E0;
+  --accent-text: #3D63DD;
   --error: #D64545;
   --warning: #C28A00;
   --success: #2E8B57;
-  --secondary-background: #FFFFFF;
-  --background: #fafafa;
-  --accent-color: #1F6FEB;
-  --accent-color-lighten: #4e8def;
-  --accent-color-text: #DADDE1;
-  --disabled: #b8b8b8;
+  --secondary-background: #E7E8EC;
+  --background: #F9F9FB;
+  --accent-color: #3D63DD;
+  --accent-color-lighten: #87A5EF;
+  --accent-color-text: #D8D9E0;
+  --disabled: #D8D9E0;
 }
 
 [data-theme=dark] {
-  --primary-text: #E4E6EB;
-  --secondary-text: #B0B3B8;
-  --divider: #3A3B3C;
-  --accent-text: #6EA8FF;
+  --primary-text: #EEEEF0;
+  --secondary-text: #B2B3BD;
+  --divider: #393A40;
+  --accent-text: #0E496D;
   --error: #FF6B6B;
   --warning: #F7B500;
   --success: #5CC689;
-  --background: #18191A;
-  --secondary-background: #494c4f;
-  --accent-color: #1F6FEB;
-  --accent-color-lighten: #4e8def;
-  --accent-color-text: #DADDE1;
-  --disabled: #b8b8b8;
+  --background: #111113;
+  --secondary-background: #19191B;
+  --accent-color: #1B7BB4;
+  --accent-color-lighten: #175982;
+  --accent-color-text: #B2B3BD;
+  --disabled: #303136;
 }
 
 .toast {
@@ -35,11 +35,11 @@
   box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
   background: var(--background);
   border-radius: 0.4rem;
-  padding: 0.375rem;
+  padding: 0.5rem;
   min-width: 250px;
   position: fixed;
   left: -200px;
-  bottom: 0.75rem;
+  bottom: 1rem;
   z-index: 1;
   transition: all 150ms ease-in;
 }
@@ -56,7 +56,7 @@
   transition: width 250ms linear;
 }
 .toast.show {
-  left: 0.75rem;
+  left: 1rem;
 }
 .toast.success {
   color: inherit;
@@ -85,16 +85,14 @@
 .toast .header {
   position: relative;
   width: 100%;
-  padding-right: 0.375rem;
-  left: -0.375rem;
-  padding-left: 0.375rem;
-  padding-bottom: 0.375rem;
+  padding-right: 0.5rem;
+  left: -0.5rem;
+  padding-left: 0.5rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--divider);
   font-weight: bold;
 }
 .toast .content {
-  padding-top: 0.375rem;
+  padding-top: 0.5rem;
   margin: 0;
-}
-
-/*# sourceMappingURL=toast.css.map */
+}/*# sourceMappingURL=toast.css.map */

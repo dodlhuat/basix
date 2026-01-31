@@ -1,17 +1,44 @@
-/* Error: Undefined variable.
- *   ,
- * 4 |   gap: $spacing;
- *   |        ^^^^^^^^
- *   '
- *   grid.scss 4:8  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Undefined variable.\a   \2577 \a 4 \2502    gap: $spacing;\a   \2502         ^^^^^^^^\a   \2575 \a   grid.scss 4:8  root stylesheet";
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
+.row.spacing-top {
+  padding-top: 0.5rem;
+}
+.row .column {
+  flex: 1;
+  padding: 1rem;
+}
+.row .column.grow-2 {
+  flex-grow: 2;
+}
+.row .column.grow-3 {
+  flex-grow: 3;
+}
+.row .column.grow-4 {
+  flex-grow: 4;
+}
+.row .column.grow-5 {
+  flex-grow: 5;
+}
+.row .column.grow-6 {
+  flex-grow: 6;
+}
+.row .column .column {
+  padding: 0;
+}
+.row .column .row {
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .row {
+    flex-wrap: wrap;
+  }
+  .row .column {
+    flex-basis: 100%;
+    overflow: hidden;
+  }
+}/*# sourceMappingURL=grid.css.map */

@@ -1,33 +1,33 @@
 :root {
-  --primary-text: #1A1A1A;
-  --secondary-text: #4A4A4A;
-  --divider: #DADDE1;
-  --accent-text: #0056D6;
+  --primary-text: #1E1F24;
+  --secondary-text: #62636C;
+  --divider: #D8D9E0;
+  --accent-text: #3D63DD;
   --error: #D64545;
   --warning: #C28A00;
   --success: #2E8B57;
-  --secondary-background: #FFFFFF;
-  --background: #fafafa;
-  --accent-color: #1F6FEB;
-  --accent-color-lighten: #4e8def;
-  --accent-color-text: #DADDE1;
-  --disabled: #b8b8b8;
+  --secondary-background: #E7E8EC;
+  --background: #F9F9FB;
+  --accent-color: #3D63DD;
+  --accent-color-lighten: #87A5EF;
+  --accent-color-text: #D8D9E0;
+  --disabled: #D8D9E0;
 }
 
 [data-theme=dark] {
-  --primary-text: #E4E6EB;
-  --secondary-text: #B0B3B8;
-  --divider: #3A3B3C;
-  --accent-text: #6EA8FF;
+  --primary-text: #EEEEF0;
+  --secondary-text: #B2B3BD;
+  --divider: #393A40;
+  --accent-text: #0E496D;
   --error: #FF6B6B;
   --warning: #F7B500;
   --success: #5CC689;
-  --background: #18191A;
-  --secondary-background: #494c4f;
-  --accent-color: #1F6FEB;
-  --accent-color-lighten: #4e8def;
-  --accent-color-text: #DADDE1;
-  --disabled: #b8b8b8;
+  --background: #111113;
+  --secondary-background: #19191B;
+  --accent-color: #1B7BB4;
+  --accent-color-lighten: #175982;
+  --accent-color-text: #B2B3BD;
+  --disabled: #303136;
 }
 
 @font-face {
@@ -43,12 +43,12 @@ p, li, td, th, div, h1, h2, h3, h4, h5 {
 }
 
 p, li, td, th, div {
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
 .h1, .h2, .h3, .h4, h1, h2, h3, h4 {
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.6666666667rem 0;
   line-height: 1.2;
   font-weight: bold;
 }
@@ -71,7 +71,7 @@ h4, .h4 {
 
 ul, ol {
   list-style-position: inside;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6666666667rem;
 }
 
 ul li {
@@ -94,12 +94,10 @@ strong {
 
 hr {
   border: 1px solid var(--divider);
-  margin-top: 1.125rem;
-  margin-bottom: 1.125rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .text-center {
   text-align: center;
-}
-
-/*# sourceMappingURL=typography.css.map */
+}/*# sourceMappingURL=typography.css.map */

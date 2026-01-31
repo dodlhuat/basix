@@ -1,5 +1,5 @@
-@import "parameters";
-@import "properties";
+@use "parameters" as *;
+@use "properties";
 
 .container {
   max-width: 800px;

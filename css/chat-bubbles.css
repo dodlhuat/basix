@@ -1,0 +1,97 @@
+:root {
+  --primary-text: #1E1F24;
+  --secondary-text: #62636C;
+  --divider: #D8D9E0;
+  --accent-text: #3D63DD;
+  --error: #D64545;
+  --warning: #C28A00;
+  --success: #2E8B57;
+  --secondary-background: #E7E8EC;
+  --background: #F9F9FB;
+  --accent-color: #3D63DD;
+  --accent-color-lighten: #87A5EF;
+  --accent-color-text: #D8D9E0;
+  --disabled: #D8D9E0;
+}
+
+[data-theme=dark] {
+  --primary-text: #EEEEF0;
+  --secondary-text: #B2B3BD;
+  --divider: #393A40;
+  --accent-text: #0E496D;
+  --error: #FF6B6B;
+  --warning: #F7B500;
+  --success: #5CC689;
+  --background: #111113;
+  --secondary-background: #19191B;
+  --accent-color: #1B7BB4;
+  --accent-color-lighten: #175982;
+  --accent-color-text: #B2B3BD;
+  --disabled: #303136;
+}
+
+.chat-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 10px;
+}
+
+.message {
+  max-width: 75%;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  position: relative;
+  line-height: 1.2rem;
+  color: var(--primary-text);
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+  word-wrap: break-word;
+}
+
+/* Metadata (time) */
+.message-meta {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--primary-text);
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* Incoming Message */
+.message-incoming {
+  align-self: flex-start;
+  background-color: var(--background);
+  border-top-left-radius: 0;
+}
+
+.message-incoming::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-top-color: var(--secondary-background);
+  border-right: 0;
+  margin-top: 0px;
+}
+
+.message-outgoing {
+  align-self: flex-end;
+  background-color: var(--accent-color-lighten);
+  border-top-right-radius: 0;
+}
+
+.message-outgoing::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-top-color: var(--accent-color-lighten);
+  border-left: 0;
+}/*# sourceMappingURL=chat-bubbles.css.map */

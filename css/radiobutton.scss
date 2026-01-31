@@ -1,5 +1,5 @@
-@import "properties";
-@import "parameters";
+@use "properties";
+@use "parameters" as *;
 
 .radio-button-container {
   display: block;

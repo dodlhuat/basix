@@ -1,0 +1,345 @@
+:root {
+  --bg-color: #0f172a;
+  --text-color: #f8fafc;
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --menu-width: 320px;
+  --transition-speed: 0.4s;
+  --font-family: "Outfit", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Header */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.menu-trigger {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.menu-trigger:hover {
+  transform: scale(1.1);
+  color: var(--accent-color);
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.main-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #c084fc, #6366f1);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.main-content p {
+  color: #94a3b8;
+  font-size: 1.2rem;
+}
+
+/* Flyout Overlay */
+.flyout-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-speed), visibility var(--transition-speed);
+  z-index: 40;
+}
+
+.flyout-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Flyout Menu Base */
+.flyout-menu {
+  position: fixed;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1);
+  /* Smoother rollout */
+}
+
+/* Directional Variants */
+.flyout-from-right {
+  top: 0;
+  right: 0;
+  width: var(--menu-width);
+  height: 100%;
+  border-left: 1px solid var(--glass-border);
+  transform: translateX(100%);
+}
+
+.flyout-from-left {
+  top: 0;
+  left: 0;
+  width: var(--menu-width);
+  height: 100%;
+  border-right: 1px solid var(--glass-border);
+  transform: translateX(-100%);
+}
+
+.flyout-menu.is-open {
+  transform: translate(0, 0);
+}
+
+/* Flyout Header */
+.flyout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.flyout-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.close-menu {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.close-menu:hover {
+  transform: rotate(90deg);
+  color: var(--accent-color);
+}
+
+/* Flyout Links */
+.flyout-links {
+  list-style: none;
+  flex-grow: 1;
+}
+
+.flyout-links li {
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.flyout-links a,
+.submenu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
+  transition-delay: var(--delay);
+}
+
+.flyout-menu.is-open .flyout-links a,
+.flyout-menu.is-open .submenu-toggle {
+  transform: translateY(0);
+}
+
+.flyout-links a:hover,
+.submenu-toggle:hover {
+  color: var(--accent-color);
+}
+
+.chevron {
+  transition: transform 0.3s;
+  opacity: 0.7;
+}
+
+.submenu-toggle.active .chevron {
+  transform: rotate(180deg);
+}
+
+/* Submenu */
+.submenu {
+  list-style: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 0;
+}
+
+.submenu.is-open {
+  max-height: 500px;
+  /* Reduced from 2000px for tighter animation */
+  /* Arbitrary large height, increased for nesting */
+  margin-top: 1rem;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Smoother easing */
+}
+
+.submenu li {
+  margin-bottom: 0.5rem;
+}
+
+.submenu a {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #cbd5e1;
+  transform: none !important;
+  /* Override slide-in for submenu items */
+  transition-delay: 0s !important;
+}
+
+.submenu .submenu-toggle {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #cbd5e1;
+  transform: none !important;
+  transition-delay: 0s !important;
+  padding: 0;
+  margin: 0;
+}
+
+/* Flyout Footer */
+.flyout-footer {
+  padding-top: 2rem;
+  border-top: 1px solid var(--glass-border);
+  color: #64748b;
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s, transform 0.4s;
+  transition-delay: var(--delay);
+}
+
+.flyout-menu.is-open .flyout-footer {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  :root {
+    --menu-width: 100%;
+  }
+  .main-content h1 {
+    font-size: 2rem;
+  }
+  /* Force Fullscreen for all directions */
+  .flyout-from-right,
+  .flyout-from-left,
+  .flyout-from-top {
+    width: 100% !important;
+    height: 100% !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    bottom: auto !important;
+    border: none !important;
+    /* Remove borders for cleaner fullscreen look */
+    border-right: 1px solid var(--glass-border) !important;
+    /* Add consistent right border */
+    transform: translateX(-100%) !important;
+    /* Force ALL to slide from LEFT with !important */
+  }
+  /* Remove specific transforms and force left slide */
+  .flyout-from-right,
+  .flyout-from-left,
+  .flyout-from-top {
+    transform: translateX(-100%) !important;
+  }
+  .flyout-menu.is-open {
+    transform: translate(0, 0) !important;
+  }
+  /* Reset Top Menu Horizontal Layout to Vertical for Mobile */
+  .flyout-from-top .flyout-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  .flyout-from-top .flyout-links > li {
+    margin-bottom: 1.5rem;
+  }
+  .flyout-from-top .flyout-links > li > a,
+  .flyout-from-top .flyout-links > li > .submenu-toggle {
+    font-size: 2rem;
+    /* Restore larger size */
+    justify-content: space-between;
+  }
+  .flyout-from-top .submenu {
+    position: static;
+    transform: none;
+    margin-top: 0;
+    min-width: 100%;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding-left: 1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+  }
+  .flyout-from-top .submenu.is-open {
+    transform: none;
+    margin-top: 1rem;
+  }
+  .flyout-from-top .submenu a {
+    font-size: 1.25rem;
+    justify-content: space-between;
+    /* Match default behavior */
+  }
+}/*# sourceMappingURL=flyout-menu.css.map */
