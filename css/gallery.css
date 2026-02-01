@@ -1,141 +1,91 @@
-/* content of css/gallery.css */
 :root {
-    --gallery-gap: 16px;
-    --gallery-overlay-bg: rgba(0, 0, 0, 0.9);
+  --primary-text: #1E1F24;
+  --secondary-text: #62636C;
+  --divider: #D8D9E0;
+  --accent-text: #3D63DD;
+  --error: #D64545;
+  --warning: #C28A00;
+  --success: #2E8B57;
+  --secondary-background: #E7E8EC;
+  --background: #F9F9FB;
+  --accent-color: #3D63DD;
+  --accent-color-lighten: #87A5EF;
+  --accent-color-text: #D8D9E0;
+  --disabled: #D8D9E0;
 }
 
-body {
-    font-family: system-ui, -apple-system, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 20px;
+[data-theme=dark] {
+  --primary-text: #EEEEF0;
+  --secondary-text: #B2B3BD;
+  --divider: #393A40;
+  --accent-text: #0E496D;
+  --error: #FF6B6B;
+  --warning: #F7B500;
+  --success: #5CC689;
+  --background: #111113;
+  --secondary-background: #19191B;
+  --accent-color: #1B7BB4;
+  --accent-color-lighten: #175982;
+  --accent-color-text: #B2B3BD;
+  --disabled: #303136;
 }
 
-/* Helper to lock scrolling */
-body.no-scroll {
-    overflow: hidden;
+.masonry-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 0 auto;
+  align-items: flex-start;
 }
 
-.gallery-container {
-    max-width: 1200px;
-    margin: 0 auto;
+.masonry-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
 }
 
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: var(--gallery-gap);
+.masonry-item {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
 }
 
-.gallery-item {
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    background-color: #eee;
-    aspect-ratio: 1 / 1;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+.masonry-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  -o-object-fit: cover;
+     object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
 }
 
-.gallery-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.masonry-item img.loaded {
+  opacity: 1;
 }
 
-.gallery-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: opacity 0.3s ease-in;
+.masonry-item-info {
+  padding: 15px;
 }
 
-/* Loading Spinner */
-.gallery-loader {
-    display: flex;
-    justify-content: center;
-    padding: 2rem;
-    width: 100%;
-    opacity: 0;
-    transition: opacity 0.3s;
+.masonry-item-title {
+  margin: 0 0 5px;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
-.gallery-loader.visible {
-    opacity: 1;
+.masonry-item-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
 }
 
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #ddd;
-    border-top-color: #0d6efd;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Overlay Styles */
-.gallery-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--gallery-overlay-bg);
-    z-index: 2000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-    /* Allows click through when hidden */
-    transition: opacity 0.3s ease;
-}
-
-.gallery-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.gallery-overlay-inner {
-    position: relative;
-    max-width: 90%;
-    max-height: 90%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.gallery-overlay-image {
-    max-width: 100%;
-    max-height: 90vh;
-    /* Explicit constraint to viewport height */
-    object-fit: contain;
-    border-radius: 4px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-
-.gallery-close {
-    position: absolute;
-    top: -40px;
-    right: 0;
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 2rem;
-    cursor: pointer;
-    line-height: 1;
-    padding: 5px;
-}
-
-@media (max-width: 480px) {
-    .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    }
-}
+.loader {
+  text-align: center;
+  padding: 40px;
+}/*# sourceMappingURL=gallery.css.map */

@@ -1,0 +1,63 @@
+@use "properties";
+@use "parameters" as *;
+
+.masonry-container {
+    display: flex;
+    gap: $spacing;
+    justify-content: center;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+.masonry-column {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing;
+    flex: 1;
+    min-width: 0;
+}
+
+.masonry-item {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: $shadow;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    position: relative;
+}
+
+.masonry-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+.masonry-item img.loaded {
+    opacity: 1;
+}
+
+.masonry-item-info {
+    padding: 15px;
+}
+
+.masonry-item-title {
+    margin: 0 0 5px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.masonry-item-desc {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.loader {
+    text-align: center;
+    padding: 40px;
+}
