@@ -41,9 +41,6 @@ class Toast {
     }
 
     public show(ms?: number): void {
-        // Remove any existing toast first
-        this.hide();
-
         const div = document.createElement('div');
         div.className = 'toast';
 
@@ -55,7 +52,6 @@ class Toast {
         document.body.appendChild(div);
         this.toastElement = div;
 
-        // Use requestAnimationFrame for smoother animation
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 this.toastElement?.classList.add('show');

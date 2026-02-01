@@ -36,8 +36,6 @@ class Toast {
         this.template = this.buildTemplate();
     }
     show(ms) {
-        // Remove any existing toast first
-        this.hide();
         const div = document.createElement('div');
         div.className = 'toast';
         if (this.type) {
@@ -46,7 +44,6 @@ class Toast {
         div.innerHTML = this.template;
         document.body.appendChild(div);
         this.toastElement = div;
-        // Use requestAnimationFrame for smoother animation
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 this.toastElement?.classList.add('show');

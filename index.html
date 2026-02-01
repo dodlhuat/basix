@@ -808,22 +808,24 @@
       <div class="card">
         <div class="row">
           <div class="column">
-            <strong>TODO: </strong>switch to a javascript solution that can show
-            html
-          </div>
-        </div>
-        <div class="row">
-          <div class="column">
-            <span
-              title="this is a tooltip with a very long - or at least longer - text content."
-              class="tooltip"
-              >this has a tooltip</span
+            <button
+              class="tooltip-trigger"
+              data-tooltip="This is a simple tooltip"
             >
-          </div>
-          <div class="column">
-            <span title="this is a tooltip" class="tooltip"
-              >this has a tooltip</span
+              Simple Tooltip
+            </button>
+            <button
+              class="tooltip-trigger"
+              data-tooltip="This tooltip has <strong>bold</strong> and <em>italic</em> text"
             >
+              HTML Formatting
+            </button>
+            <button
+              class="tooltip-trigger"
+              data-tooltip="You can include <code>code snippets</code> too!"
+            >
+              Code Example
+            </button>
           </div>
         </div>
       </div>

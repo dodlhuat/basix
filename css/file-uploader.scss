@@ -1,192 +1,195 @@
 @use "properties";
 @use "parameters" as *;
 
-.app-container {
-  width: 100%;
-  max-width: 480px;
-}
-
-
-.header h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.header p {
-  color: var(--secondary-text);
-  font-size: 0.875rem;
-}
-
-.drop-zone {
-  border: 2px dashed var(--divider);
-  border-radius: $border-radius;
-  padding: 2rem 1rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background-color: #f9fafb;
-}
-
-.drop-zone:hover,
-.drop-zone.drag-over {
-  border-color: var(--accent-color-lighten);
-  background-color: #eef2ff;
-}
-
-.drop-zone-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  pointer-events: none;
-  /* Let clicks pass through to container */
-}
-
-.icon-container {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #e0e7ff;
-  color: var(--accent-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.5rem;
-}
-
-.primary-text {
-  font-weight: 500;
-  color: var(--accent-color);
-  font-size: 0.875rem;
-}
-
-.secondary-text {
-  color: var(--secondary-text);
-  font-size: 0.75rem;
-}
-
-.file-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.file-item {
-  display: flex;
-  flex-direction: column;
-  /* Changed to column to accommodate progress bar */
-  padding: 0.75rem;
-  background-color: #f9fafb;
-  border: 1px solid var(--divider);
-  border-radius: $border-radius;
-  animation: slideIn 0.2s ease-out;
-  gap: 0.75rem;
-}
-
-.file-item-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+.uploader-content {
+  .app-container {
+    width: 100%;
+    max-width: 480px;
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
   }
-}
 
-.file-info {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  overflow: hidden;
-}
+  .header p {
+    color: var(--secondary-text);
+    font-size: 0.875rem;
+  }
 
-.file-icon {
-  color: var(--secondary-text);
-}
-
-.file-details {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.file-name {
-  font-size: 0.875rem;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.file-size {
-  font-size: 0.75rem;
-  color: var(--secondary-text);
-}
-
-.remove-btn {
-  background: none;
-  border: none;
-  color: var(--secondary-text);
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
-  transition: color 0.2s, background-color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.remove-btn:hover {
-  color: var(--erro);
-  background-color: #fee2e2;
-}
-
-.progress-container {
-  width: 100%;
-  height: 6px;
-  background-color: #e5e7eb;
-  border-radius: 3px;
-  overflow: hidden;
-  display: none;
-  /* Hidden by default */
-}
-
-.progress-bar {
-  height: 100%;
-  background-color: var(--accent-color);
-  width: 0%;
-  transition: width 0.1s linear;
-}
-
-.status-text {
-  font-size: 0.75rem;
-  color: var(--secondary-text);
-  text-align: right;
-  display: none;
-}
-
-.status-text.error {
-  color: var(--error);
-}
-
-.status-text.success {
-  color: var(--success);
-}
-
-@media (max-width: 480px) {
   .drop-zone {
-    padding: 1.5rem 1rem;
+    border: 2px dashed var(--divider);
+    border-radius: $border-radius;
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #f9fafb;
+  }
+
+  .drop-zone:hover,
+  .drop-zone.drag-over {
+    border-color: var(--accent-color-lighten);
+    background-color: #eef2ff;
+  }
+
+  .drop-zone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+    /* Let clicks pass through to container */
+  }
+
+  .icon-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e0e7ff;
+    color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .primary-text {
+    font-weight: 500;
+    color: var(--accent-color);
+    font-size: 0.875rem;
+  }
+
+  .secondary-text {
+    color: var(--secondary-text);
+    font-size: 0.75rem;
+  }
+
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .file-item {
+    display: flex;
+    flex-direction: column;
+    /* Changed to column to accommodate progress bar */
+    padding: 0.75rem;
+    background-color: #f9fafb;
+    border: 1px solid var(--divider);
+    border-radius: $border-radius;
+    animation: slideIn 0.2s ease-out;
+    gap: 0.75rem;
+  }
+
+  .file-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .file-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    overflow: hidden;
+  }
+
+  .file-icon {
+    color: var(--secondary-text);
+  }
+
+  .file-details {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .file-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .file-size {
+    font-size: 0.75rem;
+    color: var(--secondary-text);
+  }
+
+  .remove-btn {
+    background: none;
+    border: none;
+    color: var(--secondary-text);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .remove-btn:hover {
+    color: var(--erro);
+    background-color: #fee2e2;
+  }
+
+  .progress-container {
+    width: 100%;
+    height: 6px;
+    background-color: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+    display: none;
+    /* Hidden by default */
+  }
+
+  .progress-bar {
+    height: 100%;
+    background-color: var(--accent-color);
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  .status-text {
+    font-size: 0.75rem;
+    color: var(--secondary-text);
+    text-align: right;
+    display: none;
+  }
+
+  .status-text.error {
+    color: var(--error);
+  }
+
+  .status-text.success {
+    color: var(--success);
+  }
+
+  @media (max-width: 480px) {
+    .drop-zone {
+      padding: 1.5rem 1rem;
+    }
   }
 }

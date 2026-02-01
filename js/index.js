@@ -14,6 +14,7 @@ import { CodeViewer } from "./code-viewer.js";
 import { FileUploader } from "./file-uploader.js";
 import { TreeComponent, TreeNode } from "./tree.js";
 import { MasonryGallery } from "./gallery.js";
+import { Tooltip } from "./tooltip.js";
 // Generate sample table data
 const generateData = (count) => {
     const data = [];
@@ -236,4 +237,5 @@ utils.ready(() => {
         minColumnWidth: 300,
         fetchBatchSize: 12,
     });
+    Tooltip.initializeAll();
 });
