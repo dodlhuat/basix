@@ -15,6 +15,7 @@ import {FileUploader} from "./file-uploader.js";
 import {TreeComponent, TreeNode} from "./tree.js";
 import {MasonryGallery, ImageData} from "./gallery.js";
 import {Tooltip} from "./tooltip.js";
+import {Dropdown, DropdownSelectDetail} from "./dropdown";
 
 // Generate sample table data
 const generateData = (count: number): TableRow[] => {
@@ -305,6 +306,15 @@ utils.ready(() => {
             }, 800);
         })
     });
+
+    const dropdown = new Dropdown('#myDropdown');
+    const dropdownElement = document.querySelector("#myDropdown");
+    dropdownElement?.addEventListener('dropdown-select', ((event: CustomEvent<DropdownSelectDetail>) => {
+        const { text, element } = event.detail;
+        console.log('User selected:', text);
+        console.log('Selected element:', element);
+    }) as EventListener);
+
 
     Tooltip.initializeAll();
 });
