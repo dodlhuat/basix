@@ -6,7 +6,6 @@ interface ImageData {
 
 interface MasonryGalleryOptions {
   minColumnWidth?: number;
-  fetchBatchSize?: number;
   scrollThreshold?: number;
   loaderSelector?: string;
   reload?: number;
@@ -15,11 +14,10 @@ interface MasonryGalleryOptions {
 
 class MasonryGallery {
   private container: HTMLElement;
-  private loader: HTMLElement | null;
+  private readonly loader: HTMLElement | null;
   private options: Required<Omit<MasonryGalleryOptions, "loaderSelector">>;
   private columns: HTMLDivElement[] = [];
   private isFetching: boolean = false;
-  private page: number = 1;
   private resizeObserver: ResizeObserver | null = null;
   private abortController: AbortController | null = null;
   private reloaded = 0;
@@ -34,10 +32,9 @@ class MasonryGallery {
 
     this.options = {
       minColumnWidth: options.minColumnWidth ?? 250,
-      fetchBatchSize: options.fetchBatchSize ?? 10,
       scrollThreshold: options.scrollThreshold ?? 100,
       reload: 2,
-      fetchFunction: options.fetchFunction ?? this.fetchMockImages(options.fetchBatchSize ?? 10),
+      fetchFunction: options.fetchFunction ?? this.fetchMockImages(),
     };
 
     this.init();
@@ -157,28 +154,8 @@ class MasonryGallery {
     }
   }
 
-  private fetchMockImages(count: number): Promise<ImageData[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const images: ImageData[] = [];
-
-        for (let i = 0; i < count; i++) {
-          const width = 400;
-          const height = Math.floor(Math.random() * 301) + 300; // 300-600
-          const id = Math.floor(Math.random() * 1000);
-          const imageIndex = this.page * count + i;
-
-          images.push({
-            src: `https://picsum.photos/${width}/${height}?random=${imageIndex}`,
-            title: `Image ${imageIndex + 1}`,
-            desc: `A random caption for image ${id}`,
-          });
-        }
-
-        this.page++;
-        resolve(images);
-      }, 800);
-    });
+  private fetchMockImages(): Promise<ImageData[]> {
+    throw Error("Method not implemented.");
   }
 
   private renderImages(imageDataList: ImageData[]): void {
@@ -251,4 +228,4 @@ class MasonryGallery {
   }
 }
 
-export { MasonryGallery };
+export { MasonryGallery, ImageData };
