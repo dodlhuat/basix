@@ -1,167 +1,167 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <meta
-      name="viewport"
-      content="width=device-width,initial-scale=1.0,minimum-scale=1.0"
+            name="viewport"
+            content="width=device-width,initial-scale=1.0,minimum-scale=1.0"
     />
     <title>Basix</title>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
     <style>
-      /*styles for presentation only*/
-      .carousel-slide {
-        background-color: #eee;
-        color: #555;
-      }
+        /*styles for presentation only*/
+        .carousel-slide {
+            background-color: #eee;
+            color: #555;
+        }
 
-      .carousel-slide:nth-child(odd) {
-        background-color: #e0e0e0;
-      }
+        .carousel-slide:nth-child(odd) {
+            background-color: #e0e0e0;
+        }
     </style>
     <script src="js/index.js" type="module"></script>
-  </head>
-  <body class="primary-light-bg primary">
-    <div class="main-header">
-      <div class="open-menu">
+</head>
+<body class="primary-light-bg primary">
+<div class="main-header">
+    <div class="open-menu">
         <div class="navigation-controls">
-          <input type="checkbox" id="menu-navigation" class="navigation" />
-          <label for="menu-navigation">
-            <span class="icon icon-menu"></span>
-          </label>
+            <input type="checkbox" id="menu-navigation" class="navigation"/>
+            <label for="menu-navigation">
+                <span class="icon icon-menu"></span>
+            </label>
         </div>
-      </div>
-      <div class="last">
-        <div class="darkmode-picker cursor-pointer">
-          <div
-            id="theme-toggle"
-            class="theme-toggle flex"
-            aria-label="Toggle dark mode"
-          >
-            <span id="theme-icon" class="icon icon-light"></span>
-          </div>
-        </div>
-      </div>
     </div>
+    <div class="last">
+        <div class="darkmode-picker cursor-pointer">
+            <div
+                    id="theme-toggle"
+                    class="theme-toggle flex"
+                    aria-label="Toggle dark mode"
+            >
+                <span id="theme-icon" class="icon icon-light"></span>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <nav class="push-menu">
-      <ul>
+<nav class="push-menu">
+    <ul>
         <li>
-          <a onclick="window.Scroll.to('#grid')">Grid</a>
+            <a onclick="window.Scroll.to('#grid')">Grid</a>
         </li>
         <li>
-          <a onclick="window.Scroll.to('#typography')">Typography</a>
+            <a onclick="window.Scroll.to('#typography')">Typography</a>
         </li>
         <li>
-          <a onclick="window.Scroll.to('#table')">Table</a>
+            <a onclick="window.Scroll.to('#table')">Table</a>
         </li>
         <li>
-          <a onclick="window.Scroll.to('#alerts')">Alerts</a>
+            <a onclick="window.Scroll.to('#alerts')">Alerts</a>
         </li>
         <li>
-          <a onclick="window.Scroll.to('#chips')">Chips</a>
+            <a onclick="window.Scroll.to('#chips')">Chips</a>
         </li>
-      </ul>
-    </nav>
+    </ul>
+</nav>
 
-    <div class="flyout-overlay" id="flyoutOverlay"></div>
-    <div class="flyout-menu" id="flyoutMenu">
-      <ul>
+<div class="flyout-overlay" id="flyoutOverlay"></div>
+<div class="flyout-menu" id="flyoutMenu">
+    <ul>
         <li><a href="#">Home</a></li>
         <li>
-          About
-          <ul>
-            <li><a href="#">Our Story</a></li>
-            <li><a href="#">Team</a></li>
-            <li><a href="#">Careers</a></li>
-          </ul>
+            About
+            <ul>
+                <li><a href="#">Our Story</a></li>
+                <li><a href="#">Team</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
         </li>
         <li>
-          Services
-          <ul>
-            <li>
-              Web Design
-              <ul>
-                <li><a href="#">eCommerce</a></li>
-                <li><a href="#">Landing Pages</a></li>
-                <li><a href="#">Portfolios</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Development</a></li>
-            <li><a href="#">SEO</a></li>
-          </ul>
+            Services
+            <ul>
+                <li>
+                    Web Design
+                    <ul>
+                        <li><a href="#">eCommerce</a></li>
+                        <li><a href="#">Landing Pages</a></li>
+                        <li><a href="#">Portfolios</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Development</a></li>
+                <li><a href="#">SEO</a></li>
+            </ul>
         </li>
         <li><a href="#">Portfolio</a></li>
         <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
+    </ul>
+</div>
 
-    <div class="content push-content">
-      <h2 id="menu">
+<div class="content push-content">
+    <h2 id="menu">
         <h3>Push Menu</h3>
         <div class="row">
-          <div class="column card">
-            Use three lines at top to test the push menu
-          </div>
+            <div class="column card">
+                Use three lines at top to test the push menu
+            </div>
         </div>
         <h3>Flyout Menu</h3>
         <div class="row">
-          <div class="column card">
-            <p>Choose Flyout Direction:</p>
-            <div class="button-group flyout-controls">
-              <button class="active" data-direction="right">Right</button>
-              <button data-direction="left">Left</button>
-              <button class="trigger-flyout-menu">Show</button>
+            <div class="column card">
+                <p>Choose Flyout Direction:</p>
+                <div class="button-group flyout-controls">
+                    <button class="active" data-direction="right">Right</button>
+                    <button data-direction="left">Left</button>
+                    <button class="trigger-flyout-menu">Show</button>
+                </div>
             </div>
-          </div>
         </div>
-      </h2>
-      <h2 id="grid">grid</h2>
-      <div class="row">
+    </h2>
+    <h2 id="grid">grid</h2>
+    <div class="row">
         <div class="column grow-2 card">1</div>
         <div class="column card">2</div>
-      </div>
-      <div class="row card">
+    </div>
+    <div class="row card">
         <div class="column">1</div>
         <div class="column">2</div>
         <div class="column">3</div>
         <div class="column">4</div>
         <div class="column">5</div>
-      </div>
+    </div>
 
-      <h2 id="typography">typography</h2>
-      <div class="row card">
+    <h2 id="typography">typography</h2>
+    <div class="row card">
         <div class="column">
-          <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-            et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-            no sea takimata sanctus est Lorem ipsum dolor sit amet.
-          </p>
-          <h1>Headline 1</h1>
-          <h2>Headline 2</h2>
-          <h3>Headline 3</h3>
-          <h4>Headline 4</h4>
-          <ul>
-            <li>List Element 1</li>
-            <li>List Element 2</li>
-            <li>List Element 3</li>
-          </ul>
-          <ol>
-            <li>List Element 1</li>
-            <li>List Element 2</li>
-            <li>List Element 3</li>
-          </ol>
+            <p>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+                nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+                erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+                sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+                et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+                accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+            <h1>Headline 1</h1>
+            <h2>Headline 2</h2>
+            <h3>Headline 3</h3>
+            <h4>Headline 4</h4>
+            <ul>
+                <li>List Element 1</li>
+                <li>List Element 2</li>
+                <li>List Element 3</li>
+            </ul>
+            <ol>
+                <li>List Element 1</li>
+                <li>List Element 2</li>
+                <li>List Element 3</li>
+            </ol>
         </div>
-      </div>
+    </div>
 
-      <h3>block without card</h3>
-      <p>
+    <h3>block without card</h3>
+    <p>
         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
         eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
         voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
@@ -171,1158 +171,1184 @@
         sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
         rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
         ipsum dolor sit amet.
-      </p>
-      <hr />
+    </p>
+    <hr/>
 
-      <h2 id="table">table</h2>
-      <p>the table component is using both forms and custom dropdowns</p>
-      <h3>html initialized</h3>
-      <div class="row card">
+    <h2 id="table">table</h2>
+    <p>the table component is using both forms and custom dropdowns</p>
+    <h3>html initialized</h3>
+    <div class="row card">
         <div class="column" id="demo-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Company</th>
-                <th>Role</th>
-                <th>Location</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Alice</td>
-                <td>Acme Corp</td>
-                <td>Engineer</td>
-                <td>Vienna</td>
-              </tr>
-              <tr>
-                <td>Bob</td>
-                <td>Blue Co</td>
-                <td>Designer</td>
-                <td>Berlin</td>
-              </tr>
-              <tr>
-                <td>Carla</td>
-                <td>Delta Ltd</td>
-                <td>Manager</td>
-                <td>Prague</td>
-              </tr>
-              <tr>
-                <td>David</td>
-                <td>Echo Inc</td>
-                <td>Support</td>
-                <td>Amsterdam</td>
-              </tr>
-              <tr>
-                <td>Eva</td>
-                <td>Foxtrot</td>
-                <td>Engineer</td>
-                <td>Zurich</td>
-              </tr>
-              <tr>
-                <td>Frank</td>
-                <td>Golf</td>
-                <td>Sales</td>
-                <td>Paris</td>
-              </tr>
-              <tr>
-                <td>Greta</td>
-                <td>Hotel</td>
-                <td>Engineer</td>
-                <td>Rome</td>
-              </tr>
-              <tr>
-                <td>Hugo</td>
-                <td>India</td>
-                <td>Designer</td>
-                <td>Lisbon</td>
-              </tr>
-              <tr>
-                <td>Ivy</td>
-                <td>Juliet</td>
-                <td>Analyst</td>
-                <td>Stockholm</td>
-              </tr>
-              <tr>
-                <td>Jack</td>
-                <td>Kilo</td>
-                <td>CEO</td>
-                <td>Oslo</td>
-              </tr>
-              <tr>
-                <td>Kate</td>
-                <td>Lima</td>
-                <td>Engineer</td>
-                <td>Madrid</td>
-              </tr>
-            </tbody>
-          </table>
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Location</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Alice</td>
+                    <td>Acme Corp</td>
+                    <td>Engineer</td>
+                    <td>Vienna</td>
+                </tr>
+                <tr>
+                    <td>Bob</td>
+                    <td>Blue Co</td>
+                    <td>Designer</td>
+                    <td>Berlin</td>
+                </tr>
+                <tr>
+                    <td>Carla</td>
+                    <td>Delta Ltd</td>
+                    <td>Manager</td>
+                    <td>Prague</td>
+                </tr>
+                <tr>
+                    <td>David</td>
+                    <td>Echo Inc</td>
+                    <td>Support</td>
+                    <td>Amsterdam</td>
+                </tr>
+                <tr>
+                    <td>Eva</td>
+                    <td>Foxtrot</td>
+                    <td>Engineer</td>
+                    <td>Zurich</td>
+                </tr>
+                <tr>
+                    <td>Frank</td>
+                    <td>Golf</td>
+                    <td>Sales</td>
+                    <td>Paris</td>
+                </tr>
+                <tr>
+                    <td>Greta</td>
+                    <td>Hotel</td>
+                    <td>Engineer</td>
+                    <td>Rome</td>
+                </tr>
+                <tr>
+                    <td>Hugo</td>
+                    <td>India</td>
+                    <td>Designer</td>
+                    <td>Lisbon</td>
+                </tr>
+                <tr>
+                    <td>Ivy</td>
+                    <td>Juliet</td>
+                    <td>Analyst</td>
+                    <td>Stockholm</td>
+                </tr>
+                <tr>
+                    <td>Jack</td>
+                    <td>Kilo</td>
+                    <td>CEO</td>
+                    <td>Oslo</td>
+                </tr>
+                <tr>
+                    <td>Kate</td>
+                    <td>Lima</td>
+                    <td>Engineer</td>
+                    <td>Madrid</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-      </div>
+    </div>
 
-      <h3>js initialized</h3>
-      <div class="row card">
+    <h3>js initialized</h3>
+    <div class="row card">
         <div class="column no-padding" id="demo-table-js"></div>
-      </div>
+    </div>
 
-      <h2>colors / alerts</h2>
-      <div class="row card">
+    <h2>colors / alerts</h2>
+    <div class="row card">
         <div class="column">
-          <p>default, warning, error, success, ...</p>
-          <div class="row">
-            <div class="column">
-              <div class="alert alert-error">
-                <strong>Error: </strong> This is an error alert!
-              </div>
+            <p>default, warning, error, success, ...</p>
+            <div class="row">
+                <div class="column">
+                    <div class="alert alert-error">
+                        <strong>Error: </strong> This is an error alert!
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="alert alert-warning">
+                        <strong>Warning: </strong> This is an warning alert!
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="alert alert-success">
+                        <strong>Success: </strong> This is an success alert!
+                    </div>
+                </div>
             </div>
-            <div class="column">
-              <div class="alert alert-warning">
-                <strong>Warning: </strong> This is an warning alert!
-              </div>
-            </div>
-            <div class="column">
-              <div class="alert alert-success">
-                <strong>Success: </strong> This is an success alert!
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
 
-      <h2 id="chips">chips</h2>
-      <div class="row card">
+    <h2 id="chips">chips</h2>
+    <div class="row card">
         <div class="column">
-          <div class="chips">
-            <div class="chip">Example Chip</div>
-            <div class="chip clickable">Example Chip with hover</div>
-            <div class="chip closeable">
-              Example Chip with closure
-              <button class="close">
-                <span class="icon icon-close"></span>
-              </button>
+            <div class="chips">
+                <div class="chip">Example Chip</div>
+                <div class="chip clickable">Example Chip with hover</div>
+                <div class="chip closeable">
+                    Example Chip with closure
+                    <button class="close">
+                        <span class="icon icon-close"></span>
+                    </button>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
 
-      <h2>forms</h2>
-      <div class="card">
+    <h2>forms</h2>
+    <div class="card">
         <form>
-          <div class="row">
-            <div class="column">
-              <label for="text-input">Text Input</label>
-              <input type="text" id="text-input" />
+            <div class="row">
+                <div class="column">
+                    <label for="text-input">Text Input</label>
+                    <input type="text" id="text-input"/>
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              <label for="text-area">Text Area</label>
-              <textarea id="text-area"></textarea>
+            <div class="row">
+                <div class="column">
+                    <label for="text-area">Text Area</label>
+                    <textarea id="text-area"></textarea>
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="column select-group">
-              <label for="single-select">Single Select</label>
-              <select id="single-select">
-                <option value="1">One</option>
-                <option value="2" selected>Two</option>
-                <option value="3">Three</option>
-              </select>
+            <div class="row">
+                <div class="column select-group">
+                    <label for="single-select">Single Select</label>
+                    <select id="single-select">
+                        <option value="1">One</option>
+                        <option value="2" selected>Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="column select-group">
+                    <label for="multi-select">Multi Select</label>
+                    <select name="multi-select" id="multi-select" multiple>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
             </div>
-            <div class="column select-group">
-              <label for="multi-select">Multi Select</label>
-              <select name="multi-select" id="multi-select" multiple>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
+            <div class="row">
+                <div class="column">
+                    <div class="block">
+                        <input
+                                class="styled-checkbox"
+                                id="checkbox-1"
+                                type="checkbox"
+                                value="1"
+                        />
+                        <label for="checkbox-1">Checkbox</label>
+                    </div>
+                    <div class="block">
+                        <input
+                                class="styled-checkbox"
+                                id="checkbox-2"
+                                type="checkbox"
+                                value="2"
+                                disabled
+                        />
+                        <label for="checkbox-2">A disabled checkbox</label>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              <div class="block">
-                <input
-                  class="styled-checkbox"
-                  id="checkbox-1"
-                  type="checkbox"
-                  value="1"
-                />
-                <label for="checkbox-1">Checkbox</label>
-              </div>
-              <div class="block">
-                <input
-                  class="styled-checkbox"
-                  id="checkbox-2"
-                  type="checkbox"
-                  value="2"
-                  disabled
-                />
-                <label for="checkbox-2">A disabled checkbox</label>
-              </div>
+            <div class="row">
+                <div class="column">
+                    <label class="radio-button-container"
+                    >One
+                        <input type="radio" checked="checked" name="radio"/>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio-button-container"
+                    >Two
+                        <input type="radio" name="radio"/>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="radio-button-container"
+                    >Three
+                        <input type="radio" name="radio"/>
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              <label class="radio-button-container"
-                >One
-                <input type="radio" checked="checked" name="radio" />
-                <span class="checkmark"></span>
-              </label>
-              <label class="radio-button-container"
-                >Two
-                <input type="radio" name="radio" />
-                <span class="checkmark"></span>
-              </label>
-              <label class="radio-button-container"
-                >Three
-                <input type="radio" name="radio" />
-                <span class="checkmark"></span>
-              </label>
+            <div class="row">
+                <div class="column">
+                    <label for="range-slider" class="hidden">Slider</label>
+                    <input
+                            type="range"
+                            min="1"
+                            max="100"
+                            value="50"
+                            id="range-slider"
+                    />
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              <label for="range-slider" class="hidden">Slider</label>
-              <input
-                type="range"
-                min="1"
-                max="100"
-                value="50"
-                id="range-slider"
-              />
+            <div class="row">
+                <div class="column">
+                    <div class="switch">
+                        <input type="checkbox" id="switch"/><label for="switch"
+                    >Toggle</label
+                    >
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              <div class="switch">
-                <input type="checkbox" id="switch" /><label for="switch"
-                  >Toggle</label
-                >
-              </div>
-            </div>
-          </div>
         </form>
-      </div>
+    </div>
 
-      <h2>accordion</h2>
-      <div class="row card">
+    <h2>accordion</h2>
+    <div class="row card">
         <div class="column">
-          <div class="accordion">
-            <div class="accordion-item">
-              <input
-                type="radio"
-                name="accordion"
-                id="acc1"
-                class="accordion-input"
-                checked
-              />
-              <label for="acc1" class="accordion-label"> What is this? </label>
-              <div class="accordion-content">
-                <div class="accordion-body">
-                  <div>
-                    <p>
-                      This is a pure CSS accordion component. It uses the "Radio
-                      Button Hack" to manage state without a single line of
-                      JavaScript.
-                    </p>
-                  </div>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <input
+                            type="radio"
+                            name="accordion"
+                            id="acc1"
+                            class="accordion-input"
+                            checked
+                    />
+                    <label for="acc1" class="accordion-label"> What is this? </label>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <div>
+                                <p>
+                                    This is a pure CSS accordion component. It uses the "Radio
+                                    Button Hack" to manage state without a single line of
+                                    JavaScript.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <input
-                type="radio"
-                name="accordion"
-                id="acc2"
-                class="accordion-input"
-              />
-              <label for="acc2" class="accordion-label">
-                How does it work?
-              </label>
-              <div class="accordion-content">
-                <div class="accordion-body">
-                  <div>
-                    <p>It links label elements to hidden radio buttons.</p>
-                  </div>
+                <div class="accordion-item">
+                    <input
+                            type="radio"
+                            name="accordion"
+                            id="acc2"
+                            class="accordion-input"
+                    />
+                    <label for="acc2" class="accordion-label">
+                        How does it work?
+                    </label>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <div>
+                                <p>It links label elements to hidden radio buttons.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <input
-                type="radio"
-                name="accordion"
-                id="acc3"
-                class="accordion-input"
-              />
-              <label for="acc3" class="accordion-label">
-                Is it accessible?
-              </label>
-              <div class="accordion-content">
-                <div class="accordion-body">
-                  <div>
-                    <p>
-                      It's reasonably accessible as it uses semantic form
-                      elements. Users can tab through the headers (radio inputs)
-                      and select them with the keyboard. However, for full ARIA
-                      support, a small amount of JS is usually recommended to
-                      manage aria-expanded attributes.
-                    </p>
-                  </div>
+                <div class="accordion-item">
+                    <input
+                            type="radio"
+                            name="accordion"
+                            id="acc3"
+                            class="accordion-input"
+                    />
+                    <label for="acc3" class="accordion-label">
+                        Is it accessible?
+                    </label>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <div>
+                                <p>
+                                    It's reasonably accessible as it uses semantic form
+                                    elements. Users can tab through the headers (radio inputs)
+                                    and select them with the keyboard. However, for full ARIA
+                                    support, a small amount of JS is usually recommended to
+                                    manage aria-expanded attributes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
 
-      <h2>tabs</h2>
-      <div class="row card">
+    <h2>tabs</h2>
+    <div class="row card">
         <div class="column">
-          <h3>vertical</h3>
-          <div class="tabs-container vertical">
-            <div class="tabs-header">
-              <ul class="tabs-list">
-                <li class="tab-item active">General</li>
-                <li class="tab-item">Profile</li>
-                <li class="tab-item">Privacy</li>
-                <li class="tab-item">Billing</li>
-              </ul>
+            <h3>vertical</h3>
+            <div class="tabs-container vertical">
+                <div class="tabs-header">
+                    <ul class="tabs-list">
+                        <li class="tab-item active">General</li>
+                        <li class="tab-item">Profile</li>
+                        <li class="tab-item">Privacy</li>
+                        <li class="tab-item">Billing</li>
+                    </ul>
+                </div>
+                <div class="tabs-content">
+                    <div class="tab-panel active">
+                        <h3>General Information</h3>
+                        <p>
+                            Overview of your general system settings and configurations.
+                        </p>
+                    </div>
+                    <div class="tab-panel">
+                        <h3>Public Profile</h3>
+                        <p>
+                            Customize how your profile appears to other users on the
+                            platform.
+                        </p>
+                    </div>
+                    <div class="tab-panel">
+                        <h3>Privacy Settings</h3>
+                        <p>
+                            Control who can see your activity and personal information.
+                        </p>
+                    </div>
+                    <div class="tab-panel">
+                        <h3>Billing & Invoices</h3>
+                        <p>
+                            View your billing history, manage payment methods, and
+                            download invoices.
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="tabs-content">
-              <div class="tab-panel active">
-                <h3>General Information</h3>
-                <p>
-                  Overview of your general system settings and configurations.
-                </p>
-              </div>
-              <div class="tab-panel">
-                <h3>Public Profile</h3>
-                <p>
-                  Customize how your profile appears to other users on the
-                  platform.
-                </p>
-              </div>
-              <div class="tab-panel">
-                <h3>Privacy Settings</h3>
-                <p>
-                  Control who can see your activity and personal information.
-                </p>
-              </div>
-              <div class="tab-panel">
-                <h3>Billing & Invoices</h3>
-                <p>
-                  View your billing history, manage payment methods, and
-                  download invoices.
-                </p>
-              </div>
+            <h3>horizontal</h3>
+            <div class="tabs-container horizontal">
+                <div class="tabs-header">
+                    <ul class="tabs-list">
+                        <li class="tab-item active">General</li>
+                        <li class="tab-item">Profile</li>
+                        <li class="tab-item">Privacy</li>
+                        <li class="tab-item">Billing</li>
+                    </ul>
+                </div>
+                <div class="tabs-content">
+                    <div class="tab-panel active">
+                        <h3>General Information</h3>
+                        <p>
+                            Overview of your general system settings and configurations.
+                        </p>
+                    </div>
+                    <div class="tab-panel">
+                        <h3>Public Profile</h3>
+                        <p>
+                            Customize how your profile appears to other users on the
+                            platform.
+                        </p>
+                    </div>
+                    <div class="tab-panel">
+                        <h3>Privacy Settings</h3>
+                        <p>
+                            Control who can see your activity and personal information.
+                        </p>
+                    </div>
+                    <div class="tab-panel">
+                        <h3>Billing & Invoices</h3>
+                        <p>
+                            View your billing history, manage payment methods, and
+                            download invoices.
+                        </p>
+                    </div>
+                </div>
             </div>
-          </div>
-          <h3>horizontal</h3>
-          <div class="tabs-container horizontal">
-            <div class="tabs-header">
-              <ul class="tabs-list">
-                <li class="tab-item active">General</li>
-                <li class="tab-item">Profile</li>
-                <li class="tab-item">Privacy</li>
-                <li class="tab-item">Billing</li>
-              </ul>
-            </div>
-            <div class="tabs-content">
-              <div class="tab-panel active">
-                <h3>General Information</h3>
-                <p>
-                  Overview of your general system settings and configurations.
-                </p>
-              </div>
-              <div class="tab-panel">
-                <h3>Public Profile</h3>
-                <p>
-                  Customize how your profile appears to other users on the
-                  platform.
-                </p>
-              </div>
-              <div class="tab-panel">
-                <h3>Privacy Settings</h3>
-                <p>
-                  Control who can see your activity and personal information.
-                </p>
-              </div>
-              <div class="tab-panel">
-                <h3>Billing & Invoices</h3>
-                <p>
-                  View your billing history, manage payment methods, and
-                  download invoices.
-                </p>
-              </div>
-            </div>
-          </div>
-          <h3>usage</h3>
-          <div id="usage-tabs" class="code-container"></div>
+            <h3>usage</h3>
+            <div id="usage-tabs" class="code-container"></div>
 
-          <h4>options</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>layout</td>
-                <td>set either to "horizontal" or "vertical"</td>
-              </tr>
-              <tr>
-                <td>defaultTab</td>
-                <td>optional to set the first active tab starting with 0</td>
-              </tr>
-            </tbody>
-          </table>
+            <h4>options</h4>
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>layout</td>
+                    <td>set either to "horizontal" or "vertical"</td>
+                </tr>
+                <tr>
+                    <td>defaultTab</td>
+                    <td>optional to set the first active tab starting with 0</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-      </div>
+    </div>
 
-      <h2>timeline</h2>
-      <div class="row card">
+    <h2>timeline</h2>
+    <div class="row card">
         <div class="column">
-          <div class="timeline">
-            <div class="timeline-item active">
-              <div class="timeline-content">
-                <span class="timeline-date">October 12, 2023</span>
-                <h3 class="timeline-title">Project Kickoff</h3>
-                <p class="timeline-body">
-                  Initial meeting with shareholders to discuss the scope and
-                  requirements of the project. Team roles were assigned and the
-                  roadmap was drafted.
-                </p>
-              </div>
-            </div>
+            <div class="timeline">
+                <div class="timeline-item active">
+                    <div class="timeline-content">
+                        <span class="timeline-date">October 12, 2023</span>
+                        <h3 class="timeline-title">Project Kickoff</h3>
+                        <p class="timeline-body">
+                            Initial meeting with shareholders to discuss the scope and
+                            requirements of the project. Team roles were assigned and the
+                            roadmap was drafted.
+                        </p>
+                    </div>
+                </div>
 
-            <div class="timeline-item">
-              <div class="timeline-content">
-                <span class="timeline-date">November 5, 2023</span>
-                <h3 class="timeline-title">Design Phase Completed</h3>
-                <p class="timeline-body">
-                  Finalized the UI/UX mockups and received approval from the
-                  client. The design system was established with a complete
-                  color palette and typography guide.
-                </p>
-              </div>
-            </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-date">November 5, 2023</span>
+                        <h3 class="timeline-title">Design Phase Completed</h3>
+                        <p class="timeline-body">
+                            Finalized the UI/UX mockups and received approval from the
+                            client. The design system was established with a complete
+                            color palette and typography guide.
+                        </p>
+                    </div>
+                </div>
 
-            <div class="timeline-item">
-              <div class="timeline-content">
-                <span class="timeline-date">December 20, 2023</span>
-                <h3 class="timeline-title">Alpha Release</h3>
-                <p class="timeline-body">
-                  Released the first playable version of the application to
-                  internal testers. Identified major bugs in the navigation
-                  logic and fixed critical performance issues.
-                </p>
-              </div>
-            </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-date">December 20, 2023</span>
+                        <h3 class="timeline-title">Alpha Release</h3>
+                        <p class="timeline-body">
+                            Released the first playable version of the application to
+                            internal testers. Identified major bugs in the navigation
+                            logic and fixed critical performance issues.
+                        </p>
+                    </div>
+                </div>
 
-            <div class="timeline-item">
-              <div class="timeline-content">
-                <span class="timeline-date">January 15, 2024</span>
-                <h3 class="timeline-title">Beta Launch</h3>
-                <p class="timeline-body">
-                  Opened the platform to a closed beta group of 500 users.
-                  Collected feedback regarding the onboarding flow and
-                  notification settings.
-                </p>
-              </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <span class="timeline-date">January 15, 2024</span>
+                        <h3 class="timeline-title">Beta Launch</h3>
+                        <p class="timeline-body">
+                            Opened the platform to a closed beta group of 500 users.
+                            Collected feedback regarding the onboarding flow and
+                            notification settings.
+                        </p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
 
-      <h2>chat bubbles</h2>
-      <div class="row card">
+    <h2>chat bubbles</h2>
+    <div class="row card">
         <div class="column">
-          <div class="chat-container">
-            <div class="message message-incoming">
-              Hi there! How are you doing today?
-              <span class="message-meta">10:42 AM</span>
+            <div class="chat-container">
+                <div class="message message-incoming">
+                    Hi there! How are you doing today?
+                    <span class="message-meta">10:42 AM</span>
+                </div>
+                <div class="message message-outgoing">
+                    I'm doing great, thanks! Just working on some new CSS
+                    components.<br/>And other stuff.
+                    <span class="message-meta">10:43 AM</span>
+                </div>
+                <div class="message message-outgoing">
+                    Trying to make a simple chat UI.
+                    <span class="message-meta">10:43 AM</span>
+                </div>
+                <div class="message message-incoming">
+                    That sounds cool!
+                    <span class="message-meta">10:45 AM</span>
+                </div>
             </div>
-            <div class="message message-outgoing">
-              I'm doing great, thanks! Just working on some new CSS
-              components.<br />And other stuff.
-              <span class="message-meta">10:43 AM</span>
-            </div>
-            <div class="message message-outgoing">
-              Trying to make a simple chat UI.
-              <span class="message-meta">10:43 AM</span>
-            </div>
-            <div class="message message-incoming">
-              That sounds cool!
-              <span class="message-meta">10:45 AM</span>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
 
-      <h2>carousel</h2>
-      <div class="row card">
+    <h2>carousel</h2>
+    <div class="row card">
         <div class="column">
-          <div class="carousel" id="carouselIdHere">
-            <div>Slide 1</div>
-            <div>Slide 2</div>
-            <div>Slide 3</div>
-            <div>Slide 4</div>
-          </div>
+            <div class="carousel" id="carouselIdHere">
+                <div>Slide 1</div>
+                <div>Slide 2</div>
+                <div>Slide 3</div>
+                <div>Slide 4</div>
+            </div>
         </div>
-      </div>
+    </div>
 
-      <h2>scrollbar</h2>
-      <div class="row card">
+    <h2>scrollbar</h2>
+    <div class="row card">
         <div class="column scroll-container" style="height: 100px">
-          <div class="viewport">
-            <div class="content">
-              <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-                dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-                eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-                sed diam voluptua. At vero eos et accusam et justo duo dolores
-                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
-                est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                invidunt ut labore et dolore magna aliquyam erat, sed diam
-                voluptua. At vero eos et accusam et justo duo dolores et ea
-                rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-                Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in
-                hendrerit in vulputate velit esse molestie consequat, vel illum
-                dolore eu feugiat nulla facilisis at vero eros et accumsan et
-                iusto odio dignissim qui blandit praesent luptatum zzril delenit
-                augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor
-                sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
-                euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-              </p>
+            <div class="viewport">
+                <div class="content">
+                    <p>
+                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                        diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                        aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                        justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+                        dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                        eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+                        sed diam voluptua. At vero eos et accusam et justo duo dolores
+                        et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+                        est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+                        consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                        invidunt ut labore et dolore magna aliquyam erat, sed diam
+                        voluptua. At vero eos et accusam et justo duo dolores et ea
+                        rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                        Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in
+                        hendrerit in vulputate velit esse molestie consequat, vel illum
+                        dolore eu feugiat nulla facilisis at vero eros et accumsan et
+                        iusto odio dignissim qui blandit praesent luptatum zzril delenit
+                        augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor
+                        sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
+                        euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    </p>
+                </div>
+                <div class="scrollbar" aria-hidden="true">
+                    <div class="track">
+                        <div class="thumb" role="presentation" aria-hidden="true"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column scroll-container" style="height: 100px">
+            <div class="viewport">
+                <div class="content">
+                    invidunt ut labore et dolore magna aliquyam erat, sed diam
+                    voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+                    Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
+                    dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
+                    elitr, sed diam nonumy eirmod tempor invidunt ut
+                </div>
+                <div class="scrollbar" aria-hidden="true">
+                    <div class="track">
+                        <div class="thumb" role="presentation" aria-hidden="true"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column scroll-container" style="height: 100px">
+            <div class="viewport">
+                <div class="content">
+                    invidunt ut labore et dolore magna aliquyam erat
+                </div>
             </div>
             <div class="scrollbar" aria-hidden="true">
-              <div class="track">
-                <div class="thumb" role="presentation" aria-hidden="true"></div>
-              </div>
+                <div class="track">
+                    <div class="thumb" role="presentation" aria-hidden="true"></div>
+                </div>
             </div>
-          </div>
         </div>
+    </div>
 
-        <div class="column scroll-container" style="height: 100px">
-          <div class="viewport">
-            <div class="content">
-              invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut
-            </div>
-            <div class="scrollbar" aria-hidden="true">
-              <div class="track">
-                <div class="thumb" role="presentation" aria-hidden="true"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="column scroll-container" style="height: 100px">
-          <div class="viewport">
-            <div class="content">
-              invidunt ut labore et dolore magna aliquyam erat
-            </div>
-          </div>
-          <div class="scrollbar" aria-hidden="true">
-            <div class="track">
-              <div class="thumb" role="presentation" aria-hidden="true"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h2>more components</h2>
-      <h3>buttons</h3>
-      <div class="row card">
+    <h2>more components</h2>
+    <h3>buttons</h3>
+    <div class="row card">
         <div class="column">
-          <button>Default</button>&nbsp;
-          <button class="button-primary">Primary</button>&nbsp;
-          <button class="button-success">Success</button>&nbsp;
-          <button class="button-warning">Warning</button>&nbsp;
-          <button class="button-error">Error</button>
+            <button>Default</button>&nbsp;
+            <button class="button-primary">Primary</button>&nbsp;
+            <button class="button-success">Success</button>&nbsp;
+            <button class="button-warning">Warning</button>&nbsp;
+            <button class="button-error">Error</button>
         </div>
-      </div>
-      <h3>card</h3>
-      <div class="row">
+    </div>
+    <h3>card</h3>
+    <div class="row">
         <div class="column card">
-          <div class="header">Card Header</div>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-          rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-          ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-          sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-          et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-          takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit
-          amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-          invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-          At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-          kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-          amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-          diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-          erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-          et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-          Lorem ipsum dolor sit amet.
-          <div class="footer">Card Footer</div>
+            <div class="header">Card Header</div>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+            sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+            rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+            ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+            takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit
+            amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
+            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+            amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+            Lorem ipsum dolor sit amet.
+            <div class="footer">Card Footer</div>
         </div>
-      </div>
+    </div>
 
-      <h3>modal</h3>
-      <button class="show-modal">Show Modal</button>
-      <br /><br />
-      <h3>placeholder</h3>
-      <div class="row">
+    <h3>modal</h3>
+    <button class="show-modal">Show Modal</button>
+    <br/><br/>
+    <h3>placeholder</h3>
+    <div class="row">
         <div class="column card">
-          <h2><span class="placeholder w-4"></span></h2>
-          <p>
+            <h2><span class="placeholder w-4"></span></h2>
+            <p>
             <span class="placeholder w-6"></span
             ><span class="placeholder w-3"></span
             ><span class="placeholder w-2"></span
             ><span class="placeholder w-5"></span
             ><span class="placeholder w-1"></span>
-          </p>
+            </p>
         </div>
-      </div>
-
-      <h3>progress</h3>
-      <div class="row">
-        <div class="column card">
-          <div class="progress-bar">
-            <div class="progress" style="height: 24px; width: 50%"></div>
-          </div>
-        </div>
-      </div>
-
-      <h3>tooltip</h3>
-      <div class="card">
-        <div class="row">
-          <div class="column">
-            <button
-              class="tooltip-trigger"
-              data-tooltip="This is a simple tooltip"
-            >
-              Simple Tooltip
-            </button>
-            <button
-              class="tooltip-trigger"
-              data-tooltip="This tooltip has <strong>bold</strong> and <em>italic</em> text"
-            >
-              HTML Formatting
-            </button>
-            <button
-              class="tooltip-trigger"
-              data-tooltip="You can include <code>code snippets</code> too!"
-            >
-              Code Example
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <h3>toast</h3>
-      <div class="row card">
-        <div class="column">
-          <p>
-            toasts can have an additonal markup to show a colored bar on top:
-            default, success, warning, error.
-          </p>
-          <strong>Parameters:</strong>
-          content (string | mandatory)<br />
-          header (string | optional)<br />
-          markup (enum: default, success, warning, error | optional)<br />
-          closeable (boolean | optional | default: true)<br />
-          auto-closure (integer | optional | in ms)
-          <br />
-          <button class="show-toast">Show Toast</button>
-        </div>
-      </div>
-
-      <h3>icons</h3>
-      <div class="card">
-        <div class="row">
-          <div class="column">
-            <strong>Info: </strong>Basix is using a reduced font of google
-            material icon font with just a minimum of icons. Just bear in mind
-            that the reduced version is only 5.5KB in size while the full
-            version is 242.5KB.<br />
-            To show an icon use the "icon" class and the desired icon element
-            class.<br />
-            <br />The following icons are available in the reduce set:
-          </div>
-        </div>
-        <div class="horizontal-align-center">
-          <div class="row">
-            <div class="column">
-              icon-delete<br /><span class="icon icon-delete"></span>
-            </div>
-            <div class="column">
-              icon-search<br /><span class="icon icon-search"></span>
-            </div>
-            <div class="column">
-              icon-splitscreen_vertical_add<br /><span
-                class="icon icon-splitscreen_vertical_add"
-              ></span>
-            </div>
-            <div class="column">
-              icon-splitscreen_add<br /><span
-                class="icon icon-splitscreen_add"
-              ></span>
-            </div>
-            <div class="column">
-              icon-push_pin<br /><span class="icon icon-push_pin"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-block<br /><span class="icon icon-block"></span>
-            </div>
-            <div class="column">
-              icon-check_circle<br /><span
-                class="icon icon-check_circle"
-              ></span>
-            </div>
-            <div class="column">
-              icon-stars<br /><span class="icon icon-stars"></span>
-            </div>
-            <div class="column">
-              icon-support<br /><span class="icon icon-support"></span>
-            </div>
-            <div class="column">
-              icon-refresh<br /><span class="icon icon-refresh"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-sync<br /><span class="icon icon-sync"></span>
-            </div>
-            <div class="column">
-              icon-language<br /><span class="icon icon-language"></span>
-            </div>
-            <div class="column">
-              icon-article<br /><span class="icon icon-article"></span>
-            </div>
-            <div class="column">
-              icon-list_alt<br /><span class="icon icon-list_alt"></span>
-            </div>
-            <div class="column">
-              icon-add_box<br /><span class="icon icon-add_box"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-disabled_by_default<br /><span
-                class="icon icon-disabled_by_default"
-              ></span>
-            </div>
-            <div class="column">
-              icon-help_center<br /><span class="icon icon-help_center"></span>
-            </div>
-            <div class="column">
-              icon-pages<br /><span class="icon icon-pages"></span>
-            </div>
-            <div class="column">
-              icon-add_photo_alternate<br /><span
-                class="icon icon-add_photo_alternate"
-              ></span>
-            </div>
-            <div class="column">
-              icon-calendar_today<br /><span
-                class="icon icon-calendar_today"
-              ></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-assignment_turned_in<br /><span
-                class="icon icon-assignment_turned_in"
-              ></span>
-            </div>
-            <div class="column">
-              icon-finance<br /><span class="icon icon-finance"></span>
-            </div>
-            <div class="column">
-              icon-save<br /><span class="icon icon-save"></span>
-            </div>
-            <div class="column">
-              icon-folder<br /><span class="icon icon-folder"></span>
-            </div>
-            <div class="column">
-              icon-folder_off<br /><span class="icon icon-folder_off"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-folder_open<br /><span class="icon icon-folder_open"></span>
-            </div>
-            <div class="column">
-              icon-mail<br /><span class="icon icon-mail"></span>
-            </div>
-            <div class="column">
-              icon-attach_file<br /><span class="icon icon-attach_file"></span>
-            </div>
-            <div class="column">
-              icon-chat_bubble<br /><span class="icon icon-chat_bubble"></span>
-            </div>
-            <div class="column">
-              icon-cases<br /><span class="icon icon-cases"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-send<br /><span class="icon icon-send"></span>
-            </div>
-            <div class="column">
-              icon-bookmark<br /><span class="icon icon-bookmark"></span>
-            </div>
-            <div class="column">
-              icon-label<br /><span class="icon icon-label"></span>
-            </div>
-            <div class="column">
-              icon-filter_alt<br /><span class="icon icon-filter_alt"></span>
-            </div>
-            <div class="column">
-              icon-filter_alt_off<br /><span
-                class="icon icon-filter_alt_off"
-              ></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-notifications_active<br /><span
-                class="icon icon-notifications_active"
-              ></span>
-            </div>
-            <div class="column">
-              icon-more_horiz<br /><span class="icon icon-more_horiz"></span>
-            </div>
-            <div class="column">
-              icon-more_vert<br /><span class="icon icon-more_vert"></span>
-            </div>
-            <div class="column">
-              icon-navigate_before<br /><span
-                class="icon icon-navigate_before"
-              ></span>
-            </div>
-            <div class="column">
-              icon-navigate_next<br /><span
-                class="icon icon-navigate_next"
-              ></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-keyboard_double_arrow_left<br /><span
-                class="icon icon-keyboard_double_arrow_left"
-              ></span>
-            </div>
-            <div class="column">
-              icon-keyboard_double_arrow_right<br /><span
-                class="icon icon-keyboard_double_arrow_right"
-              ></span>
-            </div>
-            <div class="column">
-              icon-first_page<br /><span class="icon icon-first_page"></span>
-            </div>
-            <div class="column">
-              icon-last_page<br /><span class="icon icon-last_page"></span>
-            </div>
-            <div class="column">
-              icon-expand_less<br /><span class="icon icon-expand_less"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-expand_more<br /><span class="icon icon-expand_more"></span>
-            </div>
-            <div class="column">
-              icon-zoom_in_map<br /><span class="icon icon-zoom_in_map"></span>
-            </div>
-            <div class="column">
-              icon-zoom_out_map<br /><span
-                class="icon icon-zoom_out_map"
-              ></span>
-            </div>
-            <div class="column">
-              icon-drag_pan<br /><span class="icon icon-drag_pan"></span>
-            </div>
-            <div class="column">
-              icon-format_list_bulleted<br /><span
-                class="icon icon-format_list_bulleted"
-              ></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-format_list_numbered<br /><span
-                class="icon icon-format_list_numbered"
-              ></span>
-            </div>
-            <div class="column">
-              icon-check<br /><span class="icon icon-check"></span>
-            </div>
-            <div class="column">
-              icon-remove<br /><span class="icon icon-remove"></span>
-            </div>
-            <div class="column">
-              icon-add<br /><span class="icon icon-add"></span>
-            </div>
-            <div class="column">
-              icon-close<br /><span class="icon icon-close"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-format_bold<br /><span class="icon icon-format_bold"></span>
-            </div>
-            <div class="column">
-              icon-format_italic<br /><span
-                class="icon icon-format_italic"
-              ></span>
-            </div>
-            <div class="column">
-              icon-format_underlined<br /><span
-                class="icon icon-format_underlined"
-              ></span>
-            </div>
-            <div class="column">
-              icon-home<br /><span class="icon icon-home"></span>
-            </div>
-            <div class="column">
-              icon-favorite<br /><span class="icon icon-favorite"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-edit<br /><span class="icon icon-edit"></span>
-            </div>
-            <div class="column">
-              icon-layers<br /><span class="icon icon-layers"></span>
-            </div>
-            <div class="column">
-              icon-cloud<br /><span class="icon icon-cloud"></span>
-            </div>
-            <div class="column">
-              icon-print<br /><span class="icon icon-print"></span>
-            </div>
-            <div class="column">
-              icon-share<br /><span class="icon icon-share"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-tune<br /><span class="icon icon-tune"></span>
-            </div>
-            <div class="column">
-              icon-power_settings_new<br /><span
-                class="icon icon-power_settings_new"
-              ></span>
-            </div>
-            <div class="column">
-              icon-timeline<br /><span class="icon icon-timeline"></span>
-            </div>
-            <div class="column">
-              icon-bar_chart<br /><span class="icon icon-bar_chart"></span>
-            </div>
-            <div class="column">
-              icon-bar_chart_4_bars<br /><span
-                class="icon icon-bar_chart_4_bars"
-              ></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-finance_mode<br /><span
-                class="icon icon-finance_mode"
-              ></span>
-            </div>
-            <div class="column">
-              icon-database<br /><span class="icon icon-database"></span>
-            </div>
-            <div class="column">
-              icon-settings<br /><span class="icon icon-settings"></span>
-            </div>
-            <div class="column">
-              icon-person<br /><span class="icon icon-person"></span>
-            </div>
-            <div class="column">
-              icon-menu<br /><span class="icon icon-menu"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-light<br /><span class="icon icon-light"></span>
-            </div>
-            <div class="column">
-              icon-dark<br /><span class="icon icon-dark"></span>
-            </div>
-            <div class="column"></div>
-            <div class="column"></div>
-            <div class="column"></div>
-          </div>
-        </div>
-      </div>
-
-      <h3>spinner</h3>
-      <div class="row">
-        <div class="column card center">
-          <div class="spinner"></div>
-        </div>
-        <div class="column card center">
-          <div class="loading"></div>
-        </div>
-        <div class="column grow-4"></div>
-      </div>
-
-      <h3>date picker</h3>
-      <div class="row">
-        <div class="column card">
-          <label for="datepicker-single">Datepicker Single Value</label>
-          <input
-            type="text"
-            id="datepicker-single"
-            class="datepicker-input"
-            placeholder="Select a date"
-            readonly
-          />
-        </div>
-        <div class="column card">
-          <label for="datepicker-range">Datepicker Range</label>
-          <input
-            type="text"
-            id="datepicker-range"
-            class="datepicker-input"
-            placeholder="Select a date range"
-            readonly
-          />
-        </div>
-        <div class="column card">
-          <label for="datepicker-localized"
-            >Datepicker Translated & Start on Monday</label
-          >
-          <input
-            type="text"
-            id="datepicker-localized"
-            class="datepicker-input"
-            placeholder="Seleccionar fecha"
-            readonly
-          />
-        </div>
-      </div>
-
-      <h3>tree</h3>
-      <div class="row">
-        <div class="column card">
-          <ul id="tree-root" class="tree"></ul>
-        </div>
-      </div>
-
-      <h3>uploader</h3>
-      <div class="card row">
-        <div class="column uploader-content">
-          <div class="header">
-            <h2>Upload Files</h2>
-            <p>Select or drag files to upload</p>
-          </div>
-          <div id="drop-zone" class="drop-zone">
-            <input type="file" id="file-input" multiple hidden />
-            <div class="drop-zone-content">
-              <div class="icon-container">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="upload-icon"
-                >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="17 8 12 3 7 8"></polyline>
-                  <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-              </div>
-              <p class="primary-text">Click to upload or drag and drop</p>
-              <p class="secondary-text">
-                SVG, PNG, JPG or GIF (max. 800x400px)
-              </p>
-            </div>
-          </div>
-
-          <div id="file-list" class="file-list"></div>
-
-          <div class="actions">
-            <button id="upload-btn" disabled>Upload Files</button>
-          </div>
-        </div>
-      </div>
-
-      <h3>dropdown</h3>
-      <div class="row">
-        <div class="column card">
-          <div class="dropdown-container" id="myDropdown">
-            <button class="dropdown-trigger">Select Option</button>
-            <ul class="dropdown-menu">
-              <li>
-                <div class="dropdown-item">Profile</div>
-              </li>
-              <li>
-                <div class="dropdown-item">Settings</div>
-                <ul>
-                  <li>
-                    <div class="dropdown-item">Account</div>
-                  </li>
-                  <li>
-                    <div class="dropdown-item">Privacy</div>
-                    <ul>
-                      <li><div class="dropdown-item">Public</div></li>
-                      <li><div class="dropdown-item">Private</div></li>
-                      <li><div class="dropdown-item">Friends Only</div></li>
-                    </ul>
-                  </li>
-                  <li>
-                    <div class="dropdown-item">Notifications</div>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <div class="dropdown-item">Help</div>
-              </li>
-              <li>
-                <div class="dropdown-item">Logout</div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <h3>Gallery</h3>
-      <div class="row">
-        <div class="column card">
-          <div id="gallery" class="masonry-container"></div>
-          <div class="loader hidden"><div class="spinner"></div></div>
-        </div>
-      </div>
-
-      <h3>Starter Template</h3>
-      <div class="row">
-        <div class="column card">tbd</div>
-      </div>
     </div>
 
-    <script src="js/scroll.js" type="module"></script>
-  </body>
+    <h3>progress</h3>
+    <div class="row">
+        <div class="column card">
+            <div class="progress-bar">
+                <div class="progress" style="height: 24px; width: 50%"></div>
+            </div>
+        </div>
+    </div>
+
+    <h3>tooltip</h3>
+    <div class="card">
+        <div class="row">
+            <div class="column">
+                <button
+                        class="tooltip-trigger"
+                        data-tooltip="This is a simple tooltip"
+                >
+                    Simple Tooltip
+                </button>
+                <button
+                        class="tooltip-trigger"
+                        data-tooltip="This tooltip has <strong>bold</strong> and <em>italic</em> text"
+                >
+                    HTML Formatting
+                </button>
+                <button
+                        class="tooltip-trigger"
+                        data-tooltip="You can include <code>code snippets</code> too!"
+                >
+                    Code Example
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <h3>toast</h3>
+    <div class="row card">
+        <div class="column">
+            <p>
+                toasts can have an additonal markup to show a colored bar on top:
+                default, success, warning, error.
+            </p>
+            <strong>Parameters:</strong>
+            content (string | mandatory)<br/>
+            header (string | optional)<br/>
+            markup (enum: default, success, warning, error | optional)<br/>
+            closeable (boolean | optional | default: true)<br/>
+            auto-closure (integer | optional | in ms)
+            <br/>
+            <button class="show-toast">Show Toast</button>
+        </div>
+    </div>
+
+    <h3>icons</h3>
+    <div class="card">
+        <div class="row">
+            <div class="column">
+                <strong>Info: </strong>Basix is using a reduced font of google
+                material icon font with just a minimum of icons. Just bear in mind
+                that the reduced version is only 5.5KB in size while the full
+                version is 242.5KB.<br/>
+                To show an icon use the "icon" class and the desired icon element
+                class.<br/>
+                <br/>The following icons are available in the reduce set:
+            </div>
+        </div>
+        <div class="horizontal-align-center">
+            <div class="row">
+                <div class="column">
+                    icon-delete<br/><span class="icon icon-delete"></span>
+                </div>
+                <div class="column">
+                    icon-search<br/><span class="icon icon-search"></span>
+                </div>
+                <div class="column">
+                    icon-splitscreen_vertical_add<br/><span
+                        class="icon icon-splitscreen_vertical_add"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-splitscreen_add<br/><span
+                        class="icon icon-splitscreen_add"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-push_pin<br/><span class="icon icon-push_pin"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-block<br/><span class="icon icon-block"></span>
+                </div>
+                <div class="column">
+                    icon-check_circle<br/><span
+                        class="icon icon-check_circle"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-stars<br/><span class="icon icon-stars"></span>
+                </div>
+                <div class="column">
+                    icon-support<br/><span class="icon icon-support"></span>
+                </div>
+                <div class="column">
+                    icon-refresh<br/><span class="icon icon-refresh"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-sync<br/><span class="icon icon-sync"></span>
+                </div>
+                <div class="column">
+                    icon-language<br/><span class="icon icon-language"></span>
+                </div>
+                <div class="column">
+                    icon-article<br/><span class="icon icon-article"></span>
+                </div>
+                <div class="column">
+                    icon-list_alt<br/><span class="icon icon-list_alt"></span>
+                </div>
+                <div class="column">
+                    icon-add_box<br/><span class="icon icon-add_box"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-disabled_by_default<br/><span
+                        class="icon icon-disabled_by_default"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-help_center<br/><span class="icon icon-help_center"></span>
+                </div>
+                <div class="column">
+                    icon-pages<br/><span class="icon icon-pages"></span>
+                </div>
+                <div class="column">
+                    icon-add_photo_alternate<br/><span
+                        class="icon icon-add_photo_alternate"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-calendar_today<br/><span
+                        class="icon icon-calendar_today"
+                ></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-assignment_turned_in<br/><span
+                        class="icon icon-assignment_turned_in"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-finance<br/><span class="icon icon-finance"></span>
+                </div>
+                <div class="column">
+                    icon-save<br/><span class="icon icon-save"></span>
+                </div>
+                <div class="column">
+                    icon-folder<br/><span class="icon icon-folder"></span>
+                </div>
+                <div class="column">
+                    icon-folder_off<br/><span class="icon icon-folder_off"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-folder_open<br/><span class="icon icon-folder_open"></span>
+                </div>
+                <div class="column">
+                    icon-mail<br/><span class="icon icon-mail"></span>
+                </div>
+                <div class="column">
+                    icon-attach_file<br/><span class="icon icon-attach_file"></span>
+                </div>
+                <div class="column">
+                    icon-chat_bubble<br/><span class="icon icon-chat_bubble"></span>
+                </div>
+                <div class="column">
+                    icon-cases<br/><span class="icon icon-cases"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-send<br/><span class="icon icon-send"></span>
+                </div>
+                <div class="column">
+                    icon-bookmark<br/><span class="icon icon-bookmark"></span>
+                </div>
+                <div class="column">
+                    icon-label<br/><span class="icon icon-label"></span>
+                </div>
+                <div class="column">
+                    icon-filter_alt<br/><span class="icon icon-filter_alt"></span>
+                </div>
+                <div class="column">
+                    icon-filter_alt_off<br/><span
+                        class="icon icon-filter_alt_off"
+                ></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-notifications_active<br/><span
+                        class="icon icon-notifications_active"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-more_horiz<br/><span class="icon icon-more_horiz"></span>
+                </div>
+                <div class="column">
+                    icon-more_vert<br/><span class="icon icon-more_vert"></span>
+                </div>
+                <div class="column">
+                    icon-navigate_before<br/><span
+                        class="icon icon-navigate_before"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-navigate_next<br/><span
+                        class="icon icon-navigate_next"
+                ></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-keyboard_double_arrow_left<br/><span
+                        class="icon icon-keyboard_double_arrow_left"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-keyboard_double_arrow_right<br/><span
+                        class="icon icon-keyboard_double_arrow_right"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-first_page<br/><span class="icon icon-first_page"></span>
+                </div>
+                <div class="column">
+                    icon-last_page<br/><span class="icon icon-last_page"></span>
+                </div>
+                <div class="column">
+                    icon-expand_less<br/><span class="icon icon-expand_less"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-expand_more<br/><span class="icon icon-expand_more"></span>
+                </div>
+                <div class="column">
+                    icon-zoom_in_map<br/><span class="icon icon-zoom_in_map"></span>
+                </div>
+                <div class="column">
+                    icon-zoom_out_map<br/><span
+                        class="icon icon-zoom_out_map"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-drag_pan<br/><span class="icon icon-drag_pan"></span>
+                </div>
+                <div class="column">
+                    icon-format_list_bulleted<br/><span
+                        class="icon icon-format_list_bulleted"
+                ></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-format_list_numbered<br/><span
+                        class="icon icon-format_list_numbered"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-check<br/><span class="icon icon-check"></span>
+                </div>
+                <div class="column">
+                    icon-remove<br/><span class="icon icon-remove"></span>
+                </div>
+                <div class="column">
+                    icon-add<br/><span class="icon icon-add"></span>
+                </div>
+                <div class="column">
+                    icon-close<br/><span class="icon icon-close"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-format_bold<br/><span class="icon icon-format_bold"></span>
+                </div>
+                <div class="column">
+                    icon-format_italic<br/><span
+                        class="icon icon-format_italic"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-format_underlined<br/><span
+                        class="icon icon-format_underlined"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-home<br/><span class="icon icon-home"></span>
+                </div>
+                <div class="column">
+                    icon-favorite<br/><span class="icon icon-favorite"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-edit<br/><span class="icon icon-edit"></span>
+                </div>
+                <div class="column">
+                    icon-layers<br/><span class="icon icon-layers"></span>
+                </div>
+                <div class="column">
+                    icon-cloud<br/><span class="icon icon-cloud"></span>
+                </div>
+                <div class="column">
+                    icon-print<br/><span class="icon icon-print"></span>
+                </div>
+                <div class="column">
+                    icon-share<br/><span class="icon icon-share"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-tune<br/><span class="icon icon-tune"></span>
+                </div>
+                <div class="column">
+                    icon-power_settings_new<br/><span
+                        class="icon icon-power_settings_new"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-timeline<br/><span class="icon icon-timeline"></span>
+                </div>
+                <div class="column">
+                    icon-bar_chart<br/><span class="icon icon-bar_chart"></span>
+                </div>
+                <div class="column">
+                    icon-bar_chart_4_bars<br/><span
+                        class="icon icon-bar_chart_4_bars"
+                ></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-finance_mode<br/><span
+                        class="icon icon-finance_mode"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-database<br/><span class="icon icon-database"></span>
+                </div>
+                <div class="column">
+                    icon-settings<br/><span class="icon icon-settings"></span>
+                </div>
+                <div class="column">
+                    icon-person<br/><span class="icon icon-person"></span>
+                </div>
+                <div class="column">
+                    icon-menu<br/><span class="icon icon-menu"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-light<br/><span class="icon icon-light"></span>
+                </div>
+                <div class="column">
+                    icon-dark<br/><span class="icon icon-dark"></span>
+                </div>
+                <div class="column"></div>
+                <div class="column"></div>
+                <div class="column"></div>
+            </div>
+        </div>
+    </div>
+
+    <h3>spinner</h3>
+    <div class="row">
+        <div class="column card center">
+            <div class="spinner"></div>
+        </div>
+        <div class="column card center">
+            <div class="loading"></div>
+        </div>
+        <div class="column grow-4"></div>
+    </div>
+
+    <h3>date picker</h3>
+    <div class="row">
+        <div class="column card">
+            <label for="datepicker-single">Datepicker Single Value</label>
+            <input
+                    type="text"
+                    id="datepicker-single"
+                    class="datepicker-input"
+                    placeholder="Select a date"
+                    readonly
+            />
+        </div>
+        <div class="column card">
+            <label for="datepicker-range">Datepicker Range</label>
+            <input
+                    type="text"
+                    id="datepicker-range"
+                    class="datepicker-input"
+                    placeholder="Select a date range"
+                    readonly
+            />
+        </div>
+        <div class="column card">
+            <label for="datepicker-localized"
+            >Datepicker Translated & Start on Monday</label
+            >
+            <input
+                    type="text"
+                    id="datepicker-localized"
+                    class="datepicker-input"
+                    placeholder="Seleccionar fecha"
+                    readonly
+            />
+        </div>
+    </div>
+
+    <h3>tree</h3>
+    <div class="row">
+        <div class="column card">
+            <ul id="tree-root" class="tree"></ul>
+        </div>
+    </div>
+
+    <h3>uploader</h3>
+    <div class="card row">
+        <div class="column uploader-content">
+            <div class="header">
+                <h2>Upload Files</h2>
+                <p>Select or drag files to upload</p>
+            </div>
+            <div id="drop-zone" class="drop-zone">
+                <input type="file" id="file-input" multiple hidden/>
+                <div class="drop-zone-content">
+                    <div class="icon-container">
+                        <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="upload-icon"
+                        >
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                    </div>
+                    <p class="primary-text">Click to upload or drag and drop</p>
+                    <p class="secondary-text">
+                        SVG, PNG, JPG or GIF (max. 800x400px)
+                    </p>
+                </div>
+            </div>
+
+            <div id="file-list" class="file-list"></div>
+
+            <div class="actions">
+                <button id="upload-btn" disabled>Upload Files</button>
+            </div>
+        </div>
+    </div>
+
+    <h3>dropdown</h3>
+    <div class="row">
+        <div class="column card">
+            <div class="dropdown-container" id="myDropdown">
+                <button class="dropdown-trigger">Select Option</button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <div class="dropdown-item">Profile</div>
+                    </li>
+                    <li>
+                        <div class="dropdown-item">Settings</div>
+                        <ul>
+                            <li>
+                                <div class="dropdown-item">Account</div>
+                            </li>
+                            <li>
+                                <div class="dropdown-item">Privacy</div>
+                                <ul>
+                                    <li>
+                                        <div class="dropdown-item">Public</div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-item">Private</div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-item">Friends Only</div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="dropdown-item">Notifications</div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="dropdown-item">Help</div>
+                    </li>
+                    <li>
+                        <div class="dropdown-item">Logout</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h3>virtual dropdown</h3>
+    <div class="row">
+        <div class="column">
+            <div class="section">
+                <h2>1. Searchable Single Select (10,000 items)</h2>
+                <p>This list uses virtual scrolling to handle 10k items efficiently.</p>
+                <div id="dropdown-single"></div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="section">
+                <h2>2. Multi Select with Search</h2>
+                <p>Select multiple options.</p>
+                <div id="dropdown-multi"></div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Gallery</h3>
+    <div class="row">
+        <div class="column card">
+            <div id="gallery" class="masonry-container"></div>
+            <div class="loader hidden">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Starter Template</h3>
+    <div class="row">
+        <div class="column card">tbd</div>
+    </div>
+</div>
+
+<script src="js/scroll.js" type="module"></script>
+</body>
 </html>

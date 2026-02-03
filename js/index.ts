@@ -16,6 +16,7 @@ import {TreeComponent, TreeNode} from "./tree.js";
 import {MasonryGallery, ImageData} from "./gallery.js";
 import {Tooltip} from "./tooltip.js";
 import {Dropdown, DropdownSelectDetail} from "./dropdown";
+import {VirtualDropdown} from "./virtual-dropdown";
 
 // Generate sample table data
 const generateData = (count: number): TableRow[] => {
@@ -314,6 +315,39 @@ utils.ready(() => {
         console.log('User selected:', text);
         console.log('Selected element:', element);
     }) as EventListener);
+
+    const generateItems = (count: number, prefix: string) => {
+        return Array.from({ length: count }, (_, i) => ({
+            label: `${prefix} Item ${i + 1}`,
+            value: `${prefix.toLowerCase()}_${i + 1}`
+        }));
+    };
+
+    const bigData = generateItems(10000, 'Option');
+    const smallData = generateItems(50, 'Choice');
+
+    const singleDropdown = new VirtualDropdown({
+        container: '#dropdown-single',
+        options: bigData,
+        searchable: true,
+        placeholder: 'Search 10k items...',
+        renderLimit: 15,
+        onSelect: (val) => {
+            console.log('Single Select:', val);
+        }
+    });
+
+    const multiDropdown = new VirtualDropdown({
+        container: '#dropdown-multi',
+        options: smallData,
+        searchable: true,
+        multiSelect: true,
+        placeholder: 'Choose multiple...',
+        renderLimit: 10,
+        onSelect: (vals) => {
+            console.log('Multi Select:', vals);
+        }
+    });
 
 
     Tooltip.initializeAll();
