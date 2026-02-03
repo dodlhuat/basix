@@ -2,7 +2,6 @@ class MasonryGallery {
     constructor(containerId, options = {}) {
         this.columns = [];
         this.isFetching = false;
-        this.page = 1;
         this.resizeObserver = null;
         this.abortController = null;
         this.reloaded = 0;
@@ -23,10 +22,9 @@ class MasonryGallery {
         this.loader = document.querySelector(options.loaderSelector || ".loader");
         this.options = {
             minColumnWidth: options.minColumnWidth ?? 250,
-            fetchBatchSize: options.fetchBatchSize ?? 10,
             scrollThreshold: options.scrollThreshold ?? 100,
             reload: 2,
-            fetchFunction: options.fetchFunction ?? this.fetchMockImages(options.fetchBatchSize ?? 10),
+            fetchFunction: options.fetchFunction ?? this.fetchMockImages(),
         };
         this.init();
     }
@@ -114,25 +112,8 @@ class MasonryGallery {
             this.loader.classList.toggle("hidden", !show);
         }
     }
-    fetchMockImages(count) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                const images = [];
-                for (let i = 0; i < count; i++) {
-                    const width = 400;
-                    const height = Math.floor(Math.random() * 301) + 300; // 300-600
-                    const id = Math.floor(Math.random() * 1000);
-                    const imageIndex = this.page * count + i;
-                    images.push({
-                        src: `https://picsum.photos/${width}/${height}?random=${imageIndex}`,
-                        title: `Image ${imageIndex + 1}`,
-                        desc: `A random caption for image ${id}`,
-                    });
-                }
-                this.page++;
-                resolve(images);
-            }, 800);
-        });
+    fetchMockImages() {
+        throw Error("Method not implemented.");
     }
     renderImages(imageDataList) {
         imageDataList.forEach((data) => {

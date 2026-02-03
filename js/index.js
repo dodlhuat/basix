@@ -15,6 +15,8 @@ import { FileUploader } from "./file-uploader.js";
 import { TreeComponent, TreeNode } from "./tree.js";
 import { MasonryGallery } from "./gallery.js";
 import { Tooltip } from "./tooltip.js";
+import { Dropdown } from "./dropdown.js";
+import { VirtualDropdown } from "./virtual-dropdown.js";
 // Generate sample table data
 const generateData = (count) => {
     const data = [];
@@ -233,9 +235,64 @@ utils.ready(() => {
         new TreeNode("README.md", "file"),
     ];
     const tree = new TreeComponent("#tree-root", sampleData);
+    const batchSize = 12;
+    let indexNumber = 1;
     const gallery = new MasonryGallery("gallery", {
         minColumnWidth: 300,
-        fetchBatchSize: 12,
+        fetchFunction: new Promise((resolve) => {
+            setTimeout(() => {
+                const images = [];
+                for (let i = 0; i < batchSize; i++) {
+                    const width = 400;
+                    const height = Math.floor(Math.random() * 301) + 300; // 300-600
+                    const id = Math.floor(Math.random() * 1000);
+                    const imageIndex = indexNumber * batchSize + i;
+                    images.push({
+                        src: `https://picsum.photos/${width}/${height}?random=${imageIndex}`,
+                        title: `Image ${imageIndex + 1}`,
+                        desc: `A random caption for image ${id}`,
+                    });
+                }
+                indexNumber++;
+                resolve(images);
+            }, 800);
+        }),
+    });
+    const dropdown = new Dropdown("#myDropdown");
+    const dropdownElement = document.querySelector("#myDropdown");
+    dropdownElement?.addEventListener("dropdown-select", ((event) => {
+        const { text, element } = event.detail;
+        console.log("User selected:", text);
+        console.log("Selected element:", element);
+    }));
+    const generateItems = (count, prefix) => {
+        return Array.from({ length: count }, (_, i) => ({
+            label: `${prefix} Item ${i + 1}`,
+            value: `${prefix.toLowerCase()}_${i + 1}`,
+        }));
+    };
+    const bigData = generateItems(10000, "Option");
+    const smallData = generateItems(50, "Choice");
+    const singleDropdown = new VirtualDropdown({
+        container: "#dropdown-single",
+        options: bigData,
+        searchable: true,
+        placeholder: "Search 10k items...",
+        renderLimit: 15,
+        onSelect: (val) => {
+            console.log("Single Select:", val);
+        },
+    });
+    const multiDropdown = new VirtualDropdown({
+        container: "#dropdown-multi",
+        options: smallData,
+        searchable: true,
+        multiSelect: true,
+        placeholder: "Choose multiple...",
+        renderLimit: 10,
+        onSelect: (vals) => {
+            console.log("Multi Select:", vals);
+        },
     });
     Tooltip.initializeAll();
 });
