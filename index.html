@@ -18,6 +18,10 @@
         .carousel-slide:nth-child(odd) {
             background-color: #e0e0e0;
         }
+
+        .row .column .row.demo-row {
+            margin-bottom: 1rem;
+        }
     </style>
     <script src="js/index.js" type="module"></script>
 </head>
@@ -97,6 +101,94 @@
 </div>
 
 <div class="content push-content">
+    <div class="row card">
+        <div class="column">
+            <h2>Layout</h2>
+            <h3>Grid System</h3>
+            <p>The <strong>Grid</strong> component provides a flexbox-based layout system. Use <code>.row</code> with
+                <code>.column</code>
+                children. Columns can use <code>.grow-2</code> through <code>.grow-6</code> for proportional sizing.
+                Responsive
+                - stacks on mobile.</p>
+            <div class="row demo-row">
+                <div class="column" style="background: #e0e0e0; text-align: center;">Column 1</div>
+                <div class="column" style="background: #d0d0d0; text-align: center;">Column 2</div>
+                <div class="column" style="background: #e0e0e0; text-align: center;">Column 3</div>
+            </div>
+            <div class="row demo-row">
+                <div class="column" style="background: #e0e0e0; text-align: center;">1x</div>
+                <div class="column grow-2" style="background: #d0d0d0; text-align: center;">2x (grow-2)</div>
+                <div class="column" style="background: #e0e0e0; text-align: center;">1x</div>
+            </div>
+            <h3>Typography</h3>
+            <p>The typography system is built around the Outfit variable font, providing a modern, readable base for all
+                text. Body content uses a consistent font size and comfortable line height for optimal readability,
+                while headings follow a clear scale with bold weight and tighter line spacing for strong visual
+                hierarchy. Semantic elements share a unified text color, lists use intuitive inside markers with nested
+                styles, and utility classes enable simple text alignment. Monospace fonts are reserved for code to
+                ensure clarity and distinction.</p>
+            <h1>Headline 1</h1>
+            <h2>Headline 2</h2>
+            <h3>Headline 3</h3>
+            <h4>Headline 4</h4>
+            <ul>
+                <li>List Element 1</li>
+                <li>List Element 2</li>
+                <li>List Element 3</li>
+            </ul>
+            <ol>
+                <li>List Element 1</li>
+                <li>List Element 2</li>
+                <li>List Element 3</li>
+            </ol>
+            <a href="#">A Link</a>
+            <!-- Brief description of what the component does and when to use it. -->
+            <!-- Live Example -->
+            <!-- Code Snippet -->
+            <!-- JavaScript Initialization (if applicable) -->
+            <!-- Options Table (if applicable) -->
+            <h3>Cards</h3>
+        </div>
+    </div>
+
+    <h2>Forms</h2>
+    <h3>Text Input</h3>
+    <h3>Textarea</h3>
+    <h3>Select</h3>
+    <h3>Checkbox</h3>
+    <h3>Radio Buttons</h3>
+    <h3>Switch</h3>
+    <h3>Range Slider</h3>
+    <h2>Navigation</h2>
+    <h3>Push Menu</h3>
+    <h3>Flyout Menu</h3>
+    <h3>Dropdown Menu</h3>
+    <h2>Feedback</h2>
+    <h3>Modal</h3>
+    <h3>Toast</h3>
+    <h3>Tooltip</h3>
+    <h3>Spinner / Loading</h3>
+    <h2>Components</h2>
+    <h3>Alerts</h3>
+    <h3>Buttons</h3>
+    <h3>Chips</h3>
+    <h3>Accordion</h3>
+    <h3>Tabs</h3>
+    <h3>Timeline</h3>
+    <h3>Progress Bar</h3>
+    <h3>Placeholder / Skeleton</h3>
+    <h2>Advanced Components</h2>
+    <h3>Data Tables</h3>
+    <h3>Date Picker</h3>
+    <h3>Tree Component</h3>
+    <h3>File Uploader</h3>
+    <h3>Virtual Dropdown</h3>
+    <h3>Custom Scrollbar</h3>
+    <h2>Utilities</h2>
+    <h3>Theme Toggle</h3>
+    <h3>Scroll Utility</h3>
+
+
     <h2 id="menu">
         <h3>Push Menu</h3>
         <div class="row">

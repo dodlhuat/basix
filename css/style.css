@@ -253,6 +253,10 @@ p, li, td, th, div, h1, h2, h3, h4, h5 {
   color: var(--primary-text);
 }
 
+code {
+  font-family: "Courier New", Courier, monospace;
+}
+
 p, li, td, th, div {
   font-size: 1rem;
   line-height: 1.5;
@@ -311,6 +315,28 @@ hr {
 
 .text-center {
   text-align: center;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--accent-color-lighten);
+}
+
+a:active {
+  color: var(--accent-color);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 .card {
@@ -373,9 +399,7 @@ th {
   font-weight: 500;
   color: var(--secondary-text);
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   white-space: nowrap;
 }
 
@@ -1169,6 +1193,12 @@ button.button-error, .button.button-error {
 .placeholder.w-12 {
   width: 100%;
 }
+
+@-webkit-keyframes placeholder-fade {
+  50% {
+    opacity: 0.2;
+  }
+}
 @keyframes placeholder-fade {
   50% {
     opacity: 0.2;
@@ -1357,6 +1387,9 @@ nav {
   width: 250px;
   height: 100%;
   margin: 0 0 0 -250px;
+  -moz-transition: all 200ms ease-in;
+  -webkit-transition: all 200ms ease-in;
+  -o-transition: all 200ms ease-in;
   transition: all 200ms ease-in;
 }
 
@@ -1514,9 +1547,7 @@ nav.pushed {
   margin-bottom: 0.5rem;
   cursor: pointer;
   font-size: 18px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 
 .radio-button-container input {
@@ -1801,9 +1832,7 @@ ul.tree li {
   min-height: 52px;
   padding: 14px 16px;
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   overflow: hidden;
   border: 1px solid transparent;
   border-radius: 10px;
@@ -1940,9 +1969,7 @@ ul.tree li {
   border-radius: 0.4rem;
   width: 320px;
   padding: 1rem;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
   display: none;
   position: absolute;
@@ -2244,8 +2271,7 @@ body {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  -webkit-backdrop-filter: blur(4px);
-          backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition-speed), visibility var(--transition-speed);
@@ -2537,9 +2563,7 @@ body {
   font-weight: 500;
   color: var(--secondary-text);
   white-space: nowrap;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   transition: all 0.2s ease;
   border-bottom: 2px solid transparent;
 }
@@ -2638,9 +2662,7 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 
 .accordion-label:hover {
@@ -2855,9 +2877,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 
 .carousel-button {
@@ -3201,8 +3221,7 @@ body {
   width: 100%;
   height: auto;
   display: block;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   opacity: 0;
   transition: opacity 0.5s ease-in;
 }
@@ -3300,9 +3319,7 @@ body {
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.2s;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 .dropdown-container .dropdown-item:hover {
   background-color: var(--background);
@@ -3351,9 +3368,7 @@ body {
   width: 100%;
   max-width: 300px;
   font-family: system-ui, -apple-system, sans-serif;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   display: inline-block;
 }
 .virtual-dropdown .dropdown-trigger {
@@ -3462,4 +3477,6 @@ body {
   .virtual-dropdown .custom-dropdown {
     max-width: 100%;
   }
-}/*# sourceMappingURL=style.css.map */
+}
+
+/*# sourceMappingURL=style.css.map */

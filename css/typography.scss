@@ -14,6 +14,10 @@ p, li, td, th, div, h1, h2, h3, h4, h5 {
   color: var(--primary-text);
 }
 
+code {
+  font-family: 'Courier New', Courier, monospace;
+}
+
 p, li, td, th, div {
   font-size: $spacing;
   line-height: 1.5;
@@ -74,4 +78,28 @@ hr {
 
 .text-center {
   text-align: center;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition:
+          color 0.2s ease,
+          text-decoration-color 0.2s ease;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--accent-color-lighten);
+}
+
+a:active {
+  color: var(--accent-color);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
