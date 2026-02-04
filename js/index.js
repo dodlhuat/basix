@@ -295,4 +295,8 @@ utils.ready(() => {
         },
     });
     Tooltip.initializeAll();
+    new CodeViewer("#usage-text-input", `<label for="text-input-demo">Text Input</label>
+<input type="text" id="text-input-demo"/>`, "html");
+    new CodeViewer("#usage-textarea", `<label for="textarea-demo">Text Area</label>
+<textarea id="textarea-demo"></textarea>`, "html");
 });

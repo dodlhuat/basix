@@ -5,7 +5,7 @@ textarea, select, .select .dropdown, input {
   width: 100%;
   border: 1px solid var(--divider);
   border-radius: calc($border-radius / 2);
-  padding: calc($border-radius * 2);
+  padding: calc($spacing / 2);
   box-sizing: border-box;
   background-color: var(--background);
   min-height: $form-height;
