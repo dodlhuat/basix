@@ -101,9 +101,9 @@
 </div>
 
 <div class="content push-content">
+    <h2>Layout</h2>
     <div class="row card">
         <div class="column">
-            <h2>Layout</h2>
             <h3>Grid System</h3>
             <p>The <strong>Grid</strong> component provides a flexbox-based layout system. Use <code>.row</code> with
                 <code>.column</code>
@@ -145,26 +145,53 @@
             <a href="#">A Link</a>
             <h3>Cards</h3>
             <p>The <strong>Card</strong> component is a CSS-only component that creates visually contained content
-                sections with optional header and footer. Use the Card component when you want to group related information together visually.</p>
+                sections with optional header and footer. Use the Card component when you want to group related
+                information together visually.</p>
             <p>Use <code>.card</code> class on rows or columns to wrap those into a card.</p>
         </div>
     </div>
 
     <h2>Forms</h2>
-    <p>The <strong>Form</strong> styles provide consistent styling for inputs, textareas, and native elements.</p>
-    <h3>Text Input</h3>
-    <label for="text-input-demo">Text Input</label>
-    <input type="text" id="text-input-demo"/>
-    <div id="usage-text-input" class="code-container"></div>
-    <h3>Textarea</h3>
-    <label for="textarea-demo">Text Area</label>
-    <textarea id="textarea-demo"></textarea>
-    <div id="usage-textarea" class="code-container"></div>
-    <h3>Select</h3>
-    <h3>Checkbox</h3>
-    <h3>Radio Buttons</h3>
-    <h3>Switch</h3>
-    <h3>Range Slider</h3>
+    <div class="row">
+        <div class="column card">
+            <p>The <strong>Form</strong> styles provide consistent styling for inputs, textareas, and native elements.
+            </p>
+            <h3>Text Input</h3>
+            <label for="text-input-demo">Text Input</label>
+            <input type="text" id="text-input-demo"/>
+            <div id="usage-text-input" class="code-container"></div>
+            <h3>Textarea</h3>
+            <label for="textarea-demo">Text Area</label>
+            <textarea id="textarea-demo"></textarea>
+            <div id="usage-textarea" class="code-container"></div>
+            <h3>Select Dropdown</h3>
+            <p>Instead of using a default select, the <a href="#virtual-dropdown-component">Virtual Dropdown
+                component</a> is used</p>
+            <h3>Checkbox</h3>
+            <p>The <strong>Checkbox</strong> component provides custom-styled checkboxes.</p>
+            <div class="block">
+                <input class="styled-checkbox"
+                        id="checkbox-1"
+                        type="checkbox"
+                        value="1"
+                />
+                <label for="checkbox-1">Checkbox</label>
+            </div>
+            <div class="block">
+                <input class="styled-checkbox"
+                        id="checkbox-2"
+                        type="checkbox"
+                        value="2"
+                        disabled
+                />
+                <label for="checkbox-2">A disabled checkbox</label>
+            </div>
+            <h3>Radio Buttons</h3>
+            <h3>Switch</h3>
+            <h3>Range Slider</h3>
+        </div>
+    </div>
+
     <h2>Navigation</h2>
     <h3>Push Menu</h3>
     <!-- Brief description of what the component does and when to use it. -->
@@ -193,7 +220,7 @@
     <h3>Date Picker</h3>
     <h3>Tree Component</h3>
     <h3>File Uploader</h3>
-    <h3>Virtual Dropdown</h3>
+    <h3 id="virtual-dropdown-component">Virtual Dropdown</h3>
     <h3>Custom Scrollbar</h3>
     <h2>Utilities</h2>
     <h3>Theme Toggle</h3>
@@ -382,29 +409,6 @@
                         <option value="2">Two</option>
                         <option value="3">Three</option>
                     </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="column">
-                    <div class="block">
-                        <input
-                                class="styled-checkbox"
-                                id="checkbox-1"
-                                type="checkbox"
-                                value="1"
-                        />
-                        <label for="checkbox-1">Checkbox</label>
-                    </div>
-                    <div class="block">
-                        <input
-                                class="styled-checkbox"
-                                id="checkbox-2"
-                                type="checkbox"
-                                value="2"
-                                disabled
-                        />
-                        <label for="checkbox-2">A disabled checkbox</label>
-                    </div>
                 </div>
             </div>
             <div class="row">
