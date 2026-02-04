@@ -23,6 +23,10 @@ p, li, td, th, div {
   line-height: 1.5;
 }
 
+p {
+  padding-bottom: calc($spacing / 2);
+}
+
 .h1, .h2, .h3, .h4, h1, h2, h3, h4 {
   margin: 0 0 calc($spacing / 1.5) 0;
   line-height: 1.2;

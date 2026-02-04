@@ -357,4 +357,25 @@ utils.ready(() => {
 <input type="text" id="text-input-demo"/>`, "html");
   new CodeViewer("#usage-textarea", `<label for="textarea-demo">Text Area</label>
 <textarea id="textarea-demo"></textarea>`, "html");
+  new CodeViewer("#usage-checkbox-demo", `<input class="styled-checkbox"
+    id="checkbox-1"
+    type="checkbox"
+    value="1"
+/>
+<label for="checkbox-1">Checkbox</label>`, "html");
 });
+new CodeViewer("#usage-radiobutton-demo", `<label class="radio-button-container">Three
+    <input type="radio" name="radio"/>
+    <span class="checkmark"></span>
+</label>`, "html");
+new CodeViewer("#usage-switch-demo", `<div class="switch">
+    <input type="checkbox" id="switch"/><label for="switch">Toggle</label>
+</div>`, "html");
+new CodeViewer("#usage-slider-demo", `<label for="range-slider" class="hidden">Slider</label>
+<input
+    type="range"
+    min="1"
+    max="100"
+    value="50"
+    id="range-slider-demo"
+/>`, "html");

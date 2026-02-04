@@ -169,7 +169,7 @@
                 component</a> is used</p>
             <h3>Checkbox</h3>
             <p>The <strong>Checkbox</strong> component provides custom-styled checkboxes.</p>
-            <div class="block">
+            <div>
                 <input class="styled-checkbox"
                         id="checkbox-1"
                         type="checkbox"
@@ -177,7 +177,7 @@
                 />
                 <label for="checkbox-1">Checkbox</label>
             </div>
-            <div class="block">
+            <div>
                 <input class="styled-checkbox"
                         id="checkbox-2"
                         type="checkbox"
@@ -186,9 +186,39 @@
                 />
                 <label for="checkbox-2">A disabled checkbox</label>
             </div>
+            <div id="usage-checkbox-demo" class="code-container"></div>
             <h3>Radio Buttons</h3>
+            <p>The <strong>Radio Button</strong> component provides custom-styled radio inputs.</p>
+            <label class="radio-button-container">One
+                <input type="radio" checked="checked" name="radio"/>
+                <span class="checkmark"></span>
+            </label>
+            <label class="radio-button-container">Two
+                <input type="radio" name="radio"/>
+                <span class="checkmark"></span>
+            </label>
+            <label class="radio-button-container">Three
+                <input type="radio" name="radio"/>
+                <span class="checkmark"></span>
+            </label>
+            <div id="usage-radiobutton-demo" class="code-container"></div>
             <h3>Switch</h3>
+            <p>The <strong>Switch</strong> component creates styled toggle switches that are actually based on checkboxes.</p>
+            <div class="switch">
+                <input type="checkbox" id="switch"/><label for="switch">Toggle</label>
+            </div>
+            <div id="usage-switch-demo" class="code-container"></div>
             <h3>Range Slider</h3>
+            <p>The Range Slider component creates a simple styled slider.</p>
+            <label for="range-slider" class="hidden">Slider</label>
+            <input
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="50"
+                    id="range-slider-demo"
+            />
+            <div id="usage-slider-demo" class="code-container"></div>
         </div>
     </div>
 
@@ -413,25 +443,6 @@
             </div>
             <div class="row">
                 <div class="column">
-                    <label class="radio-button-container"
-                    >One
-                        <input type="radio" checked="checked" name="radio"/>
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="radio-button-container"
-                    >Two
-                        <input type="radio" name="radio"/>
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="radio-button-container"
-                    >Three
-                        <input type="radio" name="radio"/>
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="column">
                     <label for="range-slider" class="hidden">Slider</label>
                     <input
                             type="range"
@@ -440,15 +451,6 @@
                             value="50"
                             id="range-slider"
                     />
-                </div>
-            </div>
-            <div class="row">
-                <div class="column">
-                    <div class="switch">
-                        <input type="checkbox" id="switch"/><label for="switch"
-                    >Toggle</label
-                    >
-                    </div>
                 </div>
             </div>
         </form>

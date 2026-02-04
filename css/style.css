@@ -262,6 +262,10 @@ p, li, td, th, div {
   line-height: 1.5;
 }
 
+p {
+  padding-bottom: 0.5rem;
+}
+
 .h1, .h2, .h3, .h4, h1, h2, h3, h4 {
   margin: 0 0 0.6666666667rem 0;
   line-height: 1.2;
