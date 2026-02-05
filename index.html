@@ -230,13 +230,93 @@
     <div id="usage-pushmenu-control-demo" class="code-container"></div>
     <div id="usage-pushmenu-demo" class="code-container"></div>
     <div id="usage-pushmenu-script-demo" class="code-container"></div>
+    <h3>Flyout Menu</h3>
+    <p>The <strong>Flyout Menu</strong> component creates slide-in navigation menus with nested submenus. Supports
+        left/right direction, header/footer and keyboard navigation (Escape to close)</p>
+    <p>Choose Flyout Direction and use the
+        <italic>Show</italic>
+        button to open it. Direction normally gets set via the settings.
+    </p>
+    <div class="button-group flyout-controls">
+        <button class="active" data-direction="right">Right</button>
+        <button data-direction="left">Left</button>
+        <button class="trigger-flyout-menu">Show</button>
+    </div>
+    <div id="usage-flyout-demo" class="code-container"></div>
+    <div id="usage-flyout-script-demo" class="code-container"></div>
+    <table>
+        <thead>
+        <tr>
+            <th>Option</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><code>triggerSelector</code></td>
+            <td>string</td>
+            <td>'.menu-trigger'</td>
+            <td>description tbd</td>
+        </tr>
+        <tr>
+            <td><code>menuSelector</code></td>
+            <td>string</td>
+            <td>'#flyoutMenu'</td>
+            <td>description tbd</td>
+        </tr>
+        <tr>
+            <td><code>overlaySelector</code></td>
+            <td>string</td>
+            <td>'#flyoutOverlay'</td>
+            <td>description tbd</td>
+        </tr>
+        <tr>
+            <td><code>closeSelector</code></td>
+            <td>string</td>
+            <td>'.close-menu'</td>
+            <td>description tbd</td>
+        </tr>
+        <tr>
+            <td><code>direction</code></td>
+            <td>string</td>
+            <td>'right'</td>
+            <td>can be either 'right' or 'left'</td>
+        </tr>
+        <tr>
+            <td><code>title</code></td>
+            <td>string</td>
+            <td>'Menu'</td>
+            <td>shown in the header if enabled</td>
+        </tr>
+        <tr>
+            <td><code>enableHeader</code></td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>shows header</td>
+        </tr>
+        <tr>
+            <td><code>footerText</code></td>
+            <td>string</td>
+            <td>'&copy; 2025 Brand Inc.'</td>
+            <td>shown in the footer if enabled</td>
+        </tr>
+        <tr>
+            <td><code>enableFooter</code></td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>shows footer</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Dropdown Menu</h3>
     <!-- Brief description of what the component does and when to use it. -->
     <!-- Live Example -->
     <!-- Code Snippet -->
     <!-- JavaScript Initialization (if applicable) -->
     <!-- Options Table (if applicable) -->
-    <h3>Flyout Menu</h3>
-    <h3>Dropdown Menu</h3>
     <h2>Feedback</h2>
     <h3>Modal</h3>
     <h3>Toast</h3>

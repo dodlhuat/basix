@@ -398,3 +398,38 @@ new CodeViewer("#usage-pushmenu-demo", `<nav class="push-menu">
     </ul>
 </nav>`, "html");
 new CodeViewer("#usage-pushmenu-script-demo", `PushMenu.init();`, "js");
+new CodeViewer("#usage-flyout-script-demo", `const menu = new FlyoutMenu({
+  direction: "right",
+  triggerSelector: ".trigger-flyout-menu",
+});`, "js");
+new CodeViewer("#usage-flyout-demo", `div class="flyout-overlay" id="flyoutOverlay"></div>
+<div class="flyout-menu" id="flyoutMenu">
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li>
+            About
+            <ul>
+                <li><a href="#">Our Story</a></li>
+                <li><a href="#">Team</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+        </li>
+        <li>
+            Services
+            <ul>
+                <li>
+                    Web Design
+                    <ul>
+                        <li><a href="#">eCommerce</a></li>
+                        <li><a href="#">Landing Pages</a></li>
+                        <li><a href="#">Portfolios</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Development</a></li>
+                <li><a href="#">SEO</a></li>
+            </ul>
+        </li>
+        <li><a href="#">Portfolio</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>`, "html");
