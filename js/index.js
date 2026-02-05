@@ -340,3 +340,107 @@ new CodeViewer("#usage-pushmenu-demo", `<nav class="push-menu">
     </ul>
 </nav>`, "html");
 new CodeViewer("#usage-pushmenu-script-demo", `PushMenu.init();`, "js");
+new CodeViewer("#usage-flyout-script-demo", `const menu = new FlyoutMenu({
+  direction: "right",
+  triggerSelector: ".trigger-flyout-menu",
+});`, "js");
+new CodeViewer("#usage-flyout-demo", `<div class="flyout-overlay" id="flyoutOverlay"></div>
+<div class="flyout-menu" id="flyoutMenu">
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li>
+            About
+            <ul>
+                <li><a href="#">Our Story</a></li>
+                <li><a href="#">Team</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+        </li>
+        <li>
+            Services
+            <ul>
+                <li>
+                    Web Design
+                    <ul>
+                        <li><a href="#">eCommerce</a></li>
+                        <li><a href="#">Landing Pages</a></li>
+                        <li><a href="#">Portfolios</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Development</a></li>
+                <li><a href="#">SEO</a></li>
+            </ul>
+        </li>
+        <li><a href="#">Portfolio</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>`, "html");
+new CodeViewer("#usage-dropdown-menu-demo", `<div class="dropdown-container" id="myDropdown">
+  <button class="dropdown-trigger">Select Option</button>
+  <ul class="dropdown-menu">
+    <li>
+      <div class="dropdown-item">Profile</div>
+    </li>
+    <li>
+      <div class="dropdown-item">Settings</div>
+      <ul>
+        <li>
+          <div class="dropdown-item">Account</div>
+        </li>
+        <li>
+          <div class="dropdown-item">Privacy</div>
+          <ul>
+            <li>
+              <div class="dropdown-item">Public</div>
+            </li>
+            <li>
+              <div class="dropdown-item">Private</div>
+            </li>
+            <li>
+              <div class="dropdown-item">Friends Only</div>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <div class="dropdown-item">Notifications</div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <div class="dropdown-item">Help</div>
+    </li>
+    <li>
+      <div class="dropdown-item">Logout</div>
+    </li>
+  </ul>
+</div>`, "html");
+new CodeViewer("#usage-dropdown-menu-js-demo", `const dropdown = new Dropdown("#myDropdown");
+const dropdownElement = document.querySelector("#myDropdown");
+dropdownElement?.addEventListener("dropdown-select", ((
+  event: CustomEvent<DropdownSelectDetail>,
+) => {
+  const { text, element } = event.detail;
+  console.log("User selected:", text);
+  console.log("Selected element:", element);
+}) as EventListener);`, "js");
+new CodeViewer("#usage-modal-demo", `const modal = new Modal(
+  "content",
+  "<strong>header</strong>",
+  "controls",
+  true,
+  "default",
+);
+modal.show();`, "js");
+new CodeViewer("#usage-toast-demo", `const toast = new Toast(
+    "some content. maybe even more text in here!",
+    "some header",
+    "success",
+    true,
+  );
+  toast.show(3000);`, "js");
+new CodeViewer("#usage-tooltip-demo", `<button class="tooltip-trigger" data-tooltip="This is a simple tooltip">
+  Simple Tooltip
+</button>`, "html");
+new CodeViewer("#usage-tooltip-js-demo", `Tooltip.initializeAll();`, "js");
+new CodeViewer("#usage-spinner-demo", `<div class="spinner"></div>`, "html");
+new CodeViewer("#usage-loading-demo", `<div class="loading"></div>`, "html");

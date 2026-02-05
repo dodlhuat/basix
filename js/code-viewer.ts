@@ -170,7 +170,7 @@ class CodeViewer {
                     <div class="code-display">
                         <div class="code-header">
                             <span class="code-language">${this.language}</span>
-                            <button class="copy-button">Kopieren</button>
+                            <button class="copy-button">Copy</button>
                         </div>
                         <div class="code-content">
                             <pre>${highlighted}</pre>

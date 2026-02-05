@@ -353,41 +353,71 @@ utils.ready(() => {
 
   Tooltip.initializeAll();
 
-  new CodeViewer("#usage-text-input", `<label for="text-input-demo">Text Input</label>
-<input type="text" id="text-input-demo"/>`, "html");
-  new CodeViewer("#usage-textarea", `<label for="textarea-demo">Text Area</label>
-<textarea id="textarea-demo"></textarea>`, "html");
-  new CodeViewer("#usage-checkbox-demo", `<input class="styled-checkbox"
+  new CodeViewer(
+    "#usage-text-input",
+    `<label for="text-input-demo">Text Input</label>
+<input type="text" id="text-input-demo"/>`,
+    "html",
+  );
+  new CodeViewer(
+    "#usage-textarea",
+    `<label for="textarea-demo">Text Area</label>
+<textarea id="textarea-demo"></textarea>`,
+    "html",
+  );
+  new CodeViewer(
+    "#usage-checkbox-demo",
+    `<input class="styled-checkbox"
     id="checkbox-1"
     type="checkbox"
     value="1"
 />
-<label for="checkbox-1">Checkbox</label>`, "html");
+<label for="checkbox-1">Checkbox</label>`,
+    "html",
+  );
 });
-new CodeViewer("#usage-radiobutton-demo", `<label class="radio-button-container">Three
+new CodeViewer(
+  "#usage-radiobutton-demo",
+  `<label class="radio-button-container">Three
     <input type="radio" name="radio"/>
     <span class="checkmark"></span>
-</label>`, "html");
-new CodeViewer("#usage-switch-demo", `<div class="switch">
+</label>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-switch-demo",
+  `<div class="switch">
     <input type="checkbox" id="switch"/><label for="switch">Toggle</label>
-</div>`, "html");
-new CodeViewer("#usage-slider-demo", `<label for="range-slider" class="hidden">Slider</label>
+</div>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-slider-demo",
+  `<label for="range-slider" class="hidden">Slider</label>
 <input
     type="range"
     min="1"
     max="100"
     value="50"
     id="range-slider-demo"
-/>`, "html");
-new CodeViewer("#usage-pushmenu-control-demo", `<div class="open-menu">
+/>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-pushmenu-control-demo",
+  `<div class="open-menu">
     <div class="navigation-controls">
         <input type="checkbox" id="menu-navigation" class="navigation"/>
         <label for="menu-navigation">
             <span class="icon icon-menu"></span>
         </label>
     </div>
-</div>`, "html");
-new CodeViewer("#usage-pushmenu-demo", `<nav class="push-menu">
+</div>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-pushmenu-demo",
+  `<nav class="push-menu">
     <ul>
         <li>
             <a onclick="window.Scroll.to('#grid')">Grid</a>
@@ -396,13 +426,21 @@ new CodeViewer("#usage-pushmenu-demo", `<nav class="push-menu">
             <a onclick="window.Scroll.to('#typography')">Typography</a>
         </li>
     </ul>
-</nav>`, "html");
+</nav>`,
+  "html",
+);
 new CodeViewer("#usage-pushmenu-script-demo", `PushMenu.init();`, "js");
-new CodeViewer("#usage-flyout-script-demo", `const menu = new FlyoutMenu({
+new CodeViewer(
+  "#usage-flyout-script-demo",
+  `const menu = new FlyoutMenu({
   direction: "right",
   triggerSelector: ".trigger-flyout-menu",
-});`, "js");
-new CodeViewer("#usage-flyout-demo", `div class="flyout-overlay" id="flyoutOverlay"></div>
+});`,
+  "js",
+);
+new CodeViewer(
+  "#usage-flyout-demo",
+  `<div class="flyout-overlay" id="flyoutOverlay"></div>
 <div class="flyout-menu" id="flyoutMenu">
     <ul>
         <li><a href="#">Home</a></li>
@@ -432,4 +470,107 @@ new CodeViewer("#usage-flyout-demo", `div class="flyout-overlay" id="flyoutOverl
         <li><a href="#">Portfolio</a></li>
         <li><a href="#">Contact</a></li>
     </ul>
-</div>`, "html");
+</div>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-dropdown-menu-demo",
+  `<div class="dropdown-container" id="myDropdown">
+  <button class="dropdown-trigger">Select Option</button>
+  <ul class="dropdown-menu">
+    <li>
+      <div class="dropdown-item">Profile</div>
+    </li>
+    <li>
+      <div class="dropdown-item">Settings</div>
+      <ul>
+        <li>
+          <div class="dropdown-item">Account</div>
+        </li>
+        <li>
+          <div class="dropdown-item">Privacy</div>
+          <ul>
+            <li>
+              <div class="dropdown-item">Public</div>
+            </li>
+            <li>
+              <div class="dropdown-item">Private</div>
+            </li>
+            <li>
+              <div class="dropdown-item">Friends Only</div>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <div class="dropdown-item">Notifications</div>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <div class="dropdown-item">Help</div>
+    </li>
+    <li>
+      <div class="dropdown-item">Logout</div>
+    </li>
+  </ul>
+</div>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-dropdown-menu-js-demo",
+  `const dropdown = new Dropdown("#myDropdown");
+const dropdownElement = document.querySelector("#myDropdown");
+dropdownElement?.addEventListener("dropdown-select", ((
+  event: CustomEvent<DropdownSelectDetail>,
+) => {
+  const { text, element } = event.detail;
+  console.log("User selected:", text);
+  console.log("Selected element:", element);
+}) as EventListener);`,
+  "js",
+);
+new CodeViewer(
+  "#usage-modal-demo",
+  `const modal = new Modal(
+  "content",
+  "<strong>header</strong>",
+  "controls",
+  true,
+  "default",
+);
+modal.show();`,
+  "js",
+);
+new CodeViewer(
+  "#usage-toast-demo",
+  `const toast = new Toast(
+    "some content. maybe even more text in here!",
+    "some header",
+    "success",
+    true,
+  );
+  toast.show(3000);`,
+  "js",
+);
+new CodeViewer(
+  "#usage-tooltip-demo",
+  `<button class="tooltip-trigger" data-tooltip="This is a simple tooltip">
+  Simple Tooltip
+</button>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-tooltip-js-demo",
+  `Tooltip.initializeAll();`,
+  "js",
+);
+new CodeViewer(
+  "#usage-spinner-demo",
+  `<div class="spinner"></div>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-loading-demo",
+  `<div class="loading"></div>`,
+  "html",
+);
