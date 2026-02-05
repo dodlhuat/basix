@@ -151,15 +151,15 @@ class CodeViewer {
             
             if (!btn) return;
             
-            btn.textContent = 'Kopiert!';
+            btn.textContent = 'copied!';
             btn.classList.add('copied');
 
             setTimeout(() => {
-                btn.textContent = 'Kopieren';
+                btn.textContent = 'Copy';
                 btn.classList.remove('copied');
             }, 2000);
         } catch (err) {
-            console.error('Fehler beim Kopieren:', err);
+            console.error('Error:', err);
         }
     }
 

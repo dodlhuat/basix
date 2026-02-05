@@ -379,3 +379,22 @@ new CodeViewer("#usage-slider-demo", `<label for="range-slider" class="hidden">S
     value="50"
     id="range-slider-demo"
 />`, "html");
+new CodeViewer("#usage-pushmenu-control-demo", `<div class="open-menu">
+    <div class="navigation-controls">
+        <input type="checkbox" id="menu-navigation" class="navigation"/>
+        <label for="menu-navigation">
+            <span class="icon icon-menu"></span>
+        </label>
+    </div>
+</div>`, "html");
+new CodeViewer("#usage-pushmenu-demo", `<nav class="push-menu">
+    <ul>
+        <li>
+            <a onclick="window.Scroll.to('#grid')">Grid</a>
+        </li>
+        <li>
+            <a onclick="window.Scroll.to('#typography')">Typography</a>
+        </li>
+    </ul>
+</nav>`, "html");
+new CodeViewer("#usage-pushmenu-script-demo", `PushMenu.init();`, "js");
