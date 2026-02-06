@@ -34,10 +34,10 @@ textarea, select, .select .dropdown, input {
   width: 100%;
   border: 1px solid var(--divider);
   border-radius: 0.2rem;
-  padding: 0.8rem;
+  padding: 0.5rem;
   box-sizing: border-box;
   background-color: var(--background);
-  min-height: 3rem;
+  min-height: 2rem;
   font-size: 1rem;
   color: var(--primary-text);
 }
@@ -56,8 +56,8 @@ select {
   border-radius: 0.2rem;
   cursor: pointer;
   background: var(--background);
-  height: 3rem;
-  line-height: 3rem;
+  height: 2rem;
+  line-height: 2rem;
 }
 .select-group .dropdown-selected:after {
   font-family: "Material Symbols Outlined 24pt", serif;

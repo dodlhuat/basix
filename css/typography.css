@@ -42,9 +42,17 @@ p, li, td, th, div, h1, h2, h3, h4, h5 {
   color: var(--primary-text);
 }
 
+code {
+  font-family: "Courier New", Courier, monospace;
+}
+
 p, li, td, th, div {
   font-size: 1rem;
   line-height: 1.5;
+}
+
+p {
+  padding-bottom: 0.5rem;
 }
 
 .h1, .h2, .h3, .h4, h1, h2, h3, h4 {
@@ -98,6 +106,32 @@ hr {
   margin-bottom: 1.5rem;
 }
 
+em {
+  font-style: italic;
+}
+
 .text-center {
   text-align: center;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--accent-color-lighten);
+}
+
+a:active {
+  color: var(--accent-color);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }/*# sourceMappingURL=typography.css.map */

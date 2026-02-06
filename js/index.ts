@@ -78,9 +78,6 @@ utils.ready(() => {
   // Initialize theme
   Theme.init();
 
-  // Initialize basic table
-  new Table("#demo-table", { pageSize: 5 });
-
   // Initialize horizontal tabs
   const horizontalTabs = new Tabs(".horizontal", {
     layout: "horizontal",
@@ -559,24 +556,152 @@ new CodeViewer(
 </button>`,
   "html",
 );
-new CodeViewer(
-  "#usage-tooltip-js-demo",
-  `Tooltip.initializeAll();`,
-  "js",
-);
-new CodeViewer(
-  "#usage-spinner-demo",
-  `<div class="spinner"></div>`,
-  "html",
-);
-new CodeViewer(
-  "#usage-loading-demo",
-  `<div class="loading"></div>`,
-  "html",
-);
+new CodeViewer("#usage-tooltip-js-demo", `Tooltip.initializeAll();`, "js");
+new CodeViewer("#usage-spinner-demo", `<div class="spinner"></div>`, "html");
+new CodeViewer("#usage-loading-demo", `<div class="loading"></div>`, "html");
 new CodeViewer(
   "#usage-alerts-demo",
   `<div class="alert alert-default">
     <strong>Default: </strong> This is a default alert!
-</div>`, "html",
-)
+</div>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-chips-demo",
+  `<div class="chips">
+  <div class="chip">Example Chip</div>
+  <div class="chip clickable">Example Chip with hover</div>
+  <div class="chip closeable">
+    Example Chip with closure
+    <button class="close">
+      <span class="icon icon-close"></span>
+    </button>
+  </div>
+</div>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-accordion-demo",
+  `<div class="accordion">
+  <div class="accordion-item">
+    <input
+      type="radio"
+      name="accordion"
+      id="acc1"
+      class="accordion-input"
+      checked
+    />
+    <label for="acc1" class="accordion-label"> What is this? </label>
+    <div class="accordion-content">
+      <div class="accordion-body">
+        <div>
+          <p>
+            This is a pure CSS accordion component. It uses the "Radio
+            Button Hack" to manage state without a single line of
+            JavaScript.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <input
+      type="radio"
+      name="accordion"
+      id="acc2"
+      class="accordion-input"
+    />
+    <label for="acc2" class="accordion-label"> How does it work? </label>
+    <div class="accordion-content">
+      <div class="accordion-body">
+        <div>
+          <p>It links label elements to hidden radio buttons.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <input
+      type="radio"
+      name="accordion"
+      id="acc3"
+      class="accordion-input"
+    />
+    <label for="acc3" class="accordion-label"> Is it accessible? </label>
+    <div class="accordion-content">
+      <div class="accordion-body">
+        <div>
+          <p>
+            It's reasonably accessible as it uses semantic form elements.
+            Users can tab through the headers (radio inputs) and select
+            them with the keyboard. However, for full ARIA support, a
+            small amount of JS is usually recommended to manage
+            aria-expanded attributes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-timeline-demo",
+  `<div class="timeline">
+  <div class="timeline-item active">
+    <div class="timeline-content">
+      <span class="timeline-date">October 12, 2023</span>
+      <h3 class="timeline-title">Project Kickoff</h3>
+      <p class="timeline-body">
+        Initial meeting with shareholders to discuss the scope and
+        requirements of the project. Team roles were assigned and the
+        roadmap was drafted.
+      </p>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-content">
+      <span class="timeline-date">January 15, 2024</span>
+      <h3 class="timeline-title">Beta Launch</h3>
+      <p class="timeline-body">
+        Opened the platform to a closed beta group of 500 users. Collected
+        feedback regarding the onboarding flow and notification settings.
+      </p>
+    </div>
+  </div>
+</div>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-progress-bar-demo",
+  `<div class="progress-bar">
+  <div class="progress" style="height: 24px; width: 50%"></div>
+</div>`,
+  "html",
+);
+new CodeViewer(
+  "#usage-placeholder-demo",
+  `<span class="placeholder w-6">`,
+  "html"
+);
+new CodeViewer(
+  "#usage-table-demo",
+  `const columns: TableColumn[] = [
+  { key: "id", label: "ID" },
+  { key: "name", label: "Name" },
+];
+const tableData: TableRow[] = [
+  { id: 1, name: "John Doe" },
+  { id: 2, name: "Jane Smith" },
+  { id: 3, name: "Mike Johnson" },
+];
+new Table("#demo-table-js", {
+  data: tableData,
+  columns: columns,
+  pageSize: 10,
+});
+
+// Initialize basic table from html data
+new Table("#demo-table", { pageSize: 5 });`,
+  "js"
+);
