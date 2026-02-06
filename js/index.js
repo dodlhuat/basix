@@ -444,3 +444,6 @@ new CodeViewer("#usage-tooltip-demo", `<button class="tooltip-trigger" data-tool
 new CodeViewer("#usage-tooltip-js-demo", `Tooltip.initializeAll();`, "js");
 new CodeViewer("#usage-spinner-demo", `<div class="spinner"></div>`, "html");
 new CodeViewer("#usage-loading-demo", `<div class="loading"></div>`, "html");
+new CodeViewer("#usage-alerts-demo", `<div class="alert alert-default">
+    <strong>Default: </strong> This is a default alert!
+</div>`, "html");

@@ -317,6 +317,10 @@ hr {
   margin-bottom: 1.5rem;
 }
 
+em {
+  font-style: italic;
+}
+
 .text-center {
   text-align: center;
 }
