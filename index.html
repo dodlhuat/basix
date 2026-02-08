@@ -837,13 +837,20 @@
       </div>
       <div id="usage-timeline-demo" class="code-container"></div>
       <h3>Progress Bar</h3>
-      <p>The <strong>Progress Bar</strong> component displays task completion.</p>
+      <p>
+        The <strong>Progress Bar</strong> component displays task completion.
+      </p>
       <div class="progress-bar">
         <div class="progress" style="height: 24px; width: 50%"></div>
       </div>
       <div id="usage-progress-bar-demo" class="code-container"></div>
       <h3>Placeholder / Skeleton</h3>
-      <p>The <strong>Placeholder</strong> component creates skeleton loading states. Use <code>.placeholder</code> with width classes <code>.w-1</code> through <code>.w-12</code> (12-column grid). Animates with a pulsing fade effect.</p>
+      <p>
+        The <strong>Placeholder</strong> component creates skeleton loading
+        states. Use <code>.placeholder</code> with width classes
+        <code>.w-1</code> through <code>.w-12</code> (12-column grid). Animates
+        with a pulsing fade effect.
+      </p>
       <div class="row">
         <div class="column card">
           <h2><span class="placeholder w-4"></span></h2>
@@ -859,12 +866,209 @@
       <div id="usage-placeholder-demo" class="code-container"></div>
       <h2>Advanced Components</h2>
       <h3>Data Tables</h3>
-      <p>The <strong>Table</strong> component provides sortable, searchable, and paginated data tables. It can parse existing HTML tables or accept data programmatically.</p>
+      <p>
+        The <strong>Table</strong> component provides sortable, searchable, and
+        paginated data tables. It can parse existing HTML tables or accept data
+        programmatically.
+      </p>
       <div class="row card">
         <div class="column no-padding" id="demo-table-js"></div>
       </div>
       <div id="usage-table-demo" class="code-container"></div>
       <h3>Date Picker</h3>
+      <p>
+        The <strong>DatePicker</strong> component provides a calendar interface
+        for date selection. Supports single date or date range modes,
+        customizable locales, and mobile-responsive design.
+      </p>
+      <div class="row">
+        <div class="column card">
+          <label for="datepicker-single">Datepicker Single Value</label>
+          <input
+            type="text"
+            id="datepicker-single"
+            class="datepicker-input"
+            placeholder="Select a date"
+            readonly
+          />
+        </div>
+        <div class="column card">
+          <label for="datepicker-range">Datepicker Range</label>
+          <input
+            type="text"
+            id="datepicker-range"
+            class="datepicker-input"
+            placeholder="Select a date range"
+            readonly
+          />
+        </div>
+        <div class="column card">
+          <label for="datepicker-localized"
+            >Datepicker Translated & Start on Monday</label
+          >
+          <input
+            type="text"
+            id="datepicker-localized"
+            class="datepicker-input"
+            placeholder="Seleccionar fecha"
+            readonly
+          />
+        </div>
+      </div>
+      <div id="usage-datepicker-html-demo" class="code-container"></div>
+      <div id="usage-datepicker-js-demo" class="code-container"></div>
+      <div class="row">
+        <div class="column card">
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>input</code></td>
+                <td>HTMLInputElement | string</td>
+                <td>the input element to attach the date picker to</td>
+              </tr>
+              <tr>
+                <td><code>options</code></td>
+                <td>DatePickerOptions</td>
+                <td>
+                  an object with various configuration options for the date
+                  picker (see options table)
+                </td>
+              </tr>
+              <tr>
+                <td><code>currentDate</code></td>
+                <td>Date</td>
+                <td>
+                  the current date to be displayed in the date picker; defaults
+                  to today's date
+                </td>
+              </tr>
+              <tr>
+                <td><code>selectedDate</code></td>
+                <td>Date</td>
+                <td>the selected date in the date picker; defaults to null</td>
+              </tr>
+              <tr>
+                <td><code>rangeStart</code></td>
+                <td>Date</td>
+                <td>
+                  the start of a selected date range in the date picker;
+                  defaults to null
+                </td>
+              </tr>
+              <tr>
+                <td><code>rangeEnd</code></td>
+                <td>Date</td>
+                <td>
+                  the end of a selected date range in the date picker; defaults
+                  to null
+                </td>
+              </tr>
+              <tr>
+                <td><code>viewYear</code></td>
+                <td>number</td>
+                <td>
+                  the year currently displayed in the date picker; defaults to
+                  the current year
+                </td>
+              </tr>
+              <tr>
+                <td><code>viewMonth</code></td>
+                <td>number</td>
+                <td>
+                  the month currently displayed in the date picker; defaults to
+                  the current month
+                </td>
+              </tr>
+              <tr>
+                <td><code>viewMode</code></td>
+                <td>ViewMode</td>
+                <td>
+                  the view mode of the date picker ('days' | 'months' |
+                  'years'); defaults to 'days'
+                </td>
+              </tr>
+              <tr>
+                <td><code>yearRangeStart</code></td>
+                <td>number</td>
+                <td>
+                  the start of the year range in the date picker; defaults to
+                  this year
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="column card">
+          <table>
+            <thead>
+              <tr>
+                <th>Option</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>mode</code></td>
+                <td>string</td>
+                <td>'single' | 'range'</td>
+                <td>
+                  Mode of the date picker, either 'single' or 'range'. Defaults
+                  to 'single'
+                </td>
+              </tr>
+              <tr>
+                <td><code>startDay</code></td>
+                <td>number</td>
+                <td>0</td>
+                <td>
+                  Start day of the week (0 = Sunday, 1 = Monday, etc.). Defaults
+                  to 0 (Sunday)
+                </td>
+              </tr>
+              <tr>
+                <td><code>locales</code></td>
+                <td>DatePickerLocales</td>
+                <td>0</td>
+                <td>
+                  Locales for the date picker. Defaults to english. This is an
+                  object containing a days array with localized day names from
+                  sunday to saturday and a months array with localized month
+                  names from january to december
+                </td>
+              </tr>
+              <tr>
+                <td><code>format</code></td>
+                <td>(date: Date) => string</td>
+                <td></td>
+                <td>
+                  Function to format the date for display in the date picker.
+                  Defaults to a function that returns a string representation of
+                  the date in 'YYYY-MM-DD' format
+                </td>
+              </tr>
+              <tr>
+                <td><code>onSelect</code></td>
+                <td>(date: Date | DateRange) => void</td>
+                <td></td>
+                <td>
+                  Function to be called when a date is selected in the date
+                  picker. Defaults to a function that does nothing
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <h3>Tree Component</h3>
       <h3>File Uploader</h3>
       <h3 id="virtual-dropdown-component">Virtual Dropdown</h3>
@@ -1405,42 +1609,6 @@
             <div class="column"></div>
             <div class="column"></div>
           </div>
-        </div>
-      </div>
-
-      <h3>date picker</h3>
-      <div class="row">
-        <div class="column card">
-          <label for="datepicker-single">Datepicker Single Value</label>
-          <input
-            type="text"
-            id="datepicker-single"
-            class="datepicker-input"
-            placeholder="Select a date"
-            readonly
-          />
-        </div>
-        <div class="column card">
-          <label for="datepicker-range">Datepicker Range</label>
-          <input
-            type="text"
-            id="datepicker-range"
-            class="datepicker-input"
-            placeholder="Select a date range"
-            readonly
-          />
-        </div>
-        <div class="column card">
-          <label for="datepicker-localized"
-            >Datepicker Translated & Start on Monday</label
-          >
-          <input
-            type="text"
-            id="datepicker-localized"
-            class="datepicker-input"
-            placeholder="Seleccionar fecha"
-            readonly
-          />
         </div>
       </div>
 

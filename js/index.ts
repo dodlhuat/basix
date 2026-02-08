@@ -705,3 +705,25 @@ new Table("#demo-table-js", {
 new Table("#demo-table", { pageSize: 5 });`,
   "js"
 );
+new CodeViewer(
+  "#usage-datepicker-html-demo",
+  `<label for="datepicker-range">Datepicker Range</label>
+<input
+  type="text"
+  id="datepicker-range"
+  class="datepicker-input"
+  placeholder="Select a date range"
+  readonly
+/>`,
+  "html"
+);
+new CodeViewer(
+  "#usage-datepicker-js-demo",
+  `new DatePicker("#datepicker-single", {
+  mode: "single",
+  onSelect: (date) => {
+    console.log("Single selected:", date);
+  },
+});`,
+  "js"
+);
