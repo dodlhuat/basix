@@ -1,1703 +1,1670 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <meta
-      name="viewport"
-      content="width=device-width,initial-scale=1.0,minimum-scale=1.0"
+            name="viewport"
+            content="width=device-width,initial-scale=1.0,minimum-scale=1.0"
     />
     <title>Basix</title>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
     <style>
-      /*styles for presentation only*/
-      .carousel-slide {
-        background-color: #eee;
-        color: #555;
-      }
+        /*styles for presentation only*/
+        .carousel-slide {
+            background-color: #eee;
+            color: #555;
+        }
 
-      .carousel-slide:nth-child(odd) {
-        background-color: #e0e0e0;
-      }
+        .carousel-slide:nth-child(odd) {
+            background-color: #e0e0e0;
+        }
 
-      .row .column .row.demo-row {
-        margin-bottom: 1rem;
-      }
+        .row .column .row.demo-row {
+            margin-bottom: 1rem;
+        }
     </style>
     <script src="js/index.js" type="module"></script>
-  </head>
-  <body class="primary-light-bg primary">
-    <div class="main-header">
-      <div class="open-menu">
+</head>
+<body class="primary-light-bg primary">
+<div class="main-header">
+    <div class="open-menu">
         <div class="navigation-controls">
-          <input type="checkbox" id="menu-navigation" class="navigation" />
-          <label for="menu-navigation">
-            <span class="icon icon-menu"></span>
-          </label>
+            <input type="checkbox" id="menu-navigation" class="navigation"/>
+            <label for="menu-navigation">
+                <span class="icon icon-menu"></span>
+            </label>
         </div>
-      </div>
-      <div class="last">
-        <div class="darkmode-picker cursor-pointer">
-          <div
-            id="theme-toggle"
-            class="theme-toggle flex"
-            aria-label="Toggle dark mode"
-          >
-            <span id="theme-icon" class="icon icon-light"></span>
-          </div>
-        </div>
-      </div>
     </div>
+    <div class="last">
+        <div class="darkmode-picker cursor-pointer">
+            <div
+                    id="theme-toggle"
+                    class="theme-toggle flex"
+                    aria-label="Toggle dark mode"
+            >
+                <span id="theme-icon" class="icon icon-light"></span>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <nav class="push-menu">
-      <ul>
+<nav class="push-menu">
+    <ul>
         <li>
-          <a onclick="window.Scroll.to('#grid')">Grid</a>
+            <a onclick="window.Scroll.to('#grid')">Grid</a>
         </li>
         <li>
-          <a onclick="window.Scroll.to('#typography')">Typography</a>
+            <a onclick="window.Scroll.to('#typography')">Typography</a>
         </li>
         <li>
-          <a onclick="window.Scroll.to('#table')">Table</a>
+            <a onclick="window.Scroll.to('#table')">Table</a>
         </li>
         <li>
-          <a onclick="window.Scroll.to('#alerts')">Alerts</a>
+            <a onclick="window.Scroll.to('#alerts')">Alerts</a>
         </li>
         <li>
-          <a onclick="window.Scroll.to('#chips')">Chips</a>
+            <a onclick="window.Scroll.to('#chips')">Chips</a>
         </li>
-      </ul>
-    </nav>
+    </ul>
+</nav>
 
-    <div class="flyout-overlay" id="flyoutOverlay"></div>
-    <div class="flyout-menu" id="flyoutMenu">
-      <ul>
+<div class="flyout-overlay" id="flyoutOverlay"></div>
+<div class="flyout-menu" id="flyoutMenu">
+    <ul>
         <li><a href="#">Home</a></li>
         <li>
-          About
-          <ul>
-            <li><a href="#">Our Story</a></li>
-            <li><a href="#">Team</a></li>
-            <li><a href="#">Careers</a></li>
-          </ul>
+            About
+            <ul>
+                <li><a href="#">Our Story</a></li>
+                <li><a href="#">Team</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
         </li>
         <li>
-          Services
-          <ul>
-            <li>
-              Web Design
-              <ul>
-                <li><a href="#">eCommerce</a></li>
-                <li><a href="#">Landing Pages</a></li>
-                <li><a href="#">Portfolios</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Development</a></li>
-            <li><a href="#">SEO</a></li>
-          </ul>
+            Services
+            <ul>
+                <li>
+                    Web Design
+                    <ul>
+                        <li><a href="#">eCommerce</a></li>
+                        <li><a href="#">Landing Pages</a></li>
+                        <li><a href="#">Portfolios</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Development</a></li>
+                <li><a href="#">SEO</a></li>
+            </ul>
         </li>
         <li><a href="#">Portfolio</a></li>
         <li><a href="#">Contact</a></li>
-      </ul>
+    </ul>
+</div>
+
+<div class="content push-content">
+    <h2>Layout</h2>
+    <div class="row card">
+        <div class="column">
+            <h3>Grid System</h3>
+            <p>
+                The <strong>Grid</strong> component provides a flexbox-based layout
+                system. Use <code>.row</code> with
+                <code>.column</code>
+                children. Columns can use <code>.grow-2</code> through
+                <code>.grow-6</code> for proportional sizing. Responsive - stacks on
+                mobile.
+            </p>
+            <div class="row demo-row">
+                <div class="column" style="background: #e0e0e0; text-align: center">
+                    Column 1
+                </div>
+                <div class="column" style="background: #d0d0d0; text-align: center">
+                    Column 2
+                </div>
+                <div class="column" style="background: #e0e0e0; text-align: center">
+                    Column 3
+                </div>
+            </div>
+            <div class="row demo-row">
+                <div class="column" style="background: #e0e0e0; text-align: center">
+                    1x
+                </div>
+                <div
+                        class="column grow-2"
+                        style="background: #d0d0d0; text-align: center"
+                >
+                    2x (grow-2)
+                </div>
+                <div class="column" style="background: #e0e0e0; text-align: center">
+                    1x
+                </div>
+            </div>
+            <h3>Typography</h3>
+            <p>
+                The <strong>typography system</strong> is built around the Outfit
+                variable font, providing a modern, readable base for all text. Body
+                content uses a consistent font size and comfortable line height for
+                optimal readability, while headings follow a clear scale with bold
+                weight and tighter line spacing for strong visual hierarchy.
+                Semantic elements share a unified text color, lists use intuitive
+                inside markers with nested styles, and utility classes enable simple
+                text alignment. Monospace fonts are reserved for code to ensure
+                clarity and distinction.
+            </p>
+            <h1>Headline 1</h1>
+            <h2>Headline 2</h2>
+            <h3>Headline 3</h3>
+            <h4>Headline 4</h4>
+            <ul>
+                <li>List Element 1</li>
+                <li>List Element 2</li>
+                <li>List Element 3</li>
+            </ul>
+            <ol>
+                <li>List Element 1</li>
+                <li>List Element 2</li>
+                <li>List Element 3</li>
+            </ol>
+            <a href="#">A Link</a>
+            <h3>Cards</h3>
+            <p>
+                The <strong>Card</strong> component is a CSS-only component that
+                creates visually contained content sections with optional header and
+                footer. Use the Card component when you want to group related
+                information together visually.
+            </p>
+            <p>
+                Use <code>.card</code> class on rows or columns to wrap those into a
+                card.
+            </p>
+        </div>
     </div>
 
-    <div class="content push-content">
-      <h2>Layout</h2>
-      <div class="row card">
-        <div class="column">
-          <h3>Grid System</h3>
-          <p>
-            The <strong>Grid</strong> component provides a flexbox-based layout
-            system. Use <code>.row</code> with
-            <code>.column</code>
-            children. Columns can use <code>.grow-2</code> through
-            <code>.grow-6</code> for proportional sizing. Responsive - stacks on
-            mobile.
-          </p>
-          <div class="row demo-row">
-            <div class="column" style="background: #e0e0e0; text-align: center">
-              Column 1
-            </div>
-            <div class="column" style="background: #d0d0d0; text-align: center">
-              Column 2
-            </div>
-            <div class="column" style="background: #e0e0e0; text-align: center">
-              Column 3
-            </div>
-          </div>
-          <div class="row demo-row">
-            <div class="column" style="background: #e0e0e0; text-align: center">
-              1x
-            </div>
-            <div
-              class="column grow-2"
-              style="background: #d0d0d0; text-align: center"
-            >
-              2x (grow-2)
-            </div>
-            <div class="column" style="background: #e0e0e0; text-align: center">
-              1x
-            </div>
-          </div>
-          <h3>Typography</h3>
-          <p>
-            The <strong>typography system</strong> is built around the Outfit
-            variable font, providing a modern, readable base for all text. Body
-            content uses a consistent font size and comfortable line height for
-            optimal readability, while headings follow a clear scale with bold
-            weight and tighter line spacing for strong visual hierarchy.
-            Semantic elements share a unified text color, lists use intuitive
-            inside markers with nested styles, and utility classes enable simple
-            text alignment. Monospace fonts are reserved for code to ensure
-            clarity and distinction.
-          </p>
-          <h1>Headline 1</h1>
-          <h2>Headline 2</h2>
-          <h3>Headline 3</h3>
-          <h4>Headline 4</h4>
-          <ul>
-            <li>List Element 1</li>
-            <li>List Element 2</li>
-            <li>List Element 3</li>
-          </ul>
-          <ol>
-            <li>List Element 1</li>
-            <li>List Element 2</li>
-            <li>List Element 3</li>
-          </ol>
-          <a href="#">A Link</a>
-          <h3>Cards</h3>
-          <p>
-            The <strong>Card</strong> component is a CSS-only component that
-            creates visually contained content sections with optional header and
-            footer. Use the Card component when you want to group related
-            information together visually.
-          </p>
-          <p>
-            Use <code>.card</code> class on rows or columns to wrap those into a
-            card.
-          </p>
-        </div>
-      </div>
-
-      <h2>Forms</h2>
-      <div class="row">
+    <h2>Forms</h2>
+    <div class="row">
         <div class="column card">
-          <p>
-            The <strong>Form</strong> styles provide consistent styling for
-            inputs, textareas, and native elements.
-          </p>
-          <h3>Text Input</h3>
-          <label for="text-input-demo">Text Input</label>
-          <input type="text" id="text-input-demo" />
-          <div id="usage-text-input" class="code-container"></div>
-          <h3>Textarea</h3>
-          <label for="textarea-demo">Text Area</label>
-          <textarea id="textarea-demo"></textarea>
-          <div id="usage-textarea" class="code-container"></div>
-          <h3>Select Dropdown</h3>
-          <p>
-            Instead of using a default select, the
-            <a href="#virtual-dropdown-component">Virtual Dropdown component</a>
-            is used
-          </p>
-          <h3>Checkbox</h3>
-          <p>
-            The <strong>Checkbox</strong> component provides custom-styled
-            checkboxes.
-          </p>
-          <div>
-            <input
-              class="styled-checkbox"
-              id="checkbox-1"
-              type="checkbox"
-              value="1"
-            />
-            <label for="checkbox-1">Checkbox</label>
-          </div>
-          <div>
-            <input
-              class="styled-checkbox"
-              id="checkbox-2"
-              type="checkbox"
-              value="2"
-              disabled
-            />
-            <label for="checkbox-2">A disabled checkbox</label>
-          </div>
-          <div id="usage-checkbox-demo" class="code-container"></div>
-          <h3>Radio Buttons</h3>
-          <p>
-            The <strong>Radio Button</strong> component provides custom-styled
-            radio inputs.
-          </p>
-          <label class="radio-button-container"
+            <p>
+                The <strong>Form</strong> styles provide consistent styling for
+                inputs, textareas, and native elements.
+            </p>
+            <h3>Text Input</h3>
+            <label for="text-input-demo">Text Input</label>
+            <input type="text" id="text-input-demo"/>
+            <div id="usage-text-input" class="code-container"></div>
+            <h3>Textarea</h3>
+            <label for="textarea-demo">Text Area</label>
+            <textarea id="textarea-demo"></textarea>
+            <div id="usage-textarea" class="code-container"></div>
+            <h3>Select Dropdown</h3>
+            <p>
+                Instead of using a default select, the
+                <a href="#virtual-dropdown-component">Virtual Dropdown component</a>
+                is used
+            </p>
+            <h3>Checkbox</h3>
+            <p>
+                The <strong>Checkbox</strong> component provides custom-styled
+                checkboxes.
+            </p>
+            <div>
+                <input
+                        class="styled-checkbox"
+                        id="checkbox-1"
+                        type="checkbox"
+                        value="1"
+                />
+                <label for="checkbox-1">Checkbox</label>
+            </div>
+            <div>
+                <input
+                        class="styled-checkbox"
+                        id="checkbox-2"
+                        type="checkbox"
+                        value="2"
+                        disabled
+                />
+                <label for="checkbox-2">A disabled checkbox</label>
+            </div>
+            <div id="usage-checkbox-demo" class="code-container"></div>
+            <h3>Radio Buttons</h3>
+            <p>
+                The <strong>Radio Button</strong> component provides custom-styled
+                radio inputs.
+            </p>
+            <label class="radio-button-container"
             >One
-            <input type="radio" checked="checked" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-          <label class="radio-button-container"
+                <input type="radio" checked="checked" name="radio"/>
+                <span class="checkmark"></span>
+            </label>
+            <label class="radio-button-container"
             >Two
-            <input type="radio" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-          <label class="radio-button-container"
+                <input type="radio" name="radio"/>
+                <span class="checkmark"></span>
+            </label>
+            <label class="radio-button-container"
             >Three
-            <input type="radio" name="radio" />
-            <span class="checkmark"></span>
-          </label>
-          <div id="usage-radiobutton-demo" class="code-container"></div>
-          <h3>Switch</h3>
-          <p>
-            The <strong>Switch</strong> component creates styled toggle switches
-            that are actually based on checkboxes.
-          </p>
-          <div class="switch">
-            <input type="checkbox" id="switch" /><label for="switch"
-              >Toggle</label
+                <input type="radio" name="radio"/>
+                <span class="checkmark"></span>
+            </label>
+            <div id="usage-radiobutton-demo" class="code-container"></div>
+            <h3>Switch</h3>
+            <p>
+                The <strong>Switch</strong> component creates styled toggle switches
+                that are actually based on checkboxes.
+            </p>
+            <div class="switch">
+                <input type="checkbox" id="switch"/><label for="switch"
+            >Toggle</label
             >
-          </div>
-          <div id="usage-switch-demo" class="code-container"></div>
-          <h3>Range Slider</h3>
-          <p>The Range Slider component creates a simple styled slider.</p>
-          <label for="range-slider" class="hidden">Slider</label>
-          <input
-            type="range"
-            min="1"
-            max="100"
-            value="50"
-            id="range-slider-demo"
-          />
-          <div id="usage-slider-demo" class="code-container"></div>
+            </div>
+            <div id="usage-switch-demo" class="code-container"></div>
+            <h3>Range Slider</h3>
+            <p>The Range Slider component creates a simple styled slider.</p>
+            <label for="range-slider" class="hidden">Slider</label>
+            <input
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="50"
+                    id="range-slider-demo"
+            />
+            <div id="usage-slider-demo" class="code-container"></div>
         </div>
-      </div>
+    </div>
 
-      <h2>Navigation</h2>
-      <h3>Push Menu</h3>
-      <p>
+    <h2>Navigation</h2>
+    <h3>Push Menu</h3>
+    <p>
         The <strong>PushMenu</strong> component creates a sidebar navigation
         that "pushes" the main content when opened. Uses a checkbox-based toggle
         mechanism. Use three lines at top to test the push menu.
-      </p>
-      <div id="usage-pushmenu-control-demo" class="code-container"></div>
-      <div id="usage-pushmenu-demo" class="code-container"></div>
-      <div id="usage-pushmenu-script-demo" class="code-container"></div>
-      <h3>Flyout Menu</h3>
-      <p>
+    </p>
+    <div id="usage-pushmenu-control-demo" class="code-container"></div>
+    <div id="usage-pushmenu-demo" class="code-container"></div>
+    <div id="usage-pushmenu-script-demo" class="code-container"></div>
+    <h3>Flyout Menu</h3>
+    <p>
         The <strong>Flyout Menu</strong> component creates slide-in navigation
         menus with nested submenus. Supports left/right direction, header/footer
         and keyboard navigation (Escape to close)
-      </p>
-      <p>
+    </p>
+    <p>
         Choose Flyout Direction and use the
         <italic>Show</italic>
         button to open it. Direction normally gets set via the settings.
-      </p>
-      <div class="button-group flyout-controls">
+    </p>
+    <div class="button-group flyout-controls">
         <button class="active" data-direction="right">Right</button>
         <button data-direction="left">Left</button>
         <button class="trigger-flyout-menu">Show</button>
-      </div>
-      <div id="usage-flyout-demo" class="code-container"></div>
-      <div id="usage-flyout-script-demo" class="code-container"></div>
-      <table>
+    </div>
+    <div id="usage-flyout-demo" class="code-container"></div>
+    <div id="usage-flyout-script-demo" class="code-container"></div>
+    <table>
         <thead>
-          <tr>
+        <tr>
             <th>Option</th>
             <th>Type</th>
             <th>Default</th>
             <th>Description</th>
-          </tr>
+        </tr>
         </thead>
         <tbody>
-          <tr>
+        <tr>
             <td><code>triggerSelector</code></td>
             <td>string</td>
             <td>'.menu-trigger'</td>
             <td>description tbd</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>menuSelector</code></td>
             <td>string</td>
             <td>'#flyoutMenu'</td>
             <td>description tbd</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>overlaySelector</code></td>
             <td>string</td>
             <td>'#flyoutOverlay'</td>
             <td>description tbd</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>closeSelector</code></td>
             <td>string</td>
             <td>'.close-menu'</td>
             <td>description tbd</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>direction</code></td>
             <td>string</td>
             <td>'right'</td>
             <td>can be either 'right' or 'left'</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>title</code></td>
             <td>string</td>
             <td>'Menu'</td>
             <td>shown in the header if enabled</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>enableHeader</code></td>
             <td>boolean</td>
             <td>true</td>
             <td>shows header</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>footerText</code></td>
             <td>string</td>
             <td>'&copy; 2025 Brand Inc.'</td>
             <td>shown in the footer if enabled</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>enableFooter</code></td>
             <td>boolean</td>
             <td>true</td>
             <td>shows footer</td>
-          </tr>
+        </tr>
         </tbody>
-      </table>
-      <h3>Dropdown Menu</h3>
-      <p>
+    </table>
+    <h3>Dropdown Menu</h3>
+    <p>
         The <strong>Dropdown Menu</strong> allows to create multi-level dropdown
         menus with nested submenus.
-      </p>
-      <p>
+    </p>
+    <p>
         The menu fires custom events
         <code>CustomEvent&lt;DropdownSelectDetail&gt;</code> that can be
         listened to in order to react to user selections.
-      </p>
-      <div class="dropdown-container" id="myDropdown">
+    </p>
+    <div class="dropdown-container" id="myDropdown">
         <button class="dropdown-trigger">Select Option</button>
         <ul class="dropdown-menu">
-          <li>
-            <div class="dropdown-item">Profile</div>
-          </li>
-          <li>
-            <div class="dropdown-item">Settings</div>
-            <ul>
-              <li>
-                <div class="dropdown-item">Account</div>
-              </li>
-              <li>
-                <div class="dropdown-item">Privacy</div>
+            <li>
+                <div class="dropdown-item">Profile</div>
+            </li>
+            <li>
+                <div class="dropdown-item">Settings</div>
                 <ul>
-                  <li>
-                    <div class="dropdown-item">Public</div>
-                  </li>
-                  <li>
-                    <div class="dropdown-item">Private</div>
-                  </li>
-                  <li>
-                    <div class="dropdown-item">Friends Only</div>
-                  </li>
+                    <li>
+                        <div class="dropdown-item">Account</div>
+                    </li>
+                    <li>
+                        <div class="dropdown-item">Privacy</div>
+                        <ul>
+                            <li>
+                                <div class="dropdown-item">Public</div>
+                            </li>
+                            <li>
+                                <div class="dropdown-item">Private</div>
+                            </li>
+                            <li>
+                                <div class="dropdown-item">Friends Only</div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="dropdown-item">Notifications</div>
+                    </li>
                 </ul>
-              </li>
-              <li>
-                <div class="dropdown-item">Notifications</div>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <div class="dropdown-item">Help</div>
-          </li>
-          <li>
-            <div class="dropdown-item">Logout</div>
-          </li>
+            </li>
+            <li>
+                <div class="dropdown-item">Help</div>
+            </li>
+            <li>
+                <div class="dropdown-item">Logout</div>
+            </li>
         </ul>
-      </div>
-      <div id="usage-dropdown-menu-demo" class="code-container"></div>
-      <div id="usage-dropdown-menu-js-demo" class="code-container"></div>
-      <h2>Feedback</h2>
-      <h3>Modal</h3>
-      <p>
+    </div>
+    <div id="usage-dropdown-menu-demo" class="code-container"></div>
+    <div id="usage-dropdown-menu-js-demo" class="code-container"></div>
+    <h2>Feedback</h2>
+    <h3>Modal</h3>
+    <p>
         The <strong>Modal</strong> component creates dialog overlays with
         header, content, and footer sections. Supports types (success, error,
         warning, info) and close on Escape key
-      </p>
-      <button class="show-modal">Show Modal</button>
-      <div id="usage-modal-demo" class="code-container"></div>
-      <table>
+    </p>
+    <button class="show-modal">Show Modal</button>
+    <div id="usage-modal-demo" class="code-container"></div>
+    <table>
         <thead>
-          <tr>
+        <tr>
             <th>Parameter</th>
             <th>Type</th>
             <th>Description</th>
-          </tr>
+        </tr>
         </thead>
         <tbody>
-          <tr>
+        <tr>
             <td><code>content</code></td>
             <td>string</td>
             <td>content of the modal. can be html or a simple string</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>header</code></td>
             <td>string</td>
             <td>header of the modal. can be html or a simple string</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>footer</code></td>
             <td>string</td>
             <td>footer of the modal. can be html or a simple string</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>closeable</code></td>
             <td>boolean</td>
             <td>shows a close button</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>type</code></td>
             <td>ModalType</td>
             <td>
-              the type of the modal (success, error, warning, info, default)
+                the type of the modal (success, error, warning, info, default)
             </td>
-          </tr>
+        </tr>
         </tbody>
-      </table>
-      <h3>Toast</h3>
-      <p>The <strong>Toast</strong> component shows brief messages.</p>
-      <button class="show-toast">Show Toast</button>
-      <div id="usage-toast-demo" class="code-container"></div>
-      <table>
+    </table>
+    <h3>Toast</h3>
+    <p>The <strong>Toast</strong> component shows brief messages.</p>
+    <button class="show-toast">Show Toast</button>
+    <div id="usage-toast-demo" class="code-container"></div>
+    <table>
         <thead>
-          <tr>
+        <tr>
             <th>Parameter</th>
             <th>Type</th>
             <th>Description</th>
-          </tr>
+        </tr>
         </thead>
         <tbody>
-          <tr>
+        <tr>
             <td><code>content</code></td>
             <td>string</td>
             <td>the content of the toast</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>header</code></td>
             <td>string</td>
             <td>the header of the toast</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>markup</code></td>
             <td>ToastType</td>
             <td>
-              changes the color of the toast info: default, success, warning,
-              error
+                changes the color of the toast info: default, success, warning,
+                error
             </td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>closeable</code></td>
             <td>boolean</td>
             <td>allows to close the toast before auto-closure time</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>auto-closure</code></td>
             <td>integer</td>
             <td>optional closure time in ms</td>
-          </tr>
+        </tr>
         </tbody>
-      </table>
-      <h3>Tooltip</h3>
-      <p>
+    </table>
+    <h3>Tooltip</h3>
+    <p>
         The <strong>Tooltip</strong> component shows contextual information on
         hover.
-      </p>
-      <button class="tooltip-trigger" data-tooltip="This is a simple tooltip">
+    </p>
+    <button class="tooltip-trigger" data-tooltip="This is a simple tooltip">
         Simple Tooltip
-      </button>
-      <button
-        class="tooltip-trigger"
-        data-tooltip="This tooltip has <strong>bold</strong> and <em>italic</em> text"
-      >
+    </button>
+    <button
+            class="tooltip-trigger"
+            data-tooltip="This tooltip has <strong>bold</strong> and <em>italic</em> text"
+    >
         HTML Formatting
-      </button>
-      <button
-        class="tooltip-trigger"
-        data-tooltip="You can include <code>code snippets</code> too!"
-      >
+    </button>
+    <button
+            class="tooltip-trigger"
+            data-tooltip="You can include <code>code snippets</code> too!"
+    >
         Code Example
-      </button>
-      <div id="usage-tooltip-demo" class="code-container"></div>
-      <div id="usage-tooltip-js-demo" class="code-container"></div>
-      <h3>Spinner / Loading</h3>
-      <p>
+    </button>
+    <div id="usage-tooltip-demo" class="code-container"></div>
+    <div id="usage-tooltip-js-demo" class="code-container"></div>
+    <h3>Spinner / Loading</h3>
+    <p>
         The <strong>Spinner</strong> component shows simple loading indicators.
         There are two variants: a simple spinner and a loading indicator with
         dots.
-      </p>
-      <div class="row">
+    </p>
+    <div class="row">
         <div class="column center">
-          <div class="spinner"></div>
+            <div class="spinner"></div>
         </div>
         <div class="column center">
-          <div class="loading"></div>
+            <div class="loading"></div>
         </div>
         <div class="column grow-4"></div>
-      </div>
-      <div id="usage-spinner-demo" class="code-container"></div>
-      <div id="usage-loading-demo" class="code-container"></div>
-      <h2>Components</h2>
-      <h3>Alerts</h3>
-      <p>
+    </div>
+    <div id="usage-spinner-demo" class="code-container"></div>
+    <div id="usage-loading-demo" class="code-container"></div>
+    <h2>Components</h2>
+    <h3>Alerts</h3>
+    <p>
         The <strong>Alert</strong> component displays contextual feedback
         messages. Available variants: default, error, warning and success.
-      </p>
-      <div class="row card">
+    </p>
+    <div class="row card">
         <div class="column">
-          <div class="alert alert-default">
-            <strong>Default: </strong> This is a default alert!
-          </div>
+            <div class="alert alert-default">
+                <strong>Default: </strong> This is a default alert!
+            </div>
         </div>
         <div class="column">
-          <div class="alert alert-error">
-            <strong>Error: </strong> This is an error alert!
-          </div>
+            <div class="alert alert-error">
+                <strong>Error: </strong> This is an error alert!
+            </div>
         </div>
         <div class="column">
-          <div class="alert alert-warning">
-            <strong>Warning: </strong> This is an warning alert!
-          </div>
+            <div class="alert alert-warning">
+                <strong>Warning: </strong> This is an warning alert!
+            </div>
         </div>
         <div class="column">
-          <div class="alert alert-success">
-            <strong>Success: </strong> This is an success alert!
-          </div>
+            <div class="alert alert-success">
+                <strong>Success: </strong> This is an success alert!
+            </div>
         </div>
-      </div>
-      <div id="usage-alerts-demo" class="code-container"></div>
-      <h3>Buttons</h3>
-      <p>
+    </div>
+    <div id="usage-alerts-demo" class="code-container"></div>
+    <h3>Buttons</h3>
+    <p>
         The <strong>Button</strong> component provides styled buttons with
         variants. You can either us the <code>.button</code> class on divs or
         simply the <code>button</code> element itself with color classes:
         button-primary, button-success, button-warning, button-error
-      </p>
-      <div class="row">
+    </p>
+    <div class="row">
         <div class="column">
-          <button>Default</button>
+            <button>Default</button>
         </div>
         <div class="column">
-          <button class="button-primary">Primary</button>
+            <button class="button-primary">Primary</button>
         </div>
         <div class="column">
-          <button class="button-success">Success</button>
+            <button class="button-success">Success</button>
         </div>
         <div class="column">
-          <button class="button-warning">Warning</button>
+            <button class="button-warning">Warning</button>
         </div>
         <div class="column">
-          <button class="button-error">Error</button>
+            <button class="button-error">Error</button>
         </div>
-      </div>
-      <h3>Chips</h3>
-      <p>
+    </div>
+    <h3>Chips</h3>
+    <p>
         The <strong>Chips</strong> component displays small interactive elements
         like tags or filters. Chips are a CSS only component. Use listeners if
         you want them to be clickable or closeable.
-      </p>
-      <div class="chips">
+    </p>
+    <div class="chips">
         <div class="chip">Example Chip</div>
         <div class="chip clickable">Example Chip with hover</div>
         <div class="chip closeable">
-          Example Chip with closure
-          <button class="close">
-            <span class="icon icon-close"></span>
-          </button>
+            Example Chip with closure
+            <button class="close">
+                <span class="icon icon-close"></span>
+            </button>
         </div>
-      </div>
-      <div id="usage-chips-demo" class="code-container"></div>
-      <h3>Accordion</h3>
-      <p>
+    </div>
+    <div id="usage-chips-demo" class="code-container"></div>
+    <h3>Accordion</h3>
+    <p>
         The <strong>Accordion</strong> component creates collapsible content
         sections. Uses hidden radio/checkbox inputs with labels and is CSS only
-      </p>
-      <div class="accordion">
+    </p>
+    <div class="accordion">
         <div class="accordion-item">
-          <input
-            type="radio"
-            name="accordion"
-            id="acc1"
-            class="accordion-input"
-            checked
-          />
-          <label for="acc1" class="accordion-label"> What is this? </label>
-          <div class="accordion-content">
-            <div class="accordion-body">
-              <div>
-                <p>
-                  This is a pure CSS accordion component. It uses the "Radio
-                  Button Hack" to manage state without a single line of
-                  JavaScript.
-                </p>
-              </div>
+            <input
+                    type="radio"
+                    name="accordion"
+                    id="acc1"
+                    class="accordion-input"
+                    checked
+            />
+            <label for="acc1" class="accordion-label"> What is this? </label>
+            <div class="accordion-content">
+                <div class="accordion-body">
+                    <div>
+                        <p>
+                            This is a pure CSS accordion component. It uses the "Radio
+                            Button Hack" to manage state without a single line of
+                            JavaScript.
+                        </p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
         <div class="accordion-item">
-          <input
-            type="radio"
-            name="accordion"
-            id="acc2"
-            class="accordion-input"
-          />
-          <label for="acc2" class="accordion-label"> How does it work? </label>
-          <div class="accordion-content">
-            <div class="accordion-body">
-              <div>
-                <p>It links label elements to hidden radio buttons.</p>
-              </div>
+            <input
+                    type="radio"
+                    name="accordion"
+                    id="acc2"
+                    class="accordion-input"
+            />
+            <label for="acc2" class="accordion-label"> How does it work? </label>
+            <div class="accordion-content">
+                <div class="accordion-body">
+                    <div>
+                        <p>It links label elements to hidden radio buttons.</p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
         <div class="accordion-item">
-          <input
-            type="radio"
-            name="accordion"
-            id="acc3"
-            class="accordion-input"
-          />
-          <label for="acc3" class="accordion-label"> Is it accessible? </label>
-          <div class="accordion-content">
-            <div class="accordion-body">
-              <div>
-                <p>
-                  It's reasonably accessible as it uses semantic form elements.
-                  Users can tab through the headers (radio inputs) and select
-                  them with the keyboard. However, for full ARIA support, a
-                  small amount of JS is usually recommended to manage
-                  aria-expanded attributes.
-                </p>
-              </div>
+            <input
+                    type="radio"
+                    name="accordion"
+                    id="acc3"
+                    class="accordion-input"
+            />
+            <label for="acc3" class="accordion-label"> Is it accessible? </label>
+            <div class="accordion-content">
+                <div class="accordion-body">
+                    <div>
+                        <p>
+                            It's reasonably accessible as it uses semantic form elements.
+                            Users can tab through the headers (radio inputs) and select
+                            them with the keyboard. However, for full ARIA support, a
+                            small amount of JS is usually recommended to manage
+                            aria-expanded attributes.
+                        </p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-      <div id="usage-accordion-demo" class="code-container"></div>
-      <h3>Tabs</h3>
-      <p>
+    </div>
+    <div id="usage-accordion-demo" class="code-container"></div>
+    <h3>Tabs</h3>
+    <p>
         The <strong>Tabs</strong> component creates accessible tabbed
         interfaces. Supports horizontal/vertical layouts, keyboard navigation
         (arrow keys, Home, End), and ARIA attributes.
-      </p>
-      <p>
+    </p>
+    <p>
         Needs to be called with parameters HTMLElement (or string selector) and
         an optional options object.
-      </p>
-      <h3>vertical</h3>
-      <div class="tabs-container vertical">
+    </p>
+    <h3>vertical</h3>
+    <div class="tabs-container vertical">
         <div class="tabs-header">
-          <ul class="tabs-list">
-            <li class="tab-item active">General</li>
-            <li class="tab-item">Profile</li>
-            <li class="tab-item">Privacy</li>
-            <li class="tab-item">Billing</li>
-          </ul>
+            <ul class="tabs-list">
+                <li class="tab-item active">General</li>
+                <li class="tab-item">Profile</li>
+                <li class="tab-item">Privacy</li>
+                <li class="tab-item">Billing</li>
+            </ul>
         </div>
         <div class="tabs-content">
-          <div class="tab-panel active">
-            <h3>General Information</h3>
-            <p>Overview of your general system settings and configurations.</p>
-          </div>
-          <div class="tab-panel">
-            <h3>Public Profile</h3>
-            <p>
-              Customize how your profile appears to other users on the platform.
-            </p>
-          </div>
-          <div class="tab-panel">
-            <h3>Privacy Settings</h3>
-            <p>Control who can see your activity and personal information.</p>
-          </div>
-          <div class="tab-panel">
-            <h3>Billing & Invoices</h3>
-            <p>
-              View your billing history, manage payment methods, and download
-              invoices.
-            </p>
-          </div>
+            <div class="tab-panel active">
+                <h3>General Information</h3>
+                <p>Overview of your general system settings and configurations.</p>
+            </div>
+            <div class="tab-panel">
+                <h3>Public Profile</h3>
+                <p>
+                    Customize how your profile appears to other users on the platform.
+                </p>
+            </div>
+            <div class="tab-panel">
+                <h3>Privacy Settings</h3>
+                <p>Control who can see your activity and personal information.</p>
+            </div>
+            <div class="tab-panel">
+                <h3>Billing & Invoices</h3>
+                <p>
+                    View your billing history, manage payment methods, and download
+                    invoices.
+                </p>
+            </div>
         </div>
-      </div>
-      <h3>horizontal</h3>
-      <div class="tabs-container horizontal">
+    </div>
+    <h3>horizontal</h3>
+    <div class="tabs-container horizontal">
         <div class="tabs-header">
-          <ul class="tabs-list">
-            <li class="tab-item active">General</li>
-            <li class="tab-item">Profile</li>
-            <li class="tab-item">Privacy</li>
-            <li class="tab-item">Billing</li>
-          </ul>
+            <ul class="tabs-list">
+                <li class="tab-item active">General</li>
+                <li class="tab-item">Profile</li>
+                <li class="tab-item">Privacy</li>
+                <li class="tab-item">Billing</li>
+            </ul>
         </div>
         <div class="tabs-content">
-          <div class="tab-panel active">
-            <h3>General Information</h3>
-            <p>Overview of your general system settings and configurations.</p>
-          </div>
-          <div class="tab-panel">
-            <h3>Public Profile</h3>
-            <p>
-              Customize how your profile appears to other users on the platform.
-            </p>
-          </div>
-          <div class="tab-panel">
-            <h3>Privacy Settings</h3>
-            <p>Control who can see your activity and personal information.</p>
-          </div>
-          <div class="tab-panel">
-            <h3>Billing & Invoices</h3>
-            <p>
-              View your billing history, manage payment methods, and download
-              invoices.
-            </p>
-          </div>
+            <div class="tab-panel active">
+                <h3>General Information</h3>
+                <p>Overview of your general system settings and configurations.</p>
+            </div>
+            <div class="tab-panel">
+                <h3>Public Profile</h3>
+                <p>
+                    Customize how your profile appears to other users on the platform.
+                </p>
+            </div>
+            <div class="tab-panel">
+                <h3>Privacy Settings</h3>
+                <p>Control who can see your activity and personal information.</p>
+            </div>
+            <div class="tab-panel">
+                <h3>Billing & Invoices</h3>
+                <p>
+                    View your billing history, manage payment methods, and download
+                    invoices.
+                </p>
+            </div>
         </div>
-      </div>
-      <div id="usage-tabs" class="code-container"></div>
-      <table>
+    </div>
+    <div id="usage-tabs" class="code-container"></div>
+    <table>
         <thead>
-          <tr>
+        <tr>
             <th>Option</th>
             <th>Type</th>
             <th>Default</th>
             <th>Description</th>
-          </tr>
+        </tr>
         </thead>
         <tbody>
-          <tr>
+        <tr>
             <td><code>layout</code></td>
             <td>string</td>
             <td>'horizontal'</td>
             <td>Layout of the tabs, either 'horizontal' or 'vertical'</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td><code>defaultTab</code></td>
             <td>integer</td>
             <td>0</td>
             <td>Index of the default active tab (0-based)</td>
-          </tr>
+        </tr>
         </tbody>
-      </table>
-      <h3>Timeline</h3>
-      <p>
+    </table>
+    <h3>Timeline</h3>
+    <p>
         The <strong>Timeline</strong> component displays chronological events.
         This is a CSS only component.
-      </p>
-      <div class="timeline">
+    </p>
+    <div class="timeline">
         <div class="timeline-item active">
-          <div class="timeline-content">
-            <span class="timeline-date">October 12, 2023</span>
-            <h3 class="timeline-title">Project Kickoff</h3>
-            <p class="timeline-body">
-              Initial meeting with shareholders to discuss the scope and
-              requirements of the project. Team roles were assigned and the
-              roadmap was drafted.
-            </p>
-          </div>
+            <div class="timeline-content">
+                <span class="timeline-date">October 12, 2023</span>
+                <h3 class="timeline-title">Project Kickoff</h3>
+                <p class="timeline-body">
+                    Initial meeting with shareholders to discuss the scope and
+                    requirements of the project. Team roles were assigned and the
+                    roadmap was drafted.
+                </p>
+            </div>
         </div>
         <div class="timeline-item">
-          <div class="timeline-content">
-            <span class="timeline-date">November 5, 2023</span>
-            <h3 class="timeline-title">Design Phase Completed</h3>
-            <p class="timeline-body">
-              Finalized the UI/UX mockups and received approval from the client.
-              The design system was established with a complete color palette
-              and typography guide.
-            </p>
-          </div>
+            <div class="timeline-content">
+                <span class="timeline-date">November 5, 2023</span>
+                <h3 class="timeline-title">Design Phase Completed</h3>
+                <p class="timeline-body">
+                    Finalized the UI/UX mockups and received approval from the client.
+                    The design system was established with a complete color palette
+                    and typography guide.
+                </p>
+            </div>
         </div>
         <div class="timeline-item">
-          <div class="timeline-content">
-            <span class="timeline-date">December 20, 2023</span>
-            <h3 class="timeline-title">Alpha Release</h3>
-            <p class="timeline-body">
-              Released the first playable version of the application to internal
-              testers. Identified major bugs in the navigation logic and fixed
-              critical performance issues.
-            </p>
-          </div>
+            <div class="timeline-content">
+                <span class="timeline-date">December 20, 2023</span>
+                <h3 class="timeline-title">Alpha Release</h3>
+                <p class="timeline-body">
+                    Released the first playable version of the application to internal
+                    testers. Identified major bugs in the navigation logic and fixed
+                    critical performance issues.
+                </p>
+            </div>
         </div>
         <div class="timeline-item">
-          <div class="timeline-content">
-            <span class="timeline-date">January 15, 2024</span>
-            <h3 class="timeline-title">Beta Launch</h3>
-            <p class="timeline-body">
-              Opened the platform to a closed beta group of 500 users. Collected
-              feedback regarding the onboarding flow and notification settings.
-            </p>
-          </div>
+            <div class="timeline-content">
+                <span class="timeline-date">January 15, 2024</span>
+                <h3 class="timeline-title">Beta Launch</h3>
+                <p class="timeline-body">
+                    Opened the platform to a closed beta group of 500 users. Collected
+                    feedback regarding the onboarding flow and notification settings.
+                </p>
+            </div>
         </div>
-      </div>
-      <div id="usage-timeline-demo" class="code-container"></div>
-      <h3>Progress Bar</h3>
-      <p>
+    </div>
+    <div id="usage-timeline-demo" class="code-container"></div>
+    <h3>Progress Bar</h3>
+    <p>
         The <strong>Progress Bar</strong> component displays task completion.
-      </p>
-      <div class="progress-bar">
+    </p>
+    <div class="progress-bar">
         <div class="progress" style="height: 24px; width: 50%"></div>
-      </div>
-      <div id="usage-progress-bar-demo" class="code-container"></div>
-      <h3>Placeholder / Skeleton</h3>
-      <p>
+    </div>
+    <div id="usage-progress-bar-demo" class="code-container"></div>
+    <h3>Placeholder / Skeleton</h3>
+    <p>
         The <strong>Placeholder</strong> component creates skeleton loading
         states. Use <code>.placeholder</code> with width classes
         <code>.w-1</code> through <code>.w-12</code> (12-column grid). Animates
         with a pulsing fade effect.
-      </p>
-      <div class="row">
+    </p>
+    <div class="row">
         <div class="column card">
-          <h2><span class="placeholder w-4"></span></h2>
-          <p>
+            <h2><span class="placeholder w-4"></span></h2>
+            <p>
             <span class="placeholder w-6"></span
             ><span class="placeholder w-3"></span
             ><span class="placeholder w-2"></span
             ><span class="placeholder w-5"></span
             ><span class="placeholder w-1"></span>
-          </p>
+            </p>
         </div>
-      </div>
-      <div id="usage-placeholder-demo" class="code-container"></div>
-      <h2>Advanced Components</h2>
-      <h3>Data Tables</h3>
-      <p>
+    </div>
+    <div id="usage-placeholder-demo" class="code-container"></div>
+    <h2>Advanced Components</h2>
+    <h3>Data Tables</h3>
+    <p>
         The <strong>Table</strong> component provides sortable, searchable, and
         paginated data tables. It can parse existing HTML tables or accept data
         programmatically.
-      </p>
-      <div class="row card">
+    </p>
+    <div class="row card">
         <div class="column no-padding" id="demo-table-js"></div>
-      </div>
-      <div id="usage-table-demo" class="code-container"></div>
-      <h3>Date Picker</h3>
-      <p>
+    </div>
+    <div id="usage-table-demo" class="code-container"></div>
+    <h3>Date Picker</h3>
+    <p>
         The <strong>DatePicker</strong> component provides a calendar interface
         for date selection. Supports single date or date range modes,
         customizable locales, and mobile-responsive design.
-      </p>
-      <div class="row">
+    </p>
+    <div class="row">
         <div class="column card">
-          <label for="datepicker-single">Datepicker Single Value</label>
-          <input
-            type="text"
-            id="datepicker-single"
-            class="datepicker-input"
-            placeholder="Select a date"
-            readonly
-          />
+            <label for="datepicker-single">Datepicker Single Value</label>
+            <input
+                    type="text"
+                    id="datepicker-single"
+                    class="datepicker-input"
+                    placeholder="Select a date"
+                    readonly
+            />
         </div>
         <div class="column card">
-          <label for="datepicker-range">Datepicker Range</label>
-          <input
-            type="text"
-            id="datepicker-range"
-            class="datepicker-input"
-            placeholder="Select a date range"
-            readonly
-          />
+            <label for="datepicker-range">Datepicker Range</label>
+            <input
+                    type="text"
+                    id="datepicker-range"
+                    class="datepicker-input"
+                    placeholder="Select a date range"
+                    readonly
+            />
         </div>
         <div class="column card">
-          <label for="datepicker-localized"
+            <label for="datepicker-localized"
             >Datepicker Translated & Start on Monday</label
-          >
-          <input
-            type="text"
-            id="datepicker-localized"
-            class="datepicker-input"
-            placeholder="Seleccionar fecha"
-            readonly
-          />
+            >
+            <input
+                    type="text"
+                    id="datepicker-localized"
+                    class="datepicker-input"
+                    placeholder="Seleccionar fecha"
+                    readonly
+            />
         </div>
-      </div>
-      <div id="usage-datepicker-html-demo" class="code-container"></div>
-      <div id="usage-datepicker-js-demo" class="code-container"></div>
-      <div class="row">
+    </div>
+    <div id="usage-datepicker-html-demo" class="code-container"></div>
+    <div id="usage-datepicker-js-demo" class="code-container"></div>
+    <div class="row">
         <div class="column card">
-          <table>
-            <thead>
-              <tr>
-                <th>Parameter</th>
-                <th>Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>input</code></td>
-                <td>HTMLInputElement | string</td>
-                <td>the input element to attach the date picker to</td>
-              </tr>
-              <tr>
-                <td><code>options</code></td>
-                <td>DatePickerOptions</td>
-                <td>
-                  an object with various configuration options for the date
-                  picker (see options table)
-                </td>
-              </tr>
-              <tr>
-                <td><code>currentDate</code></td>
-                <td>Date</td>
-                <td>
-                  the current date to be displayed in the date picker; defaults
-                  to today's date
-                </td>
-              </tr>
-              <tr>
-                <td><code>selectedDate</code></td>
-                <td>Date</td>
-                <td>the selected date in the date picker; defaults to null</td>
-              </tr>
-              <tr>
-                <td><code>rangeStart</code></td>
-                <td>Date</td>
-                <td>
-                  the start of a selected date range in the date picker;
-                  defaults to null
-                </td>
-              </tr>
-              <tr>
-                <td><code>rangeEnd</code></td>
-                <td>Date</td>
-                <td>
-                  the end of a selected date range in the date picker; defaults
-                  to null
-                </td>
-              </tr>
-              <tr>
-                <td><code>viewYear</code></td>
-                <td>number</td>
-                <td>
-                  the year currently displayed in the date picker; defaults to
-                  the current year
-                </td>
-              </tr>
-              <tr>
-                <td><code>viewMonth</code></td>
-                <td>number</td>
-                <td>
-                  the month currently displayed in the date picker; defaults to
-                  the current month
-                </td>
-              </tr>
-              <tr>
-                <td><code>viewMode</code></td>
-                <td>ViewMode</td>
-                <td>
-                  the view mode of the date picker ('days' | 'months' |
-                  'years'); defaults to 'days'
-                </td>
-              </tr>
-              <tr>
-                <td><code>yearRangeStart</code></td>
-                <td>number</td>
-                <td>
-                  the start of the year range in the date picker; defaults to
-                  this year
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <table>
+                <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>input</code></td>
+                    <td>HTMLInputElement | string</td>
+                    <td>the input element to attach the date picker to</td>
+                </tr>
+                <tr>
+                    <td><code>options</code></td>
+                    <td>DatePickerOptions</td>
+                    <td>
+                        an object with various configuration options for the date
+                        picker (see options table)
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>currentDate</code></td>
+                    <td>Date</td>
+                    <td>
+                        the current date to be displayed in the date picker; defaults
+                        to today's date
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>selectedDate</code></td>
+                    <td>Date</td>
+                    <td>the selected date in the date picker; defaults to null</td>
+                </tr>
+                <tr>
+                    <td><code>rangeStart</code></td>
+                    <td>Date</td>
+                    <td>
+                        the start of a selected date range in the date picker;
+                        defaults to null
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>rangeEnd</code></td>
+                    <td>Date</td>
+                    <td>
+                        the end of a selected date range in the date picker; defaults
+                        to null
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>viewYear</code></td>
+                    <td>number</td>
+                    <td>
+                        the year currently displayed in the date picker; defaults to
+                        the current year
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>viewMonth</code></td>
+                    <td>number</td>
+                    <td>
+                        the month currently displayed in the date picker; defaults to
+                        the current month
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>viewMode</code></td>
+                    <td>ViewMode</td>
+                    <td>
+                        the view mode of the date picker ('days' | 'months' |
+                        'years'); defaults to 'days'
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>yearRangeStart</code></td>
+                    <td>number</td>
+                    <td>
+                        the start of the year range in the date picker; defaults to
+                        this year
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <div class="column card">
-          <table>
-            <thead>
-              <tr>
-                <th>Option</th>
-                <th>Type</th>
-                <th>Default</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>mode</code></td>
-                <td>string</td>
-                <td>'single' | 'range'</td>
-                <td>
-                  Mode of the date picker, either 'single' or 'range'. Defaults
-                  to 'single'
-                </td>
-              </tr>
-              <tr>
-                <td><code>startDay</code></td>
-                <td>number</td>
-                <td>0</td>
-                <td>
-                  Start day of the week (0 = Sunday, 1 = Monday, etc.). Defaults
-                  to 0 (Sunday)
-                </td>
-              </tr>
-              <tr>
-                <td><code>locales</code></td>
-                <td>DatePickerLocales</td>
-                <td>0</td>
-                <td>
-                  Locales for the date picker. Defaults to english. This is an
-                  object containing a days array with localized day names from
-                  sunday to saturday and a months array with localized month
-                  names from january to december
-                </td>
-              </tr>
-              <tr>
-                <td><code>format</code></td>
-                <td>(date: Date) => string</td>
-                <td></td>
-                <td>
-                  Function to format the date for display in the date picker.
-                  Defaults to a function that returns a string representation of
-                  the date in 'YYYY-MM-DD' format
-                </td>
-              </tr>
-              <tr>
-                <td><code>onSelect</code></td>
-                <td>(date: Date | DateRange) => void</td>
-                <td></td>
-                <td>
-                  Function to be called when a date is selected in the date
-                  picker. Defaults to a function that does nothing
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <table>
+                <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>mode</code></td>
+                    <td>string</td>
+                    <td>'single' | 'range'</td>
+                    <td>
+                        Mode of the date picker, either 'single' or 'range'. Defaults
+                        to 'single'
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>startDay</code></td>
+                    <td>number</td>
+                    <td>0</td>
+                    <td>
+                        Start day of the week (0 = Sunday, 1 = Monday, etc.). Defaults
+                        to 0 (Sunday)
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>locales</code></td>
+                    <td>DatePickerLocales</td>
+                    <td>0</td>
+                    <td>
+                        Locales for the date picker. Defaults to english. This is an
+                        object containing a days array with localized day names from
+                        sunday to saturday and a months array with localized month
+                        names from january to december
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>format</code></td>
+                    <td>(date: Date) => string</td>
+                    <td></td>
+                    <td>
+                        Function to format the date for display in the date picker.
+                        Defaults to a function that returns a string representation of
+                        the date in 'YYYY-MM-DD' format
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>onSelect</code></td>
+                    <td>(date: Date | DateRange) => void</td>
+                    <td></td>
+                    <td>
+                        Function to be called when a date is selected in the date
+                        picker. Defaults to a function that does nothing
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-      </div>
-
-      <h3>Tree Component</h3>
-      <h3>File Uploader</h3>
-      <h3 id="virtual-dropdown-component">Virtual Dropdown</h3>
-      <h3>Custom Scrollbar</h3>
-      <h2>Utilities</h2>
-      <h3>Theme Toggle</h3>
-      <h3>Scroll Utility</h3>
-      <!-- Brief description of what the component does and when to use it. -->
-      <!-- Live Example -->
-      <!-- Code Snippet -->
-      <!-- JavaScript Initialization (if applicable) -->
-      <!-- Options Table (if applicable) -->
-
-      <h2>colors / alerts</h2>
-      <div class="row card">
-        <div class="column">
-          <p>default, warning, error, success, ...</p>
-          <div class="row">
-            <div class="column">
-              <div class="alert alert-error">
-                <strong>Error: </strong> This is an error alert!
-              </div>
-            </div>
-            <div class="column">
-              <div class="alert alert-warning">
-                <strong>Warning: </strong> This is an warning alert!
-              </div>
-            </div>
-            <div class="column">
-              <div class="alert alert-success">
-                <strong>Success: </strong> This is an success alert!
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h2>forms</h2>
-      <div class="card">
-        <form>
-          <div class="row">
-            <div class="column">
-              <label for="text-input">Text Input</label>
-              <input type="text" id="text-input" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              <label for="text-area">Text Area</label>
-              <textarea id="text-area"></textarea>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column select-group">
-              <label for="single-select">Single Select</label>
-              <select id="single-select">
-                <option value="1">One</option>
-                <option value="2" selected>Two</option>
-                <option value="3">Three</option>
-              </select>
-            </div>
-            <div class="column select-group">
-              <label for="multi-select">Multi Select</label>
-              <select name="multi-select" id="multi-select" multiple>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              <label for="range-slider" class="hidden">Slider</label>
-              <input
-                type="range"
-                min="1"
-                max="100"
-                value="50"
-                id="range-slider"
-              />
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <h2>chat bubbles</h2>
-      <div class="row card">
-        <div class="column">
-          <div class="chat-container">
-            <div class="message message-incoming">
-              Hi there! How are you doing today?
-              <span class="message-meta">10:42 AM</span>
-            </div>
-            <div class="message message-outgoing">
-              I'm doing great, thanks! Just working on some new CSS
-              components.<br />And other stuff.
-              <span class="message-meta">10:43 AM</span>
-            </div>
-            <div class="message message-outgoing">
-              Trying to make a simple chat UI.
-              <span class="message-meta">10:43 AM</span>
-            </div>
-            <div class="message message-incoming">
-              That sounds cool!
-              <span class="message-meta">10:45 AM</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h2>carousel</h2>
-      <div class="row card">
-        <div class="column">
-          <div class="carousel" id="carouselIdHere">
-            <div>Slide 1</div>
-            <div>Slide 2</div>
-            <div>Slide 3</div>
-            <div>Slide 4</div>
-          </div>
-        </div>
-      </div>
-
-      <h2>scrollbar</h2>
-      <div class="row card">
-        <div class="column scroll-container" style="height: 100px">
-          <div class="viewport">
-            <div class="content">
-              <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-                dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-                eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-                sed diam voluptua. At vero eos et accusam et justo duo dolores
-                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
-                est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                invidunt ut labore et dolore magna aliquyam erat, sed diam
-                voluptua. At vero eos et accusam et justo duo dolores et ea
-                rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-                Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in
-                hendrerit in vulputate velit esse molestie consequat, vel illum
-                dolore eu feugiat nulla facilisis at vero eros et accumsan et
-                iusto odio dignissim qui blandit praesent luptatum zzril delenit
-                augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor
-                sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
-                euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-              </p>
-            </div>
-            <div class="scrollbar" aria-hidden="true">
-              <div class="track">
-                <div class="thumb" role="presentation" aria-hidden="true"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="column scroll-container" style="height: 100px">
-          <div class="viewport">
-            <div class="content">
-              invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut
-            </div>
-            <div class="scrollbar" aria-hidden="true">
-              <div class="track">
-                <div class="thumb" role="presentation" aria-hidden="true"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="column scroll-container" style="height: 100px">
-          <div class="viewport">
-            <div class="content">
-              invidunt ut labore et dolore magna aliquyam erat
-            </div>
-          </div>
-          <div class="scrollbar" aria-hidden="true">
-            <div class="track">
-              <div class="thumb" role="presentation" aria-hidden="true"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h2>more components</h2>
-
-      <h3>card</h3>
-      <div class="row">
-        <div class="column card">
-          <div class="header">Card Header</div>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-          rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-          ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-          sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-          et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-          takimata sanctus est Lorem ipsum dolor sit amet.Lorem ipsum dolor sit
-          amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-          invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-          At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-          kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-          amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-          diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-          erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-          et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-          Lorem ipsum dolor sit amet.
-          <div class="footer">Card Footer</div>
-        </div>
-      </div>
-
-      <h3>icons</h3>
-      <div class="card">
-        <div class="row">
-          <div class="column">
-            <strong>Info: </strong>Basix is using a reduced font of google
-            material icon font with just a minimum of icons. Just bear in mind
-            that the reduced version is only 5.5KB in size while the full
-            version is 242.5KB.<br />
-            To show an icon use the "icon" class and the desired icon element
-            class.<br />
-            <br />The following icons are available in the reduce set:
-          </div>
-        </div>
-        <div class="horizontal-align-center">
-          <div class="row">
-            <div class="column">
-              icon-delete<br /><span class="icon icon-delete"></span>
-            </div>
-            <div class="column">
-              icon-search<br /><span class="icon icon-search"></span>
-            </div>
-            <div class="column">
-              icon-splitscreen_vertical_add<br /><span
-                class="icon icon-splitscreen_vertical_add"
-              ></span>
-            </div>
-            <div class="column">
-              icon-splitscreen_add<br /><span
-                class="icon icon-splitscreen_add"
-              ></span>
-            </div>
-            <div class="column">
-              icon-push_pin<br /><span class="icon icon-push_pin"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-block<br /><span class="icon icon-block"></span>
-            </div>
-            <div class="column">
-              icon-check_circle<br /><span
-                class="icon icon-check_circle"
-              ></span>
-            </div>
-            <div class="column">
-              icon-stars<br /><span class="icon icon-stars"></span>
-            </div>
-            <div class="column">
-              icon-support<br /><span class="icon icon-support"></span>
-            </div>
-            <div class="column">
-              icon-refresh<br /><span class="icon icon-refresh"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-sync<br /><span class="icon icon-sync"></span>
-            </div>
-            <div class="column">
-              icon-language<br /><span class="icon icon-language"></span>
-            </div>
-            <div class="column">
-              icon-article<br /><span class="icon icon-article"></span>
-            </div>
-            <div class="column">
-              icon-list_alt<br /><span class="icon icon-list_alt"></span>
-            </div>
-            <div class="column">
-              icon-add_box<br /><span class="icon icon-add_box"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-disabled_by_default<br /><span
-                class="icon icon-disabled_by_default"
-              ></span>
-            </div>
-            <div class="column">
-              icon-help_center<br /><span class="icon icon-help_center"></span>
-            </div>
-            <div class="column">
-              icon-pages<br /><span class="icon icon-pages"></span>
-            </div>
-            <div class="column">
-              icon-add_photo_alternate<br /><span
-                class="icon icon-add_photo_alternate"
-              ></span>
-            </div>
-            <div class="column">
-              icon-calendar_today<br /><span
-                class="icon icon-calendar_today"
-              ></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-assignment_turned_in<br /><span
-                class="icon icon-assignment_turned_in"
-              ></span>
-            </div>
-            <div class="column">
-              icon-finance<br /><span class="icon icon-finance"></span>
-            </div>
-            <div class="column">
-              icon-save<br /><span class="icon icon-save"></span>
-            </div>
-            <div class="column">
-              icon-folder<br /><span class="icon icon-folder"></span>
-            </div>
-            <div class="column">
-              icon-folder_off<br /><span class="icon icon-folder_off"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-folder_open<br /><span class="icon icon-folder_open"></span>
-            </div>
-            <div class="column">
-              icon-mail<br /><span class="icon icon-mail"></span>
-            </div>
-            <div class="column">
-              icon-attach_file<br /><span class="icon icon-attach_file"></span>
-            </div>
-            <div class="column">
-              icon-chat_bubble<br /><span class="icon icon-chat_bubble"></span>
-            </div>
-            <div class="column">
-              icon-cases<br /><span class="icon icon-cases"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-send<br /><span class="icon icon-send"></span>
-            </div>
-            <div class="column">
-              icon-bookmark<br /><span class="icon icon-bookmark"></span>
-            </div>
-            <div class="column">
-              icon-label<br /><span class="icon icon-label"></span>
-            </div>
-            <div class="column">
-              icon-filter_alt<br /><span class="icon icon-filter_alt"></span>
-            </div>
-            <div class="column">
-              icon-filter_alt_off<br /><span
-                class="icon icon-filter_alt_off"
-              ></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-notifications_active<br /><span
-                class="icon icon-notifications_active"
-              ></span>
-            </div>
-            <div class="column">
-              icon-more_horiz<br /><span class="icon icon-more_horiz"></span>
-            </div>
-            <div class="column">
-              icon-more_vert<br /><span class="icon icon-more_vert"></span>
-            </div>
-            <div class="column">
-              icon-navigate_before<br /><span
-                class="icon icon-navigate_before"
-              ></span>
-            </div>
-            <div class="column">
-              icon-navigate_next<br /><span
-                class="icon icon-navigate_next"
-              ></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-keyboard_double_arrow_left<br /><span
-                class="icon icon-keyboard_double_arrow_left"
-              ></span>
-            </div>
-            <div class="column">
-              icon-keyboard_double_arrow_right<br /><span
-                class="icon icon-keyboard_double_arrow_right"
-              ></span>
-            </div>
-            <div class="column">
-              icon-first_page<br /><span class="icon icon-first_page"></span>
-            </div>
-            <div class="column">
-              icon-last_page<br /><span class="icon icon-last_page"></span>
-            </div>
-            <div class="column">
-              icon-expand_less<br /><span class="icon icon-expand_less"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-expand_more<br /><span class="icon icon-expand_more"></span>
-            </div>
-            <div class="column">
-              icon-zoom_in_map<br /><span class="icon icon-zoom_in_map"></span>
-            </div>
-            <div class="column">
-              icon-zoom_out_map<br /><span
-                class="icon icon-zoom_out_map"
-              ></span>
-            </div>
-            <div class="column">
-              icon-drag_pan<br /><span class="icon icon-drag_pan"></span>
-            </div>
-            <div class="column">
-              icon-format_list_bulleted<br /><span
-                class="icon icon-format_list_bulleted"
-              ></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-format_list_numbered<br /><span
-                class="icon icon-format_list_numbered"
-              ></span>
-            </div>
-            <div class="column">
-              icon-check<br /><span class="icon icon-check"></span>
-            </div>
-            <div class="column">
-              icon-remove<br /><span class="icon icon-remove"></span>
-            </div>
-            <div class="column">
-              icon-add<br /><span class="icon icon-add"></span>
-            </div>
-            <div class="column">
-              icon-close<br /><span class="icon icon-close"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-format_bold<br /><span class="icon icon-format_bold"></span>
-            </div>
-            <div class="column">
-              icon-format_italic<br /><span
-                class="icon icon-format_italic"
-              ></span>
-            </div>
-            <div class="column">
-              icon-format_underlined<br /><span
-                class="icon icon-format_underlined"
-              ></span>
-            </div>
-            <div class="column">
-              icon-home<br /><span class="icon icon-home"></span>
-            </div>
-            <div class="column">
-              icon-favorite<br /><span class="icon icon-favorite"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-edit<br /><span class="icon icon-edit"></span>
-            </div>
-            <div class="column">
-              icon-layers<br /><span class="icon icon-layers"></span>
-            </div>
-            <div class="column">
-              icon-cloud<br /><span class="icon icon-cloud"></span>
-            </div>
-            <div class="column">
-              icon-print<br /><span class="icon icon-print"></span>
-            </div>
-            <div class="column">
-              icon-share<br /><span class="icon icon-share"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-tune<br /><span class="icon icon-tune"></span>
-            </div>
-            <div class="column">
-              icon-power_settings_new<br /><span
-                class="icon icon-power_settings_new"
-              ></span>
-            </div>
-            <div class="column">
-              icon-timeline<br /><span class="icon icon-timeline"></span>
-            </div>
-            <div class="column">
-              icon-bar_chart<br /><span class="icon icon-bar_chart"></span>
-            </div>
-            <div class="column">
-              icon-bar_chart_4_bars<br /><span
-                class="icon icon-bar_chart_4_bars"
-              ></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-finance_mode<br /><span
-                class="icon icon-finance_mode"
-              ></span>
-            </div>
-            <div class="column">
-              icon-database<br /><span class="icon icon-database"></span>
-            </div>
-            <div class="column">
-              icon-settings<br /><span class="icon icon-settings"></span>
-            </div>
-            <div class="column">
-              icon-person<br /><span class="icon icon-person"></span>
-            </div>
-            <div class="column">
-              icon-menu<br /><span class="icon icon-menu"></span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              icon-light<br /><span class="icon icon-light"></span>
-            </div>
-            <div class="column">
-              icon-dark<br /><span class="icon icon-dark"></span>
-            </div>
-            <div class="column"></div>
-            <div class="column"></div>
-            <div class="column"></div>
-          </div>
-        </div>
-      </div>
-
-      <h3>tree</h3>
-      <div class="row">
-        <div class="column card">
-          <ul id="tree-root" class="tree"></ul>
-        </div>
-      </div>
-
-      <h3>uploader</h3>
-      <div class="card row">
-        <div class="column uploader-content">
-          <div class="header">
-            <h2>Upload Files</h2>
-            <p>Select or drag files to upload</p>
-          </div>
-          <div id="drop-zone" class="drop-zone">
-            <input type="file" id="file-input" multiple hidden />
-            <div class="drop-zone-content">
-              <div class="icon-container">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="upload-icon"
-                >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="17 8 12 3 7 8"></polyline>
-                  <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-              </div>
-              <p class="primary-text">Click to upload or drag and drop</p>
-              <p class="secondary-text">
-                SVG, PNG, JPG or GIF (max. 800x400px)
-              </p>
-            </div>
-          </div>
-
-          <div id="file-list" class="file-list"></div>
-
-          <div class="actions">
-            <button id="upload-btn" disabled>Upload Files</button>
-          </div>
-        </div>
-      </div>
-
-      <h3>virtual dropdown</h3>
-      <div class="row">
-        <div class="column">
-          <div class="virtual-dropdown">
-            <h2>1. Searchable Single Select (10,000 items)</h2>
-            <p>
-              This list uses virtual scrolling to handle 10k items efficiently.
-            </p>
-            <div id="dropdown-single"></div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="virtual-dropdown">
-            <h2>2. Multi Select with Search</h2>
-            <p>Select multiple options.</p>
-            <div id="dropdown-multi"></div>
-          </div>
-        </div>
-      </div>
-
-      <h3>Gallery</h3>
-      <div class="row">
-        <div class="column card">
-          <div id="gallery" class="masonry-container"></div>
-          <div class="loader hidden">
-            <div class="spinner"></div>
-          </div>
-        </div>
-      </div>
-
-      <h3>Starter Template</h3>
-      <div class="row">
-        <div class="column card">tbd</div>
-      </div>
     </div>
 
-    <script src="js/scroll.js" type="module"></script>
-  </body>
+    <h3>Tree Component</h3>
+    <p>The <strong>TreeComponent</strong> renders hierarchical data as an expandable/collapsible tree. Supports
+        file/folder icons, selection, and programmatic expand/collapse.</p>
+    <div class="row">
+        <div class="column card">
+            <ul id="tree-root" class="tree"></ul>
+        </div>
+    </div>
+    <div id="usage-tree-demo-html" class="code-container"></div>
+    <div id="usage-tree-demo-js" class="code-container"></div>
+    <div class="row">
+        <div class="column card">
+            <table>
+                <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>container</code></td>
+                    <td>HTMLElement | string</td>
+                    <td>the container element</td>
+                </tr>
+                <tr>
+                    <td><code>data</code></td>
+                    <td>TreeNode[]</td>
+                    <td>and array of TreeNodes to render</td>
+                </tr>
+                <tr>
+                    <td><code>selectedNode</code></td>
+                    <td>TreeNode | null</td>
+                    <td>the currently selected TreeNode</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="column card">
+            <h4>TreeNode</h4>
+            <table>
+                <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>label</code></td>
+                    <td>string</td>
+                    <td>the label of the TreeNode</td>
+                </tr>
+                <tr>
+                    <td><code>type</code></td>
+                    <td>NodeType</td>
+                    <td>the type of the TreeNode; 'file' | 'folder'</td>
+                </tr>
+                <tr>
+                    <td><code>children</code></td>
+                    <td>TreeNode[]</td>
+                    <td>an array of child TreeNodes</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <h3>File Uploader</h3>
+    <p>The <strong>FileUploader</strong> component provides drag-and-drop file upload functionality with progress
+        indication. Supports file validation (size, type), multiple files, and upload cancellation.</p>
+    <div class="uploader-content">
+        <div class="header">
+            <h2>Upload Files</h2>
+            <p>Select or drag files to upload</p>
+        </div>
+        <div id="drop-zone" class="drop-zone">
+            <input type="file" id="file-input" multiple hidden/>
+            <div class="drop-zone-content">
+                <div class="icon-container">
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="upload-icon"
+                    >
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <p class="primary-text">Click to upload or drag and drop</p>
+                <p class="secondary-text">
+                    SVG, PNG, JPG or GIF (max. 800x400px)
+                </p>
+            </div>
+        </div>
+
+        <div id="file-list" class="file-list"></div>
+
+        <div class="actions">
+            <button id="upload-btn" disabled>Upload Files</button>
+        </div>
+    </div>
+    <div id="usage-file-uploader-demo" class="code-container"></div>
+    <div id="usage-file-uploader-demo-js" class="code-container"></div>
+    <h3 id="virtual-dropdown-component">Virtual Dropdown</h3>
+    <p>Virtual Dropdown is a performant, virtualized dropdown component that efficiently renders large option lists by
+        only drawing visible items in the DOM. Supports single and multi-select modes, built-in search/filtering,
+        keyboard navigation, and configurable item height and render limits — making it ideal for scenarios with
+        hundreds or thousands of selectable options.</p>
+    <div class="row">
+        <div class="column">
+            <div class="virtual-dropdown">
+                <h2>1. Searchable Single Select (10,000 items)</h2>
+                <p>
+                    This list uses virtual scrolling to handle 10k items efficiently.
+                </p>
+                <div id="dropdown-single"></div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="virtual-dropdown">
+                <h2>2. Multi Select with Search</h2>
+                <p>Select multiple options.</p>
+                <div id="dropdown-multi"></div>
+            </div>
+        </div>
+    </div>
+    <div id="usage-virtual-dropdown-demo-html" class="code-container"></div>
+    <div id="usage-virtual-dropdown-demo-js" class="code-container"></div>
+    <h3>Custom Scrollbar</h3>
+    <p>The <strong>Scrollbar</strong> component creates custom-styled scrollbars. Supports pointer/touch dragging, track
+        clicking, and automatic thumb sizing. Can be used with any class, in the demo <code>.scroll-container</code> is
+        used to find all divs that should make use of the custom scrollbar.</p>
+    <div class="row card">
+        <div class="column scroll-container" style="height: 100px">
+            <div class="viewport">
+                <div class="content">
+                    <p>
+                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                        diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                        aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                        justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+                        dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                        eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+                        sed diam voluptua. At vero eos et accusam et justo duo dolores
+                        et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+                        est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+                        consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                        invidunt ut labore et dolore magna aliquyam erat, sed diam
+                        voluptua. At vero eos et accusam et justo duo dolores et ea
+                        rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                        Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in
+                        hendrerit in vulputate velit esse molestie consequat, vel illum
+                        dolore eu feugiat nulla facilisis at vero eros et accumsan et
+                        iusto odio dignissim qui blandit praesent luptatum zzril delenit
+                        augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor
+                        sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
+                        euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    </p>
+                </div>
+                <div class="scrollbar" aria-hidden="true">
+                    <div class="track">
+                        <div class="thumb" role="presentation" aria-hidden="true"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column scroll-container" style="height: 100px">
+            <div class="viewport">
+                <div class="content">
+                    invidunt ut labore et dolore magna aliquyam erat, sed diam
+                    voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+                    Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
+                    dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
+                    elitr, sed diam nonumy eirmod tempor invidunt ut
+                </div>
+                <div class="scrollbar" aria-hidden="true">
+                    <div class="track">
+                        <div class="thumb" role="presentation" aria-hidden="true"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column scroll-container" style="height: 100px">
+            <div class="viewport">
+                <div class="content">
+                    invidunt ut labore et dolore magna aliquyam erat
+                </div>
+            </div>
+            <div class="scrollbar" aria-hidden="true">
+                <div class="track">
+                    <div class="thumb" role="presentation" aria-hidden="true"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="usage-scrollbar-demo" class="code-container"></div>
+    <h2>Utilities</h2>
+    <h3>Theme Toggle</h3>
+    <h3>Scroll Utility</h3>
+    <!-- Brief description of what the component does and when to use it. -->
+    <!-- Live Example -->
+    <!-- Code Snippet -->
+    <!-- JavaScript Initialization (if applicable) -->
+    <!-- Options Table (if applicable) -->
+
+    <h2>chat bubbles</h2>
+    <div class="row card">
+        <div class="column">
+            <div class="chat-container">
+                <div class="message message-incoming">
+                    Hi there! How are you doing today?
+                    <span class="message-meta">10:42 AM</span>
+                </div>
+                <div class="message message-outgoing">
+                    I'm doing great, thanks! Just working on some new CSS
+                    components.<br/>And other stuff.
+                    <span class="message-meta">10:43 AM</span>
+                </div>
+                <div class="message message-outgoing">
+                    Trying to make a simple chat UI.
+                    <span class="message-meta">10:43 AM</span>
+                </div>
+                <div class="message message-incoming">
+                    That sounds cool!
+                    <span class="message-meta">10:45 AM</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>carousel</h2>
+    <div class="row card">
+        <div class="column">
+            <div class="carousel" id="carouselIdHere">
+                <div>Slide 1</div>
+                <div>Slide 2</div>
+                <div>Slide 3</div>
+                <div>Slide 4</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>icons</h3>
+    <div class="card">
+        <div class="row">
+            <div class="column">
+                <strong>Info: </strong>Basix is using a reduced font of google
+                material icon font with just a minimum of icons. Just bear in mind
+                that the reduced version is only 5.5KB in size while the full
+                version is 242.5KB.<br/>
+                To show an icon use the "icon" class and the desired icon element
+                class.<br/>
+                <br/>The following icons are available in the reduce set:
+            </div>
+        </div>
+        <div class="horizontal-align-center">
+            <div class="row">
+                <div class="column">
+                    icon-delete<br/><span class="icon icon-delete"></span>
+                </div>
+                <div class="column">
+                    icon-search<br/><span class="icon icon-search"></span>
+                </div>
+                <div class="column">
+                    icon-splitscreen_vertical_add<br/><span
+                        class="icon icon-splitscreen_vertical_add"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-splitscreen_add<br/><span
+                        class="icon icon-splitscreen_add"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-push_pin<br/><span class="icon icon-push_pin"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-block<br/><span class="icon icon-block"></span>
+                </div>
+                <div class="column">
+                    icon-check_circle<br/><span
+                        class="icon icon-check_circle"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-stars<br/><span class="icon icon-stars"></span>
+                </div>
+                <div class="column">
+                    icon-support<br/><span class="icon icon-support"></span>
+                </div>
+                <div class="column">
+                    icon-refresh<br/><span class="icon icon-refresh"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-sync<br/><span class="icon icon-sync"></span>
+                </div>
+                <div class="column">
+                    icon-language<br/><span class="icon icon-language"></span>
+                </div>
+                <div class="column">
+                    icon-article<br/><span class="icon icon-article"></span>
+                </div>
+                <div class="column">
+                    icon-list_alt<br/><span class="icon icon-list_alt"></span>
+                </div>
+                <div class="column">
+                    icon-add_box<br/><span class="icon icon-add_box"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-disabled_by_default<br/><span
+                        class="icon icon-disabled_by_default"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-help_center<br/><span class="icon icon-help_center"></span>
+                </div>
+                <div class="column">
+                    icon-pages<br/><span class="icon icon-pages"></span>
+                </div>
+                <div class="column">
+                    icon-add_photo_alternate<br/><span
+                        class="icon icon-add_photo_alternate"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-calendar_today<br/><span
+                        class="icon icon-calendar_today"
+                ></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-assignment_turned_in<br/><span
+                        class="icon icon-assignment_turned_in"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-finance<br/><span class="icon icon-finance"></span>
+                </div>
+                <div class="column">
+                    icon-save<br/><span class="icon icon-save"></span>
+                </div>
+                <div class="column">
+                    icon-folder<br/><span class="icon icon-folder"></span>
+                </div>
+                <div class="column">
+                    icon-folder_off<br/><span class="icon icon-folder_off"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-folder_open<br/><span class="icon icon-folder_open"></span>
+                </div>
+                <div class="column">
+                    icon-mail<br/><span class="icon icon-mail"></span>
+                </div>
+                <div class="column">
+                    icon-attach_file<br/><span class="icon icon-attach_file"></span>
+                </div>
+                <div class="column">
+                    icon-chat_bubble<br/><span class="icon icon-chat_bubble"></span>
+                </div>
+                <div class="column">
+                    icon-cases<br/><span class="icon icon-cases"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-send<br/><span class="icon icon-send"></span>
+                </div>
+                <div class="column">
+                    icon-bookmark<br/><span class="icon icon-bookmark"></span>
+                </div>
+                <div class="column">
+                    icon-label<br/><span class="icon icon-label"></span>
+                </div>
+                <div class="column">
+                    icon-filter_alt<br/><span class="icon icon-filter_alt"></span>
+                </div>
+                <div class="column">
+                    icon-filter_alt_off<br/><span
+                        class="icon icon-filter_alt_off"
+                ></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-notifications_active<br/><span
+                        class="icon icon-notifications_active"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-more_horiz<br/><span class="icon icon-more_horiz"></span>
+                </div>
+                <div class="column">
+                    icon-more_vert<br/><span class="icon icon-more_vert"></span>
+                </div>
+                <div class="column">
+                    icon-navigate_before<br/><span
+                        class="icon icon-navigate_before"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-navigate_next<br/><span
+                        class="icon icon-navigate_next"
+                ></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-keyboard_double_arrow_left<br/><span
+                        class="icon icon-keyboard_double_arrow_left"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-keyboard_double_arrow_right<br/><span
+                        class="icon icon-keyboard_double_arrow_right"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-first_page<br/><span class="icon icon-first_page"></span>
+                </div>
+                <div class="column">
+                    icon-last_page<br/><span class="icon icon-last_page"></span>
+                </div>
+                <div class="column">
+                    icon-expand_less<br/><span class="icon icon-expand_less"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-expand_more<br/><span class="icon icon-expand_more"></span>
+                </div>
+                <div class="column">
+                    icon-zoom_in_map<br/><span class="icon icon-zoom_in_map"></span>
+                </div>
+                <div class="column">
+                    icon-zoom_out_map<br/><span
+                        class="icon icon-zoom_out_map"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-drag_pan<br/><span class="icon icon-drag_pan"></span>
+                </div>
+                <div class="column">
+                    icon-format_list_bulleted<br/><span
+                        class="icon icon-format_list_bulleted"
+                ></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-format_list_numbered<br/><span
+                        class="icon icon-format_list_numbered"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-check<br/><span class="icon icon-check"></span>
+                </div>
+                <div class="column">
+                    icon-remove<br/><span class="icon icon-remove"></span>
+                </div>
+                <div class="column">
+                    icon-add<br/><span class="icon icon-add"></span>
+                </div>
+                <div class="column">
+                    icon-close<br/><span class="icon icon-close"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-format_bold<br/><span class="icon icon-format_bold"></span>
+                </div>
+                <div class="column">
+                    icon-format_italic<br/><span
+                        class="icon icon-format_italic"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-format_underlined<br/><span
+                        class="icon icon-format_underlined"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-home<br/><span class="icon icon-home"></span>
+                </div>
+                <div class="column">
+                    icon-favorite<br/><span class="icon icon-favorite"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-edit<br/><span class="icon icon-edit"></span>
+                </div>
+                <div class="column">
+                    icon-layers<br/><span class="icon icon-layers"></span>
+                </div>
+                <div class="column">
+                    icon-cloud<br/><span class="icon icon-cloud"></span>
+                </div>
+                <div class="column">
+                    icon-print<br/><span class="icon icon-print"></span>
+                </div>
+                <div class="column">
+                    icon-share<br/><span class="icon icon-share"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-tune<br/><span class="icon icon-tune"></span>
+                </div>
+                <div class="column">
+                    icon-power_settings_new<br/><span
+                        class="icon icon-power_settings_new"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-timeline<br/><span class="icon icon-timeline"></span>
+                </div>
+                <div class="column">
+                    icon-bar_chart<br/><span class="icon icon-bar_chart"></span>
+                </div>
+                <div class="column">
+                    icon-bar_chart_4_bars<br/><span
+                        class="icon icon-bar_chart_4_bars"
+                ></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-finance_mode<br/><span
+                        class="icon icon-finance_mode"
+                ></span>
+                </div>
+                <div class="column">
+                    icon-database<br/><span class="icon icon-database"></span>
+                </div>
+                <div class="column">
+                    icon-settings<br/><span class="icon icon-settings"></span>
+                </div>
+                <div class="column">
+                    icon-person<br/><span class="icon icon-person"></span>
+                </div>
+                <div class="column">
+                    icon-menu<br/><span class="icon icon-menu"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    icon-light<br/><span class="icon icon-light"></span>
+                </div>
+                <div class="column">
+                    icon-dark<br/><span class="icon icon-dark"></span>
+                </div>
+                <div class="column"></div>
+                <div class="column"></div>
+                <div class="column"></div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Gallery</h3>
+    <div class="row">
+        <div class="column card">
+            <div id="gallery" class="masonry-container"></div>
+            <div class="loader hidden">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Starter Template</h3>
+    <div class="row">
+        <div class="column card">tbd</div>
+    </div>
+</div>
+
+<script src="js/scroll.js" type="module"></script>
+</body>
 </html>

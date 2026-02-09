@@ -1,5 +1,4 @@
 import { utils } from "./utils.js";
-import { Select } from "./select.js";
 import { Scrollbar } from "./scrollbar.js";
 import { Modal } from "./modal.js";
 import { PushMenu } from "./push-menu.js";
@@ -96,9 +95,6 @@ utils.ready(() => {
         columns: columns,
         pageSize: 10,
     });
-    // Initialize select components
-    new Select("#single-select");
-    new Select("#multi-select");
     // Initialize modal
     const modalTrigger = document.querySelector(".show-modal");
     if (modalTrigger) {
@@ -574,3 +570,84 @@ new CodeViewer("#usage-datepicker-js-demo", `new DatePicker("#datepicker-single"
     console.log("Single selected:", date);
   },
 });`, "js");
+new CodeViewer("#usage-tree-demo-html", `<ul id="tree-root" class="tree"></ul>`, "html");
+new CodeViewer("#usage-tree-demo-js", `const sampleData: TreeNode[] = [
+    new TreeNode("Documents", "folder", [
+      new TreeNode("Work", "folder", [
+        new TreeNode("presentation.pptx", "file"),
+        new TreeNode("report.docx", "file"),
+        new TreeNode("budget.xlsx", "file"),
+      ]),
+      new TreeNode("Personal", "folder", [
+        new TreeNode("resume.pdf", "file"),
+        new TreeNode("vacation-photos", "folder", [
+          new TreeNode("beach.jpg", "file"),
+          new TreeNode("mountain.jpg", "file"),
+        ]),
+      ]),
+    ]),
+  ];
+  const tree = new TreeComponent("#tree-root", sampleData);`, "js");
+new CodeViewer("#usage-file-uploader-demo", `<div class="uploader-content">
+        <div class="header">
+            <h2>Upload Files</h2>
+            <p>Select or drag files to upload</p>
+        </div>
+        <div id="drop-zone" class="drop-zone">
+            <input type="file" id="file-input" multiple hidden/>
+            <div class="drop-zone-content">
+                <div class="icon-container">
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="upload-icon"
+                    >
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <p class="primary-text">Click to upload or drag and drop</p>
+                <p class="secondary-text">
+                    SVG, PNG, JPG or GIF (max. 800x400px)
+                </p>
+            </div>
+        </div>
+
+        <div id="file-list" class="file-list"></div>
+
+        <div class="actions">
+            <button id="upload-btn" disabled>Upload Files</button>
+        </div>
+    </div>`, "html");
+new CodeViewer("#usage-file-uploader-demo-js", `const uploaderElement =
+    document.querySelector<HTMLElement>(".uploader-content");
+  if (uploaderElement) {
+    new FileUploader(uploaderElement);
+  }`, "js");
+new CodeViewer("#usage-virtual-dropdown-demo-html", `<div class="virtual-dropdown">
+                <h2>1. Searchable Single Select (10,000 items)</h2>
+                <p>
+                    This list uses virtual scrolling to handle 10k items efficiently.
+                </p>
+                <div id="dropdown-single"></div>
+            </div>`, "html");
+new CodeViewer("#usage-virtual-dropdown-demo-js", `const singleDropdown = new VirtualDropdown({
+    container: "#dropdown-single",
+    options: bigData,
+    searchable: true,
+    placeholder: "Search 10k items...",
+    renderLimit: 15,
+    onSelect: (val) => {
+      console.log("Single Select:", val);
+    },
+  });`, "js");
+new CodeViewer("#usage-scrollbar-demo", `Scrollbar.initAll(".scroll-container");`, "js");
+//new CodeViewer("#usage-tree-demo-html", ``, "html");
