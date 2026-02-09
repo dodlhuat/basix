@@ -650,4 +650,61 @@ new CodeViewer("#usage-virtual-dropdown-demo-js", `const singleDropdown = new Vi
     },
   });`, "js");
 new CodeViewer("#usage-scrollbar-demo", `Scrollbar.initAll(".scroll-container");`, "js");
-//new CodeViewer("#usage-tree-demo-html", ``, "html");
+new CodeViewer("#usage-theme-demo", `Theme.init();`, "js");
+new CodeViewer("#usage-scroll-demo", `window.Scroll.to('#grid')`, "js");
+new CodeViewer("#usage-chat-demo-html", `<div class="chat-container">
+                <div class="message message-incoming">
+                    Hi there! How are you doing today?
+                    <span class="message-meta">10:42 AM</span>
+                </div>
+                <div class="message message-outgoing">
+                    I'm doing great, thanks! Just working on some new CSS
+                    components.<br/>And other stuff.
+                    <span class="message-meta">10:43 AM</span>
+                </div>
+                <div class="message message-outgoing">
+                    Trying to make a simple chat UI.
+                    <span class="message-meta">10:43 AM</span>
+                </div>
+                <div class="message message-incoming">
+                    That sounds cool!
+                    <span class="message-meta">10:45 AM</span>
+                </div>
+            </div>`, "html");
+new CodeViewer("#usage-carousel-demo-html", `<div class="carousel" id="carouselIdHere">
+                <div>Slide 1</div>
+                <div>Slide 2</div>
+                <div>Slide 3</div>
+                <div>Slide 4</div>
+            </div>`, "html");
+new CodeViewer("#usage-carousel-demo-js", `const carousel = new Carousel("#carouselIdHere", {
+    loop: true,
+  });`, "js");
+new CodeViewer("#usage-gallery-demo-html", `<div id="gallery" class="masonry-container"></div>
+            <div class="loader hidden">
+                <div class="spinner"></div>
+            </div>`, "html");
+new CodeViewer("#usage-gallery-demo-js", `const gallery = new MasonryGallery("gallery", {
+    minColumnWidth: 300,
+    fetchFunction: new Promise((resolve) => {
+      setTimeout(() => {
+        const images: ImageData[] = [];
+
+        for (let i = 0; i < batchSize; i++) {
+          const width = 400;
+          const height = Math.floor(Math.random() * 301) + 300;
+          const id = Math.floor(Math.random() * 1000);
+          const imageIndex = indexNumber * batchSize + i;
+
+          images.push({
+            src: \`https://picsum.photos/$\{width}/$\{height}?random=$\{imageIndex}\`,
+            title: \`Image $\{imageIndex + 1}\`,
+            desc: \`A random caption for image $\{id}\`,
+          });
+        }
+
+        indexNumber++;
+        resolve(images);
+      }, 800);
+    }),
+  });`, "js");
