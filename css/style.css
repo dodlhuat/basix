@@ -540,29 +540,69 @@ tr:hover {
   }
 }
 .alert {
+  position: relative;
   border-radius: 0.4rem;
-  padding: 0.5rem;
+  padding: 1.5rem 2rem 1.5rem 2.5rem;
   border-left: 0.5rem solid;
   color: var(--primary-text);
   box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+  line-height: 1.5;
 }
-
-.alert-error {
-  background: var(--error);
-  border-left: 0.5rem solid color-mix(in srgb, var(--error) 80%, black);
+.alert-default {
+  background: var(--secondary-background);
+  border-left-color: var(--divider);
+  color: var(--primary-text);
+}
+.alert-info {
+  background: var(--accent-color);
+  border-left-color: color-mix(in srgb, var(--accent-color) 80%, black);
   color: var(--divider);
 }
-
-.alert-warning {
-  background: var(--warning);
-  border-left: 0.5rem solid color-mix(in srgb, var(--warning) 80%, black);
-  color: var(--divider);
-}
-
 .alert-success {
   background: var(--success);
-  border-left: 0.5rem solid color-mix(in srgb, var(--success) 80%, black);
+  border-left-color: color-mix(in srgb, var(--success) 80%, black);
   color: var(--divider);
+}
+.alert-warning {
+  background: var(--warning);
+  border-left-color: color-mix(in srgb, var(--warning) 80%, black);
+  color: var(--divider);
+}
+.alert-error {
+  background: var(--error);
+  border-left-color: color-mix(in srgb, var(--error) 80%, black);
+  color: var(--divider);
+}
+.alert-dismissible {
+  padding-right: 5rem;
+}
+.alert-dismissible .alert-close {
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 1rem 1.5rem 1rem 2rem;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+.alert-dismissible .alert-close:hover {
+  opacity: 1;
+}
+.alert .alert-icon {
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+[data-theme=dark] .alert-default {
+  background: var(--secondary-background);
+  border-left-color: var(--divider);
+}
+[data-theme=dark] .alert-info, [data-theme=dark] .alert-success, [data-theme=dark] .alert-warning, [data-theme=dark] .alert-error {
+  filter: brightness(0.9);
 }
 
 textarea, select, .select .dropdown, input {

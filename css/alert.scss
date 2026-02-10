@@ -1,28 +1,86 @@
 @use "properties";
 @use "parameters" as *;
 
+$alert-border-width: calc($spacing / 2);
+$alert-border-darken: 20%;
+
+@mixin alert-variant($bg-color, $text-color: var(--divider)) {
+  background: $bg-color;
+  border-left-color: color-mix(in srgb, $bg-color 80%, black);
+  color: $text-color;
+}
+
 .alert {
+  position: relative;
   border-radius: $border-radius;
-  padding: calc($spacing / 2);
-  border-left: calc($spacing / 2) solid;
+  padding: calc($spacing * 1.5) calc($spacing * 2) calc($spacing * 1.5) calc($spacing * 2 + $alert-border-width);
+  border-left: $alert-border-width solid;
   color: var(--primary-text);
   box-shadow: $shadow;
+  line-height: 1.5;
+
+  &-default {
+    background: var(--secondary-background);
+    border-left-color: var(--divider);
+    color: var(--primary-text);
+  }
+
+  &-info {
+    @include alert-variant(var(--accent-color));
+  }
+
+  &-success {
+    @include alert-variant(var(--success));
+  }
+
+  &-warning {
+    @include alert-variant(var(--warning));
+  }
+
+  &-error {
+    @include alert-variant(var(--error));
+  }
+
+  &-dismissible {
+    padding-right: calc($spacing * 5);
+
+    .alert-close {
+      position: absolute;
+      top: 50%;
+      right: calc($spacing * 1.5);
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: calc($spacing) calc($spacing * 1.5) calc($spacing) calc($spacing * 1.5 + $alert-border-width);
+      color: inherit;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .alert-icon {
+    margin-right: calc($spacing / 2);
+    vertical-align: middle;
+  }
 }
 
-.alert-error {
-  background: var(--error);
-  border-left: calc($spacing / 2) solid color-mix(in srgb, var(--error) 80%, black);
-  color: var(--divider);
-}
+[data-theme="dark"] {
+  .alert {
+    &-default {
+      background: var(--secondary-background);
+      border-left-color: var(--divider);
+    }
 
-.alert-warning {
-  background: var(--warning);
-  border-left: calc($spacing / 2) solid color-mix(in srgb, var(--warning) 80%, black);
-  color: var(--divider);
-}
-
-.alert-success {
-  background: var(--success);
-  border-left: calc($spacing / 2) solid color-mix(in srgb, var(--success) 80%, black);
-  color: var(--divider);
+    &-info,
+    &-success,
+    &-warning,
+    &-error {
+      filter: brightness(0.9);
+    }
+  }
 }

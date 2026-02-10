@@ -558,7 +558,7 @@ new CodeViewer("#usage-loading-demo", `<div class="loading"></div>`, "html");
 new CodeViewer(
   "#usage-alerts-demo",
   `<div class="alert alert-default">
-    <strong>Default: </strong> This is a default alert!
+    <strong>Default:</strong> This is a default alert message.
 </div>`,
   "html",
 );

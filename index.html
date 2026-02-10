@@ -870,27 +870,25 @@
     <h3>Alerts</h3>
     <p>
         The <strong>Alert</strong> component displays contextual feedback
-        messages. Available variants: default, error, warning and success.
+        messages. Available variants: default, info, success, warning, and error.
+        Pure CSS component with optional dismissible functionality.
     </p>
     <div class="row card">
         <div class="column">
             <div class="alert alert-default">
-                <strong>Default: </strong> This is a default alert!
+                <strong>Default:</strong> This is a default alert message.
             </div>
-        </div>
-        <div class="column">
-            <div class="alert alert-error">
-                <strong>Error: </strong> This is an error alert!
+            <div class="alert alert-info">
+                <strong>Info:</strong> This is an informational alert.
             </div>
-        </div>
-        <div class="column">
-            <div class="alert alert-warning">
-                <strong>Warning: </strong> This is an warning alert!
-            </div>
-        </div>
-        <div class="column">
             <div class="alert alert-success">
-                <strong>Success: </strong> This is an success alert!
+                <strong>Success:</strong> Your changes were saved successfully!
+            </div>
+            <div class="alert alert-warning">
+                <strong>Warning:</strong> Please review your input before continuing.
+            </div>
+            <div class="alert alert-error">
+                <strong>Error:</strong> Something went wrong. Please try again.
             </div>
         </div>
     </div>
