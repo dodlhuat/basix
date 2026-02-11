@@ -2,31 +2,65 @@
 @use "defaults";
 @use "parameters" as *;
 
+// Base card styles
 .card {
   box-shadow: $shadow;
   background: var(--secondary-background);
   border-radius: $border-radius;
+  padding: $spacing;
+  position: relative;
+  overflow: hidden;
 
+  // Card header
   .header {
     border-bottom: 1px solid var(--divider);
-    position: relative;
-    width: 100%;
-    padding-right: 1rem;
-    left: -1rem;
-    padding-left: 1rem;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
+    margin: -$spacing -$spacing $spacing -$spacing;
+    padding: $spacing;
   }
 
+  // Card footer
   .footer {
     border-top: 1px solid var(--divider);
-    position: relative;
-    width: 100%;
-    padding-right: 1rem;
-    left: -1rem;
-    padding-left: 1rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
+    margin: $spacing -$spacing -$spacing -$spacing;
+    padding: $spacing;
   }
+
+  // Card body/content
+  .body,
+  .content {
+    padding: 0;
+  }
+}
+
+// Card variants
+.card-flat {
+  box-shadow: none;
+  border: 1px solid var(--divider);
+}
+
+.card-bordered {
+  border: 1px solid var(--divider);
+}
+
+.card-hover {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(56, 65, 74, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+// Utility modifiers for cards
+.card-padding-none {
+  padding: 0;
+}
+
+.card-padding-sm {
+  padding: calc($spacing / 2);
+}
+
+.card-padding-lg {
+  padding: calc($spacing * 2);
 }
 

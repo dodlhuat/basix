@@ -351,26 +351,52 @@ a:focus-visible {
   box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
   background: var(--secondary-background);
   border-radius: 0.4rem;
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
 }
 .card .header {
   border-bottom: 1px solid var(--divider);
-  position: relative;
-  width: 100%;
-  padding-right: 1rem;
-  left: -1rem;
-  padding-left: 1rem;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
+  margin: -2rem 0rem;
+  padding: 1rem;
 }
 .card .footer {
   border-top: 1px solid var(--divider);
-  position: relative;
-  width: 100%;
-  padding-right: 1rem;
-  left: -1rem;
-  padding-left: 1rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin: -2rem;
+  padding: 1rem;
+}
+.card .body,
+.card .content {
+  padding: 0;
+}
+
+.card-flat {
+  box-shadow: none;
+  border: 1px solid var(--divider);
+}
+
+.card-bordered {
+  border: 1px solid var(--divider);
+}
+
+.card-hover {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.card-hover:hover {
+  box-shadow: 0 4px 8px rgba(56, 65, 74, 0.2);
+  transform: translateY(-2px);
+}
+
+.card-padding-none {
+  padding: 0;
+}
+
+.card-padding-sm {
+  padding: 0.5rem;
+}
+
+.card-padding-lg {
+  padding: 2rem;
 }
 
 /* Controls */
