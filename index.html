@@ -620,72 +620,75 @@
     </div>
     <div id="usage-flyout-demo" class="code-container"></div>
     <div id="usage-flyout-script-demo" class="code-container"></div>
-    <table>
-        <thead>
-        <tr>
-            <th>Option</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td><code>triggerSelector</code></td>
-            <td>string</td>
-            <td>'.menu-trigger'</td>
-            <td>description tbd</td>
-        </tr>
-        <tr>
-            <td><code>menuSelector</code></td>
-            <td>string</td>
-            <td>'#flyoutMenu'</td>
-            <td>description tbd</td>
-        </tr>
-        <tr>
-            <td><code>overlaySelector</code></td>
-            <td>string</td>
-            <td>'#flyoutOverlay'</td>
-            <td>description tbd</td>
-        </tr>
-        <tr>
-            <td><code>closeSelector</code></td>
-            <td>string</td>
-            <td>'.close-menu'</td>
-            <td>description tbd</td>
-        </tr>
-        <tr>
-            <td><code>direction</code></td>
-            <td>string</td>
-            <td>'right'</td>
-            <td>can be either 'right' or 'left'</td>
-        </tr>
-        <tr>
-            <td><code>title</code></td>
-            <td>string</td>
-            <td>'Menu'</td>
-            <td>shown in the header if enabled</td>
-        </tr>
-        <tr>
-            <td><code>enableHeader</code></td>
-            <td>boolean</td>
-            <td>true</td>
-            <td>shows header</td>
-        </tr>
-        <tr>
-            <td><code>footerText</code></td>
-            <td>string</td>
-            <td>'&copy; 2025 Brand Inc.'</td>
-            <td>shown in the footer if enabled</td>
-        </tr>
-        <tr>
-            <td><code>enableFooter</code></td>
-            <td>boolean</td>
-            <td>true</td>
-            <td>shows footer</td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="card">
+        <h4>Available Options</h4>
+        <table>
+            <thead>
+            <tr>
+                <th>Option</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>triggerSelector</code></td>
+                <td>string</td>
+                <td>'.menu-trigger'</td>
+                <td>description tbd</td>
+            </tr>
+            <tr>
+                <td><code>menuSelector</code></td>
+                <td>string</td>
+                <td>'#flyoutMenu'</td>
+                <td>description tbd</td>
+            </tr>
+            <tr>
+                <td><code>overlaySelector</code></td>
+                <td>string</td>
+                <td>'#flyoutOverlay'</td>
+                <td>description tbd</td>
+            </tr>
+            <tr>
+                <td><code>closeSelector</code></td>
+                <td>string</td>
+                <td>'.close-menu'</td>
+                <td>description tbd</td>
+            </tr>
+            <tr>
+                <td><code>direction</code></td>
+                <td>string</td>
+                <td>'right'</td>
+                <td>can be either 'right' or 'left'</td>
+            </tr>
+            <tr>
+                <td><code>title</code></td>
+                <td>string</td>
+                <td>'Menu'</td>
+                <td>shown in the header if enabled</td>
+            </tr>
+            <tr>
+                <td><code>enableHeader</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>shows header</td>
+            </tr>
+            <tr>
+                <td><code>footerText</code></td>
+                <td>string</td>
+                <td>'&copy; 2025 Brand Inc.'</td>
+                <td>shown in the footer if enabled</td>
+            </tr>
+            <tr>
+                <td><code>enableFooter</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>shows footer</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <h3>Dropdown Menu</h3>
     <p>
         The <strong>Dropdown Menu</strong> allows to create multi-level dropdown
@@ -746,87 +749,93 @@
     </p>
     <button class="show-modal">Show Modal</button>
     <div id="usage-modal-demo" class="code-container"></div>
-    <table>
-        <thead>
-        <tr>
-            <th>Parameter</th>
-            <th>Type</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td><code>content</code></td>
-            <td>string</td>
-            <td>content of the modal. can be html or a simple string</td>
-        </tr>
-        <tr>
-            <td><code>header</code></td>
-            <td>string</td>
-            <td>header of the modal. can be html or a simple string</td>
-        </tr>
-        <tr>
-            <td><code>footer</code></td>
-            <td>string</td>
-            <td>footer of the modal. can be html or a simple string</td>
-        </tr>
-        <tr>
-            <td><code>closeable</code></td>
-            <td>boolean</td>
-            <td>shows a close button</td>
-        </tr>
-        <tr>
-            <td><code>type</code></td>
-            <td>ModalType</td>
-            <td>
-                the type of the modal (success, error, warning, info, default)
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="card">
+        <h4>Available Parameters</h4>
+        <table>
+            <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>content</code></td>
+                <td>string</td>
+                <td>content of the modal. can be html or a simple string</td>
+            </tr>
+            <tr>
+                <td><code>header</code></td>
+                <td>string</td>
+                <td>header of the modal. can be html or a simple string</td>
+            </tr>
+            <tr>
+                <td><code>footer</code></td>
+                <td>string</td>
+                <td>footer of the modal. can be html or a simple string</td>
+            </tr>
+            <tr>
+                <td><code>closeable</code></td>
+                <td>boolean</td>
+                <td>shows a close button</td>
+            </tr>
+            <tr>
+                <td><code>type</code></td>
+                <td>ModalType</td>
+                <td>
+                    the type of the modal (success, error, warning, info, default)
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <h3>Toast</h3>
     <p>The <strong>Toast</strong> component shows brief messages.</p>
     <button class="show-toast">Show Toast</button>
     <div id="usage-toast-demo" class="code-container"></div>
-    <table>
-        <thead>
-        <tr>
-            <th>Parameter</th>
-            <th>Type</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td><code>content</code></td>
-            <td>string</td>
-            <td>the content of the toast</td>
-        </tr>
-        <tr>
-            <td><code>header</code></td>
-            <td>string</td>
-            <td>the header of the toast</td>
-        </tr>
-        <tr>
-            <td><code>markup</code></td>
-            <td>ToastType</td>
-            <td>
-                changes the color of the toast info: default, success, warning,
-                error
-            </td>
-        </tr>
-        <tr>
-            <td><code>closeable</code></td>
-            <td>boolean</td>
-            <td>allows to close the toast before auto-closure time</td>
-        </tr>
-        <tr>
-            <td><code>auto-closure</code></td>
-            <td>integer</td>
-            <td>optional closure time in ms</td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="card">
+        <h4>Available Parameters</h4>
+        <table>
+            <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>content</code></td>
+                <td>string</td>
+                <td>the content of the toast</td>
+            </tr>
+            <tr>
+                <td><code>header</code></td>
+                <td>string</td>
+                <td>the header of the toast</td>
+            </tr>
+            <tr>
+                <td><code>markup</code></td>
+                <td>ToastType</td>
+                <td>
+                    changes the color of the toast info: default, success, warning,
+                    error
+                </td>
+            </tr>
+            <tr>
+                <td><code>closeable</code></td>
+                <td>boolean</td>
+                <td>allows to close the toast before auto-closure time</td>
+            </tr>
+            <tr>
+                <td><code>auto-closure</code></td>
+                <td>integer</td>
+                <td>optional closure time in ms</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <h3>Tooltip</h3>
     <p>
         The <strong>Tooltip</strong> component shows contextual information on

@@ -28,7 +28,7 @@ p {
 }
 
 .h1, .h2, .h3, .h4, h1, h2, h3, h4 {
-  margin: 0 0 calc($spacing / 1.5) 0;
+  margin: calc($spacing / 2) 0 calc($spacing / 1.5) 0;
   line-height: 1.2;
   font-weight: bold;
 }
