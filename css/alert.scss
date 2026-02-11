@@ -13,7 +13,7 @@ $alert-border-darken: 20%;
 .alert {
   position: relative;
   border-radius: $border-radius;
-  padding: calc($spacing * 1.5) calc($spacing * 2) calc($spacing * 1.5) calc($spacing * 2 + $alert-border-width);
+  padding: calc($spacing) calc($spacing) calc($spacing) calc($spacing + $alert-border-width);
   border-left: $alert-border-width solid;
   color: var(--primary-text);
   box-shadow: $shadow;

@@ -542,7 +542,7 @@ tr:hover {
 .alert {
   position: relative;
   border-radius: 0.4rem;
-  padding: 1.5rem 2rem 1.5rem 2.5rem;
+  padding: 1rem 1rem 1rem 1.5rem;
   border-left: 0.5rem solid;
   color: var(--primary-text);
   box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
@@ -1093,41 +1093,89 @@ select {
   touch-action: none;
 }
 
-button, .button {
+button,
+.button {
   padding: 1rem 2rem;
   border-radius: 0.4rem;
   background: var(--divider);
   color: var(--primary-text);
   border: none;
   cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1;
+  transition: filter 0.2s ease;
 }
-button.active, .button.active {
+button:hover:not(:disabled),
+.button:hover:not(:disabled) {
+  filter: brightness(115%);
+}
+button:focus-visible,
+.button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+button.active,
+.button.active {
   background: var(--accent-color-lighten);
 }
-button.button-primary, .button.button-primary {
+button:disabled,
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-primary,
+button.button-primary {
   background: var(--accent-color);
   color: var(--divider);
 }
-button:hover, .button:hover {
-  filter: brightness(115%);
-}
-button.button-success, .button.button-success {
+
+.button-success,
+button.button-success {
   background: var(--success);
   color: var(--divider);
 }
-button.button-warning, .button.button-warning {
+
+.button-warning,
+button.button-warning {
   background: var(--warning);
   color: var(--divider);
 }
-button.button-error, .button.button-error {
+
+.button-error,
+button.button-error {
   background: var(--error);
   color: var(--divider);
 }
 
-[data-theme=dark] button:hover, [data-theme=dark] .button:hover {
+.button-group {
+  display: inline-flex;
+  gap: 0;
+}
+.button-group button,
+.button-group .button {
+  border-radius: 0;
+}
+.button-group button:first-child,
+.button-group .button:first-child {
+  border-radius: 0.4rem 0 0 0.4rem;
+}
+.button-group button:last-child,
+.button-group .button:last-child {
+  border-radius: 0 0.4rem 0.4rem 0;
+}
+.button-group button:only-child,
+.button-group .button:only-child {
+  border-radius: 0.4rem;
+}
+
+[data-theme=dark] button:hover:not(:disabled),
+[data-theme=dark] .button:hover:not(:disabled) {
   filter: brightness(85%);
 }
-[data-theme=dark] button.button-primary, [data-theme=dark] .button.button-primary {
+[data-theme=dark] .button-primary,
+[data-theme=dark] button.button-primary {
   color: var(--primary-text);
 }
 
