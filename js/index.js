@@ -16,6 +16,7 @@ import { MasonryGallery } from "./gallery.js";
 import { Tooltip } from "./tooltip.js";
 import { Dropdown } from "./dropdown.js";
 import { VirtualDropdown } from "./virtual-dropdown.js";
+import { TimeSpanPicker } from "./timepicker.js";
 // Generate sample table data
 const generateData = (count) => {
     const data = [];
@@ -293,6 +294,11 @@ utils.ready(() => {
         },
     });
     Tooltip.initializeAll();
+    const timeSpanPicker = new TimeSpanPicker('timespan-1', {
+        onChange: (start, end) => {
+            console.log(`Start: ${start}, Ende: ${end}`);
+        }
+    });
     new CodeViewer("#usage-text-input", `<label for="text-input-demo">Text Input</label>
 <input type="text" id="text-input-demo"/>`, "html");
     new CodeViewer("#usage-textarea", `<label for="textarea-demo">Text Area</label>

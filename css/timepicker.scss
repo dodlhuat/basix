@@ -1,0 +1,72 @@
+.timespan-picker {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  max-width: 400px;
+}
+
+.timespan-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.timespan-field label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.timespan-field input[type="time"] {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background: white;
+  transition: border-color 0.2s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.timespan-field input[type="time"]:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.timespan-field input[type="time"]:invalid {
+  border-color: #dc3545;
+}
+
+.timespan-separator {
+  font-size: 1.5rem;
+  color: #6c757d;
+  padding-bottom: 0.75rem;
+  user-select: none;
+}
+
+@media (max-width: 480px) {
+  .timespan-picker {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1rem 0.75rem;
+  }
+
+  .timespan-separator {
+    text-align: center;
+    padding: 0;
+    transform: rotate(90deg);
+  }
+
+  .timespan-field input[type="time"] {
+    font-size: 1.125rem;
+    padding: 1rem;
+    min-height: 48px;
+  }
+}
