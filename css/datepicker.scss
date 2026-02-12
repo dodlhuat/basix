@@ -188,6 +188,84 @@
   background-color: var(--accent-color-lighten);
 }
 
+/* Time Picker */
+.datepicker-time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--divider);
+  margin-top: $spacing;
+  padding-top: $spacing;
+}
+
+.datepicker-time-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary-text);
+}
+
+.datepicker-time-controls {
+  display: flex;
+  align-items: center;
+  gap: calc($spacing / 4);
+}
+
+.datepicker-time-separator {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-text);
+  padding: 0 calc($spacing / 8);
+}
+
+.datepicker-time-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc($spacing / 8);
+}
+
+.datepicker-time-btn {
+  background: none;
+  border: 1px solid var(--divider);
+  border-radius: $border-radius;
+  cursor: pointer;
+  padding: calc($spacing / 8) calc($spacing / 2);
+  font-size: 0.6rem;
+  line-height: 1;
+  color: var(--primary-text);
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--accent-color-lighten);
+    color: var(--accent-color-text);
+  }
+}
+
+.datepicker-time-display {
+  width: 2.5rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  border: 1px solid var(--divider);
+  border-radius: $border-radius;
+  padding: calc($spacing / 4) 0;
+  background: var(--background);
+  color: var(--primary-text);
+  -moz-appearance: textfield;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: -1px;
+  }
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 640px) {
   .datepicker-backdrop {

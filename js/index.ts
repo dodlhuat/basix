@@ -172,7 +172,6 @@ utils.ready(() => {
     });
   });
 
-  // Initialize single date picker
   new DatePicker("#datepicker-single", {
     mode: "single",
     onSelect: (date) => {
@@ -180,7 +179,14 @@ utils.ready(() => {
     },
   });
 
-  // Initialize range date picker
+  new DatePicker("#datepicker-time", {
+    mode: "single",
+    timePicker: true,
+    onSelect: (date) => {
+      console.log("Single selected:", date);
+    },
+  });
+
   new DatePicker("#datepicker-range", {
     mode: "range",
     onSelect: (range) => {
@@ -188,7 +194,6 @@ utils.ready(() => {
     },
   });
 
-  // Initialize localized date picker
   new DatePicker("#datepicker-localized", {
     mode: "single",
     startDay: 1, // Monday

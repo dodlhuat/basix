@@ -1207,7 +1207,8 @@
     <p>
         The <strong>DatePicker</strong> component provides a calendar interface
         for date selection. Supports single date or date range modes,
-        customizable locales, and mobile-responsive design.
+        customizable locales, mobile-responsive design, and an optional
+        time picker for selecting hours and minutes.
     </p>
     <div class="row">
         <div class="column card">
@@ -1239,6 +1240,18 @@
                     id="datepicker-localized"
                     class="datepicker-input"
                     placeholder="Seleccionar fecha"
+                    readonly
+            />
+        </div>
+    </div>
+    <div class="row">
+        <div class="column card">
+            <label for="datepicker-time">Datepicker with Time Picker</label>
+            <input
+                    type="text"
+                    id="datepicker-time"
+                    class="datepicker-input"
+                    placeholder="Select date and time"
                     readonly
             />
         </div>
@@ -1374,13 +1387,27 @@
                     </td>
                 </tr>
                 <tr>
+                    <td><code>timePicker</code></td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>
+                        Enables time selection (hours and minutes) below the calendar
+                        grid. When enabled, the calendar stays open after picking a
+                        date so the user can adjust the time. The default format
+                        includes the time (e.g. "Thu Jun 26 2025 14:30")
+                    </td>
+                </tr>
+                <tr>
                     <td><code>format</code></td>
                     <td>(date: Date) => string</td>
                     <td></td>
                     <td>
                         Function to format the date for display in the date picker.
-                        Defaults to a function that returns a string representation of
-                        the date in 'YYYY-MM-DD' format
+                        Defaults to <code>date.toDateString()</code> when
+                        <code>timePicker</code> is off, or
+                        <code>date.toDateString() + " HH:MM"</code> when
+                        <code>timePicker</code> is on. A custom format function
+                        overrides both defaults
                     </td>
                 </tr>
                 <tr>

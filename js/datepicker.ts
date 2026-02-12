@@ -6,6 +6,7 @@ interface DatePickerLocales {
 interface DatePickerOptions {
   mode?: 'single' | 'range';
   startDay?: number;
+  timePicker?: boolean;
   locales?: DatePickerLocales;
   format?: (date: Date) => string;
   onSelect?: (date: Date | DateRange) => void;
@@ -29,6 +30,8 @@ class DatePicker {
   private viewMonth: number;
   private viewMode: ViewMode;
   private yearRangeStart: number;
+  private selectedHours: number;
+  private selectedMinutes: number;
   private calendar!: HTMLDivElement;
   private backdrop!: HTMLDivElement;
   private handleDocumentClick!: (e: Event) => void;
@@ -43,9 +46,12 @@ class DatePicker {
       throw new Error(`DatePicker: Element not found for selector "${elementOrSelector}"`);
     }
 
+    const timePicker = options.timePicker ?? false;
+
     this.options = {
       mode: 'single',
       startDay: 0,
+      timePicker,
       locales: {
         days: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
         months: [
@@ -53,7 +59,13 @@ class DatePicker {
           'July', 'August', 'September', 'October', 'November', 'December'
         ]
       },
-      format: (date: Date) => date.toDateString(),
+      format: timePicker
+        ? (date: Date) => {
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${date.toDateString()} ${hours}:${minutes}`;
+          }
+        : (date: Date) => date.toDateString(),
       onSelect: () => {},
       ...options
     };
@@ -68,6 +80,9 @@ class DatePicker {
 
     this.viewMode = 'days';
     this.yearRangeStart = this.viewYear - (this.viewYear % 12);
+
+    this.selectedHours = this.currentDate.getHours();
+    this.selectedMinutes = this.currentDate.getMinutes();
 
     this.init();
   }
@@ -180,6 +195,11 @@ class DatePicker {
 
     this.calendar.appendChild(header);
     this.calendar.appendChild(content);
+
+    if (this.options.timePicker && this.viewMode === 'days') {
+      const timeSection = this.createTimePicker();
+      this.calendar.appendChild(timeSection);
+    }
   }
 
   private createHeader(): HTMLDivElement {
@@ -365,7 +385,9 @@ class DatePicker {
       }
 
       if (this.options.mode === 'single') {
-        if (this.selectedDate && date.getTime() === this.selectedDate.getTime()) {
+        const selectedDay = this.selectedDate ? new Date(this.selectedDate) : null;
+        if (selectedDay) selectedDay.setHours(0, 0, 0, 0);
+        if (selectedDay && date.getTime() === selectedDay.getTime()) {
           day.classList.add('selected');
         }
       } else {
@@ -397,6 +419,141 @@ class DatePicker {
     return grid;
   }
 
+  private createTimePicker(): HTMLDivElement {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'datepicker-time';
+
+    const label = document.createElement('div');
+    label.className = 'datepicker-time-label';
+    label.textContent = 'Time';
+    wrapper.appendChild(label);
+
+    const controls = document.createElement('div');
+    controls.className = 'datepicker-time-controls';
+
+    // Hours spinner
+    const hoursSpinner = this.createSpinner(
+      this.selectedHours,
+      0,
+      23,
+      (value) => {
+        this.selectedHours = value;
+        this.applyTimeToSelection();
+      }
+    );
+
+    const separator = document.createElement('span');
+    separator.className = 'datepicker-time-separator';
+    separator.textContent = ':';
+
+    // Minutes spinner
+    const minutesSpinner = this.createSpinner(
+      this.selectedMinutes,
+      0,
+      59,
+      (value) => {
+        this.selectedMinutes = value;
+        this.applyTimeToSelection();
+      }
+    );
+
+    controls.appendChild(hoursSpinner);
+    controls.appendChild(separator);
+    controls.appendChild(minutesSpinner);
+    wrapper.appendChild(controls);
+
+    return wrapper;
+  }
+
+  private createSpinner(
+    value: number,
+    min: number,
+    max: number,
+    onChange: (value: number) => void
+  ): HTMLDivElement {
+    const spinner = document.createElement('div');
+    spinner.className = 'datepicker-time-spinner';
+
+    const upBtn = document.createElement('button');
+    upBtn.className = 'datepicker-time-btn';
+    upBtn.innerHTML = '&#9650;';
+    upBtn.onclick = (e: MouseEvent) => {
+      e.stopPropagation();
+      const next = value + 1 > max ? min : value + 1;
+      onChange(next);
+      this.render();
+    };
+
+    const display = document.createElement('input');
+    display.className = 'datepicker-time-display';
+    display.type = 'text';
+    display.inputMode = 'numeric';
+    display.value = String(value).padStart(2, '0');
+    display.maxLength = 2;
+
+    display.addEventListener('click', (e: Event) => e.stopPropagation());
+    display.addEventListener('focus', () => display.select());
+    display.addEventListener('change', (e: Event) => {
+      e.stopPropagation();
+      let parsed = parseInt(display.value, 10);
+      if (isNaN(parsed) || parsed < min || parsed > max) {
+        display.value = String(value).padStart(2, '0');
+        return;
+      }
+      onChange(parsed);
+      this.render();
+    });
+    display.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const next = value + 1 > max ? min : value + 1;
+        onChange(next);
+        this.render();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const next = value - 1 < min ? max : value - 1;
+        onChange(next);
+        this.render();
+      }
+    });
+
+    const downBtn = document.createElement('button');
+    downBtn.className = 'datepicker-time-btn';
+    downBtn.innerHTML = '&#9660;';
+    downBtn.onclick = (e: MouseEvent) => {
+      e.stopPropagation();
+      const next = value - 1 < min ? max : value - 1;
+      onChange(next);
+      this.render();
+    };
+
+    spinner.appendChild(upBtn);
+    spinner.appendChild(display);
+    spinner.appendChild(downBtn);
+
+    return spinner;
+  }
+
+  private applyTimeToSelection(): void {
+    if (this.options.mode === 'single' && this.selectedDate) {
+      this.selectedDate.setHours(this.selectedHours, this.selectedMinutes, 0, 0);
+      this.updateInput(this.options!.format!(this.selectedDate));
+      this.options!.onSelect!(this.selectedDate);
+    } else if (this.options.mode === 'range') {
+      if (this.rangeStart) {
+        this.rangeStart.setHours(this.selectedHours, this.selectedMinutes, 0, 0);
+      }
+      if (this.rangeStart && this.rangeEnd) {
+        const startDate = this.options!.format!(this.rangeStart);
+        const endDate = this.options!.format!(this.rangeEnd);
+        this.updateInput(`${startDate} - ${endDate}`);
+      } else if (this.rangeStart) {
+        this.updateInput(this.options!.format!(this.rangeStart) + ' - ...');
+      }
+      this.options!.onSelect!({ start: this.rangeStart, end: this.rangeEnd });
+    }
+  }
+
   private changeMonth(delta: number): void {
     this.viewMonth += delta;
     if (this.viewMonth > 11) {
@@ -410,13 +567,19 @@ class DatePicker {
   }
 
   private handleDateClick(date: Date): void {
-    date.setHours(0, 0, 0, 0);
+    if (this.options.timePicker) {
+      date.setHours(this.selectedHours, this.selectedMinutes, 0, 0);
+    } else {
+      date.setHours(0, 0, 0, 0);
+    }
 
     if (this.options.mode === 'single') {
       this.selectedDate = date;
       this.updateInput(this.options!.format!(this.selectedDate));
       this.options!.onSelect!(this.selectedDate);
-      this.hide();
+      if (!this.options.timePicker) {
+        this.hide();
+      }
     } else {
       if (!this.rangeStart || (this.rangeStart && this.rangeEnd)) {
         this.rangeStart = date;
@@ -436,7 +599,9 @@ class DatePicker {
         } else {
           this.updateInput(`${startDate} - ${endDate}`);
         }
-        this.hide();
+        if (!this.options.timePicker) {
+          this.hide();
+        }
       }
       this.options!.onSelect!({ start: this.rangeStart, end: this.rangeEnd });
     }
