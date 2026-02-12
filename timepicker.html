@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeSpan Picker Demo</title>
+    <style>
+        .timespan-picker {
+            display: flex;
+            align-items: flex-end;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            max-width: 400px;
+        }
+
+        .timespan-field {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .timespan-field label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .timespan-field input[type="time"] {
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            background: white;
+            transition: border-color 0.2s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .timespan-field input[type="time"]:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        .timespan-field input[type="time"]:invalid {
+            border-color: #dc3545;
+        }
+
+        .timespan-separator {
+            font-size: 1.5rem;
+            color: #6c757d;
+            padding-bottom: 0.75rem;
+            user-select: none;
+        }
+
+        /* Mobile Optimierung */
+        @media (max-width: 480px) {
+            .timespan-picker {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+                padding: 1rem 0.75rem;
+            }
+
+            .timespan-separator {
+                text-align: center;
+                padding: 0;
+                transform: rotate(90deg);
+            }
+
+            .timespan-field input[type="time"] {
+                font-size: 1.125rem;
+                padding: 1rem;
+                /* Bessere Touch-Targets auf Mobile */
+                min-height: 48px;
+            }
+        }
+
+        /* Dark Mode Support (optional) */
+        @media (prefers-color-scheme: dark) {
+            .timespan-picker {
+                background: #2d3748;
+            }
+
+            .timespan-field label {
+                color: #e2e8f0;
+            }
+
+            .timespan-field input[type="time"] {
+                background: #1a202c;
+                border-color: #4a5568;
+                color: #e2e8f0;
+            }
+
+            .timespan-field input[type="time"]:focus {
+                border-color: #4299e1;
+                box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+            }
+
+            .timespan-separator {
+                color: #a0aec0;
+            }
+        }
+    </style>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+            color: #212529;
+        }
+
+        .demo-section {
+            margin-bottom: 2rem;
+        }
+
+        .output {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #e9ecef;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        button {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        button:hover {
+            background: #0052a3;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>TimeSpan Picker Demo</h1>
+
+<div class="demo-section">
+    <h2>Beispiel 1: Basis-Verwendung</h2>
+    <div id="timespan-1"></div>
+    <div class="output" id="output-1">Wähle eine Zeitspanne aus...</div>
+</div>
+
+<div class="demo-section">
+    <h2>Beispiel 2: Mit Standardwerten</h2>
+    <div id="timespan-2"></div>
+    <button onclick="getValues()">Werte abrufen</button>
+    <button onclick="resetPicker()">Zurücksetzen</button>
+    <div class="output" id="output-2">-</div>
+</div>
+
+<script>
+    (function (global) {
+        class TimeSpanPicker {
+            constructor(containerId, options) {
+                const element = document.getElementById(containerId);
+                if (!element) {
+                    throw new Error(`Container with id "${containerId}" not found`);
+                }
+                this.container = element;
+                this.onChange = options === null || options === void 0 ? void 0 : options.onChange;
+                this.render();
+                this.startTimeInput = this.container.querySelector('.timespan-start');
+                this.endTimeInput = this.container.querySelector('.timespan-end');
+                if (options === null || options === void 0 ? void 0 : options.defaultStart) {
+                    this.startTimeInput.value = options.defaultStart;
+                }
+                if (options === null || options === void 0 ? void 0 : options.defaultEnd) {
+                    this.endTimeInput.value = options.defaultEnd;
+                }
+                this.attachEventListeners();
+            }
+            render() {
+                this.container.innerHTML = `
+      <div class="timespan-picker">
+        <div class="timespan-field">
+          <label for="timespan-start">Von</label>
+          <input
+            type="time"
+            class="timespan-start"
+            id="timespan-start"
+          />
+        </div>
+
+        <div class="timespan-separator">—</div>
+
+        <div class="timespan-field">
+          <label for="timespan-end">Bis</label>
+          <input
+            type="time"
+            class="timespan-end"
+            id="timespan-end"
+          />
+        </div>
+      </div>
+    `;
+            }
+            attachEventListeners() {
+                this.startTimeInput.addEventListener('change', () => this.handleChange());
+                this.endTimeInput.addEventListener('change', () => this.handleChange());
+            }
+            handleChange() {
+                const start = this.startTimeInput.value;
+                const end = this.endTimeInput.value;
+                if (start && end && start >= end) {
+                    this.endTimeInput.setCustomValidity('Endzeit muss nach Startzeit liegen');
+                }
+                else {
+                    this.endTimeInput.setCustomValidity('');
+                }
+                if (this.onChange && start && end) {
+                    this.onChange(start, end);
+                }
+            }
+            getValue() {
+                return {
+                    start: this.startTimeInput.value,
+                    end: this.endTimeInput.value
+                };
+            }
+            setValue(start, end) {
+                this.startTimeInput.value = start;
+                this.endTimeInput.value = end;
+                this.handleChange();
+            }
+            reset() {
+                this.startTimeInput.value = '';
+                this.endTimeInput.value = '';
+                this.endTimeInput.setCustomValidity('');
+            }
+            isValid() {
+                const { start, end } = this.getValue();
+                return !!(start && end && start < end);
+            }
+        }
+        // Make it globally available
+        global.TimeSpanPicker = TimeSpanPicker;
+    })(window);
+</script>
+<script>
+    // Beispiel 1: Mit onChange Callback
+    const picker1 = new TimeSpanPicker('timespan-1', {
+        onChange: (start, end) => {
+            const output = document.getElementById('output-1');
+            output.textContent = `Start: ${start}, Ende: ${end}`;
+        }
+    });
+
+    // Beispiel 2: Mit Standardwerten
+    const picker2 = new TimeSpanPicker('timespan-2', {
+        defaultStart: '09:00',
+        defaultEnd: '17:00'
+    });
+
+    function getValues() {
+        const values = picker2.getValue();
+        const isValid = picker2.isValid();
+        const output = document.getElementById('output-2');
+
+        output.innerHTML = `
+        <strong>Start:</strong> ${values.start}<br>
+        <strong>Ende:</strong> ${values.end}<br>
+        <strong>Gültig:</strong> ${isValid ? '✓ Ja' : '✗ Nein'}
+      `;
+    }
+
+    function resetPicker() {
+        picker2.reset();
+        document.getElementById('output-2').textContent = 'Zurückgesetzt';
+    }
+</script>
+</body>
+</html>
