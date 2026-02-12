@@ -48,23 +48,28 @@
     </div>
 </div>
 
-<!-- todo: scroll to sub-classes -->
 <nav class="push-menu">
     <ul>
         <li>
-            <a onclick="window.Scroll.to('#grid')">Grid</a>
+            <a onclick="window.Scroll.to('#layout')">Layout</a>
         </li>
         <li>
-            <a onclick="window.Scroll.to('#typography')">Typography</a>
+            <a onclick="window.Scroll.to('#forms')">Forms</a>
         </li>
         <li>
-            <a onclick="window.Scroll.to('#table')">Table</a>
+            <a onclick="window.Scroll.to('#navigation')">Navigation</a>
         </li>
         <li>
-            <a onclick="window.Scroll.to('#alerts')">Alerts</a>
+            <a onclick="window.Scroll.to('#feedback')">Feedback</a>
         </li>
         <li>
-            <a onclick="window.Scroll.to('#chips')">Chips</a>
+            <a onclick="window.Scroll.to('#components')">Components</a>
+        </li>
+        <li>
+            <a onclick="window.Scroll.to('#advanced-components')">Advanced Components</a>
+        </li>
+        <li>
+            <a onclick="window.Scroll.to('#utilities')">Utilities</a>
         </li>
     </ul>
 </nav>
@@ -72,32 +77,74 @@
 <div class="flyout-overlay" id="flyoutOverlay"></div>
 <div class="flyout-menu" id="flyoutMenu">
     <ul>
-        <li><a href="#">Home</a></li>
-        <li>
-            About
+        <li>Layout
             <ul>
-                <li><a href="#">Our Story</a></li>
-                <li><a href="#">Team</a></li>
-                <li><a href="#">Careers</a></li>
+                <li><a onclick="window.Scroll.to('#layout')">Grid System</a></li>
+                <li><a onclick="window.Scroll.to('#layout')">Typography</a></li>
+                <li><a onclick="window.Scroll.to('#layout')">Cards</a></li>
+                <li><a onclick="window.Scroll.to('#layout')">Icons</a></li>
+                <li><a onclick="window.Scroll.to('#layout')">Icons</a></li>
             </ul>
         </li>
-        <li>
-            Services
+        <li>Forms
+        <ul>
+            <li><a onclick="window.Scroll.to('#forms')">Text Input</a></li>
+            <li><a onclick="window.Scroll.to('#forms')">Textarea</a></li>
+            <li><a onclick="window.Scroll.to('#forms')">Select Dropdown</a></li>
+            <li><a onclick="window.Scroll.to('#forms')">Checkbox</a></li>
+            <li><a onclick="window.Scroll.to('#forms')">Radio Buttons</a></li>
+            <li><a onclick="window.Scroll.to('#forms')">Switch</a></li>
+            <li><a onclick="window.Scroll.to('#forms')">Range Slider</a></li>
+        </ul>
+        </li>
+        <li>Navigation
+        <ul>
+            <li><a onclick="window.Scroll.to('#navigation')">Push Menu</a></li>
+            <li><a onclick="window.Scroll.to('#navigation')">Flyout Menu</a></li>
+            <li><a onclick="window.Scroll.to('#navigation')">Dropdown Menu</a></li>
+        </ul>
+        </li>
+        <li>Feedback
+        <ul>
+            <li><a onclick="window.Scroll.to('#feedback')">Modal</a></li>
+            <li><a onclick="window.Scroll.to('#feedback')">Toast</a></li>
+            <li><a onclick="window.Scroll.to('#feedback')">Tooltip</a></li>
+            <li><a onclick="window.Scroll.to('#feedback')">Spinner / Loading</a></li>
+        </ul>
+        </li>
+        <li>Components
+        <ul>
+            <li><a onclick="window.Scroll.to('#components')">Alerts</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Buttons</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Chips</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Accordion</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Tabs</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Timeline</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Progress Bar</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Placeholder / Skeleton</a></li>
+        </ul>
+        </li>
+        <li>Advanced Components
+        <ul>
+            <li><a onclick="window.Scroll.to('#components')">Data Tables</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Date Picker</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Tree Component</a></li>
+            <li><a onclick="window.Scroll.to('#components')">File Uploader</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Virtual Dropdown</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Custom Scrollbar</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Chat Bubbles</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Carousel</a></li>
+            <li><a onclick="window.Scroll.to('#components')">Gallery</a></li>
+            <li><a onclick="window.Scroll.to('#components')">TBD: Timespan Picker</a></li>
+        </ul>
+        </li>
+        <li>Utilities
             <ul>
-                <li>
-                    Web Design
-                    <ul>
-                        <li><a href="#">eCommerce</a></li>
-                        <li><a href="#">Landing Pages</a></li>
-                        <li><a href="#">Portfolios</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Development</a></li>
-                <li><a href="#">SEO</a></li>
+                <li><a onclick="window.Scroll.to('#components')">Theme Toggle</a></li>
+                <li><a onclick="window.Scroll.to('#components')">Scroll Utility</a></li>
+                <li><a onclick="window.Scroll.to('#components')">Starter Template</a></li>
             </ul>
         </li>
-        <li><a href="#">Portfolio</a></li>
-        <li><a href="#">Contact</a></li>
     </ul>
 </div>
 
@@ -1020,7 +1067,7 @@
         Needs to be called with parameters HTMLElement (or string selector) and
         an optional options object.
     </p>
-    <h3>vertical</h3>
+    <h4>vertical</h4>
     <div class="tabs-container vertical">
         <div class="tabs-header">
             <ul class="tabs-list">
@@ -1054,7 +1101,7 @@
             </div>
         </div>
     </div>
-    <h3>horizontal</h3>
+    <h4>horizontal</h4>
     <div class="tabs-container horizontal">
         <div class="tabs-header">
             <ul class="tabs-list">
