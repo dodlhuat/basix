@@ -1,60 +1,64 @@
 @use "properties";
 @use "parameters" as *;
 
+$radio-size: 1.15rem;
+$radio-dot-size: 0.6rem;
+
 .radio-button-container {
   display: block;
   position: relative;
   padding-left: 2rem;
-  line-height: 25px;
+  line-height: 1.6rem;
   margin-bottom: calc($spacing / 2);
   cursor: pointer;
-  font-size: 18px;
+  font-size: $spacing;
   user-select: none;
-}
 
-.radio-button-container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  width: auto;
-}
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
 
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 21px;
-  width: 21px;
-  background-color: rgba(0, 0, 0, 0);
-  border-radius: 50%;
-  border: 2px solid rgba(0, 0, 0, 0.25);
-  transition: all 0.3s;
-}
+    &:checked ~ .checkmark {
+      border-color: var(--accent-color);
 
-.radio-button-container:hover input ~ .checkmark {
-  border-color: rgba(0, 0, 0, 0.5);
-}
+      &::after {
+        display: block;
+      }
+    }
 
-.radio-button-container input:checked ~ .checkmark {
-  background-color: rgba(0, 0, 0, 0);
-  border-color: var(--accent-color);
-}
+    &:focus-visible ~ .checkmark {
+      outline: 2px solid var(--accent-color);
+      outline-offset: 2px;
+    }
+  }
 
-.checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
+  &:hover input ~ .checkmark {
+    border-color: var(--secondary-text);
+  }
 
-.radio-button-container input:checked ~ .checkmark:after {
-  display: block;
-}
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: $radio-size;
+    width: $radio-size;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 2px solid var(--divider);
+    transition: border-color 0.2s ease;
 
-.radio-button-container .checkmark:after {
-  top: 2px;
-  left: 2px;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: var(--accent-color);
+    &::after {
+      content: "";
+      position: absolute;
+      display: none;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: $radio-dot-size;
+      height: $radio-dot-size;
+      border-radius: 50%;
+      background: var(--accent-color);
+    }
+  }
 }

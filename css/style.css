@@ -249,27 +249,37 @@ body {
   font-family: "Outfit", helvetica, arial, sans-serif;
 }
 
-p, li, td, th, div, h1, h2, h3, h4, h5 {
-  color: var(--primary-text);
-}
-
-code {
-  font-family: "Courier New", Courier, monospace;
-}
-
 p, li, td, th, div {
   font-size: 1rem;
   line-height: 1.5;
+  color: var(--primary-text);
 }
 
 p {
   padding-bottom: 0.5rem;
 }
 
-.h1, .h2, .h3, .h4, h1, h2, h3, h4 {
+code {
+  font-family: "Courier New", Courier, monospace;
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5 {
   margin: 0.5rem 0 0.6666666667rem 0;
   line-height: 1.2;
   font-weight: bold;
+  color: var(--primary-text);
 }
 
 h1, .h1 {
@@ -307,44 +317,30 @@ ol li li {
   list-style-type: lower-latin;
 }
 
-strong {
-  font-weight: bold;
-}
-
 hr {
   border: 1px solid var(--divider);
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-em {
-  font-style: italic;
-}
-
-.text-center {
-  text-align: center;
+  margin-block: 1.5rem;
 }
 
 a {
   color: var(--accent-color);
   text-decoration: none;
   font-weight: 500;
-  position: relative;
-  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  transition: color 0.2s ease;
 }
-
-a:hover,
-a:focus-visible {
+a:hover, a:focus-visible {
   color: var(--accent-color-lighten);
 }
-
 a:active {
   color: var(--accent-color);
 }
-
 a:focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .card {
@@ -1665,56 +1661,50 @@ nav.pushed {
   display: block;
   position: relative;
   padding-left: 2rem;
-  line-height: 25px;
+  line-height: 1.6rem;
   margin-bottom: 0.5rem;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 1rem;
   user-select: none;
 }
-
 .radio-button-container input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
-  width: auto;
 }
-
-.checkmark {
+.radio-button-container input:checked ~ .checkmark {
+  border-color: var(--accent-color);
+}
+.radio-button-container input:checked ~ .checkmark::after {
+  display: block;
+}
+.radio-button-container input:focus-visible ~ .checkmark {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+.radio-button-container:hover input ~ .checkmark {
+  border-color: var(--secondary-text);
+}
+.radio-button-container .checkmark {
   position: absolute;
   top: 0;
   left: 0;
-  height: 21px;
-  width: 21px;
-  background-color: rgba(0, 0, 0, 0);
+  height: 1.15rem;
+  width: 1.15rem;
+  background-color: transparent;
   border-radius: 50%;
-  border: 2px solid rgba(0, 0, 0, 0.25);
-  transition: all 0.3s;
+  border: 2px solid var(--divider);
+  transition: border-color 0.2s ease;
 }
-
-.radio-button-container:hover input ~ .checkmark {
-  border-color: rgba(0, 0, 0, 0.5);
-}
-
-.radio-button-container input:checked ~ .checkmark {
-  background-color: rgba(0, 0, 0, 0);
-  border-color: var(--accent-color);
-}
-
-.checkmark:after {
+.radio-button-container .checkmark::after {
   content: "";
   position: absolute;
   display: none;
-}
-
-.radio-button-container input:checked ~ .checkmark:after {
-  display: block;
-}
-
-.radio-button-container .checkmark:after {
-  top: 2px;
-  left: 2px;
-  width: 13px;
-  height: 13px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.6rem;
+  height: 0.6rem;
   border-radius: 50%;
   background: var(--accent-color);
 }
