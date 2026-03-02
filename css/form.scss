@@ -32,7 +32,7 @@ select {
     height: $form-height;
     line-height: $form-height;
 
-    &:after {
+    &::after {
       font-family: "Material Symbols Outlined 24pt", serif;
       content: "\e5cf";
       float: right;

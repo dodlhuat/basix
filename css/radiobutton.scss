@@ -22,7 +22,7 @@ $radio-dot-size: 0.6rem;
     &:checked ~ .checkmark {
       border-color: var(--accent-color);
 
-      &::after {
+      &:::after {
         display: block;
       }
     }
@@ -48,7 +48,7 @@ $radio-dot-size: 0.6rem;
     border: 2px solid var(--divider);
     transition: border-color 0.2s ease;
 
-    &::after {
+    &:::after {
       content: "";
       position: absolute;
       display: none;

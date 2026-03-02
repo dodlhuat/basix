@@ -20,7 +20,7 @@
   }
 }
 
-.loading, .loading:before, .loading:after {
+.loading, .loading::before, .loading::after {
   border-radius: 50%;
   background-color: var(--accent-color);
   width: 18px;
@@ -35,18 +35,18 @@
   animation: spScaleAlpha 1s infinite linear;
 }
 
-.loading:before, .loading:after {
+.loading::before, .loading::after {
   content: '';
   position: absolute;
   opacity: 0.25;
 }
 
-.loading:before {
+.loading::before {
   left: 30px;
   animation: spScaleAlphaBefore 1s infinite linear;
 }
 
-.loading:after {
+.loading::after {
   left: -30px;
   animation: spScaleAlphaAfter 1s infinite linear;
 }

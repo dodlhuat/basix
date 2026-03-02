@@ -36,7 +36,7 @@
   border-top-left-radius: 0;
 }
 
-.message-incoming::before {
+.message-incoming:::before {
   content: "";
   position: absolute;
   top: 0;
@@ -55,7 +55,7 @@
   border-top-right-radius: 0;
 }
 
-.message-outgoing::after {
+.message-outgoing:::after {
   content: "";
   position: absolute;
   top: 0;

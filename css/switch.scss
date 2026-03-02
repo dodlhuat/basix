@@ -19,7 +19,7 @@
     white-space: nowrap;
   }
 
-  label:after {
+  label::after {
     content: '';
     position: absolute;
     top: 0.25rem;
@@ -35,7 +35,7 @@
     background: var(--accent-color);
   }
 
-  input:checked + label:after {
+  input:checked + label::after {
     left: calc(100% - 5px);
     transform: translateX(-100%);
   }

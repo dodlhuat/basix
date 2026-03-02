@@ -728,11 +728,10 @@ select {
 
 @font-face {
   font-family: "Material Symbols Outlined 24pt";
-  src: url("../font/MaterialSymbolsOutlined.woff2") format("woff2");
+  src: url("../fonts/MaterialSymbolsOutlined.woff2") format("woff2");
 }
 .icon {
   font-family: "Material Symbols Outlined 24pt", serif;
-  speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;

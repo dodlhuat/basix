@@ -14,7 +14,7 @@
     margin-bottom: calc($spacing / 2);
   }
 
-  & + label:before {
+  & + label::before {
     content: '';
     margin-right: 10px;
     display: inline-block;
@@ -25,11 +25,11 @@
     margin-top: 2px;
   }
 
-  &:hover + label:before {
+  &:hover + label::before {
     border-color: rgba(0, 0, 0, 0.5);
   }
 
-  &:checked + label:before {
+  &:checked + label::before {
     background: var(--accent-color);
   }
 
@@ -38,12 +38,12 @@
     cursor: auto;
   }
 
-  &:disabled + label:before {
+  &:disabled + label::before {
     box-shadow: none;
     background: var(--disabled);
   }
 
-  &:checked + label:after {
+  &:checked + label::after {
     content: url("../icons/checkmark-outline.svg");
     filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(180deg) brightness(101%) contrast(101%);
     position: absolute;

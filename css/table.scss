@@ -43,12 +43,12 @@ th:hover {
   background-color: #f3f4f6;
 }
 
-th.sort-asc::after {
+th.sort-asc:::after {
   content: " ▲";
   font-size: 0.7em;
 }
 
-th.sort-desc::after {
+th.sort-desc:::after {
   content: " ▼";
   font-size: 0.7em;
 }
@@ -164,7 +164,7 @@ tr:hover {
     border-bottom: none;
   }
 
-  td::before {
+  td:::before {
     content: attr(data-label);
     font-weight: 600;
     color: var(--secondary-text);
