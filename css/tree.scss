@@ -55,7 +55,7 @@ ul.tree {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   -webkit-tap-highlight-color: transparent;
 
-  &:::before {
+  &::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -64,7 +64,7 @@ ul.tree {
     transition: opacity 0.3s ease;
   }
 
-  &:hover:::before {
+  &:hover::before {
     opacity: 1;
   }
 

@@ -5,7 +5,7 @@
   list-style: none;
 }
 
-.timeline:::before {
+.timeline::before {
   content: '';
   position: absolute;
   top: 0;
@@ -21,7 +21,7 @@
   padding-left: 50px;
 }
 
-.timeline-item:::before {
+.timeline-item::before {
   content: '';
   position: absolute;
   left: 8px;
@@ -34,7 +34,7 @@
   background: var(--background);
 }
 
-.timeline-item.active:::before {
+.timeline-item.active::before {
   border-color: var(--accent-color);
   background-color: #e7f1ff;
 }

@@ -24,7 +24,7 @@
 }
 
 /* Arrow styles */
-.tooltip:::before {
+.tooltip::before {
   content: "";
   position: absolute;
   width: 0;
@@ -32,7 +32,7 @@
   border: calc($spacing * 0.5) solid transparent;
 }
 
-.tooltip[data-position="top"]:::before {
+.tooltip[data-position="top"]::before {
   bottom: calc(($spacing / 2) * -1);
   left: 50%;
   transform: translateX(-50%);
@@ -40,7 +40,7 @@
   border-bottom: 0;
 }
 
-.tooltip[data-position="bottom"]:::before {
+.tooltip[data-position="bottom"]::before {
   top: calc(($spacing / 2) * -1);
   left: 50%;
   transform: translateX(-50%);
@@ -48,7 +48,7 @@
   border-top: 0;
 }
 
-.tooltip[data-position="left"]:::before {
+.tooltip[data-position="left"]::before {
   right: calc(($spacing / 2) * -1);
   top: 50%;
   transform: translateY(-50%);
@@ -56,7 +56,7 @@
   border-right: 0;
 }
 
-.tooltip[data-position="right"]:::before {
+.tooltip[data-position="right"]::before {
   left: calc(($spacing / 2) * -1);
   top: 50%;
   transform: translateY(-50%);
@@ -74,7 +74,7 @@
   background: var(--accent-color);
 }
 
-.tooltip.tooltip-info:::before {
+.tooltip.tooltip-info::before {
   border-top-color: var(--accent-color);
   border-bottom-color: var(--accent-color);
   border-left-color: var(--accent-color);
@@ -85,7 +85,7 @@
   background: var(--success);
 }
 
-.tooltip.tooltip-success:::before {
+.tooltip.tooltip-success::before {
   border-top-color: var(--success);
   border-bottom-color: var(--success);
   border-left-color: var(--success);
@@ -97,7 +97,7 @@
   color: var(--disabled);
 }
 
-.tooltip.tooltip-warning:::before {
+.tooltip.tooltip-warning::before {
   border-top-color: var(--warning);
   border-bottom-color: var(--warning);
   border-left-color: var(--warning);
@@ -108,7 +108,7 @@
   background: var(--error);
 }
 
-.tooltip.tooltip-error:::before {
+.tooltip.tooltip-error::before {
   border-top-color: var(--error);
   border-bottom-color: var(--error);
   border-left-color: var(--error);

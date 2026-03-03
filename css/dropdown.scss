@@ -41,7 +41,7 @@
           background-color: var(--background);
           color: var(--accent-color);
 
-          &.has-children:::after {
+          &.has-children::after {
             transform: rotate(90deg);
           }
         }
@@ -91,7 +91,7 @@
       color: var(--accent-color);
     }
 
-    &.has-children:::after {
+    &.has-children::after {
       content: "›";
       font-size: 16px;
       font-weight: bold;
@@ -126,11 +126,11 @@
       }
     }
 
-    .dropdown-item.has-children:::after {
+    .dropdown-item.has-children::after {
       transform: rotate(90deg);
     }
 
-    .dropdown-menu li.open > .dropdown-item.has-children:::after {
+    .dropdown-menu li.open > .dropdown-item.has-children::after {
       transform: rotate(-90deg);
     }
   }
