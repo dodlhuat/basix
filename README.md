@@ -452,3 +452,31 @@ The Scroll utility allows to scroll to elements in the DOM. You can scroll to an
 ``` js
 window.Scroll.to('#my-element');
 ```
+
+---
+
+## How to Run Locally
+
+Building is only necessary if you want to make changes to files. Otherwise, docker is enough.
+
+```bash
+# Docker
+docker compose up -d
+# → http://localhost:8082
+
+# Compile TypeScript
+# One-time compilation (all .ts files in js/)
+npx tsc -p js/tsconfig.json
+# Watch mode (auto-recompile on changes)
+npx tsc -p js/tsconfig.json --watch
+# Or use the shorter alias:
+tsc -p js/tsconfig.json -w
+
+# Compile SCSS to CSS
+# Install sass first: npm install -g sass
+sass css:css
+# Or with watch mode:
+sass --watch css:css
+# Or compile + minify the main bundle:
+sass --style=compressed css/style.scss css/style.min.css
+```
