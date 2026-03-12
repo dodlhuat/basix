@@ -2,391 +2,420 @@ class Editor {
     constructor() {
         this.undoStack = [];
         this.redoStack = [];
+
         const editable = document.getElementById('editable');
         const code = document.getElementById('code');
         const preview = document.getElementById('preview');
-        if (!editable || !code || !preview) {
-            throw new Error('Editor: Required elements not found (#editable, #code, #preview)');
+        const sidePanel = document.getElementById('sidePanel');
+        const wordCount = document.getElementById('wordCount');
+
+        if (!editable || !code || !preview || !sidePanel) {
+            throw new Error('Editor: Required elements not found');
         }
+
         this.editable = editable;
         this.code = code;
         this.preview = preview;
-        this.isCodeView = false;
-        this.init();
-    }
-    init() {
-        this.bindEvents();
-        this.updateCodeView();
-        this.updatePreview();
+        this.sidePanel = sidePanel;
+        this.wordCount = wordCount;
+
+        this.bindToolbar();
+        this.bindActions();
+        this.bindKeyboard();
+        this.bindEditable();
+        this.bindTabs();
+        this.syncViews();
         this.saveState();
-        // Start hidden
-        this.code.style.display = 'block';
+
+        // Start with side panel hidden
+        this.sidePanel.classList.add('hidden');
     }
-    bindEvents() {
-        // Buttons with data-cmd
+
+    bindToolbar() {
         document.querySelectorAll('[data-cmd]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const cmd = btn.dataset.cmd;
-                const val = btn.dataset.value || null;
-                if (cmd)
-                    this.exec(cmd, val);
+                const val = btn.dataset.value ?? null;
+                this.exec(cmd, val);
                 this.editable.focus();
             });
         });
-        // Link
-        const linkBtn = document.getElementById('linkBtn');
-        linkBtn?.addEventListener('click', () => {
-            const url = prompt('Provide url with https://', 'https://');
-            if (url)
-                this.exec('createLink', url);
+    }
+
+    bindActions() {
+        document.getElementById('linkBtn')?.addEventListener('click', () => {
+            const url = prompt('Enter URL:', 'https://');
+            if (url) this.exec('createLink', url);
         });
-        // Image via file
+
         const imageFile = document.getElementById('imageFile');
-        const imageBtn = document.getElementById('imageBtn');
-        imageBtn?.addEventListener('click', () => imageFile.click());
-        imageFile?.addEventListener('change', (e) => {
-            const target = e.target;
-            const f = target.files?.[0];
-            if (!f)
-                return;
+        document.getElementById('imageBtn')?.addEventListener('click', () => imageFile.click());
+        imageFile?.addEventListener('change', () => {
+            const file = imageFile.files?.[0];
+            if (!file) return;
             const reader = new FileReader();
             reader.onload = () => {
                 if (typeof reader.result === 'string') {
                     this.insertImage(reader.result);
                 }
             };
-            reader.readAsDataURL(f);
+            reader.readAsDataURL(file);
+            imageFile.value = '';
         });
-        // Clean formatting
-        const cleanBtn = document.getElementById('cleanBtn');
-        cleanBtn?.addEventListener('click', () => {
+
+        document.getElementById('cleanBtn')?.addEventListener('click', () => {
             const sel = window.getSelection();
-            if (!sel || sel.rangeCount === 0)
-                return;
+            if (!sel || sel.rangeCount === 0) return;
             const range = sel.getRangeAt(0);
             const text = range.toString();
             range.deleteContents();
             range.insertNode(document.createTextNode(text));
-            this.saveState();
-            this.updateCodeView();
-            this.updatePreview();
+            this.onContentChange();
         });
-        // Undo/Redo
-        const undoBtn = document.getElementById('undoBtn');
-        const redoBtn = document.getElementById('redoBtn');
-        undoBtn?.addEventListener('click', () => this.undo());
-        redoBtn?.addEventListener('click', () => this.redo());
-        const toggleCodeBtn = document.getElementById('toggleCodeBtn');
-        toggleCodeBtn?.addEventListener('click', () => {
-            this.isCodeView = !this.isCodeView;
-            if (this.isCodeView) {
-                this.updateCodeView();
-                this.code.style.display = 'block';
-            }
-            else {
-                this.code.style.display = 'none';
-            }
+
+        document.getElementById('undoBtn')?.addEventListener('click', () => this.undo());
+        document.getElementById('redoBtn')?.addEventListener('click', () => this.redo());
+
+        document.getElementById('toggleCodeBtn')?.addEventListener('click', () => {
+            this.sidePanel.classList.toggle('hidden');
+            this.syncViews();
         });
-        const applyCodeBtn = document.getElementById('applyCodeBtn');
-        applyCodeBtn?.addEventListener('click', () => {
+
+        // Code action buttons — matched by position within .code-actions
+        const codeActions = document.querySelectorAll('.code-actions button');
+        codeActions[0]?.addEventListener('click', () => {
             this.editable.innerHTML = this.sanitizeHTML(this.code.value);
-            this.saveState();
-            this.updatePreview();
+            this.onContentChange();
         });
-        // Sanitize button
-        const sanitizeBtn = document.getElementById('sanitizeBtn');
-        sanitizeBtn?.addEventListener('click', () => {
+        codeActions[1]?.addEventListener('click', () => {
             this.code.value = this.sanitizeHTML(this.code.value);
             this.editable.innerHTML = this.code.value;
-            this.saveState();
-            this.updatePreview();
+            this.onContentChange();
         });
-        // Minify
-        const minifyBtn = document.getElementById('minifyBtn');
-        minifyBtn?.addEventListener('click', () => {
-            this.code.value = this.code.value.replace(/\n/g, '').replace(/>\s+</g, '><').trim();
+        codeActions[2]?.addEventListener('click', () => {
+            this.code.value = this.code.value
+                .replace(/\n/g, '')
+                .replace(/>\s+</g, '><')
+                .trim();
         });
+
         const saveBtn = document.getElementById('saveBtn');
-        saveBtn?.addEventListener('click', () => {
-            const blob = new Blob([
-                '<!doctype html>\n<html lang="de">\n<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Export</title></head>\n<body>\n' +
-                    this.sanitizeHTML(this.editable.innerHTML) +
-                    '\n</body>\n</html>'
-            ], { type: 'text/html' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'document.html';
-            a.click();
-            URL.revokeObjectURL(a.href);
-        });
-        // Clear content
-        const clearBtn = document.getElementById('clearBtn');
-        clearBtn?.addEventListener('click', () => {
-            if (confirm('Do you really want to delete?')) {
+        saveBtn?.addEventListener('click', () => this.downloadHTML());
+
+        document.getElementById('clearBtn')?.addEventListener('click', () => {
+            if (confirm('Clear all content?')) {
                 this.editable.innerHTML = '';
-                this.saveState();
-                this.updateCodeView();
-                this.updatePreview();
+                this.onContentChange();
             }
         });
-        // Sync editable -> code & preview on input
-        this.editable.addEventListener('input', () => {
-            this.saveState();
-            this.updateCodeView();
-            this.updatePreview();
+    }
+
+    bindKeyboard() {
+        const saveBtn = document.getElementById('saveBtn');
+
+        window.addEventListener('keydown', (e) => {
+            const mod = e.ctrlKey || e.metaKey;
+            if (!mod) return;
+
+            const key = e.key.toLowerCase();
+
+            if (key === 'b') { e.preventDefault(); this.exec('bold'); }
+            else if (key === 'i') { e.preventDefault(); this.exec('italic'); }
+            else if (key === 'u') { e.preventDefault(); this.exec('underline'); }
+            else if (key === 'k') {
+                e.preventDefault();
+                const url = prompt('Enter URL:', 'https://');
+                if (url) this.exec('createLink', url);
+            }
+            else if (key === 's') { e.preventDefault(); saveBtn?.click(); }
+            else if (key === 'z' && !e.shiftKey) { e.preventDefault(); this.undo(); }
+            else if (key === 'y' || (key === 'z' && e.shiftKey)) { e.preventDefault(); this.redo(); }
         });
-        // Paste handling: remove styles on paste
+    }
+
+    bindEditable() {
+        this.editable.addEventListener('input', () => this.onContentChange());
+
         this.editable.addEventListener('paste', (e) => {
             e.preventDefault();
-            const text = e.clipboardData?.getData('text/plain') || '';
+            const text = e.clipboardData?.getData('text/plain') ?? '';
             this.insertText(text);
         });
-        // Keyboard shortcuts
-        window.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
-                e.preventDefault();
-                this.exec('bold');
-            }
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'i') {
-                e.preventDefault();
-                this.exec('italic');
-            }
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'u') {
-                e.preventDefault();
-                this.exec('underline');
-            }
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-                e.preventDefault();
-                const url = prompt('Provide URL', 'https://');
-                if (url)
-                    this.exec('createLink', url);
-            }
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-                e.preventDefault();
-                saveBtn?.click();
-            }
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && !e.shiftKey) {
-                e.preventDefault();
-                this.undo();
-            }
-            if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.key.toLowerCase() === 'z' && e.shiftKey))) {
-                e.preventDefault();
-                this.redo();
-            }
-        });
-        // Keep buttons' active state in sync
-        this.editable.addEventListener('keyup', () => this.refreshState());
-        this.editable.addEventListener('mouseup', () => this.refreshState());
+
+        this.editable.addEventListener('keyup', () => this.refreshActiveState());
+        this.editable.addEventListener('mouseup', () => this.refreshActiveState());
     }
+
+    bindTabs() {
+        document.querySelectorAll('.side-tab[data-tab]').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetId = tab.dataset.tab;
+
+                document.querySelectorAll('.side-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.side-panel').forEach(p => p.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(targetId)?.classList.add('active');
+            });
+        });
+    }
+
+    onContentChange() {
+        this.saveState();
+        this.syncViews();
+    }
+
+    syncViews() {
+        this.code.value = this.editable.innerHTML.trim();
+        this.preview.innerHTML = this.editable.innerHTML;
+        this.updateWordCount();
+    }
+
+    updateWordCount() {
+        if (!this.wordCount) return;
+        const text = this.editable.innerText || '';
+        const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+        const count = words.length;
+        this.wordCount.textContent = `${count} word${count !== 1 ? 's' : ''}`;
+    }
+
     saveState() {
         this.undoStack.push(this.editable.innerHTML);
-        if (this.undoStack.length > 100) {
-            this.undoStack.shift();
-        }
+        if (this.undoStack.length > 100) this.undoStack.shift();
         this.redoStack = [];
     }
+
     undo() {
-        if (this.undoStack.length > 1) {
-            const current = this.undoStack.pop();
-            this.redoStack.push(current);
-            this.editable.innerHTML = this.undoStack[this.undoStack.length - 1];
-            this.updateCodeView();
-            this.updatePreview();
-        }
+        if (this.undoStack.length <= 1) return;
+        this.redoStack.push(this.undoStack.pop());
+        this.editable.innerHTML = this.undoStack[this.undoStack.length - 1];
+        this.syncViews();
     }
+
     redo() {
-        if (this.redoStack.length > 0) {
-            const state = this.redoStack.pop();
-            this.undoStack.push(state);
-            this.editable.innerHTML = state;
-            this.updateCodeView();
-            this.updatePreview();
+        if (this.redoStack.length === 0) return;
+        const state = this.redoStack.pop();
+        this.undoStack.push(state);
+        this.editable.innerHTML = state;
+        this.syncViews();
+    }
+
+    exec(command, value = null) {
+        switch (command) {
+            case 'bold': this.toggleInlineStyle('strong'); break;
+            case 'italic': this.toggleInlineStyle('em'); break;
+            case 'underline': this.toggleInlineStyle('u'); break;
+            case 'strikeThrough': this.toggleInlineStyle('s'); break;
+            case 'createLink': if (value) this.createLink(value); break;
+            case 'formatBlock': if (value) this.formatBlock(value); break;
+            case 'insertUnorderedList': this.insertList('ul'); break;
+            case 'insertOrderedList': this.insertList('ol'); break;
         }
     }
+
     insertText(text) {
         const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0)
-            return;
+        if (!sel || sel.rangeCount === 0) return;
+
         const range = sel.getRangeAt(0);
         range.deleteContents();
         range.insertNode(document.createTextNode(text));
         range.collapse(false);
         sel.removeAllRanges();
         sel.addRange(range);
-        this.saveState();
-        this.updateCodeView();
-        this.updatePreview();
+
+        this.onContentChange();
     }
+
     insertImage(dataUrl) {
         const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0)
-            return;
+        if (!sel || sel.rangeCount === 0) return;
+
         const range = sel.getRangeAt(0);
         const img = document.createElement('img');
         img.src = dataUrl;
         img.style.maxWidth = '100%';
         range.deleteContents();
         range.insertNode(img);
-        // Move cursor after image
+
         range.setStartAfter(img);
         range.collapse(true);
         sel.removeAllRanges();
         sel.addRange(range);
-        this.saveState();
-        this.updateCodeView();
-        this.updatePreview();
+
+        this.onContentChange();
     }
-    wrapSelection(tagName) {
-        const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0)
-            return;
-        const range = sel.getRangeAt(0);
-        const selectedContent = range.extractContents();
-        const wrapper = document.createElement(tagName);
-        wrapper.appendChild(selectedContent);
-        range.insertNode(wrapper);
-        // Restore selection
-        range.selectNodeContents(wrapper);
-        sel.removeAllRanges();
-        sel.addRange(range);
-        this.saveState();
-        this.updateCodeView();
-        this.updatePreview();
-    }
+
     toggleInlineStyle(tagName) {
         const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0)
-            return;
+        if (!sel || sel.rangeCount === 0) return;
+
         const range = sel.getRangeAt(0);
         const container = range.commonAncestorContainer;
-        let currentElement = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
-        let isWrapped = false;
-        while (currentElement && currentElement !== this.editable) {
-            if (currentElement.tagName === tagName.toUpperCase()) {
-                isWrapped = true;
-                break;
-            }
-            currentElement = currentElement.parentElement;
-        }
-        if (isWrapped && currentElement) {
-            // Unwrap
-            const parent = currentElement.parentNode;
-            while (currentElement.firstChild) {
-                parent?.insertBefore(currentElement.firstChild, currentElement);
-            }
-            parent?.removeChild(currentElement);
-        }
-        else {
-            // Wrap
-            this.wrapSelection(tagName);
-        }
-        this.saveState();
-        this.updateCodeView();
-        this.updatePreview();
-    }
-    createLink(url) {
-        const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0)
-            return;
-        const range = sel.getRangeAt(0);
-        const selectedContent = range.extractContents();
-        const link = document.createElement('a');
-        link.href = url;
-        link.appendChild(selectedContent);
-        range.insertNode(link);
-        this.saveState();
-        this.updateCodeView();
-        this.updatePreview();
-    }
-    formatBlock(tag) {
-        const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0)
-            return;
-        const range = sel.getRangeAt(0);
-        const container = range.commonAncestorContainer;
-        const blockElement = container.nodeType === Node.TEXT_NODE
+        let current = container.nodeType === Node.TEXT_NODE
             ? container.parentElement
             : container;
-        if (blockElement) {
+
+        let wrapper = null;
+        while (current && current !== this.editable) {
+            if (current.tagName === tagName.toUpperCase()) {
+                wrapper = current;
+                break;
+            }
+            current = current.parentElement;
+        }
+
+        if (wrapper) {
+            const parent = wrapper.parentNode;
+            while (wrapper.firstChild) {
+                parent?.insertBefore(wrapper.firstChild, wrapper);
+            }
+            parent?.removeChild(wrapper);
+        } else {
+            const contents = range.extractContents();
+            const el = document.createElement(tagName);
+            el.appendChild(contents);
+            range.insertNode(el);
+            range.selectNodeContents(el);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+
+        this.onContentChange();
+    }
+
+    createLink(url) {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return;
+
+        const range = sel.getRangeAt(0);
+        const contents = range.extractContents();
+        const link = document.createElement('a');
+        link.href = url;
+        link.appendChild(contents);
+        range.insertNode(link);
+
+        this.onContentChange();
+    }
+
+    formatBlock(tag) {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return;
+
+        const range = sel.getRangeAt(0);
+        const container = range.commonAncestorContainer;
+        let blockElement = container.nodeType === Node.TEXT_NODE
+            ? container.parentElement
+            : container;
+
+        while (blockElement && blockElement !== this.editable && blockElement.parentElement !== this.editable) {
+            blockElement = blockElement.parentElement;
+        }
+
+        if (blockElement && blockElement !== this.editable) {
             const newBlock = document.createElement(tag);
             newBlock.innerHTML = blockElement.innerHTML;
             blockElement.parentNode?.replaceChild(newBlock, blockElement);
-            this.saveState();
-            this.updateCodeView();
-            this.updatePreview();
+            this.onContentChange();
         }
     }
-    sanitizeHTML(html) {
-        html = html.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
-        html = html.replace(/\son[a-zA-Z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
-        return html;
-    }
-    updateCodeView() {
-        this.code.value = this.editable.innerHTML.trim();
-    }
-    updatePreview() {
-        this.preview.innerHTML = this.editable.innerHTML;
-    }
-    exec(command, value = null) {
-        switch (command) {
-            case 'bold':
-                this.toggleInlineStyle('strong');
-                break;
-            case 'italic':
-                this.toggleInlineStyle('em');
-                break;
-            case 'underline':
-                this.toggleInlineStyle('u');
-                break;
-            case 'strikeThrough':
-                this.toggleInlineStyle('s');
-                break;
-            case 'createLink':
-                if (value)
-                    this.createLink(value);
-                break;
-            case 'insertImage':
-                if (value)
-                    this.insertImage(value);
-                break;
-            case 'formatBlock':
-                if (value)
-                    this.formatBlock(value);
-                break;
-            case 'insertOrderedList':
-                this.wrapSelection('ol');
-                break;
-            case 'insertUnorderedList':
-                this.wrapSelection('ul');
-                break;
-            default:
-                console.warn('Command not implemented:', command);
-        }
-    }
-    refreshState() {
+
+    insertList(listTag) {
         const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0)
-            return;
+        if (!sel || sel.rangeCount === 0) return;
+
+        const range = sel.getRangeAt(0);
+        const text = range.toString();
+
+        const list = document.createElement(listTag);
+        const lines = text ? text.split('\n').filter(l => l.trim()) : [''];
+
+        for (const line of lines) {
+            const li = document.createElement('li');
+            li.textContent = line.trim() || '\u200B';
+            list.appendChild(li);
+        }
+
+        range.deleteContents();
+        range.insertNode(list);
+
+        const lastLi = list.lastElementChild;
+        if (lastLi) {
+            range.setStart(lastLi, lastLi.childNodes.length);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+
+        this.onContentChange();
+    }
+
+    sanitizeHTML(html) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        doc.querySelectorAll('script, style, iframe, object, embed').forEach(el => el.remove());
+
+        doc.querySelectorAll('*').forEach(el => {
+            for (const attr of Array.from(el.attributes)) {
+                if (attr.name.startsWith('on') || attr.value.trim().toLowerCase().startsWith('javascript:')) {
+                    el.removeAttribute(attr.name);
+                }
+            }
+        });
+
+        return doc.body.innerHTML;
+    }
+
+    downloadHTML() {
+        const content = this.sanitizeHTML(this.editable.innerHTML);
+        const html = `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Export</title></head>
+<body>
+${content}
+</body>
+</html>`;
+        const blob = new Blob([html], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'document.html';
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }
+
+    refreshActiveState() {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return;
+
         const range = sel.getRangeAt(0);
         const container = range.commonAncestorContainer;
-        const element = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
+        const element = container.nodeType === Node.TEXT_NODE
+            ? container.parentElement
+            : container;
+
         document.querySelectorAll('[data-cmd]').forEach(btn => {
             const cmd = btn.dataset.cmd;
-            let on = false;
+            let active = false;
+
             let current = element;
             while (current && current !== this.editable) {
-                const tagName = current.tagName?.toLowerCase();
-                if ((cmd === 'bold' && (tagName === 'strong' || tagName === 'b')) ||
-                    (cmd === 'italic' && (tagName === 'em' || tagName === 'i')) ||
-                    (cmd === 'underline' && tagName === 'u') ||
-                    (cmd === 'strikeThrough' && tagName === 's')) {
-                    on = true;
+                const tag = current.tagName?.toLowerCase();
+                if (
+                    (cmd === 'bold' && (tag === 'strong' || tag === 'b')) ||
+                    (cmd === 'italic' && (tag === 'em' || tag === 'i')) ||
+                    (cmd === 'underline' && tag === 'u') ||
+                    (cmd === 'strikeThrough' && tag === 's')
+                ) {
+                    active = true;
                     break;
                 }
                 current = current.parentElement;
             }
-            btn.classList.toggle('active', on);
+
+            btn.classList.toggle('active', active);
         });
     }
 }
+
 export { Editor };

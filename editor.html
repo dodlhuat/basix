@@ -1,71 +1,137 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>WYSIWYG HTML-Editor (plain JavaScript)</title>
-    <link rel="stylesheet" href="css/editor.css">
+    <title>WYSIWYG HTML Editor</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/editor.css" />
 </head>
 
 <body>
-    <div class="app">
-        <header>
-            <h1>WYSIWYG HTML-Editor — Plain JavaScript</h1>
-            <div class="small">(keine Bibliotheken; sicherer Export; Code-Ansicht)</div>
-        </header>
-
-        <div class="toolbar" role="toolbar" aria-label="Editor-Werkzeuge">
-            <button class="btn" data-cmd="bold" title="Fett (Ctrl/Cmd+B)">B</button>
-            <button class="btn" data-cmd="italic" title="Kursiv (Ctrl/Cmd+I)">I</button>
-            <button class="btn" data-cmd="underline" title="Unterstrichen">U</button>
-            <button class="btn" data-cmd="strikeThrough" title="Durchgestrichen">S</button>
-            <button class="btn" data-cmd="insertUnorderedList" title="Aufzählung">• Liste</button>
-            <button class="btn" data-cmd="insertOrderedList" title="Nummerierte Liste">1. Liste</button>
-            <button class="btn" data-cmd="formatBlock" data-value="h1" title="Überschrift 1">H1</button>
-            <button class="btn" data-cmd="formatBlock" data-value="h2" title="Überschrift 2">H2</button>
-            <button class="btn" data-cmd="formatBlock" data-value="p" title="Absatz">¶</button>
-            <button class="btn" id="linkBtn" title="Link einfügen">🔗</button>
-            <button class="btn" id="imageBtn" title="Bild einfügen">🖼️</button>
-            <input type="file" id="imageFile" accept="image/*" style="display:none">
-            <button class="btn" id="cleanBtn" title="Formatierung entfernen">🧹 Clean</button>
-            <button class="btn" id="undoBtn" title="Rückgängig (Ctrl/Cmd+Z)">↶</button>
-            <button class="btn" id="redoBtn" title="Wiederholen (Ctrl/Cmd+Y)">↷</button>
-            <button class="btn" id="toggleCodeBtn" title="Code-Ansicht umschalten">&lt;/&gt;</button>
-            <button class="btn" id="saveBtn" title="Als HTML herunterladen">💾 Speichern</button>
-            <button class="btn" id="clearBtn" title="Inhalt löschen">🗑️</button>
-        </div>
-
-        <div class="editor-area">
-            <div class="editor panel">
-                <div id="editable" class="editable" contenteditable="true" spellcheck="true"
-                    aria-label="Bearbeitungsbereich">
-                    <h1>Willkommen</h1>
-                    <p>Das ist ein einfacher WYSIWYG-Editor mit reinem JavaScript. Schreibe Text, formatiere ihn und
-                        schalte
-                        in die Code-Ansicht um.</p>
+    <div class="content">
+        <div class="editor">
+            <div class="editor-toolbar" role="toolbar" aria-label="Editor tools">
+                <div class="toolbar-group">
+                    <button data-cmd="bold" title="Bold (Ctrl+B)">
+                        <span class="icon icon-format_bold"></span>
+                    </button>
+                    <button data-cmd="italic" title="Italic (Ctrl+I)">
+                        <span class="icon icon-format_italic"></span>
+                    </button>
+                    <button data-cmd="underline" title="Underline (Ctrl+U)">
+                        <span class="icon icon-format_underlined"></span>
+                    </button>
+                    <button data-cmd="strikeThrough" title="Strikethrough">
+                        <span class="icon icon-strikethrough"></span>
+                    </button>
                 </div>
-                <div class="status">Tipps: <span class="small">Strg/Cmd+B = Fett • Strg/Cmd+K = Link • Strg/Cmd+S =
-                        Speichern</span>
+
+                <div class="toolbar-separator"></div>
+
+                <div class="toolbar-group">
+                    <button data-cmd="formatBlock" data-value="h1" title="Heading 1">
+                        H1
+                    </button>
+                    <button data-cmd="formatBlock" data-value="h2" title="Heading 2">
+                        H2
+                    </button>
+                    <button data-cmd="formatBlock" data-value="p" title="Paragraph">
+                        <span class="icon icon-format_paragraph"></span>
+                    </button>
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <div class="toolbar-group">
+                    <button data-cmd="insertUnorderedList" title="Bullet list">
+                        <span class="icon icon-format_list_bulleted"></span>
+                    </button>
+                    <button data-cmd="insertOrderedList" title="Numbered list">
+                        <span class="icon icon-format_list_numbered"></span>
+                    </button>
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <div class="toolbar-group">
+                    <button id="linkBtn" title="Insert link (Ctrl+K)">
+                        <span class="icon icon-link"></span>
+                    </button>
+                    <button id="imageBtn" title="Insert image">
+                        <span class="icon icon-add_photo_alternate"></span>
+                    </button>
+                    <input type="file" id="imageFile" accept="image/*" hidden />
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <div class="toolbar-group">
+                    <button id="cleanBtn" title="Clear formatting">
+                        <span class="icon icon-format_clear"></span>
+                    </button>
+                    <button id="undoBtn" title="Undo (Ctrl+Z)">
+                        <span class="icon icon-undo"></span>
+                    </button>
+                    <button id="redoBtn" title="Redo (Ctrl+Y)">
+                        <span class="icon icon-redo"></span>
+                    </button>
+                </div>
+
+                <div class="toolbar-end">
+                    <button id="toggleCodeBtn" title="Toggle code panel">
+                        <span class="icon icon-code"></span>
+                    </button>
+                    <button id="saveBtn" class="toolbar-btn-accent" title="Download HTML (Ctrl+S)">
+                        <span class="icon icon-save"></span>
+                    </button>
+                    <button id="clearBtn" class="toolbar-btn-danger" title="Clear all content">
+                        <span class="icon icon-delete"></span>
+                    </button>
                 </div>
             </div>
 
-            <aside class="side">
-                <div class="panel">
-                    <h3>Code-Ansicht</h3>
-                    <textarea id="code" class="code" placeholder="HTML wird hier angezeigt"></textarea>
-                    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
-                        <button class="btn" id="applyCodeBtn">Auf Inhalt anwenden</button>
-                        <button class="btn" id="sanitizeBtn">Säubern (Script entfernen)</button>
-                        <button class="btn" id="minifyBtn">Minify (einzeilig)</button>
+            <div class="editor-body">
+                <div class="editor-main">
+                    <div id="editable" class="editable" contenteditable="true" spellcheck="true"
+                        aria-label="Editing area">
+                        <h2>Welcome to the Editor</h2>
+                        <p>A lightweight WYSIWYG editor built with plain JavaScript &mdash; no dependencies. Start
+                            typing, format text with the toolbar above, or use keyboard shortcuts.</p>
                     </div>
                 </div>
 
-                <div class="panel" style="margin-top:12px">
-                    <h3>Vorschau</h3>
-                    <div id="preview" class="panel" style="height:160px;overflow:auto"></div>
+                <div class="editor-side" id="sidePanel">
+                    <div class="side-tabs">
+                        <button class="side-tab active" data-tab="code-tab">Code</button>
+                        <button class="side-tab" data-tab="preview-tab">Preview</button>
+                    </div>
+                    <div class="side-panels">
+                        <div id="code-tab" class="side-panel active">
+                            <textarea id="code" spellcheck="false"
+                                placeholder="HTML source will appear here..."></textarea>
+                            <div class="code-actions">
+                                <button title="Apply code to editor">Apply</button>
+                                <button title="Remove scripts and event handlers">Sanitize</button>
+                                <button title="Minify HTML to single line">Minify</button>
+                            </div>
+                        </div>
+                        <div id="preview-tab" class="side-panel">
+                            <div id="preview" class="preview-content"></div>
+                        </div>
+                    </div>
                 </div>
-            </aside>
+            </div>
+
+            <div class="editor-footer">
+                <span class="editor-wordcount" id="wordCount">0 words</span>
+                <span class="editor-shortcuts">
+                    <kbd>Ctrl+B</kbd> Bold
+                    <kbd>Ctrl+K</kbd> Link
+                    <kbd>Ctrl+S</kbd> Save
+                </span>
+            </div>
         </div>
     </div>
 
