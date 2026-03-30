@@ -12,23 +12,17 @@
   overflow: hidden;
 
   // Card header
-  .header {
+  .card-header {
     border-bottom: 1px solid var(--divider);
     margin: -$spacing -$spacing $spacing -$spacing;
     padding: $spacing;
   }
 
   // Card footer
-  .footer {
+  .card-footer {
     border-top: 1px solid var(--divider);
     margin: $spacing -$spacing -$spacing -$spacing;
     padding: $spacing;
-  }
-
-  // Card body/content
-  .body,
-  .content {
-    padding: 0;
   }
 }
 
@@ -46,7 +40,7 @@
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 
   &:hover {
-    box-shadow: 0 4px 8px rgba(56, 65, 74, 0.2);
+    box-shadow: 0 4px 8px var(--divider);
     transform: translateY(-2px);
   }
 }
@@ -63,4 +57,3 @@
 .card-padding-lg {
   padding: calc($spacing * 2);
 }
-
