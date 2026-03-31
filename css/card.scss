@@ -10,18 +10,20 @@
   padding: $spacing;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   // Card header
   .card-header {
     border-bottom: 1px solid var(--divider);
-    margin: -$spacing -$spacing $spacing -$spacing;
+    margin: (-$spacing) (-$spacing) $spacing (-$spacing);
     padding: $spacing;
   }
 
   // Card footer
   .card-footer {
     border-top: 1px solid var(--divider);
-    margin: $spacing -$spacing -$spacing -$spacing;
+    margin: auto (-$spacing) (-$spacing) (-$spacing);
     padding: $spacing;
   }
 }

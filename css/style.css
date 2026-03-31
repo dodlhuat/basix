@@ -350,15 +350,17 @@ a:focus-visible {
   padding: 1rem;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .card .card-header {
   border-bottom: 1px solid var(--divider);
-  margin: -2rem 0rem;
+  margin: -1rem -1rem 1rem -1rem;
   padding: 1rem;
 }
 .card .card-footer {
   border-top: 1px solid var(--divider);
-  margin: -2rem;
+  margin: auto -1rem -1rem -1rem;
   padding: 1rem;
 }
 
@@ -3744,5 +3746,3 @@ body {
     min-height: 48px;
   }
 }
-
-/*# sourceMappingURL=style.css.map */
