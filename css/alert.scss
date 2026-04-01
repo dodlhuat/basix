@@ -1,23 +1,43 @@
 @use "properties";
 @use "parameters" as *;
 
-$alert-border-width: calc($spacing / 2);
-$alert-border-darken: 20%;
+$alert-border-width: 4px;
 
-@mixin alert-variant($bg-color, $text-color: var(--divider)) {
-  background: $bg-color;
-  border-left-color: color-mix(in srgb, $bg-color 80%, black);
-  color: $text-color;
+@mixin alert-variant($accent, $bg-tint) {
+  background: $bg-tint;
+  border-left-color: $accent;
+  color: var(--primary-text);
+
+  strong {
+    color: $accent;
+  }
+
+  .alert-icon {
+    fill: $accent;
+  }
+
+  .alert-close:hover {
+    background: color-mix(in srgb, $accent 12%, transparent);
+  }
 }
 
 .alert {
   position: relative;
   border-radius: $border-radius;
-  padding: calc($spacing) calc($spacing) calc($spacing) calc($spacing + $alert-border-width);
-  border-left: $alert-border-width solid;
+  padding: calc($spacing * 0.75) $spacing calc($spacing * 0.75) calc($spacing + $alert-border-width);
+  border-left: $alert-border-width solid transparent;
   color: var(--primary-text);
-  box-shadow: $shadow;
-  line-height: 1.5;
+  line-height: 1.6;
+  font-size: 0.9rem;
+
+  & + & {
+    margin-top: calc($spacing / 2);
+  }
+
+  strong {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
 
   &-default {
     background: var(--secondary-background);
@@ -26,36 +46,49 @@ $alert-border-darken: 20%;
   }
 
   &-info {
-    @include alert-variant(var(--accent-color));
+    @include alert-variant(
+      var(--accent-color),
+      color-mix(in srgb, var(--accent-color) 8%, var(--background))
+    );
   }
 
   &-success {
-    @include alert-variant(var(--success));
+    @include alert-variant(
+      var(--success),
+      color-mix(in srgb, var(--success) 8%, var(--background))
+    );
   }
 
   &-warning {
-    @include alert-variant(var(--warning));
+    @include alert-variant(
+      var(--warning),
+      color-mix(in srgb, var(--warning) 8%, var(--background))
+    );
   }
 
   &-error {
-    @include alert-variant(var(--error));
+    @include alert-variant(
+      var(--error),
+      color-mix(in srgb, var(--error) 8%, var(--background))
+    );
   }
 
   &-dismissible {
-    padding-right: calc($spacing * 5);
+    padding-right: calc($spacing * 3);
 
     .alert-close {
       position: absolute;
       top: 50%;
-      right: calc($spacing * 1.5);
+      right: calc($spacing * 0.75);
       transform: translateY(-50%);
       background: transparent;
       border: none;
+      border-radius: $border-radius;
       cursor: pointer;
-      padding: calc($spacing) calc($spacing * 1.5) calc($spacing) calc($spacing * 1.5 + $alert-border-width);
+      padding: calc($spacing / 4) calc($spacing / 2);
       color: inherit;
-      opacity: 0.7;
-      transition: opacity 0.2s ease;
+      opacity: 0.5;
+      transition: opacity 0.2s ease, background 0.2s ease;
 
       &:hover {
         opacity: 1;
@@ -64,23 +97,42 @@ $alert-border-darken: 20%;
   }
 
   .alert-icon {
+    width: 1.1em;
+    height: 1.1em;
     margin-right: calc($spacing / 2);
-    vertical-align: middle;
+    vertical-align: -0.15em;
+    fill: currentColor;
   }
 }
 
 [data-theme="dark"] {
   .alert {
-    &-default {
-      background: var(--secondary-background);
-      border-left-color: var(--divider);
+    &-info {
+      @include alert-variant(
+        var(--accent-color),
+        color-mix(in srgb, var(--accent-color) 10%, var(--background))
+      );
     }
 
-    &-info,
-    &-success,
-    &-warning,
+    &-success {
+      @include alert-variant(
+        var(--success),
+        color-mix(in srgb, var(--success) 10%, var(--background))
+      );
+    }
+
+    &-warning {
+      @include alert-variant(
+        var(--warning),
+        color-mix(in srgb, var(--warning) 10%, var(--background))
+      );
+    }
+
     &-error {
-      filter: brightness(0.9);
+      @include alert-variant(
+        var(--error),
+        color-mix(in srgb, var(--error) 10%, var(--background))
+      );
     }
   }
 }

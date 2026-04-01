@@ -1,76 +1,108 @@
 @use "properties";
 @use "parameters" as *;
 
-// Base button styles
+@mixin button-variant($bg) {
+  background: $bg;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, $bg 85%, black);
+  }
+
+  &:active:not(:disabled) {
+    background: color-mix(in srgb, $bg 75%, black);
+  }
+}
+
+@mixin button-variant-dark($bg) {
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, $bg 82%, white);
+  }
+
+  &:active:not(:disabled) {
+    background: color-mix(in srgb, $bg 70%, white);
+  }
+}
+
 button,
 .button {
-  padding: $spacing $spacing * 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc($spacing / 3);
+  padding: calc($spacing * 0.6) calc($spacing * 1.25);
   border-radius: $border-radius;
-  background: var(--divider);
+  background: var(--secondary-background);
   color: var(--primary-text);
   border: none;
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
+  font-weight: 500;
   line-height: 1;
-  transition: filter 0.2s ease;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.1s ease;
 
-  // Hover state
   &:hover:not(:disabled) {
-    filter: brightness(115%);
+    background: var(--divider);
   }
 
-  // Focus state for accessibility
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
   &:focus-visible {
     outline: 2px solid var(--accent-color);
     outline-offset: 2px;
   }
 
-  // Active state
   &.active {
     background: var(--accent-color-lighten);
   }
 
-  // Disabled state
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.45;
     cursor: not-allowed;
   }
 }
 
-// Button variants
 .button-primary,
 button.button-primary {
-  background: var(--accent-color);
-  color: var(--divider);
+  @include button-variant(var(--accent-color));
 }
 
 .button-success,
 button.button-success {
-  background: var(--success);
-  color: var(--divider);
+  @include button-variant(var(--success));
 }
 
 .button-warning,
 button.button-warning {
-  background: var(--warning);
-  color: var(--divider);
+  @include button-variant(var(--warning));
 }
 
 .button-error,
 button.button-error {
-  background: var(--error);
-  color: var(--divider);
+  @include button-variant(var(--error));
 }
 
-// Button group
 .button-group {
   display: inline-flex;
-  gap: 0;
 
   button,
   .button {
     border-radius: 0;
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 20%;
+      height: 60%;
+      width: 1px;
+      background: color-mix(in srgb, currentColor 15%, transparent);
+    }
 
     &:first-child {
       border-radius: $border-radius 0 0 $border-radius;
@@ -86,17 +118,31 @@ button.button-error {
   }
 }
 
-// Dark theme overrides
 [data-theme="dark"] {
   button,
   .button {
     &:hover:not(:disabled) {
-      filter: brightness(85%);
+      background: color-mix(in srgb, var(--secondary-background) 70%, white);
     }
   }
 
   .button-primary,
   button.button-primary {
-    color: var(--primary-text);
+    @include button-variant-dark(var(--accent-color));
+  }
+
+  .button-success,
+  button.button-success {
+    @include button-variant-dark(var(--success));
+  }
+
+  .button-warning,
+  button.button-warning {
+    @include button-variant-dark(var(--warning));
+  }
+
+  .button-error,
+  button.button-error {
+    @include button-variant-dark(var(--error));
   }
 }
