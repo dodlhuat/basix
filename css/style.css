@@ -2342,6 +2342,25 @@ ul.tree li {
   outline-offset: -1px;
 }
 
+/* Set Button */
+.datepicker-set-btn {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  background-color: var(--accent-color);
+  color: var(--accent-color-text);
+  border: none;
+  border-radius: 0.4rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.datepicker-set-btn:hover {
+  opacity: 0.9;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 640px) {
   .datepicker-backdrop {
@@ -3746,3 +3765,5 @@ body {
     min-height: 48px;
   }
 }
+
+/*# sourceMappingURL=style.css.map */

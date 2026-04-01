@@ -199,6 +199,15 @@ class DatePicker {
     if (this.options.timePicker && this.viewMode === 'days') {
       const timeSection = this.createTimePicker();
       this.calendar.appendChild(timeSection);
+
+      const setBtn = document.createElement('button');
+      setBtn.className = 'datepicker-set-btn';
+      setBtn.textContent = 'Set';
+      setBtn.onclick = (e: MouseEvent) => {
+        e.stopPropagation();
+        this.hide();
+      };
+      this.calendar.appendChild(setBtn);
     }
   }
 
