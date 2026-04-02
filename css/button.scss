@@ -3,7 +3,7 @@
 
 @mixin button-variant($bg) {
   background: $bg;
-  color: #fff;
+  color: var(--divider);
 
   &:hover:not(:disabled) {
     background: color-mix(in srgb, $bg 85%, black);
@@ -129,6 +129,7 @@ button.button-error {
   .button-primary,
   button.button-primary {
     @include button-variant-dark(var(--accent-color));
+    color: var(--primary-text);
   }
 
   .button-success,

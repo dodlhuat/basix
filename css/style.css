@@ -1253,7 +1253,7 @@ button:disabled,
 .button-primary,
 button.button-primary {
   background: var(--accent-color);
-  color: #fff;
+  color: var(--divider);
 }
 .button-primary:hover:not(:disabled),
 button.button-primary:hover:not(:disabled) {
@@ -1267,7 +1267,7 @@ button.button-primary:active:not(:disabled) {
 .button-success,
 button.button-success {
   background: var(--success);
-  color: #fff;
+  color: var(--divider);
 }
 .button-success:hover:not(:disabled),
 button.button-success:hover:not(:disabled) {
@@ -1281,7 +1281,7 @@ button.button-success:active:not(:disabled) {
 .button-warning,
 button.button-warning {
   background: var(--warning);
-  color: #fff;
+  color: var(--divider);
 }
 .button-warning:hover:not(:disabled),
 button.button-warning:hover:not(:disabled) {
@@ -1295,7 +1295,7 @@ button.button-warning:active:not(:disabled) {
 .button-error,
 button.button-error {
   background: var(--error);
-  color: #fff;
+  color: var(--divider);
 }
 .button-error:hover:not(:disabled),
 button.button-error:hover:not(:disabled) {
@@ -1348,6 +1348,10 @@ button.button-error:active:not(:disabled) {
 [data-theme=dark] .button-primary:active:not(:disabled),
 [data-theme=dark] button.button-primary:active:not(:disabled) {
   background: color-mix(in srgb, var(--accent-color) 70%, white);
+}
+[data-theme=dark] .button-primary,
+[data-theme=dark] button.button-primary {
+  color: var(--primary-text);
 }
 [data-theme=dark] .button-success:hover:not(:disabled),
 [data-theme=dark] button.button-success:hover:not(:disabled) {
@@ -1874,7 +1878,7 @@ nav.pushed {
 }
 .radio-button-container .checkmark {
   position: absolute;
-  top: 0;
+  top: 4px;
   left: 0;
   height: 1.15rem;
   width: 1.15rem;
