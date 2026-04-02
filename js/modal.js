@@ -72,8 +72,7 @@ class Modal {
         }
     }
     buildTemplate() {
-        const parts = ['<div class="modal-background"></div>'];
-        parts.push('<div class="modal">');
+        const parts = ['<div class="modal">'];
         if (this.closeable) {
             parts.push(CLOSE_ICON);
         }
@@ -86,6 +85,7 @@ class Modal {
             parts.push(`<div class="footer">${this.footer}</div>`);
         }
         parts.push('</div>');
+        parts.push('<div class="modal-background"></div>');
         return parts.join('');
     }
     updateContent(content) {

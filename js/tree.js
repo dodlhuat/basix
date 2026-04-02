@@ -10,7 +10,7 @@ class TreeNode {
     }
 }
 class TreeComponent {
-    constructor(elementOrSelector, data) {
+    constructor(elementOrSelector, data, options = {}) {
         const container = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
             : elementOrSelector;
@@ -20,6 +20,7 @@ class TreeComponent {
         this.container = container;
         this.data = data;
         this.selectedNode = null;
+        this.options = options;
         this.init();
     }
     init() {
@@ -36,12 +37,10 @@ class TreeComponent {
         li.className = 'tree-node';
         const itemDiv = document.createElement('div');
         itemDiv.className = `tree-item ${node.type}`;
-        if (node.selected) {
+        if (node.selected)
             itemDiv.classList.add('selected');
-        }
-        if (node.expanded) {
+        if (node.expanded)
             itemDiv.classList.add('expanded');
-        }
         const iconDiv = this.createIconElement(node.type);
         const labelSpan = this.createLabelElement(node.label);
         itemDiv.append(iconDiv, labelSpan);
@@ -95,6 +94,7 @@ class TreeComponent {
         childrenUl.className = 'tree-children';
         if (node.expanded) {
             childrenUl.classList.add('expanded');
+            childrenUl.style.height = 'auto';
         }
         node.children.forEach(child => {
             this.renderNode(child, childrenUl);
@@ -103,12 +103,28 @@ class TreeComponent {
     }
     toggleNode(node) {
         node.expanded = !node.expanded;
-        if (node.element) {
-            node.element.classList.toggle('expanded', node.expanded);
-        }
+        node.element?.classList.toggle('expanded', node.expanded);
         if (node.childrenContainer) {
+            if (node.expanded) {
+                this.expandChildren(node.childrenContainer);
+            }
+            else {
+                this.collapseChildren(node.childrenContainer);
+            }
             node.childrenContainer.classList.toggle('expanded', node.expanded);
         }
+    }
+    expandChildren(container) {
+        container.style.height = container.scrollHeight + 'px';
+        container.addEventListener('transitionend', () => {
+            container.style.height = 'auto';
+        }, { once: true });
+    }
+    collapseChildren(container) {
+        container.style.height = container.offsetHeight + 'px';
+        requestAnimationFrame(() => {
+            container.style.height = '0';
+        });
     }
     selectNode(node) {
         if (this.selectedNode?.element) {
@@ -118,23 +134,29 @@ class TreeComponent {
         node.selected = true;
         node.element?.classList.add('selected');
         this.selectedNode = node;
-        console.log('Selected:', node.label);
+        this.options.onSelect?.(node);
+        this.container.dispatchEvent(new CustomEvent('tree-select', {
+            detail: { node },
+            bubbles: true,
+        }));
     }
     expandAll() {
         this.traverseNodes(this.data, (node) => {
-            if (node.type === 'folder') {
+            if (node.type === 'folder' && node.childrenContainer) {
                 node.expanded = true;
                 node.element?.classList.add('expanded');
-                node.childrenContainer?.classList.add('expanded');
+                node.childrenContainer.classList.add('expanded');
+                node.childrenContainer.style.height = 'auto';
             }
         });
     }
     collapseAll() {
         this.traverseNodes(this.data, (node) => {
-            if (node.type === 'folder') {
+            if (node.type === 'folder' && node.childrenContainer) {
                 node.expanded = false;
                 node.element?.classList.remove('expanded');
-                node.childrenContainer?.classList.remove('expanded');
+                node.childrenContainer.classList.remove('expanded');
+                node.childrenContainer.style.height = '0';
             }
         });
     }
@@ -150,13 +172,19 @@ class TreeComponent {
         return this.selectedNode;
     }
     findNodeByLabel(label) {
-        let result = null;
-        this.traverseNodes(this.data, (node) => {
-            if (node.label === label) {
-                result = node;
+        return this.findNode(this.data, label);
+    }
+    findNode(nodes, label) {
+        for (const node of nodes) {
+            if (node.label === label)
+                return node;
+            if (node.children.length > 0) {
+                const found = this.findNode(node.children, label);
+                if (found)
+                    return found;
             }
-        });
-        return result;
+        }
+        return null;
     }
 }
 export { TreeComponent, TreeNode };

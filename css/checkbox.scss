@@ -18,38 +18,55 @@
     content: '';
     margin-right: 10px;
     display: inline-block;
+    flex-shrink: 0;
     width: $spacing;
     height: $spacing;
-    transition: border 0.3s;
-    border: 2px solid rgba(0, 0, 0, 0.25);
+    border: 2px solid var(--divider);
+    border-radius: calc($border-radius / 2);
+    background-color: var(--background);
     margin-top: 2px;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
   }
 
   &:hover + label::before {
-    border-color: rgba(0, 0, 0, 0.5);
+    border-color: var(--accent-color);
+  }
+
+  &:focus-visible + label::before {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
+    border-color: var(--accent-color);
   }
 
   &:checked + label::before {
-    background: var(--accent-color);
-  }
-
-  &:disabled + label {
-    color: var(--disabled);
-    cursor: auto;
-  }
-
-  &:disabled + label::before {
-    box-shadow: none;
-    background: var(--disabled);
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
   }
 
   &:checked + label::after {
-    content: url("../icons/checkmark-outline.svg");
-    filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(180deg) brightness(101%) contrast(101%);
+    content: '';
     position: absolute;
-    left: 2px;
-    top: 2px;
-    width: $spacing;
-    height: $spacing;
+    left: calc(2px + 0.5rem);
+    top: calc(4px + $spacing / 2);
+    width: calc($spacing * 0.28);
+    height: calc($spacing * 0.5);
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: translate(-50%, -62%) rotate(45deg);
+  }
+
+  &:disabled + label {
+    color: var(--secondary-text);
+    cursor: not-allowed;
+  }
+
+  &:disabled + label::before {
+    background-color: var(--secondary-background);
+    border-color: var(--disabled);
+    box-shadow: none;
+  }
+
+  &:disabled:checked + label::before {
+    background-color: var(--disabled);
+    border-color: var(--disabled);
   }
 }

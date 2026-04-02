@@ -2,121 +2,111 @@
 @use "parameters" as *;
 
 .tooltip {
+  --tooltip-bg: var(--divider);
   position: fixed;
   z-index: 10000;
-  background: var(--disabled);
-  color: var(--secondary-text);
+  background: var(--divider);
+  color: var(--primary-text);
   border-radius: $border-radius;
-  padding: $spacing calc($spacing * 1.5);
+  padding: 0.4rem 0.7rem;
   max-width: 300px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  word-break: break-word;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
-  box-shadow: $shadow;
-}
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 
-.tooltip.visible {
-  opacity: 1;
-}
+  &[data-position="top"]    { transform: translateY(4px); }
+  &[data-position="bottom"] { transform: translateY(-4px); }
+  &[data-position="left"]   { transform: translateX(4px); }
+  &[data-position="right"]  { transform: translateX(-4px); }
 
-.tooltip-content {
-  position: relative;
-}
+  &.visible {
+    opacity: 1;
+    transform: translate(0);
+  }
 
-/* Arrow styles */
-.tooltip::before {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border: calc($spacing * 0.5) solid transparent;
-}
+  // ── Arrow ─────────────────────────────────────────────────
+  &::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+  }
 
-.tooltip[data-position="top"]::before {
-  bottom: calc(($spacing / 2) * -1);
-  left: 50%;
-  transform: translateX(-50%);
-  border-top-color: var(--disabled);
-  border-bottom: 0;
-}
+  &[data-position="top"]::before {
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: var(--tooltip-bg);
+    border-bottom: none;
+  }
 
-.tooltip[data-position="bottom"]::before {
-  top: calc(($spacing / 2) * -1);
-  left: 50%;
-  transform: translateX(-50%);
-  border-bottom-color: var(--disabled);
-  border-top: 0;
-}
+  &[data-position="bottom"]::before {
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: var(--tooltip-bg);
+    border-top: none;
+  }
 
-.tooltip[data-position="left"]::before {
-  right: calc(($spacing / 2) * -1);
-  top: 50%;
-  transform: translateY(-50%);
-  border-left-color: var(--disabled);
-  border-right: 0;
-}
+  &[data-position="left"]::before {
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: var(--tooltip-bg);
+    border-right: none;
+  }
 
-.tooltip[data-position="right"]::before {
-  left: calc(($spacing / 2) * -1);
-  top: 50%;
-  transform: translateY(-50%);
-  border-right-color: var(--disabled);
-  border-left: 0;
-}
+  &[data-position="right"]::before {
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: var(--tooltip-bg);
+    border-left: none;
+  }
 
-.tooltip-content code {
-  padding: 2px 6px;
-  font-family: "Courier New", monospace;
-  font-size: 0.9em;
-}
+  // ── Variants ──────────────────────────────────────────────
+  &.tooltip-info {
+    --tooltip-bg: var(--accent-color);
+    background: var(--accent-color);
+    color: var(--accent-color-text);
+  }
 
-.tooltip.tooltip-info {
-  background: var(--accent-color);
-}
+  &.tooltip-success {
+    --tooltip-bg: var(--success);
+    background: var(--success);
+    color: var(--background);
+  }
 
-.tooltip.tooltip-info::before {
-  border-top-color: var(--accent-color);
-  border-bottom-color: var(--accent-color);
-  border-left-color: var(--accent-color);
-  border-right-color: var(--accent-color);
-}
+  &.tooltip-warning {
+    --tooltip-bg: var(--warning);
+    background: var(--warning);
+    color: var(--background);
+  }
 
-.tooltip.tooltip-success {
-  background: var(--success);
-}
+  &.tooltip-error {
+    --tooltip-bg: var(--error);
+    background: var(--error);
+    color: var(--background);
+  }
 
-.tooltip.tooltip-success::before {
-  border-top-color: var(--success);
-  border-bottom-color: var(--success);
-  border-left-color: var(--success);
-  border-right-color: var(--success);
-}
+  // ── Size variant ──────────────────────────────────────────
+  &.tooltip-large {
+    max-width: 500px;
+    font-size: 0.875rem;
+    padding: 0.6rem 0.9rem;
+  }
 
-.tooltip.tooltip-warning {
-  background: var(--warning);
-  color: var(--disabled);
-}
-
-.tooltip.tooltip-warning::before {
-  border-top-color: var(--warning);
-  border-bottom-color: var(--warning);
-  border-left-color: var(--warning);
-  border-right-color: var(--warning);
-}
-
-.tooltip.tooltip-error {
-  background: var(--error);
-}
-
-.tooltip.tooltip-error::before {
-  border-top-color: var(--error);
-  border-bottom-color: var(--error);
-  border-left-color: var(--error);
-  border-right-color: var(--error);
-}
-
-/* Large tooltip variant */
-.tooltip.tooltip-large {
-  max-width: 500px;
-  padding: $spacing calc($spacing * 1.5);
+  // ── Code inside tooltip ───────────────────────────────────
+  code {
+    padding: 1px 5px;
+    font-family: "Courier New", monospace;
+    font-size: 0.9em;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: calc($border-radius / 2);
+  }
 }

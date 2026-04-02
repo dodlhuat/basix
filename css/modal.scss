@@ -3,90 +3,115 @@
 
 .modal-wrapper {
   position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: 999;
+  pointer-events: none;
+
+  &.is-visible {
+    pointer-events: auto;
+
+    .modal-background {
+      opacity: 1;
+    }
+
+    .modal {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
 }
 
 .modal-background {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: black;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
   opacity: 0;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 999;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   transition: opacity 0.3s ease;
 }
 
 .modal {
-  box-shadow: 0 1px 2px rgba(56, 65, 74, .15);
-  background: var(--secondary-background);
-  border-radius: $border-radius;
+  background: var(--background);
+  border: 1px solid var(--divider);
+  border-radius: calc($border-radius * 2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.08);
   padding: $spacing;
   position: fixed;
   top: 50%;
   left: 50%;
   z-index: 1000;
-  min-width: 50%;
+  width: 90%;
+  max-width: 560px;
   max-height: 90vh;
   overflow-x: hidden;
   overflow-y: auto;
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.95);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.96);
+  transition: opacity 0.25s ease, transform 0.25s ease;
 
-  .header {
-    position: relative;
-    width: 100%;
-    left: calc(-1 * $spacing);
-    top: calc(-1 * $spacing);
-    padding: $spacing;
-    border-radius: $border-radius $border-radius 0 0;
-    box-sizing: content-box;
-  }
+  .close {
+    position: absolute;
+    top: $spacing;
+    right: $spacing;
+    cursor: pointer;
+    z-index: 1;
+    color: var(--secondary-text);
+    transition: color 0.15s ease;
 
-  .footer {
-    position: relative;
-    width: 100%;
-    left: calc(-1 * $spacing);
-    display: flex;
-    bottom: calc(-1 * $spacing);
-    padding: $spacing;
-    border-radius: 0 0 $border-radius $border-radius;
-    box-sizing: content-box;
-
-    .buttons {
-      margin-left: auto;
-      order: 2;
+    &:hover {
+      color: var(--primary-text);
     }
   }
 
-  .close {
-    cursor: pointer;
-    float: right;
-    z-index: 999;
-    position: relative;
+  .header {
+    margin: (-$spacing) (-$spacing) $spacing;
+    padding: $spacing;
+    border-bottom: 1px solid var(--divider);
+    border-radius: calc($border-radius * 2) calc($border-radius * 2) 0 0;
+  }
+
+  .footer {
+    margin: $spacing (-$spacing) (-$spacing);
+    padding: $spacing;
+    border-top: 1px solid var(--divider);
+    border-radius: 0 0 calc($border-radius * 2) calc($border-radius * 2);
+    display: flex;
+    justify-content: flex-end;
+
+    .buttons {
+      display: flex;
+      gap: calc($spacing / 2);
+    }
   }
 }
 
-.modal-wrapper.is-visible {
-  .modal-background {
-    opacity: 0.5;
+@media screen and (max-width: 768px) {
+  .modal-wrapper.is-visible .modal {
+    transform: translateY(0);
   }
 
   .modal {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 85vh;
+    border-radius: calc($border-radius * 3) calc($border-radius * 3) 0 0;
+    border-bottom: none;
+    transform: translateY(20px);
+    padding-bottom: calc($spacing + env(safe-area-inset-bottom));
 
-@media screen and (max-width:768px) {
-  .modal {
-    width: 90%;
+    .header {
+      border-radius: calc($border-radius * 3) calc($border-radius * 3) 0 0;
+    }
+
+    .footer {
+      border-radius: 0;
+    }
   }
 }

@@ -8,7 +8,8 @@
   &.active {
     > .dropdown-menu {
       opacity: 1;
-      display: block;
+      visibility: visible;
+      pointer-events: auto;
       transform: translateY(0);
     }
   }
@@ -17,19 +18,19 @@
     position: absolute;
     top: 100%;
     left: 0;
-    margin-top: 8px;
+    margin-top: 6px;
     background: var(--background);
-    border-radius: 8px;
-    box-shadow: $shadow;
+    border: 1px solid var(--divider);
+    border-radius: $border-radius;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
     min-width: 220px;
-    padding: 8px 0;
+    padding: calc($spacing / 2) 0;
     list-style: none;
     opacity: 0;
-    display: none;
-    transform: translateY(-10px);
-    transition:
-      opacity 0.2s,
-      transform 0.2s;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
     z-index: 100;
 
     li {
@@ -38,17 +39,18 @@
 
       &.open {
         > .dropdown-item {
-          background-color: var(--background);
+          background-color: var(--secondary-background);
           color: var(--accent-color);
 
           &.has-children::after {
-            transform: rotate(90deg);
+            transform: rotate(45deg);
           }
         }
 
         > ul {
           opacity: 1;
-          display: block;
+          visibility: visible;
+          pointer-events: auto;
           transform: translateX(0);
         }
       }
@@ -60,17 +62,17 @@
       left: 100%;
       margin-left: 4px;
       background-color: var(--background);
-      border-radius: 8px;
-      box-shadow: $shadow;
+      border: 1px solid var(--divider);
+      border-radius: $border-radius;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
       min-width: 220px;
-      padding: 8px 0;
+      padding: calc($spacing / 2) 0;
       list-style: none;
       opacity: 0;
-      display: none;
-      transform: translateX(-10px);
-      transition:
-        opacity 0.2s,
-        transform 0.2s;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateX(-8px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
     }
   }
 
@@ -78,25 +80,30 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 16px;
+    padding: 0.6rem $spacing;
     color: var(--primary-text);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 0.875rem;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.15s ease, color 0.15s ease;
     user-select: none;
 
     &:hover {
-      background-color: var(--background);
+      background-color: var(--secondary-background);
       color: var(--accent-color);
     }
 
     &.has-children::after {
-      content: "›";
-      font-size: 16px;
-      font-weight: bold;
-      margin-left: 10px;
-      transition: transform 0.2s;
+      content: '';
+      display: inline-block;
+      flex-shrink: 0;
+      width: 0.35rem;
+      height: 0.35rem;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(-45deg);
+      margin-left: calc($spacing / 2);
+      transition: transform 0.2s ease;
     }
   }
 
@@ -108,30 +115,32 @@
       ul {
         position: static;
         box-shadow: none;
+        border: none;
+        border-left: 2px solid var(--divider);
+        border-radius: 0;
         background-color: transparent;
         transform: none;
         margin-left: 0;
-        padding-left: 15px;
-        border-left: 2px solid var(--secondary-text);
-        border-radius: 0;
+        padding-left: $spacing;
         opacity: 0;
-        display: none;
+        visibility: hidden;
+        pointer-events: none;
         transition: none;
       }
 
       li.open > ul {
-        display: block;
         opacity: 1;
-        transform: none;
+        visibility: visible;
+        pointer-events: auto;
       }
     }
 
     .dropdown-item.has-children::after {
-      transform: rotate(90deg);
+      transform: rotate(45deg);
     }
 
     .dropdown-menu li.open > .dropdown-item.has-children::after {
-      transform: rotate(-90deg);
+      transform: rotate(-135deg);
     }
   }
 }

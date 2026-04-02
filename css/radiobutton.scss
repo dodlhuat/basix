@@ -2,7 +2,7 @@
 @use "parameters" as *;
 
 $radio-size: 1.15rem;
-$radio-dot-size: 0.6rem;
+$radio-dot-size: 0.55rem;
 
 .radio-button-container {
   display: block;
@@ -17,24 +17,45 @@ $radio-dot-size: 0.6rem;
   input {
     position: absolute;
     opacity: 0;
+    width: 0;
+    height: 0;
     cursor: pointer;
 
     &:checked ~ .checkmark {
       border-color: var(--accent-color);
 
       &::after {
-        display: block;
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
       }
     }
 
     &:focus-visible ~ .checkmark {
-      outline: 2px solid var(--accent-color);
-      outline-offset: 2px;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
+      border-color: var(--accent-color);
+    }
+
+    &:disabled ~ .checkmark {
+      border-color: var(--disabled);
+      cursor: not-allowed;
+
+      &::after {
+        background: var(--disabled);
+      }
+    }
+
+    &:disabled:checked ~ .checkmark {
+      border-color: var(--disabled);
     }
   }
 
-  &:hover input ~ .checkmark {
-    border-color: var(--secondary-text);
+  &:hover input:not(:disabled):not(:checked) ~ .checkmark {
+    border-color: var(--accent-color);
+  }
+
+  &:has(input:disabled) {
+    cursor: not-allowed;
+    color: var(--secondary-text);
   }
 
   .checkmark {
@@ -43,22 +64,23 @@ $radio-dot-size: 0.6rem;
     left: 0;
     height: $radio-size;
     width: $radio-size;
-    background-color: transparent;
+    background-color: var(--background);
     border-radius: 50%;
     border: 2px solid var(--divider);
-    transition: border-color 0.2s ease;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
     &::after {
       content: "";
       position: absolute;
-      display: none;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
       width: $radio-dot-size;
       height: $radio-dot-size;
       border-radius: 50%;
       background: var(--accent-color);
+      transition: transform 0.15s ease, opacity 0.15s ease;
     }
   }
 }

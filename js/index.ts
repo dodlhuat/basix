@@ -17,6 +17,7 @@ import {Tooltip} from "./tooltip.js";
 import {Dropdown, DropdownSelectDetail} from "./dropdown.js";
 import {VirtualDropdown} from "./virtual-dropdown.js";
 import {TimeSpanPicker} from "./timepicker.js";
+import {RangeSlider} from "./range-slider.js";
 
 // Generate sample table data
 const generateData = (count: number): TableRow[] => {
@@ -349,6 +350,9 @@ utils.ready(() => {
         },
     });
 
+    // Initialize range sliders
+    RangeSlider.initAll();
+
     Tooltip.initializeAll();
 
     const timeSpanPicker = new TimeSpanPicker('timespan-1', {
@@ -397,14 +401,9 @@ new CodeViewer(
 );
 new CodeViewer(
     "#usage-slider-demo",
-    `<label for="range-slider" class="hidden">Slider</label>
-<input
-    type="range"
-    min="1"
-    max="100"
-    value="50"
-    id="range-slider-demo"
-/>`,
+    `<div class="range-slider">
+    <input type="range" min="1" max="100" value="50" />
+</div>`,
     "html",
 );
 new CodeViewer(

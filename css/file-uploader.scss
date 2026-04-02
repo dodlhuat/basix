@@ -1,12 +1,18 @@
 @use "properties";
 @use "parameters" as *;
 
-.uploader-content {
-  .app-container {
-    width: 100%;
-    max-width: 480px;
+@keyframes fileSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+.uploader-content {
   .header h2 {
     font-size: 1.25rem;
     font-weight: 600;
@@ -24,14 +30,14 @@
     padding: 2rem 1rem;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s ease;
-    background-color: #f9fafb;
-  }
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    background-color: var(--background);
 
-  .drop-zone:hover,
-  .drop-zone.drag-over {
-    border-color: var(--accent-color-lighten);
-    background-color: #eef2ff;
+    &:hover,
+    &.drag-over {
+      border-color: var(--accent-color);
+      background-color: color-mix(in srgb, var(--accent-color) 6%, var(--background));
+    }
   }
 
   .drop-zone-content {
@@ -40,14 +46,13 @@
     align-items: center;
     gap: 0.5rem;
     pointer-events: none;
-    /* Let clicks pass through to container */
   }
 
   .icon-container {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #e0e7ff;
+    background-color: color-mix(in srgb, var(--accent-color) 12%, var(--background));
     color: var(--accent-color);
     display: flex;
     align-items: center;
@@ -72,17 +77,17 @@
     gap: 0.75rem;
     max-height: 300px;
     overflow-y: auto;
+    margin-top: $spacing;
   }
 
   .file-item {
     display: flex;
     flex-direction: column;
-    /* Changed to column to accommodate progress bar */
     padding: 0.75rem;
-    background-color: #f9fafb;
+    background-color: var(--secondary-background);
     border: 1px solid var(--divider);
     border-radius: $border-radius;
-    animation: slideIn 0.2s ease-out;
+    animation: fileSlideIn 0.2s ease-out;
     gap: 0.75rem;
   }
 
@@ -91,18 +96,6 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 
   .file-info {
@@ -114,6 +107,7 @@
 
   .file-icon {
     color: var(--secondary-text);
+    flex-shrink: 0;
   }
 
   .file-details {
@@ -136,40 +130,38 @@
   }
 
   .remove-btn {
+    flex-shrink: 0;
     background: none;
     border: none;
     color: var(--secondary-text);
     cursor: pointer;
     padding: 0.25rem;
-    border-radius: 4px;
-    transition:
-      color 0.2s,
-      background-color 0.2s;
+    border-radius: calc($border-radius / 2);
+    transition: color 0.15s ease, background-color 0.15s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
 
-  .remove-btn:hover {
-    color: var(--erro);
-    background-color: #fee2e2;
+    &:hover {
+      color: var(--error);
+      background-color: color-mix(in srgb, var(--error) 10%, var(--background));
+    }
   }
 
   .progress-container {
     width: 100%;
-    height: 6px;
-    background-color: #e5e7eb;
-    border-radius: 3px;
+    height: 4px;
+    background-color: var(--divider);
+    border-radius: calc($border-radius / 2);
     overflow: hidden;
     display: none;
-    /* Hidden by default */
   }
 
   .progress-bar {
     height: 100%;
     background-color: var(--accent-color);
     width: 0%;
-    transition: width 0.1s linear;
+    transition: width 0.3s ease, background-color 0.3s ease;
   }
 
   .status-text {
@@ -177,14 +169,14 @@
     color: var(--secondary-text);
     text-align: right;
     display: none;
-  }
 
-  .status-text.error {
-    color: var(--error);
-  }
+    &.error {
+      color: var(--error);
+    }
 
-  .status-text.success {
-    color: var(--success);
+    &.success {
+      color: var(--success);
+    }
   }
 
   @media (max-width: 480px) {

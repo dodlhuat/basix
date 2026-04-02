@@ -1,0 +1,136 @@
+@use "properties";
+@use "parameters" as *;
+
+$track-height: 4px;
+$thumb-size: 1.1rem;
+
+.range-slider {
+  width: 100%;
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    background: transparent;
+    cursor: pointer;
+    padding: calc($spacing / 2) 0;
+    margin: 0;
+    display: block;
+    // reset form.scss overrides
+    min-height: auto;
+    border: none;
+    box-shadow: none;
+    outline: none;
+
+    // ── Track ────────────────────────────────────────────────
+    &::-webkit-slider-runnable-track {
+      height: $track-height;
+      border-radius: $track-height;
+      background: linear-gradient(
+        to right,
+        var(--accent-color) var(--range-fill, 0%),
+        var(--divider) var(--range-fill, 0%)
+      );
+    }
+
+    &::-moz-range-track {
+      height: $track-height;
+      border-radius: $track-height;
+      background: var(--divider);
+    }
+
+    &::-moz-range-progress {
+      height: $track-height;
+      border-radius: $track-height;
+      background: var(--accent-color);
+    }
+
+    // ── Thumb ─────────────────────────────────────────────────
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: $thumb-size;
+      height: $thumb-size;
+      border-radius: 50%;
+      background: var(--accent-color);
+      border: 2px solid var(--background);
+      margin-top: calc(($thumb-size - $track-height) / -2);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    &::-moz-range-thumb {
+      width: $thumb-size;
+      height: $thumb-size;
+      border-radius: 50%;
+      background: var(--accent-color);
+      border: 2px solid var(--background);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      cursor: pointer;
+    }
+
+    // ── Hover ─────────────────────────────────────────────────
+    &:hover::-webkit-slider-thumb {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-color) 15%, transparent);
+    }
+
+    &:hover::-moz-range-thumb {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-color) 15%, transparent);
+    }
+
+    // ── Active ────────────────────────────────────────────────
+    &:active::-webkit-slider-thumb {
+      transform: scale(1.22);
+      box-shadow: 0 0 0 9px color-mix(in srgb, var(--accent-color) 18%, transparent);
+    }
+
+    &:active::-moz-range-thumb {
+      transform: scale(1.22);
+      box-shadow: 0 0 0 9px color-mix(in srgb, var(--accent-color) 18%, transparent);
+    }
+
+    // ── Focus ─────────────────────────────────────────────────
+    &:focus-visible::-webkit-slider-thumb {
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color) 25%, transparent);
+    }
+
+    &:focus-visible::-moz-range-thumb {
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color) 25%, transparent);
+    }
+
+    // ── Disabled ──────────────────────────────────────────────
+    &:disabled {
+      cursor: not-allowed;
+
+      &::-webkit-slider-runnable-track {
+        background: var(--divider);
+      }
+
+      &::-webkit-slider-thumb {
+        background: var(--disabled);
+        border-color: var(--secondary-background);
+        box-shadow: none;
+        transform: none;
+      }
+
+      &::-moz-range-track {
+        background: var(--divider);
+      }
+
+      &::-moz-range-progress {
+        background: var(--disabled);
+      }
+
+      &::-moz-range-thumb {
+        background: var(--disabled);
+        border-color: var(--secondary-background);
+        box-shadow: none;
+        transform: none;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

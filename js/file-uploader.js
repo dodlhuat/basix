@@ -25,7 +25,7 @@ class FileUploader {
             const target = e.target;
             if (target.files) {
                 this.handleFiles(target.files);
-                target.value = ''; // Reset input so same file can be selected again
+                target.value = '';
             }
         };
         this.handleUploadClick = async () => {
@@ -38,9 +38,10 @@ class FileUploader {
             this.uploadBtn.textContent = 'Upload Complete';
             setTimeout(() => {
                 this.dispatchUploadCompletedEvent(results);
-                this.cleanupAfterUpload();
-                this.resetUploadState();
-            }, 1000);
+                this.fileList.innerHTML = '';
+                this.files.clear();
+                this.updateUploadButton();
+            }, 1500);
         };
         const container = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
@@ -68,17 +69,18 @@ class FileUploader {
     init() {
         this.setupEventListeners();
     }
+    fileKey(file) {
+        return `${file.name}-${file.size}-${file.lastModified}`;
+    }
     setupEventListeners() {
-        // Drag & Drop - prevent default browser behavior
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            this.dropZone.addEventListener(eventName, this.preventDefaults);
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+            this.dropZone.addEventListener(event, this.preventDefaults);
         });
-        // Drag over effects
-        ['dragenter', 'dragover'].forEach(eventName => {
-            this.dropZone.addEventListener(eventName, this.handleDragEnter);
+        ['dragenter', 'dragover'].forEach(event => {
+            this.dropZone.addEventListener(event, this.handleDragEnter);
         });
-        ['dragleave', 'drop'].forEach(eventName => {
-            this.dropZone.addEventListener(eventName, this.handleDragLeave);
+        ['dragleave', 'drop'].forEach(event => {
+            this.dropZone.addEventListener(event, this.handleDragLeave);
         });
         this.dropZone.addEventListener('drop', this.handleDrop);
         this.dropZone.addEventListener('click', this.handleDropZoneClick);
@@ -87,25 +89,33 @@ class FileUploader {
     }
     handleFiles(fileList) {
         Array.from(fileList).forEach(file => {
-            if (this.validateFile(file) && !this.files.has(file.name)) {
+            const key = this.fileKey(file);
+            if (this.validateFile(file) && !this.files.has(key)) {
                 const element = this.addFileToUI(file);
-                this.files.set(file.name, { file, element });
+                this.files.set(key, { file, element });
             }
         });
         this.updateUploadButton();
     }
     validateFile(file) {
         if (this.maxFileSize && file.size > this.maxFileSize) {
-            console.warn(`File ${file.name} exceeds maximum size`);
+            this.container.dispatchEvent(new CustomEvent('file-validation-error', {
+                detail: { file, reason: 'size' },
+                bubbles: true,
+            }));
             return false;
         }
         if (this.allowedTypes && !this.allowedTypes.includes(file.type)) {
-            console.warn(`File type ${file.type} is not allowed`);
+            this.container.dispatchEvent(new CustomEvent('file-validation-error', {
+                detail: { file, reason: 'type' },
+                bubbles: true,
+            }));
             return false;
         }
         return true;
     }
     addFileToUI(file) {
+        const key = this.fileKey(file);
         const item = document.createElement('div');
         item.className = 'file-item';
         const escapedFileName = this.escapeHtml(file.name);
@@ -130,116 +140,111 @@ class FileUploader {
           </svg>
         </button>
       </div>
-      <div class="progress-container" style="display: none;">
+      <div class="progress-container">
         <div class="progress-bar"></div>
       </div>
-      <div class="status-text" style="display: none;">Waiting...</div>
+      <div class="status-text">Waiting...</div>
     `;
         const removeBtn = item.querySelector('.remove-btn');
         if (removeBtn) {
             removeBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.removeFile(file.name);
+                this.removeFile(key);
             });
         }
         this.fileList.appendChild(item);
         return item;
     }
-    async uploadFile(file, element) {
-        const progressContainer = element.querySelector('.progress-container');
-        const progressBar = element.querySelector('.progress-bar');
-        const statusText = element.querySelector('.status-text');
-        const removeBtn = element.querySelector('.remove-btn');
-        if (!progressContainer || !progressBar || !statusText || !removeBtn) {
-            throw new Error('Required UI elements not found');
-        }
-        // Show progress elements
-        progressContainer.style.display = 'block';
-        statusText.style.display = 'block';
-        removeBtn.style.display = 'none';
-        const abortController = new AbortController();
-        this.abortControllers.set(file.name, abortController);
-        try {
+    uploadFile(file, element) {
+        return new Promise((resolve, reject) => {
+            const progressContainer = element.querySelector('.progress-container');
+            const progressBar = element.querySelector('.progress-bar');
+            const statusText = element.querySelector('.status-text');
+            const removeBtn = element.querySelector('.remove-btn');
+            if (!progressContainer || !progressBar || !statusText || !removeBtn) {
+                reject(new Error('Required UI elements not found'));
+                return;
+            }
+            progressContainer.style.display = 'block';
+            statusText.style.display = 'block';
+            statusText.textContent = '0%';
+            removeBtn.style.display = 'none';
+            const xhr = new XMLHttpRequest();
+            const key = this.fileKey(file);
+            this.abortControllers.set(key, () => xhr.abort());
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    const pct = Math.round((e.loaded / e.total) * 100);
+                    progressBar.style.width = pct + '%';
+                    statusText.textContent = pct + '%';
+                }
+            });
+            xhr.addEventListener('load', () => {
+                this.abortControllers.delete(key);
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    progressBar.style.width = '100%';
+                    progressBar.style.backgroundColor = 'var(--success)';
+                    statusText.textContent = 'Completed';
+                    statusText.classList.add('success');
+                    try {
+                        resolve(JSON.parse(xhr.responseText));
+                    }
+                    catch {
+                        resolve(xhr.responseText);
+                    }
+                }
+                else {
+                    progressBar.style.backgroundColor = 'var(--error)';
+                    statusText.textContent = 'Failed';
+                    statusText.classList.add('error');
+                    removeBtn.style.display = 'flex';
+                    reject(new Error(`Upload failed: ${xhr.statusText}`));
+                }
+            });
+            xhr.addEventListener('error', () => {
+                this.abortControllers.delete(key);
+                progressBar.style.backgroundColor = 'var(--error)';
+                statusText.textContent = 'Network Error';
+                statusText.classList.add('error');
+                removeBtn.style.display = 'flex';
+                reject(new Error('Network error'));
+            });
+            xhr.addEventListener('abort', () => {
+                this.abortControllers.delete(key);
+                statusText.textContent = 'Cancelled';
+                statusText.classList.add('error');
+                removeBtn.style.display = 'flex';
+                reject(new Error('Upload aborted'));
+            });
             const formData = new FormData();
             formData.append('file', file);
-            const response = await fetch(this.uploadUrl, {
-                method: 'POST',
-                body: formData,
-                signal: abortController.signal,
-            });
-            // Note: Fetch API doesn't support upload progress natively
-            // For progress tracking, you'd need to use XMLHttpRequest or a library
-            progressBar.style.width = '100%';
-            statusText.textContent = '100%';
-            if (response.ok) {
-                statusText.textContent = 'Completed';
-                statusText.classList.add('success');
-                progressBar.style.backgroundColor = 'var(--success-color)';
-                return await response.json();
-            }
-            else {
-                throw new Error(`Upload failed: ${response.statusText}`);
-            }
-        }
-        catch (error) {
-            if (error instanceof Error && error.name === 'AbortError') {
-                statusText.textContent = 'Cancelled';
-            }
-            else {
-                statusText.textContent = error instanceof Error ? 'Error' : 'Network Error';
-            }
-            statusText.classList.add('error');
-            progressBar.style.backgroundColor = 'var(--error-color)';
-            removeBtn.style.display = 'flex';
-            throw error;
-        }
-        finally {
-            this.abortControllers.delete(file.name);
-        }
+            xhr.open('POST', this.uploadUrl);
+            xhr.send(formData);
+        });
     }
-    removeFile(fileName) {
-        // Cancel upload if in progress
-        const abortController = this.abortControllers.get(fileName);
-        if (abortController) {
-            abortController.abort();
-        }
-        const fileData = this.files.get(fileName);
+    removeFile(key) {
+        const abort = this.abortControllers.get(key);
+        if (abort)
+            abort();
+        const fileData = this.files.get(key);
         if (fileData) {
             fileData.element.remove();
-            this.files.delete(fileName);
+            this.files.delete(key);
             this.updateUploadButton();
         }
     }
     updateUploadButton() {
         this.uploadBtn.disabled = this.files.size === 0;
-        this.uploadBtn.textContent =
-            this.files.size > 0
-                ? `Upload ${this.files.size} File${this.files.size === 1 ? '' : 's'}`
-                : 'Upload Files';
+        this.uploadBtn.textContent = this.files.size > 0
+            ? `Upload ${this.files.size} File${this.files.size === 1 ? '' : 's'}`
+            : 'Upload Files';
     }
     dispatchUploadCompletedEvent(results) {
         const files = Array.from(this.files.values()).map(({ file }) => file);
-        const event = new CustomEvent('upload-completed', {
-            detail: {
-                fileCount: this.files.size,
-                files,
-                results,
-            },
+        this.container.dispatchEvent(new CustomEvent('upload-completed', {
+            detail: { fileCount: this.files.size, files, results },
             bubbles: true,
-        });
-        this.container.dispatchEvent(event);
-    }
-    cleanupAfterUpload() {
-        const progressContainers = this.fileList.querySelectorAll('.progress-container');
-        progressContainers.forEach(el => el.remove());
-        const statusTexts = this.fileList.querySelectorAll('.status-text');
-        statusTexts.forEach(el => el.remove());
-        const removeBtns = this.fileList.querySelectorAll('.remove-btn');
-        removeBtns.forEach(btn => (btn.style.display = 'flex'));
-    }
-    resetUploadState() {
-        this.files.clear();
-        this.updateUploadButton();
+        }));
     }
     formatSize(bytes) {
         if (bytes === 0)
@@ -255,13 +260,22 @@ class FileUploader {
         return div.innerHTML;
     }
     destroy() {
-        // Cancel all ongoing uploads
-        this.abortControllers.forEach(controller => controller.abort());
+        this.abortControllers.forEach(abort => abort());
         this.abortControllers.clear();
-        // Clear files
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+            this.dropZone.removeEventListener(event, this.preventDefaults);
+        });
+        ['dragenter', 'dragover'].forEach(event => {
+            this.dropZone.removeEventListener(event, this.handleDragEnter);
+        });
+        ['dragleave', 'drop'].forEach(event => {
+            this.dropZone.removeEventListener(event, this.handleDragLeave);
+        });
+        this.dropZone.removeEventListener('drop', this.handleDrop);
+        this.dropZone.removeEventListener('click', this.handleDropZoneClick);
+        this.fileInput.removeEventListener('change', this.handleFileInputChange);
+        this.uploadBtn.removeEventListener('click', this.handleUploadClick);
         this.files.clear();
-        // Remove event listeners would require storing bound handlers
-        // For now, removing elements will clean up
         this.fileList.innerHTML = '';
     }
 }

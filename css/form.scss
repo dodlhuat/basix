@@ -11,10 +11,32 @@ textarea, select, .select .dropdown, input {
   min-height: $form-height;
   font-size: $spacing;
   color: var(--primary-text);
+  box-shadow: $shadow;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+
+  &::placeholder {
+    color: var(--secondary-text);
+    opacity: 1;
+  }
+
+  &:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
+  }
+
+  &:disabled {
+    background-color: var(--secondary-background);
+    border-color: var(--disabled);
+    color: var(--secondary-text);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
 }
 
 select {
-  padding: calc($border-radius / 2);
+  padding: calc($spacing / 2);
+  cursor: pointer;
 }
 
 .select-group {
@@ -25,19 +47,33 @@ select {
 
   .dropdown-selected {
     border: 1px solid var(--divider);
-    padding: 0 calc($border-radius * 2);
+    padding: 0 calc($spacing / 2);
     border-radius: calc($border-radius / 2);
     cursor: pointer;
     background: var(--background);
     height: $form-height;
     line-height: $form-height;
+    box-shadow: $shadow;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
+    }
 
     &::after {
       font-family: "Material Symbols Outlined 24pt", serif;
       content: "\e5cf";
       float: right;
-      color: var(--primary-text);
+      color: var(--secondary-text);
+      transition: transform 0.2s ease;
     }
+  }
+
+  .dropdown.open .dropdown-selected::after {
+    transform: rotate(180deg);
   }
 
   .dropdown-options {
@@ -53,20 +89,23 @@ select {
     max-height: 250px;
     overflow-y: auto;
     background-color: var(--background);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
 
   .dropdown-option {
-    padding: 10px;
+    padding: 10px calc($spacing / 2);
     cursor: pointer;
+    transition: background 0.1s ease;
   }
 
   .dropdown-option:hover {
-    background: var(--divider);
+    background: var(--secondary-background);
   }
 
   .dropdown-option.selected {
-    background: var(--secondary-background);
-    color: var(--secondary-text);
+    background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+    color: var(--accent-color);
+    font-weight: 500;
   }
 
   .dropdown.open .dropdown-options {
@@ -83,20 +122,25 @@ select {
       top: 0;
       left: 0;
       width: 100%;
-      background: #333;
-      color: white;
+      background: var(--secondary-background);
+      color: var(--primary-text);
       text-align: center;
       padding: 15px;
-      font-weight: bold;
-
-      &.hidden {
-        display: block;
-      }
+      padding-top: calc(15px + env(safe-area-inset-top));
+      font-weight: 600;
+      font-size: $spacing;
+      border-bottom: 1px solid var(--divider);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 11;
 
       .dropdown-options-icon {
         position: absolute;
         right: 45px;
+        top: 50%;
+        transform: translateY(-50%);
         cursor: pointer;
+        color: var(--accent-color);
       }
     }
 
@@ -108,8 +152,17 @@ select {
       bottom: 0;
       border: none;
       border-radius: 0;
-      padding-top: 60px;
-      font-size: 1.2rem;
+      padding-top: calc(56px + env(safe-area-inset-top));
+      padding-bottom: env(safe-area-inset-bottom);
+      font-size: 1.1rem;
+      max-height: none;
+      box-shadow: none;
+      background-color: var(--background);
+    }
+
+    .dropdown-option {
+      padding: 14px calc($spacing / 2);
+      border-bottom: 1px solid var(--divider);
     }
   }
 }

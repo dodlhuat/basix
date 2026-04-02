@@ -17,6 +17,7 @@ import { Tooltip } from "./tooltip.js";
 import { Dropdown } from "./dropdown.js";
 import { VirtualDropdown } from "./virtual-dropdown.js";
 import { TimeSpanPicker } from "./timepicker.js";
+import { RangeSlider } from "./range-slider.js";
 // Generate sample table data
 const generateData = (count) => {
     const data = [];
@@ -293,6 +294,8 @@ utils.ready(() => {
             console.log("Multi Select:", vals);
         },
     });
+    // Initialize range sliders
+    RangeSlider.initAll();
     Tooltip.initializeAll();
     const timeSpanPicker = new TimeSpanPicker('timespan-1', {
         onChange: (start, end) => {
@@ -317,14 +320,9 @@ new CodeViewer("#usage-radiobutton-demo", `<label class="radio-button-container"
 new CodeViewer("#usage-switch-demo", `<div class="switch">
     <input type="checkbox" id="switch"/><label for="switch">Toggle</label>
 </div>`, "html");
-new CodeViewer("#usage-slider-demo", `<label for="range-slider" class="hidden">Slider</label>
-<input
-    type="range"
-    min="1"
-    max="100"
-    value="50"
-    id="range-slider-demo"
-/>`, "html");
+new CodeViewer("#usage-slider-demo", `<div class="range-slider">
+    <input type="range" min="1" max="100" value="50" />
+</div>`, "html");
 new CodeViewer("#usage-pushmenu-control-demo", `<div class="open-menu">
     <div class="navigation-controls">
         <input type="checkbox" id="menu-navigation" class="navigation"/>

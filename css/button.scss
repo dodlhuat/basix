@@ -3,7 +3,7 @@
 
 @mixin button-variant($bg) {
   background: $bg;
-  color: var(--divider);
+  color: var(--background);
 
   &:hover:not(:disabled) {
     background: color-mix(in srgb, $bg 85%, black);
@@ -15,6 +15,8 @@
 }
 
 @mixin button-variant-dark($bg) {
+  color: var(--primary-text);
+
   &:hover:not(:disabled) {
     background: color-mix(in srgb, $bg 82%, white);
   }
@@ -41,7 +43,7 @@ button,
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
 
   &:hover:not(:disabled) {
     background: var(--divider);
@@ -52,12 +54,13 @@ button,
   }
 
   &:focus-visible {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 35%, transparent);
   }
 
   &.active {
-    background: var(--accent-color-lighten);
+    background: var(--divider);
+    color: var(--accent-color);
   }
 
   &:disabled {
@@ -122,14 +125,13 @@ button.button-error {
   button,
   .button {
     &:hover:not(:disabled) {
-      background: color-mix(in srgb, var(--secondary-background) 70%, white);
+      background: var(--divider);
     }
   }
 
   .button-primary,
   button.button-primary {
     @include button-variant-dark(var(--accent-color));
-    color: var(--primary-text);
   }
 
   .button-success,
