@@ -12,11 +12,14 @@ $spacing-1-5x: calc($spacing * 1.5);
 
 body {
   font-family: "Outfit", helvetica, arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 p, li, td, th, div {
   font-size: $spacing;
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--primary-text);
 }
 
@@ -26,10 +29,22 @@ p {
 
 code {
   font-family: "Courier New", Courier, monospace;
+  font-size: 0.875em;
+  background: var(--secondary-background);
+  padding: 0.15em 0.4em;
+  border-radius: calc($border-radius / 2);
+}
+
+pre code {
+  display: block;
+  padding: $spacing;
+  overflow-x: auto;
+  border-radius: $border-radius;
+  line-height: 1.5;
 }
 
 strong {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 em {
@@ -42,15 +57,55 @@ h3, .h3,
 h4, .h4,
 h5 {
   margin: $spacing-half 0 $spacing-two-thirds 0;
-  line-height: 1.2;
-  font-weight: bold;
+  line-height: 1.15;
+  font-weight: 700;
   color: var(--primary-text);
+  letter-spacing: -0.02em;
 }
 
-h1, .h1 { font-size: 2.5rem; }
-h2, .h2 { font-size: 2rem; }
-h3, .h3 { font-size: 1.75rem; }
-h4, .h4 { font-size: 1.5rem; }
+h1, .h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+h2, .h2 {
+  font-size: 1.625rem;
+  font-weight: 750;
+}
+
+h3, .h3 {
+  font-size: 1.375rem;
+}
+
+h4, .h4 {
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
+}
+
+small, .text-small {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.text-secondary {
+  color: var(--secondary-text);
+}
+
+.text-caption {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--secondary-text);
+  letter-spacing: 0.01em;
+}
+
+.text-overline {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--secondary-text);
+}
 
 ul, ol {
   list-style-position: inside;
@@ -69,8 +124,14 @@ ol li {
   li { list-style-type: lower-latin; }
 }
 
+li + li {
+  margin-top: 0.25em;
+}
+
 hr {
-  border: 1px solid var(--divider);
+  border: none;
+  height: 1px;
+  background: var(--divider);
   margin-block: $spacing-1-5x;
 }
 

@@ -1,91 +1,66 @@
 @use "properties";
+@use "parameters" as *;
 
 .spinner {
-  width: 48px;
-  height: 48px;
-  border: 5px solid var(--accent-color);
-  border-bottom-color: transparent;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--divider);
+  border-top-color: var(--accent-color);
   border-radius: 50%;
   display: inline-block;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
+  animation: spinner-rotate 0.8s ease-in-out infinite;
+
+  &.small {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-width: 2px;
+  }
+
+  &.large {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-width: 4px;
+  }
 }
 
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
+@keyframes spinner-rotate {
+  to {
     transform: rotate(360deg);
   }
 }
 
-.loading, .loading::before, .loading::after {
-  border-radius: 50%;
-  background-color: var(--accent-color);
-  width: 18px;
-  height: 18px;
-  display: inline-block;
-}
-
 .loading {
-  position: relative;
-  background-color: rgba(var(--accent-color), 1);
-  opacity: 1;
-  animation: spScaleAlpha 1s infinite linear;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before,
+  &::after,
+  span {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+    animation: loading-pulse 1.2s ease-in-out infinite;
+  }
+
+  span {
+    animation-delay: 0.15s;
+  }
+
+  &::after {
+    animation-delay: 0.3s;
+  }
 }
 
-.loading::before, .loading::after {
-  content: '';
-  position: absolute;
-  opacity: 0.25;
-}
-
-.loading::before {
-  left: 30px;
-  animation: spScaleAlphaBefore 1s infinite linear;
-}
-
-.loading::after {
-  left: -30px;
-  animation: spScaleAlphaAfter 1s infinite linear;
-}
-
-@keyframes spScaleAlpha {
-  0% {
+@keyframes loading-pulse {
+  0%, 80%, 100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  40% {
     opacity: 1;
-  }
-  33% {
-    opacity: 0.25;
-  }
-  66% {
-    opacity: 0.25;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes spScaleAlphaBefore {
-  0% {
-    opacity: 0.25;
-  }
-  33% {
-    opacity: 1;
-  }
-  66% {
-    opacity: 0.25;
-  }
-}
-
-@keyframes spScaleAlphaAfter {
-  33% {
-    opacity: 0.25;
-  }
-  66% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.25;
+    transform: scale(1);
   }
 }

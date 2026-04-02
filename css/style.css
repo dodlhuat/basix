@@ -247,11 +247,14 @@ code.code .code-content {
 }
 body {
   font-family: "Outfit", helvetica, arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 p, li, td, th, div {
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--primary-text);
 }
 
@@ -261,10 +264,22 @@ p {
 
 code {
   font-family: "Courier New", Courier, monospace;
+  font-size: 0.875em;
+  background: var(--secondary-background);
+  padding: 0.15em 0.4em;
+  border-radius: 0.2rem;
+}
+
+pre code {
+  display: block;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 0.4rem;
+  line-height: 1.5;
 }
 
 strong {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 em {
@@ -277,25 +292,54 @@ h3, .h3,
 h4, .h4,
 h5 {
   margin: 0.5rem 0 0.6666666667rem 0;
-  line-height: 1.2;
-  font-weight: bold;
+  line-height: 1.15;
+  font-weight: 700;
   color: var(--primary-text);
+  letter-spacing: -0.02em;
 }
 
 h1, .h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
 h2, .h2 {
-  font-size: 2rem;
+  font-size: 1.625rem;
+  font-weight: 750;
 }
 
 h3, .h3 {
-  font-size: 1.75rem;
+  font-size: 1.375rem;
 }
 
 h4, .h4 {
-  font-size: 1.5rem;
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
+}
+
+small, .text-small {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.text-secondary {
+  color: var(--secondary-text);
+}
+
+.text-caption {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--secondary-text);
+  letter-spacing: 0.01em;
+}
+
+.text-overline {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--secondary-text);
 }
 
 ul, ol {
@@ -317,8 +361,14 @@ ol li li {
   list-style-type: lower-latin;
 }
 
+li + li {
+  margin-top: 0.25em;
+}
+
 hr {
-  border: 1px solid var(--divider);
+  border: none;
+  height: 1px;
+  background: var(--divider);
   margin-block: 1.5rem;
 }
 
@@ -1536,156 +1586,129 @@ button.button-error:active:not(:disabled) {
   }
 }
 .spinner {
-  width: 48px;
-  height: 48px;
-  border: 5px solid var(--accent-color);
-  border-bottom-color: transparent;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--divider);
+  border-top-color: var(--accent-color);
   border-radius: 50%;
   display: inline-block;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
+  animation: spinner-rotate 0.8s ease-in-out infinite;
+}
+.spinner.small {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-width: 2px;
+}
+.spinner.large {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-width: 4px;
 }
 
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
+@keyframes spinner-rotate {
+  to {
     transform: rotate(360deg);
   }
 }
-.loading, .loading::before, .loading::after {
+.loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.loading::before, .loading::after,
+.loading span {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 50%;
   background-color: var(--accent-color);
-  width: 18px;
-  height: 18px;
-  display: inline-block;
+  animation: loading-pulse 1.2s ease-in-out infinite;
 }
-
-.loading {
-  position: relative;
-  background-color: rgba(var(--accent-color), 1);
-  opacity: 1;
-  animation: spScaleAlpha 1s infinite linear;
+.loading span {
+  animation-delay: 0.15s;
 }
-
-.loading::before, .loading::after {
-  content: "";
-  position: absolute;
-  opacity: 0.25;
-}
-
-.loading::before {
-  left: 30px;
-  animation: spScaleAlphaBefore 1s infinite linear;
-}
-
 .loading::after {
-  left: -30px;
-  animation: spScaleAlphaAfter 1s infinite linear;
+  animation-delay: 0.3s;
 }
 
-@keyframes spScaleAlpha {
-  0% {
+@keyframes loading-pulse {
+  0%, 80%, 100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  40% {
     opacity: 1;
-  }
-  33% {
-    opacity: 0.25;
-  }
-  66% {
-    opacity: 0.25;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@keyframes spScaleAlphaBefore {
-  0% {
-    opacity: 0.25;
-  }
-  33% {
-    opacity: 1;
-  }
-  66% {
-    opacity: 0.25;
-  }
-}
-@keyframes spScaleAlphaAfter {
-  33% {
-    opacity: 0.25;
-  }
-  66% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.25;
+    transform: scale(1);
   }
 }
 .toast {
-  display: inline-block;
-  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
-  background: var(--background);
-  border-radius: 0.4rem;
-  padding: 0.5rem;
-  min-width: 250px;
+  display: flex;
+  flex-direction: column;
   position: fixed;
-  left: -200px;
   bottom: 1rem;
-  z-index: 1;
-  transition: all 150ms ease-in;
+  left: 1rem;
+  right: 1rem;
+  max-width: 380px;
+  margin: 0 auto;
+  background: var(--background);
+  border-radius: 0.8rem;
+  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15), 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 0.75rem 1rem;
+  z-index: 1000;
+  overflow: hidden;
+  transform: translateY(calc(100% + 2rem));
+  opacity: 0;
+  transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1), opacity 200ms ease;
 }
 .toast .bar {
-  display: block;
-  height: 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
   width: 100%;
   background: var(--accent-color);
-  position: absolute;
-  left: 0;
-  top: 0;
-  border-top-left-radius: 0.4rem;
-  border-top-right-radius: 0.4rem;
+  border-radius: 0 0 2px 2px;
   transition: width 250ms linear;
 }
 .toast.show {
-  left: 1rem;
-}
-.toast.success {
-  color: inherit;
+  transform: translateY(0);
+  opacity: 1;
 }
 .toast.success .bar {
   background: var(--success);
 }
-.toast.warning {
-  color: inherit;
-}
 .toast.warning .bar {
   background: var(--warning);
-}
-.toast.error {
-  color: inherit;
 }
 .toast.error .bar {
   background: var(--error);
 }
 .toast .close {
   cursor: pointer;
-  float: right;
-  z-index: 999;
-  position: relative;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.4rem;
+  transition: background 150ms ease;
+}
+.toast .close:hover {
+  background: var(--secondary-background);
 }
 .toast .header {
-  position: relative;
-  width: 100%;
-  padding-right: 0.5rem;
-  left: -0.5rem;
-  padding-left: 0.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--divider);
-  font-weight: bold;
+  padding-right: 1.5rem;
+  padding-bottom: 0.3333333333rem;
+  font-weight: 700;
 }
 .toast .content {
-  padding-top: 0.5rem;
   margin: 0;
+  color: var(--secondary-text);
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 
 .push-content {
