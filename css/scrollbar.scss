@@ -18,11 +18,11 @@
     height: 100%;
     width: 100%;
     overflow: auto;
-    padding-right: calc(var(--track-width) + var(--track-gap));
-    box-sizing: content-box;
+    box-sizing: border-box;
 
     .content {
       margin: 0;
+      margin-right: calc(var(--track-width) + var(--track-gap));
     }
   }
 

@@ -409,6 +409,9 @@ a:focus-visible {
   display: flex;
   flex-direction: column;
 }
+.card.row {
+  flex-direction: row;
+}
 .card .card-header {
   border-bottom: 1px solid var(--divider);
   margin: -1rem -1rem 1rem -1rem;
@@ -1286,11 +1289,11 @@ select {
   height: 100%;
   width: 100%;
   overflow: auto;
-  padding-right: calc(var(--track-width) + var(--track-gap));
-  box-sizing: content-box;
+  box-sizing: border-box;
 }
 .scroll-container .viewport .content {
   margin: 0;
+  margin-right: calc(var(--track-width) + var(--track-gap));
 }
 .scroll-container .viewport::-webkit-scrollbar {
   width: 0;
