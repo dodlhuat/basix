@@ -1,13 +1,20 @@
+@use "properties";
 @use "parameters" as *;
 
 .placeholder {
-  animation: placeholder-fade 2s ease-in-out infinite;
   display: inline-block;
   cursor: wait;
-  background-color: currentcolor;
-  opacity: .5;
-  min-height: calc($spacing / 2);
+  min-height: calc($spacing * 0.65);
   margin-right: calc($spacing / 2);
+  border-radius: $border-radius;
+  background: linear-gradient(
+    90deg,
+    var(--divider) 25%,
+    var(--secondary-background) 50%,
+    var(--divider) 75%
+  );
+  background-size: 200% 100%;
+  animation: placeholder-shimmer 1.5s ease-in-out infinite;
 
   @for $i from 1 through 12 {
     &.w-#{$i} {
@@ -16,13 +23,11 @@
   }
 }
 
-@-webkit-keyframes placeholder-fade {
-  50% {
-    opacity:.2
+@keyframes placeholder-shimmer {
+  0% {
+    background-position: 200% 0;
   }
-}
-@keyframes placeholder-fade {
-  50% {
-    opacity:.2
+  100% {
+    background-position: -200% 0;
   }
 }
