@@ -13,6 +13,8 @@
   --accent-color-text: #D8D9E0;
   --disabled: #D8D9E0;
   --primary-dark: #1A1B1F;
+  --primary-light: #F0F1F3;
+  --hover: rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="dark"] {
@@ -30,4 +32,6 @@
   --accent-color-text: #B2B3BD;
   --disabled: #303136;
   --primary-dark: #0C0C0E;
+  --primary-light: #1E1F23;
+  --hover: rgba(255, 255, 255, 0.05);
 }

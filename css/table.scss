@@ -6,16 +6,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: $spacing;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: calc($spacing * 0.75);
 }
 
 /* Table Styles */
 .table-wrapper {
   overflow-x: auto;
   border: 1px solid var(--divider);
-  border-radius: 8px;
+  border-radius: $border-radius;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
@@ -31,30 +32,39 @@ thead {
 }
 
 th {
-  padding: 12px 16px;
-  font-weight: 500;
+  padding: calc($spacing * 0.75) $spacing;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--secondary-text);
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
+  transition: background 160ms ease;
+
+  &:hover {
+    background-color: var(--hover);
+  }
 }
 
-th:hover {
-  background-color: #f3f4f6;
+th.sort-asc::after,
+th.sort-desc::after {
+  font-size: 0.65em;
+  margin-left: 0.35em;
+  opacity: 0.7;
 }
 
 th.sort-asc::after {
-  content: " ▲";
-  font-size: 0.7em;
+  content: " \25B2";
 }
 
 th.sort-desc::after {
-  content: " ▼";
-  font-size: 0.7em;
+  content: " \25BC";
 }
 
 td {
-  padding: 12px 16px;
+  padding: calc($spacing * 0.75) $spacing;
   border-bottom: 1px solid var(--divider);
   color: var(--primary-text);
 }
@@ -63,8 +73,12 @@ tr:last-child td {
   border-bottom: none;
 }
 
-tr:hover {
-  background-color: var(--primary-dark);
+tbody tr {
+  transition: background 160ms ease;
+
+  &:hover {
+    background-color: var(--hover);
+  }
 }
 
 /* Pagination */
@@ -72,11 +86,11 @@ tr:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
-  padding-top: 16px;
+  margin-top: $spacing;
+  padding-top: $spacing;
   border-top: 1px solid var(--divider);
   flex-wrap: wrap;
-  gap: 12px;
+  gap: calc($spacing * 0.75);
 }
 
 .pagination-info {
@@ -90,36 +104,36 @@ tr:hover {
 }
 
 .page-btn {
-  padding: 6px 12px;
+  padding: calc($spacing * 0.4) calc($spacing * 0.75);
   border: 1px solid var(--divider);
-  background: var(--divider);
+  background: transparent;
   color: var(--primary-text);
-  border-radius: 4px;
+  border-radius: $border-radius;
   cursor: pointer;
   font-size: 0.875rem;
-}
+  transition: background 160ms ease,
+              border-color 160ms ease;
 
-.page-btn:hover:not(:disabled) {
-  filter: brightness(105%);
+  &:hover:not(:disabled) {
+    background: var(--hover);
+    border-color: var(--secondary-text);
+  }
 }
 
 .page-btn.active {
   background-color: var(--accent-color);
   color: white;
-  border-color: var(--accent-color-lighten);
+  border-color: var(--accent-color);
 
   &:hover:not(:disabled) {
-    filter: brightness(115%);
+    background-color: var(--accent-color-lighten);
+    border-color: var(--accent-color-lighten);
   }
 }
 
 .page-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
-
-  &:hover {
-    filter: none;
-  }
 }
 
 /* Mobile Responsive Styles */
@@ -140,24 +154,28 @@ tr:hover {
 
   thead {
     display: none;
-    /* Hide headers on mobile */
   }
 
-  tr {
+  tbody tr {
     border: 1px solid var(--divider);
-    border-radius: 8px;
-    margin-bottom: 12px;
-    padding: 12px;
+    border-radius: $border-radius;
+    margin-bottom: calc($spacing * 0.75);
+    padding: calc($spacing * 0.75);
+    background: var(--background);
+
+    &:hover {
+      background-color: var(--hover);
+    }
   }
 
   td {
     border: none;
-    padding: 8px 0;
+    padding: calc($spacing * 0.5) 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: right;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid var(--divider);
   }
 
   td:last-child {
@@ -167,9 +185,12 @@ tr:hover {
   td::before {
     content: attr(data-label);
     font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
     color: var(--secondary-text);
     text-align: left;
-    margin-right: 12px;
+    margin-right: calc($spacing * 0.75);
   }
 
   .table-wrapper {

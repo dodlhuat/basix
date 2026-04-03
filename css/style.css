@@ -61,6 +61,8 @@ table {
   --accent-color-text: #D8D9E0;
   --disabled: #D8D9E0;
   --primary-dark: #1A1B1F;
+  --primary-light: #F0F1F3;
+  --hover: rgba(0, 0, 0, 0.04);
 }
 
 [data-theme=dark] {
@@ -78,6 +80,8 @@ table {
   --accent-color-text: #B2B3BD;
   --disabled: #303136;
   --primary-dark: #0C0C0E;
+  --primary-light: #1E1F23;
+  --hover: rgba(255, 255, 255, 0.05);
 }
 
 body {
@@ -450,16 +454,17 @@ a:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 /* Table Styles */
 .table-wrapper {
   overflow-x: auto;
   border: 1px solid var(--divider);
-  border-radius: 8px;
+  border-radius: 0.4rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
@@ -475,30 +480,38 @@ thead {
 }
 
 th {
-  padding: 12px 16px;
-  font-weight: 500;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--secondary-text);
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
+  transition: background 160ms ease;
+}
+th:hover {
+  background-color: var(--hover);
 }
 
-th:hover {
-  background-color: #f3f4f6;
+th.sort-asc::after,
+th.sort-desc::after {
+  font-size: 0.65em;
+  margin-left: 0.35em;
+  opacity: 0.7;
 }
 
 th.sort-asc::after {
   content: " ▲";
-  font-size: 0.7em;
 }
 
 th.sort-desc::after {
   content: " ▼";
-  font-size: 0.7em;
 }
 
 td {
-  padding: 12px 16px;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--divider);
   color: var(--primary-text);
 }
@@ -507,8 +520,11 @@ tr:last-child td {
   border-bottom: none;
 }
 
-tr:hover {
-  background-color: var(--primary-dark);
+tbody tr {
+  transition: background 160ms ease;
+}
+tbody tr:hover {
+  background-color: var(--hover);
 }
 
 /* Pagination */
@@ -516,11 +532,11 @@ tr:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
-  padding-top: 16px;
+  margin-top: 1rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--divider);
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .pagination-info {
@@ -534,34 +550,33 @@ tr:hover {
 }
 
 .page-btn {
-  padding: 6px 12px;
+  padding: 0.4rem 0.75rem;
   border: 1px solid var(--divider);
-  background: var(--divider);
+  background: transparent;
   color: var(--primary-text);
-  border-radius: 4px;
+  border-radius: 0.4rem;
   cursor: pointer;
   font-size: 0.875rem;
+  transition: background 160ms ease, border-color 160ms ease;
 }
-
 .page-btn:hover:not(:disabled) {
-  filter: brightness(105%);
+  background: var(--hover);
+  border-color: var(--secondary-text);
 }
 
 .page-btn.active {
   background-color: var(--accent-color);
   color: white;
-  border-color: var(--accent-color-lighten);
+  border-color: var(--accent-color);
 }
 .page-btn.active:hover:not(:disabled) {
-  filter: brightness(115%);
+  background-color: var(--accent-color-lighten);
+  border-color: var(--accent-color-lighten);
 }
 
 .page-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
-}
-.page-btn:disabled:hover {
-  filter: none;
 }
 
 /* Mobile Responsive Styles */
@@ -580,22 +595,25 @@ tr:hover {
   }
   thead {
     display: none;
-    /* Hide headers on mobile */
   }
-  tr {
+  tbody tr {
     border: 1px solid var(--divider);
-    border-radius: 8px;
-    margin-bottom: 12px;
-    padding: 12px;
+    border-radius: 0.4rem;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background: var(--background);
+  }
+  tbody tr:hover {
+    background-color: var(--hover);
   }
   td {
     border: none;
-    padding: 8px 0;
+    padding: 0.5rem 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: right;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid var(--divider);
   }
   td:last-child {
     border-bottom: none;
@@ -603,9 +621,12 @@ tr:hover {
   td::before {
     content: attr(data-label);
     font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
     color: var(--secondary-text);
     text-align: left;
-    margin-right: 12px;
+    margin-right: 0.75rem;
   }
   .table-wrapper {
     border: none;
