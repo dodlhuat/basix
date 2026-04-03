@@ -1,72 +1,151 @@
+@use "properties";
+@use "parameters" as *;
+
 .timespan-picker {
   display: flex;
-  align-items: flex-end;
-  gap: 1rem;
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  max-width: 400px;
+  align-items: stretch;
+  background: var(--secondary-background);
+  border: 1px solid var(--divider);
+  border-radius: $border-radius;
+  overflow: hidden;
+  box-shadow: $shadow;
+  transition: border-color 0.2s ease;
+
+  &.is-error {
+    border-color: var(--error);
+  }
 }
 
 .timespan-field {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  padding: calc($spacing * 0.75) $spacing;
+  min-width: 0;
+
+  label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--secondary-text);
+    margin-bottom: calc($spacing / 4);
+    pointer-events: none;
+    display: block;
+  }
+
+  input[type="time"] {
+    // reset form.scss defaults
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+    min-height: unset;
+    border-radius: 0;
+    // own styles
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--primary-text);
+    font-family: inherit;
+    width: 100%;
+    outline: none;
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+
+    &::-webkit-datetime-edit {
+      padding: 0;
+    }
+
+    &::-webkit-datetime-edit-fields-wrapper {
+      padding: 0;
+    }
+  }
 }
 
-.timespan-field label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #495057;
+.timespan-picker.is-error .timespan-field-end input[type="time"] {
+  color: var(--error);
 }
 
-.timespan-field input[type="time"] {
-  padding: 0.75rem;
+.timespan-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 calc($spacing * 0.75);
+  border-left: 1px solid var(--divider);
+  border-right: 1px solid var(--divider);
+  background: var(--background);
+  min-width: 4.5rem;
+  gap: calc($spacing / 5);
+  flex-shrink: 0;
+}
+
+.timespan-arrow {
   font-size: 1rem;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  background: white;
-  transition: border-color 0.2s ease;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  color: var(--secondary-text);
+  line-height: 1;
 }
 
-.timespan-field input[type="time"]:focus {
-  outline: none;
-  border-color: #0066cc;
-  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+.timespan-duration {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  line-height: 1;
+  min-height: 0.75rem;
+
+  .timespan-picker.is-error & {
+    color: var(--error);
+  }
 }
 
-.timespan-field input[type="time"]:invalid {
-  border-color: #dc3545;
+// 24h position bar
+.timespan-bar {
+  margin-top: calc($spacing / 2);
+  height: 3px;
+  background: var(--divider);
+  border-radius: 99px;
+  overflow: hidden;
+  position: relative;
 }
 
-.timespan-separator {
-  font-size: 1.5rem;
-  color: #6c757d;
-  padding-bottom: 0.75rem;
-  user-select: none;
+.timespan-bar-fill {
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: var(--accent-color);
+  border-radius: inherit;
+  transition: left 0.3s ease, width 0.3s ease;
+
+  .timespan-picker.is-error ~ .timespan-bar & {
+    background: var(--error);
+  }
 }
 
 @media (max-width: 480px) {
   .timespan-picker {
     flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-    padding: 1rem 0.75rem;
   }
 
-  .timespan-separator {
-    text-align: center;
-    padding: 0;
-    transform: rotate(90deg);
+  .timespan-center {
+    flex-direction: row;
+    justify-content: space-between;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--divider);
+    border-bottom: 1px solid var(--divider);
+    padding: calc($spacing / 2) $spacing;
+    min-width: unset;
   }
 
   .timespan-field input[type="time"] {
-    font-size: 1.125rem;
-    padding: 1rem;
-    min-height: 48px;
+    font-size: 2rem;
   }
 }

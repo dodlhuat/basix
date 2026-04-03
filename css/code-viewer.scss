@@ -1,15 +1,20 @@
+@use "properties";
+@use "parameters" as *;
+
+// Structural chrome uses design tokens.
+// Syntax highlight colors are intentional VS Code palette — left as-is.
 
 .code-display {
   background: #1e1e1e;
-  border-radius: 8px;
+  border-radius: $border-radius;
   overflow: hidden;
-  margin: 20px 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: $spacing * 1.25 0;
+  box-shadow: $shadow;
 }
 
 .code-header {
   background: #2d2d2d;
-  padding: 10px 15px;
+  padding: calc($spacing * 0.6) $spacing;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,7 +23,7 @@
 
 .code-language {
   color: #888;
-  font-size: 12px;
+  font-size: 0.75rem;
   text-transform: uppercase;
   font-weight: 600;
 }
@@ -27,10 +32,10 @@
   background: #4a4a4a;
   color: #fff;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+  padding: calc($spacing * 0.375) calc($spacing * 0.75);
+  border-radius: calc($border-radius / 2);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 0.75rem;
   transition: background 0.2s;
 }
 
@@ -39,60 +44,30 @@
 }
 
 .copy-button.copied {
-  background: #28a745;
+  background: var(--success);
 }
 
 .code-content {
-  padding: 15px;
+  padding: $spacing;
   overflow-x: auto;
 }
 
 .code-content pre {
   margin: 0;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
   color: #d4d4d4;
 }
 
-/* Syntax Highlighting */
-.keyword {
-  color: #569cd6;
-}
-
-.string {
-  color: #ce9178;
-}
-
-.comment {
-  color: #6a9955;
-  font-style: italic;
-}
-
-.function {
-  color: #dcdcaa;
-}
-
-.number {
-  color: #b5cea8;
-}
-
-.property {
-  color: #9cdcfe;
-}
-
-.tag {
-  color: #4ec9b0;
-}
-
-.attribute {
-  color: #9cdcfe;
-}
-
-.selector {
-  color: #d7ba7d;
-}
-
-.punctuation {
-  color: #d4d4d4;
-}
+/* Syntax Highlighting — VS Code Dark+ palette */
+.keyword   { color: #569cd6; }
+.string    { color: #ce9178; }
+.comment   { color: #6a9955; font-style: italic; }
+.function  { color: #dcdcaa; }
+.number    { color: #b5cea8; }
+.property  { color: #9cdcfe; }
+.tag       { color: #4ec9b0; }
+.attribute { color: #9cdcfe; }
+.selector  { color: #d7ba7d; }
+.punctuation { color: #d4d4d4; }

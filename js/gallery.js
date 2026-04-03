@@ -8,9 +8,8 @@ class MasonryGallery {
         this.handleScroll = () => {
             if (this.isFetching)
                 return;
-            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-            if (scrollTop + clientHeight >=
-                scrollHeight - this.options.scrollThreshold) {
+            const rect = this.container.getBoundingClientRect();
+            if (rect.bottom > 0 && rect.bottom <= window.innerHeight + this.options.scrollThreshold) {
                 this.loadMoreImages();
             }
         };
@@ -24,7 +23,7 @@ class MasonryGallery {
             minColumnWidth: options.minColumnWidth ?? 250,
             scrollThreshold: options.scrollThreshold ?? 100,
             reload: 2,
-            fetchFunction: options.fetchFunction ?? this.fetchMockImages(),
+            fetchFunction: options.fetchFunction ?? this.fetchMockImages,
         };
         this.init();
     }
@@ -85,8 +84,8 @@ class MasonryGallery {
             this.addToShortestColumn(item);
         });
     }
-    async loadMoreImages() {
-        this.reloaded++;
+    async loadMoreImages(isAutoFill = false) {
+        if (!isAutoFill) this.reloaded++;
         if (this.options.reload > 0 && this.reloaded > this.options.reload) {
             console.warn("Maximum reload limit reached.");
             return;
@@ -96,7 +95,7 @@ class MasonryGallery {
         this.isFetching = true;
         this.toggleLoader(true);
         try {
-            const newImages = await this.options.fetchFunction;
+            const newImages = await this.options.fetchFunction();
             this.renderImages(newImages);
         }
         catch (error) {
@@ -105,6 +104,14 @@ class MasonryGallery {
         finally {
             this.isFetching = false;
             this.toggleLoader(false);
+            // If the rendered content doesn't fill the viewport, auto-load the next
+            // batch without waiting for a scroll event (multi-column layout is shorter)
+            requestAnimationFrame(() => {
+                const rect = this.container.getBoundingClientRect();
+                if (rect.bottom <= window.innerHeight + this.options.scrollThreshold) {
+                    this.loadMoreImages(true);
+                }
+            });
         }
     }
     toggleLoader(show) {
@@ -112,9 +119,9 @@ class MasonryGallery {
             this.loader.classList.toggle("hidden", !show);
         }
     }
-    fetchMockImages() {
+    fetchMockImages = () => {
         throw Error("Method not implemented.");
-    }
+    };
     renderImages(imageDataList) {
         imageDataList.forEach((data) => {
             const item = this.createCard(data);

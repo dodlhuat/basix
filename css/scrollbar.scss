@@ -1,4 +1,5 @@
 @use "properties";
+@use "parameters" as *;
 
 :root {
   --track-width: 12px;
@@ -10,8 +11,8 @@
 .scroll-container {
   position: relative;
   background: var(--secondary-background);
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  border-radius: $border-radius;
+  box-shadow: $shadow;
   overflow: hidden;
 
   .viewport {
@@ -38,9 +39,9 @@
 
   .scrollbar {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    bottom: 8px;
+    top: var(--track-gap);
+    right: var(--track-gap);
+    bottom: var(--track-gap);
     width: var(--track-width);
     pointer-events: none;
   }
@@ -57,7 +58,7 @@
     position: absolute;
     left: 2px;
     right: 2px;
-    top: 0px;
+    top: 0;
     height: 40px;
     border-radius: calc(var(--track-radius) - 2px);
     background: var(--secondary-text);
@@ -66,4 +67,3 @@
     touch-action: none;
   }
 }
-

@@ -6,8 +6,22 @@
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: $border-radius;
   box-shadow: $shadow;
+  background: var(--secondary-background);
+
+  // Gradient scrim so controls are readable over any slide content
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 96px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.38), transparent);
+    pointer-events: none;
+    z-index: 5;
+  }
 }
 
 .carousel-track-container {
@@ -17,7 +31,7 @@
 
 .carousel-track {
   display: flex;
-  transition: transform 0.4s ease-in-out;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   width: 100%;
   padding: 0;
   margin: 0;
@@ -35,6 +49,7 @@
   user-select: none;
 }
 
+// Prev / next buttons — glass pill, always visible
 .carousel-button {
   position: absolute;
   top: 50%;
@@ -44,28 +59,47 @@
   align-items: center;
   justify-content: center;
   z-index: 10;
-  transition: background 0.3s;
-  padding: 10px;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.92);
+  opacity: 0.85;
+  transition: background 0.2s ease,
+              transform 0.2s ease,
+              opacity 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+
+  .icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.55);
+    opacity: 1;
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.93);
+  }
 }
 
-.carousel-button:hover {
-  background: var(--secondary-background);
-}
+.carousel-button--left  { left:  calc($spacing * 0.75); }
+.carousel-button--right { right: calc($spacing * 0.75); }
 
-.carousel-button--left {
-  left: 10px;
-}
-
-.carousel-button--right {
-  right: 10px;
-}
-
+// Dot navigation
 .carousel-nav {
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 10px 0;
+  padding: calc($spacing * 0.75) 0;
   position: absolute;
-  bottom: 10px;
+  bottom: 0;
   width: 100%;
   z-index: 10;
 }
@@ -73,15 +107,17 @@
 .carousel-indicator {
   padding: 0;
   border: none;
-  width: 20px;
-  height: 5px;
-  background: var(--disabled);
-  margin: 0 5px;
-  border-radius: 4px;
+  width: calc($spacing * 0.5);
+  height: 4px;
+  background: rgba(255, 255, 255, 0.4);
+  margin: 0 calc($spacing / 5);
+  border-radius: 99px;
   cursor: pointer;
-  transition: background 0.3s;
-}
+  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              background 0.25s ease;
 
-.carousel-indicator.current-slide {
-  background: var(--accent-color);
+  &.current-slide {
+    width: calc($spacing * 1.5);
+    background: white;
+  }
 }

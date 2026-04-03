@@ -1,11 +1,18 @@
+/* Flyout menu uses its own dark palette intentionally —
+   it renders over any background regardless of light/dark mode.
+   Scoped here rather than polluting :root. */
+.flyout-menu,
+.flyout-overlay,
+.site-header,
+.main-content {
+  --flyout-text: #f8fafc;
+  --flyout-bg: rgba(15, 23, 42, 0.7);
+  --flyout-border: rgba(255, 255, 255, 0.1);
+}
+
 :root {
-  --bg-color: #0f172a;
-  --text-color: #f8fafc;
-  --glass-bg: rgba(15, 23, 42, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
   --menu-width: 320px;
   --transition-speed: 0.4s;
-  --font-family: 'Outfit', sans-serif;
 }
 
 * {
@@ -38,7 +45,7 @@ body {
 .menu-trigger {
   background: none;
   border: none;
-  color: var(--text-color);
+  color: var(--flyout-text);
   cursor: pointer;
   padding: 0.5rem;
   transition: transform 0.2s;
@@ -96,7 +103,7 @@ body {
 /* Flyout Menu Base */
 .flyout-menu {
   position: fixed;
-  background: var(--glass-bg);
+  background: var(--flyout-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   z-index: 50;
@@ -114,7 +121,7 @@ body {
   right: 0;
   width: var(--menu-width);
   height: 100%;
-  border-left: 1px solid var(--glass-border);
+  border-left: 1px solid var(--flyout-border);
   transform: translateX(100%);
 }
 
@@ -123,7 +130,7 @@ body {
   left: 0;
   width: var(--menu-width);
   height: 100%;
-  border-right: 1px solid var(--glass-border);
+  border-right: 1px solid var(--flyout-border);
   transform: translateX(-100%);
 }
 
@@ -150,7 +157,7 @@ body {
 .close-menu {
   background: none;
   border: none;
-  color: var(--text-color);
+  color: var(--flyout-text);
   cursor: pointer;
   padding: 0.5rem;
   transition: transform 0.2s, color 0.2s;
@@ -182,7 +189,7 @@ body {
   border: none;
   font-size: 2rem;
   font-weight: 600;
-  color: var(--text-color);
+  color: var(--flyout-text);
   text-decoration: none;
   cursor: pointer;
   font-family: inherit;
@@ -258,7 +265,7 @@ body {
 /* Flyout Footer */
 .flyout-footer {
   padding-top: 2rem;
-  border-top: 1px solid var(--glass-border);
+  border-top: 1px solid var(--flyout-border);
   color: #64748b;
   font-size: 0.9rem;
   opacity: 0;
@@ -294,7 +301,7 @@ body {
     bottom: auto !important;
     border: none !important;
     /* Remove borders for cleaner fullscreen look */
-    border-right: 1px solid var(--glass-border) !important;
+    border-right: 1px solid var(--flyout-border) !important;
     /* Add consistent right border */
     transform: translateX(-100%) !important;
     /* Force ALL to slide from LEFT with !important */

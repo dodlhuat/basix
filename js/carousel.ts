@@ -15,6 +15,7 @@ class Carousel {
     private nextButton!: HTMLButtonElement;
     private dotsNav!: HTMLDivElement;
     private dots!: HTMLButtonElement[];
+    private autoPlayTimer: number | null = null;
 
     constructor(elementOrSelector: string | HTMLElement, options: CarouselOptions = {}) {
         const element = typeof elementOrSelector === 'string'
@@ -32,7 +33,6 @@ class Carousel {
         }
 
         this.root = element;
-
         this.init();
     }
 
@@ -90,6 +90,9 @@ class Carousel {
         });
 
         this.root.appendChild(this.dotsNav);
+
+        // Make focusable for keyboard nav
+        this.root.setAttribute('tabindex', '0');
     }
 
     private bindEvents(): void {
@@ -99,7 +102,6 @@ class Carousel {
         this.dotsNav.addEventListener('click', (e: MouseEvent) => {
             const targetDot = (e.target as HTMLElement).closest('button');
             if (!targetDot) return;
-
             const targetIndex = this.dots.findIndex(dot => dot === targetDot);
             this.moveToSlide(targetIndex);
         });
@@ -108,6 +110,20 @@ class Carousel {
             this.slideWidth = this.slides[0].getBoundingClientRect().width;
             this.moveToSlide(this.currentIndex, false);
         });
+
+        // Keyboard navigation
+        this.root.addEventListener('keydown', (e: KeyboardEvent) => {
+            if (e.key === 'ArrowLeft')  this.moveToPrevSlide();
+            if (e.key === 'ArrowRight') this.moveToNextSlide();
+        });
+
+        // Pause autoplay on hover / focus
+        if (this.options.autoPlay) {
+            this.root.addEventListener('mouseenter', () => this.pauseAutoPlay());
+            this.root.addEventListener('mouseleave', () => this.resumeAutoPlay());
+            this.root.addEventListener('focusin',    () => this.pauseAutoPlay());
+            this.root.addEventListener('focusout',   () => this.resumeAutoPlay());
+        }
 
         this.addTouchSupport();
     }
@@ -121,8 +137,19 @@ class Carousel {
             else targetIndex = this.slides.length - 1;
         }
 
+        if (!animate) {
+            this.track.style.transitionDuration = '0ms';
+        }
+
         const amountToMove = -1 * (this.slideWidth * targetIndex);
         this.track.style.transform = `translateX(${amountToMove}px)`;
+
+        if (!animate) {
+            // Restore CSS transition after the paint to avoid a flash
+            requestAnimationFrame(() => {
+                this.track.style.transitionDuration = '';
+            });
+        }
 
         this.updateDots(targetIndex);
         this.currentIndex = targetIndex;
@@ -154,7 +181,6 @@ class Carousel {
             if (!isDragging) return;
             const endX = e.changedTouches[0].clientX;
             const diffX = startX - endX;
-
             if (Math.abs(diffX) > 50) {
                 if (diffX > 0) this.moveToNextSlide();
                 else this.moveToPrevSlide();
@@ -164,10 +190,28 @@ class Carousel {
     }
 
     private startAutoPlay(): void {
-        setInterval(() => {
+        this.autoPlayTimer = window.setInterval(() => {
             this.moveToNextSlide();
         }, this.options.autoPlayInterval);
     }
+
+    private pauseAutoPlay(): void {
+        if (this.autoPlayTimer !== null) {
+            clearInterval(this.autoPlayTimer);
+            this.autoPlayTimer = null;
+        }
+    }
+
+    private resumeAutoPlay(): void {
+        if (this.options.autoPlay && this.autoPlayTimer === null) {
+            this.startAutoPlay();
+        }
+    }
+
+    public destroy(): void {
+        this.pauseAutoPlay();
+    }
 }
+
 export { Carousel };
 export type { CarouselOptions };

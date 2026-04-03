@@ -26,11 +26,9 @@ class TimeSpanPicker {
 
         this.render();
 
-        // Query the inputs after rendering
         this.startTimeInput = this.queryInput('.timespan-start');
         this.endTimeInput = this.queryInput('.timespan-end');
 
-        // Set default values if provided
         if (options?.defaultStart) {
             this.startTimeInput.value = options.defaultStart;
         }
@@ -39,6 +37,11 @@ class TimeSpanPicker {
         }
 
         this.attachEventListeners();
+
+        // Render initial state if defaults provided
+        if (options?.defaultStart || options?.defaultEnd) {
+            this.updateUI();
+        }
     }
 
     private queryInput(selector: string): HTMLInputElement {
@@ -52,8 +55,8 @@ class TimeSpanPicker {
     private render(): void {
         this.container.innerHTML = `
       <div class="timespan-picker">
-        <div class="timespan-field">
-          <label for="timespan-start">from</label>
+        <div class="timespan-field timespan-field-start">
+          <label for="timespan-start">From</label>
           <input
             type="time"
             class="timespan-start"
@@ -61,16 +64,22 @@ class TimeSpanPicker {
           />
         </div>
 
-        <div class="timespan-separator">-</div>
+        <div class="timespan-center">
+          <span class="timespan-arrow">→</span>
+          <span class="timespan-duration"></span>
+        </div>
 
-        <div class="timespan-field">
-          <label for="timespan-end">to</label>
+        <div class="timespan-field timespan-field-end">
+          <label for="timespan-end">To</label>
           <input
             type="time"
             class="timespan-end"
             id="timespan-end"
           />
         </div>
+      </div>
+      <div class="timespan-bar" aria-hidden="true">
+        <div class="timespan-bar-fill"></div>
       </div>
     `;
     }
@@ -80,18 +89,62 @@ class TimeSpanPicker {
         this.endTimeInput.addEventListener('change', () => this.handleChange());
     }
 
-    private handleChange(): void {
+    private toMinutes(time: string): number {
+        const [h, m] = time.split(':').map(Number);
+        return h * 60 + m;
+    }
+
+    private formatDuration(minutes: number): string {
+        const h = Math.floor(minutes / 60);
+        const m = minutes % 60;
+        if (h && m) return `${h}h ${m}m`;
+        if (h) return `${h}h`;
+        return `${m}m`;
+    }
+
+    private updateUI(): void {
+        const picker = this.container.querySelector<HTMLElement>('.timespan-picker');
+        const durationEl = this.container.querySelector<HTMLElement>('.timespan-duration');
+        const barFill = this.container.querySelector<HTMLElement>('.timespan-bar-fill');
+
         const start = this.startTimeInput.value;
         const end = this.endTimeInput.value;
+        const isError = !!(start && end && start >= end);
 
-        // Validate that end time is after start time
-        if (start && end && start >= end) {
-            this.endTimeInput.setCustomValidity('Endzeit muss nach Startzeit liegen');
-        } else {
-            this.endTimeInput.setCustomValidity('');
+        picker?.classList.toggle('is-error', isError);
+
+        if (isError) {
+            this.endTimeInput.setCustomValidity('End time must be after start time');
+            if (durationEl) durationEl.textContent = '!';
+            return;
         }
 
-        // Trigger onChange callback if both values are present
+        this.endTimeInput.setCustomValidity('');
+
+        if (start && end && durationEl && barFill) {
+            const startMins = this.toMinutes(start);
+            const endMins = this.toMinutes(end);
+            const duration = endMins - startMins;
+
+            durationEl.textContent = this.formatDuration(duration);
+
+            const startPct = ((startMins / 1440) * 100).toFixed(2);
+            const widthPct = ((duration / 1440) * 100).toFixed(2);
+            barFill.style.left = `${startPct}%`;
+            barFill.style.width = `${widthPct}%`;
+        } else {
+            if (durationEl) durationEl.textContent = '';
+            if (barFill) {
+                barFill.style.left = '0';
+                barFill.style.width = '0';
+            }
+        }
+    }
+
+    private handleChange(): void {
+        this.updateUI();
+
+        const { start, end } = this.getValue();
         if (this.onChange && start && end) {
             this.onChange(start, end);
         }
@@ -114,18 +167,28 @@ class TimeSpanPicker {
         this.startTimeInput.value = '';
         this.endTimeInput.value = '';
         this.endTimeInput.setCustomValidity('');
+
+        const picker = this.container.querySelector('.timespan-picker');
+        const durationEl = this.container.querySelector<HTMLElement>('.timespan-duration');
+        const barFill = this.container.querySelector<HTMLElement>('.timespan-bar-fill');
+
+        picker?.classList.remove('is-error');
+        if (durationEl) durationEl.textContent = '';
+        if (barFill) { barFill.style.left = '0'; barFill.style.width = '0'; }
     }
 
     public isValid(): boolean {
-        const {start, end} = this.getValue();
+        const { start, end } = this.getValue();
         return !!(start && end && start < end);
     }
 
     public destroy(): void {
-        this.startTimeInput.removeEventListener('change', () => this.handleChange());
-        this.endTimeInput.removeEventListener('change', () => this.handleChange());
+        const startHandler = () => this.handleChange();
+        const endHandler = () => this.handleChange();
+        this.startTimeInput.removeEventListener('change', startHandler);
+        this.endTimeInput.removeEventListener('change', endHandler);
     }
 }
 
-export {TimeSpanPicker};
-export type {TimeSpan, TimeSpanPickerOptions};
+export { TimeSpanPicker };
+export type { TimeSpan, TimeSpanPickerOptions };

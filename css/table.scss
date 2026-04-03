@@ -122,7 +122,7 @@ tbody tr {
 
 .page-btn.active {
   background-color: var(--accent-color);
-  color: white;
+  color: var(--accent-color-text);
   border-color: var(--accent-color);
 
   &:hover:not(:disabled) {
