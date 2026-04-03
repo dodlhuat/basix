@@ -9,6 +9,7 @@ class PushMenu {
             throw new Error('PushMenu: Required elements not found (.navigation, .push-content)');
         }
         this.elements.navigation.addEventListener('change', this.handleNavigationChange.bind(this));
+        this.elements.backdrop?.addEventListener('click', this.handleBackdropClick);
         this.initialized = true;
     }
     static handleNavigationChange() {
@@ -29,6 +30,7 @@ class PushMenu {
         this.toggleClass(this.elements.content, 'pushed', !isPushed);
         this.toggleClass(this.elements.menu, 'pushed', !isPushed);
         this.toggleClass(this.elements.header, 'pushed', !isPushed);
+        this.toggleClass(this.elements.backdrop, 'pushed', !isPushed);
         if (this.elements.controlIcon) {
             if (isPushed) {
                 this.elements.controlIcon.classList.remove('icon-menu_open');
@@ -68,13 +70,15 @@ class PushMenu {
             return;
         this.elements.navigation?.removeEventListener('change', this.handleNavigationChange);
         this.elements.content?.removeEventListener('click', this.clickNav);
+        this.elements.backdrop?.removeEventListener('click', this.handleBackdropClick);
         this.close();
         this.elements = {
             navigation: null,
             content: null,
             menu: null,
             header: null,
-            controlIcon: null
+            controlIcon: null,
+            backdrop: null
         };
         this.initialized = false;
     }
@@ -84,6 +88,7 @@ class PushMenu {
         this.elements.menu = document.querySelector('.push-menu');
         this.elements.header = document.querySelector('.main-header');
         this.elements.controlIcon = document.querySelector('.navigation-controls .icon');
+        this.elements.backdrop = document.querySelector('.push-menu-backdrop');
     }
 }
 PushMenu.elements = {
@@ -91,11 +96,18 @@ PushMenu.elements = {
     content: null,
     menu: null,
     header: null,
-    controlIcon: null
+    controlIcon: null,
+    backdrop: null
 };
 PushMenu.initialized = false;
 PushMenu.clickNav = () => {
     const navigation = PushMenu.elements.navigation;
     navigation?.click();
+};
+PushMenu.handleBackdropClick = () => {
+    if (PushMenu.isOpen()) {
+        const navigation = PushMenu.elements.navigation;
+        navigation?.click();
+    }
 };
 export { PushMenu };

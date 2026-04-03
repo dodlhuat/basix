@@ -4,6 +4,7 @@ interface PushMenuElements {
     menu: HTMLElement | null;
     header: HTMLElement | null;
     controlIcon: HTMLElement | null;
+    backdrop: HTMLElement | null;
 }
 
 class PushMenu {
@@ -12,7 +13,8 @@ class PushMenu {
         content: null,
         menu: null,
         header: null,
-        controlIcon: null
+        controlIcon: null,
+        backdrop: null
     };
 
     private static initialized = false;
@@ -30,6 +32,8 @@ class PushMenu {
         }
 
         this.elements.navigation.addEventListener('change', this.handleNavigationChange.bind(this));
+
+        this.elements.backdrop?.addEventListener('click', this.handleBackdropClick);
 
         this.initialized = true;
     }
@@ -56,6 +60,7 @@ class PushMenu {
         this.toggleClass(this.elements.content, 'pushed', !isPushed);
         this.toggleClass(this.elements.menu, 'pushed', !isPushed);
         this.toggleClass(this.elements.header, 'pushed', !isPushed);
+        this.toggleClass(this.elements.backdrop, 'pushed', !isPushed);
 
         if (this.elements.controlIcon) {
             if (isPushed) {
@@ -83,6 +88,13 @@ class PushMenu {
         navigation?.click();
     };
 
+    private static handleBackdropClick = (): void => {
+        if (PushMenu.isOpen()) {
+            const navigation = PushMenu.elements.navigation as HTMLElement;
+            navigation?.click();
+        }
+    };
+
     public static open(): void {
         if (!this.elements.content?.classList.contains('pushed')) {
             this.pushToggle();
@@ -104,6 +116,7 @@ class PushMenu {
 
         this.elements.navigation?.removeEventListener('change', this.handleNavigationChange);
         this.elements.content?.removeEventListener('click', this.clickNav);
+        this.elements.backdrop?.removeEventListener('click', this.handleBackdropClick);
 
         this.close();
 
@@ -112,7 +125,8 @@ class PushMenu {
             content: null,
             menu: null,
             header: null,
-            controlIcon: null
+            controlIcon: null,
+            backdrop: null
         };
 
         this.initialized = false;
@@ -124,6 +138,7 @@ class PushMenu {
         this.elements.menu = document.querySelector('.push-menu');
         this.elements.header = document.querySelector('.main-header');
         this.elements.controlIcon = document.querySelector('.navigation-controls .icon');
+        this.elements.backdrop = document.querySelector('.push-menu-backdrop');
     }
 }
 
