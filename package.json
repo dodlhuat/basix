@@ -1,11 +1,12 @@
 {
   "name": "@dodlhuat/basix",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.",
   "main": "js/index.js",
   "exports": {
     ".": "./js/index.js",
-    "./css/*": "./css/*"
+    "./css/*": "./css/*",
+    "./js/*": "./js/*"
   },
   "files": [
     "js/",
