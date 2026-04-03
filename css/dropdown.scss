@@ -122,15 +122,20 @@
         transform: none;
         margin-left: 0;
         padding-left: $spacing;
-        opacity: 0;
-        visibility: hidden;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 1;
+        visibility: visible;
         pointer-events: none;
-        transition: none;
+        padding-top: 0;
+        padding-bottom: 0;
+        transition: max-height 0.25s ease, padding 0.25s ease;
       }
 
       li.open > ul {
-        opacity: 1;
-        visibility: visible;
+        max-height: 600px;
+        padding-top: calc($spacing / 4);
+        padding-bottom: calc($spacing / 4);
         pointer-events: auto;
       }
     }
