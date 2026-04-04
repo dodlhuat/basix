@@ -16,6 +16,7 @@ class TimeSpanPicker {
             this.endTimeInput.value = options.defaultEnd;
         }
         this.attachEventListeners();
+        // Render initial state if defaults provided
         if (options?.defaultStart || options?.defaultEnd) {
             this.updateUI();
         }
@@ -69,8 +70,10 @@ class TimeSpanPicker {
     formatDuration(minutes) {
         const h = Math.floor(minutes / 60);
         const m = minutes % 60;
-        if (h && m) return `${h}h ${m}m`;
-        if (h) return `${h}h`;
+        if (h && m)
+            return `${h}h ${m}m`;
+        if (h)
+            return `${h}h`;
         return `${m}m`;
     }
     updateUI() {
@@ -83,7 +86,8 @@ class TimeSpanPicker {
         picker?.classList.toggle('is-error', isError);
         if (isError) {
             this.endTimeInput.setCustomValidity('End time must be after start time');
-            if (durationEl) durationEl.textContent = '!';
+            if (durationEl)
+                durationEl.textContent = '!';
             return;
         }
         this.endTimeInput.setCustomValidity('');
@@ -96,9 +100,14 @@ class TimeSpanPicker {
             const widthPct = ((duration / 1440) * 100).toFixed(2);
             barFill.style.left = `${startPct}%`;
             barFill.style.width = `${widthPct}%`;
-        } else {
-            if (durationEl) durationEl.textContent = '';
-            if (barFill) { barFill.style.left = '0'; barFill.style.width = '0'; }
+        }
+        else {
+            if (durationEl)
+                durationEl.textContent = '';
+            if (barFill) {
+                barFill.style.left = '0';
+                barFill.style.width = '0';
+            }
         }
     }
     handleChange() {
@@ -127,8 +136,12 @@ class TimeSpanPicker {
         const durationEl = this.container.querySelector('.timespan-duration');
         const barFill = this.container.querySelector('.timespan-bar-fill');
         picker?.classList.remove('is-error');
-        if (durationEl) durationEl.textContent = '';
-        if (barFill) { barFill.style.left = '0'; barFill.style.width = '0'; }
+        if (durationEl)
+            durationEl.textContent = '';
+        if (barFill) {
+            barFill.style.left = '0';
+            barFill.style.width = '0';
+        }
     }
     isValid() {
         const { start, end } = this.getValue();

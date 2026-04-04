@@ -6,39 +6,36 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>WYSIWYG HTML Editor</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/editor.css" />
 </head>
 
 <body>
     <div class="content">
         <div class="editor">
+
             <div class="editor-toolbar" role="toolbar" aria-label="Editor tools">
+
                 <div class="toolbar-group">
                     <button data-cmd="bold" title="Bold (Ctrl+B)">
-                        <span class="icon icon-format_bold"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#format_bold"/></svg>
                     </button>
                     <button data-cmd="italic" title="Italic (Ctrl+I)">
-                        <span class="icon icon-format_italic"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#format_italic"/></svg>
                     </button>
                     <button data-cmd="underline" title="Underline (Ctrl+U)">
-                        <span class="icon icon-format_underlined"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#format_underlined"/></svg>
                     </button>
                     <button data-cmd="strikeThrough" title="Strikethrough">
-                        <span class="icon icon-strikethrough"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#format_strikethrough"/></svg>
                     </button>
                 </div>
 
                 <div class="toolbar-separator"></div>
 
                 <div class="toolbar-group">
-                    <button data-cmd="formatBlock" data-value="h1" title="Heading 1">
-                        H1
-                    </button>
-                    <button data-cmd="formatBlock" data-value="h2" title="Heading 2">
-                        H2
-                    </button>
+                    <button data-cmd="formatBlock" data-value="h1" title="Heading 1" class="toolbar-label">H1</button>
+                    <button data-cmd="formatBlock" data-value="h2" title="Heading 2" class="toolbar-label">H2</button>
                     <button data-cmd="formatBlock" data-value="p" title="Paragraph">
-                        <span class="icon icon-format_paragraph"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#format_size"/></svg>
                     </button>
                 </div>
 
@@ -46,10 +43,10 @@
 
                 <div class="toolbar-group">
                     <button data-cmd="insertUnorderedList" title="Bullet list">
-                        <span class="icon icon-format_list_bulleted"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#format_list_bulleted"/></svg>
                     </button>
                     <button data-cmd="insertOrderedList" title="Numbered list">
-                        <span class="icon icon-format_list_numbered"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#format_list_numbered"/></svg>
                     </button>
                 </div>
 
@@ -57,10 +54,10 @@
 
                 <div class="toolbar-group">
                     <button id="linkBtn" title="Insert link (Ctrl+K)">
-                        <span class="icon icon-link"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#link"/></svg>
                     </button>
                     <button id="imageBtn" title="Insert image">
-                        <span class="icon icon-add_photo_alternate"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#add_photo_alternate"/></svg>
                     </button>
                     <input type="file" id="imageFile" accept="image/*" hidden />
                 </div>
@@ -69,27 +66,20 @@
 
                 <div class="toolbar-group">
                     <button id="cleanBtn" title="Clear formatting">
-                        <span class="icon icon-format_clear"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#backspace"/></svg>
                     </button>
                     <button id="undoBtn" title="Undo (Ctrl+Z)">
-                        <span class="icon icon-undo"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#undo"/></svg>
                     </button>
                     <button id="redoBtn" title="Redo (Ctrl+Y)">
-                        <span class="icon icon-redo"></span>
+                        <svg class="icon-svg"><use href="svg-icons/icons.svg#redo"/></svg>
                     </button>
                 </div>
 
                 <div class="toolbar-end">
-                    <button id="toggleCodeBtn" title="Toggle code panel">
-                        <span class="icon icon-code"></span>
-                    </button>
-                    <button id="saveBtn" class="toolbar-btn-accent" title="Download HTML (Ctrl+S)">
-                        <span class="icon icon-save"></span>
-                    </button>
-                    <button id="clearBtn" class="toolbar-btn-danger" title="Clear all content">
-                        <span class="icon icon-delete"></span>
-                    </button>
+                    
                 </div>
+
             </div>
 
             <div class="editor-body">
@@ -98,16 +88,38 @@
                         aria-label="Editing area">
                     </div>
                 </div>
+
+                <div class="editor-side hidden" id="sidePanel">
+                    <div class="side-tabs">
+                        <button class="side-tab active" data-tab="codePanel">Code</button>
+                        <button class="side-tab" data-tab="previewPanel">Preview</button>
+                    </div>
+                    <div class="side-panels">
+                        <div class="side-panel active" id="codePanel">
+                            <textarea id="code" spellcheck="false" autocomplete="off"
+                                placeholder="HTML will appear here…"></textarea>
+                            <div class="code-actions">
+                                <button title="Apply HTML to editor">Apply</button>
+                                <button title="Strip unsafe elements">Sanitize</button>
+                                <button title="Remove whitespace">Minify</button>
+                            </div>
+                        </div>
+                        <div class="side-panel" id="previewPanel">
+                            <div class="preview-content" id="preview"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="editor-footer">
                 <span class="editor-wordcount" id="wordCount">0 words</span>
                 <span class="editor-shortcuts">
-                    <kbd>Ctrl+B</kbd> Bold
-                    <kbd>Ctrl+K</kbd> Link
-                    <kbd>Ctrl+S</kbd> Save
+                    <span><kbd>Ctrl+B</kbd> Bold</span>
+                    <span><kbd>Ctrl+K</kbd> Link</span>
+                    <span><kbd>Ctrl+S</kbd> Save</span>
                 </span>
             </div>
+
         </div>
     </div>
 

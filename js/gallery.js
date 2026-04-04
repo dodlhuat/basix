@@ -13,6 +13,9 @@ class MasonryGallery {
                 this.loadMoreImages();
             }
         };
+        this.fetchMockImages = () => {
+            throw Error("Method not implemented.");
+        };
         const container = document.getElementById(containerId);
         if (!container) {
             throw new Error(`Container with id "${containerId}" not found`);
@@ -85,7 +88,8 @@ class MasonryGallery {
         });
     }
     async loadMoreImages(isAutoFill = false) {
-        if (!isAutoFill) this.reloaded++;
+        if (!isAutoFill)
+            this.reloaded++;
         if (this.options.reload > 0 && this.reloaded > this.options.reload) {
             console.warn("Maximum reload limit reached.");
             return;
@@ -119,9 +123,6 @@ class MasonryGallery {
             this.loader.classList.toggle("hidden", !show);
         }
     }
-    fetchMockImages = () => {
-        throw Error("Method not implemented.");
-    };
     renderImages(imageDataList) {
         imageDataList.forEach((data) => {
             const item = this.createCard(data);

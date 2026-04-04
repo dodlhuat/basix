@@ -284,7 +284,7 @@ utils.ready(() => {
     let indexNumber = 1;
     const gallery = new MasonryGallery("gallery", {
         minColumnWidth: 300,
-        fetchFunction: new Promise((resolve) => {
+        fetchFunction: () => new Promise<ImageData[]>((resolve) => {
             setTimeout(() => {
                 const images: ImageData[] = [];
 
@@ -849,7 +849,7 @@ new CodeViewer("#usage-gallery-demo-html", `<div id="gallery" class="masonry-con
             </div>`, "html");
 new CodeViewer("#usage-gallery-demo-js", `const gallery = new MasonryGallery("gallery", {
     minColumnWidth: 300,
-    fetchFunction: new Promise((resolve) => {
+    fetchFunction: () => new Promise((resolve) => {
       setTimeout(() => {
         const images: ImageData[] = [];
 

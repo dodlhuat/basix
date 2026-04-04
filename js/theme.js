@@ -80,10 +80,14 @@ class Theme {
         // Update button state
         toggleBtn.setAttribute('aria-pressed', String(isDark));
         toggleBtn.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
-        // Update icon
-        const use = icon.querySelector('use');
-        if (use) {
-            use.setAttribute('href', isDark ? 'svg-icons/icons.svg#bedtime' : 'svg-icons/icons.svg#clear_day');
+        // Update icon classes
+        if (isDark) {
+            icon.classList.remove('icon-light');
+            icon.classList.add('icon-dark');
+        }
+        else {
+            icon.classList.remove('icon-dark');
+            icon.classList.add('icon-light');
         }
     }
     /**

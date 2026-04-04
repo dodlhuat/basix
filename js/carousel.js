@@ -59,6 +59,7 @@ class Carousel {
             this.dots.push(dot);
         });
         this.root.appendChild(this.dotsNav);
+        // Make focusable for keyboard nav
         this.root.setAttribute('tabindex', '0');
     }
     bindEvents() {
@@ -66,7 +67,8 @@ class Carousel {
         this.prevButton.addEventListener('click', () => this.moveToPrevSlide());
         this.dotsNav.addEventListener('click', (e) => {
             const targetDot = e.target.closest('button');
-            if (!targetDot) return;
+            if (!targetDot)
+                return;
             const targetIndex = this.dots.findIndex(dot => dot === targetDot);
             this.moveToSlide(targetIndex);
         });
@@ -76,25 +78,32 @@ class Carousel {
         });
         // Keyboard navigation
         this.root.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft')  this.moveToPrevSlide();
-            if (e.key === 'ArrowRight') this.moveToNextSlide();
+            if (e.key === 'ArrowLeft')
+                this.moveToPrevSlide();
+            if (e.key === 'ArrowRight')
+                this.moveToNextSlide();
         });
         // Pause autoplay on hover / focus
         if (this.options.autoPlay) {
             this.root.addEventListener('mouseenter', () => this.pauseAutoPlay());
             this.root.addEventListener('mouseleave', () => this.resumeAutoPlay());
-            this.root.addEventListener('focusin',    () => this.pauseAutoPlay());
-            this.root.addEventListener('focusout',   () => this.resumeAutoPlay());
+            this.root.addEventListener('focusin', () => this.pauseAutoPlay());
+            this.root.addEventListener('focusout', () => this.resumeAutoPlay());
         }
         this.addTouchSupport();
     }
     moveToSlide(targetIndex, animate = true) {
         if (targetIndex < 0) {
-            if (this.options.loop) targetIndex = this.slides.length - 1;
-            else targetIndex = 0;
-        } else if (targetIndex >= this.slides.length) {
-            if (this.options.loop) targetIndex = 0;
-            else targetIndex = this.slides.length - 1;
+            if (this.options.loop)
+                targetIndex = this.slides.length - 1;
+            else
+                targetIndex = 0;
+        }
+        else if (targetIndex >= this.slides.length) {
+            if (this.options.loop)
+                targetIndex = 0;
+            else
+                targetIndex = this.slides.length - 1;
         }
         if (!animate) {
             this.track.style.transitionDuration = '0ms';
@@ -102,6 +111,7 @@ class Carousel {
         const amountToMove = -1 * (this.slideWidth * targetIndex);
         this.track.style.transform = `translateX(${amountToMove}px)`;
         if (!animate) {
+            // Restore CSS transition after the paint to avoid a flash
             requestAnimationFrame(() => {
                 this.track.style.transitionDuration = '';
             });
@@ -127,12 +137,15 @@ class Carousel {
             isDragging = true;
         }, { passive: true });
         this.track.addEventListener('touchend', (e) => {
-            if (!isDragging) return;
+            if (!isDragging)
+                return;
             const endX = e.changedTouches[0].clientX;
             const diffX = startX - endX;
             if (Math.abs(diffX) > 50) {
-                if (diffX > 0) this.moveToNextSlide();
-                else this.moveToPrevSlide();
+                if (diffX > 0)
+                    this.moveToNextSlide();
+                else
+                    this.moveToPrevSlide();
             }
             isDragging = false;
         });
