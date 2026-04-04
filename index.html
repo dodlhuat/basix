@@ -10,6 +10,13 @@
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
     <style>
         /*styles for presentation only*/
+        svg.icon-svg {
+            fill: currentColor;
+            display: inline-block;
+            vertical-align: middle;
+            width: 24px;
+            height: 24px;
+        }
         .carousel-slide {
             background-color: #eee;
             color: #555;
@@ -31,7 +38,7 @@
         <div class="navigation-controls">
             <input type="checkbox" id="menu-navigation" class="navigation"/>
             <label for="menu-navigation">
-                <span class="icon icon-menu"></span>
+                <svg class="icon-svg" width="24" height="24"><use href="svg-icons/icons.svg#menu"/></svg>
             </label>
         </div>
     </div>
@@ -42,7 +49,7 @@
                     class="theme-toggle flex"
                     aria-label="Toggle dark mode"
             >
-                <span id="theme-icon" class="icon icon-light"></span>
+                <svg id="theme-icon" class="icon-svg" width="24" height="24"><use href="svg-icons/icons.svg#clear_day"/></svg>
             </div>
         </div>
     </div>
@@ -266,319 +273,131 @@
         </div>
     </div>
     <h3>Icons</h3>
-    <p><strong>Info: </strong>Basix is using a reduced font of google
-        material icon font with just a minimum of icons. Just bear in mind
-        that the reduced version is only 5.5KB in size while the full
-        version is 242.5KB.<br/>
-        To show an icon use the "icon" class and the desired icon element
-        class.<br/>
-        <br/>The following icons are available in the reduce set:</p>
+    <p>Icons are served as an SVG sprite. Use <code>&lt;svg&gt;&lt;use href="svg-icons/icons.svg#icon_name"/&gt;&lt;/svg&gt;</code> to display an icon.</p>
     <div class="card">
         <div class="horizontal-align-center">
             <div class="row">
-                <div class="column">
-                    icon-delete<br/><span class="icon icon-delete"></span>
-                </div>
-                <div class="column">
-                    icon-search<br/><span class="icon icon-search"></span>
-                </div>
-                <div class="column">
-                    icon-splitscreen_vertical_add<br/><span
-                        class="icon icon-splitscreen_vertical_add"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-splitscreen_add<br/><span
-                        class="icon icon-splitscreen_add"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-push_pin<br/><span class="icon icon-push_pin"></span>
-                </div>
+                <div class="column">add<br><svg class="icon-svg"><use href="svg-icons/icons.svg#add"/></svg></div>
+                <div class="column">add_circle<br><svg class="icon-svg"><use href="svg-icons/icons.svg#add_circle"/></svg></div>
+                <div class="column">add_photo_alternate<br><svg class="icon-svg"><use href="svg-icons/icons.svg#add_photo_alternate"/></svg></div>
+                <div class="column">arrow_back<br><svg class="icon-svg"><use href="svg-icons/icons.svg#arrow_back"/></svg></div>
+                <div class="column">arrow_circle_right<br><svg class="icon-svg"><use href="svg-icons/icons.svg#arrow_circle_right"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-block<br/><span class="icon icon-block"></span>
-                </div>
-                <div class="column">
-                    icon-check_circle<br/><span
-                        class="icon icon-check_circle"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-stars<br/><span class="icon icon-stars"></span>
-                </div>
-                <div class="column">
-                    icon-support<br/><span class="icon icon-support"></span>
-                </div>
-                <div class="column">
-                    icon-refresh<br/><span class="icon icon-refresh"></span>
-                </div>
+                <div class="column">arrow_downward<br><svg class="icon-svg"><use href="svg-icons/icons.svg#arrow_downward"/></svg></div>
+                <div class="column">arrow_drop_down<br><svg class="icon-svg"><use href="svg-icons/icons.svg#arrow_drop_down"/></svg></div>
+                <div class="column">arrow_forward<br><svg class="icon-svg"><use href="svg-icons/icons.svg#arrow_forward"/></svg></div>
+                <div class="column">attachment<br><svg class="icon-svg"><use href="svg-icons/icons.svg#attachment"/></svg></div>
+                <div class="column">autorenew<br><svg class="icon-svg"><use href="svg-icons/icons.svg#autorenew"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-sync<br/><span class="icon icon-sync"></span>
-                </div>
-                <div class="column">
-                    icon-language<br/><span class="icon icon-language"></span>
-                </div>
-                <div class="column">
-                    icon-article<br/><span class="icon icon-article"></span>
-                </div>
-                <div class="column">
-                    icon-list_alt<br/><span class="icon icon-list_alt"></span>
-                </div>
-                <div class="column">
-                    icon-add_box<br/><span class="icon icon-add_box"></span>
-                </div>
+                <div class="column">backspace<br><svg class="icon-svg"><use href="svg-icons/icons.svg#backspace"/></svg></div>
+                <div class="column">bedtime<br><svg class="icon-svg"><use href="svg-icons/icons.svg#bedtime"/></svg></div>
+                <div class="column">block<br><svg class="icon-svg"><use href="svg-icons/icons.svg#block"/></svg></div>
+                <div class="column">calendar_month<br><svg class="icon-svg"><use href="svg-icons/icons.svg#calendar_month"/></svg></div>
+                <div class="column">cancel<br><svg class="icon-svg"><use href="svg-icons/icons.svg#cancel"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-disabled_by_default<br/><span
-                        class="icon icon-disabled_by_default"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-help_center<br/><span class="icon icon-help_center"></span>
-                </div>
-                <div class="column">
-                    icon-pages<br/><span class="icon icon-pages"></span>
-                </div>
-                <div class="column">
-                    icon-add_photo_alternate<br/><span
-                        class="icon icon-add_photo_alternate"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-calendar_today<br/><span
-                        class="icon icon-calendar_today"
-                ></span>
-                </div>
+                <div class="column">check<br><svg class="icon-svg"><use href="svg-icons/icons.svg#check"/></svg></div>
+                <div class="column">check_circle<br><svg class="icon-svg"><use href="svg-icons/icons.svg#check_circle"/></svg></div>
+                <div class="column">chevron_left<br><svg class="icon-svg"><use href="svg-icons/icons.svg#chevron_left"/></svg></div>
+                <div class="column">chevron_right<br><svg class="icon-svg"><use href="svg-icons/icons.svg#chevron_right"/></svg></div>
+                <div class="column">clear_day<br><svg class="icon-svg"><use href="svg-icons/icons.svg#clear_day"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-assignment_turned_in<br/><span
-                        class="icon icon-assignment_turned_in"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-finance<br/><span class="icon icon-finance"></span>
-                </div>
-                <div class="column">
-                    icon-save<br/><span class="icon icon-save"></span>
-                </div>
-                <div class="column">
-                    icon-folder<br/><span class="icon icon-folder"></span>
-                </div>
-                <div class="column">
-                    icon-folder_off<br/><span class="icon icon-folder_off"></span>
-                </div>
+                <div class="column">clock_loader_10<br><svg class="icon-svg"><use href="svg-icons/icons.svg#clock_loader_10"/></svg></div>
+                <div class="column">clock_loader_20<br><svg class="icon-svg"><use href="svg-icons/icons.svg#clock_loader_20"/></svg></div>
+                <div class="column">clock_loader_40<br><svg class="icon-svg"><use href="svg-icons/icons.svg#clock_loader_40"/></svg></div>
+                <div class="column">clock_loader_60<br><svg class="icon-svg"><use href="svg-icons/icons.svg#clock_loader_60"/></svg></div>
+                <div class="column">clock_loader_80<br><svg class="icon-svg"><use href="svg-icons/icons.svg#clock_loader_80"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-folder_open<br/><span class="icon icon-folder_open"></span>
-                </div>
-                <div class="column">
-                    icon-mail<br/><span class="icon icon-mail"></span>
-                </div>
-                <div class="column">
-                    icon-attach_file<br/><span class="icon icon-attach_file"></span>
-                </div>
-                <div class="column">
-                    icon-chat_bubble<br/><span class="icon icon-chat_bubble"></span>
-                </div>
-                <div class="column">
-                    icon-cases<br/><span class="icon icon-cases"></span>
-                </div>
+                <div class="column">clock_loader_90<br><svg class="icon-svg"><use href="svg-icons/icons.svg#clock_loader_90"/></svg></div>
+                <div class="column">close<br><svg class="icon-svg"><use href="svg-icons/icons.svg#close"/></svg></div>
+                <div class="column">create_new_folder<br><svg class="icon-svg"><use href="svg-icons/icons.svg#create_new_folder"/></svg></div>
+                <div class="column">delete<br><svg class="icon-svg"><use href="svg-icons/icons.svg#delete"/></svg></div>
+                <div class="column">delete_forever<br><svg class="icon-svg"><use href="svg-icons/icons.svg#delete_forever"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-send<br/><span class="icon icon-send"></span>
-                </div>
-                <div class="column">
-                    icon-bookmark<br/><span class="icon icon-bookmark"></span>
-                </div>
-                <div class="column">
-                    icon-label<br/><span class="icon icon-label"></span>
-                </div>
-                <div class="column">
-                    icon-filter_alt<br/><span class="icon icon-filter_alt"></span>
-                </div>
-                <div class="column">
-                    icon-filter_alt_off<br/><span
-                        class="icon icon-filter_alt_off"
-                ></span>
-                </div>
+                <div class="column">do_not_disturb_on<br><svg class="icon-svg"><use href="svg-icons/icons.svg#do_not_disturb_on"/></svg></div>
+                <div class="column">download<br><svg class="icon-svg"><use href="svg-icons/icons.svg#download"/></svg></div>
+                <div class="column">drafts<br><svg class="icon-svg"><use href="svg-icons/icons.svg#drafts"/></svg></div>
+                <div class="column">drag_indicator<br><svg class="icon-svg"><use href="svg-icons/icons.svg#drag_indicator"/></svg></div>
+                <div class="column">edit<br><svg class="icon-svg"><use href="svg-icons/icons.svg#edit"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-notifications_active<br/><span
-                        class="icon icon-notifications_active"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-more_horiz<br/><span class="icon icon-more_horiz"></span>
-                </div>
-                <div class="column">
-                    icon-more_vert<br/><span class="icon icon-more_vert"></span>
-                </div>
-                <div class="column">
-                    icon-navigate_before<br/><span
-                        class="icon icon-navigate_before"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-navigate_next<br/><span
-                        class="icon icon-navigate_next"
-                ></span>
-                </div>
+                <div class="column">event<br><svg class="icon-svg"><use href="svg-icons/icons.svg#event"/></svg></div>
+                <div class="column">expand_circle_down<br><svg class="icon-svg"><use href="svg-icons/icons.svg#expand_circle_down"/></svg></div>
+                <div class="column">favorite<br><svg class="icon-svg"><use href="svg-icons/icons.svg#favorite"/></svg></div>
+                <div class="column">filter_alt<br><svg class="icon-svg"><use href="svg-icons/icons.svg#filter_alt"/></svg></div>
+                <div class="column">filter_list<br><svg class="icon-svg"><use href="svg-icons/icons.svg#filter_list"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-keyboard_double_arrow_left<br/><span
-                        class="icon icon-keyboard_double_arrow_left"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-keyboard_double_arrow_right<br/><span
-                        class="icon icon-keyboard_double_arrow_right"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-first_page<br/><span class="icon icon-first_page"></span>
-                </div>
-                <div class="column">
-                    icon-last_page<br/><span class="icon icon-last_page"></span>
-                </div>
-                <div class="column">
-                    icon-expand_less<br/><span class="icon icon-expand_less"></span>
-                </div>
+                <div class="column">format_align_center<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_align_center"/></svg></div>
+                <div class="column">format_align_left<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_align_left"/></svg></div>
+                <div class="column">format_align_right<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_align_right"/></svg></div>
+                <div class="column">format_bold<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_bold"/></svg></div>
+                <div class="column">format_color_text<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_color_text"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-expand_more<br/><span class="icon icon-expand_more"></span>
-                </div>
-                <div class="column">
-                    icon-zoom_in_map<br/><span class="icon icon-zoom_in_map"></span>
-                </div>
-                <div class="column">
-                    icon-zoom_out_map<br/><span
-                        class="icon icon-zoom_out_map"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-drag_pan<br/><span class="icon icon-drag_pan"></span>
-                </div>
-                <div class="column">
-                    icon-format_list_bulleted<br/><span
-                        class="icon icon-format_list_bulleted"
-                ></span>
-                </div>
+                <div class="column">format_italic<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_italic"/></svg></div>
+                <div class="column">format_list_bulleted<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_list_bulleted"/></svg></div>
+                <div class="column">format_list_numbered<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_list_numbered"/></svg></div>
+                <div class="column">format_size<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_size"/></svg></div>
+                <div class="column">format_strikethrough<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_strikethrough"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-format_list_numbered<br/><span
-                        class="icon icon-format_list_numbered"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-check<br/><span class="icon icon-check"></span>
-                </div>
-                <div class="column">
-                    icon-remove<br/><span class="icon icon-remove"></span>
-                </div>
-                <div class="column">
-                    icon-add<br/><span class="icon icon-add"></span>
-                </div>
-                <div class="column">
-                    icon-close<br/><span class="icon icon-close"></span>
-                </div>
+                <div class="column">format_underlined<br><svg class="icon-svg"><use href="svg-icons/icons.svg#format_underlined"/></svg></div>
+                <div class="column">fullscreen<br><svg class="icon-svg"><use href="svg-icons/icons.svg#fullscreen"/></svg></div>
+                <div class="column">home<br><svg class="icon-svg"><use href="svg-icons/icons.svg#home"/></svg></div>
+                <div class="column">image<br><svg class="icon-svg"><use href="svg-icons/icons.svg#image"/></svg></div>
+                <div class="column">key<br><svg class="icon-svg"><use href="svg-icons/icons.svg#key"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-format_bold<br/><span class="icon icon-format_bold"></span>
-                </div>
-                <div class="column">
-                    icon-format_italic<br/><span
-                        class="icon icon-format_italic"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-format_underlined<br/><span
-                        class="icon icon-format_underlined"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-home<br/><span class="icon icon-home"></span>
-                </div>
-                <div class="column">
-                    icon-favorite<br/><span class="icon icon-favorite"></span>
-                </div>
+                <div class="column">library_add<br><svg class="icon-svg"><use href="svg-icons/icons.svg#library_add"/></svg></div>
+                <div class="column">list<br><svg class="icon-svg"><use href="svg-icons/icons.svg#list"/></svg></div>
+                <div class="column">login<br><svg class="icon-svg"><use href="svg-icons/icons.svg#login"/></svg></div>
+                <div class="column">logout<br><svg class="icon-svg"><use href="svg-icons/icons.svg#logout"/></svg></div>
+                <div class="column">mail<br><svg class="icon-svg"><use href="svg-icons/icons.svg#mail"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-edit<br/><span class="icon icon-edit"></span>
-                </div>
-                <div class="column">
-                    icon-layers<br/><span class="icon icon-layers"></span>
-                </div>
-                <div class="column">
-                    icon-cloud<br/><span class="icon icon-cloud"></span>
-                </div>
-                <div class="column">
-                    icon-print<br/><span class="icon icon-print"></span>
-                </div>
-                <div class="column">
-                    icon-share<br/><span class="icon icon-share"></span>
-                </div>
+                <div class="column">manage_search<br><svg class="icon-svg"><use href="svg-icons/icons.svg#manage_search"/></svg></div>
+                <div class="column">menu<br><svg class="icon-svg"><use href="svg-icons/icons.svg#menu"/></svg></div>
+                <div class="column">menu_open<br><svg class="icon-svg"><use href="svg-icons/icons.svg#menu_open"/></svg></div>
+                <div class="column">minimize<br><svg class="icon-svg"><use href="svg-icons/icons.svg#minimize"/></svg></div>
+                <div class="column">more_horiz<br><svg class="icon-svg"><use href="svg-icons/icons.svg#more_horiz"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-tune<br/><span class="icon icon-tune"></span>
-                </div>
-                <div class="column">
-                    icon-power_settings_new<br/><span
-                        class="icon icon-power_settings_new"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-timeline<br/><span class="icon icon-timeline"></span>
-                </div>
-                <div class="column">
-                    icon-bar_chart<br/><span class="icon icon-bar_chart"></span>
-                </div>
-                <div class="column">
-                    icon-bar_chart_4_bars<br/><span
-                        class="icon icon-bar_chart_4_bars"
-                ></span>
-                </div>
+                <div class="column">more_vert<br><svg class="icon-svg"><use href="svg-icons/icons.svg#more_vert"/></svg></div>
+                <div class="column">open_in_full<br><svg class="icon-svg"><use href="svg-icons/icons.svg#open_in_full"/></svg></div>
+                <div class="column">person_edit<br><svg class="icon-svg"><use href="svg-icons/icons.svg#person_edit"/></svg></div>
+                <div class="column">person_search<br><svg class="icon-svg"><use href="svg-icons/icons.svg#person_search"/></svg></div>
+                <div class="column">redo<br><svg class="icon-svg"><use href="svg-icons/icons.svg#redo"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-finance_mode<br/><span
-                        class="icon icon-finance_mode"
-                ></span>
-                </div>
-                <div class="column">
-                    icon-database<br/><span class="icon icon-database"></span>
-                </div>
-                <div class="column">
-                    icon-settings<br/><span class="icon icon-settings"></span>
-                </div>
-                <div class="column">
-                    icon-person<br/><span class="icon icon-person"></span>
-                </div>
-                <div class="column">
-                    icon-menu<br/><span class="icon icon-menu"></span>
-                </div>
+                <div class="column">refresh<br><svg class="icon-svg"><use href="svg-icons/icons.svg#refresh"/></svg></div>
+                <div class="column">remove<br><svg class="icon-svg"><use href="svg-icons/icons.svg#remove"/></svg></div>
+                <div class="column">reply<br><svg class="icon-svg"><use href="svg-icons/icons.svg#reply"/></svg></div>
+                <div class="column">schedule<br><svg class="icon-svg"><use href="svg-icons/icons.svg#schedule"/></svg></div>
+                <div class="column">search<br><svg class="icon-svg"><use href="svg-icons/icons.svg#search"/></svg></div>
             </div>
             <div class="row">
-                <div class="column">
-                    icon-light<br/><span class="icon icon-light"></span>
-                </div>
-                <div class="column">
-                    icon-dark<br/><span class="icon icon-dark"></span>
-                </div>
+                <div class="column">send<br><svg class="icon-svg"><use href="svg-icons/icons.svg#send"/></svg></div>
+                <div class="column">settings<br><svg class="icon-svg"><use href="svg-icons/icons.svg#settings"/></svg></div>
+                <div class="column">sort<br><svg class="icon-svg"><use href="svg-icons/icons.svg#sort"/></svg></div>
+                <div class="column">stacks<br><svg class="icon-svg"><use href="svg-icons/icons.svg#stacks"/></svg></div>
+                <div class="column">star<br><svg class="icon-svg"><use href="svg-icons/icons.svg#star"/></svg></div>
+            </div>
+            <div class="row">
+                <div class="column">support<br><svg class="icon-svg"><use href="svg-icons/icons.svg#support"/></svg></div>
+                <div class="column">sync_saved_locally<br><svg class="icon-svg"><use href="svg-icons/icons.svg#sync_saved_locally"/></svg></div>
+                <div class="column">table<br><svg class="icon-svg"><use href="svg-icons/icons.svg#table"/></svg></div>
+                <div class="column">tune<br><svg class="icon-svg"><use href="svg-icons/icons.svg#tune"/></svg></div>
+                <div class="column">undo<br><svg class="icon-svg"><use href="svg-icons/icons.svg#undo"/></svg></div>
+            </div>
+            <div class="row">
+                <div class="column">upload<br><svg class="icon-svg"><use href="svg-icons/icons.svg#upload"/></svg></div>
+                <div class="column">zoom_in<br><svg class="icon-svg"><use href="svg-icons/icons.svg#zoom_in"/></svg></div>
                 <div class="column"></div>
                 <div class="column"></div>
                 <div class="column"></div>
@@ -1025,7 +844,7 @@
         <div class="chip closeable">
             Example Chip with closure
             <button class="close">
-                <span class="icon icon-close"></span>
+                <svg class="icon-svg"><use href="svg-icons/icons.svg#close"/></svg>
             </button>
         </div>
     </div>
