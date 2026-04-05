@@ -18,6 +18,7 @@ import { Dropdown } from "./dropdown.js";
 import { VirtualDropdown } from "./virtual-dropdown.js";
 import { TimeSpanPicker } from "./timepicker.js";
 import { RangeSlider } from "./range-slider.js";
+import { Editor } from "./editor.js";
 // Generate sample table data
 const generateData = (count) => {
     const data = [];
@@ -297,6 +298,7 @@ utils.ready(() => {
     // Initialize range sliders
     RangeSlider.initAll();
     Tooltip.initializeAll();
+    new Editor();
     const timeSpanPicker = new TimeSpanPicker('timespan-1', {
         onChange: (start, end) => {
             console.log(`Start: ${start}, Ende: ${end}`);
@@ -657,6 +659,10 @@ new CodeViewer("#usage-virtual-dropdown-demo-js", `const singleDropdown = new Vi
       console.log("Single Select:", val);
     },
   });`, "js");
+new CodeViewer("#usage-editor-demo", `import { Editor } from "./editor.js";
+
+// Requires matching HTML structure in the page (toolbar, #editable, #code, #preview, #sidePanel)
+new Editor();`, "js");
 new CodeViewer("#usage-scrollbar-demo", `Scrollbar.initAll(".scroll-container");`, "js");
 new CodeViewer("#usage-theme-demo", `Theme.init();`, "js");
 new CodeViewer("#usage-scroll-demo", `window.Scroll.to('#grid')`, "js");

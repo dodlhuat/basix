@@ -36,10 +36,107 @@ class Editor {
         });
     }
     bindActions() {
-        document.getElementById('linkBtn')?.addEventListener('click', () => {
-            const url = prompt('Enter URL:', 'https://');
-            if (url)
-                this.exec('createLink', url);
+        this.savedRange = null;
+        this.editingAnchor = null;
+        const linkPopover = document.getElementById('linkPopover');
+        const linkUrl = document.getElementById('linkUrl');
+        const linkText = document.getElementById('linkText');
+        const linkNewTab = document.getElementById('linkNewTab');
+        const linkConfirmBtn = document.getElementById('linkConfirmBtn');
+        const linkRemoveBtn = document.getElementById('linkRemoveBtn');
+        const linkCancelBtn = document.getElementById('linkCancelBtn');
+        const linkBtn = document.getElementById('linkBtn');
+        const closeLinkPopover = () => {
+            linkPopover?.removeAttribute('hidden');
+            linkPopover?.setAttribute('hidden', '');
+            this.savedRange = null;
+            this.editingAnchor = null;
+        };
+        linkBtn?.addEventListener('click', () => {
+            const sel = window.getSelection();
+            // Save selection before focus leaves editable
+            if (sel && sel.rangeCount > 0) {
+                this.savedRange = sel.getRangeAt(0).cloneRange();
+            }
+            else {
+                this.savedRange = null;
+            }
+            // Check if cursor is inside an existing <a>
+            const anchor = this.getAnchorAtSelection();
+            this.editingAnchor = anchor;
+            if (anchor) {
+                linkUrl.value = anchor.href;
+                linkText.value = anchor.textContent ?? '';
+                linkNewTab.checked = anchor.target === '_blank';
+                linkRemoveBtn?.removeAttribute('hidden');
+                linkConfirmBtn.textContent = 'Update';
+            }
+            else {
+                linkUrl.value = '';
+                linkText.value = sel && !sel.isCollapsed ? sel.toString() : '';
+                linkNewTab.checked = false;
+                linkRemoveBtn?.setAttribute('hidden', '');
+                linkConfirmBtn.textContent = 'Insert';
+            }
+            // Show popover and focus URL field
+            linkPopover?.removeAttribute('hidden');
+            // Show or hide text field depending on whether text is pre-selected
+            if (linkText) {
+                linkText.closest('.link-popover-row').style.display =
+                    (this.editingAnchor || (sel && !sel.isCollapsed)) ? 'none' : '';
+            }
+            linkUrl.focus();
+        });
+        linkConfirmBtn?.addEventListener('click', () => {
+            const url = linkUrl.value.trim();
+            if (!url)
+                return;
+            const text = linkText.value.trim();
+            const newTab = linkNewTab.checked;
+            if (this.editingAnchor) {
+                // Update existing anchor in-place
+                this.editingAnchor.href = url;
+                if (newTab) {
+                    this.editingAnchor.target = '_blank';
+                    this.editingAnchor.rel = 'noopener noreferrer';
+                }
+                else {
+                    this.editingAnchor.removeAttribute('target');
+                    this.editingAnchor.removeAttribute('rel');
+                }
+            }
+            else {
+                this.restoreSelection();
+                this.insertLink(url, text, newTab);
+            }
+            this.onContentChange();
+            closeLinkPopover();
+        });
+        linkRemoveBtn?.addEventListener('click', () => {
+            if (this.editingAnchor) {
+                const parent = this.editingAnchor.parentNode;
+                while (this.editingAnchor.firstChild) {
+                    parent?.insertBefore(this.editingAnchor.firstChild, this.editingAnchor);
+                }
+                parent?.removeChild(this.editingAnchor);
+                this.onContentChange();
+            }
+            closeLinkPopover();
+        });
+        linkCancelBtn?.addEventListener('click', () => {
+            closeLinkPopover();
+        });
+        // Close on Escape
+        linkPopover?.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape')
+                closeLinkPopover();
+        });
+        // Submit on Enter from url field
+        linkUrl?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                linkConfirmBtn?.click();
+            }
         });
         const imageFile = document.getElementById('imageFile');
         document.getElementById('imageBtn')?.addEventListener('click', () => imageFile.click());
@@ -119,9 +216,7 @@ class Editor {
             }
             else if (key === 'k') {
                 e.preventDefault();
-                const url = prompt('Enter URL:', 'https://');
-                if (url)
-                    this.exec('createLink', url);
+                document.getElementById('linkBtn')?.click();
             }
             else if (key === 's') {
                 e.preventDefault();
@@ -210,10 +305,6 @@ class Editor {
             case 'strikeThrough':
                 this.toggleInlineStyle('s');
                 break;
-            case 'createLink':
-                if (value)
-                    this.createLink(value);
-                break;
             case 'formatBlock':
                 if (value)
                     this.formatBlock(value);
@@ -289,17 +380,56 @@ class Editor {
         }
         this.onContentChange();
     }
-    createLink(url) {
+    getAnchorAtSelection() {
         const sel = window.getSelection();
         if (!sel || sel.rangeCount === 0)
+            return null;
+        let node = sel.getRangeAt(0).commonAncestorContainer;
+        if (node.nodeType === Node.TEXT_NODE)
+            node = node.parentElement;
+        let current = node;
+        while (current && current !== this.editable) {
+            if (current.tagName === 'A')
+                return current;
+            current = current.parentElement;
+        }
+        return null;
+    }
+    restoreSelection() {
+        if (!this.savedRange)
             return;
-        const range = sel.getRangeAt(0);
-        const contents = range.extractContents();
+        const sel = window.getSelection();
+        if (!sel)
+            return;
+        sel.removeAllRanges();
+        sel.addRange(this.savedRange);
+    }
+    insertLink(url, text, newTab) {
+        const sel = window.getSelection();
+        if (!sel)
+            return;
         const link = document.createElement('a');
         link.href = url;
-        link.appendChild(contents);
-        range.insertNode(link);
-        this.onContentChange();
+        if (newTab) {
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+        }
+        if (sel.isCollapsed) {
+            // No selection — insert link with provided text (or url as fallback)
+            link.textContent = text || url;
+            const range = sel.getRangeAt(0);
+            range.insertNode(link);
+            range.setStartAfter(link);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+        else {
+            const range = sel.getRangeAt(0);
+            const contents = range.extractContents();
+            link.appendChild(contents);
+            range.insertNode(link);
+        }
     }
     formatBlock(tag) {
         const sel = window.getSelection();

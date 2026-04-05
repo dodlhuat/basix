@@ -144,6 +144,7 @@
             <li><a onclick="window.Scroll.to('#components')">Carousel</a></li>
             <li><a onclick="window.Scroll.to('#components')">Gallery</a></li>
             <li><a onclick="window.Scroll.to('#components')">TBD: Timespan Picker</a></li>
+            <li><a onclick="window.Scroll.to('#editor')">Rich Text Editor</a></li>
         </ul>
         </li>
         <li>Utilities
@@ -232,6 +233,14 @@
                 Use <code>.card</code> class on rows or columns to wrap those into a
                 card.
             </p>
+            <h3>Breadcrumbs</h3>
+            <div class="breadcrumb" aria-label="Breadcrumb">
+                <ol>
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Users</a></li>
+                    <li aria-current="page"><span>John Doe</span></li>
+                </ol>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -1693,6 +1702,137 @@
     <div class="card">
         <div id="timespan-1"></div>
     </div>
+    <h3 id="editor">Rich Text Editor</h3>
+    <p>
+        The <strong>Editor</strong> component provides a rich text editing experience with a formatting
+        toolbar, HTML code view, and live preview. Supports bold, italic, underline, strikethrough,
+        block-level formatting, ordered/unordered lists, links, images, undo/redo, and HTML export.
+    </p>
+    <div class="editor">
+        <div class="editor-link-popover" id="linkPopover" hidden>
+            <div class="link-popover-row">
+                <input type="text" id="linkText" class="link-popover-input" placeholder="Link text" autocomplete="off"/>
+            </div>
+            <div class="link-popover-row">
+                <input type="url" id="linkUrl" class="link-popover-input" placeholder="https://" autocomplete="off"/>
+            </div>
+            <div class="link-popover-row link-popover-actions">
+                <label class="link-popover-check">
+                    <input type="checkbox" id="linkNewTab"/> New tab
+                </label>
+                <div class="link-popover-btns">
+                    <button id="linkRemoveBtn" class="link-popover-remove" hidden>Remove</button>
+                    <button id="linkCancelBtn" class="link-popover-cancel">Cancel</button>
+                    <button id="linkConfirmBtn" class="link-popover-confirm">Insert</button>
+                </div>
+            </div>
+        </div>
+        <div class="editor-toolbar">
+            <div class="toolbar-group">
+                <button id="undoBtn" title="Undo (Ctrl+Z)" aria-label="Undo">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#undo"/></svg>
+                </button>
+                <button id="redoBtn" title="Redo (Ctrl+Y)" aria-label="Redo">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#redo"/></svg>
+                </button>
+            </div>
+            <div class="toolbar-separator"></div>
+            <div class="toolbar-group">
+                <button data-cmd="formatBlock" data-value="p" title="Paragraph" aria-label="Paragraph">P</button>
+                <button data-cmd="formatBlock" data-value="h1" title="Heading 1" aria-label="Heading 1">H1</button>
+                <button data-cmd="formatBlock" data-value="h2" title="Heading 2" aria-label="Heading 2">H2</button>
+                <button data-cmd="formatBlock" data-value="blockquote" title="Blockquote" aria-label="Blockquote">"</button>
+            </div>
+            <div class="toolbar-separator"></div>
+            <div class="toolbar-group">
+                <button data-cmd="bold" title="Bold (Ctrl+B)" aria-label="Bold">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#format_bold"/></svg>
+                </button>
+                <button data-cmd="italic" title="Italic (Ctrl+I)" aria-label="Italic">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#format_italic"/></svg>
+                </button>
+                <button data-cmd="underline" title="Underline (Ctrl+U)" aria-label="Underline">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#format_underlined"/></svg>
+                </button>
+                <button data-cmd="strikeThrough" title="Strikethrough" aria-label="Strikethrough">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#format_strikethrough"/></svg>
+                </button>
+            </div>
+            <div class="toolbar-separator"></div>
+            <div class="toolbar-group">
+                <button data-cmd="insertUnorderedList" title="Bullet List" aria-label="Bullet List">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#format_list_bulleted"/></svg>
+                </button>
+                <button data-cmd="insertOrderedList" title="Numbered List" aria-label="Numbered List">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#format_list_numbered"/></svg>
+                </button>
+            </div>
+            <div class="toolbar-separator"></div>
+            <div class="toolbar-group">
+                <button id="linkBtn" title="Insert Link (Ctrl+K)" aria-label="Insert Link">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#link"/></svg>
+                </button>
+                <button id="imageBtn" title="Insert Image" aria-label="Insert Image">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#image"/></svg>
+                </button>
+                <input type="file" id="imageFile" accept="image/*" hidden/>
+            </div>
+            <div class="toolbar-end">
+
+            </div>
+        </div>
+        <div class="editor-body">
+            <div class="editor-main">
+                <div id="editable"
+                     class="editable"
+                     contenteditable="true"
+                     role="textbox"
+                     aria-multiline="true"
+                     aria-label="Rich text editor"
+                     spellcheck="true">
+                    <h1>Welcome to Basix Editor</h1>
+                    <p>This is a <strong>rich text editor</strong> with live HTML and preview panels. Select text and use the toolbar — or keyboard shortcuts — to apply formatting.</p>
+                    <ul>
+                        <li>Bold, italic, underline, strikethrough</li>
+                        <li>Headings &amp; block quotes</li>
+                        <li>Ordered &amp; unordered lists</li>
+                        <li>Links and inline images</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="editor-side" id="sidePanel">
+                <div class="side-tabs">
+                    <button class="side-tab active" data-tab="codePanel">HTML</button>
+                    <button class="side-tab" data-tab="previewPanel">Preview</button>
+                </div>
+                <div class="side-panels">
+                    <div class="side-panel active" id="codePanel">
+                        <div class="code-actions">
+                            <button title="Apply HTML to editor">Apply</button>
+                            <button title="Sanitize and apply">Sanitize</button>
+                            <button title="Minify HTML">Minify</button>
+                        </div>
+                        <textarea id="code" spellcheck="false" placeholder="HTML will appear here…"></textarea>
+                    </div>
+                    <div class="side-panel" id="previewPanel">
+                        <div id="preview" class="preview-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="editor-footer">
+            <span id="wordCount" class="editor-wordcount">0 words</span>
+            <div class="editor-shortcuts">
+                <span><kbd>Ctrl+B</kbd> Bold</span>
+                <span><kbd>Ctrl+I</kbd> Italic</span>
+                <span><kbd>Ctrl+K</kbd> Link</span>
+                <span><kbd>Ctrl+S</kbd> Export</span>
+                <span><kbd>Ctrl+Z</kbd> Undo</span>
+            </div>
+        </div>
+    </div>
+    <div id="usage-editor-demo" class="code-container"></div>
+
     <h2>Utilities</h2>
     <h3>Theme Toggle</h3>
     <p>The <strong>Theme</strong> component manages light/dark mode switching. Persists preference to localStorage,

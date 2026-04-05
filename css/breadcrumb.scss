@@ -1,0 +1,158 @@
+@use "properties";
+@use "parameters" as *;
+
+// ─── Breadcrumb ────────────────────────────────────────────────────────────────
+
+.breadcrumb {
+  ol {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+
+    // Chevron separator via Material Symbols font
+    + li::before {
+      content: "\e409"; // navigate_next
+      font-family: "Material Symbols Outlined 24pt";
+      font-size: 1.125rem;
+      line-height: 1;
+      color: var(--divider);
+      flex-shrink: 0;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.8125rem;
+      font-weight: 450;
+      color: var(--secondary-text);
+      text-decoration: none;
+      padding: 0.25rem 0.375rem;
+      border-radius: calc($border-radius / 2);
+      white-space: nowrap;
+      transition: color 0.15s ease, background 0.15s ease;
+
+      .icon {
+        font-size: 1rem;
+      }
+
+      &:hover {
+        color: var(--primary-text);
+        background: var(--secondary-background);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--accent-color);
+        outline-offset: -1px;
+        border-radius: calc($border-radius / 2);
+      }
+    }
+
+    // Current page item (not a link)
+    &[aria-current="page"] > span {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 550;
+      color: var(--primary-text);
+      padding: 0.25rem 0.375rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 28ch;
+    }
+  }
+
+  // Collapse modifier: on small screens, hide everything except last ancestor + current
+  &--collapse {
+    @media (max-width: 600px) {
+      li:not(:nth-last-child(-n+2)) {
+        display: none;
+      }
+
+      // Replace separator with ellipsis when items are hidden
+      li:nth-last-child(2):not(:first-child)::before {
+        content: "···";
+        font-family: inherit;
+        font-size: 0.875rem;
+        letter-spacing: 0.04em;
+        color: var(--divider);
+        padding: 0 0.125rem;
+      }
+    }
+  }
+}
+
+// ─── Page Header ───────────────────────────────────────────────────────────────
+
+.page-header {
+  padding-block: calc($spacing * 1.25) $spacing;
+
+  .breadcrumb {
+    margin-bottom: calc($spacing * 0.5);
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing;
+
+    h1, h2, h3, h4,
+    .h1, .h2, .h3, .h4 {
+      margin: 0;
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: calc($spacing * 0.5);
+    flex-shrink: 0;
+    padding-top: 0.3rem; // optical alignment with h1 baseline
+  }
+
+  &__description {
+    margin: calc($spacing * 0.375) 0 0;
+    padding-bottom: 0;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--secondary-text);
+  }
+
+  // Bordered variant — adds a bottom divider and bottom margin
+  &--bordered {
+    border-bottom: 1px solid var(--divider);
+    padding-bottom: calc($spacing * 1.25);
+    margin-bottom: calc($spacing * 1.5);
+  }
+
+  @media (max-width: 540px) {
+    &__title-row {
+      flex-wrap: wrap;
+    }
+
+    &__actions {
+      width: 100%;
+      padding-top: calc($spacing * 0.25);
+
+      button,
+      .button {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+  }
+}
