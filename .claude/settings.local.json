@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(grep -v \"^icons\\\\.svg$\")",
-      "Bash(find \"C:/Users/dodlh/Github/basix/svg-icons/\" -name \"*.svg\" ! -name \"icons.svg\" -delete)"
-    ]
-  }
-}
