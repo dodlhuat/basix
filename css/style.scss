@@ -23,6 +23,8 @@
 @use "tooltip";
 @use "breadcrumb";
 @use "chips";
+@use "badge";
+@use "stepper";
 @use "tree";
 @use "datepicker";
 @use "flyout-menu";
@@ -39,3 +41,5 @@
 @use "timepicker";
 @use "range-slider";
 @use "editor";
+@use "bottom-sheet";
+@use "context-menu";

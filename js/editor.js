@@ -1,20 +1,31 @@
 class Editor {
-    constructor() {
+    constructor(options = {}) {
         this.undoStack = [];
         this.redoStack = [];
         const editable = document.getElementById('editable');
-        const code = document.getElementById('code');
-        const preview = document.getElementById('preview');
-        const sidePanel = document.getElementById('sidePanel');
-        const wordCount = document.getElementById('wordCount');
-        if (!editable || !code || !preview || !sidePanel) {
-            throw new Error('Editor: Required elements not found');
+        if (!editable) {
+            throw new Error('Editor: #editable element not found');
         }
         this.editable = editable;
-        this.code = code;
-        this.preview = preview;
-        this.sidePanel = sidePanel;
-        this.wordCount = wordCount;
+        this.wordCount = document.getElementById('wordCount');
+        if (options.simple) {
+            this.code = null;
+            this.preview = null;
+            this.sidePanel = document.getElementById('sidePanel');
+            this.sidePanel?.classList.add('hidden');
+        }
+        else {
+            const code = document.getElementById('code');
+            const preview = document.getElementById('preview');
+            const sidePanel = document.getElementById('sidePanel');
+            if (!code || !preview || !sidePanel) {
+                throw new Error('Editor: #code, #preview and #sidePanel are required unless simple: true');
+            }
+            this.code = code;
+            this.preview = preview;
+            this.sidePanel = sidePanel;
+            this.sidePanel.classList.add('hidden');
+        }
         this.bindToolbar();
         this.bindActions();
         this.bindKeyboard();
@@ -22,8 +33,6 @@ class Editor {
         this.bindTabs();
         this.syncViews();
         this.saveState();
-        // Start with side panel hidden
-        this.sidePanel.classList.add('hidden');
     }
     bindToolbar() {
         document.querySelectorAll('[data-cmd]').forEach(btn => {
@@ -36,107 +45,10 @@ class Editor {
         });
     }
     bindActions() {
-        this.savedRange = null;
-        this.editingAnchor = null;
-        const linkPopover = document.getElementById('linkPopover');
-        const linkUrl = document.getElementById('linkUrl');
-        const linkText = document.getElementById('linkText');
-        const linkNewTab = document.getElementById('linkNewTab');
-        const linkConfirmBtn = document.getElementById('linkConfirmBtn');
-        const linkRemoveBtn = document.getElementById('linkRemoveBtn');
-        const linkCancelBtn = document.getElementById('linkCancelBtn');
-        const linkBtn = document.getElementById('linkBtn');
-        const closeLinkPopover = () => {
-            linkPopover?.removeAttribute('hidden');
-            linkPopover?.setAttribute('hidden', '');
-            this.savedRange = null;
-            this.editingAnchor = null;
-        };
-        linkBtn?.addEventListener('click', () => {
-            const sel = window.getSelection();
-            // Save selection before focus leaves editable
-            if (sel && sel.rangeCount > 0) {
-                this.savedRange = sel.getRangeAt(0).cloneRange();
-            }
-            else {
-                this.savedRange = null;
-            }
-            // Check if cursor is inside an existing <a>
-            const anchor = this.getAnchorAtSelection();
-            this.editingAnchor = anchor;
-            if (anchor) {
-                linkUrl.value = anchor.href;
-                linkText.value = anchor.textContent ?? '';
-                linkNewTab.checked = anchor.target === '_blank';
-                linkRemoveBtn?.removeAttribute('hidden');
-                linkConfirmBtn.textContent = 'Update';
-            }
-            else {
-                linkUrl.value = '';
-                linkText.value = sel && !sel.isCollapsed ? sel.toString() : '';
-                linkNewTab.checked = false;
-                linkRemoveBtn?.setAttribute('hidden', '');
-                linkConfirmBtn.textContent = 'Insert';
-            }
-            // Show popover and focus URL field
-            linkPopover?.removeAttribute('hidden');
-            // Show or hide text field depending on whether text is pre-selected
-            if (linkText) {
-                linkText.closest('.link-popover-row').style.display =
-                    (this.editingAnchor || (sel && !sel.isCollapsed)) ? 'none' : '';
-            }
-            linkUrl.focus();
-        });
-        linkConfirmBtn?.addEventListener('click', () => {
-            const url = linkUrl.value.trim();
-            if (!url)
-                return;
-            const text = linkText.value.trim();
-            const newTab = linkNewTab.checked;
-            if (this.editingAnchor) {
-                // Update existing anchor in-place
-                this.editingAnchor.href = url;
-                if (newTab) {
-                    this.editingAnchor.target = '_blank';
-                    this.editingAnchor.rel = 'noopener noreferrer';
-                }
-                else {
-                    this.editingAnchor.removeAttribute('target');
-                    this.editingAnchor.removeAttribute('rel');
-                }
-            }
-            else {
-                this.restoreSelection();
-                this.insertLink(url, text, newTab);
-            }
-            this.onContentChange();
-            closeLinkPopover();
-        });
-        linkRemoveBtn?.addEventListener('click', () => {
-            if (this.editingAnchor) {
-                const parent = this.editingAnchor.parentNode;
-                while (this.editingAnchor.firstChild) {
-                    parent?.insertBefore(this.editingAnchor.firstChild, this.editingAnchor);
-                }
-                parent?.removeChild(this.editingAnchor);
-                this.onContentChange();
-            }
-            closeLinkPopover();
-        });
-        linkCancelBtn?.addEventListener('click', () => {
-            closeLinkPopover();
-        });
-        // Close on Escape
-        linkPopover?.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape')
-                closeLinkPopover();
-        });
-        // Submit on Enter from url field
-        linkUrl?.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                linkConfirmBtn?.click();
-            }
+        document.getElementById('linkBtn')?.addEventListener('click', () => {
+            const url = prompt('Enter URL:', 'https://');
+            if (url)
+                this.exec('createLink', url);
         });
         const imageFile = document.getElementById('imageFile');
         document.getElementById('imageBtn')?.addEventListener('click', () => imageFile.click());
@@ -166,26 +78,29 @@ class Editor {
         document.getElementById('undoBtn')?.addEventListener('click', () => this.undo());
         document.getElementById('redoBtn')?.addEventListener('click', () => this.redo());
         document.getElementById('toggleCodeBtn')?.addEventListener('click', () => {
-            this.sidePanel.classList.toggle('hidden');
+            this.sidePanel?.classList.toggle('hidden');
             this.syncViews();
         });
         // Code action buttons — matched by position within .code-actions
-        const codeActions = document.querySelectorAll('.code-actions button');
-        codeActions[0]?.addEventListener('click', () => {
-            this.editable.innerHTML = this.sanitizeHTML(this.code.value);
-            this.onContentChange();
-        });
-        codeActions[1]?.addEventListener('click', () => {
-            this.code.value = this.sanitizeHTML(this.code.value);
-            this.editable.innerHTML = this.code.value;
-            this.onContentChange();
-        });
-        codeActions[2]?.addEventListener('click', () => {
-            this.code.value = this.code.value
-                .replace(/\n/g, '')
-                .replace(/>\s+</g, '><')
-                .trim();
-        });
+        if (this.code) {
+            const code = this.code;
+            const codeActions = document.querySelectorAll('.code-actions button');
+            codeActions[0]?.addEventListener('click', () => {
+                this.editable.innerHTML = this.sanitizeHTML(code.value);
+                this.onContentChange();
+            });
+            codeActions[1]?.addEventListener('click', () => {
+                code.value = this.sanitizeHTML(code.value);
+                this.editable.innerHTML = code.value;
+                this.onContentChange();
+            });
+            codeActions[2]?.addEventListener('click', () => {
+                code.value = code.value
+                    .replace(/\n/g, '')
+                    .replace(/>\s+</g, '><')
+                    .trim();
+            });
+        }
         const saveBtn = document.getElementById('saveBtn');
         saveBtn?.addEventListener('click', () => this.downloadHTML());
         document.getElementById('clearBtn')?.addEventListener('click', () => {
@@ -216,7 +131,9 @@ class Editor {
             }
             else if (key === 'k') {
                 e.preventDefault();
-                document.getElementById('linkBtn')?.click();
+                const url = prompt('Enter URL:', 'https://');
+                if (url)
+                    this.exec('createLink', url);
             }
             else if (key === 's') {
                 e.preventDefault();
@@ -258,8 +175,10 @@ class Editor {
         this.syncViews();
     }
     syncViews() {
-        this.code.value = this.editable.innerHTML.trim();
-        this.preview.innerHTML = this.editable.innerHTML;
+        if (this.code)
+            this.code.value = this.editable.innerHTML.trim();
+        if (this.preview)
+            this.preview.innerHTML = this.editable.innerHTML;
         this.updateWordCount();
     }
     updateWordCount() {
@@ -304,6 +223,10 @@ class Editor {
                 break;
             case 'strikeThrough':
                 this.toggleInlineStyle('s');
+                break;
+            case 'createLink':
+                if (value)
+                    this.createLink(value);
                 break;
             case 'formatBlock':
                 if (value)
@@ -380,56 +303,17 @@ class Editor {
         }
         this.onContentChange();
     }
-    getAnchorAtSelection() {
+    createLink(url) {
         const sel = window.getSelection();
         if (!sel || sel.rangeCount === 0)
-            return null;
-        let node = sel.getRangeAt(0).commonAncestorContainer;
-        if (node.nodeType === Node.TEXT_NODE)
-            node = node.parentElement;
-        let current = node;
-        while (current && current !== this.editable) {
-            if (current.tagName === 'A')
-                return current;
-            current = current.parentElement;
-        }
-        return null;
-    }
-    restoreSelection() {
-        if (!this.savedRange)
             return;
-        const sel = window.getSelection();
-        if (!sel)
-            return;
-        sel.removeAllRanges();
-        sel.addRange(this.savedRange);
-    }
-    insertLink(url, text, newTab) {
-        const sel = window.getSelection();
-        if (!sel)
-            return;
+        const range = sel.getRangeAt(0);
+        const contents = range.extractContents();
         const link = document.createElement('a');
         link.href = url;
-        if (newTab) {
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
-        }
-        if (sel.isCollapsed) {
-            // No selection — insert link with provided text (or url as fallback)
-            link.textContent = text || url;
-            const range = sel.getRangeAt(0);
-            range.insertNode(link);
-            range.setStartAfter(link);
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
-        }
-        else {
-            const range = sel.getRangeAt(0);
-            const contents = range.extractContents();
-            link.appendChild(contents);
-            range.insertNode(link);
-        }
+        link.appendChild(contents);
+        range.insertNode(link);
+        this.onContentChange();
     }
     formatBlock(tag) {
         const sel = window.getSelection();

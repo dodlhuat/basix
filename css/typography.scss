@@ -8,6 +8,7 @@ $spacing-1-5x: calc($spacing * 1.5);
 @font-face {
   font-family: "Outfit";
   src: url("../fonts/Outfit-VariableFont_wght.woff2") format("woff2");
+  font-display: swap;
 }
 
 body {
@@ -24,13 +25,14 @@ p, li, td, th, div {
 }
 
 p {
-  padding-bottom: $spacing-half;
+  margin-bottom: $spacing-half;
 }
 
 code {
   font-family: "Courier New", Courier, monospace;
   font-size: 0.875em;
   background: var(--secondary-background);
+  border: 1px solid var(--divider);
   padding: 0.15em 0.4em;
   border-radius: calc($border-radius / 2);
 }
@@ -41,6 +43,7 @@ pre code {
   overflow-x: auto;
   border-radius: $border-radius;
   line-height: 1.5;
+  border: none;
 }
 
 strong {
@@ -55,9 +58,7 @@ h1, .h1,
 h2, .h2,
 h3, .h3,
 h4, .h4,
-h5 {
-  margin: $spacing-half 0 $spacing-two-thirds 0;
-  line-height: 1.15;
+h5, .h5 {
   font-weight: 700;
   color: var(--primary-text);
   letter-spacing: -0.02em;
@@ -67,20 +68,36 @@ h1, .h1 {
   font-size: 2rem;
   font-weight: 800;
   letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: $spacing-1-5x 0 $spacing-two-thirds 0;
 }
 
 h2, .h2 {
   font-size: 1.625rem;
   font-weight: 750;
+  line-height: 1.12;
+  margin: $spacing-1-5x 0 $spacing-two-thirds 0;
 }
 
 h3, .h3 {
   font-size: 1.375rem;
+  line-height: 1.2;
+  margin: $spacing 0 $spacing-half 0;
 }
 
 h4, .h4 {
   font-size: 1.125rem;
   letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin: $spacing 0 $spacing-half 0;
+}
+
+h5, .h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.3;
+  margin: $spacing-half 0 calc($spacing / 4) 0;
 }
 
 small, .text-small {
@@ -107,8 +124,24 @@ small, .text-small {
   color: var(--secondary-text);
 }
 
+blockquote {
+  border-left: 3px solid var(--divider);
+  padding: $spacing-half $spacing;
+  margin-block: $spacing-half;
+  color: var(--secondary-text);
+  font-style: italic;
+}
+
+mark {
+  background-color: color-mix(in srgb, var(--accent-color) 18%, transparent);
+  color: var(--primary-text);
+  border-radius: calc($border-radius / 4);
+  padding: 0 0.2em;
+}
+
 ul, ol {
-  list-style-position: inside;
+  list-style-position: outside;
+  padding-left: $spacing-1-5x;
   margin-bottom: $spacing-two-thirds;
 }
 

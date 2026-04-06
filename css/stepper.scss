@@ -1,0 +1,212 @@
+@use "properties";
+@use "parameters" as *;
+
+$indicator-size: 2rem;
+$connector-thickness: 2px;
+
+@keyframes stepper-pulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-color) 35%, transparent); }
+  65%  { box-shadow: 0 0 0 5px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.stepper {
+  display: flex;
+  align-items: flex-start;
+}
+
+.stepper-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc($spacing * 0.4);
+  flex-shrink: 0;
+}
+
+.stepper-indicator {
+  width: $indicator-size;
+  height: $indicator-size;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  border: 2px solid var(--divider);
+  background: var(--background);
+  color: var(--secondary-text);
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  position: relative;
+  z-index: 1;
+
+  .icon-svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.stepper-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.125rem;
+}
+
+.stepper-title {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--secondary-text);
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.stepper-desc {
+  font-size: 0.6875rem;
+  color: var(--secondary-text);
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+// Connector — animated fill via ::after
+.stepper-connector {
+  flex: 1;
+  height: $connector-thickness;
+  // align center of connector with center of indicator
+  margin-top: calc(#{$indicator-size} / 2 - #{$connector-thickness} / 2);
+  min-width: $spacing;
+  background: var(--divider);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.completed::after {
+    transform: scaleX(1);
+  }
+}
+
+// Step states
+.stepper-step {
+  &.active {
+    .stepper-indicator {
+      border-color: var(--accent-color);
+      background: color-mix(in srgb, var(--accent-color) 10%, var(--background));
+      color: var(--accent-color);
+      animation: stepper-pulse 2.4s ease-out infinite;
+    }
+
+    .stepper-title {
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+  }
+
+  &.completed {
+    .stepper-indicator {
+      border-color: var(--accent-color);
+      background: var(--accent-color);
+      color: #fff;
+    }
+
+    .stepper-title {
+      color: var(--primary-text);
+    }
+  }
+
+  &.error {
+    .stepper-indicator {
+      border-color: var(--error);
+      background: color-mix(in srgb, var(--error) 10%, var(--background));
+      color: var(--error);
+      animation: none;
+    }
+
+    .stepper-title {
+      color: var(--error);
+    }
+  }
+}
+
+// Vertical orientation
+.stepper-vertical {
+  flex-direction: column;
+
+  .stepper-step {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: $spacing;
+  }
+
+  .stepper-label {
+    align-items: flex-start;
+    text-align: left;
+    // vertically center the title text against the indicator circle
+    padding-top: calc((#{$indicator-size} - 1.15rem) / 2);
+  }
+
+  .stepper-connector {
+    width: $connector-thickness;
+    height: auto;
+    min-height: 1.5rem;
+    min-width: unset;
+    flex: unset;
+    margin-top: 0;
+    // horizontally center connector under the indicator
+    margin-left: calc(#{$indicator-size} / 2 - #{$connector-thickness} / 2);
+    align-self: flex-start;
+
+    &::after {
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+
+    &.completed::after {
+      transform: scaleY(1);
+    }
+  }
+}
+
+// Clickable steps
+.stepper-clickable {
+  .stepper-step {
+    &.completed,
+    &.active {
+      cursor: pointer;
+
+      .stepper-indicator {
+        transition:
+          background 0.25s ease,
+          border-color 0.25s ease,
+          color 0.25s ease,
+          transform 0.15s ease;
+      }
+
+      &:hover .stepper-indicator {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .stepper:not(.stepper-vertical) {
+    .stepper-label {
+      display: none;
+    }
+
+    .stepper-connector {
+      min-width: calc($spacing * 0.5);
+    }
+  }
+}

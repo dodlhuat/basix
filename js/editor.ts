@@ -1,28 +1,47 @@
+interface EditorOptions {
+    /** Hides the entire side panel (code/preview) permanently. Safe to use
+     *  without #code, #preview, or #sidePanel in the DOM. */
+    simple?: boolean;
+}
+
 class Editor {
     private readonly editable: HTMLElement;
-    private readonly code: HTMLTextAreaElement;
-    private readonly preview: HTMLElement;
-    private readonly sidePanel: HTMLElement;
+    private readonly code: HTMLTextAreaElement | null;
+    private readonly preview: HTMLElement | null;
+    private readonly sidePanel: HTMLElement | null;
     private readonly wordCount: HTMLElement | null;
     private undoStack: string[] = [];
     private redoStack: string[] = [];
 
-    constructor() {
+    constructor(options: EditorOptions = {}) {
         const editable = document.getElementById('editable');
-        const code = document.getElementById('code') as HTMLTextAreaElement;
-        const preview = document.getElementById('preview');
-        const sidePanel = document.getElementById('sidePanel');
-        const wordCount = document.getElementById('wordCount');
 
-        if (!editable || !code || !preview || !sidePanel) {
-            throw new Error('Editor: Required elements not found');
+        if (!editable) {
+            throw new Error('Editor: #editable element not found');
         }
 
-        this.editable = editable;
-        this.code = code;
-        this.preview = preview;
-        this.sidePanel = sidePanel;
-        this.wordCount = wordCount;
+        this.editable  = editable;
+        this.wordCount = document.getElementById('wordCount');
+
+        if (options.simple) {
+            this.code      = null;
+            this.preview   = null;
+            this.sidePanel = document.getElementById('sidePanel');
+            this.sidePanel?.classList.add('hidden');
+        } else {
+            const code      = document.getElementById('code') as HTMLTextAreaElement;
+            const preview   = document.getElementById('preview');
+            const sidePanel = document.getElementById('sidePanel');
+
+            if (!code || !preview || !sidePanel) {
+                throw new Error('Editor: #code, #preview and #sidePanel are required unless simple: true');
+            }
+
+            this.code      = code;
+            this.preview   = preview;
+            this.sidePanel = sidePanel;
+            this.sidePanel.classList.add('hidden');
+        }
 
         this.bindToolbar();
         this.bindActions();
@@ -31,9 +50,6 @@ class Editor {
         this.bindTabs();
         this.syncViews();
         this.saveState();
-
-        // Start with side panel hidden
-        this.sidePanel.classList.add('hidden');
     }
 
     private bindToolbar(): void {
@@ -82,27 +98,30 @@ class Editor {
         document.getElementById('redoBtn')?.addEventListener('click', () => this.redo());
 
         document.getElementById('toggleCodeBtn')?.addEventListener('click', () => {
-            this.sidePanel.classList.toggle('hidden');
+            this.sidePanel?.classList.toggle('hidden');
             this.syncViews();
         });
 
         // Code action buttons — matched by position within .code-actions
-        const codeActions = document.querySelectorAll<HTMLButtonElement>('.code-actions button');
-        codeActions[0]?.addEventListener('click', () => {
-            this.editable.innerHTML = this.sanitizeHTML(this.code.value);
-            this.onContentChange();
-        });
-        codeActions[1]?.addEventListener('click', () => {
-            this.code.value = this.sanitizeHTML(this.code.value);
-            this.editable.innerHTML = this.code.value;
-            this.onContentChange();
-        });
-        codeActions[2]?.addEventListener('click', () => {
-            this.code.value = this.code.value
-                .replace(/\n/g, '')
-                .replace(/>\s+</g, '><')
-                .trim();
-        });
+        if (this.code) {
+            const code = this.code;
+            const codeActions = document.querySelectorAll<HTMLButtonElement>('.code-actions button');
+            codeActions[0]?.addEventListener('click', () => {
+                this.editable.innerHTML = this.sanitizeHTML(code.value);
+                this.onContentChange();
+            });
+            codeActions[1]?.addEventListener('click', () => {
+                code.value = this.sanitizeHTML(code.value);
+                this.editable.innerHTML = code.value;
+                this.onContentChange();
+            });
+            codeActions[2]?.addEventListener('click', () => {
+                code.value = code.value
+                    .replace(/\n/g, '')
+                    .replace(/>\s+</g, '><')
+                    .trim();
+            });
+        }
 
         const saveBtn = document.getElementById('saveBtn');
         saveBtn?.addEventListener('click', () => this.downloadHTML());
@@ -171,8 +190,8 @@ class Editor {
     }
 
     private syncViews(): void {
-        this.code.value = this.editable.innerHTML.trim();
-        this.preview.innerHTML = this.editable.innerHTML;
+        if (this.code)    this.code.value          = this.editable.innerHTML.trim();
+        if (this.preview) this.preview.innerHTML   = this.editable.innerHTML;
         this.updateWordCount();
     }
 

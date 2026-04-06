@@ -103,6 +103,11 @@
             <li><a onclick="window.Scroll.to('#forms')">Radio Buttons</a></li>
             <li><a onclick="window.Scroll.to('#forms')">Switch</a></li>
             <li><a onclick="window.Scroll.to('#forms')">Range Slider</a></li>
+            <li><a onclick="window.Scroll.to('#form-group')">Form Group</a></li>
+            <li><a onclick="window.Scroll.to('#form-validation')">Validation States</a></li>
+            <li><a onclick="window.Scroll.to('#input-group')">Input Group</a></li>
+            <li><a onclick="window.Scroll.to('#input-readonly')">Readonly</a></li>
+            <li><a onclick="window.Scroll.to('#input-sizes')">Input Sizes</a></li>
         </ul>
         </li>
         <li>Navigation
@@ -115,6 +120,7 @@
         <li>Feedback
         <ul>
             <li><a onclick="window.Scroll.to('#feedback')">Modal</a></li>
+            <li><a onclick="window.Scroll.to('#bottom-sheet')">Bottom Sheet</a></li>
             <li><a onclick="window.Scroll.to('#feedback')">Toast</a></li>
             <li><a onclick="window.Scroll.to('#feedback')">Tooltip</a></li>
             <li><a onclick="window.Scroll.to('#feedback')">Spinner / Loading</a></li>
@@ -507,6 +513,105 @@
         </div>
     </div>
 
+    <h2 id="form-group">Form Group</h2>
+    <div class="row">
+        <div class="column card">
+            <p>
+                The <strong>Form Group</strong> wraps a label, input, and optional hint
+                text into a consistent vertical layout using <code>.form-group</code>.
+            </p>
+            <div class="form-group">
+                <label for="fg-name">Full Name</label>
+                <input type="text" id="fg-name" placeholder="John Doe"/>
+                <span class="form-hint">Enter your first and last name.</span>
+            </div>
+            <br/>
+            <div class="form-group">
+                <label for="fg-bio">Bio</label>
+                <textarea id="fg-bio" placeholder="Tell us about yourself..."></textarea>
+                <span class="form-hint">Max 200 characters.</span>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="form-validation">Validation States</h2>
+    <div class="row">
+        <div class="column card">
+            <p>
+                Add <code>.error</code> or <code>.success</code> to a
+                <code>.form-group</code> to apply validation feedback styling to
+                the input and hint text.
+            </p>
+            <div class="form-group error">
+                <label for="val-email">Email</label>
+                <input type="email" id="val-email" value="not-an-email"/>
+                <span class="form-hint">Please enter a valid email address.</span>
+            </div>
+            <br/>
+            <div class="form-group success">
+                <label for="val-username">Username</label>
+                <input type="text" id="val-username" value="johnny99"/>
+                <span class="form-hint">Username is available.</span>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="input-group">Input Group</h2>
+    <div class="row">
+        <div class="column card">
+            <p>
+                The <strong>Input Group</strong> attaches prefix or suffix addons
+                to an input using <code>.input-group</code> and
+                <code>.input-addon</code>.
+            </p>
+            <div class="input-group">
+                <span class="input-addon">$</span>
+                <input type="number" placeholder="0.00"/>
+            </div>
+            <br/>
+            <div class="input-group">
+                <input type="text" placeholder="Search..."/>
+                <span class="input-addon">
+                    <svg class="icon-svg" width="18" height="18"><use href="svg-icons/icons.svg#search"/></svg>
+                </span>
+            </div>
+            <br/>
+            <div class="input-group">
+                <span class="input-addon">https://</span>
+                <input type="text" placeholder="example.com"/>
+                <span class="input-addon">/page</span>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="input-readonly">Readonly</h2>
+    <div class="row">
+        <div class="column card">
+            <p>
+                The <code>readonly</code> attribute renders an input with a muted
+                background and non-editable cursor, visually distinct from both
+                the default and disabled states.
+            </p>
+            <label for="readonly-demo">Account ID</label>
+            <input type="text" id="readonly-demo" value="ACC-0048291" readonly/>
+        </div>
+    </div>
+
+    <h2 id="input-sizes">Input Sizes</h2>
+    <div class="row">
+        <div class="column card">
+            <p>
+                Use <code>.input-sm</code> or <code>.input-lg</code> for
+                smaller or larger inputs when density or prominence requires it.
+            </p>
+            <input type="text" class="input-sm" placeholder="Small input"/>
+            <br/><br/>
+            <input type="text" placeholder="Default input"/>
+            <br/><br/>
+            <input type="text" class="input-lg" placeholder="Large input"/>
+        </div>
+    </div>
+
     <h2>Navigation</h2>
     <h3>Push Menu</h3>
     <p>
@@ -705,6 +810,53 @@
             </tbody>
         </table>
     </div>
+    <h3 id="bottom-sheet">Bottom Sheet</h3>
+    <p>
+        The <strong>Bottom Sheet</strong> slides up from the bottom of the viewport —
+        the native mobile pattern for actions, filters, and contextual content.
+        Supports drag-to-dismiss, backdrop click, Escape key, and three snap heights.
+    </p>
+    <button class="show-bottom-sheet">Show Bottom Sheet</button>
+    <div id="usage-bottom-sheet-demo" class="code-container"></div>
+    <div class="card">
+        <h4>Available Parameters</h4>
+        <table>
+            <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><code>content</code></td>
+                <td>string</td>
+                <td>Content of the sheet. Can be HTML or plain text.</td>
+            </tr>
+            <tr>
+                <td><code>header</code></td>
+                <td>string</td>
+                <td>Optional header rendered above the content.</td>
+            </tr>
+            <tr>
+                <td><code>footer</code></td>
+                <td>string</td>
+                <td>Optional footer rendered below the content, typically for actions.</td>
+            </tr>
+            <tr>
+                <td><code>closeable</code></td>
+                <td>boolean</td>
+                <td>Enables backdrop click, Escape key, and drag-to-dismiss. Defaults to true.</td>
+            </tr>
+            <tr>
+                <td><code>snapHeight</code></td>
+                <td>'auto' | 'half' | 'full'</td>
+                <td>Controls the sheet height. <code>auto</code> sizes to content (max 80vh), <code>half</code> is 50vh, <code>full</code> is near full-screen.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <h3>Toast</h3>
     <p>The <strong>Toast</strong> component shows brief messages.</p>
     <button class="show-toast">Show Toast</button>
@@ -858,6 +1010,126 @@
         </div>
     </div>
     <div id="usage-chips-demo" class="code-container"></div>
+    <h3>Badge</h3>
+    <p>
+        The <strong>Badge</strong> component displays compact status labels or counts.
+        It is a CSS only component with soft, solid, and outline variants.
+    </p>
+    <div class="row card" style="gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+        <span class="badge">Default</span>
+        <span class="badge badge-info">Info</span>
+        <span class="badge badge-success">Success</span>
+        <span class="badge badge-warning">Warning</span>
+        <span class="badge badge-error">Error</span>
+    </div>
+    <div class="row card" style="gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+        <span class="badge badge-solid badge-info">Info</span>
+        <span class="badge badge-solid badge-success">Success</span>
+        <span class="badge badge-solid badge-warning">Warning</span>
+        <span class="badge badge-solid badge-error">Error</span>
+    </div>
+    <div class="row card" style="gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+        <span class="badge badge-outline">Default</span>
+        <span class="badge badge-outline badge-info">Info</span>
+        <span class="badge badge-outline badge-success">Success</span>
+        <span class="badge badge-outline badge-warning">Warning</span>
+        <span class="badge badge-outline badge-error">Error</span>
+    </div>
+    <div class="row card" style="gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+        <span class="badge badge-sm badge-info">Small</span>
+        <span class="badge badge-info">Default</span>
+        <span class="badge badge-lg badge-info">Large</span>
+        <span class="badge badge-dot"></span>
+        <span class="badge badge-dot badge-info"></span>
+        <span class="badge badge-dot badge-success"></span>
+        <span class="badge badge-dot badge-warning"></span>
+        <span class="badge badge-dot badge-error"></span>
+    </div>
+    <div id="usage-badge-demo" class="code-container"></div>
+    <h3>Stepper</h3>
+    <p>
+        The <strong>Stepper</strong> component guides users through a multi-step process.
+        Supports horizontal and vertical layouts, completed, active, and error states.
+    </p>
+    <div class="row card">
+        <div class="stepper" id="stepper-demo">
+            <div class="stepper-step completed">
+                <div class="stepper-indicator">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#check"/></svg>
+                </div>
+                <div class="stepper-label">
+                    <span class="stepper-title">Account</span>
+                    <span class="stepper-desc">Your details</span>
+                </div>
+            </div>
+            <div class="stepper-connector completed"></div>
+            <div class="stepper-step active">
+                <div class="stepper-indicator">2</div>
+                <div class="stepper-label">
+                    <span class="stepper-title">Profile</span>
+                    <span class="stepper-desc">Preferences</span>
+                </div>
+            </div>
+            <div class="stepper-connector"></div>
+            <div class="stepper-step">
+                <div class="stepper-indicator">3</div>
+                <div class="stepper-label">
+                    <span class="stepper-title">Review</span>
+                    <span class="stepper-desc">Confirm</span>
+                </div>
+            </div>
+            <div class="stepper-connector"></div>
+            <div class="stepper-step">
+                <div class="stepper-indicator">4</div>
+                <div class="stepper-label">
+                    <span class="stepper-title">Done</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row card" style="gap: 0.5rem;">
+        <button class="btn" id="stepper-prev">Previous</button>
+        <button class="btn btn-primary" id="stepper-next">Next</button>
+    </div>
+    <div class="row card">
+        <div class="stepper stepper-vertical" id="stepper-vertical-demo">
+            <div class="stepper-step completed">
+                <div class="stepper-indicator">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#check"/></svg>
+                </div>
+                <div class="stepper-label">
+                    <span class="stepper-title">Shipping</span>
+                    <span class="stepper-desc">Address confirmed</span>
+                </div>
+            </div>
+            <div class="stepper-connector completed"></div>
+            <div class="stepper-step active">
+                <div class="stepper-indicator">2</div>
+                <div class="stepper-label">
+                    <span class="stepper-title">Payment</span>
+                    <span class="stepper-desc">Enter card details</span>
+                </div>
+            </div>
+            <div class="stepper-connector"></div>
+            <div class="stepper-step error">
+                <div class="stepper-indicator">
+                    <svg class="icon-svg"><use href="svg-icons/icons.svg#close"/></svg>
+                </div>
+                <div class="stepper-label">
+                    <span class="stepper-title">Verification</span>
+                    <span class="stepper-desc">Validation failed</span>
+                </div>
+            </div>
+            <div class="stepper-connector"></div>
+            <div class="stepper-step">
+                <div class="stepper-indicator">4</div>
+                <div class="stepper-label">
+                    <span class="stepper-title">Confirm</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="usage-stepper-demo" class="code-container"></div>
     <h3>Accordion</h3>
     <p>
         The <strong>Accordion</strong> component creates collapsible content
@@ -1108,6 +1380,17 @@
     </div>
     <div id="usage-placeholder-demo" class="code-container"></div>
     <h2>Advanced Components</h2>
+    <h3>Context Menu</h3>
+    <p>
+        The <strong>ContextMenu</strong> component shows a custom right-click menu on any element.
+        Supports icons, keyboard shortcuts, separators, group labels, submenus, destructive and disabled items.
+    </p>
+    <div class="row card" style="gap: 0.75rem; flex-wrap: wrap;">
+        <div class="context-menu-target" style="padding: 1.25rem 2rem; border: 1px dashed var(--divider); border-radius: 0.4rem; cursor: context-menu; user-select: none; color: var(--secondary-text); font-size: 0.875rem;">
+            Right-click here
+        </div>
+    </div>
+    <div id="usage-context-menu-demo" class="code-container"></div>
     <h3>Data Tables</h3>
     <p>
         The <strong>Table</strong> component provides sortable, searchable, and

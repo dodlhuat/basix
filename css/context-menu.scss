@@ -1,0 +1,182 @@
+@use "parameters" as *;
+@use "properties";
+
+.context-menu {
+  position: fixed;
+  z-index: 9999;
+  min-width: 200px;
+  padding: calc($spacing * 0.375) 0;
+  background: var(--background);
+  border: 1px solid var(--divider);
+  border-radius: calc($border-radius * 2.5);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  list-style: none;
+  margin: 0;
+  opacity: 0;
+  transform: scale(0.94);
+  transform-origin: top left;
+  transition: opacity 0.14s ease, transform 0.14s ease;
+  pointer-events: none;
+
+  &.is-visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+}
+
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: calc($spacing * 0.55);
+  padding: calc($spacing * 0.45) calc($spacing * 0.75);
+  font-size: 0.875rem;
+  color: var(--primary-text);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: background 0.1s ease, color 0.1s ease;
+  position: relative;
+
+  // Icon slot — always present to keep label column aligned
+  .context-menu-icon {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-text);
+    transition: color 0.1s ease;
+
+    .icon-svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .context-menu-label {
+    flex: 1;
+  }
+
+  .context-menu-shortcut {
+    padding-left: calc($spacing * 1.5);
+    font-size: 0.75rem;
+    color: var(--secondary-text);
+    opacity: 0.6;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+
+  .context-menu-chevron {
+    flex-shrink: 0;
+    width: 0.35rem;
+    height: 0.35rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(-45deg);
+    opacity: 0.5;
+    margin-left: calc($spacing * 0.25);
+    color: var(--secondary-text);
+  }
+
+  // Hover + keyboard focus — same treatment as dropdown
+  &:hover,
+  &.is-focused {
+    background: var(--secondary-background);
+    color: var(--accent-color);
+
+    .context-menu-icon {
+      color: var(--accent-color);
+    }
+
+    .context-menu-chevron {
+      color: var(--accent-color);
+      opacity: 0.8;
+    }
+  }
+
+  // Submenu-parent active (submenu is open) — keep it highlighted
+  &.is-active {
+    background: var(--secondary-background);
+    color: var(--accent-color);
+
+    .context-menu-icon {
+      color: var(--accent-color);
+    }
+
+    .context-menu-chevron {
+      color: var(--accent-color);
+      opacity: 0.8;
+    }
+  }
+
+  &.is-destructive {
+    color: var(--error);
+
+    .context-menu-icon {
+      color: var(--error);
+    }
+
+    &:hover,
+    &.is-focused {
+      background: color-mix(in srgb, var(--error) 8%, var(--background));
+      color: var(--error);
+
+      .context-menu-icon {
+        color: var(--error);
+      }
+    }
+  }
+
+  &.is-disabled {
+    opacity: 0.38;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  // Submenu
+  &.has-submenu {
+    > .context-menu {
+      position: absolute;
+      top: calc($spacing * -0.375);
+      left: 100%;
+      margin-left: 4px;
+      transform-origin: top left;
+    }
+
+    &.is-active > .context-menu {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    &.submenu-flip > .context-menu {
+      left: auto;
+      right: 100%;
+      margin-left: 0;
+      margin-right: 4px;
+      transform-origin: top right;
+    }
+  }
+}
+
+.context-menu-separator {
+  height: 1px;
+  background: var(--divider);
+  margin: calc($spacing * 0.375) 0;
+}
+
+.context-menu-group-label {
+  padding: calc($spacing * 0.3) calc($spacing * 0.75);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--secondary-text);
+  opacity: 0.55;
+  user-select: none;
+}

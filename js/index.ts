@@ -18,6 +18,10 @@ import {Dropdown, DropdownSelectDetail} from "./dropdown.js";
 import {VirtualDropdown} from "./virtual-dropdown.js";
 import {TimeSpanPicker} from "./timepicker.js";
 import {RangeSlider} from "./range-slider.js";
+import {BottomSheet} from "./bottom-sheet.js";
+import {Editor} from "./editor.js";
+import {Stepper} from "./stepper.js";
+import {ContextMenu} from "./context-menu.js";
 
 // Generate sample table data
 const generateData = (count: number): TableRow[] => {
@@ -350,10 +354,55 @@ utils.ready(() => {
         },
     });
 
+    // Initialize bottom sheet
+    const bottomSheetTrigger = document.querySelector('.show-bottom-sheet');
+    if (bottomSheetTrigger) {
+        bottomSheetTrigger.addEventListener('click', () => {
+            const buttons = '<div class="buttons"><button class="button-light">Cancel</button>&nbsp;<button>Confirm</button></div>';
+            const sheet = new BottomSheet({
+                content: '<p>This is the bottom sheet content. It slides up from the bottom and can be dismissed by dragging down, tapping the backdrop, or pressing Escape.</p>',
+                header: 'Bottom Sheet',
+                footer: buttons,
+                closeable: true,
+                snapHeight: 'auto',
+            });
+            sheet.show();
+        });
+    }
+
+    // Initialize context menu demo
+    new ContextMenu('.context-menu-target', [
+        { group: 'File' },
+        { label: 'Open', icon: 'folder_open', shortcut: '⌘O', action: () => {} },
+        { label: 'Rename', icon: 'edit', shortcut: 'F2', action: () => {} },
+        { label: 'Duplicate', icon: 'library_add', action: () => {} },
+        'separator',
+        {
+            label: 'Share',
+            icon: 'send',
+            submenu: [
+                { label: 'Copy link', icon: 'attachment', action: () => {} },
+                { label: 'Send by mail', icon: 'mail', action: () => {} },
+            ]
+        },
+        'separator',
+        { label: 'Delete', icon: 'delete', shortcut: '⌫', destructive: true, action: () => {} },
+    ]);
+
+    // Initialize stepper demo
+    const stepperEl = document.querySelector<HTMLElement>('#stepper-demo');
+    if (stepperEl) {
+        const stepper = new Stepper(stepperEl, { defaultStep: 1 });
+        document.querySelector('#stepper-next')?.addEventListener('click', () => stepper.next());
+        document.querySelector('#stepper-prev')?.addEventListener('click', () => stepper.prev());
+    }
+
     // Initialize range sliders
     RangeSlider.initAll();
 
     Tooltip.initializeAll();
+
+    new Editor({ simple: true });
 
     const timeSpanPicker = new TimeSpanPicker('timespan-1', {
         onChange: (start, end) => {
@@ -533,6 +582,18 @@ dropdownElement?.addEventListener("dropdown-select", ((
     "js",
 );
 new CodeViewer(
+    "#usage-bottom-sheet-demo",
+    `const sheet = new BottomSheet({
+  content: '<p>Sheet content here.</p>',
+  header: 'Title',
+  footer: '<div class="buttons"><button>Confirm</button></div>',
+  closeable: true,
+  snapHeight: 'auto',
+});
+sheet.show();`,
+    "js",
+);
+new CodeViewer(
     "#usage-modal-demo",
     `const modal = new Modal(
   "content",
@@ -584,6 +645,40 @@ new CodeViewer(
     </button>
   </div>
 </div>`,
+    "html",
+);
+new CodeViewer(
+    "#usage-stepper-demo",
+    `<div class="stepper">
+  <div class="stepper-step completed">
+    <div class="stepper-indicator">
+      <svg class="icon-svg"><use href="svg-icons/icons.svg#check"/></svg>
+    </div>
+    <div class="stepper-label">
+      <span class="stepper-title">Account</span>
+    </div>
+  </div>
+  <div class="stepper-connector completed"></div>
+  <div class="stepper-step active">
+    <div class="stepper-indicator">2</div>
+    <div class="stepper-label">
+      <span class="stepper-title">Profile</span>
+    </div>
+  </div>
+  <div class="stepper-connector"></div>
+  <div class="stepper-step">
+    <div class="stepper-indicator">3</div>
+    <div class="stepper-label">
+      <span class="stepper-title">Review</span>
+    </div>
+  </div>
+</div>
+
+const stepper = new Stepper('#my-stepper');
+stepper.next();
+stepper.prev();
+stepper.goTo(2);
+stepper.setError(1);`,
     "html",
 );
 new CodeViewer(
@@ -689,6 +784,25 @@ new CodeViewer(
     "#usage-placeholder-demo",
     `<span class="placeholder w-6">`,
     "html"
+);
+new CodeViewer(
+    "#usage-context-menu-demo",
+    `new ContextMenu('.my-element', [
+  { group: 'File' },
+  { label: 'Open',      icon: 'folder_open', shortcut: '⌘O', action: (t) => {} },
+  { label: 'Rename',    icon: 'edit',        shortcut: 'F2', action: (t) => {} },
+  'separator',
+  {
+    label: 'Share', icon: 'send',
+    submenu: [
+      { label: 'Copy link',   icon: 'attachment', action: (t) => {} },
+      { label: 'Send by mail', icon: 'mail',      action: (t) => {} },
+    ]
+  },
+  'separator',
+  { label: 'Delete', icon: 'delete', destructive: true, action: (t) => {} },
+]);`,
+    "javascript",
 );
 new CodeViewer(
     "#usage-table-demo",

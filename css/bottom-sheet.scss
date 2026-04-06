@@ -1,0 +1,192 @@
+@use "properties";
+@use "parameters" as *;
+
+.bottom-sheet-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+
+  &.is-visible {
+    pointer-events: auto;
+
+    .bottom-sheet-backdrop {
+      opacity: 1;
+    }
+
+    .bottom-sheet {
+      transform: translateY(0);
+    }
+  }
+}
+
+.bottom-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.32s ease;
+}
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background: var(--background);
+  border: 1px solid var(--divider);
+  border-bottom: none;
+  border-radius: calc($border-radius * 4) calc($border-radius * 4) 0 0;
+  box-shadow:
+    0 -2px 0 rgba(255, 255, 255, 0.06) inset,
+    0 -8px 40px rgba(0, 0, 0, 0.18),
+    0 -2px 12px rgba(0, 0, 0, 0.1),
+    0 -1px 3px rgba(0, 0, 0, 0.08);
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.42s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+  overscroll-behavior: contain;
+
+  // Snap height variants
+  &.snap-half {
+    height: 50vh;
+  }
+
+  &.snap-full {
+    height: calc(100dvh - env(safe-area-inset-top) - $spacing);
+    max-height: none;
+  }
+}
+
+// Drag handle — large tap target wrapping a visual pill
+.bottom-sheet-handle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc($spacing * 0.75) $spacing calc($spacing * 0.5);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--divider);
+    transition: background 0.15s ease, width 0.15s ease;
+  }
+
+  &:hover::after,
+  &:active::after {
+    background: var(--secondary-text);
+    width: 48px;
+  }
+}
+
+// Scrollable content area
+.bottom-sheet-body {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 $spacing $spacing;
+  padding-bottom: calc($spacing + env(safe-area-inset-bottom));
+
+  // fade out bottom edge when content overflows
+  mask-image: linear-gradient(to bottom, black calc(100% - 2rem), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 2rem), transparent 100%);
+
+  &:not(.is-scrollable) {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}
+
+// Header and footer are outside .bottom-sheet-body so they stay fixed
+.bottom-sheet-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: calc($spacing * 0.5);
+  padding: calc($spacing * 0.25) $spacing calc($spacing * 0.75);
+
+  &.has-divider {
+    border-bottom: 1px solid var(--divider);
+    margin-bottom: calc($spacing * 0.5);
+    padding-bottom: calc($spacing * 0.75);
+  }
+
+  .title {
+    flex: 1;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--primary-text);
+    line-height: 1.3;
+  }
+
+  .subtitle {
+    flex: 1;
+    font-size: 0.8125rem;
+    color: var(--secondary-text);
+    margin-top: 0.125rem;
+  }
+
+  .close {
+    cursor: pointer;
+    color: var(--secondary-text);
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--primary-text);
+    }
+  }
+}
+
+.bottom-sheet-footer {
+  flex-shrink: 0;
+  border-top: 1px solid var(--divider);
+  padding: $spacing;
+  padding-bottom: calc($spacing + env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: flex-end;
+
+  .buttons {
+    display: flex;
+    gap: calc($spacing / 2);
+  }
+}
+
+@media (min-width: 768px) {
+  .bottom-sheet {
+    left: 50%;
+    right: auto;
+    width: 480px;
+    bottom: $spacing;
+    border: 1px solid var(--divider);
+    border-radius: calc($border-radius * 4);
+    transform: translateX(-50%) translateY(calc(100% + #{$spacing}));
+    max-height: 80vh;
+
+    .bottom-sheet-footer {
+      border-radius: 0 0 calc($border-radius * 4) calc($border-radius * 4);
+    }
+  }
+
+  .bottom-sheet-wrapper.is-visible .bottom-sheet {
+    transform: translateX(-50%) translateY(0);
+  }
+}

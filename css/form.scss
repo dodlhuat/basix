@@ -166,3 +166,142 @@ select {
     }
   }
 }
+
+// Form group — label + input + hint layout
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: calc($spacing * 0.3);
+
+  label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--primary-text);
+    letter-spacing: 0.01em;
+  }
+
+  .form-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: var(--secondary-text);
+    margin-top: 0.125rem;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+      margin-top: 0.38em;
+      opacity: 0.55;
+    }
+  }
+
+  &.error {
+    input, textarea, select {
+      border-color: var(--error);
+      background-color: color-mix(in srgb, var(--error) 4%, var(--background));
+
+      &:focus {
+        border-color: var(--error);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--error) 15%, transparent);
+      }
+    }
+
+    .form-hint {
+      color: var(--error);
+
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+
+  &.success {
+    input, textarea, select {
+      border-color: var(--success);
+
+      &:focus {
+        border-color: var(--success);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 15%, transparent);
+      }
+    }
+
+    .form-hint {
+      color: var(--success);
+
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Input group — prefix / suffix addons
+.input-group {
+  display: flex;
+
+  input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .input-addon {
+    display: flex;
+    align-items: center;
+    padding: 0 calc($spacing / 2);
+    background-color: var(--secondary-background);
+    border: 1px solid var(--divider);
+    color: var(--secondary-text);
+    font-size: $spacing;
+    white-space: nowrap;
+    box-shadow: $shadow;
+
+    &:first-child {
+      border-right: none;
+      border-radius: calc($border-radius / 2) 0 0 calc($border-radius / 2);
+
+      & + input {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    &:last-child {
+      border-left: none;
+      border-radius: 0 calc($border-radius / 2) calc($border-radius / 2) 0;
+    }
+  }
+
+  input:not(:last-child) {
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+// Readonly state
+input[readonly], textarea[readonly] {
+  background-color: var(--secondary-background);
+  color: var(--secondary-text);
+  cursor: default;
+  box-shadow: none;
+}
+
+// Size variants
+input.input-sm, textarea.input-sm {
+  min-height: calc($form-height * 0.8);
+  font-size: 0.875rem;
+  padding: calc($spacing / 4) calc($spacing / 2);
+}
+
+input.input-lg, textarea.input-lg {
+  min-height: calc($form-height * 1.4);
+  font-size: 1.125rem;
+  padding: calc($spacing * 0.6) calc($spacing / 2);
+}

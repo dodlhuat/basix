@@ -1,0 +1,104 @@
+@use "properties";
+@use "parameters" as *;
+
+@mixin badge-variant($color, $bg) {
+  background: $bg;
+  color: $color;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: calc($spacing * 0.3);
+  padding: calc($spacing * 0.15) calc($spacing * 0.5);
+  border-radius: calc($border-radius * 4);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  vertical-align: middle;
+  border: 1px solid transparent;
+
+  // Default — neutral
+  background: var(--secondary-background);
+  color: var(--secondary-text);
+
+  &-info {
+    @include badge-variant(
+      var(--accent-color),
+      color-mix(in srgb, var(--accent-color) 12%, var(--background))
+    );
+    border-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
+  }
+
+  &-success {
+    @include badge-variant(
+      var(--success),
+      color-mix(in srgb, var(--success) 12%, var(--background))
+    );
+    border-color: color-mix(in srgb, var(--success) 20%, transparent);
+  }
+
+  &-warning {
+    @include badge-variant(
+      var(--warning),
+      color-mix(in srgb, var(--warning) 12%, var(--background))
+    );
+    border-color: color-mix(in srgb, var(--warning) 20%, transparent);
+  }
+
+  &-error {
+    @include badge-variant(
+      var(--error),
+      color-mix(in srgb, var(--error) 12%, var(--background))
+    );
+    border-color: color-mix(in srgb, var(--error) 20%, transparent);
+  }
+
+  // Solid filled
+  &-solid {
+    &.badge-info    { background: var(--accent-color); color: #fff; border-color: transparent; }
+    &.badge-success { background: var(--success);      color: #fff; border-color: transparent; }
+    &.badge-warning { background: var(--warning);      color: #fff; border-color: transparent; }
+    &.badge-error   { background: var(--error);        color: #fff; border-color: transparent; }
+  }
+
+  // Outline only
+  &-outline {
+    background: transparent;
+    border-color: var(--divider);
+    color: var(--secondary-text);
+
+    &.badge-info    { border-color: var(--accent-color); color: var(--accent-color); }
+    &.badge-success { border-color: var(--success);      color: var(--success); }
+    &.badge-warning { border-color: var(--warning);      color: var(--warning); }
+    &.badge-error   { border-color: var(--error);        color: var(--error); }
+  }
+
+  // Sizes
+  &-sm {
+    padding: calc($spacing * 0.1) calc($spacing * 0.35);
+    font-size: 0.6875rem;
+  }
+
+  &-lg {
+    padding: calc($spacing * 0.25) calc($spacing * 0.65);
+    font-size: 0.875rem;
+  }
+
+  // Dot indicator — no text
+  &-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--divider);
+    border: none;
+
+    &.badge-info    { background: var(--accent-color); }
+    &.badge-success { background: var(--success); }
+    &.badge-warning { background: var(--warning); }
+    &.badge-error   { background: var(--error); }
+  }
+}

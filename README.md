@@ -1,4 +1,4 @@
-# Basix 1.1.0
+# Basix 1.2.0
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -58,10 +58,18 @@ The Card component is a CSS-only component that creates visually contained conte
 
 ### Icons
 
-Basix uses a reduced Google Material Icon font with just a minimum set of icons. The reduced version is only 5.5 KB compared to the full 242.5 KB. Use the `icon` class with the desired icon element class.
+Basix ships icons in two formats:
+
+**Font icons** — a reduced Google Material Icon font (~5.5 KB vs the full 242.5 KB). Use the `.icon` class with a modifier.
 
 ``` html
 <span class="icon icon-home"></span>
+```
+
+**SVG sprite** — a single `svg-icons/icons.svg` sprite file. Preferred when you need consistent sizing, color inheritance via `currentColor`, or icons inside JS-generated markup.
+
+``` html
+<svg class="icon-svg"><use href="svg-icons/icons.svg#home"/></svg>
 ```
 
 ---
@@ -194,6 +202,32 @@ The Toast component shows brief notification messages.
 | `closeable` | boolean | Allows to close the toast before auto-closure time |
 | `auto-closure` | integer | Optional closure time in ms |
 
+### Bottom Sheet
+
+The Bottom Sheet component slides up a panel from the bottom of the screen. On desktop it centers as a floating panel. Supports drag-to-dismiss, snap heights, header/footer slots, and an optional close button.
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `content` | string | — | HTML content rendered inside the sheet body |
+| `header` | string | — | Optional header text |
+| `footer` | string | — | Optional footer HTML (e.g. action buttons) |
+| `closeable` | boolean | `true` | Shows a close button and enables backdrop/Escape dismissal |
+| `snapHeight` | string | `'auto'` | Height preset: `'auto'`, `'half'` (50vh), or `'full'` (100dvh) |
+| `onClose` | function | — | Callback fired after the dismiss animation completes |
+
+``` js
+const sheet = new BottomSheet({
+    content: '<p>Sheet content here.</p>',
+    header: 'Title',
+    footer: '<div class="buttons"><button>Cancel</button><button>Confirm</button></div>',
+    snapHeight: 'half',
+    onClose: () => console.log('closed'),
+});
+sheet.show();
+sheet.hide();
+sheet.snapTo('full');
+```
+
 ### Tooltip
 
 The Tooltip component shows contextual information on hover.
@@ -245,6 +279,89 @@ The Chips component displays small interactive elements like tags or filters. CS
     </div>
 </div>
 ```
+
+### Badge
+
+The Badge component displays compact status labels or counts inline. CSS only. Supports soft (tinted), solid, and outline variants, three sizes, and a dot-only indicator.
+
+``` html
+<!-- Soft (default) -->
+<span class="badge badge-info">Info</span>
+<span class="badge badge-success">Success</span>
+<span class="badge badge-warning">Warning</span>
+<span class="badge badge-error">Error</span>
+
+<!-- Solid fill -->
+<span class="badge badge-solid badge-info">Info</span>
+
+<!-- Outline -->
+<span class="badge badge-outline badge-error">Error</span>
+
+<!-- Sizes -->
+<span class="badge badge-sm badge-info">Small</span>
+<span class="badge badge-lg badge-info">Large</span>
+
+<!-- Dot indicator (no text) -->
+<span class="badge badge-dot badge-success"></span>
+```
+
+### Stepper
+
+The Stepper component guides users through a multi-step process. Supports horizontal and vertical layouts, animated connector fills, active pulse, completed, and error states. Steps can optionally be made clickable for non-linear navigation.
+
+``` html
+<div class="stepper" id="my-stepper">
+    <div class="stepper-step completed">
+        <div class="stepper-indicator">
+            <svg class="icon-svg"><use href="svg-icons/icons.svg#check"/></svg>
+        </div>
+        <div class="stepper-label">
+            <span class="stepper-title">Account</span>
+            <span class="stepper-desc">Your details</span>
+        </div>
+    </div>
+    <div class="stepper-connector completed"></div>
+    <div class="stepper-step active">
+        <div class="stepper-indicator">2</div>
+        <div class="stepper-label">
+            <span class="stepper-title">Profile</span>
+        </div>
+    </div>
+    <div class="stepper-connector"></div>
+    <div class="stepper-step">
+        <div class="stepper-indicator">3</div>
+        <div class="stepper-label">
+            <span class="stepper-title">Review</span>
+        </div>
+    </div>
+</div>
+```
+
+Add `.stepper-vertical` to the container for a vertical layout.
+
+``` js
+const stepper = new Stepper('#my-stepper', {
+    defaultStep: 0,   // initial active step (0-based)
+    clickable: true,  // allow clicking completed steps to navigate back
+    onChange: (current, previous) => console.log(current, previous),
+});
+
+stepper.next();
+stepper.prev();
+stepper.goTo(2);
+stepper.setError(1);
+stepper.clearError(1);
+stepper.isFirst();   // boolean
+stepper.isLast();    // boolean
+stepper.getStep();   // current index
+stepper.getStepCount();
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `defaultStep` | number | `0` | Index of the initially active step |
+| `clickable` | boolean | `false` | Adds `.stepper-clickable` and wires click-to-navigate on all steps |
+| `onChange` | function | — | Callback fired on step change: `(current, previous) => void` |
 
 ### Accordion
 
@@ -308,6 +425,58 @@ The Placeholder component creates skeleton loading states. Use `.placeholder` wi
 ---
 
 ## Advanced Components
+
+### Context Menu
+
+The Context Menu component shows a custom right-click menu on any target element. Supports icons, keyboard shortcuts, group labels, separators, submenus, destructive items, and disabled items. Automatically flips to avoid viewport overflow and animates in from the click origin.
+
+``` js
+new ContextMenu('.my-element', [
+    { group: 'File' },
+    { label: 'Open',   icon: 'folder_open', shortcut: '⌘O', action: (target) => {} },
+    { label: 'Rename', icon: 'edit',        shortcut: 'F2', action: (target) => {} },
+    'separator',
+    {
+        label: 'Share', icon: 'send',
+        submenu: [
+            { label: 'Copy link',    icon: 'attachment', action: (target) => {} },
+            { label: 'Send by mail', icon: 'mail',       action: (target) => {} },
+        ]
+    },
+    'separator',
+    { label: 'Delete', icon: 'delete', destructive: true, action: (target) => {} },
+]);
+```
+
+The constructor accepts a CSS selector string, a single `HTMLElement`, or an array of `HTMLElement`s as the first argument.
+
+#### Item types
+
+| Type | Shape | Description |
+|---|---|---|
+| Action item | `ContextMenuItemDef` | Regular clickable item |
+| Separator | `'separator'` | Horizontal divider line |
+| Group label | `{ group: string }` | Non-interactive section header |
+
+#### ContextMenuItemDef
+
+| Property | Type | Description |
+|---|---|---|
+| `label` | string | Display text |
+| `icon` | string | SVG sprite icon id (e.g. `'delete'`) |
+| `shortcut` | string | Keyboard shortcut hint shown on the right (e.g. `'⌘O'`) |
+| `disabled` | boolean | Renders item at reduced opacity, non-interactive |
+| `destructive` | boolean | Renders item in error/red color |
+| `action` | function | Callback `(target: HTMLElement) => void` — receives the right-clicked element |
+| `submenu` | `ContextMenuInput[]` | Nested items; renders a submenu on hover |
+
+#### Keyboard navigation
+
+| Key | Action |
+|---|---|
+| `↑` / `↓` | Move focus between items |
+| `Enter` | Activate focused item |
+| `Escape` | Close the menu |
 
 ### Data Tables
 
