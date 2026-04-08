@@ -67,6 +67,41 @@ button,
     opacity: 0.45;
     cursor: not-allowed;
   }
+
+  &.is-loading {
+    pointer-events: none;
+    position: relative;
+    color: transparent !important;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 1.1em;
+      height: 1.1em;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spinner-rotate 0.8s ease-in-out infinite;
+      color: var(--primary-text);
+    }
+
+    > * {
+      visibility: hidden;
+    }
+  }
+}
+
+.button-primary,
+button.button-primary,
+.button-success,
+button.button-success,
+.button-warning,
+button.button-warning,
+.button-error,
+button.button-error {
+  &.is-loading::after {
+    color: var(--background);
+  }
 }
 
 .button-primary,
@@ -147,5 +182,18 @@ button.button-error {
   .button-error,
   button.button-error {
     @include button-variant-dark(var(--error));
+  }
+
+  .button-primary,
+  button.button-primary,
+  .button-success,
+  button.button-success,
+  .button-warning,
+  button.button-warning,
+  .button-error,
+  button.button-error {
+    &.is-loading::after {
+      color: var(--primary-text);
+    }
   }
 }

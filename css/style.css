@@ -1519,6 +1519,39 @@ button:disabled,
   opacity: 0.45;
   cursor: not-allowed;
 }
+button.is-loading,
+.button.is-loading {
+  pointer-events: none;
+  position: relative;
+  color: transparent !important;
+}
+button.is-loading::after,
+.button.is-loading::after {
+  content: "";
+  position: absolute;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spinner-rotate 0.8s ease-in-out infinite;
+  color: var(--primary-text);
+}
+button.is-loading > *,
+.button.is-loading > * {
+  visibility: hidden;
+}
+
+.button-primary.is-loading::after,
+button.button-primary.is-loading::after,
+.button-success.is-loading::after,
+button.button-success.is-loading::after,
+.button-warning.is-loading::after,
+button.button-warning.is-loading::after,
+.button-error.is-loading::after,
+button.button-error.is-loading::after {
+  color: var(--background);
+}
 
 .button-primary,
 button.button-primary {
@@ -1658,6 +1691,16 @@ button.button-error:active:not(:disabled) {
 [data-theme=dark] .button-error:active:not(:disabled),
 [data-theme=dark] button.button-error:active:not(:disabled) {
   background: color-mix(in srgb, var(--error) 70%, white);
+}
+[data-theme=dark] .button-primary.is-loading::after,
+[data-theme=dark] button.button-primary.is-loading::after,
+[data-theme=dark] .button-success.is-loading::after,
+[data-theme=dark] button.button-success.is-loading::after,
+[data-theme=dark] .button-warning.is-loading::after,
+[data-theme=dark] button.button-warning.is-loading::after,
+[data-theme=dark] .button-error.is-loading::after,
+[data-theme=dark] button.button-error.is-loading::after {
+  color: var(--primary-text);
 }
 
 .modal-wrapper {
