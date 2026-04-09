@@ -1,0 +1,744 @@
+// ============================================================
+// calendar.scss — Basix Calendar Component Styles
+//
+// Integration principles:
+//   • No hard-coded colours — uses Basix CSS custom properties
+//   • No global reset
+//   • BEM: .cal / .cal__* / is-* / has-*
+//   • State classes match Basix convention: .is-today, .is-selected,
+//     .is-disabled, .has-events, .active, .error, .success
+//   • Font, spacing, radius, border — all from Basix tokens
+//   • Event pills accept any Basix badge/alert class as className
+// ============================================================
+
+// ------------------------------------------------------------------
+// Basix token aliases — fall back gracefully if tokens not present
+// ------------------------------------------------------------------
+
+.cal {
+  // Spacing — mirrors Basix internal spacing scale
+  --cal-spacing-xs: 4px;
+  --cal-spacing-sm: 8px;
+  --cal-spacing-md: 12px;
+  --cal-spacing-lg: 16px;
+
+  // Surfaces — delegates to Basix CSS vars
+  --cal-bg:          var(--color-bg, #ffffff);
+  --cal-bg-alt:      var(--color-bg-alt, #f5f5f5);
+  --cal-bg-hover:    var(--color-bg-hover, #efefef);
+
+  // Borders
+  --cal-border:      var(--color-border, rgba(0,0,0,0.12));
+
+  // Text
+  --cal-text:        var(--color-text, #1a1a1a);
+  --cal-text-muted:  var(--color-text-muted, #6b7280);
+
+  // Accent — today, selection
+  --cal-accent:      var(--color-primary, #2563eb);
+  --cal-accent-text: var(--color-primary-contrast, #ffffff);
+
+  // Today ring (unselected)
+  --cal-today-ring:  var(--color-primary, #2563eb);
+
+  // Hour grid height
+  --cal-hour-height: 48px;
+  --cal-time-col-width: 52px;
+
+  // Radius — reuse Basix card radius
+  --cal-radius:      var(--border-radius, 6px);
+  --cal-radius-sm:   calc(var(--border-radius, 6px) * 0.5);
+
+  // Typography — Basix uses "Outfit" variable font
+  font-family: var(--font-family, 'Outfit', sans-serif);
+  color: var(--cal-text);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.cal *,
+.cal *::before,
+.cal *::after {
+  box-sizing: inherit;
+}
+
+// ------------------------------------------------------------------
+// Header
+// ------------------------------------------------------------------
+
+.cal__header {
+  display: flex;
+  align-items: center;
+  gap: var(--cal-spacing-sm);
+  margin-bottom: var(--cal-spacing-lg);
+  flex-wrap: wrap;
+}
+
+.cal__title {
+  flex: 1;
+  min-width: 120px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cal-text);
+  margin: 0;
+}
+
+// Navigation buttons — delegate to Basix .button styles
+// Use Basix default button appearance as base, keep overrides minimal
+.cal__nav {
+  display: flex;
+  gap: var(--cal-spacing-xs);
+  align-items: center;
+}
+
+.cal__btn {
+  // Inherits from Basix button element style for unstyled buttons
+  // We only add what's needed for layout/state
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cal-spacing-xs);
+  padding: 5px var(--cal-spacing-md);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+  border: 1px solid var(--cal-border);
+  border-radius: var(--cal-radius-sm);
+  background: transparent;
+  color: var(--cal-text);
+  transition: background 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--cal-bg-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cal-accent);
+    outline-offset: 2px;
+  }
+
+  &:active {
+    opacity: 0.85;
+  }
+
+  &--active,
+  &[aria-pressed="true"] {
+    background: var(--cal-bg-alt);
+    border-color: var(--color-primary, var(--cal-accent));
+    color: var(--cal-accent);
+  }
+
+  .icon-svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    vertical-align: middle;
+  }
+}
+
+.cal__view-toggle {
+  display: flex;
+
+  .cal__btn {
+    border-radius: 0;
+    border-right-width: 0;
+
+    &:first-child {
+      border-radius: var(--cal-radius-sm) 0 0 var(--cal-radius-sm);
+    }
+
+    &:last-child {
+      border-radius: 0 var(--cal-radius-sm) var(--cal-radius-sm) 0;
+      border-right-width: 1px;
+    }
+  }
+}
+
+// ------------------------------------------------------------------
+// Body wrapper
+// ------------------------------------------------------------------
+
+.cal__body {
+  width: 100%;
+}
+
+// ------------------------------------------------------------------
+// Month View
+// ------------------------------------------------------------------
+
+.cal__month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border: 1px solid var(--cal-border);
+  border-radius: var(--cal-radius);
+  overflow: hidden;
+  // Create the grid lines via gap + background trick
+  gap: 1px;
+  background: var(--cal-border);
+}
+
+.cal__weekday {
+  background: var(--cal-bg-alt);
+  padding: var(--cal-spacing-sm) var(--cal-spacing-xs);
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cal-text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cal__day {
+  background: var(--cal-bg);
+  padding: var(--cal-spacing-xs) var(--cal-spacing-sm);
+  min-height: 88px;
+  cursor: pointer;
+  transition: background 0.1s ease;
+  position: relative;
+
+  &:hover {
+    background: var(--cal-bg-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cal-accent);
+    outline-offset: -2px;
+    z-index: 1;
+  }
+
+  &--empty {
+    background: var(--cal-bg-alt);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &--outside {
+    .cal__day-num {
+      opacity: 0.35;
+    }
+    .cal__day-events {
+      opacity: 0.35;
+    }
+  }
+
+  // State: today — ring around number
+  &.is-today .cal__day-num {
+    background: var(--cal-today-ring);
+    color: var(--cal-accent-text);
+    border-radius: 50%;
+  }
+
+  // State: selected — filled accent
+  &.is-selected .cal__day-num {
+    background: var(--cal-accent);
+    color: var(--cal-accent-text);
+    border-radius: 50%;
+    font-weight: 700;
+  }
+
+  // has-events indicator dot (visible on mobile when pills are hidden)
+  &.has-events::after {
+    content: '';
+    display: none; // shown via media query
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--cal-accent);
+  }
+}
+
+.cal__day-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--cal-text);
+  margin-bottom: var(--cal-spacing-xs);
+  flex-shrink: 0;
+  transition: background 0.1s, color 0.1s;
+}
+
+.cal__day-events {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+// Event pill — integrates with Basix badge color variants
+// Use .className on CalendarEvent to inject e.g. badge-success, badge-warning
+.cal__event-pill {
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  padding: 1px 6px;
+  border-radius: var(--cal-radius-sm);
+  background: var(--color-primary-light, #dbeafe);
+  color: var(--color-primary-dark, #1e40af);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border: none;
+  display: block;
+  text-align: left;
+  width: 100%;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cal-accent);
+    outline-offset: 1px;
+  }
+
+  // Allow Basix badge classes to override colours naturally
+  // e.g. className="badge-success" → green pill
+  // No specificity wars needed as Basix badge styles will take over
+}
+
+.cal__event-more {
+  font-size: 0.6875rem;
+  color: var(--cal-text-muted);
+  padding: 1px 6px;
+}
+
+.cal__event-time {
+  font-weight: 600;
+  margin-right: 3px;
+  opacity: 0.8;
+}
+
+// ------------------------------------------------------------------
+// Week View
+// ------------------------------------------------------------------
+
+.cal__week {
+  border: 1px solid var(--cal-border);
+  border-radius: var(--cal-radius);
+  overflow: hidden;
+}
+
+.cal__week-head {
+  display: grid;
+  grid-template-columns: var(--cal-time-col-width) repeat(7, minmax(0, 1fr));
+  background: var(--cal-bg-alt);
+  border-bottom: 1px solid var(--cal-border);
+}
+
+.cal__week-head-time {
+  padding: var(--cal-spacing-sm) var(--cal-spacing-xs);
+  font-size: 0.6875rem;
+  color: var(--cal-text-muted);
+}
+
+.cal__week-head-day {
+  padding: var(--cal-spacing-sm) var(--cal-spacing-xs);
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--cal-text-muted);
+  border-left: 1px solid var(--cal-border);
+  cursor: pointer;
+
+  span {
+    display: block;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--cal-text);
+    line-height: 1.2;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-top: 2px;
+    transition: background 0.1s;
+  }
+
+  &.is-today span {
+    background: var(--cal-today-ring);
+    color: var(--cal-accent-text);
+  }
+
+  &.is-selected span {
+    background: var(--cal-accent);
+    color: var(--cal-accent-text);
+  }
+}
+
+// All-day row
+.cal__allday {
+  display: grid;
+  grid-template-columns: var(--cal-time-col-width) repeat(7, minmax(0, 1fr));
+  border-bottom: 1px solid var(--cal-border);
+  min-height: 32px;
+  background: var(--cal-bg);
+}
+
+.cal__allday-label {
+  padding: var(--cal-spacing-xs) var(--cal-spacing-xs);
+  font-size: 0.6875rem;
+  color: var(--cal-text-muted);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 6px;
+}
+
+.cal__allday-col {
+  border-left: 1px solid var(--cal-border);
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+// Scrollable time grid
+.cal__week-body {
+  overflow-y: auto;
+  max-height: 480px;
+  position: relative;
+  background: var(--cal-bg);
+
+  // Custom scrollbar — thin, matches Basix aesthetic
+  scrollbar-width: thin;
+  scrollbar-color: var(--cal-border) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--cal-border);
+    border-radius: 3px;
+  }
+}
+
+.cal__week-grid {
+  display: grid;
+  grid-template-columns: var(--cal-time-col-width) repeat(7, minmax(0, 1fr));
+  position: relative;
+}
+
+.cal__time-col {
+  display: flex;
+  flex-direction: column;
+  background: var(--cal-bg-alt);
+}
+
+.cal__time-slot {
+  height: var(--cal-hour-height);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 3px;
+  padding-right: var(--cal-spacing-sm);
+  font-size: 0.6875rem;
+  color: var(--cal-text-muted);
+  justify-content: flex-end;
+  border-top: 1px solid var(--cal-border);
+  flex-shrink: 0;
+
+  &:first-child {
+    border-top: none;
+  }
+}
+
+.cal__day-col {
+  border-left: 1px solid var(--cal-border);
+  position: relative;
+}
+
+.cal__day-col-hour {
+  height: var(--cal-hour-height);
+  border-top: 1px solid var(--cal-border);
+  flex-shrink: 0;
+
+  &:first-child {
+    border-top: none;
+  }
+
+  // Half-hour marker
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--cal-border);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.cal__week-event {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: var(--cal-radius-sm);
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  padding: 2px 5px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--color-primary-light, #dbeafe);
+  color: var(--color-primary-dark, #1e40af);
+  border-left: 2px solid var(--cal-accent);
+  z-index: 1;
+  transition: filter 0.1s;
+
+  &:hover {
+    filter: brightness(0.95);
+    z-index: 2;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cal-accent);
+    outline-offset: 1px;
+    z-index: 3;
+  }
+}
+
+// Now-line (injected dynamically if needed)
+.cal__now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-danger, #dc2626);
+  z-index: 5;
+  pointer-events: none;
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-danger, #dc2626);
+  }
+}
+
+// ------------------------------------------------------------------
+// Agenda View
+// ------------------------------------------------------------------
+
+.cal__agenda {
+  border: 1px solid var(--cal-border);
+  border-radius: var(--cal-radius);
+  overflow: hidden;
+}
+
+.cal__agenda-day {
+  display: flex;
+  gap: var(--cal-spacing-lg);
+  padding: var(--cal-spacing-md) var(--cal-spacing-lg);
+  border-bottom: 1px solid var(--cal-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &.is-today {
+    background: var(--cal-bg-alt);
+  }
+}
+
+.cal__agenda-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 42px;
+  flex-shrink: 0;
+}
+
+.cal__agenda-dow {
+  font-size: 0.6875rem;
+  color: var(--cal-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.cal__agenda-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cal-text);
+  border-radius: 50%;
+  margin-top: 2px;
+
+  &.is-today {
+    background: var(--cal-today-ring);
+    color: var(--cal-accent-text);
+  }
+}
+
+.cal__agenda-events {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cal-spacing-xs);
+  padding-top: 4px;
+}
+
+.cal__agenda-event {
+  display: flex;
+  align-items: baseline;
+  gap: var(--cal-spacing-sm);
+  padding: var(--cal-spacing-xs) var(--cal-spacing-sm);
+  border-radius: var(--cal-radius-sm);
+  background: var(--color-primary-light, #dbeafe);
+  cursor: pointer;
+  transition: filter 0.1s;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cal-accent);
+    outline-offset: 1px;
+  }
+}
+
+.cal__agenda-event-time {
+  font-size: 0.75rem;
+  color: var(--color-primary-dark, #1e40af);
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 120px;
+}
+
+.cal__agenda-event-title {
+  font-size: 0.875rem;
+  color: var(--cal-text);
+}
+
+.cal__agenda-empty {
+  padding: var(--cal-spacing-lg) var(--cal-spacing-lg);
+  color: var(--cal-text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+// ------------------------------------------------------------------
+// Responsive
+// ------------------------------------------------------------------
+
+@media (max-width: 600px) {
+  .cal__day {
+    min-height: 56px;
+    padding: var(--cal-spacing-xs);
+  }
+
+  .cal__event-pill {
+    display: none; // hide pills, show dot indicator instead
+  }
+
+  .cal__day.has-events::after {
+    display: block; // show dot on mobile
+  }
+
+  .cal__day-num {
+    width: 22px;
+    height: 22px;
+    font-size: 0.75rem;
+  }
+
+  .cal__header {
+    gap: var(--cal-spacing-xs);
+  }
+
+  .cal__title {
+    font-size: 0.9375rem;
+    order: -1;
+    width: 100%;
+  }
+
+  .cal__week-body {
+    max-height: 360px;
+  }
+
+  .cal__week-head-day span {
+    font-size: 0.875rem;
+    width: 24px;
+    height: 24px;
+  }
+
+  .cal__agenda-day {
+    padding: var(--cal-spacing-sm) var(--cal-spacing-md);
+    gap: var(--cal-spacing-md);
+  }
+
+  .cal__agenda-event-time {
+    min-width: 80px;
+    font-size: 0.6875rem;
+  }
+}
+
+// ------------------------------------------------------------------
+// Dark mode — relies entirely on Basix CSS custom property overrides
+// When Basix switches --color-bg, --color-text etc., the calendar
+// automatically adapts without any extra rules needed here.
+// ------------------------------------------------------------------
+
+// ------------------------------------------------------------------
+// Print styles
+// ------------------------------------------------------------------
+
+@media print {
+  .cal__header .cal__view-toggle,
+  .cal__header .cal__nav .cal__btn--today {
+    display: none;
+  }
+
+  .cal__week-body {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .cal__month-grid,
+  .cal__week,
+  .cal__agenda {
+    border: 1px solid #ccc;
+  }
+}
+
+// ------------------------------------------------------------------
+// Animation — subtle, respects prefers-reduced-motion
+// ------------------------------------------------------------------
+
+@media (prefers-reduced-motion: no-preference) {
+  .cal__body {
+    animation: cal-fade-in 0.15s ease;
+  }
+}
+
+@keyframes cal-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
