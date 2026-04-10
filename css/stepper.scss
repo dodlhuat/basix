@@ -6,8 +6,20 @@ $connector-thickness: 2px;
 
 @keyframes stepper-pulse {
   0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-color) 35%, transparent); }
-  65%  { box-shadow: 0 0 0 5px transparent; }
+  65%  { box-shadow: 0 0 0 6px transparent; }
   100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes stepper-check-in {
+  0%   { transform: scale(0.5); opacity: 0; }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes stepper-complete-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
 }
 
 .stepper {
@@ -37,7 +49,11 @@ $connector-thickness: 2px;
   border: 2px solid var(--divider);
   background: var(--background);
   color: var(--secondary-text);
-  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
   position: relative;
   z-index: 1;
 
@@ -59,7 +75,7 @@ $connector-thickness: 2px;
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--secondary-text);
-  transition: color 0.2s ease;
+  transition: color 0.25s ease, font-weight 0.25s ease;
   white-space: nowrap;
 }
 
@@ -68,16 +84,17 @@ $connector-thickness: 2px;
   color: var(--secondary-text);
   opacity: 0.6;
   white-space: nowrap;
+  transition: opacity 0.25s ease;
 }
 
 // Connector — animated fill via ::after
 .stepper-connector {
   flex: 1;
   height: $connector-thickness;
-  // align center of connector with center of indicator
   margin-top: calc(#{$indicator-size} / 2 - #{$connector-thickness} / 2);
   min-width: $spacing;
   background: var(--divider);
+  border-radius: $connector-thickness;
   position: relative;
   overflow: hidden;
 
@@ -88,7 +105,7 @@ $connector-thickness: 2px;
     background: var(--accent-color);
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &.completed::after {
@@ -110,6 +127,10 @@ $connector-thickness: 2px;
       color: var(--accent-color);
       font-weight: 600;
     }
+
+    .stepper-desc {
+      opacity: 0.8;
+    }
   }
 
   &.completed {
@@ -117,6 +138,11 @@ $connector-thickness: 2px;
       border-color: var(--accent-color);
       background: var(--accent-color);
       color: #fff;
+      animation: stepper-complete-pop 0.35s ease-out;
+
+      .icon-svg {
+        animation: stepper-check-in 0.3s ease-out 0.05s both;
+      }
     }
 
     .stepper-title {
@@ -135,6 +161,11 @@ $connector-thickness: 2px;
     .stepper-title {
       color: var(--error);
     }
+
+    .stepper-desc {
+      color: var(--error);
+      opacity: 0.7;
+    }
   }
 }
 
@@ -151,7 +182,6 @@ $connector-thickness: 2px;
   .stepper-label {
     align-items: flex-start;
     text-align: left;
-    // vertically center the title text against the indicator circle
     padding-top: calc((#{$indicator-size} - 1.15rem) / 2);
   }
 
@@ -162,9 +192,9 @@ $connector-thickness: 2px;
     min-width: unset;
     flex: unset;
     margin-top: 0;
-    // horizontally center connector under the indicator
     margin-left: calc(#{$indicator-size} / 2 - #{$connector-thickness} / 2);
     align-self: flex-start;
+    border-radius: $connector-thickness;
 
     &::after {
       transform: scaleY(0);
@@ -186,14 +216,20 @@ $connector-thickness: 2px;
 
       .stepper-indicator {
         transition:
-          background 0.25s ease,
-          border-color 0.25s ease,
-          color 0.25s ease,
-          transform 0.15s ease;
+          background 0.3s ease,
+          border-color 0.3s ease,
+          color 0.3s ease,
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
       }
 
       &:hover .stepper-indicator {
-        transform: scale(1.1);
+        transform: scale(1.12);
+        box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-color) 25%, transparent);
+      }
+
+      &:active .stepper-indicator {
+        transform: scale(1.04);
       }
     }
   }

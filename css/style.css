@@ -2772,10 +2772,34 @@ nav.pushed {
     box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-color) 35%, transparent);
   }
   65% {
-    box-shadow: 0 0 0 5px transparent;
+    box-shadow: 0 0 0 6px transparent;
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
+  }
+}
+@keyframes stepper-check-in {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes stepper-complete-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 .stepper {
@@ -2805,7 +2829,7 @@ nav.pushed {
   border: 2px solid var(--divider);
   background: var(--background);
   color: var(--secondary-text);
-  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   z-index: 1;
 }
@@ -2826,7 +2850,7 @@ nav.pushed {
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--secondary-text);
-  transition: color 0.2s ease;
+  transition: color 0.25s ease, font-weight 0.25s ease;
   white-space: nowrap;
 }
 
@@ -2835,6 +2859,7 @@ nav.pushed {
   color: var(--secondary-text);
   opacity: 0.6;
   white-space: nowrap;
+  transition: opacity 0.25s ease;
 }
 
 .stepper-connector {
@@ -2843,6 +2868,7 @@ nav.pushed {
   margin-top: calc(2rem / 2 - 2px / 2);
   min-width: 1rem;
   background: var(--divider);
+  border-radius: 2px;
   position: relative;
   overflow: hidden;
 }
@@ -2853,7 +2879,7 @@ nav.pushed {
   background: var(--accent-color);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .stepper-connector.completed::after {
   transform: scaleX(1);
@@ -2869,10 +2895,17 @@ nav.pushed {
   color: var(--accent-color);
   font-weight: 600;
 }
+.stepper-step.active .stepper-desc {
+  opacity: 0.8;
+}
 .stepper-step.completed .stepper-indicator {
   border-color: var(--accent-color);
   background: var(--accent-color);
   color: #fff;
+  animation: stepper-complete-pop 0.35s ease-out;
+}
+.stepper-step.completed .stepper-indicator .icon-svg {
+  animation: stepper-check-in 0.3s ease-out 0.05s both;
 }
 .stepper-step.completed .stepper-title {
   color: var(--primary-text);
@@ -2885,6 +2918,10 @@ nav.pushed {
 }
 .stepper-step.error .stepper-title {
   color: var(--error);
+}
+.stepper-step.error .stepper-desc {
+  color: var(--error);
+  opacity: 0.7;
 }
 
 .stepper-vertical {
@@ -2909,6 +2946,7 @@ nav.pushed {
   margin-top: 0;
   margin-left: calc(2rem / 2 - 2px / 2);
   align-self: flex-start;
+  border-radius: 2px;
 }
 .stepper-vertical .stepper-connector::after {
   transform: scaleY(0);
@@ -2922,10 +2960,14 @@ nav.pushed {
   cursor: pointer;
 }
 .stepper-clickable .stepper-step.completed .stepper-indicator, .stepper-clickable .stepper-step.active .stepper-indicator {
-  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.15s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 .stepper-clickable .stepper-step.completed:hover .stepper-indicator, .stepper-clickable .stepper-step.active:hover .stepper-indicator {
-  transform: scale(1.1);
+  transform: scale(1.12);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-color) 25%, transparent);
+}
+.stepper-clickable .stepper-step.completed:active .stepper-indicator, .stepper-clickable .stepper-step.active:active .stepper-indicator {
+  transform: scale(1.04);
 }
 
 @media (max-width: 480px) {
