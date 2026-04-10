@@ -9,10 +9,19 @@
   border-radius: $border-radius;
   overflow: hidden;
   box-shadow: $shadow;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 12%, transparent);
+  }
 
   &.is-error {
     border-color: var(--error);
+
+    &:focus-within {
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--error) 12%, transparent);
+    }
   }
 }
 
@@ -22,6 +31,7 @@
   flex-direction: column;
   padding: calc($spacing * 0.75) $spacing;
   min-width: 0;
+  position: relative;
 
   label {
     font-size: 0.6875rem;
@@ -32,6 +42,15 @@
     margin-bottom: calc($spacing / 4);
     pointer-events: none;
     display: block;
+    transition: color 0.15s ease;
+  }
+
+  &:focus-within label {
+    color: var(--accent-color);
+  }
+
+  .timespan-picker.is-error .timespan-field-end:focus-within & label {
+    color: var(--error);
   }
 
   input[type="time"] {
@@ -81,7 +100,7 @@
   border-right: 1px solid var(--divider);
   background: var(--background);
   min-width: 4.5rem;
-  gap: calc($spacing / 5);
+  gap: calc($spacing / 4);
   flex-shrink: 0;
 }
 
@@ -89,6 +108,15 @@
   font-size: 1rem;
   color: var(--secondary-text);
   line-height: 1;
+  transition: color 0.2s ease, transform 0.2s ease;
+
+  .timespan-picker:focus-within & {
+    color: var(--accent-color);
+  }
+
+  .timespan-picker.is-error & {
+    color: var(--error);
+  }
 }
 
 .timespan-duration {
@@ -99,19 +127,29 @@
   white-space: nowrap;
   line-height: 1;
   min-height: 0.75rem;
+  padding: 2px 6px;
+  border-radius: calc($border-radius * 2);
+  background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+  transition: color 0.2s ease, background 0.2s ease, transform 0.25s cubic-bezier(0.2, 0, 0, 1);
+
+  &:empty {
+    background: transparent;
+    padding: 0;
+  }
 
   .timespan-picker.is-error & {
     color: var(--error);
+    background: color-mix(in srgb, var(--error) 10%, transparent);
   }
 }
 
 // 24h position bar
 .timespan-bar {
   margin-top: calc($spacing / 2);
-  height: 3px;
+  height: 6px;
   background: var(--divider);
   border-radius: 99px;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 
@@ -122,11 +160,64 @@
   height: 100%;
   background: var(--accent-color);
   border-radius: inherit;
-  transition: left 0.3s ease, width 0.3s ease;
+  transition: left 0.3s cubic-bezier(0.2, 0, 0, 1), width 0.3s cubic-bezier(0.2, 0, 0, 1);
+
+  // Start/end dot markers
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    border: 2px solid var(--background);
+    transform: translateY(-50%);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+  }
+
+  &::before {
+    left: -6px;
+  }
+
+  &::after {
+    right: -6px;
+  }
+
+  // Only show dots when the bar has width (values are set)
+  &[style*="width"]:not([style*="width: 0"]):not([style*="width:0"]) {
+    &::before,
+    &::after {
+      opacity: 1;
+    }
+  }
 
   .timespan-picker.is-error ~ .timespan-bar & {
     background: var(--error);
+
+    &::before,
+    &::after {
+      background: var(--error);
+    }
   }
+}
+
+// Error shake
+@media (prefers-reduced-motion: no-preference) {
+  .timespan-picker.is-error {
+    animation: timespan-shake 0.35s cubic-bezier(0.2, 0, 0, 1);
+  }
+}
+
+@keyframes timespan-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-4px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-2px); }
+  80%      { transform: translateX(2px); }
 }
 
 @media (max-width: 480px) {
@@ -143,6 +234,10 @@
     border-bottom: 1px solid var(--divider);
     padding: calc($spacing / 2) $spacing;
     min-width: unset;
+  }
+
+  .timespan-arrow {
+    transform: rotate(90deg);
   }
 
   .timespan-field input[type="time"] {
