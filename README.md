@@ -539,6 +539,61 @@ The FileUploader component provides drag-and-drop file upload functionality with
 
 Virtual Dropdown is a performant, virtualized dropdown component that efficiently renders large option lists by only drawing visible items in the DOM. Supports single and multi-select modes, built-in search/filtering, keyboard navigation, and configurable item height and render limits — making it ideal for scenarios with hundreds or thousands of selectable options.
 
+### Group Picker
+
+The GroupPicker component enables hierarchical group and subgroup selection. Users can either select an entire parent group (covering all subgroups) or pick individual subgroups. Groups without children are directly selectable. Selecting all subgroups automatically promotes to a parent selection. Includes debounced search with match highlighting, expand/collapse, and a chip-based selection summary.
+
+``` html
+<div id="group-picker-demo"></div>
+```
+
+``` js
+const data: GroupData[] = [
+  {
+    id: 'gruppenspiele', label: 'Gruppenspiele',
+    subgroups: [
+      { id: 'grossgruppe', label: 'Grossgruppenspiele' },
+      { id: 'trinkspiele', label: 'Trinkspiele' },
+    ]
+  },
+  { id: 'schach', label: 'Schach' }, // no subgroups — directly selectable
+];
+
+const picker = new GroupPicker('#group-picker-demo', data, {
+  onSelectionChange: (selection) => console.log(selection),
+});
+```
+
+#### GroupData
+
+| Property | Type | Description |
+|---|---|---|
+| `id` | string | Unique identifier for the group |
+| `label` | string | Display name |
+| `subgroups` | SubgroupData[] | Optional array of `{ id, label }` child items |
+
+#### GroupPickerOptions
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `onSelectionChange` | function | — | Callback fired on selection change with `GroupPickerSelection` |
+| `searchPlaceholder` | string | `'Gruppen durchsuchen...'` | Placeholder text for the search input |
+| `selectAllLabel` | string | `'Alle'` | Label for the select-all button |
+| `deselectLabel` | string | `'Abwahlen'` | Label shown when a parent group is selected |
+| `emptyLabel` | string | `'Keine Ergebnisse'` | Shown when search yields no results |
+| `selectionPlaceholder` | string | `'Noch keine Auswahl getroffen'` | Placeholder in the selection summary area |
+
+#### Public API
+
+| Method | Description |
+|---|---|
+| `getSelection()` | Returns `{ parentGroups: string[], subgroups: { groupId, subgroupId }[] }` |
+| `setSelection(selection)` | Programmatically set the selection state |
+| `clearSelection()` | Clear all selections |
+| `expandAll()` | Expand all groups |
+| `collapseAll()` | Collapse all groups |
+| `destroy()` | Remove event listeners and clear the DOM |
+
 ### Custom Scrollbar
 
 The Scrollbar component creates custom-styled scrollbars. Supports pointer/touch dragging, track clicking, and automatic thumb sizing. Can be used with any class.

@@ -22,6 +22,7 @@ import {BottomSheet} from "./bottom-sheet.js";
 import {Editor} from "./editor.js";
 import {Stepper} from "./stepper.js";
 import {ContextMenu} from "./context-menu.js";
+import {GroupPicker, GroupData} from "./group-picker.js";
 
 // Generate sample table data
 const generateData = (count: number): TableRow[] => {
@@ -403,6 +404,54 @@ utils.ready(() => {
     Tooltip.initializeAll();
 
     new Editor({ simple: true });
+
+    // Initialize group picker
+    const groupPickerData: GroupData[] = [
+        {
+            id: 'gruppenspiele', label: 'Gruppenspiele',
+            subgroups: [
+                { id: 'grossgruppe', label: 'Grossgruppenspiele' },
+                { id: 'trinkspiele', label: 'Trinkspiele' },
+                { id: 'outdoor', label: 'Outdoor-Spiele' },
+                { id: 'indoor', label: 'Indoor-Spiele' },
+            ]
+        },
+        {
+            id: 'brettspiele', label: 'Brettspiele',
+            subgroups: [
+                { id: 'strategie', label: 'Strategiespiele' },
+                { id: 'familie', label: 'Familienspiele' },
+                { id: 'kooperativ', label: 'Kooperative Spiele' },
+                { id: 'party', label: 'Partyspiele' },
+                { id: 'legacy', label: 'Legacy-Spiele' },
+            ]
+        },
+        {
+            id: 'kartenspiele', label: 'Kartenspiele',
+            subgroups: [
+                { id: 'klassisch', label: 'Klassische Kartenspiele' },
+                { id: 'sammel', label: 'Sammelkartenspiele' },
+                { id: 'deck', label: 'Deckbuilding' },
+            ]
+        },
+        { id: 'schach', label: 'Schach' },
+        { id: 'tischtennis', label: 'Tischtennis' },
+        {
+            id: 'raetsel', label: 'Ratsel & Denksport',
+            subgroups: [
+                { id: 'escape', label: 'Escape-Room-Spiele' },
+                { id: 'puzzle', label: 'Puzzles' },
+                { id: 'logik', label: 'Logikratsel' },
+                { id: 'quiz', label: 'Quizspiele' },
+            ]
+        },
+    ];
+
+    new GroupPicker('#group-picker-demo', groupPickerData, {
+        onSelectionChange: (selection) => {
+            console.log('Group Picker selection:', selection);
+        },
+    });
 
     const timeSpanPicker = new TimeSpanPicker('timespan-1', {
         onChange: (start, end) => {
@@ -985,3 +1034,28 @@ new CodeViewer("#usage-gallery-demo-js", `const gallery = new MasonryGallery("ga
       }, 800);
     }),
   });`, "js");
+new CodeViewer("#usage-group-picker-demo-html", `<div id="group-picker-demo"></div>`, "html");
+new CodeViewer("#usage-group-picker-demo-js", `const data: GroupData[] = [
+  {
+    id: 'gruppenspiele', label: 'Gruppenspiele',
+    subgroups: [
+      { id: 'grossgruppe', label: 'Grossgruppenspiele' },
+      { id: 'trinkspiele', label: 'Trinkspiele' },
+      { id: 'outdoor', label: 'Outdoor-Spiele' },
+    ]
+  },
+  { id: 'schach', label: 'Schach' }, // no subgroups
+];
+
+const picker = new GroupPicker('#group-picker-demo', data, {
+  onSelectionChange: (selection) => {
+    console.log(selection);
+  },
+});
+
+// Public API
+picker.getSelection();
+picker.clearSelection();
+picker.expandAll();
+picker.collapseAll();
+picker.destroy();`, "js");
