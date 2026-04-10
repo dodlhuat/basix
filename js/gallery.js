@@ -124,9 +124,15 @@ class MasonryGallery {
         }
     }
     renderImages(imageDataList) {
-        imageDataList.forEach((data) => {
+        // Sort columns by current height so we start filling from the shortest.
+        // Then round-robin across them — this avoids the problem where unloaded
+        // images (0 height) cause offsetHeight-based distribution to pile all
+        // new items into a single column.
+        const sorted = [...this.columns].sort((a, b) => a.offsetHeight - b.offsetHeight);
+        imageDataList.forEach((data, index) => {
             const item = this.createCard(data);
-            this.addToShortestColumn(item);
+            const col = sorted[index % sorted.length];
+            col.appendChild(item);
             requestAnimationFrame(() => {
                 const img = item.querySelector("img");
                 if (img) {

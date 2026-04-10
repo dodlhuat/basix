@@ -22,9 +22,31 @@
   overflow: hidden;
   box-shadow: $shadow;
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.3s cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
   position: relative;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.1),
+      0 2px 8px rgba(0, 0, 0, 0.06);
+
+    img.loaded {
+      transform: scale(1.03);
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    transition-duration: 0.1s;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
 }
 
 .masonry-item img {
@@ -33,30 +55,67 @@
   display: block;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.5s ease-in;
+  transform: scale(1.06);
+  filter: blur(4px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.6s cubic-bezier(0.2, 0, 0, 1),
+    filter 0.5s ease;
 }
 
 .masonry-item img.loaded {
   opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
 }
 
 .masonry-item-info {
-  padding: $spacing;
+  padding: calc($spacing * 0.75) $spacing;
+  border-top: 1px solid var(--divider);
 }
 
 .masonry-item-title {
   margin: 0 0 calc($spacing / 4);
-  font-size: $spacing;
+  font-size: 0.9375rem;
   font-weight: 600;
+  color: var(--primary-text);
+  line-height: 1.3;
 }
 
 .masonry-item-desc {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.8125rem;
   color: var(--secondary-text);
+  line-height: 1.5;
 }
 
 .loader {
   text-align: center;
   padding: calc($spacing * 2.5);
+  color: var(--secondary-text);
+  font-size: 0.8125rem;
+}
+
+// Staggered entrance for items
+@media (prefers-reduced-motion: no-preference) {
+  .masonry-item {
+    animation: masonry-in 0.4s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+
+  @for $i from 1 through 20 {
+    .masonry-column .masonry-item:nth-child(#{$i}) {
+      animation-delay: #{0.04s * $i};
+    }
+  }
+}
+
+@keyframes masonry-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
