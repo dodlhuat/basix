@@ -1,308 +1,430 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chart</title>
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <link rel="stylesheet" href="css/chart.css">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Basix — Charts</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <style>
+        .push-content {
+            padding: 2rem;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-text);
+            margin-bottom: 0.25rem;
+        }
+        .section-subtitle {
+            font-size: 0.875rem;
+            color: var(--secondary-text);
+            margin-bottom: 1.5rem;
+        }
+        .chart-demo-desc {
+            font-size: 0.875rem;
+            color: var(--secondary-text);
+            margin-top: 1rem;
+            line-height: 1.6;
+        }
+    </style>
 </head>
+<body class="primary-light-bg primary">
 
 <div class="main-header">
-    <div class="open-menu"></div>
+    <div class="open-menu">
+        <div class="navigation-controls">
+            <input type="checkbox" id="menu-navigation" class="navigation"/>
+            <label for="menu-navigation">
+                <svg style="fill:currentColor;width:24px;height:24px;display:inline-block;vertical-align:middle" width="24" height="24">
+                    <use href="svg-icons/icons.svg#menu"/>
+                </svg>
+            </label>
+        </div>
+    </div>
     <div class="last">
-        <div class="darkmode-picker cursor-pointer">
-            <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode">
-                <span id="theme-icon" class="icon icon-light"></span>
-            </div>
+        <div id="theme-toggle" class="theme-toggle flex cursor-pointer" aria-label="Toggle dark mode">
+            <svg id="theme-icon" style="fill:currentColor;width:24px;height:24px;display:inline-block;vertical-align:middle" width="24" height="24">
+                <use href="svg-icons/icons.svg#clear_day"/>
+            </svg>
         </div>
     </div>
 </div>
 
+<nav class="push-menu">
+    <ul>
+        <li><a href="index.html">← Back to Showcase</a></li>
+        <li><a onclick="document.getElementById('section-line').scrollIntoView({behavior:'smooth'})">Line Chart</a></li>
+        <li><a onclick="document.getElementById('section-area').scrollIntoView({behavior:'smooth'})">Area Chart</a></li>
+        <li><a onclick="document.getElementById('section-column').scrollIntoView({behavior:'smooth'})">Column Chart</a></li>
+        <li><a onclick="document.getElementById('section-bar').scrollIntoView({behavior:'smooth'})">Bar Chart</a></li>
+        <li><a onclick="document.getElementById('section-pie').scrollIntoView({behavior:'smooth'})">Pie Chart</a></li>
+    </ul>
+</nav>
+<div class="push-menu-backdrop"></div>
 
-<div class="content push-content">
-    <div class="row">
+<div class="push-content">
+
+    <h1 class="section-title">Charts</h1>
+    <p class="section-subtitle">Pure SVG chart components — no external dependencies. Five chart types with animations, tooltips, legends, and full dark mode support.</p>
+
+    <!-- ─── Line ───────────────────────────────────────────────────────────── -->
+
+    <div id="section-line" class="row">
         <div class="column">
-            <h3>T Werte / Prozentrang</h3>
-            <div class="switch">
-                <input type="checkbox" id="switch"/><label for="switch">T Werte</label>
-            </div>
-        </div>
-    </div>
-    <div class="row card">
-        <div class="column">
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-alter">Alter</label>
-                    <input id="input-alter" type="number">
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-alltagswissen">Alltagswissen</label>
-                    <input id="input-alltagswissen" type="number" data-id="1">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-realitaetssicherheit">Realitätssicherheit</label>
-                    <input id="input-realitaetssicherheit" type="number" data-id="2">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-angewandtes-rechnen">Angewandtes Rechnen</label>
-                    <input id="input-angewandtes-rechnen" type="number" data-id="3">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-soziale-und-sachliche-folgerichtigkeit">Soziale und Sachliche
-                        Folgerichtigkeit</label>
-                    <input id="input-soziale-und-sachliche-folgerichtigkeit" type="number" data-id="4">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-unmittelbares-reproduziere-vorwaerts">Unmittelbares Reproduzieren - numerisch
-                        (vorwärts)</label>
-                    <input id="input-unmittelbares-reproduziere-vorwaerts" type="number" data-id="5">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-unmittelbares-reproduziere-rueckwaerts">Unmittelbares Reproduzieren - numerisch
-                        (rückwärts)</label>
-                    <input id="input-unmittelbares-reproduziere-rueckwaerts" type="number" data-id="6">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-synonyme-finden">Synonyme Finden</label>
-                    <input id="input-synonyme-finden" type="number" data-id="7">
-                </div>
-            </div>
-        </div>
-        <div class="column">
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-kodieren-kodiermenge">Kodieren und Assoziieren (Kodiermenge)</label>
-                    <input id="input-kodieren-kodiermenge" type="number" data-id="8">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-kodieren-assoziationen">Kodieren und Assoziieren (Assoziationen)</label>
-                    <input id="input-kodieren-assoziationen" type="number" data-id="9">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-antizipieren-und-kombinieren">Antizipieren und Kombinieren - figural</label>
-                    <input id="input-antizipieren-und-kombinieren" type="number" data-id="10">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-funktionen-abstrahieren">Funktionen Abstrahieren</label>
-                    <input id="input-funktionen-abstrahieren" type="number" data-id="11">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-analysieren-und-synthetisieren">Analysieren und Synthetisieren - abstrakt</label>
-                    <input id="input-analysieren-und-synthetisieren" type="number" data-id="12">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-soziales-erfassen">Soziales Erfassen und Sachliches Reflektieren</label>
-                    <input id="input-soziales-erfassen" type="number" data-id="13">
-                </div>
-            </div>
-            <div class="row">
-                <div class="column input-values">
-                    <label for="input-formale-folgerichtigkeit">Formale Folgerichtigkeit</label>
-                    <input id="input-formale-folgerichtigkeit" type="number" data-id="14">
+            <div class="row card">
+                <div class="column">
+                    <div id="chart-line"></div>
+                    <p class="chart-demo-desc">
+                        Line chart with smooth Catmull-Rom bezier curves. Supports multiple series, hover tooltips, and an animated stroke-dashoffset draw effect on load.
+                    </p>
+                    <div id="chart-line-html-demo"></div>
+                    <div id="chart-line-js-demo"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div id="chart-container" class="column card"></div>
+    <!-- ─── Area ───────────────────────────────────────────────────────────── -->
+
+    <div id="section-area" class="row">
+        <div class="column">
+            <div class="row card">
+                <div class="column">
+                    <div id="chart-area"></div>
+                    <p class="chart-demo-desc">
+                        Area chart fills the region under the line with a translucent tint. Great for visualising volume or cumulative data over time.
+                    </p>
+                    <div id="chart-area-js-demo"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-</div>
+    <!-- ─── Column ─────────────────────────────────────────────────────────── -->
 
-<script src="js/chart.js"></script>
+    <div id="section-column" class="row">
+        <div class="column">
+            <div class="row card">
+                <div class="column">
+                    <div id="chart-column"></div>
+                    <p class="chart-demo-desc">
+                        Vertical column chart. Multiple series are rendered side-by-side within each category group. Bars animate with a staggered scaleY grow effect.
+                    </p>
+                    <div id="chart-column-js-demo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Bar ────────────────────────────────────────────────────────────── -->
+
+    <div id="section-bar" class="row">
+        <div class="column">
+            <div class="row card">
+                <div class="column">
+                    <div id="chart-bar"></div>
+                    <p class="chart-demo-desc">
+                        Horizontal bar chart — ideal for ranked data or long category labels. Bars animate with a scaleX grow from the left.
+                    </p>
+                    <div id="chart-bar-js-demo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Pie ────────────────────────────────────────────────────────────── -->
+
+    <div id="section-pie" class="row">
+        <div class="column">
+            <div class="row card">
+                <div class="column">
+                    <div id="chart-pie"></div>
+                    <p class="chart-demo-desc">
+                        Pie chart with per-slice hover pop-out and percentage legend. Slices animate in with a staggered scale + fade.
+                    </p>
+                    <div id="chart-pie-js-demo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /.push-content -->
+
 <script type="module">
-    import {utils} from "./js/utils.js";
-    const data = [
-        {id: 1, position: 1, name: 'Alltagswissen', value: 41},
-        {id: 2, position: 2, name: 'Realitätssicherheit', value: 48},
-        {id: 3, position: 3, name: 'Angewandtes Rechnen', value: 59},
-        {id: 4, position: 4, name: 'Soziale und Sachliche Folgerichtigkeit', value: 44},
-        {id: 5, position: 5, name: 'Unmittelbares Reproduzieren - numerisch', description: 'vorwärts', value: 46},
-        {id: 6, position: 5, name: 'Unmittelbares Reproduzieren - numerisch', description: 'rückwärts', value: 41},
-        {id: 7, position: 6, name: 'Synonyme Finden', value: 48},
-        {id: 8, position: 7, name: 'Kodieren und Assoziieren', description: 'Kodiermenge', value: 48},
-        {id: 9, position: 7, name: 'Kodieren und Assoziieren', description: 'Assoziationen', value: 54},
-        {id: 10, position: 8, name: 'Antizipieren und Kombinieren - figural', value: 38},
-        {id: 11, position: 9, name: 'Funktionen Abstrahieren', value: 42},
-        {id: 12, position: 10, name: 'Analysieren und Synthetisieren - abstrakt', value: 43},
-        {id: 13, position: 11, name: 'Soziales Erfassen und Sachliches Reflektieren', value: 45},
-        {id: 14, position: 12, name: 'Formale Folgerichtigkeit', value: 47},
-    ];
+import { Chart } from './js/chart.js';
+import { CodeViewer } from './js/code-viewer.js';
+import { PushMenu } from './js/push-menu.js';
 
-    // Initialize Chart
-    utils.ready(function () {
-        window.chart = new Chart('chart-container', data);
-        window.chart.render();
-        let switchState = false;
-        document.querySelectorAll('.input-values input').forEach(input => {
-            const dataId = input.dataset.id;
-            console.log(dataId);
-            addListeners(input, dataId);
-        });
+PushMenu.init();
 
-        // document.getElementById('input-alltagswissen').addEventListener("keydown", function (event) {
-        //     if (event.key === "Enter") {
-        //         event.preventDefault(); // optional: prevents form submit
-        //         handleInputChange(1, this.value);
-        //     }
-        // });
-        // document.getElementById('input-alltagswissen').addEventListener("blur", function () {
-        //     handleInputChange(1, this.value);
-        // });
+// ── Theme toggle ─────────────────────────────────────────────────────────────
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon   = document.getElementById('theme-icon');
+const html        = document.documentElement;
 
-        document.getElementById('switch').addEventListener('change', function () {
-            document.querySelector("label[for='switch']").textContent = this.checked ? 'Prozentrang' : 'T Werte';
-            switchState = this.checked;
+const applyTheme = (dark) => {
+    html.classList.toggle('dark', dark);
+    themeIcon.querySelector('use').setAttribute('href',
+        dark ? 'svg-icons/icons.svg#dark_mode' : 'svg-icons/icons.svg#clear_day');
+};
 
-            document.querySelectorAll('.input-values input').forEach(input => {
-                if (switchState) {
-                    input.value = tWertZuProzentrang(input.value);
-                } else {
-                    input.value = prozentrangZuTWert(input.value);
-                }
-            });
-        });
+applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+themeToggle.addEventListener('click', () => applyTheme(!html.classList.contains('dark')));
 
-        function addListeners(element, id) {
-            element.addEventListener("keydown", function (event) {
-                if (event.key === "Enter") {
-                    event.preventDefault(); // optional: prevents form submit
-                    handleInputChange(id, this.value);
-                }
-            });
-            element.addEventListener("blur", function () {
-                handleInputChange(id, this.value);
-            });
-        }
+// ── Data ─────────────────────────────────────────────────────────────────────
 
-        function handleInputChange(row, value) {
-            let tValue = switchState ? prozentrangZuTWert(value) : value;
-            chart.updateRowValue(parseInt(row), Math.round(tValue));
-        }
-    });
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    function tWertZuProzentrang(t) {
-        // Umrechnung T-Wert -> z-Wert
-        const z = (t - 50) / 10;
+// Line: Monthly Revenue — 2 series
+new Chart('#chart-line', {
+    type: 'line',
+    title: 'Monthly Revenue',
+    subtitle: 'Current year vs. previous year',
+    series: [
+        {
+            name: 'This Year',
+            data: [
+                { label: 'Jan', value: 42000 },
+                { label: 'Feb', value: 38000 },
+                { label: 'Mar', value: 55000 },
+                { label: 'Apr', value: 61000 },
+                { label: 'May', value: 58000 },
+                { label: 'Jun', value: 72000 },
+                { label: 'Jul', value: 69000 },
+                { label: 'Aug', value: 84000 },
+                { label: 'Sep', value: 91000 },
+                { label: 'Oct', value: 87000 },
+                { label: 'Nov', value: 96000 },
+                { label: 'Dec', value: 110000 },
+            ],
+        },
+        {
+            name: 'Last Year',
+            data: [
+                { label: 'Jan', value: 31000 },
+                { label: 'Feb', value: 29000 },
+                { label: 'Mar', value: 44000 },
+                { label: 'Apr', value: 50000 },
+                { label: 'May', value: 48000 },
+                { label: 'Jun', value: 60000 },
+                { label: 'Jul', value: 57000 },
+                { label: 'Aug', value: 70000 },
+                { label: 'Sep', value: 75000 },
+                { label: 'Oct', value: 72000 },
+                { label: 'Nov', value: 80000 },
+                { label: 'Dec', value: 92000 },
+            ],
+        },
+    ],
+    onPointClick(series, point) {
+        console.log(`${series.name} — ${point.label}: ${point.value}`);
+    },
+});
 
-        // Fehlerfunktion (erf) – Näherung
-        function erf(x) {
-            const a1 = 0.254829592;
-            const a2 = -0.284496736;
-            const a3 = 1.421413741;
-            const a4 = -1.453152027;
-            const a5 = 1.061405429;
-            const p = 0.3275911;
+// Area: User Growth — 1 series
+new Chart('#chart-area', {
+    type: 'area',
+    title: 'User Growth',
+    subtitle: 'Monthly active users',
+    series: [
+        {
+            name: 'Active Users',
+            data: months.map((label, i) => ({
+                label,
+                value: Math.round(12000 + i * 3400 + Math.sin(i) * 2000),
+            })),
+        },
+    ],
+});
 
-            const sign = x < 0 ? -1 : 1;
-            x = Math.abs(x);
+// Column: Sales by Category — 2 series
+new Chart('#chart-column', {
+    type: 'column',
+    title: 'Sales by Category',
+    subtitle: 'Q1 vs Q2 comparison',
+    series: [
+        {
+            name: 'Q1',
+            data: [
+                { label: 'Electronics', value: 84000 },
+                { label: 'Clothing',    value: 53000 },
+                { label: 'Home',        value: 67000 },
+                { label: 'Sports',      value: 41000 },
+                { label: 'Books',       value: 29000 },
+                { label: 'Toys',        value: 38000 },
+            ],
+        },
+        {
+            name: 'Q2',
+            data: [
+                { label: 'Electronics', value: 96000 },
+                { label: 'Clothing',    value: 61000 },
+                { label: 'Home',        value: 72000 },
+                { label: 'Sports',      value: 55000 },
+                { label: 'Books',       value: 33000 },
+                { label: 'Toys',        value: 47000 },
+            ],
+        },
+    ],
+});
 
-            const t = 1 / (1 + p * x);
-            const y =
-                1 -
-                (((((a5 * t + a4) * t + a3) * t + a2) * t + a1) *
-                    t *
-                    Math.exp(-x * x));
+// Bar: Top Products — 1 series
+new Chart('#chart-bar', {
+    type: 'bar',
+    title: 'Top Products',
+    subtitle: 'Units sold this quarter',
+    height: 300,
+    series: [
+        {
+            name: 'Units Sold',
+            data: [
+                { label: 'Wireless Headphones', value: 4820 },
+                { label: 'Smart Watch',          value: 3960 },
+                { label: 'Laptop Stand',         value: 3410 },
+                { label: 'USB-C Hub',             value: 2980 },
+                { label: 'Mechanical Keyboard',  value: 2550 },
+                { label: 'Webcam HD',             value: 1890 },
+            ],
+        },
+    ],
+});
 
-            return sign * y;
-        }
+// Pie: Market Share — 1 series, 5 segments
+new Chart('#chart-pie', {
+    type: 'pie',
+    title: 'Market Share',
+    subtitle: 'By platform — current quarter',
+    height: 300,
+    series: [
+        {
+            name: 'Market Share',
+            data: [
+                { label: 'Web',     value: 42 },
+                { label: 'iOS',     value: 28 },
+                { label: 'Android', value: 18 },
+                { label: 'Desktop', value: 9  },
+                { label: 'Other',   value: 3  },
+            ],
+        },
+    ],
+    onPointClick(series, point) {
+        console.log(`${point.label}: ${point.value}%`);
+    },
+});
 
-        // Standardnormalverteilung (CDF)
-        const percentile = 0.5 * (1 + erf(z / Math.sqrt(2)));
+// ── Code examples ─────────────────────────────────────────────────────────────
 
-        // In Prozent (0–100)
-        return Math.round(percentile * 10000) / 100; // auf 2 Dezimalstellen
-    }
+new CodeViewer('#chart-line-html-demo', `<div id="my-chart"></div>`, 'html');
 
-    function prozentrangZuTWert(p) {
-        // p als Prozent (0–100)
-        const pr = p / 100;
+new CodeViewer('#chart-line-js-demo', `import { Chart } from './js/chart.js';
 
-        // Inverse Normalverteilung (Acklam-Approximation)
-        function normInv(p) {
-            const a1 = -39.6968302866538;
-            const a2 = 220.946098424521;
-            const a3 = -275.928510446969;
-            const a4 = 138.357751867269;
-            const a5 = -30.6647980661472;
-            const a6 = 2.50662827745924;
+const chart = new Chart('#my-chart', {
+    type: 'line',           // 'line' | 'area' | 'column' | 'bar' | 'pie'
+    title: 'Monthly Revenue',
+    subtitle: 'Current year vs. previous year',
+    height: 280,            // inner chart area height in px (default: 280)
+    showLegend: true,       // default: true
+    showGrid: true,         // default: true
+    animate: true,          // default: true
+    yMin: 0,                // y-axis minimum (default: 0)
+    // yMax: 120000,        // y-axis maximum — omit for auto
 
-            const b1 = -54.4760987982241;
-            const b2 = 161.585836858041;
-            const b3 = -155.698979859887;
-            const b4 = 66.8013118877197;
-            const b5 = -13.2806815528857;
+    series: [
+        {
+            name: 'This Year',
+            // color: '#3D63DD',  // optional per-series color override
+            data: [
+                { label: 'Jan', value: 42000 },
+                { label: 'Feb', value: 38000 },
+                // ...
+            ],
+        },
+        {
+            name: 'Last Year',
+            data: [
+                { label: 'Jan', value: 31000 },
+                // ...
+            ],
+        },
+    ],
 
-            const c1 = -0.00778489400243029;
-            const c2 = -0.322396458041136;
-            const c3 = -2.40075827716184;
-            const c4 = -2.54973253934373;
-            const c5 = 4.37466414146497;
-            const c6 = 2.93816398269878;
+    onPointClick(series, point, index) {
+        console.log(series.name, point.label, point.value);
+    },
+});
 
-            const d1 = 0.00778469570904146;
-            const d2 = 0.32246712907004;
-            const d3 = 2.445134137143;
-            const d4 = 3.75440866190742;
+// Public API
+chart.update(newSeries);         // replace data & re-render
+chart.setType('area');           // switch chart type
+chart.destroy();                 // remove from DOM & clean up`, 'js');
 
-            const plow = 0.02425;
-            const phigh = 1 - plow;
-            let q, r;
+new CodeViewer('#chart-area-js-demo', `new Chart('#chart-area', {
+    type: 'area',
+    title: 'User Growth',
+    series: [{
+        name: 'Active Users',
+        data: [
+            { label: 'Jan', value: 12000 },
+            { label: 'Feb', value: 15400 },
+            // ...
+        ],
+    }],
+});`, 'js');
 
-            if (p < plow) {
-                q = Math.sqrt(-2 * Math.log(p));
-                return (((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) /
-                    ((((d1 * q + d2) * q + d3) * q + d4) * q + 1);
-            }
+new CodeViewer('#chart-column-js-demo', `new Chart('#chart-column', {
+    type: 'column',
+    title: 'Sales by Category',
+    series: [
+        {
+            name: 'Q1',
+            data: [
+                { label: 'Electronics', value: 84000 },
+                { label: 'Clothing',    value: 53000 },
+            ],
+        },
+        {
+            name: 'Q2',
+            data: [
+                { label: 'Electronics', value: 96000 },
+                { label: 'Clothing',    value: 61000 },
+            ],
+        },
+    ],
+});`, 'js');
 
-            if (p > phigh) {
-                q = Math.sqrt(-2 * Math.log(1 - p));
-                return -(((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) /
-                    ((((d1 * q + d2) * q + d3) * q + d4) * q + 1);
-            }
+new CodeViewer('#chart-bar-js-demo', `new Chart('#chart-bar', {
+    type: 'bar',
+    title: 'Top Products',
+    height: 300,
+    series: [{
+        name: 'Units Sold',
+        data: [
+            { label: 'Wireless Headphones', value: 4820 },
+            { label: 'Smart Watch',          value: 3960 },
+            // ...
+        ],
+    }],
+});`, 'js');
 
-            q = p - 0.5;
-            r = q * q;
-            return (((((a1 * r + a2) * r + a3) * r + a4) * r + a5) * r + a6) * q /
-                (((((b1 * r + b2) * r + b3) * r + b4) * r + b5) * r + 1);
-        }
-
-        // z-Wert berechnen
-        const z = normInv(pr);
-
-        // z -> T-Wert
-        const t = 50 + z * 10;
-
-        return Math.round(t * 100) / 100; // 2 Nachkommastellen
-    }
+new CodeViewer('#chart-pie-js-demo', `new Chart('#chart-pie', {
+    type: 'pie',
+    title: 'Market Share',
+    height: 300,
+    series: [{
+        name: 'Market Share',
+        data: [
+            { label: 'Web',     value: 42 },
+            { label: 'iOS',     value: 28 },
+            { label: 'Android', value: 18 },
+            { label: 'Desktop', value: 9  },
+            { label: 'Other',   value: 3  },
+        ],
+    }],
+    onPointClick(series, point) {
+        console.log(point.label, point.value + '%');
+    },
+});`, 'js');
 </script>
+
 </body>
 </html>

@@ -12,6 +12,7 @@
 
   .column {
     flex: 1;
+    min-width: 0;
     padding: $spacing;
 
     @for $i from 2 through 6 {

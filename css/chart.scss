@@ -1,157 +1,270 @@
 @use "properties";
+@use "parameters" as *;
 
-:root {
-  /* Data-viz palette — intentional, not overridden by theme */
-  --zone-left-bg: #e0f7fa;
-  --zone-mid-bg: #fff9c4;
-  --zone-right-bg: #d0f7db;
-  --grid-line-color: #bdbdbd;
-  --line-color: #1976d2;
-  --point-color: #d32f2f;
+// ─── Chart color palette ────────────────────────────────────────────────────
+// Readable via JS: getComputedStyle(el).getPropertyValue('--chart-color-1')
+
+.chart {
+  --chart-color-1: var(--accent-color);
+  --chart-color-2: var(--success);
+  --chart-color-3: var(--warning);
+  --chart-color-4: var(--error);
+  --chart-color-5: #8B5CF6;
+  --chart-color-6: #06B6D4;
+  --chart-color-7: #F97316;
+  --chart-color-8: #EC4899;
 }
 
-#chart-container {
+// ─── Wrapper ────────────────────────────────────────────────────────────────
+
+.chart {
   position: relative;
-}
-
-/* Background Zones Layer */
-.chart-background {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  display: flex;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.zone {
-  height: 100%;
-  border-right: 1px dashed rgba(0, 0, 0, 0.05);
-  /* Optional zone separator */
-}
-
-.zone-left {
-  background-color: var(--zone-left-bg);
-}
-
-.zone-mid {
-  background-color: var(--zone-mid-bg);
-}
-
-.zone-right {
-  background-color: var(--zone-right-bg);
-}
-
-/* Grid Lines Layer */
-.grid-lines {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.grid-line {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background-color: var(--grid-line-color);
-}
-
-.grid-label {
-  position: absolute;
-  top: 10px;
-  transform: translateX(-50%);
-  font-size: 10px;
-  color: var(--secondary-text);
-}
-
-/* Content Layer */
-.chart-content {
-  position: relative;
-  z-index: 2;
-}
-
-.chart-row {
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  transition: background-color 0.2s;
-  height: 40px;
-  /* Fixed height for easier calculation */
-  box-sizing: border-box;
-}
-
-.chart-row:hover {
-  background-color: var(--hover);
-}
-
-.row-info {
-  width: 350px;
-  /* Fixed width for info column */
-  flex-shrink: 0;
-  font-size: 11px;
+  min-width: 0;
   color: var(--primary-text);
-  z-index: 3;
-  /* Above lines */
+  font-size: 0.875rem;
+
+  // ─── Header ───────────────────────────────────────────────────────────────
+
+  &-header {
+    margin-bottom: calc($spacing * 0.75);
+  }
+
+  &-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-text);
+    line-height: 1.3;
+  }
+
+  &-subtitle {
+    font-size: 0.8125rem;
+    color: var(--secondary-text);
+    margin-top: calc($spacing * 0.2);
+  }
+
+  // ─── Canvas ───────────────────────────────────────────────────────────────
+
+  &-canvas {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &-svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+  }
+
+  // ─── Axes & grid ──────────────────────────────────────────────────────────
+
+  .chart-axis-line {
+    stroke: var(--divider);
+    stroke-width: 1;
+  }
+
+  .chart-grid-line {
+    stroke: var(--divider);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+    opacity: 0.7;
+  }
+
+  .chart-axis-label {
+    fill: var(--secondary-text);
+    font-size: 0.6875rem;
+    font-family: inherit;
+  }
+
+  // ─── Line & area ──────────────────────────────────────────────────────────
+
+  .chart-line {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: var(--path-length, 9999);
+    stroke-dashoffset: var(--path-length, 9999);
+    animation: chart-draw 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .chart-area {
+    animation: chart-fade-in 0.8s ease forwards;
+  }
+
+  // Dots visible by default (small), expand on hover via group
+  .chart-point-dot {
+    transition: r 0.15s ease;
+  }
+
+  .chart-point-ring {
+    opacity: 0;
+    transition: opacity 0.15s ease, r 0.15s ease;
+  }
+
+  .chart-point-group {
+    cursor: pointer;
+
+    &:hover .chart-point-dot {
+      r: 5;
+    }
+
+    &:hover .chart-point-ring {
+      opacity: 1;
+    }
+  }
+
+  // ─── Column & bar ─────────────────────────────────────────────────────────
+
+  .chart-bar {
+    transition: opacity 0.15s ease, filter 0.15s ease;
+    cursor: pointer;
+    transform-box: fill-box;
+
+    &--vertical {
+      transform-origin: bottom center;
+      animation: chart-grow-y calc(0.5s + var(--animation-delay, 0ms)) cubic-bezier(0.4, 0, 0.2, 1) both;
+      animation-delay: var(--animation-delay, 0ms);
+    }
+
+    &--horizontal {
+      transform-origin: left center;
+      animation: chart-grow-x calc(0.5s + var(--animation-delay, 0ms)) cubic-bezier(0.4, 0, 0.2, 1) both;
+      animation-delay: var(--animation-delay, 0ms);
+    }
+
+    &:hover {
+      opacity: 0.85;
+      filter: brightness(1.08);
+    }
+  }
+
+  // ─── Pie ──────────────────────────────────────────────────────────────────
+
+  .chart-slice {
+    cursor: pointer;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.15s ease;
+    animation: chart-slice-in 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: var(--animation-delay, 0ms);
+
+    &:hover {
+      filter: brightness(1.08);
+    }
+  }
+
+  // ─── Legend ───────────────────────────────────────────────────────────────
+
+  &-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc($spacing * 0.35) calc($spacing * 1);
+    margin-top: calc($spacing * 0.75);
+  }
+
+  &-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: calc($spacing * 0.4);
+    font-size: 0.75rem;
+    color: var(--secondary-text);
+    cursor: default;
+  }
+
+  &-legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  // Pie legend variant — bigger swatches, stacked nicely
+  &-pie-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc($spacing * 0.4) calc($spacing * 1.25);
+    margin-top: calc($spacing * 0.75);
+    justify-content: center;
+  }
+
+  &-pie-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: calc($spacing * 0.5);
+    font-size: 0.8125rem;
+    color: var(--secondary-text);
+  }
+
+  &-pie-legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  &-pie-legend-value {
+    font-weight: 600;
+    color: var(--primary-text);
+    margin-left: calc($spacing * 0.15);
+  }
+
+  // ─── Tooltip ──────────────────────────────────────────────────────────────
+
+  &-tooltip {
+    position: fixed;
+    background: var(--primary-dark);
+    color: var(--primary-light);
+    padding: calc($spacing * 0.5) calc($spacing * 0.75);
+    border-radius: $border-radius;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 9999;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+
+    &.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    strong {
+      display: block;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 1px;
+    }
+  }
 }
 
-.row-name {
-  font-weight: bold;
-  font-size: 12px;
+// ─── Animations ─────────────────────────────────────────────────────────────
+
+@keyframes chart-draw {
+  from { stroke-dashoffset: var(--path-length, 9999); }
+  to   { stroke-dashoffset: 0; }
 }
 
-.row-meta {
-  font-size: 10px;
-  color: var(--secondary-text);
+@keyframes chart-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-/* SVG Layer for Line */
-.chart-svg-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-  /* Nuclear option for visibility */
-  pointer-events: none;
-  overflow: visible;
-  /* Allow points to extend beyond container if needed */
+@keyframes chart-grow-y {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
 }
 
-.chart-polyline {
-  fill: none;
-  stroke: var(--line-color);
-  stroke-width: 2;
-  stroke-linejoin: round;
-  stroke-linecap: round;
+@keyframes chart-grow-x {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 
-.chart-point {
-  fill: var(--point-color);
-  stroke: white;
-  stroke-width: 2;
+@keyframes chart-slice-in {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
 }
-
-/* Tooltip Styles */
-.chart-tooltip {
-  position: absolute;
-  background-color: var(--primary-text);
-  color: var(--background);
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  z-index: 10000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-}
-
-/*# sourceMappingURL=chart.css.map */
