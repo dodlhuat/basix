@@ -1041,10 +1041,21 @@
         you want them to be clickable or closeable.
     </p>
     <div class="chips">
-        <div class="chip">Example Chip</div>
-        <div class="chip clickable">Example Chip with hover</div>
+        <div class="chip">Default</div>
+        <div class="chip clickable">Clickable</div>
         <div class="chip closeable">
-            Example Chip with closure
+            Closeable
+            <button class="close">
+                <svg class="icon-svg"><use href="svg-icons/icons.svg#close"/></svg>
+            </button>
+        </div>
+        <div class="chip chip-accent">Accent</div>
+        <div class="chip chip-success">Success</div>
+        <div class="chip chip-warning">Warning</div>
+        <div class="chip chip-error">Error</div>
+        <div class="chip chip-outline">Outline</div>
+        <div class="chip chip-accent closeable">
+            Removable
             <button class="close">
                 <svg class="icon-svg"><use href="svg-icons/icons.svg#close"/></svg>
             </button>
