@@ -61,7 +61,22 @@
             <a onclick="window.Scroll.to('#layout')">Layout</a>
         </li>
         <li>
-            <a onclick="window.Scroll.to('#forms')">Forms</a>
+            <a>Forms</a>
+            <ul>
+                <li><a onclick="window.Scroll.to('#forms')">Text Inputs</a></li>
+                <li><a onclick="window.Scroll.to('#forms')">Select &amp; Dropdown</a></li>
+                <li><a onclick="window.Scroll.to('#forms')">Checkbox &amp; Radio</a></li>
+                <li><a onclick="window.Scroll.to('#forms')">Switch &amp; Range</a></li>
+                <li>
+                    <a>Pickers</a>
+                    <ul>
+                        <li><a onclick="window.Scroll.to('#forms')">Date Picker</a></li>
+                        <li><a onclick="window.Scroll.to('#forms')">Time Picker</a></li>
+                        <li><a onclick="window.Scroll.to('#forms')">Color Picker</a></li>
+                    </ul>
+                </li>
+                <li><a onclick="window.Scroll.to('#form-validation')">Validation</a></li>
+            </ul>
         </li>
         <li>
             <a onclick="window.Scroll.to('#navigation')">Navigation</a>
@@ -70,10 +85,13 @@
             <a onclick="window.Scroll.to('#feedback')">Feedback</a>
         </li>
         <li>
-            <a onclick="window.Scroll.to('#components')">Components</a>
-        </li>
-        <li>
-            <a onclick="window.Scroll.to('#advanced-components')">Advanced Components</a>
+            <a>Components</a>
+            <ul>
+                <li><a onclick="window.Scroll.to('#components')">Cards</a></li>
+                <li><a onclick="window.Scroll.to('#components')">Carousel</a></li>
+                <li><a onclick="window.Scroll.to('#components')">Gallery</a></li>
+                <li><a onclick="window.Scroll.to('#advanced-components')">Advanced</a></li>
+            </ul>
         </li>
         <li>
             <a onclick="window.Scroll.to('#utilities')">Utilities</a>
@@ -2138,6 +2156,20 @@
         </div>
     </div>
     <div id="usage-editor-demo" class="code-container"></div>
+
+    <h3 id="calendar">Calendar</h3>
+    <p>
+        The <strong>Calendar</strong> component renders a full-featured calendar with
+        month, week, and agenda views. Supports events with custom badge colours,
+        all-day events, locale configuration, and callbacks for day and event clicks.
+    </p>
+    <div class="row card">
+        <div class="column">
+            <div id="calendar-demo"></div>
+        </div>
+    </div>
+    <div id="usage-calendar-demo-html" class="code-container"></div>
+    <div id="usage-calendar-demo-js" class="code-container"></div>
 
     <h3 id="group-picker">Group Picker</h3>
     <p>

@@ -18,6 +18,7 @@ class PushMenu {
     };
 
     private static initialized = false;
+    private static panelStack: HTMLElement[] = [];
 
     public static init(): void {
         if (this.initialized) {
@@ -31,12 +32,149 @@ class PushMenu {
             throw new Error('PushMenu: Required elements not found (.navigation, .push-content)');
         }
 
-        this.elements.navigation.addEventListener('change', this.handleNavigationChange.bind(this));
+        this.buildPanels();
 
+        this.elements.navigation.addEventListener('change', this.handleNavigationChange.bind(this));
         this.elements.backdrop?.addEventListener('click', this.handleBackdropClick);
 
         this.initialized = true;
     }
+
+    // ─── Panel construction ────────────────────────────────────────────────
+
+    private static buildPanels(): void {
+        const menu = this.elements.menu;
+        if (!menu) return;
+
+        const rootUl = menu.querySelector(':scope > ul');
+        if (!rootUl) return;
+
+        // Wrap root ul in a panel
+        const rootPanel = document.createElement('div');
+        rootPanel.classList.add('push-menu-panel', 'is-active');
+        rootPanel.dataset.level = '0';
+        rootPanel.appendChild(rootUl);
+        menu.appendChild(rootPanel);
+
+        // Recursively extract nested uls into sibling panels
+        this.extractSubPanels(rootPanel, 1);
+
+        this.panelStack = [rootPanel];
+    }
+
+    private static extractSubPanels(panel: HTMLElement, level: number): void {
+        // Collect all uls currently in this panel before any mutations
+        const uls = Array.from(panel.querySelectorAll('ul')) as HTMLUListElement[];
+
+        for (const ul of uls) {
+            const listItems = Array.from(ul.children) as HTMLElement[];
+
+            for (const li of listItems) {
+                const childUl = li.querySelector(':scope > ul') as HTMLElement | null;
+                if (!childUl) continue;
+
+                // Determine label from the immediate anchor child
+                const parentAnchor = li.querySelector(':scope > a') as HTMLElement | null;
+                const title = parentAnchor?.textContent?.trim() ?? '';
+
+                // ── Build sub-panel ──────────────────────────────────────
+                const subPanel = document.createElement('div');
+                subPanel.classList.add('push-menu-panel');
+                subPanel.dataset.level = String(level);
+
+                // Header: back button + breadcrumb title
+                const header = document.createElement('div');
+                header.classList.add('push-menu-panel-header');
+
+                const backBtn = document.createElement('button');
+                backBtn.classList.add('push-menu-back');
+                backBtn.setAttribute('aria-label', 'Back');
+                backBtn.innerHTML = `<span class="icon icon-navigate_before" aria-hidden="true"></span>`;
+                header.addEventListener('click', () => PushMenu.goBack());
+
+                const titleEl = document.createElement('span');
+                titleEl.classList.add('push-menu-panel-title');
+                titleEl.textContent = title;
+
+                header.appendChild(backBtn);
+                header.appendChild(titleEl);
+                subPanel.appendChild(header);
+
+                // Move the child ul into the sub-panel
+                subPanel.appendChild(childUl);
+
+                // Append sub-panel as sibling inside the nav
+                this.elements.menu?.appendChild(subPanel);
+
+                // ── Replace anchor with a trigger span in the parent li ──
+                const trigger = document.createElement('span');
+                trigger.classList.add('push-menu-item');
+                trigger.textContent = title;
+
+                // Chevron icon
+                const chevron = document.createElement('span');
+                chevron.classList.add('push-menu-chevron');
+                chevron.setAttribute('aria-hidden', 'true');
+                chevron.innerHTML = `<span class="icon icon-navigate_next" aria-hidden="true"></span>`;
+                trigger.appendChild(chevron);
+
+                if (parentAnchor) {
+                    parentAnchor.replaceWith(trigger);
+                } else {
+                    li.prepend(trigger);
+                }
+
+                trigger.addEventListener('click', () => PushMenu.openPanel(subPanel));
+
+                // Recurse into the newly created sub-panel
+                this.extractSubPanels(subPanel, level + 1);
+            }
+        }
+    }
+
+    // ─── Panel navigation ──────────────────────────────────────────────────
+
+    public static openPanel(panel: HTMLElement): void {
+        const currentPanel = this.panelStack[this.panelStack.length - 1];
+
+        currentPanel.classList.remove('is-active');
+        currentPanel.classList.add('is-prev');
+
+        panel.classList.add('is-active');
+
+        this.panelStack.push(panel);
+    }
+
+    public static goBack(): void {
+        if (this.panelStack.length <= 1) return;
+
+        const currentPanel = this.panelStack.pop()!;
+        const prevPanel = this.panelStack[this.panelStack.length - 1];
+
+        currentPanel.classList.remove('is-active');
+        prevPanel.classList.remove('is-prev');
+        prevPanel.classList.add('is-active');
+    }
+
+    private static resetPanels(): void {
+        const menu = this.elements.menu;
+        if (!menu) return;
+
+        // Wait for the close animation before snapping panels back
+        setTimeout(() => {
+            const panels = Array.from(menu.querySelectorAll('.push-menu-panel')) as HTMLElement[];
+            panels.forEach((panel, index) => {
+                panel.classList.remove('is-active', 'is-prev');
+                if (index === 0) panel.classList.add('is-active');
+            });
+
+            if (panels[0]) {
+                this.panelStack = [panels[0]];
+            }
+        }, 300);
+    }
+
+    // ─── Open / close ──────────────────────────────────────────────────────
 
     private static handleNavigationChange(): void {
         const isPushed = this.elements.content?.classList.contains('pushed') ?? false;
@@ -45,6 +183,7 @@ class PushMenu {
             this.elements.content?.addEventListener('click', this.clickNav);
         } else {
             this.elements.content?.removeEventListener('click', this.clickNav);
+            this.resetPanels();
         }
 
         this.pushToggle();
@@ -75,7 +214,6 @@ class PushMenu {
 
     private static toggleClass(element: HTMLElement | null, className: string, add: boolean): void {
         if (!element) return;
-
         if (add) {
             element.classList.add(className);
         } else {
@@ -129,6 +267,7 @@ class PushMenu {
             backdrop: null
         };
 
+        this.panelStack = [];
         this.initialized = false;
     }
 

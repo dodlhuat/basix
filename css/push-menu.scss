@@ -3,41 +3,151 @@
 
 $menu-width: 280px;
 $menu-easing: cubic-bezier(0.4, 0, 0.2, 1);
-$menu-duration: 280ms;
+$menu-duration: 300ms;
 
-.push-content {
-  transition: transform $menu-duration $menu-easing;
-  will-change: transform;
-}
+// ─── Outer nav shell ───────────────────────────────────────────────────────
 
-nav {
+nav.push-menu {
   position: fixed;
   top: 0;
   left: 0;
   width: $menu-width;
   height: 100%;
+  overflow: hidden; // clip sliding panels
   transform: translateX(-100%);
   transition: transform $menu-duration $menu-easing,
               box-shadow $menu-duration $menu-easing;
   z-index: 10;
+
+  &.pushed {
+    transform: translateX(0);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.35);
+  }
 }
 
-nav ul {
-  width: 100%;
-  height: 100%;
-  padding: calc($spacing * 4.5) 0 $spacing;
+.push-content {
+  transition: transform $menu-duration $menu-easing;
+  will-change: transform;
+
+  &.pushed {
+    transform: translate3d($menu-width, 0, 0);
+  }
+}
+
+// ─── Panel system ──────────────────────────────────────────────────────────
+// Three states:
+//   (no class)  → translateX(105%)  hidden to the right
+//   .is-prev    → translateX(-20%)  parallax depth, previous level
+//   .is-active  → translateX(0)     current visible panel
+
+.push-menu-panel {
+  position: absolute;
+  inset: 0;
+  background: var(--primary-dark);
+  transform: translateX(105%);
+  transition: transform $menu-duration $menu-easing;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  will-change: transform;
+
+  &.is-active {
+    transform: translateX(0);
+  }
+
+  &.is-prev {
+    transform: translateX(-20%);
+  }
+}
+
+// ─── Root panel list ───────────────────────────────────────────────────────
+
+.push-menu-panel[data-level="0"] > ul {
+  padding-top: calc($spacing * 4.5); // clear the fixed header
+  padding-bottom: $spacing;
   margin: 0;
   list-style: none;
-  background: var(--primary-dark);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
 }
+
+// ─── Sub-panel header (back button + title) ────────────────────────────────
+
+.push-menu-panel-header {
+  display: flex;
+  align-items: center;
+  gap: calc($spacing * 0.75);
+  padding: calc($spacing * 4.5) calc($spacing * 1.5) calc($spacing * 1) calc($spacing * 1.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  position: sticky;
+  top: 0;
+  background: var(--primary-dark);
+  z-index: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 160ms ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+
+    .push-menu-back {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+  }
+
+  &:active {
+    background: rgba(255, 255, 255, 0.08);
+
+    .push-menu-back {
+      transform: scale(0.92);
+    }
+  }
+}
+
+.push-menu-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: calc($border-radius * 0.75);
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.65);
+  pointer-events: none; // header handles the click
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.push-menu-panel-title {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ─── Sub-panel list ────────────────────────────────────────────────────────
+
+.push-menu-panel:not([data-level="0"]) > ul {
+  padding: calc($spacing * 0.5) 0;
+  margin: 0;
+  list-style: none;
+  width: 100%;
+}
+
+// ─── List items ────────────────────────────────────────────────────────────
 
 nav li {
   margin: 0;
 }
 
-nav a {
+// Shared styles: anchor links and submenu trigger spans
+nav a,
+.push-menu-item {
   color: var(--accent-color-text);
   font-size: 0.9rem;
   font-weight: 500;
@@ -50,6 +160,10 @@ nav a {
   transition: background $menu-duration $menu-easing,
               color 160ms ease;
   -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  user-select: none;
 
   &:hover {
     color: #fff;
@@ -61,9 +175,29 @@ nav a {
   }
 }
 
-nav li + li a {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+nav li + li a,
+nav li + li .push-menu-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.055);
 }
+
+// ─── Chevron for parent items ───────────────────────────────────────────────
+
+.push-menu-chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.35;
+  transition: opacity 160ms ease, transform 200ms $menu-easing;
+
+}
+
+.push-menu-item:hover .push-menu-chevron {
+  opacity: 0.7;
+  transform: translateX(2px);
+}
+
+// ─── Navigation controls (hamburger) ───────────────────────────────────────
 
 .navigation-controls {
   line-height: inherit;
@@ -86,7 +220,8 @@ nav li + li a {
   }
 }
 
-// Backdrop overlay
+// ─── Backdrop ──────────────────────────────────────────────────────────────
+
 .push-menu-backdrop {
   position: fixed;
   inset: 0;
@@ -104,14 +239,7 @@ nav li + li a {
   }
 }
 
-nav.pushed {
-  transform: translateX(0);
-  box-shadow: 8px 0 30px rgba(0, 0, 0, 0.3);
-}
-
-.push-content.pushed {
-  transform: translate3d($menu-width, 0, 0);
-}
+// ─── Main header ───────────────────────────────────────────────────────────
 
 .main-header {
   position: fixed;

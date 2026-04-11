@@ -59,7 +59,7 @@ class GroupPicker {
       onSelectionChange: options.onSelectionChange ?? (() => {}),
       searchPlaceholder: options.searchPlaceholder ?? 'Gruppen durchsuchen...',
       selectAllLabel: options.selectAllLabel ?? 'Alle',
-      deselectLabel: options.deselectLabel ?? 'Abwahlen',
+      deselectLabel: options.deselectLabel ?? 'Abwählen',
       emptyLabel: options.emptyLabel ?? 'Keine Ergebnisse',
       selectionPlaceholder: options.selectionPlaceholder ?? 'Noch keine Auswahl getroffen',
     };
@@ -76,16 +76,16 @@ class GroupPicker {
   private render(): void {
     this.container.innerHTML = '';
 
-    // Selection summary
+    // Selection summary — Basix .chips container
     this.selectionEl = document.createElement('div');
-    this.selectionEl.className = 'group-picker__selection';
+    this.selectionEl.className = 'chips group-picker__selection';
     this.selectionEl.dataset.placeholder = this.options.selectionPlaceholder;
 
-    // Search
+    // Search — Basix form input with font icon overlay
     const searchWrap = document.createElement('div');
     searchWrap.className = 'group-picker__search';
     searchWrap.innerHTML = `
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke-linecap="round"/></svg>
+      <span class="icon icon-search group-picker__search-icon" aria-hidden="true"></span>
       <input type="text" placeholder="${this.options.searchPlaceholder}" />
     `;
     this.searchInput = searchWrap.querySelector('input')!;
@@ -114,12 +114,7 @@ class GroupPicker {
       if (!groupMatches && matchingSubs.length === 0 && query) continue;
 
       visibleCount++;
-      const groupEl = this.createGroupElement(
-        group,
-        query,
-        groupMatches,
-        matchingSubs
-      );
+      const groupEl = this.createGroupElement(group, query, groupMatches, matchingSubs);
       this.listEl.appendChild(groupEl);
     }
 
@@ -127,7 +122,7 @@ class GroupPicker {
       const empty = document.createElement('div');
       empty.className = 'group-picker__empty';
       empty.innerHTML = `
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke-linecap="round"/></svg>
+        <span class="icon icon-search" aria-hidden="true"></span>
         <span>${this.options.emptyLabel}</span>
       `;
       this.listEl.appendChild(empty);
@@ -157,7 +152,7 @@ class GroupPicker {
     if (isExpanded) el.classList.add('is-expanded');
     if (isParentSelected) el.classList.add('is-selected');
 
-    // Header
+    // Header row
     const header = document.createElement('div');
     header.className = 'group-picker__group-header';
 
@@ -168,19 +163,21 @@ class GroupPicker {
       : group.label;
 
     if (hasChildren) {
-      // Groups with children: chevron + count + action button
-      const chevron = document.createElement('div');
-      chevron.className = 'group-picker__chevron';
-      chevron.innerHTML = `<svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      // Chevron — Basix font icon
+      const chevron = document.createElement('span');
+      chevron.className = 'icon icon-navigate_next group-picker__chevron';
+      chevron.setAttribute('aria-hidden', 'true');
 
+      // Count — Basix badge
       const count = document.createElement('span');
-      count.className = 'group-picker__group-count';
+      count.className = 'badge badge-sm';
       count.textContent = `${subs.length}`;
 
+      // Action button — Basix button, button-primary when selected
       const actionBtn = document.createElement('button');
       actionBtn.className = 'group-picker__group-action';
       if (isParentSelected) {
-        actionBtn.classList.add('is-selected');
+        actionBtn.classList.add('button-primary');
         actionBtn.textContent = this.options.deselectLabel;
       } else {
         actionBtn.textContent = this.options.selectAllLabel;
@@ -197,29 +194,21 @@ class GroupPicker {
         this.toggleExpand(group.id);
       }, { signal: this.abortController.signal });
 
-      // Subgroups
+      // Subgroups — Basix .chips container
       const subsContainer = document.createElement('div');
       subsContainer.className = 'group-picker__subgroups';
 
       const subsList = document.createElement('div');
-      subsList.className = 'group-picker__subgroup-list';
+      subsList.className = 'chips group-picker__subgroup-list';
 
       const displaySubs = query && !groupMatches ? matchingSubs : subs;
 
       for (const sub of displaySubs) {
-        const subEl = document.createElement('button');
-        subEl.className = 'group-picker__subgroup';
+        // Subgroup chip — Basix .chip.clickable
+        const subEl = document.createElement('span');
+        subEl.className = 'chip clickable group-picker__subgroup';
         subEl.dataset.subId = sub.id;
-
-        const dot = document.createElement('span');
-        dot.className = 'group-picker__subgroup-dot';
-
-        const subLabel = document.createElement('span');
-        subLabel.innerHTML = query
-          ? this.highlightText(sub.label, query)
-          : sub.label;
-
-        subEl.append(dot, subLabel);
+        subEl.innerHTML = query ? this.highlightText(sub.label, query) : sub.label;
 
         const isSubSelected = this.selectedSubs.get(group.id)?.has(sub.id) ?? false;
         if (isSubSelected) subEl.classList.add('is-selected');
@@ -238,7 +227,6 @@ class GroupPicker {
       subsContainer.appendChild(subsList);
       el.append(header, subsContainer);
 
-      // Animate expand
       if (isExpanded) {
         requestAnimationFrame(() => {
           subsContainer.style.height = subsContainer.scrollHeight + 'px';
@@ -248,10 +236,10 @@ class GroupPicker {
         });
       }
     } else {
-      // Leaf group (no children): clickable row that toggles selection directly
+      // Leaf group — Basix font icon check mark
       const checkEl = document.createElement('span');
-      checkEl.className = 'group-picker__leaf-check';
-      checkEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      checkEl.className = 'icon icon-check group-picker__leaf-check';
+      checkEl.setAttribute('aria-hidden', 'true');
 
       header.append(label, checkEl);
 
@@ -268,7 +256,6 @@ class GroupPicker {
   private renderSelection(): void {
     this.selectionEl.innerHTML = '';
 
-    // Parent group chips
     for (const groupId of this.selectedParents) {
       const group = this.data.find(g => g.id === groupId);
       if (!group) continue;
@@ -277,7 +264,6 @@ class GroupPicker {
       );
     }
 
-    // Subgroup chips
     for (const [groupId, subs] of this.selectedSubs) {
       const group = this.data.find(g => g.id === groupId);
       if (!group) continue;
@@ -291,23 +277,22 @@ class GroupPicker {
     }
   }
 
+  // Basix .chip.closeable structure
   private createChip(label: string, isParent: boolean, onRemove: () => void): HTMLElement {
     const chip = document.createElement('span');
-    chip.className = 'group-picker__chip';
-    if (isParent) chip.classList.add('group-picker__chip--parent');
-
-    const text = document.createElement('span');
-    text.textContent = label;
+    chip.className = isParent
+      ? 'chip closeable group-picker__chip--parent'
+      : 'chip closeable';
 
     const btn = document.createElement('button');
     btn.setAttribute('aria-label', `${label} entfernen`);
-    btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg>`;
+    btn.innerHTML = `<span class="icon icon-close"></span>`;
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       onRemove();
     }, { signal: this.abortController.signal });
 
-    chip.append(text, btn);
+    chip.append(document.createTextNode(label), btn);
     return chip;
   }
 
@@ -318,7 +303,6 @@ class GroupPicker {
       this.selectedParents.delete(groupId);
     } else {
       this.selectedParents.add(groupId);
-      // Clear subgroup selections for this group
       this.selectedSubs.delete(groupId);
     }
     this.refresh();
@@ -338,7 +322,6 @@ class GroupPicker {
       subs.add(subId);
     }
 
-    // If all subgroups selected, promote to parent selection
     const group = this.data.find(g => g.id === groupId);
     if (group && subs.size === (group.subgroups ?? []).length) {
       this.selectedSubs.delete(groupId);

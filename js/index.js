@@ -23,6 +23,7 @@ import { Editor } from "./editor.js";
 import { Stepper } from "./stepper.js";
 import { ContextMenu } from "./context-menu.js";
 import { GroupPicker } from "./group-picker.js";
+import { Calendar } from "./calendar.js";
 // Generate sample table data
 const generateData = (count) => {
     const data = [];
@@ -384,6 +385,60 @@ utils.ready(() => {
             ]
         },
     ];
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = today.getMonth();
+    const d = today.getDate();
+    const calendarEvents = [
+        {
+            id: '1',
+            title: 'Team Meeting',
+            start: new Date(y, m, d, 9, 0),
+            end: new Date(y, m, d, 10, 30),
+            className: 'badge-success',
+        },
+        {
+            id: '2',
+            title: 'Deployment',
+            start: new Date(y, m, d, 14, 0),
+            end: new Date(y, m, d, 15, 0),
+            className: 'badge-warning',
+        },
+        {
+            id: '3',
+            title: 'Sprint Planning',
+            start: new Date(y, m, d + 1, 10, 0),
+            end: new Date(y, m, d + 1, 12, 0),
+        },
+        {
+            id: '4',
+            title: 'Vacation',
+            start: new Date(y, m, d + 3),
+            end: new Date(y, m, d + 5),
+            allDay: true,
+            className: 'badge-info',
+        },
+        {
+            id: '5',
+            title: 'Release Review',
+            start: new Date(y, m, d + 2, 16, 0),
+            end: new Date(y, m, d + 2, 17, 0),
+            className: 'badge-error',
+        },
+    ];
+    new Calendar({
+        container: '#calendar-demo',
+        events: calendarEvents,
+        view: 'month',
+        showOutsideDays: true,
+        locale: { firstDayOfWeek: 1 },
+        onDayClick(date) {
+            console.log('Day clicked:', date.toLocaleDateString());
+        },
+        onEventClick(event) {
+            console.log('Event clicked:', event.title);
+        },
+    });
     new GroupPicker('#group-picker-demo', groupPickerData, {
         onSelectionChange: (selection) => {
             console.log('Group Picker selection:', selection);
@@ -861,6 +916,53 @@ new CodeViewer("#usage-gallery-demo-js", `const gallery = new MasonryGallery("ga
       }, 800);
     }),
   });`, "js");
+new CodeViewer("#usage-calendar-demo-html", `<div id="calendar-demo"></div>`, "html");
+new CodeViewer("#usage-calendar-demo-js", `import { Calendar } from '@dodlhuat/basix/js/calendar.js';
+
+const events = [
+  {
+    id: '1',
+    title: 'Team Meeting',
+    start: new Date(2025, 3, 14, 9, 0),
+    end:   new Date(2025, 3, 14, 10, 30),
+    className: 'badge-success',   // uses Basix badge colours
+  },
+  {
+    id: '2',
+    title: 'Vacation',
+    start: new Date(2025, 3, 17),
+    end:   new Date(2025, 3, 19),
+    allDay: true,
+    className: 'badge-info',
+  },
+];
+
+const cal = new Calendar({
+  container: '#calendar-demo',
+  events,
+  view: 'month',           // 'month' | 'week' | 'agenda'
+  showOutsideDays: true,
+  locale: { firstDayOfWeek: 1 },  // Monday start
+
+  onDayClick(date) {
+    console.log('Clicked:', date.toLocaleDateString());
+  },
+  onEventClick(event) {
+    console.log('Event:', event.title);
+  },
+  onChange(date, view) {
+    console.log('Navigated to:', date, view);
+  },
+});
+
+// Public API
+cal.next();
+cal.prev();
+cal.today();
+cal.setView('week');
+cal.addEvent({ id: '99', title: 'New', start: new Date(), end: new Date(), allDay: true });
+cal.setEvents([]);
+cal.destroy();`, "js");
 new CodeViewer("#usage-group-picker-demo-html", `<div id="group-picker-demo"></div>`, "html");
 new CodeViewer("#usage-group-picker-demo-js", `const data: GroupData[] = [
   {

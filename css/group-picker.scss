@@ -4,144 +4,105 @@
 .group-picker {
   position: relative;
   width: 100%;
-  font-size: 0.9375rem;
   color: var(--primary-text);
 
-  // Selection summary — floating chips bar
+  // ─── Selection summary ─────────────────────────────────────────────────────
+
   &__selection {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: calc($spacing * 0.35);
-    padding: calc($spacing * 0.6) calc($spacing * 0.75);
-    min-height: calc($spacing * 2.75);
+    min-height: $form-height;
+    padding: calc($spacing * 0.35) calc($spacing * 0.6);
     background: var(--background);
     border: 1px solid var(--divider);
-    border-radius: calc($border-radius * 2);
+    border-radius: calc($border-radius / 2);
     margin-bottom: calc($spacing * 0.75);
-    align-items: center;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: $shadow;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    // Chips inside use gap — suppress their own margins
+    .chip {
+      margin: 0;
+      animation: gp-chip-in 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    // Fix font icon centering inside the absolute close button
+    .chip.closeable button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      .icon {
+        font-size: 0.7rem;
+        top: 0;
+      }
+    }
 
     &:empty::before {
       content: attr(data-placeholder);
       color: var(--secondary-text);
-      font-size: 0.8125rem;
-      opacity: 0.7;
+      font-size: 0.875rem;
     }
 
     &:focus-within {
       border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 12%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
     }
   }
 
-  &__chip {
-    display: inline-flex;
-    align-items: center;
-    gap: calc($spacing * 0.3);
-    padding: calc($spacing * 0.2) calc($spacing * 0.55);
-    background: color-mix(in srgb, var(--accent-color) 10%, var(--background));
-    color: var(--accent-color);
-    border: 1px solid color-mix(in srgb, var(--accent-color) 22%, transparent);
-    border-radius: calc($border-radius * 3);
-    font-size: 0.75rem;
-    font-weight: 500;
-    line-height: 1.4;
-    white-space: nowrap;
-    animation: gp-chip-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-
-    &--parent {
-      background: var(--accent-color);
-      color: var(--accent-color-text);
-      border-color: var(--accent-color);
-    }
+  // Parent chip — solid accent fill
+  // Specificity 0,3,0 via .chip.group-picker__chip--parent → beats .chips .chip (0,2,0)
+  &__selection .chip.group-picker__chip--parent {
+    background: var(--accent-color);
+    color: var(--background); // same pattern as button.scss button-variant
 
     button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: calc($spacing * 0.9);
-      height: calc($spacing * 0.9);
-      padding: 0;
-      margin: 0;
-      border: none;
-      border-radius: 50%;
-      background: transparent;
-      color: inherit;
-      cursor: pointer;
-      opacity: 0.7;
-      transition: opacity 0.15s ease, background 0.15s ease;
-
-      &:hover {
-        opacity: 1;
-        background: color-mix(in srgb, currentColor 12%, transparent);
-      }
-
-      svg {
-        width: 10px;
-        height: 10px;
-        stroke: currentColor;
-        stroke-width: 2.5;
-        fill: none;
-      }
+      background: color-mix(in srgb, var(--accent-color) 78%, black);
+      color: var(--background);
     }
   }
 
-  // Search
+  // ─── Search ────────────────────────────────────────────────────────────────
+  // Basix <input> handles border, focus ring, shadow — we only position the icon
+
   &__search {
     position: relative;
     margin-bottom: calc($spacing * 0.5);
 
     input {
-      width: 100%;
-      padding: calc($spacing * 0.55) calc($spacing * 0.75);
-      padding-left: calc($spacing * 2.4);
-      border: 1px solid var(--divider);
-      border-radius: calc($border-radius * 2);
-      background: var(--background);
-      color: var(--primary-text);
-      font-size: 0.875rem;
-      min-height: unset;
-      box-shadow: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-      &::placeholder {
-        color: var(--secondary-text);
-        opacity: 0.65;
-      }
-
-      &:focus {
-        border-color: var(--accent-color);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 12%, transparent);
-      }
-    }
-
-    svg {
-      position: absolute;
-      left: calc($spacing * 0.75);
-      top: 50%;
-      transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
-      stroke: var(--secondary-text);
-      stroke-width: 2;
-      fill: none;
-      pointer-events: none;
-      opacity: 0.6;
+      padding-left: calc($spacing * 2.2);
     }
   }
 
-  // List container
+  &__search-icon {
+    position: absolute;
+    left: calc($spacing * 0.55);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: var(--secondary-text);
+    pointer-events: none;
+    opacity: 0.45;
+    z-index: 1;
+  }
+
+  // ─── List container ────────────────────────────────────────────────────────
+
   &__list {
     max-height: 420px;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     border: 1px solid var(--divider);
-    border-radius: calc($border-radius * 2);
+    border-radius: calc($border-radius / 2);
     background: var(--background);
+    box-shadow: $shadow;
   }
 
-  // Empty state
+  // ─── Empty state ───────────────────────────────────────────────────────────
+
   &__empty {
     display: flex;
     flex-direction: column;
@@ -149,21 +110,18 @@
     justify-content: center;
     padding: calc($spacing * 2.5) $spacing;
     color: var(--secondary-text);
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     text-align: center;
-    gap: calc($spacing * 0.4);
+    gap: calc($spacing * 0.5);
 
-    svg {
-      width: 28px;
-      height: 28px;
-      stroke: var(--divider);
-      stroke-width: 1.5;
-      fill: none;
-      margin-bottom: calc($spacing * 0.25);
+    .icon {
+      font-size: 2rem;
+      opacity: 0.2;
     }
   }
 
-  // Group (obergruppe)
+  // ─── Group row ─────────────────────────────────────────────────────────────
+
   &__group {
     border-bottom: 1px solid var(--divider);
 
@@ -171,137 +129,118 @@
       border-bottom: none;
     }
 
-    &.is-hidden {
-      display: none;
+    // Expanded state: tint the header and accent the label
+    &.is-expanded > .group-picker__group-header {
+      background: color-mix(in srgb, var(--accent-color) 4%, transparent);
+
+      .group-picker__group-label {
+        color: var(--accent-color);
+      }
     }
   }
 
   &__group-header {
-    position: relative;
     display: flex;
     align-items: center;
     gap: calc($spacing * 0.5);
-    padding: calc($spacing * 0.7) calc($spacing * 0.75);
+    padding: calc($spacing * 0.75) calc($spacing * 0.85);
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     transition: background 0.15s ease;
 
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
+    &:hover {
+      background: var(--hover);
+    }
+
+    &:active {
       background: var(--secondary-background);
-      opacity: 0;
-      transition: opacity 0.15s ease;
-      pointer-events: none;
-    }
-
-    &:hover::before {
-      opacity: 0.5;
-    }
-
-    &:active::before {
-      opacity: 0.8;
     }
   }
 
+  // Chevron — accent color when expanded, eased rotation
   &__chevron {
-    position: relative;
-    z-index: 1;
-    width: 18px;
-    height: 18px;
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 1rem;
+    color: var(--secondary-text);
+    opacity: 0.5;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.15s ease,
+                opacity 0.15s ease;
 
-    svg {
-      width: 14px;
-      height: 14px;
-      stroke: var(--secondary-text);
-      stroke-width: 2.5;
-      fill: none;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .group-picker__group.is-expanded & svg {
+    .group-picker__group.is-expanded & {
       transform: rotate(90deg);
+      color: var(--accent-color);
+      opacity: 1;
     }
   }
 
   &__group-label {
-    position: relative;
-    z-index: 1;
     flex: 1;
     font-size: 0.875rem;
     font-weight: 600;
-    letter-spacing: -0.01em;
     color: var(--primary-text);
+    transition: color 0.15s ease;
 
     mark {
-      background: color-mix(in srgb, var(--warning) 25%, transparent);
+      background: color-mix(in srgb, var(--warning) 22%, transparent);
       color: inherit;
       border-radius: 2px;
-      padding: 0 1px;
+      padding: 0 2px;
     }
   }
 
+  // Action button — pill style, overrides Basix <button> base where needed
   &__group-action {
-    position: relative;
-    z-index: 1;
-    padding: calc($spacing * 0.2) calc($spacing * 0.55);
-    border-radius: calc($border-radius * 3);
+    flex-shrink: 0;
     font-size: 0.6875rem;
     font-weight: 500;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.025em;
     text-transform: uppercase;
+    padding: calc($spacing * 0.15) calc($spacing * 0.6);
+    border-radius: calc($border-radius * 3);
     border: 1px solid var(--divider);
     background: transparent;
     color: var(--secondary-text);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s ease;
+    line-height: 1.5;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease,
+                transform 0.1s ease;
 
-    &:hover {
+    &:hover:not(.button-primary):not(:disabled) {
       border-color: var(--accent-color);
       color: var(--accent-color);
       background: color-mix(in srgb, var(--accent-color) 6%, transparent);
+      transform: none;
     }
 
-    &.is-selected {
-      background: var(--accent-color);
-      border-color: var(--accent-color);
-      color: var(--accent-color-text);
+    &:active:not(:disabled) {
+      transform: scale(0.94);
+    }
 
-      &:hover {
-        background: color-mix(in srgb, var(--accent-color) 85%, black);
-        border-color: color-mix(in srgb, var(--accent-color) 85%, black);
-      }
+    // When button-primary is added by JS — keep pill shape
+    &.button-primary {
+      border-radius: calc($border-radius * 3);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.025em;
+      text-transform: uppercase;
+      padding: calc($spacing * 0.15) calc($spacing * 0.6);
+      border: 1px solid transparent;
+      line-height: 1.5;
     }
   }
 
-  &__group-count {
-    position: relative;
-    z-index: 1;
-    font-size: 0.6875rem;
-    color: var(--secondary-text);
-    background: var(--secondary-background);
-    padding: calc($spacing * 0.1) calc($spacing * 0.4);
-    border-radius: calc($border-radius * 2);
-    line-height: 1.3;
-    margin-right: calc($spacing * 0.15);
-  }
+  // ─── Leaf group ────────────────────────────────────────────────────────────
 
-  // Leaf group (no children) — selectable row
   &__group.is-leaf {
-    &.is-selected .group-picker__group-header::before {
-      background: color-mix(in srgb, var(--accent-color) 8%, transparent);
-      opacity: 1;
-    }
+    cursor: pointer;
 
-    &.is-selected .group-picker__group-label {
-      color: var(--accent-color);
+    &.is-selected > .group-picker__group-header {
+      background: color-mix(in srgb, var(--accent-color) 6%, transparent);
+
+      .group-picker__group-label {
+        color: var(--accent-color);
+      }
     }
 
     &.is-selected .group-picker__leaf-check {
@@ -310,34 +249,24 @@
     }
   }
 
+  // Leaf check icon — springs in on select
   &__leaf-check {
-    position: relative;
-    z-index: 1;
-    width: 20px;
-    height: 20px;
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--accent-color);
     opacity: 0;
-    transform: scale(0.5);
-    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-    svg {
-      width: 16px;
-      height: 16px;
-      stroke: var(--accent-color);
-      stroke-width: 2.5;
-      fill: none;
-    }
+    transform: scale(0.3);
+    transition: opacity 0.18s ease,
+                transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  // Subgroups container
+  // ─── Subgroups accordion ───────────────────────────────────────────────────
+
   &__subgroups {
     height: 0;
     overflow: hidden;
     opacity: 0;
-    transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: height 0.28s cubic-bezier(0.16, 1, 0.3, 1),
                 opacity 0.2s ease;
 
     .group-picker__group.is-expanded & {
@@ -345,90 +274,60 @@
     }
   }
 
+  // Subgroup chip list — indented to align with label, not chevron
   &__subgroup-list {
-    padding: 0 calc($spacing * 0.5) calc($spacing * 0.5);
     display: flex;
     flex-wrap: wrap;
     gap: calc($spacing * 0.3);
+    padding: calc($spacing * 0.3) calc($spacing * 0.85) calc($spacing * 0.75) calc($spacing * 2.35);
+
+    // Chips use gap — suppress their own margins
+    .chip {
+      margin: 0;
+    }
   }
 
-  // Individual subgroup item
+  // Subgroup chip — selected/disabled states on top of .chip.clickable
   &__subgroup {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: calc($spacing * 0.35);
-    padding: calc($spacing * 0.35) calc($spacing * 0.65);
-    border-radius: calc($border-radius * 2.5);
-    border: 1px solid var(--divider);
-    background: transparent;
-    color: var(--primary-text);
-    font-size: 0.8125rem;
-    font-weight: 400;
-    cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    transition: all 0.18s ease;
-
-    &:hover {
-      border-color: var(--accent-color-lighten);
-      background: color-mix(in srgb, var(--accent-color) 5%, transparent);
-      color: var(--accent-color);
-    }
+    transition: background 0.15s ease, color 0.15s ease, outline-color 0.15s ease;
 
     &.is-selected {
-      background: color-mix(in srgb, var(--accent-color) 10%, var(--background));
-      border-color: var(--accent-color);
+      background: color-mix(in srgb, var(--accent-color) 12%, var(--background));
       color: var(--accent-color);
+      outline: 1px solid color-mix(in srgb, var(--accent-color) 35%, transparent);
       font-weight: 500;
     }
 
     &.is-disabled {
-      opacity: 0.38;
+      opacity: 0.35;
       cursor: not-allowed;
       pointer-events: none;
     }
 
-    &.is-hidden {
-      display: none;
-    }
-
     mark {
-      background: color-mix(in srgb, var(--warning) 25%, transparent);
+      background: color-mix(in srgb, var(--warning) 22%, transparent);
       color: inherit;
       border-radius: 2px;
-      padding: 0 1px;
-    }
-  }
-
-  &__subgroup-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--divider);
-    flex-shrink: 0;
-    transition: background 0.18s ease, transform 0.18s ease;
-
-    .group-picker__subgroup.is-selected & {
-      background: var(--accent-color);
-      transform: scale(1.3);
+      padding: 0 2px;
     }
   }
 }
 
-// Animations
+// ─── Chip entrance animation ─────────────────────────────────────────────────
+
 @keyframes gp-chip-in {
-  0% {
+  from {
     opacity: 0;
     transform: scale(0.7) translateY(4px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
 }
 
-// Responsive
+// ─── Responsive ──────────────────────────────────────────────────────────────
+
 @media (max-width: 768px) {
   .group-picker {
     &__list {
@@ -436,17 +335,11 @@
     }
 
     &__group-header {
-      padding: calc($spacing * 0.85) calc($spacing * 0.75);
+      padding: calc($spacing * 0.9) calc($spacing * 0.85);
     }
 
-    &__subgroup {
-      padding: calc($spacing * 0.45) calc($spacing * 0.75);
-      font-size: 0.875rem;
-    }
-
-    &__group-action {
-      padding: calc($spacing * 0.3) calc($spacing * 0.65);
-      font-size: 0.75rem;
+    &__subgroup-list {
+      padding-left: calc($spacing * 2);
     }
   }
 }

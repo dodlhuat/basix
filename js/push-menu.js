@@ -8,10 +8,120 @@ class PushMenu {
         if (!this.elements.navigation || !this.elements.content) {
             throw new Error('PushMenu: Required elements not found (.navigation, .push-content)');
         }
+        this.buildPanels();
         this.elements.navigation.addEventListener('change', this.handleNavigationChange.bind(this));
         this.elements.backdrop?.addEventListener('click', this.handleBackdropClick);
         this.initialized = true;
     }
+    // ─── Panel construction ────────────────────────────────────────────────
+    static buildPanels() {
+        const menu = this.elements.menu;
+        if (!menu)
+            return;
+        const rootUl = menu.querySelector(':scope > ul');
+        if (!rootUl)
+            return;
+        // Wrap root ul in a panel
+        const rootPanel = document.createElement('div');
+        rootPanel.classList.add('push-menu-panel', 'is-active');
+        rootPanel.dataset.level = '0';
+        rootPanel.appendChild(rootUl);
+        menu.appendChild(rootPanel);
+        // Recursively extract nested uls into sibling panels
+        this.extractSubPanels(rootPanel, 1);
+        this.panelStack = [rootPanel];
+    }
+    static extractSubPanels(panel, level) {
+        // Collect all uls currently in this panel before any mutations
+        const uls = Array.from(panel.querySelectorAll('ul'));
+        for (const ul of uls) {
+            const listItems = Array.from(ul.children);
+            for (const li of listItems) {
+                const childUl = li.querySelector(':scope > ul');
+                if (!childUl)
+                    continue;
+                // Determine label from the immediate anchor child
+                const parentAnchor = li.querySelector(':scope > a');
+                const title = parentAnchor?.textContent?.trim() ?? '';
+                // ── Build sub-panel ──────────────────────────────────────
+                const subPanel = document.createElement('div');
+                subPanel.classList.add('push-menu-panel');
+                subPanel.dataset.level = String(level);
+                // Header: back button + breadcrumb title
+                const header = document.createElement('div');
+                header.classList.add('push-menu-panel-header');
+                const backBtn = document.createElement('button');
+                backBtn.classList.add('push-menu-back');
+                backBtn.setAttribute('aria-label', 'Back');
+                backBtn.innerHTML = `<span class="icon icon-navigate_before" aria-hidden="true"></span>`;
+                header.addEventListener('click', () => PushMenu.goBack());
+                const titleEl = document.createElement('span');
+                titleEl.classList.add('push-menu-panel-title');
+                titleEl.textContent = title;
+                header.appendChild(backBtn);
+                header.appendChild(titleEl);
+                subPanel.appendChild(header);
+                // Move the child ul into the sub-panel
+                subPanel.appendChild(childUl);
+                // Append sub-panel as sibling inside the nav
+                this.elements.menu?.appendChild(subPanel);
+                // ── Replace anchor with a trigger span in the parent li ──
+                const trigger = document.createElement('span');
+                trigger.classList.add('push-menu-item');
+                trigger.textContent = title;
+                // Chevron icon
+                const chevron = document.createElement('span');
+                chevron.classList.add('push-menu-chevron');
+                chevron.setAttribute('aria-hidden', 'true');
+                chevron.innerHTML = `<span class="icon icon-navigate_next" aria-hidden="true"></span>`;
+                trigger.appendChild(chevron);
+                if (parentAnchor) {
+                    parentAnchor.replaceWith(trigger);
+                }
+                else {
+                    li.prepend(trigger);
+                }
+                trigger.addEventListener('click', () => PushMenu.openPanel(subPanel));
+                // Recurse into the newly created sub-panel
+                this.extractSubPanels(subPanel, level + 1);
+            }
+        }
+    }
+    // ─── Panel navigation ──────────────────────────────────────────────────
+    static openPanel(panel) {
+        const currentPanel = this.panelStack[this.panelStack.length - 1];
+        currentPanel.classList.remove('is-active');
+        currentPanel.classList.add('is-prev');
+        panel.classList.add('is-active');
+        this.panelStack.push(panel);
+    }
+    static goBack() {
+        if (this.panelStack.length <= 1)
+            return;
+        const currentPanel = this.panelStack.pop();
+        const prevPanel = this.panelStack[this.panelStack.length - 1];
+        currentPanel.classList.remove('is-active');
+        prevPanel.classList.remove('is-prev');
+        prevPanel.classList.add('is-active');
+    }
+    static resetPanels() {
+        const menu = this.elements.menu;
+        if (!menu)
+            return;
+        // Wait for the close animation before snapping panels back
+        setTimeout(() => {
+            const panels = Array.from(menu.querySelectorAll('.push-menu-panel'));
+            panels.forEach((panel, index) => {
+                panel.classList.remove('is-active', 'is-prev');
+                if (index === 0)
+                    panel.classList.add('is-active');
+            });
+            if (panels[0]) {
+                this.panelStack = [panels[0]];
+            }
+        }, 300);
+    }
+    // ─── Open / close ──────────────────────────────────────────────────────
     static handleNavigationChange() {
         const isPushed = this.elements.content?.classList.contains('pushed') ?? false;
         if (!isPushed) {
@@ -19,6 +129,7 @@ class PushMenu {
         }
         else {
             this.elements.content?.removeEventListener('click', this.clickNav);
+            this.resetPanels();
         }
         this.pushToggle();
     }
@@ -80,6 +191,7 @@ class PushMenu {
             controlIcon: null,
             backdrop: null
         };
+        this.panelStack = [];
         this.initialized = false;
     }
     static refresh() {
@@ -100,6 +212,7 @@ PushMenu.elements = {
     backdrop: null
 };
 PushMenu.initialized = false;
+PushMenu.panelStack = [];
 PushMenu.clickNav = () => {
     const navigation = PushMenu.elements.navigation;
     navigation?.click();
