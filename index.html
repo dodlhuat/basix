@@ -91,6 +91,7 @@
                 <li><a onclick="window.Scroll.to('#components')">Carousel</a></li>
                 <li><a onclick="window.Scroll.to('#components')">Gallery</a></li>
                 <li><a onclick="window.Scroll.to('#advanced-components')">Advanced</a></li>
+                <li><a onclick="window.Scroll.to('#charts')">Charts</a></li>
             </ul>
         </li>
         <li>
@@ -168,6 +169,7 @@
             <li><a onclick="window.Scroll.to('#components')">Carousel</a></li>
             <li><a onclick="window.Scroll.to('#components')">Gallery</a></li>
             <li><a onclick="window.Scroll.to('#group-picker')">Group Picker</a></li>
+            <li><a onclick="window.Scroll.to('#charts')">Charts</a></li>
             <li><a onclick="window.Scroll.to('#components')">TBD: Timespan Picker</a></li>
             <li><a onclick="window.Scroll.to('#editor')">Rich Text Editor</a></li>
         </ul>
@@ -2195,6 +2197,63 @@
     </div>
     <div id="usage-group-picker-demo-html" class="code-container"></div>
     <div id="usage-group-picker-demo-js" class="code-container"></div>
+
+    <h3 id="charts">Charts</h3>
+    <p>
+        Pure SVG chart components — no external dependencies. Five chart types with animations,
+        tooltips, legends, and full dark mode support.
+    </p>
+
+    <!-- Line -->
+    <div class="row card">
+        <div class="column">
+            <div id="chart-line"></div>
+            <p>Line chart with smooth Catmull-Rom bezier curves. Supports multiple series, hover
+                tooltips, and an animated stroke-dashoffset draw effect on load.</p>
+            <div id="usage-chart-line-html" class="code-container"></div>
+            <div id="usage-chart-line-js" class="code-container"></div>
+        </div>
+    </div>
+
+    <!-- Area -->
+    <div class="row card">
+        <div class="column">
+            <div id="chart-area"></div>
+            <p>Area chart fills the region under the line with a translucent tint. Great for
+                visualising volume or cumulative data over time.</p>
+            <div id="usage-chart-area-js" class="code-container"></div>
+        </div>
+    </div>
+
+    <!-- Column -->
+    <div class="row card">
+        <div class="column">
+            <div id="chart-column"></div>
+            <p>Vertical column chart. Multiple series are rendered side-by-side within each category
+                group. Bars animate with a staggered scaleY grow effect.</p>
+            <div id="usage-chart-column-js" class="code-container"></div>
+        </div>
+    </div>
+
+    <!-- Bar -->
+    <div class="row card">
+        <div class="column">
+            <div id="chart-bar"></div>
+            <p>Horizontal bar chart — ideal for ranked data or long category labels. Bars animate
+                with a scaleX grow from the left.</p>
+            <div id="usage-chart-bar-js" class="code-container"></div>
+        </div>
+    </div>
+
+    <!-- Pie -->
+    <div class="row card">
+        <div class="column">
+            <div id="chart-pie"></div>
+            <p>Pie chart with per-slice hover pop-out and percentage legend. Slices animate in with
+                a staggered scale + fade.</p>
+            <div id="usage-chart-pie-js" class="code-container"></div>
+        </div>
+    </div>
 
     <h2>Utilities</h2>
     <h3>Theme Toggle</h3>

@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Basix — Popover</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <style>
+        /* ── demo-only helpers ─────────────────────────────────────────────── */
+        .demo-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--secondary-text);
+            margin-bottom: 0.75rem;
+        }
+
+        /* placement crosshair */
+        .placement-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 0.5rem;
+            align-items: center;
+            justify-items: center;
+            width: 260px;
+            margin: 0 auto;
+        }
+        .placement-grid .top    { grid-column: 2; grid-row: 1; }
+        .placement-grid .middle { grid-column: 1 / -1; grid-row: 2; display: flex; gap: 2rem; align-items: center; justify-content: space-between; width: 100%; }
+        .placement-grid .bottom { grid-column: 2; grid-row: 3; }
+
+        /* avatar button */
+        .avatar-btn {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .avatar-btn:hover { transform: scale(1.05); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 25%, transparent); }
+
+        /* user card inside popover */
+        .user-card-avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .user-card-name  { font-weight: 600; font-size: 0.9rem; color: var(--primary-text); }
+        .user-card-role  { font-size: 0.78rem; color: var(--secondary-text); margin-top: 1px; }
+
+        /* info trigger */
+        .info-btn {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: var(--secondary-background);
+            border: 1.5px solid var(--divider);
+            color: var(--secondary-text);
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: default;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: border-color 0.15s, color 0.15s;
+            vertical-align: middle;
+        }
+        .info-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+
+        /* status dot */
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            flex-shrink: 0;
+        }
+
+        /* demo sections */
+        .demo-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .demo-card {
+            background: var(--background);
+            border: 1px solid var(--divider);
+            border-radius: 0.5rem;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+    </style>
+</head>
+<body class="primary-light-bg primary">
+
+<div class="main-header">
+    <div class="open-menu">
+        <div class="navigation-controls">
+            <input type="checkbox" id="menu-navigation" class="navigation"/>
+            <label for="menu-navigation">
+                <svg style="fill:currentColor;width:24px;height:24px;display:inline-block;vertical-align:middle" width="24" height="24">
+                    <use href="svg-icons/icons.svg#menu"/>
+                </svg>
+            </label>
+        </div>
+    </div>
+    <div class="last">
+        <div id="theme-toggle" class="theme-toggle flex cursor-pointer" aria-label="Toggle dark mode">
+            <svg id="theme-icon" style="fill:currentColor;width:24px;height:24px;display:inline-block;vertical-align:middle" width="24" height="24">
+                <use href="svg-icons/icons.svg#clear_day"/>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<nav class="push-menu">
+    <ul>
+        <li><a href="index.html">← Back to Showcase</a></li>
+        <li><a onclick="document.getElementById('section-placements').scrollIntoView({behavior:'smooth'})">Placements</a></li>
+        <li><a onclick="document.getElementById('section-alignment').scrollIntoView({behavior:'smooth'})">Alignment</a></li>
+        <li><a onclick="document.getElementById('section-examples').scrollIntoView({behavior:'smooth'})">Examples</a></li>
+        <li><a onclick="document.getElementById('section-variants').scrollIntoView({behavior:'smooth'})">Variants</a></li>
+        <li><a onclick="document.getElementById('section-api').scrollIntoView({behavior:'smooth'})">API</a></li>
+    </ul>
+</nav>
+<div class="push-menu-backdrop"></div>
+
+<div class="push-content">
+
+    <h1 style="font-size:1.5rem;font-weight:700;margin-bottom:0.25rem;">Popover</h1>
+    <p style="color:var(--secondary-text);margin-bottom:2rem;font-size:0.9rem;">
+        Anchored overlay positioned relative to a trigger. Closes on outside click or Escape.
+        Unlike Modal, the rest of the page stays interactive.
+    </p>
+
+    <!-- ─── Placements ───────────────────────────────────────────────────────── -->
+    <div id="section-placements" class="row card">
+        <div class="column">
+            <p class="demo-label">Placements</p>
+            <div class="placement-grid">
+                <button class="button top" id="btn-top">Top</button>
+                <div class="middle">
+                    <button class="button" id="btn-left">Left</button>
+                    <button class="button" id="btn-auto" style="background:var(--accent-color);color:#fff;font-size:0.8rem;">Auto</button>
+                    <button class="button" id="btn-right">Right</button>
+                </div>
+                <button class="button bottom" id="btn-bottom">Bottom</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Alignment ────────────────────────────────────────────────────────── -->
+    <div id="section-alignment" class="row card">
+        <div class="column">
+            <p class="demo-label">Alignment — bottom placement</p>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                <button class="button" id="btn-align-start">Start</button>
+                <button class="button" id="btn-align-center">Center</button>
+                <button class="button" id="btn-align-end">End</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Real-world examples ───────────────────────────────────────────────── -->
+    <div id="section-examples" class="row card">
+        <div class="column">
+            <p class="demo-label">Examples</p>
+            <div class="demo-row">
+
+                <!-- Profile card -->
+                <div class="demo-card">
+                    <div style="font-size:0.8rem;color:var(--secondary-text);">User avatar</div>
+                    <button class="avatar-btn" id="btn-profile">AB</button>
+                </div>
+
+                <!-- Action menu -->
+                <div class="demo-card">
+                    <div style="font-size:0.8rem;color:var(--secondary-text);">Actions menu</div>
+                    <button class="button" id="btn-actions" style="width:36px;padding:0;height:36px;border-radius:50%;">⋯</button>
+                </div>
+
+                <!-- Inline info -->
+                <div class="demo-card">
+                    <div style="font-size:0.8rem;color:var(--secondary-text);">Hover info</div>
+                    <span style="font-size:0.9rem;color:var(--primary-text);">
+                        Padding
+                        <button class="info-btn" id="btn-info">i</button>
+                    </span>
+                </div>
+
+                <!-- Confirmation -->
+                <div class="demo-card">
+                    <div style="font-size:0.8rem;color:var(--secondary-text);">Confirmation</div>
+                    <button class="button" style="color:var(--error)" id="btn-confirm">Delete item</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Variants ─────────────────────────────────────────────────────────── -->
+    <div id="section-variants" class="row card">
+        <div class="column">
+            <p class="demo-label">Variants</p>
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
+                <button class="button" id="btn-no-arrow">No arrow</button>
+                <button class="button" id="btn-wide">Wide content</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── API ──────────────────────────────────────────────────────────────── -->
+    <div id="section-api">
+        <div id="popover-api-demo" class="code-container"></div>
+        <div id="popover-declarative-demo" class="code-container"></div>
+    </div>
+
+</div><!-- /.push-content -->
+
+<!-- ─── Hidden content templates ─────────────────────────────────────────────── -->
+
+<template id="tpl-simple">
+    <div class="popover-body">Popover content goes here.</div>
+</template>
+
+<template id="tpl-profile">
+    <div class="popover-body" style="min-width:220px;">
+        <div style="display:flex;gap:0.75rem;align-items:center;margin-bottom:0.75rem;">
+            <div class="user-card-avatar">AB</div>
+            <div>
+                <div class="user-card-name">Andi Bauer</div>
+                <div class="user-card-role">Designer &amp; Developer</div>
+            </div>
+            <div class="status-dot" style="margin-left:auto;" title="Online"></div>
+        </div>
+        <div style="display:flex;gap:0.5rem;">
+            <button class="button" style="flex:1;font-size:0.8rem;padding:0.4rem 0;">Message</button>
+            <button class="button" style="flex:1;font-size:0.8rem;padding:0.4rem 0;background:var(--accent-color);color:#fff;">Follow</button>
+        </div>
+    </div>
+</template>
+
+<template id="tpl-actions">
+    <div class="popover-menu" style="min-width:160px;">
+        <div class="popover-menu-label">Actions</div>
+        <div class="popover-menu-item">Edit</div>
+        <div class="popover-menu-item">Duplicate</div>
+        <div class="popover-menu-item">Share…</div>
+        <div class="popover-menu-divider"></div>
+        <div class="popover-menu-item is-destructive">Delete</div>
+    </div>
+</template>
+
+<template id="tpl-info">
+    <div class="popover-body" style="max-width:220px;">
+        The space inside an element between its content and its border. Controlled via <code>padding</code>.
+    </div>
+</template>
+
+<template id="tpl-confirm">
+    <div class="popover-header">Are you sure?</div>
+    <div class="popover-body" style="color:var(--secondary-text);font-size:0.82rem;">
+        This action cannot be undone.
+    </div>
+    <div class="popover-footer">
+        <button class="button" id="confirm-cancel" style="font-size:0.82rem;">Cancel</button>
+        <button class="button" id="confirm-ok" style="font-size:0.82rem;background:var(--error);color:#fff;">Delete</button>
+    </div>
+</template>
+
+<template id="tpl-wide">
+    <div class="popover-header">Keyboard shortcuts</div>
+    <div class="popover-body" style="min-width:260px;">
+        <div style="display:flex;flex-direction:column;gap:0.4rem;">
+            <div style="display:flex;justify-content:space-between;gap:2rem;">
+                <span>Save</span> <kbd style="background:var(--secondary-background);border:1px solid var(--divider);border-radius:3px;padding:1px 6px;font-size:0.75rem;">⌘ S</kbd>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:2rem;">
+                <span>Undo</span> <kbd style="background:var(--secondary-background);border:1px solid var(--divider);border-radius:3px;padding:1px 6px;font-size:0.75rem;">⌘ Z</kbd>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:2rem;">
+                <span>Find</span> <kbd style="background:var(--secondary-background);border:1px solid var(--divider);border-radius:3px;padding:1px 6px;font-size:0.75rem;">⌘ F</kbd>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script type="module">
+import { Popover }     from './js/popover.js';
+import { CodeViewer }  from './js/code-viewer.js';
+import { PushMenu }    from './js/push-menu.js';
+import { Theme }       from './js/theme.js';
+
+PushMenu.init();
+Theme.init();
+
+const tpl = id => document.querySelector(id).innerHTML;
+
+// ── Placements ────────────────────────────────────────────────────────────────
+new Popover('#btn-top',    { content: tpl('#tpl-simple'), placement: 'top' });
+new Popover('#btn-bottom', { content: tpl('#tpl-simple'), placement: 'bottom' });
+new Popover('#btn-left',   { content: tpl('#tpl-simple'), placement: 'left' });
+new Popover('#btn-right',  { content: tpl('#tpl-simple'), placement: 'right' });
+new Popover('#btn-auto',   { content: tpl('#tpl-simple'), placement: 'auto' });
+
+// ── Alignment ─────────────────────────────────────────────────────────────────
+new Popover('#btn-align-start',  { content: tpl('#tpl-simple'), placement: 'bottom', align: 'start' });
+new Popover('#btn-align-center', { content: tpl('#tpl-simple'), placement: 'bottom', align: 'center' });
+new Popover('#btn-align-end',    { content: tpl('#tpl-simple'), placement: 'bottom', align: 'end' });
+
+// ── Examples ──────────────────────────────────────────────────────────────────
+new Popover('#btn-profile', { content: tpl('#tpl-profile'), placement: 'bottom', align: 'end' });
+new Popover('#btn-actions', { content: tpl('#tpl-actions'), placement: 'bottom', align: 'end' });
+new Popover('#btn-info',    { content: tpl('#tpl-info'),    placement: 'top',    triggerMode: 'hover' });
+
+const confirmPop = new Popover('#btn-confirm', {
+    content: tpl('#tpl-confirm'),
+    placement: 'top',
+    align: 'start',
+    closeOnOutsideClick: false,
+});
+// Wire confirm/cancel buttons after popover opens
+document.addEventListener('pointerdown', e => {
+    if (e.target.id === 'confirm-cancel') confirmPop.close();
+    if (e.target.id === 'confirm-ok')     { alert('Deleted!'); confirmPop.close(); }
+}, { capture: true });
+
+// ── Variants ──────────────────────────────────────────────────────────────────
+new Popover('#btn-no-arrow', { content: tpl('#tpl-simple'), arrow: false, placement: 'bottom' });
+new Popover('#btn-wide',     { content: tpl('#tpl-wide'),   placement: 'bottom', align: 'start' });
+
+// ── Code examples ─────────────────────────────────────────────────────────────
+new CodeViewer('#popover-api-demo', `import { Popover } from './js/popover.js';
+
+const pop = new Popover('#my-button', {
+    content:    '<div class="popover-body">Hello!</div>',
+    placement:  'bottom',        // 'top' | 'bottom' | 'left' | 'right' | 'auto'
+    align:      'center',        // 'start' | 'center' | 'end'
+    offset:     8,               // gap between trigger and popover in px
+    arrow:      true,            // show the arrow/caret
+    triggerMode:'click',         // 'click' | 'hover'
+    closeOnOutsideClick: true,
+    closeOnEscape:       true,
+    onOpen:  () => console.log('opened'),
+    onClose: () => console.log('closed'),
+});
+
+// Public API
+pop.open();
+pop.close();
+pop.toggle();
+pop.isOpen;    // boolean
+pop.destroy(); // removes listeners
+
+Popover.closeAll(); // close every open popover`, 'js');
+
+new CodeViewer('#popover-declarative-demo', `<!-- Declarative: point data-popover at a <template> or hidden element -->
+<button data-popover="#my-content"
+        data-popover-placement="bottom"
+        data-popover-align="center"
+        data-popover-trigger="click"
+        data-popover-arrow="true">
+  Open
+</button>
+
+<template id="my-content">
+  <div class="popover-body">Content here.</div>
+</template>
+
+<script type="module">
+import { Popover } from './js/popover.js';
+Popover.initAll(); // wires all [data-popover] elements at once
+<\/script>
+
+<!-- Content structure helpers -->
+<div class="popover-header">Title</div>
+<div class="popover-body">Body text or any HTML.</div>
+<div class="popover-footer"><!-- buttons --></div>
+
+<!-- Action-list style -->
+<div class="popover-menu">
+  <div class="popover-menu-label">Section</div>
+  <div class="popover-menu-item">Edit</div>
+  <div class="popover-menu-item is-destructive">Delete</div>
+  <div class="popover-menu-divider"></div>
+</div>`, 'html');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+@use "properties";
+@use "parameters" as *;
+
+$arrow: 6px;
+
+.popover {
+  position: fixed;
+  z-index: 900;
+  background: var(--background);
+  border: 1px solid var(--divider);
+  border-radius: calc($border-radius * 2.5);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 12px 24px -4px rgba(0, 0, 0, 0.12);
+  min-width: 160px;
+  max-width: 320px;
+  opacity: 0;
+  pointer-events: none;
+
+  // Entry: offset from the trigger side + subtle scale
+  &[data-placement="top"]    { transform-origin: bottom center; transform: translateY(6px)  scale(0.95); }
+  &[data-placement="bottom"] { transform-origin: top center;    transform: translateY(-6px) scale(0.95); }
+  &[data-placement="left"]   { transform-origin: right center;  transform: translateX(6px)  scale(0.95); }
+  &[data-placement="right"]  { transform-origin: left center;   transform: translateX(-6px) scale(0.95); }
+
+  // Shift transform-origin to the anchor corner for aligned popovers
+  &[data-placement="bottom"][data-align="start"] { transform-origin: top left; }
+  &[data-placement="bottom"][data-align="end"]   { transform-origin: top right; }
+  &[data-placement="top"][data-align="start"]    { transform-origin: bottom left; }
+  &[data-placement="top"][data-align="end"]      { transform-origin: bottom right; }
+
+  transition:
+    opacity 0.18s ease,
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none !important;
+  }
+
+  // ── Arrows ─────────────────────────────────────────────────────────────────
+  // Two layers: ::before = border colour (1px larger), ::after = background fill
+  &[data-arrow="true"] {
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    // bottom placement → arrow ▲ at top of popover
+    &[data-placement="bottom"] {
+      &::before {
+        top: -($arrow + 1px);
+        left: var(--popover-arrow-offset, 50%);
+        transform: translateX(-50%);
+        border: ($arrow + 1px) solid transparent;
+        border-top-width: 0;
+        border-bottom-color: var(--divider);
+      }
+      &::after {
+        top: -$arrow;
+        left: var(--popover-arrow-offset, 50%);
+        transform: translateX(-50%);
+        border: $arrow solid transparent;
+        border-top-width: 0;
+        border-bottom-color: var(--background);
+      }
+    }
+
+    // top placement → arrow ▼ at bottom of popover
+    &[data-placement="top"] {
+      &::before {
+        bottom: -($arrow + 1px);
+        left: var(--popover-arrow-offset, 50%);
+        transform: translateX(-50%);
+        border: ($arrow + 1px) solid transparent;
+        border-bottom-width: 0;
+        border-top-color: var(--divider);
+      }
+      &::after {
+        bottom: -$arrow;
+        left: var(--popover-arrow-offset, 50%);
+        transform: translateX(-50%);
+        border: $arrow solid transparent;
+        border-bottom-width: 0;
+        border-top-color: var(--background);
+      }
+    }
+
+    // right placement → arrow ◁ at left of popover
+    &[data-placement="right"] {
+      &::before {
+        left: -($arrow + 1px);
+        top: var(--popover-arrow-offset, 50%);
+        transform: translateY(-50%);
+        border: ($arrow + 1px) solid transparent;
+        border-left-width: 0;
+        border-right-color: var(--divider);
+      }
+      &::after {
+        left: -$arrow;
+        top: var(--popover-arrow-offset, 50%);
+        transform: translateY(-50%);
+        border: $arrow solid transparent;
+        border-left-width: 0;
+        border-right-color: var(--background);
+      }
+    }
+
+    // left placement → arrow ▶ at right of popover
+    &[data-placement="left"] {
+      &::before {
+        right: -($arrow + 1px);
+        top: var(--popover-arrow-offset, 50%);
+        transform: translateY(-50%);
+        border: ($arrow + 1px) solid transparent;
+        border-right-width: 0;
+        border-left-color: var(--divider);
+      }
+      &::after {
+        right: -$arrow;
+        top: var(--popover-arrow-offset, 50%);
+        transform: translateY(-50%);
+        border: $arrow solid transparent;
+        border-right-width: 0;
+        border-left-color: var(--background);
+      }
+    }
+  }
+}
+
+// ── Content regions ──────────────────────────────────────────────────────────
+
+.popover-header {
+  padding: calc($spacing * 0.65) $spacing;
+  border-bottom: 1px solid var(--divider);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--primary-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc($spacing * 0.5);
+  border-radius: calc($border-radius * 2.5) calc($border-radius * 2.5) 0 0;
+}
+
+.popover-body {
+  padding: calc($spacing * 0.75) $spacing;
+  color: var(--primary-text);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.popover-footer {
+  padding: calc($spacing * 0.65) $spacing;
+  border-top: 1px solid var(--divider);
+  display: flex;
+  justify-content: flex-end;
+  gap: calc($spacing * 0.5);
+  border-radius: 0 0 calc($border-radius * 2.5) calc($border-radius * 2.5);
+}
+
+// ── Action list (menu-style content) ─────────────────────────────────────────
+
+.popover-menu {
+  padding: calc($spacing * 0.375) 0;
+
+  .popover-menu-item {
+    display: flex;
+    align-items: center;
+    gap: calc($spacing * 0.6);
+    padding: calc($spacing * 0.45) $spacing;
+    font-size: 0.875rem;
+    color: var(--primary-text);
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+    user-select: none;
+
+    &:hover { background: var(--hover); }
+
+    &.is-destructive {
+      color: var(--error);
+      &:hover { background: color-mix(in srgb, var(--error) 8%, transparent); }
+    }
+  }
+
+  .popover-menu-divider {
+    height: 1px;
+    background: var(--divider);
+    margin: calc($spacing * 0.375) 0;
+  }
+
+  .popover-menu-label {
+    padding: calc($spacing * 0.3) $spacing calc($spacing * 0.2);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--secondary-text);
+  }
+}

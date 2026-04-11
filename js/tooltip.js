@@ -1,3 +1,5 @@
+// tooltip.ts
+import { computePosition } from './position.js';
 class Tooltip {
     constructor(trigger, content, options = {}) {
         this.tooltipElement = null;
@@ -105,66 +107,10 @@ class Tooltip {
     position() {
         if (!this.tooltipElement)
             return;
-        const triggerRect = this.trigger.getBoundingClientRect();
-        const tooltipRect = this.tooltipElement.getBoundingClientRect();
-        let position = this.options.position;
-        if (position === 'auto') {
-            position = this.determineAutoPosition(triggerRect, tooltipRect);
-        }
-        const coords = this.calculatePosition(position, triggerRect, tooltipRect);
-        this.tooltipElement.style.left = `${coords.left}px`;
-        this.tooltipElement.style.top = `${coords.top}px`;
-        this.tooltipElement.setAttribute('data-position', position);
-    }
-    determineAutoPosition(triggerRect, tooltipRect) {
-        const spaceTop = triggerRect.top;
-        const spaceBottom = window.innerHeight - triggerRect.bottom;
-        const spaceLeft = triggerRect.left;
-        const spaceRight = window.innerWidth - triggerRect.right;
-        const canFitTop = spaceTop >= tooltipRect.height + this.options.offset;
-        const canFitBottom = spaceBottom >= tooltipRect.height + this.options.offset;
-        const canFitLeft = spaceLeft >= tooltipRect.width + this.options.offset;
-        const canFitRight = spaceRight >= tooltipRect.width + this.options.offset;
-        if (canFitTop && spaceTop >= Math.max(spaceBottom, spaceLeft, spaceRight)) {
-            return 'top';
-        }
-        else if (canFitBottom && spaceBottom >= Math.max(spaceTop, spaceLeft, spaceRight)) {
-            return 'bottom';
-        }
-        else if (canFitLeft && spaceLeft >= Math.max(spaceTop, spaceBottom, spaceRight)) {
-            return 'left';
-        }
-        else if (canFitRight) {
-            return 'right';
-        }
-        return spaceBottom > spaceTop ? 'bottom' : 'top';
-    }
-    calculatePosition(position, triggerRect, tooltipRect) {
-        let left = 0;
-        let top = 0;
-        switch (position) {
-            case 'top':
-                left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
-                top = triggerRect.top - tooltipRect.height - this.options.offset;
-                break;
-            case 'bottom':
-                left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
-                top = triggerRect.bottom + this.options.offset;
-                break;
-            case 'left':
-                left = triggerRect.left - tooltipRect.width - this.options.offset;
-                top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
-                break;
-            case 'right':
-                left = triggerRect.right + this.options.offset;
-                top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
-                break;
-        }
-        // Clamp to viewport
-        const margin = 8;
-        left = Math.max(margin, Math.min(window.innerWidth - tooltipRect.width - margin, left));
-        top = Math.max(margin, Math.min(window.innerHeight - tooltipRect.height - margin, top));
-        return { left, top };
+        const { left, top, placement } = computePosition(this.trigger.getBoundingClientRect(), this.tooltipElement.getBoundingClientRect(), { placement: this.options.position, offset: this.options.offset });
+        this.tooltipElement.style.left = `${left}px`;
+        this.tooltipElement.style.top = `${top}px`;
+        this.tooltipElement.setAttribute('data-position', placement);
     }
     attachEvents() {
         this.trigger.addEventListener('mouseenter', this.handleMouseEnter);
