@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>File Uploader — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { FileUploader } from '../../js/file-uploader.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new FileUploader('#uploader-demo', {
+            uploadUrl:    'https://httpbin.org/post',
+            maxFileSize:  5 * 1024 * 1024, // 5 MB
+            allowedTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/svg+xml'],
+        });
+
+        new CodeViewer('#code-html', `<div id="my-uploader">
+  <input type="file" id="file-input" multiple hidden/>
+  <div id="drop-zone" class="drop-zone">
+    <div class="drop-zone-content">
+      <p class="primary-text">Click to upload or drag and drop</p>
+      <p class="secondary-text">PNG, JPG, GIF, SVG (max 5 MB)</p>
+    </div>
+  </div>
+  <div id="file-list" class="file-list"></div>
+  <div class="actions">
+    <button id="upload-btn" disabled>Upload Files</button>
+  </div>
+</div>`, 'html');
+
+        new CodeViewer('#code-js', `import { FileUploader } from '@dodlhuat/basix/js/file-uploader.js';
+
+const uploader = new FileUploader('#my-uploader', {
+  uploadUrl:    'https://api.example.com/upload',
+  maxFileSize:  5 * 1024 * 1024,          // 5 MB in bytes
+  allowedTypes: ['image/png', 'image/jpeg'],
+});
+
+// Events fired on the container element
+document.getElementById('my-uploader').addEventListener('upload-completed', (e) => {
+  console.log('All uploads done', e.detail);
+});
+
+document.getElementById('my-uploader').addEventListener('file-validation-error', (e) => {
+  console.warn('Rejected:', e.detail.file.name, '—', e.detail.reason);
+});`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>File Uploader</h1>
+            <p class="docs-lead">Drag-and-drop file upload zone with progress indication, file type and size validation, multi-file support, and upload cancellation. Fires custom events on completion and validation failure.</p>
+
+            <h2>Demo</h2>
+            <p>Drag files onto the zone or click to browse. Accepted: PNG, JPG, GIF, SVG up to 5 MB.</p>
+            <div class="docs-demo" id="uploader-demo">
+                <input type="file" id="file-input" multiple hidden/>
+                <div id="drop-zone" class="drop-zone">
+                    <div class="drop-zone-content">
+                        <div class="icon-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <p class="primary-text">Click to upload or drag and drop</p>
+                        <p class="secondary-text">PNG, JPG, GIF, SVG (max 5 MB)</p>
+                    </div>
+                </div>
+                <div id="file-list" class="file-list"></div>
+                <div class="actions" style="margin-top:0.75rem;">
+                    <button id="upload-btn" disabled>Upload Files</button>
+                </div>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>uploadUrl</code></td><td>string</td><td><code>'https://httpbin.org/post'</code></td><td>Endpoint that receives the multipart file upload.</td></tr>
+                    <tr><td><code>maxFileSize</code></td><td>number</td><td>—</td><td>Maximum file size in bytes. Files over this limit are rejected.</td></tr>
+                    <tr><td><code>allowedTypes</code></td><td>string[]</td><td>—</td><td>MIME types allowed. Files with other types are rejected.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Events</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Event</th><th>Detail</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>upload-completed</code></td><td>PromiseSettledResult[]</td><td>Fired on the container after all uploads finish.</td></tr>
+                    <tr><td><code>file-validation-error</code></td><td>{ file, reason: 'size' | 'type' }</td><td>Fired when a file is rejected during selection.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

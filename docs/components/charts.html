@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Charts — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Chart } from '../../js/chart.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+
+        new Chart('#chart-line', {
+            type: 'line',
+            series: [
+                { label: 'Revenue', data: [42, 58, 51, 73, 68, 90] },
+                { label: 'Expenses', data: [30, 35, 40, 38, 50, 45] },
+            ],
+            labels: months,
+        });
+
+        new Chart('#chart-area', {
+            type: 'area',
+            series: [{ label: 'Sessions', data: [120, 145, 132, 178, 165, 200] }],
+            labels: months,
+        });
+
+        new Chart('#chart-column', {
+            type: 'column',
+            series: [
+                { label: 'Q1', data: [25, 40, 35, 50, 30, 60] },
+                { label: 'Q2', data: [30, 45, 28, 55, 42, 70] },
+            ],
+            labels: months,
+        });
+
+        new Chart('#chart-bar', {
+            type: 'bar',
+            series: [{ label: 'Score', data: [80, 65, 90, 55, 70] }],
+            labels: ['Design', 'Development', 'Performance', 'Accessibility', 'SEO'],
+        });
+
+        new Chart('#chart-pie', {
+            type: 'pie',
+            series: [{ label: 'Share', data: [35, 25, 20, 15, 5] }],
+            labels: ['Chrome', 'Safari', 'Firefox', 'Edge', 'Other'],
+        });
+
+        new CodeViewer('#code-js', `import { Chart } from '@dodlhuat/basix/js/chart.js';
+
+new Chart('#my-chart', {
+  type:   'line',              // 'line' | 'area' | 'column' | 'bar' | 'pie'
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  series: [
+    { label: 'Revenue',  data: [42, 58, 51, 73, 68, 90] },
+    { label: 'Expenses', data: [30, 35, 40, 38, 50, 45] },
+  ],
+});`, 'js');
+
+        new CodeViewer('#code-html', `<!-- Container div — chart renders inside -->
+<div id="my-chart"></div>`, 'html');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Charts</h1>
+            <p class="docs-lead">Pure SVG chart components — no external dependencies. Five types with enter animations, hover tooltips, legends, and full dark mode support.</p>
+
+            <h2>Line</h2>
+            <p>Smooth Catmull-Rom bezier curves. Supports multiple series and hover tooltips.</p>
+            <div class="docs-demo"><div id="chart-line"></div></div>
+
+            <h2>Area</h2>
+            <p>Fills the region under the line with a translucent tint. Great for volume or cumulative data.</p>
+            <div class="docs-demo"><div id="chart-area"></div></div>
+
+            <h2>Column</h2>
+            <p>Vertical bars with multiple series side-by-side. Animate with a staggered grow effect.</p>
+            <div class="docs-demo"><div id="chart-column"></div></div>
+
+            <h2>Bar</h2>
+            <p>Horizontal bars — ideal for ranked data or long category labels.</p>
+            <div class="docs-demo"><div id="chart-bar"></div></div>
+
+            <h2>Pie</h2>
+            <p>Per-slice hover pop-out and percentage legend. Slices animate with staggered scale + fade.</p>
+            <div class="docs-demo"><div id="chart-pie"></div></div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>type</code></td><td>line | area | column | bar | pie</td><td>—</td><td>Chart type to render.</td></tr>
+                    <tr><td><code>labels</code></td><td>string[]</td><td>—</td><td>Category labels for the x-axis (or pie segments).</td></tr>
+                    <tr><td><code>series</code></td><td>Array&lt;{label, data[]}&gt;</td><td>—</td><td>One or more data series. Each has a <code>label</code> and array of numeric <code>data</code> values.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

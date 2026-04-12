@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Icons — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <style>
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .icon-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.75rem 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .icon-cell:hover { background: var(--primary-light); }
+        .icon-cell svg { width: 24px; height: 24px; fill: currentColor; }
+        .icon-cell span { font-size: 0.65rem; color: var(--secondary-text); text-align: center; word-break: break-all; }
+        #icon-filter { width: 100%; max-width: 360px; }
+    </style>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        const icons = ["add","add_circle","add_photo_alternate","arrow_back","arrow_circle_right","arrow_downward","arrow_drop_down","arrow_forward","attachment","autorenew","backspace","bedtime","block","calendar_month","cancel","check","check_circle","chevron_left","chevron_right","clear_day","clock_loader_10","clock_loader_20","clock_loader_40","clock_loader_60","clock_loader_80","clock_loader_90","close","code","create_new_folder","delete","delete_forever","do_not_disturb_on","download","drafts","drag_indicator","edit","event","expand_circle_down","favorite","filter_alt","filter_list","format_align_center","format_align_left","format_align_right","format_bold","format_color_text","format_italic","format_list_bulleted","format_list_numbered","format_size","format_strikethrough","format_underlined","fullscreen","home","image","key","library_add","link","list","login","logout","mail","manage_search","menu","menu_open","minimize","more_horiz","more_vert","open_in_full","person_edit","person_search","redo","refresh","remove","reply","schedule","search","send","settings","sort","stacks","star","support","sync_saved_locally","table","tune","undo","upload","zoom_in"];
+
+        function renderGrid(filter = '') {
+            const grid = document.getElementById('icon-grid');
+            grid.innerHTML = '';
+            icons
+                .filter(id => id.includes(filter.toLowerCase()))
+                .forEach(id => {
+                    const cell = document.createElement('div');
+                    cell.className = 'icon-cell';
+                    cell.title = `Click to copy: #${id}`;
+                    cell.innerHTML = `<svg viewBox="0 0 24 24"><use href="../../svg-icons/icons.svg#${id}"/></svg><span>${id}</span>`;
+                    cell.addEventListener('click', () => {
+                        navigator.clipboard.writeText(`<svg viewBox="0 0 24 24"><use href="svg-icons/icons.svg#${id}"/></svg>`);
+                        cell.style.background = 'var(--accent-tint)';
+                        setTimeout(() => cell.style.background = '', 800);
+                    });
+                    grid.appendChild(cell);
+                });
+        }
+
+        renderGrid();
+        document.getElementById('icon-filter').addEventListener('input', e => renderGrid(e.target.value));
+
+        new CodeViewer('#code-html', `<!-- Via SVG sprite (recommended) -->
+<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+  <use href="svg-icons/icons.svg#search"/>
+</svg>
+
+<!-- Inline SVG fallback (works without the sprite file) -->
+<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+  <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5
+           6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57
+           l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0
+           C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5
+           11.99 14 9.5 14z"/>
+</svg>`, 'html');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Icons</h1>
+            <p class="docs-lead">SVG sprite icon system. 89 icons included — reference via <code>&lt;use href&gt;</code> to stay sharp at any size and inherit <code>currentColor</code>. Click any icon to copy its markup to the clipboard.</p>
+
+            <h2>Browse icons</h2>
+            <input type="search" id="icon-filter" class="input" placeholder="Filter icons…" style="margin-bottom:0.5rem;"/>
+            <div id="icon-grid" class="icon-grid"></div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+
+            <h2>Sizing &amp; colour</h2>
+            <div class="docs-demo" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 0 24 24" width="32" height="32" style="color:var(--accent);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 0 24 24" width="32" height="32" style="color:var(--success);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 0 24 24" width="32" height="32" style="color:var(--error);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
+            </div>
+            <p style="margin-top:0.75rem;font-size:0.9rem;color:var(--secondary-text);">Set <code>width</code> and <code>height</code> on the <code>&lt;svg&gt;</code> element. Colour follows <code>fill: currentColor</code> so you can use any CSS <code>color</code> property.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

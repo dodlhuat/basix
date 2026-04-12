@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Typography — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new CodeViewer('#code-type', `<h1>Headline 1</h1>
+<h2>Headline 2</h2>
+<h3>Headline 3</h3>
+<h4>Headline 4</h4>
+<p>Body text with a <a href="#">link</a>, <strong>bold</strong>, and <em>italic</em>.</p>
+<code>Inline code</code>
+<pre><code>Block code</code></pre>
+<ul>
+  <li>Unordered item</li>
+  <li>Another item</li>
+</ul>
+<ol>
+  <li>Ordered item</li>
+  <li>Another item</li>
+</ol>`, 'html');
+
+        new CodeViewer('#code-breadcrumb', `<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="#">Dashboard</a></li>
+    <li><a href="#">Users</a></li>
+    <li aria-current="page"><span>John Doe</span></li>
+  </ol>
+</nav>`, 'html');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Typography</h1>
+            <p class="docs-lead">Built around the Outfit variable font. Consistent heading scale, comfortable body line-height, semantic list styles, and monospace code elements — all pure CSS, no classes required.</p>
+
+            <h2>Type scale</h2>
+            <div class="docs-demo">
+                <h1 style="margin:0 0 0.25rem">Headline 1</h1>
+                <h2 style="margin:0 0 0.25rem">Headline 2</h2>
+                <h3 style="margin:0 0 0.25rem">Headline 3</h3>
+                <h4 style="margin:0 0 0.25rem">Headline 4</h4>
+                <p style="margin:0.75rem 0 0">Body text with a <a href="#">link</a>, <strong>bold</strong>, and <em>italic</em> text. Comfortable line-height for longer paragraphs.</p>
+            </div>
+
+            <h2>Code</h2>
+            <div class="docs-demo">
+                <p>Use <code>inline code</code> for short snippets.</p>
+                <pre style="background:var(--secondary-bg);border:1px solid var(--divider);border-radius:0.4rem;padding:1rem;margin:0;"><code>// Block code keeps monospace and line breaks
+const greeting = 'Hello, world!';</code></pre>
+            </div>
+
+            <h2>Lists</h2>
+            <div class="docs-demo" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                <ul>
+                    <li>Unordered item one</li>
+                    <li>Item two
+                        <ul><li>Nested item</li></ul>
+                    </li>
+                    <li>Item three</li>
+                </ul>
+                <ol>
+                    <li>Ordered item one</li>
+                    <li>Item two</li>
+                    <li>Item three</li>
+                </ol>
+            </div>
+
+            <h2>Breadcrumbs</h2>
+            <p>Pure CSS breadcrumb navigation using an <code>&lt;ol&gt;</code> inside <code>.breadcrumb</code>.</p>
+            <div class="docs-demo">
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <ol>
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Users</a></li>
+                        <li aria-current="page"><span>John Doe</span></li>
+                    </ol>
+                </nav>
+            </div>
+
+            <h2>Code</h2>
+            <div id="code-type"></div>
+
+            <h2>Breadcrumb code</h2>
+            <div id="code-breadcrumb"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

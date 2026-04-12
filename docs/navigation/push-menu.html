@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Push Menu — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new CodeViewer('#code-html', `<!-- Header: hamburger toggle -->
+<div class="main-header">
+  <div class="open-menu">
+    <div class="navigation-controls">
+      <input type="checkbox" id="menu-navigation" class="navigation"/>
+      <label for="menu-navigation"><svg viewBox="0 -960 960 960" width="24" height="24" fill="currentColor"><use href="../../svg-icons/icons.svg#menu"/></svg></label>
+    </div>
+  </div>
+</div>
+
+<!-- Sidebar nav -->
+<nav class="push-menu">
+  <ul>
+    <li><a href="#">Dashboard</a></li>
+    <li>
+      <a>Settings</a>
+      <ul>
+        <li><a href="#">Account</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+    </li>
+    <li><a href="#">Logout</a></li>
+  </ul>
+</nav>
+<div class="push-menu-backdrop"></div>
+
+<!-- Main content area -->
+<div class="content push-content">
+  <!-- page content here -->
+</div>`, 'html');
+
+        new CodeViewer('#code-js', `import { PushMenu } from '@dodlhuat/basix/js/push-menu.js';
+
+// Call once after DOM is ready
+PushMenu.init();
+
+// Programmatic control
+PushMenu.open();
+PushMenu.close();
+PushMenu.isOpen();   // boolean
+PushMenu.destroy();`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Push Menu</h1>
+            <p class="docs-lead">A sidebar navigation that slides in and "pushes" the main content to the side when opened. Built on a CSS checkbox toggle — no JS required for basic use. Nested items are extracted into sliding sub-panels automatically.</p>
+
+            <div class="alert alert-info" style="margin-bottom:1.5rem;">
+                <strong>Live demo:</strong> The hamburger menu in the top-left of the <a href="../../showcase.html">showcase page</a> is a working Push Menu instance. The component requires the full page layout (<code>.main-header</code>, <code>.push-menu</code>, <code>.push-content</code>) and cannot run inside this docs frame without conflict.
+            </div>
+
+            <h2>How it works</h2>
+            <p>The menu toggle is an <code>&lt;input type="checkbox" class="navigation"&gt;</code>. CSS sibling selectors translate the checked state into <code>.pushed</code> classes on <code>.main-header</code>, <code>.push-menu</code>, and <code>.push-content</code>. <code>PushMenu.init()</code> then adds nested <code>&lt;ul&gt;</code> sub-panel behaviour.</p>
+            <p>Clicking a menu item with children slides to a new panel showing only that subtree, with a back button to return. Closing the menu resets all panels to the root.</p>
+
+            <h2>Required DOM structure</h2>
+            <div id="code-html"></div>
+
+            <h2>Initialisation</h2>
+            <div id="code-js"></div>
+
+            <h2>API</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>PushMenu.init()</code></td><td>Finds required DOM elements, builds sub-panels, and binds events. Call once on DOMContentLoaded.</td></tr>
+                    <tr><td><code>PushMenu.open()</code></td><td>Opens the menu programmatically.</td></tr>
+                    <tr><td><code>PushMenu.close()</code></td><td>Closes the menu programmatically.</td></tr>
+                    <tr><td><code>PushMenu.isOpen()</code></td><td>Returns <code>true</code> if the menu is currently open.</td></tr>
+                    <tr><td><code>PushMenu.destroy()</code></td><td>Removes all event listeners and resets state.</td></tr>
+                    <tr><td><code>PushMenu.refresh()</code></td><td>Re-queries DOM elements — useful after dynamic DOM changes.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Required CSS selectors</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Selector</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td><code>.navigation</code></td><td>The checkbox input that drives open/close state.</td></tr>
+                    <tr><td><code>.push-menu</code></td><td>The <code>&lt;nav&gt;</code> sidebar element.</td></tr>
+                    <tr><td><code>.push-content</code></td><td>The main content wrapper that gets pushed.</td></tr>
+                    <tr><td><code>.main-header</code></td><td>The top bar that moves with the content.</td></tr>
+                    <tr><td><code>.push-menu-backdrop</code></td><td>Overlay that closes the menu on click.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

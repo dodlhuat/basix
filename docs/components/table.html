@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Data Table — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new CodeViewer('#code-html', `<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Role</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Alice</td>
+      <td>Admin</td>
+      <td><span class="badge success">Active</span></td>
+    </tr>
+    <tr>
+      <td>Bob</td>
+      <td>Editor</td>
+      <td><span class="badge warning">Pending</span></td>
+    </tr>
+  </tbody>
+</table>`, 'html');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Data Table</h1>
+            <p class="docs-lead">Semantic HTML table with consistent styling for headers, rows, hover states, and striped variants. Compose with badges, chips, and other components inside cells.</p>
+
+            <h2>Default</h2>
+            <div class="docs-demo">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Joined</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Alice Müller</td>
+                            <td>Admin</td>
+                            <td>Jan 2024</td>
+                            <td><span class="badge success solid">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>Bob Schmitt</td>
+                            <td>Editor</td>
+                            <td>Mar 2024</td>
+                            <td><span class="badge warning solid">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>Carol Wang</td>
+                            <td>Viewer</td>
+                            <td>Jul 2024</td>
+                            <td><span class="badge solid">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dave Park</td>
+                            <td>Editor</td>
+                            <td>Nov 2024</td>
+                            <td><span class="badge error solid">Inactive</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Striped rows</h2>
+            <div class="docs-demo">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th>Version</th>
+                            <th>License</th>
+                            <th>Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>@dodlhuat/basix</td><td>2.0.0</td><td>MIT</td><td>42 kB</td></tr>
+                        <tr><td>chart.js</td><td>4.4.0</td><td>MIT</td><td>187 kB</td></tr>
+                        <tr><td>date-fns</td><td>3.6.0</td><td>MIT</td><td>71 kB</td></tr>
+                        <tr><td>zod</td><td>3.22.0</td><td>MIT</td><td>14 kB</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+
+            <h2>Modifiers</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Class on <code>.table</code></th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><em>(none)</em></td><td>Default bordered table with hover row highlight.</td></tr>
+                    <tr><td><code>.table-striped</code></td><td>Alternating row background for easier scanning.</td></tr>
+                    <tr><td><code>.table-compact</code></td><td>Reduced cell padding for dense data.</td></tr>
+                    <tr><td><code>.table-borderless</code></td><td>Removes all borders — rows separated by background only.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

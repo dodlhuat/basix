@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Layout & Grid — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <style>
+        .grid-demo .column {
+            background: color-mix(in srgb, var(--accent) 12%, transparent);
+            border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+            border-radius: 0.4rem;
+            padding: 0.5rem 0.75rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+    </style>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new CodeViewer('#code-grid', `<!-- Equal columns -->
+<div class="row">
+  <div class="column">1x</div>
+  <div class="column">1x</div>
+  <div class="column">1x</div>
+</div>
+
+<!-- Proportional sizing -->
+<div class="row">
+  <div class="column">1x</div>
+  <div class="column grow-2">2x</div>
+  <div class="column grow-3">3x</div>
+</div>`, 'html');
+
+        new CodeViewer('#code-card', `<!-- Basic card -->
+<div class="card">Content</div>
+
+<!-- Card with sections -->
+<div class="card">
+  <div class="card-header">Header</div>
+  Body content
+  <div class="card-footer">Footer</div>
+</div>
+
+<!-- Variants -->
+<div class="card card-flat">Flat — no shadow</div>
+<div class="card card-bordered">Bordered</div>
+<div class="card card-hover">Hover effect</div>
+
+<!-- Padding utilities -->
+<div class="card card-padding-none">No padding</div>
+<div class="card card-padding-sm">Small padding</div>
+<div class="card card-padding-lg">Large padding</div>`, 'html');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Layout &amp; Grid</h1>
+            <p class="docs-lead">A flexbox-based grid system using <code>.row</code> and <code>.column</code>. Columns stack on mobile automatically. Use <code>grow-2</code> through <code>grow-6</code> for proportional sizing.</p>
+
+            <h2>Equal columns</h2>
+            <div class="docs-demo grid-demo">
+                <div class="row" style="gap:0.5rem;">
+                    <div class="column">1x</div>
+                    <div class="column">1x</div>
+                    <div class="column">1x</div>
+                </div>
+                <div class="row" style="gap:0.5rem;margin-top:0.5rem;">
+                    <div class="column">1x</div>
+                    <div class="column">1x</div>
+                </div>
+            </div>
+
+            <h2>Proportional sizing</h2>
+            <div class="docs-demo grid-demo">
+                <div class="row" style="gap:0.5rem;">
+                    <div class="column">1x</div>
+                    <div class="column grow-2">2x</div>
+                    <div class="column">1x</div>
+                </div>
+                <div class="row" style="gap:0.5rem;margin-top:0.5rem;">
+                    <div class="column">1x</div>
+                    <div class="column grow-3">3x</div>
+                    <div class="column grow-2">2x</div>
+                </div>
+            </div>
+
+            <h2>Grid code</h2>
+            <div id="code-grid"></div>
+
+            <h2>Cards</h2>
+            <p>The <code>.card</code> class wraps any content in a contained section with padding, background and shadow. Combine with <code>.row</code> and <code>.column</code> for layout.</p>
+
+            <div class="docs-demo" style="display:flex;flex-wrap:wrap;gap:1rem;">
+                <div class="card" style="flex:1;min-width:150px;">
+                    <div class="card-header"><strong>With header</strong></div>
+                    Body content
+                    <div class="card-footer">Footer</div>
+                </div>
+                <div class="card card-flat" style="flex:1;min-width:150px;"><code>.card-flat</code></div>
+                <div class="card card-bordered" style="flex:1;min-width:150px;"><code>.card-bordered</code></div>
+                <div class="card card-hover" style="flex:1;min-width:150px;"><code>.card-hover</code></div>
+            </div>
+
+            <h2>Card code</h2>
+            <div id="code-card"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

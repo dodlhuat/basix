@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Alerts & Badge — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new CodeViewer('#code-alerts', `<div class="alert alert-default">
+  <strong>Default:</strong> A plain informational message.
+</div>
+<div class="alert alert-info">
+  <strong>Info:</strong> Some helpful information.
+</div>
+<div class="alert alert-success">
+  <strong>Success:</strong> Your changes were saved.
+</div>
+<div class="alert alert-warning">
+  <strong>Warning:</strong> Please review before continuing.
+</div>
+<div class="alert alert-error">
+  <strong>Error:</strong> Something went wrong.
+</div>
+
+<!-- Dismissible (add your own JS listener) -->
+<div class="alert alert-info alert-dismissible">
+  Dismissible alert
+  <button class="alert-close" onclick="this.closest('.alert').remove()">×</button>
+</div>`, 'html');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Alerts</h1>
+            <p class="docs-lead">Contextual feedback messages. Five semantic variants — default, info, success, warning, error. Pure CSS with optional dismissal via a close button.</p>
+
+            <h2>Variants</h2>
+            <div class="docs-demo" style="display:flex;flex-direction:column;gap:0.5rem;">
+                <div class="alert alert-default"><strong>Default:</strong> A plain informational message.</div>
+                <div class="alert alert-info"><strong>Info:</strong> Some helpful information for you.</div>
+                <div class="alert alert-success"><strong>Success:</strong> Your changes were saved successfully.</div>
+                <div class="alert alert-warning"><strong>Warning:</strong> Please review your input before continuing.</div>
+                <div class="alert alert-error"><strong>Error:</strong> Something went wrong. Please try again.</div>
+            </div>
+
+            <h2>Dismissible</h2>
+            <div class="docs-demo">
+                <div class="alert alert-info" style="display:flex;align-items:center;justify-content:space-between;">
+                    <span><strong>Info:</strong> Click × to dismiss this alert.</span>
+                    <button class="button ghost" style="padding:0.1rem 0.4rem;margin-left:1rem;" onclick="this.closest('.alert').remove()">×</button>
+                </div>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-alerts"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Tooltip — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Tooltip } from '../../js/tooltip.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        // Placement demos
+        new Tooltip(document.getElementById('tip-top'),    'Appears on top',    { position: 'top' });
+        new Tooltip(document.getElementById('tip-bottom'), 'Appears on bottom', { position: 'bottom' });
+        new Tooltip(document.getElementById('tip-left'),   'Appears on left',   { position: 'left' });
+        new Tooltip(document.getElementById('tip-right'),  'Appears on right',  { position: 'right' });
+        new Tooltip(document.getElementById('tip-auto'),   'Auto-picks the best position', { position: 'auto' });
+
+        // HTML content
+        new Tooltip(document.getElementById('tip-html'),
+            'Supports <strong>bold</strong>, <em>italic</em> and <code>code</code>.',
+            { position: 'top' });
+
+        // Declarative
+        Tooltip.initializeAll();
+
+        new CodeViewer('#code-html', `<!-- Declarative: set data-tooltip on any element -->
+<button data-tooltip="Simple tooltip text" data-tooltip-position="top">
+  Hover me
+</button>`, 'html');
+
+        new CodeViewer('#code-js', `import { Tooltip } from '@dodlhuat/basix/js/tooltip.js';
+
+// Programmatic
+const tip = new Tooltip(
+  document.getElementById('my-trigger'),
+  'Tooltip content — can be <strong>HTML</strong>',
+  {
+    position:  'top',    // 'top' | 'bottom' | 'left' | 'right' | 'auto'
+    offset:    8,        // px gap
+    delay:     0,        // show delay in ms
+    className: '',       // extra CSS class
+  }
+);
+
+// Declarative — initialise all [data-tooltip] elements
+Tooltip.initializeAll();
+
+tip.destroy();`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Tooltip</h1>
+            <p class="docs-lead">Shows contextual information on hover or focus. Supports four explicit placements plus auto-detection, HTML content, and both declarative (<code>data-tooltip</code>) and programmatic APIs.</p>
+
+            <h2>Placement</h2>
+            <div class="docs-demo centered" style="gap:1rem;">
+                <button class="button" id="tip-top">Top</button>
+                <button class="button" id="tip-bottom">Bottom</button>
+                <button class="button" id="tip-left">Left</button>
+                <button class="button" id="tip-right">Right</button>
+                <button class="button" id="tip-auto">Auto</button>
+            </div>
+
+            <h2>HTML content</h2>
+            <div class="docs-demo centered">
+                <button class="button" id="tip-html">HTML tooltip</button>
+            </div>
+
+            <h2>Declarative</h2>
+            <p>Add <code>data-tooltip</code> and optionally <code>data-tooltip-position</code> to any element, then call <code>Tooltip.initializeAll()</code>.</p>
+            <div class="docs-demo centered">
+                <button class="button" data-tooltip="Set via data attribute" data-tooltip-position="top">data-tooltip</button>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>position</code></td><td>top | bottom | left | right | auto</td><td><code>'auto'</code></td><td>Preferred placement. <code>auto</code> picks the side with the most space.</td></tr>
+                    <tr><td><code>offset</code></td><td>number</td><td><code>8</code></td><td>Gap in px between trigger and tooltip.</td></tr>
+                    <tr><td><code>delay</code></td><td>number</td><td><code>0</code></td><td>Show delay in ms.</td></tr>
+                    <tr><td><code>className</code></td><td>string</td><td><code>''</code></td><td>Extra CSS class added to the tooltip element.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>API</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>show()</code></td><td>Shows the tooltip immediately (respects delay).</td></tr>
+                    <tr><td><code>hide()</code></td><td>Hides the tooltip.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Removes the tooltip and all event listeners.</td></tr>
+                    <tr><td><code>Tooltip.initializeAll()</code></td><td>Initialises all <code>[data-tooltip]</code> elements on the page.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

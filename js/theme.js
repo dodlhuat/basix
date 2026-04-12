@@ -80,14 +80,25 @@ class Theme {
         // Update button state
         toggleBtn.setAttribute('aria-pressed', String(isDark));
         toggleBtn.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
-        // Update icon classes
-        if (isDark) {
-            icon.classList.remove('icon-light');
-            icon.classList.add('icon-dark');
+        // Update icon — SVG sprite via <use> or font icon via class
+        const useEl = icon.querySelector('use');
+        if (useEl) {
+            const iconName = isDark ? icon.dataset.iconDark : icon.dataset.iconLight;
+            if (iconName) {
+                const existingHref = useEl.getAttribute('href') ?? '';
+                const basePath = existingHref.includes('#') ? existingHref.split('#')[0] : '';
+                useEl.setAttribute('href', `${basePath}#${iconName}`);
+            }
         }
         else {
-            icon.classList.remove('icon-dark');
-            icon.classList.add('icon-light');
+            if (isDark) {
+                icon.classList.remove('icon-light');
+                icon.classList.add('icon-dark');
+            }
+            else {
+                icon.classList.remove('icon-dark');
+                icon.classList.add('icon-light');
+            }
         }
     }
     /**

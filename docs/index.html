@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Basix Docs</title>
+    <link rel="stylesheet" href="../css/style.css" type="text/css"/>
+    <script type="module">
+        import { DocsNav } from '../js/docs-nav.js';
+        import { Theme } from '../js/theme.js';
+        new DocsNav();
+        Theme.init();
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+
+    <!-- Sidebar -->
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+
+    <!-- Main -->
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb">
+                <a href="../index.html">Basix</a>
+                <span class="sep">/</span>
+                <span class="current">Documentation</span>
+            </div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20">
+                        <use href="../svg-icons/icons.svg#clear_day"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="docs-content">
+            <h1>Welcome to Basix</h1>
+            <p class="docs-lead">
+                A lightweight, framework-free component library built with plain HTML, CSS, and TypeScript.
+                Pick a component from the sidebar to explore its API and examples.
+            </p>
+
+            <h2>Where to start</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-top:1rem;">
+                <a href="foundation/layout.html" class="component-card">
+                    <div class="cc-icon"><svg viewBox="0 -960 960 960" fill="currentColor"><use href="../svg-icons/icons.svg#stacks"/></svg></div>
+                    <div class="cc-name">Foundation</div>
+                    <div class="cc-desc">Grid, typography, colors, icons</div>
+                </a>
+                <a href="forms/inputs.html" class="component-card">
+                    <div class="cc-icon"><svg viewBox="0 -960 960 960" fill="currentColor"><use href="../svg-icons/icons.svg#edit"/></svg></div>
+                    <div class="cc-name">Forms</div>
+                    <div class="cc-desc">Inputs, pickers, validation</div>
+                </a>
+                <a href="overlays/popover.html" class="component-card">
+                    <div class="cc-icon"><svg viewBox="0 -960 960 960" fill="currentColor"><use href="../svg-icons/icons.svg#chat_bubble"/></svg></div>
+                    <div class="cc-name">Overlays</div>
+                    <div class="cc-desc">Modal, popover, tooltip, toast</div>
+                </a>
+                <a href="components/charts.html" class="component-card">
+                    <div class="cc-icon"><svg viewBox="0 -960 960 960" fill="currentColor"><use href="../svg-icons/icons.svg#bar_chart"/></svg></div>
+                    <div class="cc-name">Charts</div>
+                    <div class="cc-desc">Area, bar, column, line, pie</div>
+                </a>
+            </div>
+
+            <h2>Installation</h2>
+            <pre style="background:var(--secondary-bg);border:1px solid var(--divider);border-radius:0.4rem;padding:1rem;font-size:0.85rem;overflow-x:auto;"><code>npm install @dodlhuat/basix</code></pre>
+
+            <h2>Basic setup</h2>
+            <pre style="background:var(--secondary-bg);border:1px solid var(--divider);border-radius:0.4rem;padding:1rem;font-size:0.85rem;overflow-x:auto;"><code>&lt;!-- In your HTML head --&gt;
+&lt;link rel="stylesheet" href="node_modules/@dodlhuat/basix/css/style.css"&gt;
+
+&lt;!-- In your JS --&gt;
+import { Popover } from '@dodlhuat/basix/js/popover.js';
+import { Toast }   from '@dodlhuat/basix/js/toast.js';</code></pre>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Rich Text Editor — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Editor } from '../../js/editor.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new Editor({ simple: true });
+
+        new CodeViewer('#code-html', `<!-- Toolbar -->
+<div class="editor-toolbar">
+  <button data-cmd="bold" title="Bold"><b>B</b></button>
+  <button data-cmd="italic" title="Italic"><i>I</i></button>
+  <button data-cmd="underline" title="Underline"><u>U</u></button>
+  <button data-cmd="insertUnorderedList" title="Bullet list">≡</button>
+  <button id="linkBtn" title="Insert link"><svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><use href="../../svg-icons/icons.svg#link"/></svg></button>
+</div>
+
+<!-- Editable area -->
+<div id="editable" class="editor-content" contenteditable="true">
+  <p>Start typing here…</p>
+</div>
+
+<!-- Word count -->
+<div id="wordCount" class="editor-footer">0 words</div>`, 'html');
+
+        new CodeViewer('#code-js', `import { Editor } from '@dodlhuat/basix/js/editor.js';
+
+// Simple mode — only requires #editable
+const editor = new Editor({ simple: true });
+
+// Full mode — requires #editable, #code, #preview, #sidePanel
+const editor = new Editor();
+
+// Execute a formatting command directly
+editor.exec('bold');
+editor.exec('foreColor', '#ff0000');`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Rich Text Editor</h1>
+            <p class="docs-lead">WYSIWYG editor built on <code>contenteditable</code> with a toolbar driven by <code>data-cmd</code> attributes, undo/redo history, link insertion, image embedding, word count, and an optional HTML/preview side panel.</p>
+
+            <h2>Demo</h2>
+            <div class="docs-demo">
+                <div class="editor-toolbar">
+                    <button data-cmd="bold" title="Bold"><b>B</b></button>
+                    <button data-cmd="italic" title="Italic"><i>I</i></button>
+                    <button data-cmd="underline" title="Underline"><u>U</u></button>
+                    <button data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+                    <span class="editor-toolbar-divider"></span>
+                    <button data-cmd="insertUnorderedList" title="Bullet list">&#8226;&#8226;</button>
+                    <button data-cmd="insertOrderedList" title="Numbered list">1.</button>
+                    <span class="editor-toolbar-divider"></span>
+                    <button data-cmd="justifyLeft" title="Align left">&#8676;</button>
+                    <button data-cmd="justifyCenter" title="Center">&#8677;</button>
+                    <button data-cmd="justifyRight" title="Align right">&#8678;</button>
+                    <span class="editor-toolbar-divider"></span>
+                    <button id="linkBtn" title="Insert link"><svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><use href="../../svg-icons/icons.svg#link"/></svg></button>
+                    <input type="file" id="imageFile" accept="image/*" hidden/>
+                    <button id="imageBtn" title="Insert image"><svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><use href="../../svg-icons/icons.svg#image"/></svg></button>
+                </div>
+                <div id="editable" class="editor-content" contenteditable="true">
+                    <p>Start typing here… Select text and use the toolbar above to format it.</p>
+                </div>
+                <div id="wordCount" class="editor-footer">0 words</div>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <h2>Toolbar commands</h2>
+            <p>Any button with a <code>data-cmd</code> attribute executes <code>document.execCommand(cmd, false, value)</code>. The optional <code>data-value</code> attribute sets the command value.</p>
+            <table class="docs-props-table">
+                <thead><tr><th><code>data-cmd</code></th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>bold</code></td><td>Toggle bold on selection.</td></tr>
+                    <tr><td><code>italic</code></td><td>Toggle italic on selection.</td></tr>
+                    <tr><td><code>underline</code></td><td>Toggle underline on selection.</td></tr>
+                    <tr><td><code>strikeThrough</code></td><td>Toggle strikethrough on selection.</td></tr>
+                    <tr><td><code>insertUnorderedList</code></td><td>Wrap in a bullet list.</td></tr>
+                    <tr><td><code>insertOrderedList</code></td><td>Wrap in a numbered list.</td></tr>
+                    <tr><td><code>justifyLeft / Center / Right</code></td><td>Text alignment.</td></tr>
+                    <tr><td><code>foreColor</code></td><td>Apply text color — use <code>data-value="#hex"</code>.</td></tr>
+                    <tr><td><code>formatBlock</code></td><td>Wrap in block element — use <code>data-value="h2"</code> etc.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>simple</code></td><td>boolean</td><td><code>false</code></td><td>Simple mode requires only <code>#editable</code>. Full mode additionally requires <code>#code</code>, <code>#preview</code>, <code>#sidePanel</code>.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

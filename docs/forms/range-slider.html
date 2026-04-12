@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Range Slider — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { RangeSlider } from '../../js/range-slider.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new RangeSlider(document.querySelector('#slider-basic'));
+        document.querySelector('#slider-basic')?.addEventListener('input', e => {
+            document.getElementById('val-basic').textContent = e.target.value;
+        });
+
+        new RangeSlider(document.querySelector('#slider-step'));
+        document.querySelector('#slider-step')?.addEventListener('input', e => {
+            document.getElementById('val-step').textContent = e.target.value;
+        });
+
+        new CodeViewer('#code-html', `<div class="range-slider">
+  <input type="range" id="my-slider" min="0" max="100" value="50"/>
+</div>`, 'html');
+
+        new CodeViewer('#code-js', `import { RangeSlider } from '@dodlhuat/basix/js/range-slider.js';
+
+// Single instance
+const slider = new RangeSlider(document.getElementById('my-slider'));
+
+// React to value changes
+document.getElementById('my-slider').addEventListener('input', (e) => {
+  console.log(e.target.value);
+});
+
+// Initialise all sliders at once
+RangeSlider.initAll();            // default: .range-slider input[type="range"]
+RangeSlider.initAll('#my-form input[type="range"]'); // custom selector
+
+slider.destroy();`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Range Slider</h1>
+            <p class="docs-lead">Styled <code>&lt;input type="range"&gt;</code> with a filled-track accent that updates as the thumb moves. Wrap in <code>.range-slider</code> and initialise with <code>RangeSlider</code> to activate the fill.</p>
+
+            <h2>Basic</h2>
+            <div class="docs-demo" style="max-width:480px;">
+                <div class="range-slider">
+                    <input type="range" id="slider-basic" min="0" max="100" value="50"/>
+                </div>
+                <p style="margin:0.5rem 0 0;font-size:0.85rem;color:var(--secondary-text);">Value: <strong id="val-basic">50</strong></p>
+            </div>
+
+            <h2>With step</h2>
+            <div class="docs-demo" style="max-width:480px;">
+                <div class="range-slider">
+                    <input type="range" id="slider-step" min="0" max="100" value="25" step="25"/>
+                </div>
+                <p style="margin:0.5rem 0 0;font-size:0.85rem;color:var(--secondary-text);">Value (step 25): <strong id="val-step">25</strong></p>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <h2>API</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>update()</code></td><td>Recalculates the fill percentage. Called automatically on <code>input</code>.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Removes the event listener and clears the CSS fill property.</td></tr>
+                    <tr><td><code>RangeSlider.initAll(selector?)</code></td><td>Initialises all matching inputs. Default: <code>'.range-slider input[type="range"]'</code>.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

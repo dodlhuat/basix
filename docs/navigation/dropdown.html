@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Dropdown — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Dropdown } from '../../js/dropdown.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new Dropdown('#demo-dropdown');
+
+        document.getElementById('demo-dropdown')?.addEventListener('basix:dropdown-select', (e) => {
+            document.getElementById('selected-value').textContent = e.detail?.label ?? '';
+        });
+
+        new CodeViewer('#code-html', `<div class="dropdown-container" id="myDropdown">
+  <button class="dropdown-trigger">Select Option</button>
+  <ul class="dropdown-menu">
+    <li><div class="dropdown-item">Profile</div></li>
+    <li>
+      <div class="dropdown-item">Settings</div>
+      <ul>
+        <li><div class="dropdown-item">Account</div></li>
+        <li><div class="dropdown-item">Notifications</div></li>
+      </ul>
+    </li>
+    <li><div class="dropdown-item">Logout</div></li>
+  </ul>
+</div>`, 'html');
+
+        new CodeViewer('#code-js', `import { Dropdown } from '@dodlhuat/basix/js/dropdown.js';
+
+const dd = new Dropdown('#myDropdown');
+
+// Listen to selections
+document.getElementById('myDropdown').addEventListener('basix:dropdown-select', (e) => {
+  console.log(e.detail.label, e.detail.value);
+});`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Dropdown</h1>
+            <p class="docs-lead">Multi-level dropdown menus built from plain <code>&lt;ul&gt;</code> structure. Fires custom events on selection. Supports nested submenus, keyboard navigation, and outside-click closing.</p>
+
+            <h2>Demo</h2>
+            <div class="docs-demo" style="min-height:200px;">
+                <div class="dropdown-container" id="demo-dropdown">
+                    <button class="dropdown-trigger">Select Option</button>
+                    <ul class="dropdown-menu">
+                        <li><div class="dropdown-item">Profile</div></li>
+                        <li>
+                            <div class="dropdown-item">Settings</div>
+                            <ul>
+                                <li><div class="dropdown-item">Account</div></li>
+                                <li>
+                                    <div class="dropdown-item">Privacy</div>
+                                    <ul>
+                                        <li><div class="dropdown-item">Public</div></li>
+                                        <li><div class="dropdown-item">Private</div></li>
+                                    </ul>
+                                </li>
+                                <li><div class="dropdown-item">Notifications</div></li>
+                            </ul>
+                        </li>
+                        <li><div class="dropdown-item">Help</div></li>
+                        <li><div class="dropdown-item">Logout</div></li>
+                    </ul>
+                </div>
+                <p style="margin-top:1rem;font-size:0.85rem;color:var(--secondary-text);">
+                    Selected: <strong id="selected-value">—</strong>
+                </p>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

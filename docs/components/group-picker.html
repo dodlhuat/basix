@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Group Picker — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { GroupPicker } from '../../js/group-picker.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        const data = [
+            {
+                id: 'design',
+                label: 'Design',
+                subgroups: [
+                    { id: 'ux', label: 'UX Research' },
+                    { id: 'ui', label: 'UI Design' },
+                    { id: 'motion', label: 'Motion' },
+                ],
+            },
+            {
+                id: 'engineering',
+                label: 'Engineering',
+                subgroups: [
+                    { id: 'frontend', label: 'Frontend' },
+                    { id: 'backend', label: 'Backend' },
+                    { id: 'infra', label: 'Infrastructure' },
+                ],
+            },
+            {
+                id: 'product',
+                label: 'Product',
+                subgroups: [
+                    { id: 'pm', label: 'Product Management' },
+                    { id: 'analytics', label: 'Analytics' },
+                ],
+            },
+        ];
+
+        new GroupPicker('#group-picker-demo', data, {
+            searchPlaceholder: 'Search groups…',
+            onSelectionChange: (selected) => {
+                document.getElementById('picker-output').textContent = JSON.stringify(selected, null, 2);
+            },
+        });
+
+        new CodeViewer('#code-js', `import { GroupPicker } from '@dodlhuat/basix/js/group-picker.js';
+
+const picker = new GroupPicker('#my-picker', [
+  {
+    id: 'design',
+    label: 'Design',
+    subgroups: [
+      { id: 'ux', label: 'UX Research' },
+      { id: 'ui', label: 'UI Design' },
+    ],
+  },
+  {
+    id: 'engineering',
+    label: 'Engineering',
+    subgroups: [
+      { id: 'frontend', label: 'Frontend' },
+      { id: 'backend', label: 'Backend' },
+    ],
+  },
+], {
+  searchPlaceholder:     'Search groups…',
+  selectAllLabel:        'All',
+  deselectLabel:         'Deselect',
+  emptyLabel:            'No results',
+  selectionPlaceholder:  'No selection',
+  onSelectionChange: (selected) => {
+    console.log(selected); // { parents: Set, subs: Map }
+  },
+});`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Group Picker</h1>
+            <p class="docs-lead">Hierarchical multi-select component with collapsible groups, search filtering, and a chip-based selection summary. Pass a tree of groups and subgroups — the picker handles the rest.</p>
+
+            <h2>Demo</h2>
+            <div class="docs-demo" style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;">
+                <div id="group-picker-demo" style="width:320px;"></div>
+                <div>
+                    <p style="margin:0 0 0.4rem;font-size:0.85rem;color:var(--secondary-text);">Selection (onSelectionChange output):</p>
+                    <pre id="picker-output" style="font-size:0.8rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:0.75rem;min-width:200px;min-height:48px;"></pre>
+                </div>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-js"></div>
+
+            <h2>Data format</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>id</code></td><td>string</td><td>Unique identifier for the group or subgroup.</td></tr>
+                    <tr><td><code>label</code></td><td>string</td><td>Display name shown in the list.</td></tr>
+                    <tr><td><code>subgroups</code></td><td>array</td><td>Optional array of child items (same shape without nesting).</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>onSelectionChange</code></td><td>function</td><td>—</td><td>Called with <code>{ parents: Set, subs: Map }</code> whenever selection changes.</td></tr>
+                    <tr><td><code>searchPlaceholder</code></td><td>string</td><td><code>'Gruppen durchsuchen…'</code></td><td>Placeholder text in the search input.</td></tr>
+                    <tr><td><code>selectAllLabel</code></td><td>string</td><td><code>'Alle'</code></td><td>Label for the "select all subgroups" action.</td></tr>
+                    <tr><td><code>deselectLabel</code></td><td>string</td><td><code>'Abwählen'</code></td><td>Label for the "deselect" action.</td></tr>
+                    <tr><td><code>emptyLabel</code></td><td>string</td><td><code>'Keine Ergebnisse'</code></td><td>Message shown when search yields no results.</td></tr>
+                    <tr><td><code>selectionPlaceholder</code></td><td>string</td><td><code>'Noch keine Auswahl'</code></td><td>Placeholder text in the chip area when nothing is selected.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

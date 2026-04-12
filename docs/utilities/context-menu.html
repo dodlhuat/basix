@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Context Menu — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { ContextMenu } from '../../js/context-menu.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new ContextMenu('#ctx-target', [
+            { label: 'Open',    action: () => alert('Open') },
+            { label: 'Rename',  action: () => alert('Rename') },
+            { label: 'Copy',    action: () => alert('Copy') },
+            { type: 'separator' },
+            {
+                label: 'Share',
+                children: [
+                    { label: 'Copy link',    action: () => alert('Copy link') },
+                    { label: 'Send by mail', action: () => alert('Send mail') },
+                ],
+            },
+            { type: 'separator' },
+            { label: 'Delete', action: () => alert('Delete'), danger: true },
+        ]);
+
+        new CodeViewer('#code-js', `import { ContextMenu } from '@dodlhuat/basix/js/context-menu.js';
+
+const menu = new ContextMenu('#my-target', [
+  { label: 'Open',   action: () => console.log('open') },
+  { label: 'Rename', action: () => console.log('rename') },
+  { type: 'separator' },
+  {
+    label: 'Share',
+    children: [
+      { label: 'Copy link',    action: () => {} },
+      { label: 'Send by mail', action: () => {} },
+    ],
+  },
+  { type: 'separator' },
+  { label: 'Delete', action: () => {}, danger: true },
+]);
+
+menu.destroy();`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Context Menu</h1>
+            <p class="docs-lead">Right-click context menu with nested submenus, separators, danger items, and full keyboard navigation (↑ ↓ Enter Escape). Attach to any element — the menu opens at cursor position.</p>
+
+            <h2>Demo</h2>
+            <div class="docs-demo">
+                <div id="ctx-target" style="padding:2rem;border:2px dashed var(--border);border-radius:var(--radius-md);text-align:center;cursor:context-menu;user-select:none;">
+                    Right-click here to open the context menu
+                </div>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-js"></div>
+
+            <h2>Item schema</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>label</code></td><td>string</td><td>Display text of the menu item.</td></tr>
+                    <tr><td><code>action</code></td><td>function</td><td>Called when the item is clicked or activated via keyboard.</td></tr>
+                    <tr><td><code>children</code></td><td>Item[]</td><td>Nested submenu items — renders a flyout panel on hover/focus.</td></tr>
+                    <tr><td><code>type</code></td><td>'separator'</td><td>Renders a horizontal divider line instead of an interactive item.</td></tr>
+                    <tr><td><code>danger</code></td><td>boolean</td><td>Applies a destructive red colour to the item label.</td></tr>
+                    <tr><td><code>disabled</code></td><td>boolean</td><td>Renders the item as non-interactive.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>API</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>destroy()</code></td><td>Removes all event listeners from the target elements.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Keyboard navigation</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Key</th><th>Action</th></tr></thead>
+                <tbody>
+                    <tr><td>↑ / ↓</td><td>Move focus between items.</td></tr>
+                    <tr><td>Enter</td><td>Activate focused item.</td></tr>
+                    <tr><td>Escape</td><td>Close the menu.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

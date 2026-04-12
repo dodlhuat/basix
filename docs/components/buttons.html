@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Buttons & Chips — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <style>
+        .icon-svg { fill: currentColor; display: inline-block; vertical-align: middle; width: 16px; height: 16px; }
+    </style>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new CodeViewer('#code-buttons', `<!-- Variants -->
+<button>Default</button>
+<button class="button-primary">Primary</button>
+<button class="button-success">Success</button>
+<button class="button-warning">Warning</button>
+<button class="button-error">Error</button>
+
+<!-- Ghost / outline -->
+<button class="button ghost">Ghost</button>
+<button class="button accent">Accent</button>
+
+<!-- Loading state -->
+<button class="is-loading">Loading…</button>
+
+<!-- Disabled -->
+<button disabled>Disabled</button>`, 'html');
+
+        new CodeViewer('#code-chips', `<div class="chips">
+  <div class="chip">Default</div>
+  <div class="chip clickable">Clickable</div>
+  <div class="chip closeable">
+    Closeable
+    <button class="close">×</button>
+  </div>
+  <div class="chip chip-accent">Accent</div>
+  <div class="chip chip-success">Success</div>
+  <div class="chip chip-warning">Warning</div>
+  <div class="chip chip-error">Error</div>
+  <div class="chip chip-outline">Outline</div>
+</div>`, 'html');
+
+        new CodeViewer('#code-badge', `<span class="badge">Default</span>
+<span class="badge badge-info">Info</span>
+<span class="badge badge-success">Success</span>
+<span class="badge badge-warning">Warning</span>
+<span class="badge badge-error">Error</span>
+
+<!-- Solid -->
+<span class="badge badge-solid badge-success">Solid</span>
+
+<!-- Outline -->
+<span class="badge badge-outline badge-error">Outline</span>
+
+<!-- Sizes -->
+<span class="badge badge-sm badge-info">Small</span>
+<span class="badge badge-info">Default</span>
+<span class="badge badge-lg badge-info">Large</span>
+
+<!-- Dot -->
+<span class="badge badge-dot badge-success"></span>`, 'html');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Buttons &amp; Chips</h1>
+            <p class="docs-lead">Pure CSS components. Buttons use the native <code>&lt;button&gt;</code> element with optional modifier classes. Chips are compact labels or filters. Badges display counts or statuses.</p>
+
+            <h2>Buttons</h2>
+            <div class="docs-demo" style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+                <button>Default</button>
+                <button class="button-primary">Primary</button>
+                <button class="button-success">Success</button>
+                <button class="button-warning">Warning</button>
+                <button class="button-error">Error</button>
+                <button class="button ghost">Ghost</button>
+                <button class="button accent">Accent</button>
+                <button disabled>Disabled</button>
+            </div>
+
+            <h3>Loading state</h3>
+            <div class="docs-demo" style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+                <button class="is-loading">Default</button>
+                <button class="button-primary is-loading">Primary</button>
+                <button class="button-success is-loading">Success</button>
+                <button class="button-error is-loading">Error</button>
+            </div>
+
+            <div id="code-buttons"></div>
+
+            <h2>Chips</h2>
+            <p>Use <code>.chips</code> as a container and <code>.chip</code> on each item. Add <code>.clickable</code> for hover effects, <code>.closeable</code> for a close button.</p>
+            <div class="docs-demo">
+                <div class="chips">
+                    <div class="chip">Default</div>
+                    <div class="chip clickable">Clickable</div>
+                    <div class="chip closeable">Closeable <button class="close">×</button></div>
+                    <div class="chip chip-accent">Accent</div>
+                    <div class="chip chip-success">Success</div>
+                    <div class="chip chip-warning">Warning</div>
+                    <div class="chip chip-error">Error</div>
+                    <div class="chip chip-outline">Outline</div>
+                </div>
+            </div>
+            <div id="code-chips"></div>
+
+            <h2>Badge</h2>
+            <p>Compact status labels. Supports soft (default), solid, and outline styles plus size variants and dot indicators.</p>
+            <div class="docs-demo" style="display:flex;flex-direction:column;gap:0.75rem;">
+                <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+                    <span class="badge">Default</span>
+                    <span class="badge badge-info">Info</span>
+                    <span class="badge badge-success">Success</span>
+                    <span class="badge badge-warning">Warning</span>
+                    <span class="badge badge-error">Error</span>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+                    <span class="badge badge-solid badge-info">Solid info</span>
+                    <span class="badge badge-solid badge-success">Solid success</span>
+                    <span class="badge badge-solid badge-warning">Solid warning</span>
+                    <span class="badge badge-solid badge-error">Solid error</span>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+                    <span class="badge badge-outline">Outline</span>
+                    <span class="badge badge-outline badge-info">Info</span>
+                    <span class="badge badge-outline badge-success">Success</span>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+                    <span class="badge badge-sm badge-info">Small</span>
+                    <span class="badge badge-info">Default</span>
+                    <span class="badge badge-lg badge-info">Large</span>
+                    <span class="badge badge-dot"></span>
+                    <span class="badge badge-dot badge-info"></span>
+                    <span class="badge badge-dot badge-success"></span>
+                    <span class="badge badge-dot badge-warning"></span>
+                    <span class="badge badge-dot badge-error"></span>
+                </div>
+            </div>
+            <div id="code-badge"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

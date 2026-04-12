@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Flyout Menu — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { FlyoutMenu } from '../../js/flyout-menu.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        // Demo flyout embedded in the page
+        const flyout = new FlyoutMenu({
+            triggerSelector: '#demo-flyout-trigger',
+            menuSelector:    '#demo-flyout-menu',
+            overlaySelector: '#demo-flyout-overlay',
+            closeSelector:   '#demo-flyout-close',
+            direction:       'right',
+            title:           'Demo Menu',
+            enableHeader:    true,
+            enableFooter:    true,
+            footerText:      '© 2026 Basix',
+        });
+
+        document.getElementById('demo-flyout-trigger')?.addEventListener('click', () => flyout.open());
+
+        new CodeViewer('#code-html', `<!-- Trigger button -->
+<button id="my-trigger">Open menu</button>
+
+<!-- Overlay backdrop -->
+<div class="flyout-overlay" id="flyoutOverlay"></div>
+
+<!-- Menu panel -->
+<div class="flyout-menu" id="flyoutMenu">
+  <ul>
+    <li>Section
+      <ul>
+        <li><a href="#">Item A</a></li>
+        <li><a href="#">Item B</a></li>
+      </ul>
+    </li>
+    <li><a href="#">Standalone link</a></li>
+  </ul>
+</div>`, 'html');
+
+        new CodeViewer('#code-js', `import { FlyoutMenu } from '@dodlhuat/basix/js/flyout-menu.js';
+
+const flyout = new FlyoutMenu({
+  triggerSelector: '.trigger-flyout-menu', // opens the menu
+  menuSelector:    '#flyoutMenu',
+  overlaySelector: '#flyoutOverlay',
+  closeSelector:   '.close-menu',          // elements inside that close on click
+  direction:       'right',               // 'right' | 'left'
+  title:           'Navigation',
+  enableHeader:    true,
+  footerText:      '© 2026 Brand Inc.',
+  enableFooter:    true,
+});
+
+// Programmatic control
+flyout.open();
+flyout.close();
+flyout.destroy();`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+
+<!-- Demo flyout elements (outside docs layout so they render correctly) -->
+<div class="flyout-overlay" id="demo-flyout-overlay"></div>
+<div class="flyout-menu" id="demo-flyout-menu">
+    <ul>
+        <li>Foundation
+            <ul>
+                <li><a href="../foundation/layout.html">Layout &amp; Grid</a></li>
+                <li><a href="../foundation/typography.html">Typography</a></li>
+                <li><a href="../foundation/colors.html">Colors</a></li>
+            </ul>
+        </li>
+        <li>Forms
+            <ul>
+                <li><a href="../forms/inputs.html">Inputs</a></li>
+                <li><a href="../forms/datepicker.html">Date Picker</a></li>
+            </ul>
+        </li>
+        <li><a href="../../showcase.html">Full Showcase</a></li>
+    </ul>
+</div>
+
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Flyout Menu</h1>
+            <p class="docs-lead">A slide-in navigation panel that overlays the page from the left or right edge. Supports nested submenus, optional header and footer, keyboard Escape to close, and overlay-click dismissal.</p>
+
+            <h2>Demo</h2>
+            <div class="docs-demo centered">
+                <button class="button" id="demo-flyout-trigger">Open flyout →</button>
+                <button class="button ghost" id="demo-flyout-close" style="display:none;">Close</button>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>triggerSelector</code></td><td>string</td><td><code>'.menu-trigger'</code></td><td>Elements that open the menu on click.</td></tr>
+                    <tr><td><code>menuSelector</code></td><td>string</td><td><code>'#flyoutMenu'</code></td><td>The flyout panel element.</td></tr>
+                    <tr><td><code>overlaySelector</code></td><td>string</td><td><code>'#flyoutOverlay'</code></td><td>The backdrop overlay element.</td></tr>
+                    <tr><td><code>closeSelector</code></td><td>string</td><td><code>'.close-menu'</code></td><td>Elements inside the menu that close it on click.</td></tr>
+                    <tr><td><code>direction</code></td><td>right | left</td><td><code>'right'</code></td><td>Side the panel slides in from.</td></tr>
+                    <tr><td><code>title</code></td><td>string</td><td><code>'Menu'</code></td><td>Header title text.</td></tr>
+                    <tr><td><code>enableHeader</code></td><td>boolean</td><td><code>true</code></td><td>Show the menu header with title.</td></tr>
+                    <tr><td><code>footerText</code></td><td>string</td><td><code>'© 2025 Brand Inc.'</code></td><td>Footer text content.</td></tr>
+                    <tr><td><code>enableFooter</code></td><td>boolean</td><td><code>true</code></td><td>Show the menu footer.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>API</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>open()</code></td><td>Opens the flyout panel.</td></tr>
+                    <tr><td><code>close()</code></td><td>Closes the flyout panel.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Removes all event listeners.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

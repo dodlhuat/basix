@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Accordion — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        // Pure CSS accordion — no JS needed
+        new CodeViewer('#code-accordion', `<div class="accordion">
+  <div class="accordion-item">
+    <input type="checkbox" id="acc1" class="accordion-toggle"/>
+    <label class="accordion-header" for="acc1">
+      What is Basix?
+    </label>
+    <div class="accordion-body">
+      <p>Basix is a lightweight, framework-free CSS and TypeScript component library.</p>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <input type="checkbox" id="acc2" class="accordion-toggle"/>
+    <label class="accordion-header" for="acc2">
+      Do I need a framework?
+    </label>
+    <div class="accordion-body">
+      <p>No. Basix works with any stack, or plain HTML.</p>
+    </div>
+  </div>
+</div>`, 'html');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Accordion</h1>
+            <p class="docs-lead">Collapsible content sections powered entirely by CSS using the <code>checkbox</code> + <code>label</code> pattern. No JavaScript required.</p>
+
+            <h2>Demo</h2>
+            <div class="docs-demo">
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <input type="checkbox" id="acc1" class="accordion-toggle" checked/>
+                        <label class="accordion-header" for="acc1">What is Basix?</label>
+                        <div class="accordion-body">
+                            <p>Basix is a lightweight, framework-free CSS and TypeScript component library. Drop in the stylesheet, import the modules you need — done.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <input type="checkbox" id="acc2" class="accordion-toggle"/>
+                        <label class="accordion-header" for="acc2">Do I need a build tool?</label>
+                        <div class="accordion-body">
+                            <p>No. You can link the compiled CSS directly. The TypeScript modules are also available as plain ES modules (.js) so no bundler is required.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <input type="checkbox" id="acc3" class="accordion-toggle"/>
+                        <label class="accordion-header" for="acc3">Does it support dark mode?</label>
+                        <div class="accordion-body">
+                            <p>Yes. The Theme utility handles light, dark, and system-preference modes using CSS custom properties.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-accordion"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

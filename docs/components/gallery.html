@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Gallery — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Gallery } from '../../js/gallery.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new Gallery('#gallery-demo');
+
+        new CodeViewer('#code-html', `<div class="gallery" id="my-gallery">
+  <figure class="gallery-item">
+    <img src="photo1.jpg" alt="Description" loading="lazy"/>
+  </figure>
+  <figure class="gallery-item">
+    <img src="photo2.jpg" alt="Description" loading="lazy"/>
+    <figcaption>Optional caption</figcaption>
+  </figure>
+</div>`, 'html');
+
+        new CodeViewer('#code-js', `import { Gallery } from '@dodlhuat/basix/js/gallery.js';
+
+// Enables lightbox on click for all .gallery-item images
+const gallery = new Gallery('#my-gallery');
+
+gallery.destroy();`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Gallery</h1>
+            <p class="docs-lead">CSS grid image gallery with optional lightbox on click. Images load lazily with the native <code>loading="lazy"</code> attribute. The <code>Gallery</code> class intercepts clicks to open a full-screen lightbox with keyboard navigation.</p>
+
+            <h2>Demo</h2>
+            <div class="docs-demo">
+                <div class="gallery" id="gallery-demo">
+                    <figure class="gallery-item">
+                        <div style="background:var(--accent-tint);height:140px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:600;">Image 1</div>
+                    </figure>
+                    <figure class="gallery-item">
+                        <div style="background:var(--success-tint);height:200px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--success);font-weight:600;">Image 2</div>
+                    </figure>
+                    <figure class="gallery-item">
+                        <div style="background:var(--warning-tint);height:160px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--warning);font-weight:600;">Image 3</div>
+                    </figure>
+                    <figure class="gallery-item">
+                        <div style="background:var(--error-tint);height:180px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--error);font-weight:600;">Image 4</div>
+                    </figure>
+                    <figure class="gallery-item">
+                        <div style="background:var(--primary-tint);height:150px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-weight:600;">Image 5</div>
+                    </figure>
+                    <figure class="gallery-item">
+                        <div style="background:var(--accent-tint);height:190px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:600;">Image 6</div>
+                        <figcaption>With caption</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <h2>Lightbox controls</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Interaction</th><th>Action</th></tr></thead>
+                <tbody>
+                    <tr><td>Click image</td><td>Opens lightbox on that image.</td></tr>
+                    <tr><td>← → Arrow keys</td><td>Navigate to previous / next image.</td></tr>
+                    <tr><td>Escape</td><td>Close the lightbox.</td></tr>
+                    <tr><td>Click overlay</td><td>Close the lightbox.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

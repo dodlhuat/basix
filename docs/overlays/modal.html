@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Modal — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Modal } from '../../js/modal.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        document.getElementById('demo-default')?.addEventListener('click', () => {
+            new Modal({ header: 'Default Modal', content: '<p>This is a basic modal with a header and content area.</p>', footer: '<button class="button" onclick="this.closest(\'.modal-overlay\').remove()">Close</button>', closeable: true });
+        });
+        document.getElementById('demo-success')?.addEventListener('click', () => {
+            new Modal({ header: 'Success', content: '<p>Your changes have been saved successfully.</p>', type: 'success', closeable: true });
+        });
+        document.getElementById('demo-error')?.addEventListener('click', () => {
+            new Modal({ header: 'Error', content: '<p>Something went wrong. Please try again.</p>', type: 'error', closeable: true });
+        });
+        document.getElementById('demo-warning')?.addEventListener('click', () => {
+            new Modal({ header: 'Warning', content: '<p>This action cannot be undone. Are you sure?</p>', type: 'warning', closeable: true, footer: '<button class="button ghost" onclick="this.closest(\'.modal-overlay\').remove()">Cancel</button><button class="button accent" style="margin-left:0.5rem">Confirm</button>' });
+        });
+        document.getElementById('demo-info')?.addEventListener('click', () => {
+            new Modal({ header: 'Information', content: '<p>Here is some important information for you.</p>', type: 'info', closeable: true });
+        });
+
+        new CodeViewer('#code-html', `<!-- No HTML markup needed — modal is built entirely in JS -->`, 'html');
+        new CodeViewer('#code-js', `import { Modal } from '@dodlhuat/basix/js/modal.js';
+
+new Modal({
+  header:    '<strong>Confirm action</strong>',
+  content:   '<p>Are you sure you want to proceed?</p>',
+  footer:    '<button class="button ghost" id="cancel">Cancel</button>',
+  type:      'warning',   // 'default' | 'success' | 'error' | 'warning' | 'info'
+  closeable: true,        // show × button + close on backdrop/Escape
+});`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Modal</h1>
+            <p class="docs-lead">Dialog overlays with header, content, and footer sections. Supports semantic types, a close button, backdrop and Escape key dismissal. Built entirely in JavaScript — no HTML markup required.</p>
+
+            <h2>Variants</h2>
+            <div class="docs-demo centered">
+                <button class="button" id="demo-default">Default</button>
+                <button class="button" id="demo-success">Success</button>
+                <button class="button" id="demo-error">Error</button>
+                <button class="button" id="demo-warning">Warning</button>
+                <button class="button" id="demo-info">Info</button>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>content</code></td><td>string</td><td>—</td><td>HTML string for the modal body.</td></tr>
+                    <tr><td><code>header</code></td><td>string</td><td>—</td><td>HTML string for the modal header.</td></tr>
+                    <tr><td><code>footer</code></td><td>string</td><td>—</td><td>HTML string for the modal footer, typically action buttons.</td></tr>
+                    <tr><td><code>type</code></td><td>default | success | error | warning | info</td><td><code>'default'</code></td><td>Applies a semantic colour to the modal header.</td></tr>
+                    <tr><td><code>closeable</code></td><td>boolean</td><td><code>true</code></td><td>Shows × button and enables backdrop/Escape dismissal.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

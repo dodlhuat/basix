@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Popover — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css" type="text/css"/>
+    <style>
+        .placement-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 0.5rem;
+            align-items: center;
+            justify-items: center;
+            width: 260px;
+            margin: 0 auto;
+        }
+        .placement-grid .top    { grid-column: 2; grid-row: 1; }
+        .placement-grid .middle { grid-column: 1 / -1; grid-row: 2; display: flex; gap: 2rem; align-items: center; justify-content: space-between; width: 100%; }
+        .placement-grid .bottom { grid-column: 2; grid-row: 3; }
+    </style>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Popover } from '../../js/popover.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+
+        new DocsNav();
+        Theme.init();
+
+        // Placement demo
+        new Popover('#pop-bottom', { content: '<strong>Bottom</strong><p style="margin:0.25rem 0 0;font-size:0.85rem;">Flips to top when no room.</p>', placement: 'bottom' });
+        new Popover('#pop-top',    { content: '<strong>Top</strong><p style="margin:0.25rem 0 0;font-size:0.85rem;">Flips to bottom when no room.</p>', placement: 'top' });
+        new Popover('#pop-left',   { content: '<strong>Left</strong><p style="margin:0.25rem 0 0;font-size:0.85rem;">Flips to right when no room.</p>', placement: 'left' });
+        new Popover('#pop-right',  { content: '<strong>Right</strong><p style="margin:0.25rem 0 0;font-size:0.85rem;">Flips to left when no room.</p>', placement: 'right' });
+
+        // Alignment demo
+        new Popover('#pop-align-start',  { content: 'align: start',  placement: 'bottom', align: 'start' });
+        new Popover('#pop-align-center', { content: 'align: center', placement: 'bottom', align: 'center' });
+        new Popover('#pop-align-end',    { content: 'align: end',    placement: 'bottom', align: 'end' });
+
+        // Hover trigger
+        new Popover('#pop-hover', {
+            content: '<strong>Hover trigger</strong><p style="margin:0.25rem 0 0;font-size:0.85rem;">Opens on mouseenter, closes after 120ms delay.</p>',
+            placement: 'top',
+            triggerMode: 'hover',
+        });
+
+        // No arrow
+        new Popover('#pop-no-arrow', {
+            content: `<ul style="list-style:none;margin:0;padding:0;min-width:140px;">
+                <li><button class="button ghost" style="width:100%;text-align:left;">Edit</button></li>
+                <li><button class="button ghost" style="width:100%;text-align:left;">Duplicate</button></li>
+                <li><hr style="margin:0.25rem 0;border-color:var(--divider)"></li>
+                <li><button class="button ghost" style="width:100%;text-align:left;color:var(--error)">Delete</button></li>
+            </ul>`,
+            placement: 'bottom',
+            align: 'end',
+            arrow: false,
+        });
+
+        // Code examples
+        new CodeViewer('#code-html', `<!-- Trigger — any focusable element works -->
+<button class="button" id="my-trigger">Open</button>`, 'html');
+
+        new CodeViewer('#code-js', `import { Popover } from '@dodlhuat/basix/js/popover.js';
+
+const pop = new Popover('#my-trigger', {
+  content:             '<strong>Title</strong><p>Body content.</p>',
+  placement:           'bottom',   // 'top' | 'bottom' | 'left' | 'right'
+  align:               'center',   // 'start' | 'center' | 'end'
+  offset:              8,          // px gap between trigger and popover
+  arrow:               true,       // bordered arrow
+  triggerMode:         'click',    // 'click' | 'hover'
+  closeOnOutsideClick: true,
+  closeOnEscape:       true,
+  onOpen:  () => {},
+  onClose: () => {},
+});
+
+// API
+pop.open();
+pop.close();
+pop.toggle();
+pop.destroy();
+Popover.closeAll();`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20">
+                        <use href="../../svg-icons/icons.svg#clear_day"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="docs-content">
+            <h1>Popover</h1>
+            <p class="docs-lead">
+                Attaches a floating overlay to any trigger element. Unlike Modal, the rest of the page
+                stays interactive. Supports four placements with automatic flip on collision,
+                cross-axis alignment, click and hover trigger modes, and an optional bordered arrow.
+            </p>
+
+            <!-- Placement -->
+            <h2>Placement</h2>
+            <p>Use <code>placement</code> to set the preferred side. The popover automatically flips to the opposite side if there is not enough viewport space.</p>
+            <div class="docs-demo centered">
+                <div class="placement-grid">
+                    <div class="top"><button class="button" id="pop-top">Top</button></div>
+                    <div class="middle">
+                        <button class="button" id="pop-left">Left</button>
+                        <span style="width:60px;height:40px;border:2px dashed var(--divider);border-radius:0.4rem;"></span>
+                        <button class="button" id="pop-right">Right</button>
+                    </div>
+                    <div class="bottom"><button class="button" id="pop-bottom">Bottom</button></div>
+                </div>
+            </div>
+
+            <!-- Alignment -->
+            <h2>Alignment</h2>
+            <p>The <code>align</code> option controls where the popover sits on the cross axis relative to the trigger.</p>
+            <div class="docs-demo centered">
+                <button class="button" id="pop-align-start">Start</button>
+                <button class="button" id="pop-align-center">Center</button>
+                <button class="button" id="pop-align-end">End</button>
+            </div>
+
+            <!-- Trigger modes -->
+            <h2>Trigger modes</h2>
+            <p><code>triggerMode: 'click'</code> (default) toggles on click and closes other open popovers. <code>triggerMode: 'hover'</code> opens on mouseenter with a 120 ms close delay.</p>
+            <div class="docs-demo centered">
+                <button class="button" id="pop-hover">Hover me</button>
+            </div>
+
+            <!-- No arrow / menu -->
+            <h2>Without arrow</h2>
+            <p>Set <code>arrow: false</code> for contextual menus or other content where an arrow would look out of place. Combine with <code>align: 'end'</code> for dropdown-style menus.</p>
+            <div class="docs-demo" style="display:flex;justify-content:flex-end;">
+                <button class="button" id="pop-no-arrow">Actions ⋯</button>
+            </div>
+
+            <!-- Usage -->
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <!-- Options table -->
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>content</code></td><td>string</td><td>—</td><td>HTML string rendered inside the popover.</td></tr>
+                    <tr><td><code>placement</code></td><td>top | bottom | left | right</td><td><code>'bottom'</code></td><td>Preferred placement. Flips automatically on collision.</td></tr>
+                    <tr><td><code>align</code></td><td>start | center | end</td><td><code>'center'</code></td><td>Cross-axis alignment relative to the trigger.</td></tr>
+                    <tr><td><code>offset</code></td><td>number</td><td><code>8</code></td><td>Gap in px between trigger and popover.</td></tr>
+                    <tr><td><code>arrow</code></td><td>boolean</td><td><code>true</code></td><td>Show a bordered arrow pointing at the trigger.</td></tr>
+                    <tr><td><code>triggerMode</code></td><td>click | hover</td><td><code>'click'</code></td><td>How the popover is opened.</td></tr>
+                    <tr><td><code>closeOnOutsideClick</code></td><td>boolean</td><td><code>true</code></td><td>Close when clicking outside the popover and trigger.</td></tr>
+                    <tr><td><code>closeOnEscape</code></td><td>boolean</td><td><code>true</code></td><td>Close on Escape key.</td></tr>
+                    <tr><td><code>className</code></td><td>string</td><td><code>''</code></td><td>Extra CSS class added to the popover element.</td></tr>
+                    <tr><td><code>onOpen</code></td><td>() =&gt; void</td><td>—</td><td>Callback fired after the popover opens.</td></tr>
+                    <tr><td><code>onClose</code></td><td>() =&gt; void</td><td>—</td><td>Callback fired after the popover closes.</td></tr>
+                </tbody>
+            </table>
+
+            <!-- API -->
+            <h2>API</h2>
+            <table class="docs-props-table">
+                <thead>
+                    <tr><th>Method / Property</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>open()</code></td><td>Opens the popover.</td></tr>
+                    <tr><td><code>close()</code></td><td>Closes the popover.</td></tr>
+                    <tr><td><code>toggle()</code></td><td>Toggles open/close.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Removes event listeners and closes the popover.</td></tr>
+                    <tr><td><code>isOpen</code></td><td>Boolean — whether the popover is currently open.</td></tr>
+                    <tr><td><code>Popover.closeAll()</code></td><td>Closes all currently open popovers.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

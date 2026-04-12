@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Toast — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Toast } from '../../js/toast.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        document.getElementById('demo-default')?.addEventListener('click', () => new Toast({ header: 'Default', content: 'A plain notification message.', closeable: true, autoClose: 4000 }));
+        document.getElementById('demo-success')?.addEventListener('click', () => new Toast({ header: 'Success', content: 'Your changes were saved.', markup: 'success', closeable: true, autoClose: 4000 }));
+        document.getElementById('demo-warning')?.addEventListener('click', () => new Toast({ header: 'Warning', content: 'Please review your input.', markup: 'warning', closeable: true, autoClose: 4000 }));
+        document.getElementById('demo-error')?.addEventListener('click', () => new Toast({ header: 'Error', content: 'Something went wrong.', markup: 'error', closeable: true, autoClose: 4000 }));
+
+        new CodeViewer('#code-js', `import { Toast } from '@dodlhuat/basix/js/toast.js';
+
+new Toast({
+  header:    'Success',
+  content:   'Your changes were saved.',
+  markup:    'success',    // 'default' | 'success' | 'warning' | 'error'
+  closeable: true,         // show close button
+  autoClose: 4000,         // ms until auto-dismiss (omit to stay)
+});`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Toast</h1>
+            <p class="docs-lead">Brief notification messages that appear in the corner of the viewport and auto-dismiss after a configurable delay. Supports four semantic variants and an optional close button.</p>
+
+            <h2>Variants</h2>
+            <div class="docs-demo centered">
+                <button class="button" id="demo-default">Default</button>
+                <button class="button" id="demo-success">Success</button>
+                <button class="button" id="demo-warning">Warning</button>
+                <button class="button" id="demo-error">Error</button>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-js"></div>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>content</code></td><td>string</td><td>—</td><td>The notification body text or HTML.</td></tr>
+                    <tr><td><code>header</code></td><td>string</td><td>—</td><td>Optional title above the content.</td></tr>
+                    <tr><td><code>markup</code></td><td>default | success | warning | error</td><td><code>'default'</code></td><td>Semantic colour variant.</td></tr>
+                    <tr><td><code>closeable</code></td><td>boolean</td><td><code>true</code></td><td>Shows a close (×) button.</td></tr>
+                    <tr><td><code>autoClose</code></td><td>number</td><td>—</td><td>Milliseconds until the toast auto-dismisses. Omit to persist.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Tabs — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Tabs } from '../../js/tabs.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new Tabs('#demo-tabs');
+        new Tabs('#demo-tabs-pills');
+
+        new CodeViewer('#code-html', `<div class="tabs" id="myTabs">
+  <div class="tabs-header">
+    <button class="tab-btn active" data-tab="tab1">General</button>
+    <button class="tab-btn" data-tab="tab2">Profile</button>
+    <button class="tab-btn" data-tab="tab3">Billing</button>
+  </div>
+  <div class="tab-panel active" id="tab1">
+    <p>General settings content.</p>
+  </div>
+  <div class="tab-panel" id="tab2">
+    <p>Profile content.</p>
+  </div>
+  <div class="tab-panel" id="tab3">
+    <p>Billing content.</p>
+  </div>
+</div>`, 'html');
+
+        new CodeViewer('#code-js', `import { Tabs } from '@dodlhuat/basix/js/tabs.js';
+
+const tabs = new Tabs('#myTabs');
+
+// API
+tabs.goTo('tab2');   // activate by panel id
+tabs.destroy();`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Tabs</h1>
+            <p class="docs-lead">Organise content into switchable panels. Driven by <code>data-tab</code> attributes. Add <code>.tabs-pills</code> to the wrapper for a pill-style variant.</p>
+
+            <h2>Default</h2>
+            <div class="docs-demo">
+                <div class="tabs" id="demo-tabs">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" data-tab="t1">General</button>
+                        <button class="tab-btn" data-tab="t2">Profile</button>
+                        <button class="tab-btn" data-tab="t3">Privacy</button>
+                        <button class="tab-btn" data-tab="t4">Billing</button>
+                    </div>
+                    <div class="tab-panel active" id="t1"><p>General settings content.</p></div>
+                    <div class="tab-panel" id="t2"><p>Profile content.</p></div>
+                    <div class="tab-panel" id="t3"><p>Privacy settings.</p></div>
+                    <div class="tab-panel" id="t4"><p>Billing &amp; invoices.</p></div>
+                </div>
+            </div>
+
+            <h2>Pills variant</h2>
+            <div class="docs-demo">
+                <div class="tabs tabs-pills" id="demo-tabs-pills">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" data-tab="p1">Overview</button>
+                        <button class="tab-btn" data-tab="p2">Analytics</button>
+                        <button class="tab-btn" data-tab="p3">Reports</button>
+                    </div>
+                    <div class="tab-panel active" id="p1"><p>Overview panel.</p></div>
+                    <div class="tab-panel" id="p2"><p>Analytics panel.</p></div>
+                    <div class="tab-panel" id="p3"><p>Reports panel.</p></div>
+                </div>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

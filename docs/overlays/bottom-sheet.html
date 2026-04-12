@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Bottom Sheet — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { BottomSheet } from '../../js/bottom-sheet.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        const content = '<p>This is the bottom sheet content. It can contain any HTML including forms, lists, or action buttons.</p><p>Try dragging it down to dismiss.</p>';
+
+        document.getElementById('demo-auto')?.addEventListener('click', () => new BottomSheet({ header: 'Auto height', content, closeable: true, snapHeight: 'auto' }));
+        document.getElementById('demo-half')?.addEventListener('click', () => new BottomSheet({ header: 'Half screen', content, closeable: true, snapHeight: 'half' }));
+        document.getElementById('demo-full')?.addEventListener('click', () => new BottomSheet({ header: 'Full screen', content, closeable: true, snapHeight: 'full' }));
+
+        new CodeViewer('#code-js', `import { BottomSheet } from '@dodlhuat/basix/js/bottom-sheet.js';
+
+new BottomSheet({
+  header:     'Filter results',
+  content:    '<p>Sheet body — any HTML.</p>',
+  footer:     '<button class="button accent">Apply</button>',
+  closeable:  true,      // drag-to-dismiss, backdrop, Escape
+  snapHeight: 'auto',    // 'auto' | 'half' | 'full'
+});`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Bottom Sheet</h1>
+            <p class="docs-lead">Slides up from the bottom of the viewport — the native mobile pattern for actions, filters, and contextual content. Supports drag-to-dismiss, backdrop click, Escape key, and three snap heights.</p>
+
+            <h2>Snap heights</h2>
+            <div class="docs-demo centered">
+                <button class="button" id="demo-auto">Auto (content)</button>
+                <button class="button" id="demo-half">Half screen</button>
+                <button class="button" id="demo-full">Full screen</button>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-js"></div>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>content</code></td><td>string</td><td>—</td><td>HTML string for the sheet body.</td></tr>
+                    <tr><td><code>header</code></td><td>string</td><td>—</td><td>Optional header rendered above the content.</td></tr>
+                    <tr><td><code>footer</code></td><td>string</td><td>—</td><td>Optional footer, typically for action buttons.</td></tr>
+                    <tr><td><code>closeable</code></td><td>boolean</td><td><code>true</code></td><td>Enables backdrop click, Escape key, and drag-to-dismiss.</td></tr>
+                    <tr><td><code>snapHeight</code></td><td>auto | half | full</td><td><code>'auto'</code></td><td><code>auto</code> sizes to content (max 80 vh), <code>half</code> = 50 vh, <code>full</code> = near full-screen.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Timeline — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new CodeViewer('#code-html', `<ul class="timeline">
+  <li class="timeline-item">
+    <div class="timeline-marker"></div>
+    <div class="timeline-content">
+      <time class="timeline-time">Jan 2026</time>
+      <h4 class="timeline-title">Project launched</h4>
+      <p>Initial release published to npm.</p>
+    </div>
+  </li>
+  <li class="timeline-item">
+    <div class="timeline-marker success"></div>
+    <div class="timeline-content">
+      <time class="timeline-time">Feb 2026</time>
+      <h4 class="timeline-title">v1.1 — Forms</h4>
+      <p>Date picker and file uploader added.</p>
+    </div>
+  </li>
+</ul>`, 'html');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar"></aside>
+    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="docs-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Timeline</h1>
+            <p class="docs-lead">Vertical event timeline for changelogs, activity feeds, or process histories. Pure CSS — no JavaScript required. Markers support color variants for status communication.</p>
+
+            <h2>Default</h2>
+            <div class="docs-demo">
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <time class="timeline-time">Jan 2026</time>
+                            <h4 class="timeline-title">Project launched</h4>
+                            <p>Initial release published to npm with core components.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-marker success"></div>
+                        <div class="timeline-content">
+                            <time class="timeline-time">Feb 2026</time>
+                            <h4 class="timeline-title">v1.1 — Forms</h4>
+                            <p>Date picker, file uploader, and range slider added.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-marker warning"></div>
+                        <div class="timeline-content">
+                            <time class="timeline-time">Mar 2026</time>
+                            <h4 class="timeline-title">v1.2 — Charts (beta)</h4>
+                            <p>Chart component in public beta — API may change.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-marker accent"></div>
+                        <div class="timeline-content">
+                            <time class="timeline-time">Apr 2026</time>
+                            <h4 class="timeline-title">v2.0 planned</h4>
+                            <p>Full design token overhaul and new component variants.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <h2>With icon markers</h2>
+            <div class="docs-demo">
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <div class="timeline-marker success">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <div class="timeline-content">
+                            <time class="timeline-time">09:00</time>
+                            <h4 class="timeline-title">Build passed</h4>
+                            <p>All 142 tests green.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-marker error">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </div>
+                        <div class="timeline-content">
+                            <time class="timeline-time">10:15</time>
+                            <h4 class="timeline-title">Deploy failed</h4>
+                            <p>Out-of-memory on staging — rolled back.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <time class="timeline-time">11:30</time>
+                            <h4 class="timeline-title">Investigating</h4>
+                            <p>Memory limit increased in infrastructure config.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+
+            <h2>Marker variants</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Class on <code>.timeline-marker</code></th><th>Color</th></tr></thead>
+                <tbody>
+                    <tr><td><em>(none)</em></td><td>Primary / default</td></tr>
+                    <tr><td><code>.success</code></td><td>Green</td></tr>
+                    <tr><td><code>.warning</code></td><td>Amber</td></tr>
+                    <tr><td><code>.error</code></td><td>Red</td></tr>
+                    <tr><td><code>.accent</code></td><td>Accent color</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
