@@ -1003,24 +1003,10 @@ select {
   letter-spacing: 0.01em;
 }
 .form-group .form-hint {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.3rem;
   font-size: 0.75rem;
   line-height: 1.45;
   color: var(--secondary-text);
   margin-top: 0.125rem;
-}
-.form-group .form-hint::before {
-  content: "";
-  display: block;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: currentColor;
-  flex-shrink: 0;
-  margin-top: 0.38em;
-  opacity: 0.55;
 }
 .form-group.error input, .form-group.error textarea, .form-group.error select {
   border-color: var(--error);
@@ -4795,16 +4781,16 @@ body {
     transform: translateY(0);
   }
 }
-.uploader-content .header h2 {
+.file-uploader .header h2 {
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
-.uploader-content .header p {
+.file-uploader .header p {
   color: var(--secondary-text);
   font-size: 0.875rem;
 }
-.uploader-content .drop-zone {
+.file-uploader .drop-zone {
   border: 2px dashed var(--divider);
   border-radius: 0.4rem;
   padding: 2rem 1rem;
@@ -4813,18 +4799,18 @@ body {
   transition: border-color 0.2s ease, background-color 0.2s ease;
   background-color: var(--background);
 }
-.uploader-content .drop-zone:hover, .uploader-content .drop-zone.drag-over {
+.file-uploader .drop-zone:hover, .file-uploader .drop-zone.drag-over {
   border-color: var(--accent-color);
   background-color: color-mix(in srgb, var(--accent-color) 6%, var(--background));
 }
-.uploader-content .drop-zone-content {
+.file-uploader .drop-zone-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
   pointer-events: none;
 }
-.uploader-content .icon-container {
+.file-uploader .icon-container {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -4835,16 +4821,16 @@ body {
   justify-content: center;
   margin-bottom: 0.5rem;
 }
-.uploader-content .primary-text {
+.file-uploader .primary-text {
   font-weight: 500;
   color: var(--accent-color);
   font-size: 0.875rem;
 }
-.uploader-content .secondary-text {
+.file-uploader .secondary-text {
   color: var(--secondary-text);
   font-size: 0.75rem;
 }
-.uploader-content .file-list {
+.file-uploader .file-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -4852,7 +4838,7 @@ body {
   overflow-y: auto;
   margin-top: 1rem;
 }
-.uploader-content .file-item {
+.file-uploader .file-item {
   display: flex;
   flex-direction: column;
   padding: 0.75rem;
@@ -4862,39 +4848,39 @@ body {
   animation: fileSlideIn 0.2s ease-out;
   gap: 0.75rem;
 }
-.uploader-content .file-item-header {
+.file-uploader .file-item-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 }
-.uploader-content .file-info {
+.file-uploader .file-info {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   overflow: hidden;
 }
-.uploader-content .file-icon {
+.file-uploader .file-icon {
   color: var(--secondary-text);
   flex-shrink: 0;
 }
-.uploader-content .file-details {
+.file-uploader .file-details {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
-.uploader-content .file-name {
+.file-uploader .file-name {
   font-size: 0.875rem;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.uploader-content .file-size {
+.file-uploader .file-size {
   font-size: 0.75rem;
   color: var(--secondary-text);
 }
-.uploader-content .remove-btn {
+.file-uploader .remove-btn {
   flex-shrink: 0;
   background: none;
   border: none;
@@ -4907,11 +4893,11 @@ body {
   align-items: center;
   justify-content: center;
 }
-.uploader-content .remove-btn:hover {
+.file-uploader .remove-btn:hover {
   color: var(--error);
   background-color: color-mix(in srgb, var(--error) 10%, var(--background));
 }
-.uploader-content .progress-container {
+.file-uploader .progress-container {
   width: 100%;
   height: 4px;
   background-color: var(--divider);
@@ -4919,26 +4905,26 @@ body {
   overflow: hidden;
   display: none;
 }
-.uploader-content .progress-bar {
+.file-uploader .progress-bar {
   height: 100%;
   background-color: var(--accent-color);
   width: 0%;
   transition: width 0.3s ease, background-color 0.3s ease;
 }
-.uploader-content .status-text {
+.file-uploader .status-text {
   font-size: 0.75rem;
   color: var(--secondary-text);
   text-align: right;
   display: none;
 }
-.uploader-content .status-text.error {
+.file-uploader .status-text.error {
   color: var(--error);
 }
-.uploader-content .status-text.success {
+.file-uploader .status-text.success {
   color: var(--success);
 }
 @media (max-width: 480px) {
-  .uploader-content .drop-zone {
+  .file-uploader .drop-zone {
     padding: 1.5rem 1rem;
   }
 }
@@ -8112,8 +8098,8 @@ body {
 
 .sidebar-nav {
   width: var(--sidebar-width, 240px);
-  flex-shrink: 0;
-  position: sticky;
+  position: fixed;
+  left: 0;
   top: 0;
   height: 100vh;
   overflow-y: auto;
@@ -8131,6 +8117,7 @@ body {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  margin-left: var(--sidebar-width, 240px);
 }
 
 .sidebar-backdrop {
@@ -8166,15 +8153,16 @@ body {
     align-items: center;
   }
   .sidebar-nav {
-    position: fixed;
     left: calc(-1 * var(--sidebar-width, 240px));
-    top: 0;
     transition: left 0.25s ease;
     box-shadow: none;
   }
   .sidebar-nav.is-open {
     left: 0;
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  }
+  .sidebar-main {
+    margin-left: 0;
   }
 }
 .sidebar-nav .docs-sidebar-logo {
@@ -8369,6 +8357,29 @@ body {
   border-radius: 0.4rem;
   padding: 2rem;
   margin: 1rem 0;
+}
+.docs-content .docs-demo h1 {
+  font-size: 2rem;
+  font-weight: 800;
+}
+.docs-content .docs-demo h2 {
+  font-size: 1.625rem;
+  font-weight: 750;
+  border: none;
+  padding: 0;
+  margin-top: 0;
+}
+.docs-content .docs-demo h3 {
+  font-size: 1.375rem;
+  font-weight: 700;
+}
+.docs-content .docs-demo h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+.docs-content .docs-demo h5 {
+  font-size: 1rem;
+  font-weight: 600;
 }
 .docs-content .docs-demo.centered {
   display: flex;

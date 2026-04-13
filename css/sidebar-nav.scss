@@ -11,18 +11,23 @@
 
 .sidebar-nav {
   width: var(--sidebar-width, 240px);
-  flex-shrink: 0;
-  position: sticky;
+  position: fixed;
+  left: 0;
   top: 0;
   height: 100vh;
-  overflow-y: auto;
   background: var(--primary-bg);
   border-right: 1px solid var(--divider);
   display: flex;
   flex-direction: column;
   z-index: 100;
-  scrollbar-width: thin;
-  scrollbar-color: var(--divider) transparent;
+
+  .sidebar-scroll {
+    flex: 1;
+    min-height: 0;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }
 
 // ── Main content area ─────────────────────────────────────────────────────────
@@ -32,6 +37,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  margin-left: var(--sidebar-width, 240px);
 }
 
 // ── Backdrop (mobile overlay) ─────────────────────────────────────────────────
@@ -70,9 +76,7 @@
   }
 
   .sidebar-nav {
-    position: fixed;
     left: calc(-1 * var(--sidebar-width, 240px));
-    top: 0;
     transition: left 0.25s ease;
     box-shadow: none;
 
@@ -80,5 +84,9 @@
       left: 0;
       box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
     }
+  }
+
+  .sidebar-main {
+    margin-left: 0;
   }
 }

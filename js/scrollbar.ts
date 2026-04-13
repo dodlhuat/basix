@@ -30,6 +30,7 @@ class Scrollbar {
     private readonly boundTrackClick!: (e: MouseEvent) => void;
     private readonly boundViewportScroll!: () => void;
     private readonly boundUpdateThumb!: () => void;
+    private readonly boundContainerWheel!: (e: WheelEvent) => void;
 
     constructor(elementOrSelector: string | HTMLElement) {
         const container = typeof elementOrSelector === 'string'
@@ -65,6 +66,7 @@ class Scrollbar {
         this.boundTrackClick = this.handleTrackClick.bind(this);
         this.boundViewportScroll = this.updateThumb.bind(this);
         this.boundUpdateThumb = this.updateThumb.bind(this);
+        this.boundContainerWheel = this.handleContainerWheel.bind(this);
 
         // Setup ResizeObserver
         this.ro = new ResizeObserver(this.boundUpdateThumb);
@@ -131,6 +133,7 @@ class Scrollbar {
         this.viewport.addEventListener('scroll', this.boundViewportScroll, { passive: true });
         this.thumb.addEventListener('pointerdown', this.boundThumbPointerDown);
         this.track.addEventListener('click', this.boundTrackClick);
+        this.container.addEventListener('wheel', this.boundContainerWheel, { passive: false });
 
         // Observe size changes
         this.ro.observe(this.viewport);
@@ -266,11 +269,25 @@ class Scrollbar {
         this.viewport.scrollTo({ top: scrollTop, behavior: 'smooth' });
     }
 
+    private handleContainerWheel(e: WheelEvent): void {
+        const { scrollTop, scrollHeight, clientHeight } = this.viewport;
+        const scrollable = scrollHeight > clientHeight;
+        const atTop = scrollTop === 0 && e.deltaY < 0;
+        const atBottom = scrollTop + clientHeight >= scrollHeight - 1 && e.deltaY > 0;
+
+        if (scrollable && !atTop && !atBottom) {
+            e.preventDefault();
+        }
+
+        this.viewport.scrollTop += e.deltaY;
+    }
+
     public destroy(): void {
         // Remove event listeners
         this.viewport.removeEventListener('scroll', this.boundViewportScroll);
         this.thumb.removeEventListener('pointerdown', this.boundThumbPointerDown);
         this.track.removeEventListener('click', this.boundTrackClick);
+        this.container.removeEventListener('wheel', this.boundContainerWheel);
         window.removeEventListener('resize', this.boundUpdateThumb);
 
         // Disconnect observer

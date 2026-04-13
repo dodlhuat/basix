@@ -1,4 +1,5 @@
 import { SidebarNav } from './sidebar-nav.js';
+import { Scrollbar } from './scrollbar.js';
 
 const NAV = [
     {
@@ -107,10 +108,23 @@ class DocsNav {
             <div class="docs-sidebar-search">
                 <input type="search" placeholder="Search…" id="docs-search" autocomplete="off"/>
             </div>
-            <nav class="docs-nav" aria-label="Documentation navigation">
-                <ul>${NAV.map(section => this.renderSection(section)).join('')}</ul>
-            </nav>
+            <div class="scroll-container sidebar-scroll">
+                <div class="viewport">
+                    <div class="content">
+                        <nav class="docs-nav" aria-label="Documentation navigation">
+                            <ul>${NAV.map(section => this.renderSection(section)).join('')}</ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="scrollbar">
+                    <div class="track">
+                        <div class="thumb"></div>
+                    </div>
+                </div>
+            </div>
         `;
+
+        new Scrollbar(sidebar.querySelector('.sidebar-scroll'));
 
         // Breadcrumb
         this.renderBreadcrumb();

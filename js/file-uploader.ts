@@ -42,6 +42,7 @@ class FileUploader {
         }
 
         this.container = container;
+        this.container.classList.add('file-uploader');
 
         const dropZone = container.querySelector<HTMLElement>('#drop-zone');
         const fileInput = container.querySelector<HTMLInputElement>('#file-input');

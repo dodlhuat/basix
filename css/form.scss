@@ -181,25 +181,10 @@ select {
   }
 
   .form-hint {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.3rem;
     font-size: 0.75rem;
     line-height: 1.45;
     color: var(--secondary-text);
     margin-top: 0.125rem;
-
-    &::before {
-      content: '';
-      display: block;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: currentColor;
-      flex-shrink: 0;
-      margin-top: 0.38em;
-      opacity: 0.55;
-    }
   }
 
   &.error {

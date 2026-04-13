@@ -50,6 +50,7 @@ class FileUploader {
             throw new Error(`FileUploader: Element not found for selector "${elementOrSelector}"`);
         }
         this.container = container;
+        this.container.classList.add('file-uploader');
         const dropZone = container.querySelector('#drop-zone');
         const fileInput = container.querySelector('#file-input');
         const fileList = container.querySelector('#file-list');
