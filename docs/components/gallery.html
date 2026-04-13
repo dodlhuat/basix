@@ -8,40 +8,50 @@
     <script type="module">
         import { DocsNav } from '../../js/docs-nav.js';
         import { Theme } from '../../js/theme.js';
-        import { Gallery } from '../../js/gallery.js';
+        import { MasonryGallery } from '../../js/gallery.js';
         import { CodeViewer } from '../../js/code-viewer.js';
         new DocsNav();
         Theme.init();
 
-        new Gallery('#gallery-demo');
+        const images = [
+            { src: 'https://picsum.photos/seed/bx1/400/300', title: 'Mountain', desc: 'A scenic alpine view' },
+            { src: 'https://picsum.photos/seed/bx2/400/540', title: 'Forest', desc: 'Dense forest trail' },
+            { src: 'https://picsum.photos/seed/bx3/400/260', title: 'Ocean', desc: 'Calm ocean at dusk' },
+            { src: 'https://picsum.photos/seed/bx4/400/480', title: 'Desert', desc: 'Sand dunes at sunrise' },
+            { src: 'https://picsum.photos/seed/bx5/400/320', title: 'City', desc: 'Urban skyline' },
+            { src: 'https://picsum.photos/seed/bx6/400/440', title: 'Lake', desc: 'Mirror-still lake' },
+        ];
 
-        new CodeViewer('#code-html', `<div class="gallery" id="my-gallery">
-  <figure class="gallery-item">
-    <img src="photo1.jpg" alt="Description" loading="lazy"/>
-  </figure>
-  <figure class="gallery-item">
-    <img src="photo2.jpg" alt="Description" loading="lazy"/>
-    <figcaption>Optional caption</figcaption>
-  </figure>
-</div>`, 'html');
+        new MasonryGallery('gallery-demo', {
+            minColumnWidth: 200,
+            fetchFunction: () => Promise.resolve(images),
+        });
 
-        new CodeViewer('#code-js', `import { Gallery } from '@dodlhuat/basix/js/gallery.js';
+        new CodeViewer('#code-html', `<div id="my-gallery"></div>`, 'html');
 
-// Enables lightbox on click for all .gallery-item images
-const gallery = new Gallery('#my-gallery');
+        new CodeViewer('#code-js', `import { MasonryGallery } from '@dodlhuat/basix/js/gallery.js';
+
+const gallery = new MasonryGallery('my-gallery', {
+  minColumnWidth: 250,           // min column width in px
+  scrollThreshold: 100,          // px from bottom to trigger next load
+  fetchFunction: async () => [   // required — return ImageData[]
+    { src: 'photo1.jpg', title: 'Mountain', desc: 'Alpine view' },
+    { src: 'photo2.jpg', title: 'Forest',   desc: 'Forest trail' },
+  ],
+});
 
 gallery.destroy();`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
@@ -51,45 +61,26 @@ gallery.destroy();`, 'js');
         </div>
         <div class="docs-content">
             <h1>Gallery</h1>
-            <p class="docs-lead">CSS grid image gallery with optional lightbox on click. Images load lazily with the native <code>loading="lazy"</code> attribute. The <code>Gallery</code> class intercepts clicks to open a full-screen lightbox with keyboard navigation.</p>
+            <p class="docs-lead">Infinite-scroll masonry image gallery. Columns are computed from <code>minColumnWidth</code>, images are loaded via a custom <code>fetchFunction</code>, and new batches are fetched automatically as the user scrolls toward the bottom.</p>
+            <p class="docs-import">{ MasonryGallery } from '/basix/js/gallery.js'</p>
 
             <h2>Demo</h2>
-            <div class="docs-demo">
-                <div class="gallery" id="gallery-demo">
-                    <figure class="gallery-item">
-                        <div style="background:var(--accent-tint);height:140px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:600;">Image 1</div>
-                    </figure>
-                    <figure class="gallery-item">
-                        <div style="background:var(--success-tint);height:200px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--success);font-weight:600;">Image 2</div>
-                    </figure>
-                    <figure class="gallery-item">
-                        <div style="background:var(--warning-tint);height:160px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--warning);font-weight:600;">Image 3</div>
-                    </figure>
-                    <figure class="gallery-item">
-                        <div style="background:var(--error-tint);height:180px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--error);font-weight:600;">Image 4</div>
-                    </figure>
-                    <figure class="gallery-item">
-                        <div style="background:var(--primary-tint);height:150px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-weight:600;">Image 5</div>
-                    </figure>
-                    <figure class="gallery-item">
-                        <div style="background:var(--accent-tint);height:190px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:600;">Image 6</div>
-                        <figcaption>With caption</figcaption>
-                    </figure>
-                </div>
+            <div class="docs-demo" style="padding:1rem;">
+                <div id="gallery-demo"></div>
             </div>
 
             <h2>Usage</h2>
             <div id="code-html"></div>
             <div id="code-js" style="margin-top:0.5rem;"></div>
 
-            <h2>Lightbox controls</h2>
+            <h2>Options</h2>
             <table class="docs-props-table">
-                <thead><tr><th>Interaction</th><th>Action</th></tr></thead>
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
                 <tbody>
-                    <tr><td>Click image</td><td>Opens lightbox on that image.</td></tr>
-                    <tr><td>← → Arrow keys</td><td>Navigate to previous / next image.</td></tr>
-                    <tr><td>Escape</td><td>Close the lightbox.</td></tr>
-                    <tr><td>Click overlay</td><td>Close the lightbox.</td></tr>
+                    <tr><td><code>fetchFunction</code></td><td>() => Promise&lt;ImageData[]&gt;</td><td>—</td><td>Required. Called on init and on each scroll trigger. Return an array of <code>{ src, title, desc }</code> objects.</td></tr>
+                    <tr><td><code>minColumnWidth</code></td><td>number</td><td><code>250</code></td><td>Minimum column width in px — determines the number of columns.</td></tr>
+                    <tr><td><code>scrollThreshold</code></td><td>number</td><td><code>100</code></td><td>Distance from container bottom (px) that triggers the next fetch.</td></tr>
+                    <tr><td><code>loaderSelector</code></td><td>string</td><td><code>'.loader'</code></td><td>CSS selector for an optional loading indicator element.</td></tr>
                 </tbody>
             </table>
         </div>

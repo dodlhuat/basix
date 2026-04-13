@@ -1,3 +1,4 @@
+import { SidebarNav } from './sidebar-nav.js';
 
 const NAV = [
     {
@@ -12,11 +13,10 @@ const NAV = [
     {
         label: 'Forms',
         items: [
-            { label: 'Inputs',           href: 'forms/inputs.html' },
+            { label: 'Inputs & Forms',   href: 'forms/inputs.html' },
             { label: 'Date Picker',      href: 'forms/datepicker.html' },
             { label: 'Range Slider',     href: 'forms/range-slider.html' },
             { label: 'File Uploader',    href: 'forms/file-uploader.html' },
-            { label: 'Form Groups',      href: 'forms/form-groups.html' },
         ],
     },
     {
@@ -24,6 +24,7 @@ const NAV = [
         items: [
             { label: 'Push Menu',        href: 'navigation/push-menu.html' },
             { label: 'Flyout Menu',      href: 'navigation/flyout-menu.html' },
+            { label: 'Sidebar Nav',      href: 'navigation/sidebar-nav.html' },
             { label: 'Dropdown',         href: 'navigation/dropdown.html' },
             { label: 'Tabs',             href: 'navigation/tabs.html' },
             { label: 'Breadcrumbs',      href: 'navigation/breadcrumbs.html' },
@@ -181,21 +182,8 @@ class DocsNav {
     }
 
     bindMobile() {
-        const toggle = document.getElementById('docs-mobile-toggle');
-        const sidebar = document.getElementById('docs-sidebar');
-        const backdrop = document.getElementById('docs-sidebar-backdrop');
-
-        const open = () => {
-            sidebar?.classList.add('is-open');
-            backdrop?.classList.add('is-visible');
-        };
-        const close = () => {
-            sidebar?.classList.remove('is-open');
-            backdrop?.classList.remove('is-visible');
-        };
-
-        toggle?.addEventListener('click', open);
-        backdrop?.addEventListener('click', close);
+        const layout = document.querySelector('.sidebar-layout');
+        if (layout) new SidebarNav(layout, { toggleSelector: '#docs-mobile-toggle' });
     }
 }
 

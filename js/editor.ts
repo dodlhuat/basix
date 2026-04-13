@@ -234,6 +234,10 @@ class Editor {
             case 'formatBlock': if (value) this.formatBlock(value); break;
             case 'insertUnorderedList': this.insertList('ul'); break;
             case 'insertOrderedList': this.insertList('ol'); break;
+            case 'justifyLeft':
+            case 'justifyCenter':
+            case 'justifyRight': this.setAlignment(command); break;
+            case 'foreColor': if (value) this.setForeColor(value); break;
         }
     }
 
@@ -374,6 +378,40 @@ class Editor {
         this.onContentChange();
     }
 
+    private setAlignment(cmd: string): void {
+        const align: Record<string, string> = {
+            justifyLeft: 'left', justifyCenter: 'center', justifyRight: 'right',
+        };
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return;
+        const container = sel.getRangeAt(0).commonAncestorContainer;
+        let block: HTMLElement | null = container.nodeType === Node.TEXT_NODE
+            ? container.parentElement
+            : container as HTMLElement;
+        while (block && block !== this.editable && block.parentElement !== this.editable) {
+            block = block.parentElement;
+        }
+        if (block && block !== this.editable) {
+            block.style.textAlign = align[cmd];
+            this.onContentChange();
+        }
+    }
+
+    private setForeColor(color: string): void {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return;
+        const range = sel.getRangeAt(0);
+        if (range.collapsed) return;
+        const span = document.createElement('span');
+        span.style.color = color;
+        span.appendChild(range.extractContents());
+        range.insertNode(span);
+        range.selectNodeContents(span);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        this.onContentChange();
+    }
+
     private sanitizeHTML(html: string): string {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
@@ -439,6 +477,7 @@ ${content}
 
             btn.classList.toggle('active', active);
         });
+
     }
 }
 

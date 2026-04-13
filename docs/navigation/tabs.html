@@ -16,20 +16,18 @@
         new Tabs('#demo-tabs');
         new Tabs('#demo-tabs-pills');
 
-        new CodeViewer('#code-html', `<div class="tabs" id="myTabs">
+        new CodeViewer('#code-html', `<div class="tabs-container" id="myTabs">
   <div class="tabs-header">
-    <button class="tab-btn active" data-tab="tab1">General</button>
-    <button class="tab-btn" data-tab="tab2">Profile</button>
-    <button class="tab-btn" data-tab="tab3">Billing</button>
+    <ul class="tabs-list">
+      <li class="tab-item active">General</li>
+      <li class="tab-item">Profile</li>
+      <li class="tab-item">Billing</li>
+    </ul>
   </div>
-  <div class="tab-panel active" id="tab1">
-    <p>General settings content.</p>
-  </div>
-  <div class="tab-panel" id="tab2">
-    <p>Profile content.</p>
-  </div>
-  <div class="tab-panel" id="tab3">
-    <p>Billing content.</p>
+  <div class="tabs-content">
+    <div class="tab-panel active"><p>General settings content.</p></div>
+    <div class="tab-panel"><p>Profile content.</p></div>
+    <div class="tab-panel"><p>Billing content.</p></div>
   </div>
 </div>`, 'html');
 
@@ -38,19 +36,19 @@
 const tabs = new Tabs('#myTabs');
 
 // API
-tabs.goTo('tab2');   // activate by panel id
+tabs.goToTab(1);     // activate by index (0-based)
 tabs.destroy();`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
@@ -61,34 +59,44 @@ tabs.destroy();`, 'js');
         <div class="docs-content">
             <h1>Tabs</h1>
             <p class="docs-lead">Organise content into switchable panels. Driven by <code>data-tab</code> attributes. Add <code>.tabs-pills</code> to the wrapper for a pill-style variant.</p>
+            <p class="docs-import">{ Tabs } from '/basix/js/tabs.js'</p>
 
             <h2>Default</h2>
             <div class="docs-demo">
-                <div class="tabs" id="demo-tabs">
+                <div class="tabs-container" id="demo-tabs">
                     <div class="tabs-header">
-                        <button class="tab-btn active" data-tab="t1">General</button>
-                        <button class="tab-btn" data-tab="t2">Profile</button>
-                        <button class="tab-btn" data-tab="t3">Privacy</button>
-                        <button class="tab-btn" data-tab="t4">Billing</button>
+                        <ul class="tabs-list">
+                            <li class="tab-item active">General</li>
+                            <li class="tab-item">Profile</li>
+                            <li class="tab-item">Privacy</li>
+                            <li class="tab-item">Billing</li>
+                        </ul>
                     </div>
-                    <div class="tab-panel active" id="t1"><p>General settings content.</p></div>
-                    <div class="tab-panel" id="t2"><p>Profile content.</p></div>
-                    <div class="tab-panel" id="t3"><p>Privacy settings.</p></div>
-                    <div class="tab-panel" id="t4"><p>Billing &amp; invoices.</p></div>
+                    <div class="tabs-content">
+                        <div class="tab-panel active"><p>General settings content.</p></div>
+                        <div class="tab-panel"><p>Profile content.</p></div>
+                        <div class="tab-panel"><p>Privacy settings.</p></div>
+                        <div class="tab-panel"><p>Billing &amp; invoices.</p></div>
+                    </div>
                 </div>
             </div>
 
             <h2>Pills variant</h2>
             <div class="docs-demo">
-                <div class="tabs tabs-pills" id="demo-tabs-pills">
+                <div class="tabs-container tabs-pills" id="demo-tabs-pills">
                     <div class="tabs-header">
-                        <button class="tab-btn active" data-tab="p1">Overview</button>
-                        <button class="tab-btn" data-tab="p2">Analytics</button>
-                        <button class="tab-btn" data-tab="p3">Reports</button>
+                        <ul class="tabs-list">
+                            <li class="tab-item active">Overview</li>
+                            <li class="tab-item">Analytics</li>
+                            <li class="tab-item">Reports</li>
+                        </ul>
                     </div>
-                    <div class="tab-panel active" id="p1"><p>Overview panel.</p></div>
-                    <div class="tab-panel" id="p2"><p>Analytics panel.</p></div>
-                    <div class="tab-panel" id="p3"><p>Reports panel.</p></div>
+                    <div class="tabs-content">
+                        <div class="tab-panel active"><p>Overview panel.</p></div>
+                        <div class="tab-panel"><p>Analytics panel.</p></div>
+                        <div class="tab-panel"><p>Reports panel.</p>
+</div>
+                    </div>
                 </div>
             </div>
 

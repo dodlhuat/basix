@@ -8,34 +8,50 @@
     <script type="module">
         import { DocsNav } from '../../js/docs-nav.js';
         import { Theme } from '../../js/theme.js';
-        import { Tree } from '../../js/tree.js';
+        import { TreeComponent, TreeNode } from '../../js/tree.js';
         import { CodeViewer } from '../../js/code-viewer.js';
         new DocsNav();
         Theme.init();
 
-        new Tree('#tree-demo');
+        const data = [
+            new TreeNode('src', 'folder', [
+                new TreeNode('index.ts'),
+                new TreeNode('components', 'folder', [
+                    new TreeNode('Button.ts'),
+                    new TreeNode('Modal.ts'),
+                    new TreeNode('Popover.ts'),
+                ]),
+                new TreeNode('utils', 'folder', [
+                    new TreeNode('theme.ts'),
+                    new TreeNode('dom.ts'),
+                ]),
+            ]),
+            new TreeNode('docs', 'folder', [
+                new TreeNode('index.html'),
+                new TreeNode('components.html'),
+            ]),
+            new TreeNode('package.json'),
+            new TreeNode('README.md'),
+        ];
 
-        new CodeViewer('#code-html', `<ul class="tree" id="my-tree">
-  <li>
-    <span class="tree-toggle">src</span>
-    <ul>
-      <li><a href="#">index.ts</a></li>
-      <li>
-        <span class="tree-toggle">components</span>
-        <ul>
-          <li><a href="#">Button.ts</a></li>
-          <li><a href="#">Modal.ts</a></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li><a href="#">package.json</a></li>
-</ul>`, 'html');
+        new TreeComponent('#tree-demo', data);
 
-        new CodeViewer('#code-js', `import { Tree } from '@dodlhuat/basix/js/tree.js';
+        new CodeViewer('#code-js', `import { TreeComponent, TreeNode } from '@dodlhuat/basix/js/tree.js';
 
-// Activates expand/collapse on all .tree-toggle elements
-const tree = new Tree('#my-tree');
+const data = [
+  new TreeNode('src', 'folder', [
+    new TreeNode('index.ts'),
+    new TreeNode('components', 'folder', [
+      new TreeNode('Button.ts'),
+      new TreeNode('Modal.ts'),
+    ]),
+  ]),
+  new TreeNode('package.json'),
+];
+
+const tree = new TreeComponent('#my-tree', data, {
+  onSelect: (node) => console.log('selected:', node.label),
+});
 
 tree.expandAll();
 tree.collapseAll();
@@ -43,14 +59,14 @@ tree.destroy();`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
@@ -61,46 +77,15 @@ tree.destroy();`, 'js');
         <div class="docs-content">
             <h1>Tree</h1>
             <p class="docs-lead">Expandable tree component for hierarchical data — file trees, navigation menus, category structures. Items with children use <code>.tree-toggle</code> spans that collapse/expand their nested <code>&lt;ul&gt;</code> on click.</p>
+            <p class="docs-import">{ TreeComponent, TreeNode } from '/basix/js/tree.js'</p>
 
             <h2>Demo</h2>
             <div class="docs-demo">
-                <ul class="tree" id="tree-demo">
-                    <li>
-                        <span class="tree-toggle">src</span>
-                        <ul>
-                            <li><a href="#">index.ts</a></li>
-                            <li>
-                                <span class="tree-toggle">components</span>
-                                <ul>
-                                    <li><a href="#">Button.ts</a></li>
-                                    <li><a href="#">Modal.ts</a></li>
-                                    <li><a href="#">Popover.ts</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <span class="tree-toggle">utils</span>
-                                <ul>
-                                    <li><a href="#">theme.ts</a></li>
-                                    <li><a href="#">dom.ts</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <span class="tree-toggle">docs</span>
-                        <ul>
-                            <li><a href="#">index.html</a></li>
-                            <li><a href="#">components.html</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">package.json</a></li>
-                    <li><a href="#">README.md</a></li>
-                </ul>
+                <ul class="tree" id="tree-demo"></ul>
             </div>
 
             <h2>Usage</h2>
-            <div id="code-html"></div>
-            <div id="code-js" style="margin-top:0.5rem;"></div>
+            <div id="code-js"></div>
 
             <h2>API</h2>
             <table class="docs-props-table">

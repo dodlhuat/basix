@@ -15,8 +15,8 @@
 
         new Dropdown('#demo-dropdown');
 
-        document.getElementById('demo-dropdown')?.addEventListener('basix:dropdown-select', (e) => {
-            document.getElementById('selected-value').textContent = e.detail?.label ?? '';
+        document.getElementById('demo-dropdown')?.addEventListener('dropdown-select', (e) => {
+            document.getElementById('selected-value').textContent = e.detail?.text ?? '';
         });
 
         new CodeViewer('#code-html', `<div class="dropdown-container" id="myDropdown">
@@ -39,20 +39,20 @@
 const dd = new Dropdown('#myDropdown');
 
 // Listen to selections
-document.getElementById('myDropdown').addEventListener('basix:dropdown-select', (e) => {
-  console.log(e.detail.label, e.detail.value);
+document.getElementById('myDropdown').addEventListener('dropdown-select', (e) => {
+  console.log(e.detail.text);
 });`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
@@ -63,6 +63,7 @@ document.getElementById('myDropdown').addEventListener('basix:dropdown-select', 
         <div class="docs-content">
             <h1>Dropdown</h1>
             <p class="docs-lead">Multi-level dropdown menus built from plain <code>&lt;ul&gt;</code> structure. Fires custom events on selection. Supports nested submenus, keyboard navigation, and outside-click closing.</p>
+            <p class="docs-import">{ Dropdown } from '/basix/js/dropdown.js'</p>
 
             <h2>Demo</h2>
             <div class="docs-demo" style="min-height:200px;">

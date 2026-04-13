@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
-    <title>Inputs — Basix Docs</title>
+    <title>Inputs &amp; Forms — Basix Docs</title>
     <link rel="stylesheet" href="../../css/style.css"/>
     <script type="module">
         import { DocsNav } from '../../js/docs-nav.js';
@@ -52,27 +52,50 @@
 </div>
 
 <!-- Validation states -->
-<div class="form-group is-success">
-  <label for="ok">Valid field</label>
-  <input type="text" id="ok" value="correct@email.com"/>
-  <span class="form-hint">Looks good!</span>
-</div>
-<div class="form-group is-error">
+<div class="form-group error">
   <label for="err">Error field</label>
   <input type="text" id="err" value="invalid"/>
   <span class="form-hint">Please enter a valid value.</span>
+</div>
+<div class="form-group success">
+  <label for="ok">Valid field</label>
+  <input type="text" id="ok" value="correct@email.com"/>
+  <span class="form-hint">Looks good!</span>
 </div>`, 'html');
+
+        new CodeViewer('#code-input-group', `<!-- Prefix addon -->
+<div class="input-group">
+  <span class="input-addon">$</span>
+  <input type="number" placeholder="0.00"/>
+</div>
+
+<!-- Suffix addon -->
+<div class="input-group">
+  <input type="text" placeholder="Search…"/>
+  <span class="input-addon">🔍</span>
+</div>
+
+<!-- Both -->
+<div class="input-group">
+  <span class="input-addon">https://</span>
+  <input type="text" placeholder="example.com"/>
+  <span class="input-addon">/page</span>
+</div>`, 'html');
+
+        new CodeViewer('#code-sizes', `<input type="text" class="input-sm" placeholder="Small (.input-sm)"/>
+<input type="text"              placeholder="Default"/>
+<input type="text" class="input-lg" placeholder="Large (.input-lg)"/>`, 'html');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
@@ -81,8 +104,8 @@
             </div>
         </div>
         <div class="docs-content">
-            <h1>Inputs</h1>
-            <p class="docs-lead">Pure CSS form controls. Text inputs, textareas, checkboxes, radio buttons, switches, and range sliders all inherit consistent sizing, spacing, and states from the base styles.</p>
+            <h1>Inputs &amp; Forms</h1>
+            <p class="docs-lead">Pure CSS form controls — text inputs, textareas, checkboxes, radios, switches, and form layout helpers. No JavaScript required.</p>
 
             <h2>Text inputs &amp; textarea</h2>
             <div class="docs-demo" style="display:flex;flex-direction:column;gap:0.75rem;max-width:400px;">
@@ -108,7 +131,7 @@
             <h2>Checkbox, Radio &amp; Switch</h2>
             <div class="docs-demo" style="display:flex;flex-direction:column;gap:0.75rem;">
                 <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
-                    <div><input class="styled-checkbox" id="cb1" type="checkbox"/><label for="cb1">Checked</label></div>
+                    <div><input class="styled-checkbox" id="cb1" type="checkbox"/><label for="cb1">Unchecked</label></div>
                     <div><input class="styled-checkbox" id="cb2" type="checkbox" checked/><label for="cb2">Checked</label></div>
                     <div><input class="styled-checkbox" id="cb3" type="checkbox" disabled/><label for="cb3">Disabled</label></div>
                 </div>
@@ -121,25 +144,56 @@
             </div>
             <div id="code-checks"></div>
 
-            <h2>Form groups &amp; validation</h2>
-            <div class="docs-demo" style="display:flex;flex-direction:column;gap:1rem;max-width:400px;">
+            <h2>Form group &amp; validation</h2>
+            <p>Use <code>.form-group</code> to stack a label, input, and hint text. Add <code>.error</code> or <code>.success</code> for validation states.</p>
+            <div class="docs-demo" style="display:flex;flex-direction:column;gap:1rem;max-width:420px;">
                 <div class="form-group">
                     <label for="fg1">Email</label>
                     <input type="email" id="fg1" placeholder="you@example.com"/>
                     <span class="form-hint">We'll never share your email.</span>
                 </div>
-                <div class="form-group is-success">
-                    <label for="fg2">Username</label>
-                    <input type="text" id="fg2" value="johndoe"/>
-                    <span class="form-hint">Username is available!</span>
-                </div>
-                <div class="form-group is-error">
-                    <label for="fg3">Password</label>
-                    <input type="password" id="fg3" value="123"/>
+                <div class="form-group error">
+                    <label for="fg2">Password</label>
+                    <input type="password" id="fg2" value="123"/>
                     <span class="form-hint">Password must be at least 8 characters.</span>
+                </div>
+                <div class="form-group success">
+                    <label for="fg3">Username</label>
+                    <input type="text" id="fg3" value="johndoe"/>
+                    <span class="form-hint">Username is available!</span>
                 </div>
             </div>
             <div id="code-group"></div>
+
+            <h2>Input group</h2>
+            <p>Attach prefix or suffix addons to an input with <code>.input-group</code> and <code>.input-addon</code>.</p>
+            <div class="docs-demo" style="max-width:420px;display:flex;flex-direction:column;gap:0.75rem;">
+                <div class="input-group">
+                    <span class="input-addon">$</span>
+                    <input type="number" placeholder="0.00"/>
+                </div>
+                <div class="input-group">
+                    <input type="text" placeholder="Search…"/>
+                    <span class="input-addon">
+                        <svg style="fill:currentColor;width:16px;height:16px;" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    </span>
+                </div>
+                <div class="input-group">
+                    <span class="input-addon">https://</span>
+                    <input type="text" placeholder="example.com"/>
+                    <span class="input-addon">/page</span>
+                </div>
+            </div>
+            <div id="code-input-group"></div>
+
+            <h2>Input sizes</h2>
+            <p>Use <code>.input-sm</code> or <code>.input-lg</code> when density or prominence requires it.</p>
+            <div class="docs-demo" style="max-width:420px;display:flex;flex-direction:column;gap:0.75rem;">
+                <input type="text" class="input-sm" placeholder="Small input (.input-sm)"/>
+                <input type="text" placeholder="Default input"/>
+                <input type="text" class="input-lg" placeholder="Large input (.input-lg)"/>
+            </div>
+            <div id="code-sizes"></div>
         </div>
     </div>
 </div>

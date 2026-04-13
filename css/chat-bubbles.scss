@@ -3,85 +3,132 @@
 
 :root {
   --bubble-radius: 18px;
-  --bubble-tail: 4px;
 }
 
-.chat-container {
-  width: 100%;
+// ── Container ─────────────────────────────────────────────────────────────────
+
+.chat {
   display: flex;
   flex-direction: column;
+  gap: calc($spacing * 0.4);
   padding: $spacing;
-  gap: calc($spacing * 0.3);
+  width: 100%;
 }
 
-// Breathe a little more between direction changes
-.message-incoming + .message-outgoing,
-.message-outgoing + .message-incoming {
+// Extra breathing room between direction changes
+.chat-message.incoming + .chat-message.outgoing,
+.chat-message.outgoing + .chat-message.incoming {
   margin-top: calc($spacing * 0.5);
 }
 
-.message {
+// ── Message row ───────────────────────────────────────────────────────────────
+
+.chat-message {
+  display: flex;
+  align-items: flex-end;
+  gap: calc($spacing * 0.6);
+
+  &.outgoing {
+    flex-direction: row-reverse;
+
+    .chat-bubble {
+      background: var(--accent-color);
+      color: #fff;
+      border-bottom-right-radius: 0;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+
+      // Tail: right-angle at bubble's bottom-right corner, extends right
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: -8px;
+        width: 8px;
+        height: 8px;
+        background: var(--accent-color);
+        clip-path: polygon(0% 0%, 0% 100%, 100% 100%);
+      }
+
+      .chat-time { color: rgba(255, 255, 255, 0.65); }
+    }
+  }
+
+  &.incoming {
+    .chat-bubble {
+      background: var(--secondary-background);
+      color: var(--primary-text);
+      border-bottom-left-radius: 0;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
+
+      // Tail: right-angle at bubble's bottom-left corner, extends left
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: -8px;
+        width: 8px;
+        height: 8px;
+        background: var(--secondary-background);
+        clip-path: polygon(100% 0%, 0% 100%, 100% 100%);
+      }
+    }
+  }
+}
+
+// ── Avatar ────────────────────────────────────────────────────────────────────
+
+.chat-avatar {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--accent-color-tint);
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// ── Bubble ────────────────────────────────────────────────────────────────────
+
+.chat-bubble {
+  position: relative;
   max-width: 72%;
   padding: calc($spacing * 0.55) calc($spacing * 0.85);
   border-radius: var(--bubble-radius);
-  position: relative;
   line-height: 1.45;
-  color: var(--primary-text);
   word-wrap: break-word;
-  // filter: drop-shadow wraps the CSS-triangle tail so shadow follows the full shape
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
 }
 
-[data-theme="dark"] .message {
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35));
-}
+// ── Timestamp ─────────────────────────────────────────────────────────────────
 
-/* Metadata (time) */
-.message-meta {
+.chat-time {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.01em;
   text-align: right;
-  margin-top: 3px;
+  margin-top: 4px;
   opacity: 0.5;
+  color: inherit;
 }
 
-/* Incoming */
-.message-incoming {
-  align-self: flex-start;
-  background: var(--secondary-background);
-  border-top-left-radius: 0;
+// ── Dark mode shadow ──────────────────────────────────────────────────────────
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -7px;
-    border: 7px solid transparent;
-    border-top-color: var(--secondary-background);
-    border-right: 0;
-  }
-}
-
-/* Outgoing */
-.message-outgoing {
-  align-self: flex-end;
-  background: var(--accent-color);
-  color: #fff;
-  border-top-right-radius: 0;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: -7px;
-    border: 7px solid transparent;
-    border-top-color: var(--accent-color);
-    border-left: 0;
-  }
-
-  .message-meta {
-    color: rgba(255, 255, 255, 0.65);
-    opacity: 1; // override parent opacity; color carries the dimming
-  }
+[data-theme="dark"] {
+  .chat-message.incoming .chat-bubble  { filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35)); }
+  .chat-message.outgoing .chat-bubble  { filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4)); }
 }

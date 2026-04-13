@@ -15,9 +15,9 @@
 
         const content = '<p>This is the bottom sheet content. It can contain any HTML including forms, lists, or action buttons.</p><p>Try dragging it down to dismiss.</p>';
 
-        document.getElementById('demo-auto')?.addEventListener('click', () => new BottomSheet({ header: 'Auto height', content, closeable: true, snapHeight: 'auto' }));
-        document.getElementById('demo-half')?.addEventListener('click', () => new BottomSheet({ header: 'Half screen', content, closeable: true, snapHeight: 'half' }));
-        document.getElementById('demo-full')?.addEventListener('click', () => new BottomSheet({ header: 'Full screen', content, closeable: true, snapHeight: 'full' }));
+        document.getElementById('demo-auto')?.addEventListener('click', () => new BottomSheet({ header: 'Auto height', content, closeable: true, snapHeight: 'auto' }).show());
+        document.getElementById('demo-half')?.addEventListener('click', () => new BottomSheet({ header: 'Half screen', content, closeable: true, snapHeight: 'half' }).show());
+        document.getElementById('demo-full')?.addEventListener('click', () => new BottomSheet({ header: 'Full screen', content, closeable: true, snapHeight: 'full' }).show());
 
         new CodeViewer('#code-js', `import { BottomSheet } from '@dodlhuat/basix/js/bottom-sheet.js';
 
@@ -27,18 +27,18 @@ new BottomSheet({
   footer:     '<button class="button accent">Apply</button>',
   closeable:  true,      // drag-to-dismiss, backdrop, Escape
   snapHeight: 'auto',    // 'auto' | 'half' | 'full'
-});`, 'js');
+}).show();`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
@@ -49,6 +49,7 @@ new BottomSheet({
         <div class="docs-content">
             <h1>Bottom Sheet</h1>
             <p class="docs-lead">Slides up from the bottom of the viewport — the native mobile pattern for actions, filters, and contextual content. Supports drag-to-dismiss, backdrop click, Escape key, and three snap heights.</p>
+            <p class="docs-import">{ BottomSheet } from '/basix/js/bottom-sheet.js'</p>
 
             <h2>Snap heights</h2>
             <div class="docs-demo centered">

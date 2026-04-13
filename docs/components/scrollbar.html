@@ -8,25 +8,45 @@
     <script type="module">
         import { DocsNav } from '../../js/docs-nav.js';
         import { Theme } from '../../js/theme.js';
+        import { Scrollbar } from '../../js/scrollbar.js';
         import { CodeViewer } from '../../js/code-viewer.js';
         new DocsNav();
         Theme.init();
 
-        new CodeViewer('#code-html', `<div class="custom-scrollbar" style="height:200px;overflow-y:auto;">
-  <!-- scrollable content -->
-  <p>Long content...</p>
+        new Scrollbar('#scroll-demo-v');
+
+        new CodeViewer('#code-html', `<div class="scroll-container" id="my-scrollbar" style="height:200px;">
+  <div class="viewport">
+    <div class="content">
+      <!-- your scrollable content -->
+    </div>
+  </div>
+  <div class="scrollbar">
+    <div class="track">
+      <div class="thumb"></div>
+    </div>
+  </div>
 </div>`, 'html');
+
+        new CodeViewer('#code-js', `import { Scrollbar } from '@dodlhuat/basix/js/scrollbar.js';
+
+const sb = new Scrollbar('#my-scrollbar');
+
+// Or init multiple at once
+const all = Scrollbar.initAll('.scroll-container');
+
+sb.destroy();`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
@@ -36,45 +56,54 @@
         </div>
         <div class="docs-content">
             <h1>Scrollbar</h1>
-            <p class="docs-lead">Custom styled scrollbar using <code>::webkit-scrollbar</code> pseudo-elements. Thin by default, expands on hover. Apply <code>.custom-scrollbar</code> to any scrollable container — no JavaScript required.</p>
+            <p class="docs-lead">Custom draggable scrollbar with a thin-at-rest, expands-on-hover thumb. Requires a small HTML structure and one <code>new Scrollbar()</code> call — the component handles thumb sizing, drag, track-click, and resize automatically.</p>
+            <p class="docs-import">{ Scrollbar } from '/basix/js/scrollbar.js'</p>
 
             <h2>Vertical scroll</h2>
-            <div class="docs-demo">
-                <div class="custom-scrollbar" style="height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;">
-                    <p>Scroll this container to see the custom scrollbar. It starts as a thin track and expands slightly on hover for easier grabbing.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
-                </div>
-            </div>
-
-            <h2>Horizontal scroll</h2>
-            <div class="docs-demo">
-                <div class="custom-scrollbar" style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;">
-                    <div style="white-space:nowrap;width:900px;">
-                        <p>This content is wider than its container — scroll horizontally to see the custom scrollbar in action. Drag the thumb or use your trackpad / mouse wheel.</p>
+            <div class="docs-demo" style="padding:0;">
+                <div class="scroll-container" id="scroll-demo-v" style="height:220px;">
+                    <div class="viewport">
+                        <div class="content" style="padding:1.5rem;">
+                            <p>Scroll this container to see the custom scrollbar. Hover near the right edge to reveal the thumb, or drag it directly.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+                        </div>
+                    </div>
+                    <div class="scrollbar">
+                        <div class="track">
+                            <div class="thumb"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <h2>Usage</h2>
             <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
 
-            <h2>How it works</h2>
+            <h2>API</h2>
             <table class="docs-props-table">
-                <thead><tr><th>Pseudo-element / selector</th><th>Purpose</th></tr></thead>
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
                 <tbody>
-                    <tr><td><code>::-webkit-scrollbar</code></td><td>Sets scrollbar track width/height to a thin value (4 px).</td></tr>
-                    <tr><td><code>::-webkit-scrollbar-track</code></td><td>Transparent track background.</td></tr>
-                    <tr><td><code>::-webkit-scrollbar-thumb</code></td><td>Rounded thumb with a muted border color.</td></tr>
-                    <tr><td><code>:hover::-webkit-scrollbar</code></td><td>Expands track to 8 px on container hover for easier interaction.</td></tr>
-                    <tr><td><code>scrollbar-width: thin</code></td><td>Firefox equivalent — no pseudo-element support needed.</td></tr>
+                    <tr><td><code>new Scrollbar(selector)</code></td><td>Initialise on a <code>.scroll-container</code> element.</td></tr>
+                    <tr><td><code>Scrollbar.initAll(selector)</code></td><td>Initialise on all matching elements, returns array of instances.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Remove all event listeners and disconnect the ResizeObserver.</td></tr>
                 </tbody>
             </table>
 
-            <p style="margin-top:1rem;font-size:0.9rem;color:var(--secondary-text);">Note: <code>::-webkit-scrollbar</code> is not a standard CSS property and works in Chromium-based browsers and Safari. Firefox uses <code>scrollbar-width</code> and <code>scrollbar-color</code> instead, which are included automatically via the <code>.custom-scrollbar</code> class.</p>
+            <h2>CSS tokens</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>--track-width</code></td><td><code>12px</code></td><td>Width of the scrollbar track lane.</td></tr>
+                    <tr><td><code>--track-radius</code></td><td><code>8px</code></td><td>Border radius of track and thumb.</td></tr>
+                    <tr><td><code>--thumb-min</code></td><td><code>28px</code></td><td>Minimum thumb height in px.</td></tr>
+                    <tr><td><code>--track-gap</code></td><td><code>6px</code></td><td>Gap between track and container edge.</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

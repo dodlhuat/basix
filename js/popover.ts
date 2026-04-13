@@ -138,7 +138,13 @@ class Popover {
         el.id          = id;
         el.setAttribute('role', 'dialog');
         el.setAttribute('data-arrow', String(this.opts.arrow));
-        el.innerHTML   = this.opts.content;
+
+        // Wrap plain content in .popover-body so it gets proper padding.
+        // Skip wrapping when content already uses structured popover elements.
+        const hasStructure = /class="popover-(header|body|footer|menu)/.test(this.opts.content);
+        el.innerHTML = hasStructure
+            ? this.opts.content
+            : `<div class="popover-body">${this.opts.content}</div>`;
 
         this.trigger.setAttribute('aria-expanded', 'true');
         this.trigger.setAttribute('aria-controls', id);

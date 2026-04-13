@@ -13,7 +13,7 @@
         new DocsNav();
         Theme.init();
 
-        new Editor({ simple: true });
+        new Editor();
 
         new CodeViewer('#code-html', `<!-- Toolbar -->
 <div class="editor-toolbar">
@@ -46,14 +46,14 @@ editor.exec('foreColor', '#ff0000');`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
@@ -64,30 +64,117 @@ editor.exec('foreColor', '#ff0000');`, 'js');
         <div class="docs-content">
             <h1>Rich Text Editor</h1>
             <p class="docs-lead">WYSIWYG editor built on <code>contenteditable</code> with a toolbar driven by <code>data-cmd</code> attributes, undo/redo history, link insertion, image embedding, word count, and an optional HTML/preview side panel.</p>
+            <p class="docs-import">{ Editor } from '/basix/js/editor.js'</p>
 
             <h2>Demo</h2>
-            <div class="docs-demo">
-                <div class="editor-toolbar">
-                    <button data-cmd="bold" title="Bold"><b>B</b></button>
-                    <button data-cmd="italic" title="Italic"><i>I</i></button>
-                    <button data-cmd="underline" title="Underline"><u>U</u></button>
-                    <button data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
-                    <span class="editor-toolbar-divider"></span>
-                    <button data-cmd="insertUnorderedList" title="Bullet list">&#8226;&#8226;</button>
-                    <button data-cmd="insertOrderedList" title="Numbered list">1.</button>
-                    <span class="editor-toolbar-divider"></span>
-                    <button data-cmd="justifyLeft" title="Align left">&#8676;</button>
-                    <button data-cmd="justifyCenter" title="Center">&#8677;</button>
-                    <button data-cmd="justifyRight" title="Align right">&#8678;</button>
-                    <span class="editor-toolbar-divider"></span>
-                    <button id="linkBtn" title="Insert link"><svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><use href="../../svg-icons/icons.svg#link"/></svg></button>
-                    <input type="file" id="imageFile" accept="image/*" hidden/>
-                    <button id="imageBtn" title="Insert image"><svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><use href="../../svg-icons/icons.svg#image"/></svg></button>
+            <div class="docs-demo" style="padding:0;">
+                <div class="editor">
+                    <div class="editor-link-popover" id="linkPopover" hidden>
+                        <div class="link-popover-row">
+                            <input type="text" id="linkText" class="link-popover-input" placeholder="Link text" autocomplete="off"/>
+                        </div>
+                        <div class="link-popover-row">
+                            <input type="url" id="linkUrl" class="link-popover-input" placeholder="https://" autocomplete="off"/>
+                        </div>
+                        <div class="link-popover-row link-popover-actions">
+                            <label class="link-popover-check">
+                                <input type="checkbox" id="linkNewTab"/> New tab
+                            </label>
+                            <div class="link-popover-btns">
+                                <button id="linkRemoveBtn" class="link-popover-remove" hidden>Remove</button>
+                                <button id="linkCancelBtn" class="link-popover-cancel">Cancel</button>
+                                <button id="linkConfirmBtn" class="link-popover-confirm">Insert</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="editor-toolbar">
+                        <div class="toolbar-group">
+                            <button id="undoBtn" title="Undo (Ctrl+Z)" aria-label="Undo">
+                                <svg class="icon-svg"><use href="../../svg-icons/icons.svg#undo"/></svg>
+                            </button>
+                            <button id="redoBtn" title="Redo (Ctrl+Y)" aria-label="Redo">
+                                <svg class="icon-svg"><use href="../../svg-icons/icons.svg#redo"/></svg>
+                            </button>
+                        </div>
+                        <div class="toolbar-separator"></div>
+                        <div class="toolbar-group">
+                            <button data-cmd="formatBlock" data-value="p" title="Paragraph" aria-label="Paragraph">P</button>
+                            <button data-cmd="formatBlock" data-value="h1" title="Heading 1" aria-label="Heading 1">H1</button>
+                            <button data-cmd="formatBlock" data-value="h2" title="Heading 2" aria-label="Heading 2">H2</button>
+                            <button data-cmd="formatBlock" data-value="blockquote" title="Blockquote" aria-label="Blockquote">"</button>
+                        </div>
+                        <div class="toolbar-separator"></div>
+                        <div class="toolbar-group">
+                            <button data-cmd="bold" title="Bold (Ctrl+B)" aria-label="Bold">
+                                <svg class="icon-svg"><use href="../../svg-icons/icons.svg#format_bold"/></svg>
+                            </button>
+                            <button data-cmd="italic" title="Italic (Ctrl+I)" aria-label="Italic">
+                                <svg class="icon-svg"><use href="../../svg-icons/icons.svg#format_italic"/></svg>
+                            </button>
+                            <button data-cmd="underline" title="Underline (Ctrl+U)" aria-label="Underline">
+                                <svg class="icon-svg"><use href="../../svg-icons/icons.svg#format_underlined"/></svg>
+                            </button>
+                            <button data-cmd="strikeThrough" title="Strikethrough" aria-label="Strikethrough">
+                                <svg class="icon-svg"><use href="../../svg-icons/icons.svg#format_strikethrough"/></svg>
+                            </button>
+                        </div>
+                        <div class="toolbar-separator"></div>
+                        <div class="toolbar-group">
+                            <button data-cmd="insertUnorderedList" title="Bullet List" aria-label="Bullet List">
+                                <svg class="icon-svg"><use href="../../svg-icons/icons.svg#format_list_bulleted"/></svg>
+                            </button>
+                            <button data-cmd="insertOrderedList" title="Numbered List" aria-label="Numbered List">
+                                <svg class="icon-svg"><use href="../../svg-icons/icons.svg#format_list_numbered"/></svg>
+                            </button>
+                        </div>
+                        <div class="toolbar-separator"></div>
+                        <div class="toolbar-group">
+                            <button id="linkBtn" title="Insert Link (Ctrl+K)" aria-label="Insert Link">
+                                <svg class="icon-svg"><use href="../../svg-icons/icons.svg#link"/></svg>
+                            </button>
+                            <button id="imageBtn" title="Insert Image" aria-label="Insert Image">
+                                <svg class="icon-svg"><use href="../../svg-icons/icons.svg#image"/></svg>
+                            </button>
+                            <input type="file" id="imageFile" accept="image/*" hidden/>
+                        </div>
+                        <div class="toolbar-end"></div>
+                    </div>
+                    <div class="editor-body">
+                        <div class="editor-main">
+                            <div id="editable" class="editable" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true">
+                                <p>Start typing here… Select text and use the toolbar above to format it.</p>
+                            </div>
+                        </div>
+                        <div class="editor-side" id="sidePanel">
+                            <div class="side-tabs">
+                                <button class="side-tab active" data-tab="codePanel">HTML</button>
+                                <button class="side-tab" data-tab="previewPanel">Preview</button>
+                            </div>
+                            <div class="side-panels">
+                                <div class="side-panel active" id="codePanel">
+                                    <div class="code-actions">
+                                        <button title="Apply HTML to editor">Apply</button>
+                                        <button title="Sanitize and apply">Sanitize</button>
+                                        <button title="Minify HTML">Minify</button>
+                                    </div>
+                                    <textarea id="code" spellcheck="false" placeholder="HTML will appear here…"></textarea>
+                                </div>
+                                <div class="side-panel" id="previewPanel">
+                                    <div id="preview" class="preview-content"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="editor-footer">
+                        <span id="wordCount" class="editor-wordcount">0 words</span>
+                        <div class="editor-shortcuts">
+                            <span><kbd>Ctrl+B</kbd> Bold</span>
+                            <span><kbd>Ctrl+I</kbd> Italic</span>
+                            <span><kbd>Ctrl+K</kbd> Link</span>
+                            <span><kbd>Ctrl+Z</kbd> Undo</span>
+                        </div>
+                    </div>
                 </div>
-                <div id="editable" class="editor-content" contenteditable="true">
-                    <p>Start typing here… Select text and use the toolbar above to format it.</p>
-                </div>
-                <div id="wordCount" class="editor-footer">0 words</div>
             </div>
 
             <h2>Usage</h2>

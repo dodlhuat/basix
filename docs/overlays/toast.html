@@ -13,31 +13,30 @@
         new DocsNav();
         Theme.init();
 
-        document.getElementById('demo-default')?.addEventListener('click', () => new Toast({ header: 'Default', content: 'A plain notification message.', closeable: true, autoClose: 4000 }));
-        document.getElementById('demo-success')?.addEventListener('click', () => new Toast({ header: 'Success', content: 'Your changes were saved.', markup: 'success', closeable: true, autoClose: 4000 }));
-        document.getElementById('demo-warning')?.addEventListener('click', () => new Toast({ header: 'Warning', content: 'Please review your input.', markup: 'warning', closeable: true, autoClose: 4000 }));
-        document.getElementById('demo-error')?.addEventListener('click', () => new Toast({ header: 'Error', content: 'Something went wrong.', markup: 'error', closeable: true, autoClose: 4000 }));
+        document.getElementById('demo-default')?.addEventListener('click', () => new Toast({ header: 'Default', content: 'A plain notification message.', closeable: true }).show(4000));
+        document.getElementById('demo-success')?.addEventListener('click', () => new Toast({ header: 'Success', content: 'Your changes were saved.', type: 'success', closeable: true }).show(4000));
+        document.getElementById('demo-warning')?.addEventListener('click', () => new Toast({ header: 'Warning', content: 'Please review your input.', type: 'warning', closeable: true }).show(4000));
+        document.getElementById('demo-error')?.addEventListener('click', () => new Toast({ header: 'Error', content: 'Something went wrong.', type: 'error', closeable: true }).show(4000));
 
         new CodeViewer('#code-js', `import { Toast } from '@dodlhuat/basix/js/toast.js';
 
 new Toast({
   header:    'Success',
   content:   'Your changes were saved.',
-  markup:    'success',    // 'default' | 'success' | 'warning' | 'error'
+  type:      'success',    // 'success' | 'warning' | 'error' | 'info'
   closeable: true,         // show close button
-  autoClose: 4000,         // ms until auto-dismiss (omit to stay)
-});`, 'js');
+}).show(4000);             // pass ms to auto-dismiss (omit to stay)`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
@@ -48,6 +47,7 @@ new Toast({
         <div class="docs-content">
             <h1>Toast</h1>
             <p class="docs-lead">Brief notification messages that appear in the corner of the viewport and auto-dismiss after a configurable delay. Supports four semantic variants and an optional close button.</p>
+            <p class="docs-import">{ Toast } from '/basix/js/toast.js'</p>
 
             <h2>Variants</h2>
             <div class="docs-demo centered">
@@ -66,9 +66,9 @@ new Toast({
                 <tbody>
                     <tr><td><code>content</code></td><td>string</td><td>—</td><td>The notification body text or HTML.</td></tr>
                     <tr><td><code>header</code></td><td>string</td><td>—</td><td>Optional title above the content.</td></tr>
-                    <tr><td><code>markup</code></td><td>default | success | warning | error</td><td><code>'default'</code></td><td>Semantic colour variant.</td></tr>
+                    <tr><td><code>type</code></td><td>success | warning | error | info</td><td>—</td><td>Semantic colour variant.</td></tr>
                     <tr><td><code>closeable</code></td><td>boolean</td><td><code>true</code></td><td>Shows a close (×) button.</td></tr>
-                    <tr><td><code>autoClose</code></td><td>number</td><td>—</td><td>Milliseconds until the toast auto-dismisses. Omit to persist.</td></tr>
+                    <tr><td><code>.show(ms?)</code></td><td>number</td><td>—</td><td>Pass milliseconds to <code>.show()</code> to auto-dismiss. Omit to persist.</td></tr>
                 </tbody>
             </table>
         </div>

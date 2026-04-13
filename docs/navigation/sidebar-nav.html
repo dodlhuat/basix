@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Sidebar Nav — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new CodeViewer('#code-html', `<div class="sidebar-layout">
+  <aside class="sidebar-nav" id="my-sidebar">
+    <!-- your sidebar content -->
+  </aside>
+  <div class="sidebar-backdrop" id="my-backdrop"></div>
+  <div class="sidebar-main">
+    <div class="topbar">
+      <button class="sidebar-toggle" id="my-toggle" aria-label="Open sidebar">
+        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:currentColor">
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+        </svg>
+      </button>
+    </div>
+    <main><!-- page content --></main>
+  </div>
+</div>`, 'html');
+
+        new CodeViewer('#code-js', `import { SidebarNav } from '@dodlhuat/basix/js/sidebar-nav.js';
+
+const layout = document.querySelector('.sidebar-layout');
+const nav = new SidebarNav(layout, {
+    toggleSelector: '#my-toggle',
+    breakpoint: 768,          // px — sidebar is always visible above this
+});
+
+// API
+nav.open();
+nav.close();
+nav.toggle();
+nav.isOpen();   // → boolean
+nav.destroy();  // remove all listeners`, 'js');
+
+        new CodeViewer('#code-options', `new SidebarNav(container, {
+    toggleSelector: '.sidebar-toggle', // CSS selector for the hamburger button
+    breakpoint:     768,               // close drawer when viewport > breakpoint
+});`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Sidebar Nav</h1>
+            <p class="docs-lead">An always-visible sidebar on desktop that collapses into a slide-in drawer on mobile. Zero configuration — just add the CSS classes and call <code>new SidebarNav()</code>.</p>
+            <p class="docs-import">{ SidebarNav } from '/basix/js/sidebar-nav.js'</p>
+
+            <h2>How it works</h2>
+            <p>Wrap your page in <code>.sidebar-layout</code>. Place the sidebar as <code>.sidebar-nav</code>, a backdrop overlay as <code>.sidebar-backdrop</code>, and the rest of the page inside <code>.sidebar-main</code>. On mobile a hamburger button with class <code>.sidebar-toggle</code> opens the drawer.</p>
+
+            <h2>HTML structure</h2>
+            <div id="code-html"></div>
+
+            <h2>JavaScript</h2>
+            <p>Pass the layout container and an optional options object. The component wires up the toggle button, backdrop click-to-close, and auto-close on resize.</p>
+            <div id="code-js"></div>
+
+            <h2>Options</h2>
+            <div id="code-options"></div>
+
+            <h2>API reference</h2>
+            <table class="docs-props-table">
+                <thead>
+                    <tr><th>Method</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>open()</code></td><td>Slide the sidebar in and show the backdrop.</td></tr>
+                    <tr><td><code>close()</code></td><td>Slide the sidebar out and hide the backdrop.</td></tr>
+                    <tr><td><code>toggle()</code></td><td>Toggle between open and closed states.</td></tr>
+                    <tr><td><code>isOpen()</code></td><td>Returns <code>true</code> if the sidebar is currently open.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Remove all event listeners added by this instance.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Options reference</h2>
+            <table class="docs-props-table">
+                <thead>
+                    <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>toggleSelector</code></td><td>string</td><td><code>'.sidebar-toggle'</code></td><td>CSS selector for the hamburger toggle button.</td></tr>
+                    <tr><td><code>breakpoint</code></td><td>number</td><td><code>768</code></td><td>Viewport width (px) above which the sidebar is permanently visible and the drawer auto-closes.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>CSS classes</h2>
+            <table class="docs-props-table">
+                <thead>
+                    <tr><th>Class</th><th>Element</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>.sidebar-layout</code></td><td>Wrapper</td><td>Flex container that holds the sidebar and main content side by side.</td></tr>
+                    <tr><td><code>.sidebar-nav</code></td><td><code>&lt;aside&gt;</code></td><td>The sidebar panel. Sticky on desktop, fixed drawer on mobile.</td></tr>
+                    <tr><td><code>.sidebar-backdrop</code></td><td><code>&lt;div&gt;</code></td><td>Full-screen semi-transparent overlay shown behind the open drawer.</td></tr>
+                    <tr><td><code>.sidebar-main</code></td><td><code>&lt;div&gt;</code></td><td>The scrollable main content area next to the sidebar.</td></tr>
+                    <tr><td><code>.sidebar-toggle</code></td><td><code>&lt;button&gt;</code></td><td>Hamburger button — hidden on desktop, visible on mobile.</td></tr>
+                    <tr><td><code>.is-open</code></td><td><code>.sidebar-nav</code></td><td>Added by JS when the drawer is open.</td></tr>
+                    <tr><td><code>.is-visible</code></td><td><code>.sidebar-backdrop</code></td><td>Added by JS when the backdrop is shown.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

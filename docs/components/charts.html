@@ -14,51 +14,65 @@
         Theme.init();
 
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        const mkData = (labels, values) => labels.map((label, i) => ({ label, value: values[i] }));
 
         new Chart('#chart-line', {
             type: 'line',
             series: [
-                { label: 'Revenue', data: [42, 58, 51, 73, 68, 90] },
-                { label: 'Expenses', data: [30, 35, 40, 38, 50, 45] },
+                { name: 'Revenue',  data: mkData(months, [42, 58, 51, 73, 68, 90]) },
+                { name: 'Expenses', data: mkData(months, [30, 35, 40, 38, 50, 45]) },
             ],
-            labels: months,
         });
 
         new Chart('#chart-area', {
             type: 'area',
-            series: [{ label: 'Sessions', data: [120, 145, 132, 178, 165, 200] }],
-            labels: months,
+            series: [{ name: 'Sessions', data: mkData(months, [120, 145, 132, 178, 165, 200]) }],
         });
 
         new Chart('#chart-column', {
             type: 'column',
             series: [
-                { label: 'Q1', data: [25, 40, 35, 50, 30, 60] },
-                { label: 'Q2', data: [30, 45, 28, 55, 42, 70] },
+                { name: 'Q1', data: mkData(months, [25, 40, 35, 50, 30, 60]) },
+                { name: 'Q2', data: mkData(months, [30, 45, 28, 55, 42, 70]) },
             ],
-            labels: months,
         });
 
         new Chart('#chart-bar', {
             type: 'bar',
-            series: [{ label: 'Score', data: [80, 65, 90, 55, 70] }],
-            labels: ['Design', 'Development', 'Performance', 'Accessibility', 'SEO'],
+            series: [{ name: 'Score', data: mkData(['Design', 'Development', 'Performance', 'Accessibility', 'SEO'], [80, 65, 90, 55, 70]) }],
         });
 
         new Chart('#chart-pie', {
             type: 'pie',
-            series: [{ label: 'Share', data: [35, 25, 20, 15, 5] }],
-            labels: ['Chrome', 'Safari', 'Firefox', 'Edge', 'Other'],
+            series: [{ name: 'Share', data: mkData(['Chrome', 'Safari', 'Firefox', 'Edge', 'Other'], [35, 25, 20, 15, 5]) }],
         });
+
+        const curveSeries = [{ name: 'Value', data: mkData(months, [30, 70, 45, 85, 55, 95]) }];
+        new Chart('#chart-curve-smooth', { type: 'line', curve: 'smooth', series: curveSeries, showLegend: false });
+        new Chart('#chart-curve-linear', { type: 'line', curve: 'linear', series: curveSeries, showLegend: false });
+        new Chart('#chart-curve-step',   { type: 'line', curve: 'step',   series: curveSeries, showLegend: false });
 
         new CodeViewer('#code-js', `import { Chart } from '@dodlhuat/basix/js/chart.js';
 
 new Chart('#my-chart', {
-  type:   'line',              // 'line' | 'area' | 'column' | 'bar' | 'pie'
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  type: 'line',   // 'line' | 'area' | 'column' | 'bar' | 'pie'
   series: [
-    { label: 'Revenue',  data: [42, 58, 51, 73, 68, 90] },
-    { label: 'Expenses', data: [30, 35, 40, 38, 50, 45] },
+    {
+      name: 'Revenue',
+      data: [
+        { label: 'Jan', value: 42 },
+        { label: 'Feb', value: 58 },
+        { label: 'Mar', value: 51 },
+      ],
+    },
+    {
+      name: 'Expenses',
+      data: [
+        { label: 'Jan', value: 30 },
+        { label: 'Feb', value: 35 },
+        { label: 'Mar', value: 40 },
+      ],
+    },
   ],
 });`, 'js');
 
@@ -67,14 +81,14 @@ new Chart('#my-chart', {
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
@@ -85,6 +99,7 @@ new Chart('#my-chart', {
         <div class="docs-content">
             <h1>Charts</h1>
             <p class="docs-lead">Pure SVG chart components — no external dependencies. Five types with enter animations, hover tooltips, legends, and full dark mode support.</p>
+            <p class="docs-import">{ Chart } from '/basix/js/chart.js'</p>
 
             <h2>Line</h2>
             <p>Smooth Catmull-Rom bezier curves. Supports multiple series and hover tooltips.</p>
@@ -106,6 +121,23 @@ new Chart('#my-chart', {
             <p>Per-slice hover pop-out and percentage legend. Slices animate with staggered scale + fade.</p>
             <div class="docs-demo"><div id="chart-pie"></div></div>
 
+            <h2>Curve styles</h2>
+            <p>Applies to <code>line</code> and <code>area</code> charts via the <code>curve</code> option.</p>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+                <div>
+                    <p style="text-align:center;font-size:0.8rem;font-weight:600;margin:0 0 0.25rem;">smooth</p>
+                    <div class="docs-demo" style="padding:0;"><div id="chart-curve-smooth"></div></div>
+                </div>
+                <div>
+                    <p style="text-align:center;font-size:0.8rem;font-weight:600;margin:0 0 0.25rem;">linear</p>
+                    <div class="docs-demo" style="padding:0;"><div id="chart-curve-linear"></div></div>
+                </div>
+                <div>
+                    <p style="text-align:center;font-size:0.8rem;font-weight:600;margin:0 0 0.25rem;">step</p>
+                    <div class="docs-demo" style="padding:0;"><div id="chart-curve-step"></div></div>
+                </div>
+            </div>
+
             <h2>Usage</h2>
             <div id="code-html"></div>
             <div id="code-js" style="margin-top:0.5rem;"></div>
@@ -115,8 +147,14 @@ new Chart('#my-chart', {
                 <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
                 <tbody>
                     <tr><td><code>type</code></td><td>line | area | column | bar | pie</td><td>—</td><td>Chart type to render.</td></tr>
-                    <tr><td><code>labels</code></td><td>string[]</td><td>—</td><td>Category labels for the x-axis (or pie segments).</td></tr>
-                    <tr><td><code>series</code></td><td>Array&lt;{label, data[]}&gt;</td><td>—</td><td>One or more data series. Each has a <code>label</code> and array of numeric <code>data</code> values.</td></tr>
+                    <tr><td><code>series</code></td><td>Array&lt;{name, data[]}&gt;</td><td>—</td><td>One or more data series. Each has a <code>name</code> and an array of <code>{ label, value }</code> data points.</td></tr>
+                    <tr><td><code>height</code></td><td>number</td><td><code>280</code></td><td>Inner chart height in px.</td></tr>
+                    <tr><td><code>showLegend</code></td><td>boolean</td><td><code>true</code></td><td>Show the legend below the chart.</td></tr>
+                    <tr><td><code>showGrid</code></td><td>boolean</td><td><code>true</code></td><td>Show horizontal grid lines.</td></tr>
+                    <tr><td><code>animate</code></td><td>boolean</td><td><code>true</code></td><td>Enable enter animations.</td></tr>
+                    <tr><td><code>curve</code></td><td>smooth | linear | step</td><td><code>'smooth'</code></td><td>Line interpolation style for <code>line</code> and <code>area</code> charts.</td></tr>
+                    <tr><td><code>yMin</code></td><td>number</td><td><code>0</code></td><td>Fixed y-axis minimum.</td></tr>
+                    <tr><td><code>yMax</code></td><td>number</td><td>auto</td><td>Fixed y-axis maximum. Defaults to max value × 1.1.</td></tr>
                 </tbody>
             </table>
         </div>

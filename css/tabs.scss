@@ -94,6 +94,37 @@
   }
 }
 
+// ── Pills variant ─────────────────────────────────────────────────────────────
+
+.tabs-container.tabs-pills {
+  .tabs-header {
+    border-bottom: none;
+    padding-bottom: calc($spacing * 0.5);
+  }
+
+  .tabs-list {
+    gap: calc($spacing * 0.375);
+  }
+
+  .tab-item {
+    border-bottom: none;
+    border-radius: calc($border-radius * 5);
+    padding: calc($spacing * 0.4) calc($spacing * 1);
+    background: transparent;
+
+    &:hover {
+      background: var(--hover);
+      color: var(--primary-text);
+    }
+
+    &.active {
+      background: var(--accent-color);
+      color: #fff;
+      border-bottom-color: transparent;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .tabs-container.tabs-vertical {
     flex-direction: column;

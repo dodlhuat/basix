@@ -7,13 +7,10 @@
     <link rel="stylesheet" href="../../css/style.css"/>
     <style>
         .grid-demo .column {
-            background: color-mix(in srgb, var(--accent) 12%, transparent);
-            border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
             border-radius: 0.4rem;
             padding: 0.5rem 0.75rem;
             text-align: center;
             font-size: 0.8rem;
-            color: var(--accent);
             font-weight: 600;
         }
     </style>
@@ -60,14 +57,14 @@
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
@@ -82,27 +79,27 @@
             <h2>Equal columns</h2>
             <div class="docs-demo grid-demo">
                 <div class="row" style="gap:0.5rem;">
-                    <div class="column">1x</div>
-                    <div class="column">1x</div>
-                    <div class="column">1x</div>
+                    <div class="column" style="background:var(--accent-color-tint);color:var(--accent-color);">1x</div>
+                    <div class="column" style="background:var(--success-tint);color:var(--success);">1x</div>
+                    <div class="column" style="background:var(--warning-tint);color:var(--warning);">1x</div>
                 </div>
                 <div class="row" style="gap:0.5rem;margin-top:0.5rem;">
-                    <div class="column">1x</div>
-                    <div class="column">1x</div>
+                    <div class="column" style="background:var(--accent-color-tint);color:var(--accent-color);">1x</div>
+                    <div class="column" style="background:var(--success-tint);color:var(--success);">1x</div>
                 </div>
             </div>
 
             <h2>Proportional sizing</h2>
             <div class="docs-demo grid-demo">
                 <div class="row" style="gap:0.5rem;">
-                    <div class="column">1x</div>
-                    <div class="column grow-2">2x</div>
-                    <div class="column">1x</div>
+                    <div class="column" style="background:var(--accent-color-tint);color:var(--accent-color);">1x</div>
+                    <div class="column grow-2" style="background:var(--success-tint);color:var(--success);">2x</div>
+                    <div class="column" style="background:var(--warning-tint);color:var(--warning);">1x</div>
                 </div>
                 <div class="row" style="gap:0.5rem;margin-top:0.5rem;">
-                    <div class="column">1x</div>
-                    <div class="column grow-3">3x</div>
-                    <div class="column grow-2">2x</div>
+                    <div class="column" style="background:var(--accent-color-tint);color:var(--accent-color);">1x</div>
+                    <div class="column grow-3" style="background:var(--success-tint);color:var(--success);">3x</div>
+                    <div class="column grow-2" style="background:var(--warning-tint);color:var(--warning);">2x</div>
                 </div>
             </div>
 

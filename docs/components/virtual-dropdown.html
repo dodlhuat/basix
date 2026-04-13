@@ -41,7 +41,7 @@
             placeholder: 'Select a country…',
             searchable:  true,
             multiSelect: false,
-            onSelect: (val, label) => console.log('Selected:', label),
+            onSelect: (values) => console.log('Selected:', values),
         });
 
         new VirtualDropdown({
@@ -66,21 +66,21 @@ const dropdown = new VirtualDropdown({
   multiSelect:  false,             // allow multiple selections
   renderLimit:  20,                // items rendered per scroll window
   itemHeight:   40,                // px — must match CSS row height
-  onSelect: (value, label) => {
-    console.log(value, label);
+  onSelect: (values) => {
+    console.log(values); // Array of selected values
   },
 });`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
@@ -91,6 +91,7 @@ const dropdown = new VirtualDropdown({
         <div class="docs-content">
             <h1>Virtual Dropdown</h1>
             <p class="docs-lead">Virtualised searchable dropdown for large datasets. Only the visible rows are rendered to the DOM — 10,000+ items scroll smoothly. Supports single and multi-select modes.</p>
+            <p class="docs-import">{ VirtualDropdown } from '/basix/js/virtual-dropdown.js'</p>
 
             <h2>Single select (150 countries)</h2>
             <div class="docs-demo" style="max-width:360px;">
@@ -116,7 +117,18 @@ const dropdown = new VirtualDropdown({
                     <tr><td><code>multiSelect</code></td><td>boolean</td><td><code>false</code></td><td>Allow selecting multiple items.</td></tr>
                     <tr><td><code>renderLimit</code></td><td>number</td><td><code>20</code></td><td>Number of items rendered per virtual scroll window.</td></tr>
                     <tr><td><code>itemHeight</code></td><td>number</td><td><code>40</code></td><td>Row height in px — must match CSS to calculate scroll positions correctly.</td></tr>
-                    <tr><td><code>onSelect</code></td><td>function</td><td>—</td><td>Called with <code>(value, label)</code> on selection change.</td></tr>
+                    <tr><td><code>onSelect</code></td><td>function</td><td>—</td><td>Called with <code>(selectedValues: Array&lt;string|number&gt;)</code> on any selection change.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>API</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>getValue()</code></td><td>Returns the current selection as <code>Array&lt;string|number&gt;</code>.</td></tr>
+                    <tr><td><code>setValue(values)</code></td><td>Programmatically set the selection. Ignores values not in the options list.</td></tr>
+                    <tr><td><code>clearSelection()</code></td><td>Clears all selected values and resets the trigger label.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Removes all event listeners and clears the container.</td></tr>
                 </tbody>
             </table>
         </div>

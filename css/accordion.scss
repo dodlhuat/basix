@@ -10,17 +10,17 @@
 
 .accordion-item {
   border-bottom: 1px solid var(--divider);
+
+  &:last-child { border-bottom: none; }
 }
 
-.accordion-item:last-child {
-  border-bottom: none;
-}
-
-.accordion-input {
+// Hidden checkbox toggle
+.accordion-toggle {
   display: none;
 }
 
-.accordion-label {
+// Clickable header / trigger
+.accordion-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,34 +28,29 @@
   background: transparent;
   font-weight: 500;
   cursor: pointer;
-  transition: background 160ms ease,
-              color 160ms ease;
+  transition: background 160ms ease, color 160ms ease;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 
-  &:hover {
-    background: var(--hover);
-  }
+  &:hover  { background: var(--hover); }
+  &:active { background: var(--hover); }
 
-  &:active {
-    background: var(--hover);
+  &::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-right: 1.5px solid var(--secondary-text);
+    border-bottom: 1.5px solid var(--secondary-text);
+    transform: rotate(45deg);
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 160ms ease;
+    margin-left: $spacing;
+    flex-shrink: 0;
   }
 }
 
-.accordion-label::after {
-  content: '';
-  width: 8px;
-  height: 8px;
-  border-right: 1.5px solid var(--secondary-text);
-  border-bottom: 1.5px solid var(--secondary-text);
-  transform: rotate(45deg);
-  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 160ms ease;
-  margin-left: $spacing;
-  flex-shrink: 0;
-}
-
-.accordion-input:checked + .accordion-label {
+// Active state
+.accordion-toggle:checked + .accordion-header {
   color: var(--accent-color);
 
   &::after {
@@ -64,6 +59,7 @@
   }
 }
 
+// Grid wrapper — animates height via grid-template-rows
 .accordion-content {
   display: grid;
   grid-template-rows: 0fr;
@@ -71,17 +67,20 @@
   overflow: hidden;
 }
 
+.accordion-toggle:checked ~ .accordion-content {
+  grid-template-rows: 1fr;
+}
+
+// Inner body — min-height:0 is required for grid 0fr to collapse
 .accordion-body {
   min-height: 0;
-}
+  padding: 0;
+  overflow: hidden;
 
-.accordion-body > div {
-  padding: 0 calc($spacing * 1.25) calc($spacing * 1.25);
-  color: var(--secondary-text);
-  font-size: 0.9rem;
-  line-height: 1.6;
-}
-
-.accordion-input:checked ~ .accordion-content {
-  grid-template-rows: 1fr;
+  > * {
+    padding: 0 calc($spacing * 1.25) calc($spacing * 1.25);
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
 }

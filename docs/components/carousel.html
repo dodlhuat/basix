@@ -14,25 +14,21 @@
         Theme.init();
 
         new Carousel('#carousel-default', { loop: true });
-        new Carousel('#carousel-auto',    { loop: true, autoplay: true, interval: 2500 });
+        new Carousel('#carousel-auto',    { loop: true, autoPlay: true, autoPlayInterval: 2500 });
 
-        new CodeViewer('#code-html', `<div class="carousel" id="my-carousel">
-  <div class="carousel-track">
-    <div class="carousel-slide">Slide 1</div>
-    <div class="carousel-slide">Slide 2</div>
-    <div class="carousel-slide">Slide 3</div>
-  </div>
-  <button class="carousel-prev" aria-label="Previous">&#8249;</button>
-  <button class="carousel-next" aria-label="Next">&#8250;</button>
-  <div class="carousel-dots"></div>
+        new CodeViewer('#code-html', `<!-- Place slide content as direct children — the component builds track, controls, and dots -->
+<div class="carousel" id="my-carousel">
+  <div style="height:200px;">Slide 1</div>
+  <div style="height:200px;">Slide 2</div>
+  <div style="height:200px;">Slide 3</div>
 </div>`, 'html');
 
         new CodeViewer('#code-js', `import { Carousel } from '@dodlhuat/basix/js/carousel.js';
 
 const c = new Carousel('#my-carousel', {
-  loop:     true,       // wrap around at ends
-  autoplay: false,      // start auto-advancing
-  interval: 3000,       // ms between slides (autoplay)
+  loop:             true,   // wrap around at ends
+  autoPlay:         false,  // start auto-advancing
+  autoPlayInterval: 3000,   // ms between slides (autoPlay)
 });
 
 c.next();              // advance one slide
@@ -44,14 +40,14 @@ c.destroy();`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
@@ -62,33 +58,24 @@ c.destroy();`, 'js');
         <div class="docs-content">
             <h1>Carousel</h1>
             <p class="docs-lead">Touch-enabled slide carousel with prev/next controls, dot indicators, configurable loop and autoplay. Works with any content — images, cards, or custom HTML.</p>
+            <p class="docs-import">{ Carousel } from '/basix/js/carousel.js'</p>
 
             <h2>Default (loop)</h2>
-            <div class="docs-demo">
+            <div class="docs-demo" style="padding:0;">
                 <div class="carousel" id="carousel-default">
-                    <div class="carousel-track">
-                        <div class="carousel-slide" style="background:var(--accent-tint);height:180px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:600;border-radius:var(--radius-md);">Slide 1</div>
-                        <div class="carousel-slide" style="background:var(--success-tint);height:180px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:600;border-radius:var(--radius-md);">Slide 2</div>
-                        <div class="carousel-slide" style="background:var(--warning-tint);height:180px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:600;border-radius:var(--radius-md);">Slide 3</div>
-                        <div class="carousel-slide" style="background:var(--error-tint);height:180px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:600;border-radius:var(--radius-md);">Slide 4</div>
-                    </div>
-                    <button class="carousel-prev" aria-label="Previous">&#8249;</button>
-                    <button class="carousel-next" aria-label="Next">&#8250;</button>
-                    <div class="carousel-dots"></div>
+                    <div style="background:var(--accent-color-tint);height:200px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:600;">Slide 1</div>
+                    <div style="background:var(--success-tint);height:200px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:600;">Slide 2</div>
+                    <div style="background:var(--warning-tint);height:200px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:600;">Slide 3</div>
+                    <div style="background:var(--error-tint);height:200px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:600;">Slide 4</div>
                 </div>
             </div>
 
             <h2>Autoplay</h2>
-            <div class="docs-demo">
+            <div class="docs-demo" style="padding:0;">
                 <div class="carousel" id="carousel-auto">
-                    <div class="carousel-track">
-                        <div class="carousel-slide" style="background:var(--primary-tint);height:160px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:600;border-radius:var(--radius-md);">Auto A</div>
-                        <div class="carousel-slide" style="background:var(--accent-tint);height:160px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:600;border-radius:var(--radius-md);">Auto B</div>
-                        <div class="carousel-slide" style="background:var(--success-tint);height:160px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:600;border-radius:var(--radius-md);">Auto C</div>
-                    </div>
-                    <button class="carousel-prev" aria-label="Previous">&#8249;</button>
-                    <button class="carousel-next" aria-label="Next">&#8250;</button>
-                    <div class="carousel-dots"></div>
+                    <div style="background:var(--accent-color-tint);height:160px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:600;">Auto A</div>
+                    <div style="background:var(--success-tint);height:160px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:600;">Auto B</div>
+                    <div style="background:var(--warning-tint);height:160px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:600;">Auto C</div>
                 </div>
             </div>
 
@@ -101,8 +88,8 @@ c.destroy();`, 'js');
                 <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
                 <tbody>
                     <tr><td><code>loop</code></td><td>boolean</td><td><code>false</code></td><td>Wraps from last slide back to first (and vice versa).</td></tr>
-                    <tr><td><code>autoplay</code></td><td>boolean</td><td><code>false</code></td><td>Automatically advances slides on an interval.</td></tr>
-                    <tr><td><code>interval</code></td><td>number</td><td><code>3000</code></td><td>Milliseconds between auto-advances when <code>autoplay</code> is on.</td></tr>
+                    <tr><td><code>autoPlay</code></td><td>boolean</td><td><code>false</code></td><td>Automatically advances slides on an interval.</td></tr>
+                    <tr><td><code>autoPlayInterval</code></td><td>number</td><td><code>3000</code></td><td>Milliseconds between auto-advances when <code>autoPlay</code> is on.</td></tr>
                 </tbody>
             </table>
 

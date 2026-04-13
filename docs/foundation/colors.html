@@ -13,45 +13,46 @@
         Theme.init();
 
         new CodeViewer('#code-override', `:root {
-  /* Brand primary */
-  --primary:        #6C47FF;
-  --primary-light:  #EDE9FF;
-
-  /* Accent */
-  --accent:         #00C2B8;
-  --accent-tint:    color-mix(in srgb, var(--accent) 12%, transparent);
+  /* Accent / brand */
+  --accent-color:         #6C47FF;
+  --accent-color-lighten: #A78BFA;
+  --accent-color-tint:    color-mix(in srgb, #6C47FF 12%, transparent);
 
   /* Semantic */
   --success:        #16A34A;
+  --success-tint:   color-mix(in srgb, #16A34A 12%, transparent);
   --warning:        #D97706;
+  --warning-tint:   color-mix(in srgb, #D97706 12%, transparent);
   --error:          #DC2626;
+  --error-tint:     color-mix(in srgb, #DC2626 12%, transparent);
 
   /* Surface & border */
-  --surface:        #FFFFFF;
-  --border:         #E5E7EB;
+  --background:          #FFFFFF;
+  --secondary-background:#F3F4F6;
+  --divider:             #E5E7EB;
 
   /* Text */
   --primary-text:   #111827;
   --secondary-text: #6B7280;
 
   /* Radius */
-  --radius-sm:      4px;
-  --radius-md:      8px;
-  --radius-lg:      12px;
-  --radius-xl:      16px;
-  --radius-full:    9999px;
+  --radius-sm:   0.25rem;
+  --radius-md:   0.4rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1rem;
+  --radius-full: 9999px;
 }`, 'css');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
@@ -63,23 +64,19 @@
             <h1>Colors &amp; Tokens</h1>
             <p class="docs-lead">CSS custom properties for colours, spacing, shadows, and border radius. Override any token on <code>:root</code> to re-theme the entire library instantly — no build step required.</p>
 
-            <h2>Brand colours</h2>
+            <h2>Accent</h2>
             <div class="docs-demo" style="display:flex;gap:0.75rem;flex-wrap:wrap;">
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--primary);"></div>
-                    <code style="font-size:0.75rem;">--primary</code>
+                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--accent-color);"></div>
+                    <code style="font-size:0.75rem;">--accent-color</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--primary-light);border:1px solid var(--border);"></div>
-                    <code style="font-size:0.75rem;">--primary-light</code>
+                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--accent-color-lighten);"></div>
+                    <code style="font-size:0.75rem;">--accent-color-lighten</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--accent);"></div>
-                    <code style="font-size:0.75rem;">--accent</code>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--accent-tint);border:1px solid var(--border);"></div>
-                    <code style="font-size:0.75rem;">--accent-tint</code>
+                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--accent-color-tint);border:1px solid var(--divider);"></div>
+                    <code style="font-size:0.75rem;">--accent-color-tint</code>
                 </div>
             </div>
 
@@ -90,7 +87,7 @@
                     <code style="font-size:0.75rem;">--success</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--success-tint);border:1px solid var(--border);"></div>
+                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--success-tint);border:1px solid var(--divider);"></div>
                     <code style="font-size:0.75rem;">--success-tint</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
@@ -98,7 +95,7 @@
                     <code style="font-size:0.75rem;">--warning</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--warning-tint);border:1px solid var(--border);"></div>
+                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--warning-tint);border:1px solid var(--divider);"></div>
                     <code style="font-size:0.75rem;">--warning-tint</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
@@ -106,7 +103,7 @@
                     <code style="font-size:0.75rem;">--error</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--error-tint);border:1px solid var(--border);"></div>
+                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--error-tint);border:1px solid var(--divider);"></div>
                     <code style="font-size:0.75rem;">--error-tint</code>
                 </div>
             </div>
@@ -114,12 +111,16 @@
             <h2>Surface &amp; text</h2>
             <div class="docs-demo" style="display:flex;gap:0.75rem;flex-wrap:wrap;">
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);"></div>
-                    <code style="font-size:0.75rem;">--surface</code>
+                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--background);border:1px solid var(--divider);"></div>
+                    <code style="font-size:0.75rem;">--background</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--border);"></div>
-                    <code style="font-size:0.75rem;">--border</code>
+                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--secondary-background);border:1px solid var(--divider);"></div>
+                    <code style="font-size:0.75rem;">--secondary-background</code>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
+                    <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--divider);"></div>
+                    <code style="font-size:0.75rem;">--divider</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
                     <div style="width:72px;height:72px;border-radius:var(--radius-md);background:var(--primary-text);"></div>
@@ -134,23 +135,23 @@
             <h2>Border radius</h2>
             <div class="docs-demo" style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;">
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:56px;height:56px;background:var(--primary-light);border:2px solid var(--primary);border-radius:var(--radius-sm);"></div>
-                    <code style="font-size:0.75rem;">--radius-sm<br/>4px</code>
+                    <div style="width:56px;height:56px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-sm);"></div>
+                    <code style="font-size:0.75rem;">--radius-sm<br/>0.25rem</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:64px;height:64px;background:var(--primary-light);border:2px solid var(--primary);border-radius:var(--radius-md);"></div>
-                    <code style="font-size:0.75rem;">--radius-md<br/>8px</code>
+                    <div style="width:64px;height:64px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-md);"></div>
+                    <code style="font-size:0.75rem;">--radius-md<br/>0.4rem</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:72px;height:72px;background:var(--primary-light);border:2px solid var(--primary);border-radius:var(--radius-lg);"></div>
-                    <code style="font-size:0.75rem;">--radius-lg<br/>12px</code>
+                    <div style="width:72px;height:72px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-lg);"></div>
+                    <code style="font-size:0.75rem;">--radius-lg<br/>0.75rem</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:80px;height:80px;background:var(--primary-light);border:2px solid var(--primary);border-radius:var(--radius-xl);"></div>
-                    <code style="font-size:0.75rem;">--radius-xl<br/>16px</code>
+                    <div style="width:80px;height:80px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-xl);"></div>
+                    <code style="font-size:0.75rem;">--radius-xl<br/>1rem</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-                    <div style="width:88px;height:88px;background:var(--primary-light);border:2px solid var(--primary);border-radius:var(--radius-full);"></div>
+                    <div style="width:88px;height:88px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-full);"></div>
                     <code style="font-size:0.75rem;">--radius-full<br/>9999px</code>
                 </div>
             </div>

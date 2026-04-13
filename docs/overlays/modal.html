@@ -14,19 +14,19 @@
         Theme.init();
 
         document.getElementById('demo-default')?.addEventListener('click', () => {
-            new Modal({ header: 'Default Modal', content: '<p>This is a basic modal with a header and content area.</p>', footer: '<button class="button" onclick="this.closest(\'.modal-overlay\').remove()">Close</button>', closeable: true });
+            new Modal({ header: 'Default Modal', content: '<p>This is a basic modal with a header and content area.</p>', footer: '<button class="button" onclick="this.closest(\'.modal-wrapper\').remove()">Close</button>', closeable: true }).show();
         });
         document.getElementById('demo-success')?.addEventListener('click', () => {
-            new Modal({ header: 'Success', content: '<p>Your changes have been saved successfully.</p>', type: 'success', closeable: true });
+            new Modal({ header: 'Success', content: '<p>Your changes have been saved successfully.</p>', type: 'success', closeable: true }).show();
         });
         document.getElementById('demo-error')?.addEventListener('click', () => {
-            new Modal({ header: 'Error', content: '<p>Something went wrong. Please try again.</p>', type: 'error', closeable: true });
+            new Modal({ header: 'Error', content: '<p>Something went wrong. Please try again.</p>', type: 'error', closeable: true }).show();
         });
         document.getElementById('demo-warning')?.addEventListener('click', () => {
-            new Modal({ header: 'Warning', content: '<p>This action cannot be undone. Are you sure?</p>', type: 'warning', closeable: true, footer: '<button class="button ghost" onclick="this.closest(\'.modal-overlay\').remove()">Cancel</button><button class="button accent" style="margin-left:0.5rem">Confirm</button>' });
+            new Modal({ header: 'Warning', content: '<p>This action cannot be undone. Are you sure?</p>', type: 'warning', closeable: true, footer: '<button class="button ghost" onclick="this.closest(\'.modal-wrapper\').remove()">Cancel</button><button class="button accent" style="margin-left:0.5rem">Confirm</button>' }).show();
         });
         document.getElementById('demo-info')?.addEventListener('click', () => {
-            new Modal({ header: 'Information', content: '<p>Here is some important information for you.</p>', type: 'info', closeable: true });
+            new Modal({ header: 'Information', content: '<p>Here is some important information for you.</p>', type: 'info', closeable: true }).show();
         });
 
         new CodeViewer('#code-html', `<!-- No HTML markup needed — modal is built entirely in JS -->`, 'html');
@@ -38,18 +38,18 @@ new Modal({
   footer:    '<button class="button ghost" id="cancel">Cancel</button>',
   type:      'warning',   // 'default' | 'success' | 'error' | 'warning' | 'info'
   closeable: true,        // show × button + close on backdrop/Escape
-});`, 'js');
+}).show();`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
@@ -60,6 +60,7 @@ new Modal({
         <div class="docs-content">
             <h1>Modal</h1>
             <p class="docs-lead">Dialog overlays with header, content, and footer sections. Supports semantic types, a close button, backdrop and Escape key dismissal. Built entirely in JavaScript — no HTML markup required.</p>
+            <p class="docs-import">{ Modal } from '/basix/js/modal.js'</p>
 
             <h2>Variants</h2>
             <div class="docs-demo centered">

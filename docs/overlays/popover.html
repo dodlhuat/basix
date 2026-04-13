@@ -49,12 +49,12 @@
 
         // No arrow
         new Popover('#pop-no-arrow', {
-            content: `<ul style="list-style:none;margin:0;padding:0;min-width:140px;">
-                <li><button class="button ghost" style="width:100%;text-align:left;">Edit</button></li>
-                <li><button class="button ghost" style="width:100%;text-align:left;">Duplicate</button></li>
-                <li><hr style="margin:0.25rem 0;border-color:var(--divider)"></li>
-                <li><button class="button ghost" style="width:100%;text-align:left;color:var(--error)">Delete</button></li>
-            </ul>`,
+            content: `<div class="popover-menu">
+                <div class="popover-menu-item">Edit</div>
+                <div class="popover-menu-item">Duplicate</div>
+                <div class="popover-menu-divider"></div>
+                <div class="popover-menu-item is-destructive">Delete</div>
+            </div>`,
             placement: 'bottom',
             align: 'end',
             arrow: false,
@@ -88,16 +88,16 @@ Popover.closeAll();`, 'js');
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
+<div class="sidebar-layout">
 
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
 
-    <div class="docs-main">
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24">
                         <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
                     </svg>
@@ -117,6 +117,7 @@ Popover.closeAll();`, 'js');
                 stays interactive. Supports four placements with automatic flip on collision,
                 cross-axis alignment, click and hover trigger modes, and an optional bordered arrow.
             </p>
+            <p class="docs-import">{ Popover } from '/basix/js/popover.js'</p>
 
             <!-- Placement -->
             <h2>Placement</h2>

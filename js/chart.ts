@@ -1,6 +1,7 @@
 // ─── Types ──────────────────────────────────────────────────────────────────
 
-export type ChartType = 'line' | 'area' | 'column' | 'bar' | 'pie';
+export type ChartType  = 'line' | 'area' | 'column' | 'bar' | 'pie';
+export type ChartCurve = 'smooth' | 'linear' | 'step';
 
 export interface ChartDataPoint {
     label: string;
@@ -23,6 +24,8 @@ export interface ChartOptions {
     showLegend?: boolean;
     showGrid?: boolean;
     animate?: boolean;
+    /** Line interpolation for line/area charts. Default: 'smooth' */
+    curve?: ChartCurve;
     /** Fixed y-axis minimum. Default: 0 */
     yMin?: number;
     /** Fixed y-axis maximum. Default: auto (max value × 1.1) */
@@ -73,6 +76,7 @@ class Chart {
             showLegend:   options.showLegend   ?? true,
             showGrid:     options.showGrid     ?? true,
             animate:      options.animate      ?? true,
+            curve:        options.curve        ?? 'smooth',
             yMin:         options.yMin         ?? 0,
             yMax:         options.yMax         ?? 0,
             onPointClick: options.onPointClick ?? (() => {}),
@@ -147,7 +151,7 @@ class Chart {
             }));
 
             if (isArea) {
-                const areaD = `${this.smoothPath(pts)} L ${pts[pts.length - 1].x} ${m.top + h} L ${pts[0].x} ${m.top + h} Z`;
+                const areaD = `${this.buildPath(pts)} L ${pts[pts.length - 1].x} ${m.top + h} L ${pts[0].x} ${m.top + h} Z`;
                 svg.appendChild(this.svgEl('path', {
                     d: areaD, fill: color,
                     'fill-opacity': '0.12', stroke: 'none',
@@ -156,7 +160,7 @@ class Chart {
             }
 
             const linePath = this.svgEl('path', {
-                d: this.smoothPath(pts), fill: 'none',
+                d: this.buildPath(pts), fill: 'none',
                 stroke: color, 'stroke-width': '2.5',
                 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
                 class: 'chart-line',
@@ -449,6 +453,28 @@ class Chart {
     }
 
     // ── Geometry helpers ─────────────────────────────────────────────────────
+
+    private buildPath(pts: Point[]): string {
+        switch (this.opts.curve) {
+            case 'linear': return this.linearPath(pts);
+            case 'step':   return this.stepPath(pts);
+            default:       return this.smoothPath(pts);
+        }
+    }
+
+    private linearPath(pts: Point[]): string {
+        if (pts.length === 0) return '';
+        return pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+    }
+
+    private stepPath(pts: Point[]): string {
+        if (pts.length === 0) return '';
+        let d = `M ${pts[0].x} ${pts[0].y}`;
+        for (let i = 1; i < pts.length; i++) {
+            d += ` H ${pts[i].x} V ${pts[i].y}`;
+        }
+        return d;
+    }
 
     /** Smooth cubic bezier path through points (Catmull-Rom → cubic bezier) */
     private smoothPath(pts: Point[]): string {

@@ -81,14 +81,14 @@ const picker = new GroupPicker('#my-picker', [
     </script>
 </head>
 <body class="primary-light-bg primary">
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
@@ -99,6 +99,7 @@ const picker = new GroupPicker('#my-picker', [
         <div class="docs-content">
             <h1>Group Picker</h1>
             <p class="docs-lead">Hierarchical multi-select component with collapsible groups, search filtering, and a chip-based selection summary. Pass a tree of groups and subgroups — the picker handles the rest.</p>
+            <p class="docs-import">{ GroupPicker } from '/basix/js/group-picker.js'</p>
 
             <h2>Demo</h2>
             <div class="docs-demo" style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;">

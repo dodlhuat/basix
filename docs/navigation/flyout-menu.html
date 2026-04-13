@@ -14,19 +14,16 @@
         Theme.init();
 
         // Demo flyout embedded in the page
-        const flyout = new FlyoutMenu({
+        new FlyoutMenu({
             triggerSelector: '#demo-flyout-trigger',
             menuSelector:    '#demo-flyout-menu',
             overlaySelector: '#demo-flyout-overlay',
-            closeSelector:   '#demo-flyout-close',
             direction:       'right',
             title:           'Demo Menu',
             enableHeader:    true,
             enableFooter:    true,
             footerText:      '© 2026 Basix',
         });
-
-        document.getElementById('demo-flyout-trigger')?.addEventListener('click', () => flyout.open());
 
         new CodeViewer('#code-html', `<!-- Trigger button -->
 <button id="my-trigger">Open menu</button>
@@ -86,18 +83,17 @@ flyout.destroy();`, 'js');
                 <li><a href="../forms/datepicker.html">Date Picker</a></li>
             </ul>
         </li>
-        <li><a href="../../showcase.html">Full Showcase</a></li>
     </ul>
 </div>
 
-<div class="docs-layout">
-    <aside class="docs-sidebar" id="docs-sidebar"></aside>
-    <div class="docs-sidebar-backdrop" id="docs-sidebar-backdrop"></div>
-    <div class="docs-main">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
         <div class="docs-topbar">
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
-                <button class="docs-mobile-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
                     <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
@@ -108,11 +104,11 @@ flyout.destroy();`, 'js');
         <div class="docs-content">
             <h1>Flyout Menu</h1>
             <p class="docs-lead">A slide-in navigation panel that overlays the page from the left or right edge. Supports nested submenus, optional header and footer, keyboard Escape to close, and overlay-click dismissal.</p>
+            <p class="docs-import">{ FlyoutMenu } from '/basix/js/flyout-menu.js'</p>
 
             <h2>Demo</h2>
             <div class="docs-demo centered">
                 <button class="button" id="demo-flyout-trigger">Open flyout →</button>
-                <button class="button ghost" id="demo-flyout-close" style="display:none;">Close</button>
             </div>
 
             <h2>Usage</h2>
