@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Push Menu Demo</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <style>
+        body { margin: 0; background: var(--primary-background); color: var(--primary-text); }
+        .push-content { padding: calc(var(--spacing) * 4.5) calc(var(--spacing) * 1.5) calc(var(--spacing) * 1.5); }
+        .push-content h2 { margin: 0 0 0.5rem; font-size: 1.1rem; }
+        .push-content p { margin: 0 0 1rem; font-size: 0.875rem; opacity: 0.7; line-height: 1.5; }
+    </style>
+    <script type="module">
+        import { PushMenu } from '../../js/push-menu.js';
+        import { Theme } from '../../js/theme.js';
+        Theme.init();
+        PushMenu.init();
+    </script>
+</head>
+<body class="primary-light-bg primary">
+
+<div class="main-header">
+    <div class="open-menu">
+        <div class="navigation-controls">
+            <input type="checkbox" id="menu-navigation" class="navigation"/>
+            <label for="menu-navigation">
+                <svg style="fill:currentColor;width:24px;height:24px;display:inline-block;vertical-align:middle" width="24" height="24">
+                    <use href="../../svg-icons/icons.svg#menu"/>
+                </svg>
+            </label>
+        </div>
+    </div>
+    <div class="last" style="display:flex;align-items:center;gap:0.5rem;">
+        <span style="font-size:0.8rem;font-weight:600;letter-spacing:0.04em;">Push Menu Demo</span>
+    </div>
+</div>
+
+<nav class="push-menu">
+    <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Messages</a></li>
+        <li>
+            <a>Settings</a>
+            <ul>
+                <li><a href="#">Account</a></li>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Notifications</a></li>
+            </ul>
+        </li>
+        <li>
+            <a>Projects</a>
+            <ul>
+                <li><a href="#">Active</a></li>
+                <li><a href="#">Archived</a></li>
+                <li>
+                    <a>Reports</a>
+                    <ul>
+                        <li><a href="#">Weekly</a></li>
+                        <li><a href="#">Monthly</a></li>
+                        <li><a href="#">Annual</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><a href="#">Help</a></li>
+        <li><a href="#">Logout</a></li>
+    </ul>
+</nav>
+<div class="push-menu-backdrop"></div>
+
+<div class="content push-content">
+    <h2>Main Content</h2>
+    <p>Click the hamburger icon in the top-left corner to open the push menu. The menu supports nested sub-panels — try clicking "Settings" or "Projects" to drill into sub-levels.</p>
+    <p>The backdrop overlay closes the menu when clicked. The entire content area shifts to the right when the menu is open.</p>
+</div>
+
+</body>
+</html>
