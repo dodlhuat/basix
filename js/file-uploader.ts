@@ -1,3 +1,5 @@
+import { escapeHtml } from './utils.js';
+
 interface FileData {
     file: File;
     element: HTMLDivElement;
@@ -44,10 +46,10 @@ class FileUploader {
         this.container = container;
         this.container.classList.add('file-uploader');
 
-        const dropZone = container.querySelector<HTMLElement>('#drop-zone');
-        const fileInput = container.querySelector<HTMLInputElement>('#file-input');
-        const fileList = container.querySelector<HTMLElement>('#file-list');
-        const uploadBtn = container.querySelector<HTMLButtonElement>('#upload-btn');
+        const dropZone = container.querySelector<HTMLElement>('.drop-zone');
+        const fileInput = container.querySelector<HTMLInputElement>('.file-input');
+        const fileList = container.querySelector<HTMLElement>('.file-list');
+        const uploadBtn = container.querySelector<HTMLButtonElement>('.upload-btn');
 
         if (!dropZone || !fileInput || !fileList || !uploadBtn) {
             throw new Error('Required elements not found in container');
@@ -182,7 +184,7 @@ class FileUploader {
         const item = document.createElement('div');
         item.className = 'file-item';
 
-        const escapedFileName = this.escapeHtml(file.name);
+        const escapedFileName = escapeHtml(file.name);
 
         item.innerHTML = `
       <div class="file-item-header">
@@ -330,12 +332,6 @@ class FileUploader {
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'] as const;
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
-    }
-
-    private escapeHtml(text: string): string {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 
     public destroy(): void {

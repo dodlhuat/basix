@@ -1,6 +1,8 @@
 class Select {
     private readonly element: HTMLSelectElement;
     private readonly isMultiselect: boolean;
+    private readonly dropdown: HTMLElement | null;
+    private readonly documentClickHandler: (e: Event) => void;
 
     constructor(elementOrSelector: string | HTMLSelectElement) {
         const element = typeof elementOrSelector === 'string'
@@ -18,7 +20,20 @@ class Select {
             throw new Error(`Select: Failed to initialize select for "${elementOrSelector}"`);
         }
 
-        this.isMultiselect = result;
+        this.isMultiselect = result.isMulti;
+        this.dropdown = result.dropdown;
+
+        this.documentClickHandler = (e: Event) => {
+            if (this.dropdown && !this.dropdown.contains(e.target as Node)) {
+                this.dropdown.classList.remove('open');
+            }
+        };
+        document.addEventListener('click', this.documentClickHandler);
+    }
+
+    public destroy(): void {
+        document.removeEventListener('click', this.documentClickHandler);
+        this.dropdown?.classList.remove('open');
     }
 
     public value(): string | string[] | undefined {
@@ -42,10 +57,20 @@ class Select {
             return null;
         }
 
-        return Select.initElement(element);
+        const result = Select.initElement(element);
+        if (!result) return null;
+
+        // Static init path: add document listener without lifecycle management
+        document.addEventListener('click', (e: Event) => {
+            if (!result.dropdown.contains(e.target as Node)) {
+                result.dropdown.classList.remove('open');
+            }
+        });
+
+        return result.isMulti;
     }
 
-    private static initElement(element: HTMLSelectElement): boolean | null {
+    private static initElement(element: HTMLSelectElement): { isMulti: boolean; dropdown: HTMLElement } | null {
         if (!Select.transformSelect(element)) {
             return null;
         }
@@ -98,14 +123,7 @@ class Select {
             });
         }
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e: Event) => {
-            if (!dropdown.contains(e.target as Node)) {
-                dropdown.classList.remove('open');
-            }
-        });
-
-        return isMulti;
+        return { isMulti, dropdown };
     }
 
     private static closeAllDropdowns(exceptDropdown?: HTMLElement): void {

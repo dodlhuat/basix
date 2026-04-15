@@ -30,6 +30,7 @@ class Table {
     private tableBody!: HTMLTableSectionElement;
     private tableHeader!: HTMLTableSectionElement;
     private paginationContainer!: HTMLDivElement;
+    private abortController = new AbortController();
 
     constructor(elementOrSelector: string | HTMLElement, options: TableOptions = {}) {
         const element = typeof elementOrSelector === 'string'
@@ -118,7 +119,7 @@ class Table {
         searchInput.className = 'search-input';
         searchInput.addEventListener('input', (e) => {
             this.handleSearch((e.target as HTMLInputElement).value);
-        });
+        }, { signal: this.abortController.signal });
         controlsDiv.appendChild(searchInput);
 
         // Page size selector
@@ -142,7 +143,7 @@ class Table {
 
         pageSizeSelect.addEventListener('change', (e) => {
             this.handlePageSizeChange(parseInt((e.target as HTMLSelectElement).value, 10));
-        });
+        }, { signal: this.abortController.signal });
 
         this.assignUniqueId(pageSizeSelect, 'page-size-select-0');
         selectGroup.appendChild(pageSizeSelect);
@@ -172,7 +173,7 @@ class Table {
 
             if (col.sortable !== false) {
                 th.classList.add('sortable');
-                th.addEventListener('click', () => this.handleSort(col.key));
+                th.addEventListener('click', () => this.handleSort(col.key), { signal: this.abortController.signal });
             }
 
             tr.appendChild(th);
@@ -447,6 +448,11 @@ class Table {
      */
     public getData(): TableRow[] {
         return this.getFilteredAndSortedData();
+    }
+
+    public destroy(): void {
+        this.abortController.abort();
+        this.container.innerHTML = '';
     }
 }
 

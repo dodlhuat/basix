@@ -7,6 +7,9 @@ interface TooltipOptions {
     offset?: number;
     delay?: number;
     className?: string;
+    /** Set to true when content is trusted HTML (e.g. from data-tooltip-id).
+     *  Defaults to false — content is treated as plain text and escaped. */
+    isHtml?: boolean;
 }
 
 class Tooltip {
@@ -27,7 +30,8 @@ class Tooltip {
             position: options.position ?? 'auto',
             offset: options.offset ?? 8,
             delay: options.delay ?? 0,
-            className: options.className ?? ''
+            className: options.className ?? '',
+            isHtml: options.isHtml ?? false,
         };
 
         this.attachEvents();
@@ -41,7 +45,7 @@ class Tooltip {
             const className = trigger.getAttribute('data-tooltip-class') ?? '';
 
             if (content) {
-                new Tooltip(trigger, content, { position, className });
+                new Tooltip(trigger, content, { position, className, isHtml: false });
             }
         });
 
@@ -56,7 +60,7 @@ class Tooltip {
                 const contentElement = document.getElementById(contentId);
                 if (contentElement) {
                     const content = contentElement.innerHTML;
-                    new Tooltip(trigger, content, { position, className });
+                    new Tooltip(trigger, content, { position, className, isHtml: true });
                 }
             }
         });
@@ -113,7 +117,15 @@ class Tooltip {
         tooltip.className = 'tooltip';
         tooltip.id = `tooltip-${++Tooltip.idCounter}`;
         tooltip.setAttribute('role', 'tooltip');
-        tooltip.innerHTML = `<div class="tooltip-content">${this.content}</div>`;
+
+        const tooltipContent = document.createElement('div');
+        tooltipContent.className = 'tooltip-content';
+        if (this.options.isHtml) {
+            tooltipContent.innerHTML = this.content;
+        } else {
+            tooltipContent.textContent = this.content;
+        }
+        tooltip.appendChild(tooltipContent);
 
         if (this.options.className) {
             tooltip.classList.add(this.options.className);

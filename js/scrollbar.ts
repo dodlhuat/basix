@@ -9,6 +9,8 @@ class Scrollbar {
     private static readonly instances = new WeakMap<HTMLElement, Scrollbar>();
     private static activeInstance: Scrollbar | null = null;
     private static globalListenersInstalled = false;
+    private static instanceCount = 0;
+    private static globalListenerAbortController: AbortController | null = null;
 
     private readonly container!: HTMLElement;
     private readonly viewport!: HTMLElement;
@@ -32,21 +34,7 @@ class Scrollbar {
     private readonly boundUpdateThumb!: () => void;
     private readonly boundContainerWheel!: (e: WheelEvent) => void;
 
-    constructor(elementOrSelector: string | HTMLElement) {
-        const container = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLElement>(elementOrSelector)
-            : elementOrSelector;
-
-        if (!container) {
-            throw new Error(`Scrollbar: Element not found for selector "${elementOrSelector}"`);
-        }
-
-        // Return existing instance if already initialized
-        const existingInstance = Scrollbar.instances.get(container);
-        if (existingInstance) {
-            return existingInstance as any;
-        }
-
+    private constructor(container: HTMLElement) {
         this.container = container;
 
         // Query and validate required elements
@@ -75,7 +63,8 @@ class Scrollbar {
         this.attachEventListeners();
         Scrollbar.instances.set(container, this);
 
-        // Install global listeners once for all instances
+        // Track instances and install global listeners once for all
+        Scrollbar.instanceCount++;
         if (!Scrollbar.globalListenersInstalled) {
             Scrollbar.installGlobalListeners();
         }
@@ -112,18 +101,20 @@ class Scrollbar {
     }
 
     private static installGlobalListeners(): void {
-        // Route pointer events to the active scrollbar instance
+        const ac = new AbortController();
+        Scrollbar.globalListenerAbortController = ac;
+
         document.addEventListener('pointermove', (e: PointerEvent) => {
             Scrollbar.activeInstance?.boundPointerMove(e);
-        }, { passive: false });
+        }, { passive: false, signal: ac.signal });
 
         document.addEventListener('pointerup', (e: PointerEvent) => {
             Scrollbar.activeInstance?.boundPointerUp(e);
-        });
+        }, { signal: ac.signal });
 
         document.addEventListener('pointercancel', (e: PointerEvent) => {
             Scrollbar.activeInstance?.boundPointerUp(e);
-        });
+        }, { signal: ac.signal });
 
         Scrollbar.globalListenersInstalled = true;
     }
@@ -300,26 +291,45 @@ class Scrollbar {
         if (Scrollbar.activeInstance === this) {
             Scrollbar.activeInstance = null;
         }
+
+        // Uninstall global listeners when last instance is destroyed
+        Scrollbar.instanceCount--;
+        if (Scrollbar.instanceCount === 0) {
+            Scrollbar.globalListenerAbortController?.abort();
+            Scrollbar.globalListenerAbortController = null;
+            Scrollbar.globalListenersInstalled = false;
+        }
     }
 
     // Static factory methods
+    public static create(elementOrSelector: string | HTMLElement): Scrollbar {
+        const container = typeof elementOrSelector === 'string'
+            ? document.querySelector<HTMLElement>(elementOrSelector)
+            : elementOrSelector;
+
+        if (!container) {
+            throw new Error(`Scrollbar: Element not found for selector "${elementOrSelector}"`);
+        }
+
+        const existing = Scrollbar.instances.get(container);
+        if (existing) return existing;
+
+        return new Scrollbar(container);
+    }
+
     public static initAll(selector: string): Scrollbar[] {
         const containers = document.querySelectorAll<HTMLElement>(selector);
-        return Array.from(containers).map(container => new Scrollbar(container));
+        return Array.from(containers).map(container => Scrollbar.create(container));
     }
 
     public static initOne(elementOrSelector: string | HTMLElement): Scrollbar {
-        return new Scrollbar(elementOrSelector);
+        return Scrollbar.create(elementOrSelector);
     }
 
     public static getInstance(container: HTMLElement): Scrollbar | undefined {
         return Scrollbar.instances.get(container);
     }
 
-    public static destroyAll(): void {
-        // Note: WeakMap doesn't support iteration, so this is a no-op
-        // Individual instances should be destroyed by calling destroy()
-    }
 }
 
 export { Scrollbar, ScrollbarElements };

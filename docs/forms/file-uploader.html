@@ -20,16 +20,16 @@
         });
 
         new CodeViewer('#code-html', `<div id="my-uploader">
-  <input type="file" id="file-input" multiple hidden/>
-  <div id="drop-zone" class="drop-zone">
+  <input type="file" class="file-input" multiple hidden/>
+  <div class="drop-zone">
     <div class="drop-zone-content">
       <p class="primary-text">Click to upload or drag and drop</p>
       <p class="secondary-text">PNG, JPG, GIF, SVG (max 5 MB)</p>
     </div>
   </div>
-  <div id="file-list" class="file-list"></div>
+  <div class="file-list"></div>
   <div class="actions">
-    <button id="upload-btn" disabled>Upload Files</button>
+    <button class="upload-btn" disabled>Upload Files</button>
   </div>
 </div>`, 'html');
 
@@ -75,8 +75,8 @@ document.getElementById('my-uploader').addEventListener('file-validation-error',
             <h2>Demo</h2>
             <p>Drag files onto the zone or click to browse. Accepted: PNG, JPG, GIF, SVG up to 5 MB.</p>
             <div class="docs-demo" id="uploader-demo">
-                <input type="file" id="file-input" multiple hidden/>
-                <div id="drop-zone" class="drop-zone">
+                <input type="file" class="file-input" multiple hidden/>
+                <div class="drop-zone">
                     <div class="drop-zone-content">
                         <div class="icon-container">
                             <svg width="32" height="32" style="fill:currentColor;display:block;"><use href="../../svg-icons/icons.svg#upload"/></svg>
@@ -85,9 +85,9 @@ document.getElementById('my-uploader').addEventListener('file-validation-error',
                         <p class="secondary-text">PNG, JPG, GIF, SVG (max 5 MB)</p>
                     </div>
                 </div>
-                <div id="file-list" class="file-list"></div>
+                <div class="file-list"></div>
                 <div class="actions" style="margin-top:0.75rem;">
-                    <button id="upload-btn" disabled>Upload Files</button>
+                    <button class="upload-btn" disabled>Upload Files</button>
                 </div>
             </div>
 

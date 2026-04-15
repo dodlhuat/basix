@@ -81,4 +81,39 @@ const utils: Utils = {
     }
 };
 
-export { utils };
+/**
+ * Escape a plain-text string so it is safe to inject into innerHTML.
+ * Use this whenever inserting user-controlled strings into HTML templates.
+ */
+function escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/**
+ * Sanitize an HTML string by removing dangerous elements and attributes
+ * (script, iframe, on* handlers, javascript: hrefs) while preserving safe markup.
+ * Use this when a component intentionally accepts rich HTML from callers.
+ */
+function sanitizeHtml(html: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    doc.querySelectorAll('script, style, iframe, object, embed').forEach(el => el.remove());
+
+    doc.querySelectorAll('*').forEach(el => {
+        for (const attr of Array.from(el.attributes)) {
+            if (
+                attr.name.startsWith('on') ||
+                attr.value.trim().toLowerCase().startsWith('javascript:')
+            ) {
+                el.removeAttribute(attr.name);
+            }
+        }
+    });
+
+    return doc.body.innerHTML;
+}
+
+export { utils, escapeHtml, sanitizeHtml };

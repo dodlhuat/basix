@@ -20,6 +20,7 @@ class FlyoutMenu {
     private closeBtn: HTMLElement | null = null;
     private submenuToggles: NodeListOf<HTMLElement> | null = null;
     private menuLinks: NodeListOf<HTMLAnchorElement> | null = null;
+    private submenuHandlers = new Map<HTMLElement, (e: Event) => void>();
 
     constructor(options: FlyoutMenuOptions = {}) {
         this.options = {
@@ -157,7 +158,9 @@ class FlyoutMenu {
 
         // Submenus
         this.submenuToggles?.forEach(toggle => {
-            toggle.addEventListener('click', (e) => this.handleSubmenu(e, toggle));
+            const handler = (e: Event) => this.handleSubmenu(e, toggle);
+            this.submenuHandlers.set(toggle, handler);
+            toggle.addEventListener('click', handler);
         });
 
         // Close on Link Click
@@ -234,8 +237,10 @@ class FlyoutMenu {
         this.flyoutOverlay?.removeEventListener('click', this.close);
 
         this.submenuToggles?.forEach(toggle => {
-            toggle.removeEventListener('click', (e) => this.handleSubmenu(e, toggle));
+            const handler = this.submenuHandlers.get(toggle);
+            if (handler) toggle.removeEventListener('click', handler);
         });
+        this.submenuHandlers.clear();
 
         this.menuLinks?.forEach(link => {
             link.removeEventListener('click', this.close);

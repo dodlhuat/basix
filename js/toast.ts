@@ -1,3 +1,5 @@
+import { escapeHtml } from './utils.js';
+
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 interface ToastOptions {
@@ -119,18 +121,12 @@ class Toast {
         }
 
         if (this.header) {
-            parts.push(`<div class="header">${this.escapeHtml(this.header)}</div>`);
+            parts.push(`<div class="header">${escapeHtml(this.header)}</div>`);
         }
 
-        parts.push(`<div class="content">${this.escapeHtml(this.content)}</div>`);
+        parts.push(`<div class="content">${escapeHtml(this.content)}</div>`);
 
         return parts.join('');
-    }
-
-    private escapeHtml(text: string): string {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 }
 

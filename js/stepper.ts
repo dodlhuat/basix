@@ -10,6 +10,7 @@ class Stepper {
     private connectors: HTMLElement[];
     private current: number;
     private readonly onChange?: (current: number, previous: number) => void;
+    private abortController = new AbortController();
 
     constructor(elementOrSelector: string | HTMLElement, options: StepperOptions = {}) {
         const element = typeof elementOrSelector === 'string'
@@ -32,7 +33,7 @@ class Stepper {
         if (options.clickable) {
             this.container.classList.add('stepper-clickable');
             this.steps.forEach((step, i) => {
-                step.addEventListener('click', () => this.goTo(i));
+                step.addEventListener('click', () => this.goTo(i), { signal: this.abortController.signal });
             });
         }
 
@@ -98,6 +99,10 @@ class Stepper {
 
     public isLast(): boolean {
         return this.current === this.steps.length - 1;
+    }
+
+    public destroy(): void {
+        this.abortController.abort();
     }
 }
 

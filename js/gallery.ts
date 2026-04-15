@@ -1,3 +1,5 @@
+import { escapeHtml } from './utils.js';
+
 interface ImageData {
   src: string;
   title: string;
@@ -5,11 +7,11 @@ interface ImageData {
 }
 
 interface MasonryGalleryOptions {
+  fetchFunction: () => Promise<ImageData[]>;
   minColumnWidth?: number;
   scrollThreshold?: number;
   loaderSelector?: string;
   reload?: number;
-  fetchFunction?: () => Promise<ImageData[]>;
 }
 
 class MasonryGallery {
@@ -22,7 +24,7 @@ class MasonryGallery {
   private abortController: AbortController | null = null;
   private reloaded = 0;
 
-  constructor(containerId: string, options: MasonryGalleryOptions = {}) {
+  constructor(containerId: string, options: MasonryGalleryOptions) {
     const container = document.getElementById(containerId);
     if (!container) {
       throw new Error(`Container with id "${containerId}" not found`);
@@ -34,7 +36,7 @@ class MasonryGallery {
       minColumnWidth: options.minColumnWidth ?? 250,
       scrollThreshold: options.scrollThreshold ?? 100,
       reload: 2,
-      fetchFunction: options.fetchFunction ?? this.fetchMockImages,
+      fetchFunction: options.fetchFunction,
     };
 
     this.init();
@@ -159,10 +161,6 @@ class MasonryGallery {
     }
   }
 
-  private fetchMockImages = (): Promise<ImageData[]> => {
-    throw Error("Method not implemented.");
-  };
-
   private renderImages(imageDataList: ImageData[]): void {
     // Sort columns by current height so we start filling from the shortest.
     // Then round-robin across them — this avoids the problem where unloaded
@@ -196,20 +194,14 @@ class MasonryGallery {
     div.className = "masonry-item";
 
     div.innerHTML = `
-      <img src="${this.escapeHtml(data.src)}" alt="${this.escapeHtml(data.title)}" loading="lazy">
+      <img src="${escapeHtml(data.src)}" alt="${escapeHtml(data.title)}" loading="lazy">
       <div class="masonry-item-info">
-        <h3 class="masonry-item-title">${this.escapeHtml(data.title)}</h3>
-        <p class="masonry-item-desc">${this.escapeHtml(data.desc)}</p>
+        <h3 class="masonry-item-title">${escapeHtml(data.title)}</h3>
+        <p class="masonry-item-desc">${escapeHtml(data.desc)}</p>
       </div>
     `;
 
     return div;
-  }
-
-  private escapeHtml(text: string): string {
-    const div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
   }
 
   private addToShortestColumn(element: HTMLElement): void {

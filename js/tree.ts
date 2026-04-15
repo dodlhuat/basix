@@ -215,6 +215,11 @@ class TreeComponent {
     });
   }
 
+  public destroy(): void {
+    this.container.innerHTML = '';
+    this.selectedNode = null;
+  }
+
   public getSelectedNode(): TreeNode | null {
     return this.selectedNode;
   }

@@ -14,15 +14,22 @@ class TimeSpanPicker {
     private startTimeInput: HTMLInputElement;
     private endTimeInput: HTMLInputElement;
     private onChange?: (start: string, end: string) => void;
+    private readonly uid: string;
 
-    constructor(containerId: string, options?: TimeSpanPickerOptions) {
-        const element = document.getElementById(containerId);
+    constructor(elementOrSelector: string | HTMLElement, options?: TimeSpanPickerOptions) {
+        const element = typeof elementOrSelector === 'string'
+            ? (elementOrSelector.startsWith('#') || elementOrSelector.startsWith('.')
+                ? document.querySelector<HTMLElement>(elementOrSelector)
+                : document.getElementById(elementOrSelector))
+            : elementOrSelector;
+
         if (!element) {
-            throw new Error(`Container with id "${containerId}" not found`);
+            throw new Error(`TimeSpanPicker: Element not found for "${elementOrSelector}"`);
         }
 
         this.container = element;
         this.onChange = options?.onChange;
+        this.uid = `tsp-${Math.random().toString(36).slice(2, 9)}`;
 
         this.render();
 
@@ -53,15 +60,13 @@ class TimeSpanPicker {
     }
 
     private render(): void {
+        const startId = `${this.uid}-start`;
+        const endId = `${this.uid}-end`;
         this.container.innerHTML = `
       <div class="timespan-picker">
         <div class="timespan-field timespan-field-start">
-          <label for="timespan-start">From</label>
-          <input
-            type="time"
-            class="timespan-start"
-            id="timespan-start"
-          />
+          <label for="${startId}">From</label>
+          <input type="time" class="timespan-start" id="${startId}"/>
         </div>
 
         <div class="timespan-center">
@@ -70,12 +75,8 @@ class TimeSpanPicker {
         </div>
 
         <div class="timespan-field timespan-field-end">
-          <label for="timespan-end">To</label>
-          <input
-            type="time"
-            class="timespan-end"
-            id="timespan-end"
-          />
+          <label for="${endId}">To</label>
+          <input type="time" class="timespan-end" id="${endId}"/>
         </div>
       </div>
       <div class="timespan-bar" aria-hidden="true">
@@ -84,9 +85,12 @@ class TimeSpanPicker {
     `;
     }
 
+    private readonly handleStartChange = (): void => { this.handleChange(); };
+    private readonly handleEndChange = (): void => { this.handleChange(); };
+
     private attachEventListeners(): void {
-        this.startTimeInput.addEventListener('change', () => this.handleChange());
-        this.endTimeInput.addEventListener('change', () => this.handleChange());
+        this.startTimeInput.addEventListener('change', this.handleStartChange);
+        this.endTimeInput.addEventListener('change', this.handleEndChange);
     }
 
     private toMinutes(time: string): number {
@@ -183,10 +187,8 @@ class TimeSpanPicker {
     }
 
     public destroy(): void {
-        const startHandler = () => this.handleChange();
-        const endHandler = () => this.handleChange();
-        this.startTimeInput.removeEventListener('change', startHandler);
-        this.endTimeInput.removeEventListener('change', endHandler);
+        this.startTimeInput.removeEventListener('change', this.handleStartChange);
+        this.endTimeInput.removeEventListener('change', this.handleEndChange);
     }
 }
 

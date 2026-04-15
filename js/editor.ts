@@ -12,6 +12,7 @@ class Editor {
     private readonly wordCount: HTMLElement | null;
     private undoStack: string[] = [];
     private redoStack: string[] = [];
+    private abortController = new AbortController();
 
     constructor(options: EditorOptions = {}) {
         const editable = document.getElementById('editable');
@@ -53,24 +54,26 @@ class Editor {
     }
 
     private bindToolbar(): void {
+        const sig = { signal: this.abortController.signal };
         document.querySelectorAll<HTMLElement>('[data-cmd]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const cmd = btn.dataset.cmd!;
                 const val = btn.dataset.value ?? null;
                 this.exec(cmd, val);
                 this.editable.focus();
-            });
+            }, sig);
         });
     }
 
     private bindActions(): void {
+        const sig = { signal: this.abortController.signal };
         document.getElementById('linkBtn')?.addEventListener('click', () => {
             const url = prompt('Enter URL:', 'https://');
             if (url) this.exec('createLink', url);
-        });
+        }, sig);
 
         const imageFile = document.getElementById('imageFile') as HTMLInputElement;
-        document.getElementById('imageBtn')?.addEventListener('click', () => imageFile.click());
+        document.getElementById('imageBtn')?.addEventListener('click', () => imageFile.click(), sig);
         imageFile?.addEventListener('change', () => {
             const file = imageFile.files?.[0];
             if (!file) return;
@@ -82,7 +85,7 @@ class Editor {
             };
             reader.readAsDataURL(file);
             imageFile.value = '';
-        });
+        }, sig);
 
         document.getElementById('cleanBtn')?.addEventListener('click', () => {
             const sel = window.getSelection();
@@ -92,15 +95,15 @@ class Editor {
             range.deleteContents();
             range.insertNode(document.createTextNode(text));
             this.onContentChange();
-        });
+        }, sig);
 
-        document.getElementById('undoBtn')?.addEventListener('click', () => this.undo());
-        document.getElementById('redoBtn')?.addEventListener('click', () => this.redo());
+        document.getElementById('undoBtn')?.addEventListener('click', () => this.undo(), sig);
+        document.getElementById('redoBtn')?.addEventListener('click', () => this.redo(), sig);
 
         document.getElementById('toggleCodeBtn')?.addEventListener('click', () => {
             this.sidePanel?.classList.toggle('hidden');
             this.syncViews();
-        });
+        }, sig);
 
         // Code action buttons — matched by position within .code-actions
         if (this.code) {
@@ -109,29 +112,29 @@ class Editor {
             codeActions[0]?.addEventListener('click', () => {
                 this.editable.innerHTML = this.sanitizeHTML(code.value);
                 this.onContentChange();
-            });
+            }, sig);
             codeActions[1]?.addEventListener('click', () => {
                 code.value = this.sanitizeHTML(code.value);
                 this.editable.innerHTML = code.value;
                 this.onContentChange();
-            });
+            }, sig);
             codeActions[2]?.addEventListener('click', () => {
                 code.value = code.value
                     .replace(/\n/g, '')
                     .replace(/>\s+</g, '><')
                     .trim();
-            });
+            }, sig);
         }
 
         const saveBtn = document.getElementById('saveBtn');
-        saveBtn?.addEventListener('click', () => this.downloadHTML());
+        saveBtn?.addEventListener('click', () => this.downloadHTML(), sig);
 
         document.getElementById('clearBtn')?.addEventListener('click', () => {
             if (confirm('Clear all content?')) {
                 this.editable.innerHTML = '';
                 this.onContentChange();
             }
-        });
+        }, sig);
     }
 
     private bindKeyboard(): void {
@@ -154,23 +157,25 @@ class Editor {
             else if (key === 's') { e.preventDefault(); saveBtn?.click(); }
             else if (key === 'z' && !e.shiftKey) { e.preventDefault(); this.undo(); }
             else if (key === 'y' || (key === 'z' && e.shiftKey)) { e.preventDefault(); this.redo(); }
-        });
+        }, { signal: this.abortController.signal });
     }
 
     private bindEditable(): void {
-        this.editable.addEventListener('input', () => this.onContentChange());
+        const sig = { signal: this.abortController.signal };
+        this.editable.addEventListener('input', () => this.onContentChange(), sig);
 
         this.editable.addEventListener('paste', (e: ClipboardEvent) => {
             e.preventDefault();
             const text = e.clipboardData?.getData('text/plain') ?? '';
             this.insertText(text);
-        });
+        }, sig);
 
-        this.editable.addEventListener('keyup', () => this.refreshActiveState());
-        this.editable.addEventListener('mouseup', () => this.refreshActiveState());
+        this.editable.addEventListener('keyup', () => this.refreshActiveState(), sig);
+        this.editable.addEventListener('mouseup', () => this.refreshActiveState(), sig);
     }
 
     private bindTabs(): void {
+        const sig = { signal: this.abortController.signal };
         document.querySelectorAll<HTMLElement>('.side-tab[data-tab]').forEach(tab => {
             tab.addEventListener('click', () => {
                 const targetId = tab.dataset.tab!;
@@ -180,7 +185,7 @@ class Editor {
 
                 tab.classList.add('active');
                 document.getElementById(targetId)?.classList.add('active');
-            });
+            }, sig);
         });
     }
 
@@ -191,7 +196,7 @@ class Editor {
 
     private syncViews(): void {
         if (this.code)    this.code.value          = this.editable.innerHTML.trim();
-        if (this.preview) this.preview.innerHTML   = this.editable.innerHTML;
+        if (this.preview) this.preview.innerHTML   = this.sanitizeHTML(this.editable.innerHTML);
         this.updateWordCount();
     }
 
@@ -477,7 +482,10 @@ ${content}
 
             btn.classList.toggle('active', active);
         });
+    }
 
+    public destroy(): void {
+        this.abortController.abort();
     }
 }
 

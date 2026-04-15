@@ -35,6 +35,7 @@ class DatePicker {
   private calendar!: HTMLDivElement;
   private backdrop!: HTMLDivElement;
   private handleDocumentClick!: (e: Event) => void;
+  private abortController = new AbortController();
 
 
   constructor(elementOrSelector: string | HTMLInputElement, options: DatePickerOptions = {}) {
@@ -102,7 +103,7 @@ class DatePicker {
     this.backdrop.className = 'datepicker-backdrop';
     document.body.appendChild(this.backdrop);
 
-    this.backdrop.addEventListener('click', () => this.hide());
+    this.backdrop.addEventListener('click', () => this.hide(), { signal: this.abortController.signal });
   }
 
   private attachEvents(): void {
@@ -117,13 +118,15 @@ class DatePicker {
       }
     };
 
-    this.input?.addEventListener('click', toggle);
+    const sig = { signal: this.abortController.signal };
+
+    this.input?.addEventListener('click', toggle, sig);
 
     this.backdrop.addEventListener('click', (e: Event) => {
       e.preventDefault();
       e.stopPropagation();
       this.hide();
-    });
+    }, sig);
 
     this.handleDocumentClick = (e: Event): void => {
       if (this.calendar.classList.contains('mobile')) return;
@@ -621,6 +624,13 @@ class DatePicker {
     if (this.input) {
       this.input.value = value;
     }
+  }
+
+  public destroy(): void {
+    this.hide();
+    this.abortController.abort();
+    this.calendar.remove();
+    this.backdrop.remove();
   }
 }
 

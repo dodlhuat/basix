@@ -16,6 +16,7 @@ class Carousel {
     private dotsNav!: HTMLDivElement;
     private dots!: HTMLButtonElement[];
     private autoPlayTimer: number | null = null;
+    private abortController = new AbortController();
 
     constructor(elementOrSelector: string | HTMLElement, options: CarouselOptions = {}) {
         const element = typeof elementOrSelector === 'string'
@@ -96,33 +97,35 @@ class Carousel {
     }
 
     private bindEvents(): void {
-        this.nextButton.addEventListener('click', () => this.moveToNextSlide());
-        this.prevButton.addEventListener('click', () => this.moveToPrevSlide());
+        const sig = { signal: this.abortController.signal };
+
+        this.nextButton.addEventListener('click', () => this.moveToNextSlide(), sig);
+        this.prevButton.addEventListener('click', () => this.moveToPrevSlide(), sig);
 
         this.dotsNav.addEventListener('click', (e: MouseEvent) => {
             const targetDot = (e.target as HTMLElement).closest('button');
             if (!targetDot) return;
             const targetIndex = this.dots.findIndex(dot => dot === targetDot);
             this.moveToSlide(targetIndex);
-        });
+        }, sig);
 
         window.addEventListener('resize', () => {
             this.slideWidth = this.slides[0].getBoundingClientRect().width;
             this.moveToSlide(this.currentIndex, false);
-        });
+        }, sig);
 
         // Keyboard navigation
         this.root.addEventListener('keydown', (e: KeyboardEvent) => {
             if (e.key === 'ArrowLeft')  this.moveToPrevSlide();
             if (e.key === 'ArrowRight') this.moveToNextSlide();
-        });
+        }, sig);
 
         // Pause autoplay on hover / focus
         if (this.options.autoPlay) {
-            this.root.addEventListener('mouseenter', () => this.pauseAutoPlay());
-            this.root.addEventListener('mouseleave', () => this.resumeAutoPlay());
-            this.root.addEventListener('focusin',    () => this.pauseAutoPlay());
-            this.root.addEventListener('focusout',   () => this.resumeAutoPlay());
+            this.root.addEventListener('mouseenter', () => this.pauseAutoPlay(), sig);
+            this.root.addEventListener('mouseleave', () => this.resumeAutoPlay(), sig);
+            this.root.addEventListener('focusin',    () => this.pauseAutoPlay(), sig);
+            this.root.addEventListener('focusout',   () => this.resumeAutoPlay(), sig);
         }
 
         this.addTouchSupport();
@@ -171,11 +174,12 @@ class Carousel {
     private addTouchSupport(): void {
         let startX = 0;
         let isDragging = false;
+        const sig = { signal: this.abortController.signal };
 
         this.track.addEventListener('touchstart', (e: TouchEvent) => {
             startX = e.touches[0].clientX;
             isDragging = true;
-        }, { passive: true });
+        }, { passive: true, signal: this.abortController.signal });
 
         this.track.addEventListener('touchend', (e: TouchEvent) => {
             if (!isDragging) return;
@@ -186,7 +190,7 @@ class Carousel {
                 else this.moveToPrevSlide();
             }
             isDragging = false;
-        });
+        }, sig);
     }
 
     private startAutoPlay(): void {
@@ -210,6 +214,7 @@ class Carousel {
 
     public destroy(): void {
         this.pauseAutoPlay();
+        this.abortController.abort();
     }
 }
 

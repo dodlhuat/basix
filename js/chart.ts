@@ -1,3 +1,5 @@
+import { escapeHtml } from './utils.js';
+
 // ─── Types ──────────────────────────────────────────────────────────────────
 
 export type ChartType  = 'line' | 'area' | 'column' | 'bar' | 'pie';
@@ -380,7 +382,7 @@ class Chart {
             path.addEventListener('mouseenter', (e) => {
                 path.style.transform = `translate(${dx}px, ${dy}px)`;
                 this.showTooltip(e as MouseEvent,
-                    `<strong>${d.label}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`
+                    `<strong>${escapeHtml(d.label)}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`
                 );
             }, { signal: this.abortController.signal });
 
@@ -589,7 +591,7 @@ class Chart {
     private onPoint(g: SVGElement, s: ChartSeries, d: ChartDataPoint, i: number): void {
         const sig = { signal: this.abortController.signal };
         g.addEventListener('mouseenter', (e) => {
-            this.showTooltip(e as MouseEvent, `<strong>${d.label}</strong>${s.name}: ${this.fmt(d.value)}`);
+            this.showTooltip(e as MouseEvent, `<strong>${escapeHtml(d.label)}</strong>${escapeHtml(s.name)}: ${this.fmt(d.value)}`);
         }, sig);
         g.addEventListener('mousemove', (e) => this.moveTooltip(e as MouseEvent), sig);
         g.addEventListener('mouseleave', () => this.hideTooltip(), sig);
@@ -600,7 +602,7 @@ class Chart {
         const sig = { signal: this.abortController.signal };
         rect.style.cursor = 'pointer';
         rect.addEventListener('mouseenter', (e) => {
-            this.showTooltip(e as MouseEvent, `<strong>${d.label}</strong>${s.name}: ${this.fmt(d.value)}`);
+            this.showTooltip(e as MouseEvent, `<strong>${escapeHtml(d.label)}</strong>${escapeHtml(s.name)}: ${this.fmt(d.value)}`);
         }, sig);
         rect.addEventListener('mousemove', (e) => this.moveTooltip(e as MouseEvent), sig);
         rect.addEventListener('mouseleave', () => this.hideTooltip(), sig);

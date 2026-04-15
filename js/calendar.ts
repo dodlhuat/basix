@@ -544,6 +544,8 @@ export class Calendar {
     }
 
     destroy(): void {
+        this.container.removeEventListener('click', this.boundHandleClick);
+        this.container.removeEventListener('keydown', this.boundHandleKeydown);
         this.container.innerHTML = '';
         this.container.removeAttribute('data-cal');
     }
@@ -629,9 +631,12 @@ export class Calendar {
     // Event delegation
     // ----------------------------------------------------------
 
+    private readonly boundHandleClick = (e: MouseEvent): void => this.handleClick(e);
+    private readonly boundHandleKeydown = (e: KeyboardEvent): void => this.handleKeydown(e);
+
     private attachEvents(): void {
-        this.container.addEventListener('click', (e) => this.handleClick(e));
-        this.container.addEventListener('keydown', (e) => this.handleKeydown(e));
+        this.container.addEventListener('click', this.boundHandleClick);
+        this.container.addEventListener('keydown', this.boundHandleKeydown);
     }
 
     private handleClick(e: MouseEvent): void {

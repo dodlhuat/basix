@@ -1,3 +1,5 @@
+import { escapeHtml } from './utils.js';
+
 interface SubgroupData {
   id: string;
   label: string;
@@ -86,9 +88,10 @@ class GroupPicker {
     searchWrap.className = 'group-picker__search';
     searchWrap.innerHTML = `
       <span class="icon icon-search group-picker__search-icon" aria-hidden="true"></span>
-      <input type="text" placeholder="${this.options.searchPlaceholder}" />
+      <input type="text" />
     `;
     this.searchInput = searchWrap.querySelector('input')!;
+    this.searchInput.placeholder = this.options.searchPlaceholder;
 
     // List
     this.listEl = document.createElement('div');
@@ -160,7 +163,7 @@ class GroupPicker {
     label.className = 'group-picker__group-label';
     label.innerHTML = query && groupMatches
       ? this.highlightText(group.label, query)
-      : group.label;
+      : escapeHtml(group.label);
 
     if (hasChildren) {
       // Chevron — Basix font icon
@@ -208,7 +211,7 @@ class GroupPicker {
         const subEl = document.createElement('span');
         subEl.className = 'chip clickable group-picker__subgroup';
         subEl.dataset.subId = sub.id;
-        subEl.innerHTML = query ? this.highlightText(sub.label, query) : sub.label;
+        subEl.innerHTML = query ? this.highlightText(sub.label, query) : escapeHtml(sub.label);
 
         const isSubSelected = this.selectedSubs.get(group.id)?.has(sub.id) ?? false;
         if (isSubSelected) subEl.classList.add('is-selected');
@@ -387,10 +390,11 @@ class GroupPicker {
   }
 
   private highlightText(text: string, query: string): string {
-    if (!query) return text;
-    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`(${escaped})`, 'gi');
-    return text.replace(regex, '<mark>$1</mark>');
+    const safeText = escapeHtml(text);
+    if (!query) return safeText;
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escapedQuery})`, 'gi');
+    return safeText.replace(regex, '<mark>$1</mark>');
   }
 
   // Public API
