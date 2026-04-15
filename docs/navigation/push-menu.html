@@ -75,9 +75,12 @@ PushMenu.destroy();`, 'js');
             <h1>Push Menu</h1>
             <p class="docs-lead">A sidebar navigation that slides in and "pushes" the main content to the side when opened. Built on a CSS checkbox toggle — no JS required for basic use. Nested items are extracted into sliding sub-panels automatically.</p>
 
-            <div class="alert alert-info" style="margin-bottom:1.5rem;">
-                <strong>Note:</strong> The Push Menu requires a full page layout (<code>.main-header</code>, <code>.push-menu</code>, <code>.push-content</code>) and cannot run inside this docs frame without conflict. Use the code example below to integrate it in your own page.
+            <h2>Demo</h2>
+            <p>Click the hamburger icon to open the menu. Try nested items like "Settings" or "Projects" to see sub-panel navigation.</p>
+            <div class="docs-demo" style="padding:0;overflow:hidden;border-radius:var(--border-radius);height:400px;">
+                <iframe src="push-menu-demo.html" style="width:100%;height:100%;border:none;border-radius:inherit;"></iframe>
             </div>
+            <p style="margin-top:0.5rem;"><a href="push-menu-demo.html" target="_blank" class="link">Open demo in new tab &rarr;</a></p>
 
             <h2>How it works</h2>
             <p>The menu toggle is an <code>&lt;input type="checkbox" class="navigation"&gt;</code>. CSS sibling selectors translate the checked state into <code>.pushed</code> classes on <code>.main-header</code>, <code>.push-menu</code>, and <code>.push-content</code>. <code>PushMenu.init()</code> then adds nested <code>&lt;ul&gt;</code> sub-panel behaviour.</p>
