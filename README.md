@@ -1,4 +1,4 @@
-# Basix 1.2.0
+# Basix 1.2.1
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -16,12 +16,23 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 Take a look at style.scss for a glimpse on a full import. reset, parameters, colors & defaults are mandatory, anything
 else can be added as needed.
 
-To use the import functionality of javascript files you need to import your main script as a module. And either build
-your own css or include the existing full style.css (or min)
+Include the stylesheet and import individual components as ES modules. There is no bundled entry point — only the components you use are loaded.
 
 ``` html
 <link rel="stylesheet" href="css/style.css" type="text/css">
-<script src="js/index.js" type="module"></script>
+<script type="module">
+    import { Chart }   from './js/chart.js';
+    import { Modal }   from './js/modal.js';
+    import { Stepper } from './js/stepper.js';
+    // … add only what you need
+</script>
+```
+
+When installed via npm, import from the package:
+
+``` js
+import { Chart }   from '@dodlhuat/basix/js/chart.js';
+import { Modal }   from '@dodlhuat/basix/js/modal.js';
 ```
 
 ---
@@ -125,10 +136,20 @@ The Switch component creates styled toggle switches based on checkboxes.
 
 ### Range Slider
 
-The Range Slider component creates a simple styled slider.
+The Range Slider component creates a styled slider with a CSS custom property `--range-fill` that tracks the current value for fill styling. Use the JS class to initialise fill tracking automatically.
 
 ``` html
-<input type="range" min="1" max="100" value="50" />
+<div class="range-slider">
+    <input type="range" min="1" max="100" value="50" />
+</div>
+```
+
+``` js
+// Initialise a single slider
+new RangeSlider(document.querySelector('.range-slider input'));
+
+// Or initialise all sliders on the page at once
+RangeSlider.initAll();
 ```
 
 ---
@@ -154,6 +175,37 @@ The Flyout Menu component creates slide-in navigation menus with nested submenus
 | `enableHeader` | boolean | `true` | Shows the menu header |
 | `footerText` | string | `'© 2025 Brand Inc.'` | Shown in the footer if enabled |
 | `enableFooter` | boolean | `true` | Shows the menu footer |
+
+### Popover
+
+The Popover component attaches a floating content panel to any trigger element. Supports click and hover trigger modes, four placement directions, optional arrow, and stacks correctly when multiple popovers exist.
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `content` | string | — | HTML content rendered inside the popover |
+| `placement` | string | `'top'` | Preferred placement: `'top'`, `'bottom'`, `'left'`, `'right'`, or `'auto'` |
+| `align` | string | `'center'` | Alignment along the axis: `'start'`, `'center'`, `'end'` |
+| `offset` | number | `8` | Distance in px between the trigger and the popover |
+| `arrow` | boolean | `true` | Shows a directional arrow |
+| `triggerMode` | string | `'click'` | `'click'` or `'hover'` |
+| `closeOnOutsideClick` | boolean | `true` | Closes when clicking outside |
+| `closeOnEscape` | boolean | `true` | Closes on Escape key |
+| `className` | string | — | Extra CSS class on the popover element |
+| `onOpen` | function | — | Callback fired when the popover opens |
+| `onClose` | function | — | Callback fired when the popover closes |
+
+``` js
+const pop = new Popover('#my-trigger', {
+    content: '<p>Popover content</p>',
+    placement: 'bottom',
+    triggerMode: 'click',
+});
+
+pop.open();
+pop.close();
+pop.toggle();
+pop.destroy();
+```
 
 ### Dropdown Menu
 
@@ -426,6 +478,91 @@ The Placeholder component creates skeleton loading states. Use `.placeholder` wi
 
 ## Advanced Components
 
+### Chart
+
+The Chart component renders SVG-based charts with no external dependencies. Supports line, area, column, bar, and pie chart types. Animates on first render and redraws on container resize.
+
+``` js
+const chart = new Chart('#chart-container', {
+    type: 'line',
+    title: 'Monthly Revenue',
+    series: [
+        {
+            name: 'Product A',
+            data: [
+                { label: 'Jan', value: 120 },
+                { label: 'Feb', value: 180 },
+                { label: 'Mar', value: 150 },
+            ],
+        },
+    ],
+});
+
+chart.update(newSeries);   // replace data and redraw
+chart.setType('bar');      // switch chart type
+chart.destroy();           // remove listeners and DOM
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `type` | ChartType | — | `'line'`, `'area'`, `'column'`, `'bar'`, or `'pie'` |
+| `series` | ChartSeries[] | — | Array of `{ name, data, color? }` objects |
+| `title` | string | — | Optional chart title |
+| `subtitle` | string | — | Optional subtitle below the title |
+| `height` | number | `280` | Inner chart height in px |
+| `showLegend` | boolean | `true` | Renders the series legend |
+| `showGrid` | boolean | `true` | Renders background grid lines |
+| `animate` | boolean | `true` | Animates on first render |
+| `curve` | string | `'smooth'` | Line interpolation for line/area: `'smooth'`, `'linear'`, `'step'` |
+| `yMin` | number | `0` | Fixed y-axis minimum |
+| `yMax` | number | auto | Fixed y-axis maximum (defaults to max value × 1.1) |
+| `onPointClick` | function | — | Callback `(series, point, index) => void` fired on data point click |
+
+### Calendar
+
+The Calendar component renders a full interactive calendar with month, week, and agenda views. Supports event display, keyboard navigation, and locale configuration.
+
+``` js
+const cal = new Calendar({
+    container: '#my-calendar',
+    view: 'month',
+    events: [
+        {
+            id: '1',
+            title: 'Team Meeting',
+            start: new Date(2026, 3, 20, 10, 0),
+            end:   new Date(2026, 3, 20, 11, 0),
+            className: 'badge-success',
+        },
+    ],
+    onEventClick: (event) => console.log(event),
+    onDayClick:   (date)  => console.log(date),
+    onChange:     (date, view) => console.log(date, view),
+});
+
+cal.next();
+cal.prev();
+cal.today();
+cal.setView('week');
+cal.addEvent({ id: '2', title: 'Lunch', start: new Date(), end: new Date() });
+cal.removeEvent('2');
+cal.setEvents(events);
+cal.getEvents();
+cal.destroy();
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `container` | HTMLElement \| string | — | Target container element or CSS selector |
+| `events` | CalendarEvent[] | `[]` | Initial events |
+| `view` | string | `'month'` | Initial view: `'month'`, `'week'`, or `'agenda'` |
+| `showOutsideDays` | boolean | `true` | Show days from adjacent months in the month grid |
+| `locale` | object | — | Override locale strings (day names, month names, labels) |
+| `onDayClick` | function | — | Callback `(date: Date) => void` |
+| `onEventClick` | function | — | Callback `(event: CalendarEvent) => void` |
+| `onChange` | function | — | Callback `(date: Date, view: CalendarView) => void` |
+| `className` | string | — | Extra CSS class on the root element |
+
 ### Context Menu
 
 The Context Menu component shows a custom right-click menu on any target element. Supports icons, keyboard shortcuts, group labels, separators, submenus, destructive items, and disabled items. Automatically flips to avoid viewport overflow and animates in from the click origin.
@@ -593,6 +730,74 @@ const picker = new GroupPicker('#group-picker-demo', data, {
 | `expandAll()` | Expand all groups |
 | `collapseAll()` | Collapse all groups |
 | `destroy()` | Remove event listeners and clear the DOM |
+
+### Time Span Picker
+
+The TimeSpanPicker component provides a paired start/end time input for selecting a time range.
+
+``` js
+const picker = new TimeSpanPicker('my-container', {
+    defaultStart: '09:00',
+    defaultEnd:   '17:00',
+    onChange: (start, end) => console.log(start, end),
+});
+
+picker.getValue();            // { start: '09:00', end: '17:00' }
+picker.setValue('10:00', '18:00');
+picker.reset();
+picker.isValid();             // boolean
+picker.destroy();
+```
+
+### Select
+
+The Select component wraps a native `<select>` element with custom Basix styling. Supports single and multi-select.
+
+``` html
+<select id="my-select">
+    <option value="a">Option A</option>
+    <option value="b">Option B</option>
+</select>
+```
+
+``` js
+const sel = new Select('#my-select');
+sel.value();   // returns selected value string, or string[] for multi-select
+
+// Or initialise by passing the element directly
+Select.init(document.querySelector('#my-select'));
+```
+
+### Code Viewer
+
+The CodeViewer component renders syntax-highlighted code blocks inside any container. Supports JavaScript, HTML, and CSS.
+
+``` js
+new CodeViewer('#output', '<div class="card">Hello</div>', 'html');
+new CodeViewer('#output', 'const x = 42;', 'javascript');
+new CodeViewer('#output', '.card { padding: 1rem; }', 'css');
+```
+
+### Editor
+
+The Editor component provides a contenteditable rich-text editing area with undo/redo, word count, and an optional side panel showing the raw HTML source and a live preview. Requires a `#editable` element in the DOM.
+
+``` html
+<div id="editable" contenteditable="true"></div>
+<!-- Optional side panel elements -->
+<textarea id="code"></textarea>
+<div id="preview"></div>
+<div id="sidePanel"></div>
+<span id="wordCount"></span>
+```
+
+``` js
+// Full editor with side panel
+new Editor();
+
+// Simple mode — hides the side panel permanently
+new Editor({ simple: true });
+```
 
 ### Custom Scrollbar
 
