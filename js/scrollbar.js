@@ -1,20 +1,9 @@
 class Scrollbar {
-    constructor(elementOrSelector) {
+    constructor(container) {
         this.dragging = false;
         this.activePointerId = null;
         this.startPointerY = 0;
         this.startThumbTop = 0;
-        const container = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
-        if (!container) {
-            throw new Error(`Scrollbar: Element not found for selector "${elementOrSelector}"`);
-        }
-        // Return existing instance if already initialized
-        const existingInstance = Scrollbar.instances.get(container);
-        if (existingInstance) {
-            return existingInstance;
-        }
         this.container = container;
         // Query and validate required elements
         const elements = this.getRequiredElements(container);
@@ -37,7 +26,8 @@ class Scrollbar {
         // Initialize
         this.attachEventListeners();
         Scrollbar.instances.set(container, this);
-        // Install global listeners once for all instances
+        // Track instances and install global listeners once for all
+        Scrollbar.instanceCount++;
         if (!Scrollbar.globalListenersInstalled) {
             Scrollbar.installGlobalListeners();
         }
@@ -64,16 +54,17 @@ class Scrollbar {
         return Math.max(absoluteMin, parsed || defaultMin);
     }
     static installGlobalListeners() {
-        // Route pointer events to the active scrollbar instance
+        const ac = new AbortController();
+        Scrollbar.globalListenerAbortController = ac;
         document.addEventListener('pointermove', (e) => {
             Scrollbar.activeInstance?.boundPointerMove(e);
-        }, { passive: false });
+        }, { passive: false, signal: ac.signal });
         document.addEventListener('pointerup', (e) => {
             Scrollbar.activeInstance?.boundPointerUp(e);
-        });
+        }, { signal: ac.signal });
         document.addEventListener('pointercancel', (e) => {
             Scrollbar.activeInstance?.boundPointerUp(e);
-        });
+        }, { signal: ac.signal });
         Scrollbar.globalListenersInstalled = true;
     }
     attachEventListeners() {
@@ -209,24 +200,41 @@ class Scrollbar {
         if (Scrollbar.activeInstance === this) {
             Scrollbar.activeInstance = null;
         }
+        // Uninstall global listeners when last instance is destroyed
+        Scrollbar.instanceCount--;
+        if (Scrollbar.instanceCount === 0) {
+            Scrollbar.globalListenerAbortController?.abort();
+            Scrollbar.globalListenerAbortController = null;
+            Scrollbar.globalListenersInstalled = false;
+        }
     }
     // Static factory methods
+    static create(elementOrSelector) {
+        const container = typeof elementOrSelector === 'string'
+            ? document.querySelector(elementOrSelector)
+            : elementOrSelector;
+        if (!container) {
+            throw new Error(`Scrollbar: Element not found for selector "${elementOrSelector}"`);
+        }
+        const existing = Scrollbar.instances.get(container);
+        if (existing)
+            return existing;
+        return new Scrollbar(container);
+    }
     static initAll(selector) {
         const containers = document.querySelectorAll(selector);
-        return Array.from(containers).map(container => new Scrollbar(container));
+        return Array.from(containers).map(container => Scrollbar.create(container));
     }
     static initOne(elementOrSelector) {
-        return new Scrollbar(elementOrSelector);
+        return Scrollbar.create(elementOrSelector);
     }
     static getInstance(container) {
         return Scrollbar.instances.get(container);
-    }
-    static destroyAll() {
-        // Note: WeakMap doesn't support iteration, so this is a no-op
-        // Individual instances should be destroyed by calling destroy()
     }
 }
 Scrollbar.instances = new WeakMap();
 Scrollbar.activeInstance = null;
 Scrollbar.globalListenersInstalled = false;
+Scrollbar.instanceCount = 0;
+Scrollbar.globalListenerAbortController = null;
 export { Scrollbar };

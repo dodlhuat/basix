@@ -9,7 +9,8 @@ class PushMenu {
             throw new Error('PushMenu: Required elements not found (.navigation, .push-content)');
         }
         this.buildPanels();
-        this.elements.navigation.addEventListener('change', this.handleNavigationChange.bind(this));
+        this.boundHandleNavigationChange = this.handleNavigationChange.bind(this);
+        this.elements.navigation.addEventListener('change', this.boundHandleNavigationChange);
         this.elements.backdrop?.addEventListener('click', this.handleBackdropClick);
         this.initialized = true;
     }
@@ -179,7 +180,7 @@ class PushMenu {
     static destroy() {
         if (!this.initialized)
             return;
-        this.elements.navigation?.removeEventListener('change', this.handleNavigationChange);
+        this.elements.navigation?.removeEventListener('change', this.boundHandleNavigationChange);
         this.elements.content?.removeEventListener('click', this.clickNav);
         this.elements.backdrop?.removeEventListener('click', this.handleBackdropClick);
         this.close();

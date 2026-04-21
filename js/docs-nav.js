@@ -39,6 +39,7 @@ const NAV = [
             { label: 'Tooltip',          href: 'overlays/tooltip.html' },
             { label: 'Bottom Sheet',     href: 'overlays/bottom-sheet.html' },
             { label: 'Toast',            href: 'overlays/toast.html' },
+            { label: 'Lightbox',         href: 'overlays/lightbox.html' },
         ],
     },
     {

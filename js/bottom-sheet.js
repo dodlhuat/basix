@@ -1,3 +1,4 @@
+import { sanitizeHtml } from './utils.js';
 class BottomSheet {
     constructor(options) {
         this.wrapper = null;
@@ -146,18 +147,18 @@ class BottomSheet {
             : '';
         const headerHtml = this.header !== undefined
             ? `<div class="bottom-sheet-header has-divider">
-                <span class="title">${this.header}</span>
+                <span class="title">${sanitizeHtml(this.header)}</span>
                 ${closeButton}
                </div>`
             : '';
         const footerHtml = this.footer !== undefined
-            ? `<div class="bottom-sheet-footer">${this.footer}</div>`
+            ? `<div class="bottom-sheet-footer">${sanitizeHtml(this.footer)}</div>`
             : '';
         return `
             <div class="bottom-sheet${snapClass}">
                 <div class="bottom-sheet-handle" role="button" aria-label="Drag to dismiss"></div>
                 ${headerHtml}
-                <div class="bottom-sheet-body">${this.content}</div>
+                <div class="bottom-sheet-body">${sanitizeHtml(this.content)}</div>
                 ${footerHtml}
             </div>
             <div class="bottom-sheet-backdrop"></div>

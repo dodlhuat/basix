@@ -1,3 +1,4 @@
+import { escapeHtml } from './utils.js';
 class VirtualDropdown {
     constructor(config) {
         const containerElement = typeof config.container === 'string'
@@ -30,7 +31,7 @@ class VirtualDropdown {
     renderBase() {
         this.container.innerHTML = `
       <div class="dropdown-trigger" tabindex="0" role="button" aria-haspopup="listbox" aria-expanded="false">
-        <span class="trigger-text">${this.escapeHtml(this.placeholder)}</span>
+        <span class="trigger-text">${escapeHtml(this.placeholder)}</span>
         <span class="trigger-arrow" aria-hidden="true">▼</span>
       </div>
       <div class="dropdown-menu" role="listbox">
@@ -146,14 +147,14 @@ class VirtualDropdown {
             const isSelected = this.selectedValues.has(opt.value);
             return `
           <div class="dropdown-item ${isSelected ? 'selected' : ''}"
-               data-value="${this.escapeHtml(String(opt.value))}"
+               data-value="${escapeHtml(String(opt.value))}"
                data-idx="${realIdx}"
                role="option"
                aria-selected="${isSelected}"
                tabindex="0"
                style="height: ${this.itemHeight}px; line-height: ${this.itemHeight}px;">
             ${this.multiSelect ? `<input type="checkbox" ${isSelected ? 'checked' : ''} tabindex="-1" aria-hidden="true">` : ''}
-            <span class="item-label">${this.escapeHtml(opt.label)}</span>
+            <span class="item-label">${escapeHtml(opt.label)}</span>
           </div>
         `;
         })
@@ -220,11 +221,6 @@ class VirtualDropdown {
                 this.triggerText.textContent = opt ? opt.label : String(val);
             }
         }
-    }
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
     getValue() {
         return Array.from(this.selectedValues);

@@ -308,6 +308,11 @@ export class Calendar {
     constructor(options) {
         this.selectedDate = null;
         this.events = [];
+        // ----------------------------------------------------------
+        // Event delegation
+        // ----------------------------------------------------------
+        this.boundHandleClick = (e) => this.handleClick(e);
+        this.boundHandleKeydown = (e) => this.handleKeydown(e);
         // Resolve container
         if (typeof options.container === 'string') {
             const el = document.querySelector(options.container);
@@ -386,6 +391,8 @@ export class Calendar {
         return [...this.events];
     }
     destroy() {
+        this.container.removeEventListener('click', this.boundHandleClick);
+        this.container.removeEventListener('keydown', this.boundHandleKeydown);
         this.container.innerHTML = '';
         this.container.removeAttribute('data-cal');
     }
@@ -452,12 +459,9 @@ export class Calendar {
       </div>
     </div>`;
     }
-    // ----------------------------------------------------------
-    // Event delegation
-    // ----------------------------------------------------------
     attachEvents() {
-        this.container.addEventListener('click', (e) => this.handleClick(e));
-        this.container.addEventListener('keydown', (e) => this.handleKeydown(e));
+        this.container.addEventListener('click', this.boundHandleClick);
+        this.container.addEventListener('keydown', this.boundHandleKeydown);
     }
     handleClick(e) {
         const target = e.target;

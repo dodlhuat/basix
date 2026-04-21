@@ -2,6 +2,7 @@ class Editor {
     constructor(options = {}) {
         this.undoStack = [];
         this.redoStack = [];
+        this.abortController = new AbortController();
         const editable = document.getElementById('editable');
         if (!editable) {
             throw new Error('Editor: #editable element not found');
@@ -35,23 +36,25 @@ class Editor {
         this.saveState();
     }
     bindToolbar() {
+        const sig = { signal: this.abortController.signal };
         document.querySelectorAll('[data-cmd]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const cmd = btn.dataset.cmd;
                 const val = btn.dataset.value ?? null;
                 this.exec(cmd, val);
                 this.editable.focus();
-            });
+            }, sig);
         });
     }
     bindActions() {
+        const sig = { signal: this.abortController.signal };
         document.getElementById('linkBtn')?.addEventListener('click', () => {
             const url = prompt('Enter URL:', 'https://');
             if (url)
                 this.exec('createLink', url);
-        });
+        }, sig);
         const imageFile = document.getElementById('imageFile');
-        document.getElementById('imageBtn')?.addEventListener('click', () => imageFile.click());
+        document.getElementById('imageBtn')?.addEventListener('click', () => imageFile.click(), sig);
         imageFile?.addEventListener('change', () => {
             const file = imageFile.files?.[0];
             if (!file)
@@ -64,7 +67,7 @@ class Editor {
             };
             reader.readAsDataURL(file);
             imageFile.value = '';
-        });
+        }, sig);
         document.getElementById('cleanBtn')?.addEventListener('click', () => {
             const sel = window.getSelection();
             if (!sel || sel.rangeCount === 0)
@@ -74,13 +77,13 @@ class Editor {
             range.deleteContents();
             range.insertNode(document.createTextNode(text));
             this.onContentChange();
-        });
-        document.getElementById('undoBtn')?.addEventListener('click', () => this.undo());
-        document.getElementById('redoBtn')?.addEventListener('click', () => this.redo());
+        }, sig);
+        document.getElementById('undoBtn')?.addEventListener('click', () => this.undo(), sig);
+        document.getElementById('redoBtn')?.addEventListener('click', () => this.redo(), sig);
         document.getElementById('toggleCodeBtn')?.addEventListener('click', () => {
             this.sidePanel?.classList.toggle('hidden');
             this.syncViews();
-        });
+        }, sig);
         // Code action buttons — matched by position within .code-actions
         if (this.code) {
             const code = this.code;
@@ -88,27 +91,27 @@ class Editor {
             codeActions[0]?.addEventListener('click', () => {
                 this.editable.innerHTML = this.sanitizeHTML(code.value);
                 this.onContentChange();
-            });
+            }, sig);
             codeActions[1]?.addEventListener('click', () => {
                 code.value = this.sanitizeHTML(code.value);
                 this.editable.innerHTML = code.value;
                 this.onContentChange();
-            });
+            }, sig);
             codeActions[2]?.addEventListener('click', () => {
                 code.value = code.value
                     .replace(/\n/g, '')
                     .replace(/>\s+</g, '><')
                     .trim();
-            });
+            }, sig);
         }
         const saveBtn = document.getElementById('saveBtn');
-        saveBtn?.addEventListener('click', () => this.downloadHTML());
+        saveBtn?.addEventListener('click', () => this.downloadHTML(), sig);
         document.getElementById('clearBtn')?.addEventListener('click', () => {
             if (confirm('Clear all content?')) {
                 this.editable.innerHTML = '';
                 this.onContentChange();
             }
-        });
+        }, sig);
     }
     bindKeyboard() {
         const saveBtn = document.getElementById('saveBtn');
@@ -147,19 +150,21 @@ class Editor {
                 e.preventDefault();
                 this.redo();
             }
-        });
+        }, { signal: this.abortController.signal });
     }
     bindEditable() {
-        this.editable.addEventListener('input', () => this.onContentChange());
+        const sig = { signal: this.abortController.signal };
+        this.editable.addEventListener('input', () => this.onContentChange(), sig);
         this.editable.addEventListener('paste', (e) => {
             e.preventDefault();
             const text = e.clipboardData?.getData('text/plain') ?? '';
             this.insertText(text);
-        });
-        this.editable.addEventListener('keyup', () => this.refreshActiveState());
-        this.editable.addEventListener('mouseup', () => this.refreshActiveState());
+        }, sig);
+        this.editable.addEventListener('keyup', () => this.refreshActiveState(), sig);
+        this.editable.addEventListener('mouseup', () => this.refreshActiveState(), sig);
     }
     bindTabs() {
+        const sig = { signal: this.abortController.signal };
         document.querySelectorAll('.side-tab[data-tab]').forEach(tab => {
             tab.addEventListener('click', () => {
                 const targetId = tab.dataset.tab;
@@ -167,7 +172,7 @@ class Editor {
                 document.querySelectorAll('.side-panel').forEach(p => p.classList.remove('active'));
                 tab.classList.add('active');
                 document.getElementById(targetId)?.classList.add('active');
-            });
+            }, sig);
         });
     }
     onContentChange() {
@@ -178,7 +183,7 @@ class Editor {
         if (this.code)
             this.code.value = this.editable.innerHTML.trim();
         if (this.preview)
-            this.preview.innerHTML = this.editable.innerHTML;
+            this.preview.innerHTML = this.sanitizeHTML(this.editable.innerHTML);
         this.updateWordCount();
     }
     updateWordCount() {
@@ -457,6 +462,9 @@ ${content}
             }
             btn.classList.toggle('active', active);
         });
+    }
+    destroy() {
+        this.abortController.abort();
     }
 }
 export { Editor };

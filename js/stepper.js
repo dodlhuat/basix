@@ -1,5 +1,6 @@
 class Stepper {
     constructor(elementOrSelector, options = {}) {
+        this.abortController = new AbortController();
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
             : elementOrSelector;
@@ -17,7 +18,7 @@ class Stepper {
         if (options.clickable) {
             this.container.classList.add('stepper-clickable');
             this.steps.forEach((step, i) => {
-                step.addEventListener('click', () => this.goTo(i));
+                step.addEventListener('click', () => this.goTo(i), { signal: this.abortController.signal });
             });
         }
         this.render();
@@ -75,6 +76,9 @@ class Stepper {
     }
     isLast() {
         return this.current === this.steps.length - 1;
+    }
+    destroy() {
+        this.abortController.abort();
     }
 }
 export { Stepper };

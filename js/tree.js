@@ -168,6 +168,10 @@ class TreeComponent {
             }
         });
     }
+    destroy() {
+        this.container.innerHTML = '';
+        this.selectedNode = null;
+    }
     getSelectedNode() {
         return this.selectedNode;
     }

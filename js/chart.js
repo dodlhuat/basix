@@ -1,4 +1,4 @@
-// ─── Types ──────────────────────────────────────────────────────────────────
+import { escapeHtml } from './utils.js';
 const MARGIN_XY = { top: 16, right: 24, bottom: 44, left: 52 };
 const MARGIN_BAR = { top: 8, right: 52, bottom: 24, left: 120 };
 const MARGIN_PIE = { top: 8, right: 8, bottom: 8, left: 8 };
@@ -294,7 +294,7 @@ class Chart {
             const { x: dx, y: dy } = this.polar(0, 0, 8, midAngle);
             path.addEventListener('mouseenter', (e) => {
                 path.style.transform = `translate(${dx}px, ${dy}px)`;
-                this.showTooltip(e, `<strong>${d.label}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`);
+                this.showTooltip(e, `<strong>${escapeHtml(d.label)}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`);
             }, { signal: this.abortController.signal });
             path.addEventListener('mouseleave', () => {
                 path.style.transform = '';
@@ -483,7 +483,7 @@ class Chart {
     onPoint(g, s, d, i) {
         const sig = { signal: this.abortController.signal };
         g.addEventListener('mouseenter', (e) => {
-            this.showTooltip(e, `<strong>${d.label}</strong>${s.name}: ${this.fmt(d.value)}`);
+            this.showTooltip(e, `<strong>${escapeHtml(d.label)}</strong>${escapeHtml(s.name)}: ${this.fmt(d.value)}`);
         }, sig);
         g.addEventListener('mousemove', (e) => this.moveTooltip(e), sig);
         g.addEventListener('mouseleave', () => this.hideTooltip(), sig);
@@ -493,7 +493,7 @@ class Chart {
         const sig = { signal: this.abortController.signal };
         rect.style.cursor = 'pointer';
         rect.addEventListener('mouseenter', (e) => {
-            this.showTooltip(e, `<strong>${d.label}</strong>${s.name}: ${this.fmt(d.value)}`);
+            this.showTooltip(e, `<strong>${escapeHtml(d.label)}</strong>${escapeHtml(s.name)}: ${this.fmt(d.value)}`);
         }, sig);
         rect.addEventListener('mousemove', (e) => this.moveTooltip(e), sig);
         rect.addEventListener('mouseleave', () => this.hideTooltip(), sig);

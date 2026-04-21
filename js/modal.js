@@ -1,3 +1,4 @@
+import { sanitizeHtml } from './utils.js';
 const CLOSE_ICON = '<div class="icon icon-close close"></div>';
 class Modal {
     constructor(contentOrOptions, header, footer, closeable = true, type = 'default') {
@@ -45,7 +46,7 @@ class Modal {
         });
     }
     hide() {
-        const wrapper = document.querySelector('.modal-wrapper');
+        const wrapper = this.modalWrapper;
         if (!wrapper)
             return;
         // Remove event listeners
@@ -78,11 +79,11 @@ class Modal {
         }
         if (this.header !== undefined) {
             const headerClass = `header ${this.type}-bg`;
-            parts.push(`<div class="${headerClass}">${this.header}</div>`);
+            parts.push(`<div class="${headerClass}">${sanitizeHtml(this.header)}</div>`);
         }
-        parts.push(this.content);
+        parts.push(sanitizeHtml(this.content));
         if (this.footer !== undefined) {
-            parts.push(`<div class="footer">${this.footer}</div>`);
+            parts.push(`<div class="footer">${sanitizeHtml(this.footer)}</div>`);
         }
         parts.push('</div>');
         parts.push('<div class="modal-background"></div>');

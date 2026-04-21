@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Lightbox — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Lightbox } from '../../js/lightbox.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        const IMAGES = [
+            { src: 'https://picsum.photos/seed/lb1/1200/800', alt: 'Mountain landscape', caption: 'A misty mountain range at dawn' },
+            { src: 'https://picsum.photos/seed/lb2/900/1200', alt: 'Forest path',        caption: 'Sunlight through a dense forest' },
+            { src: 'https://picsum.photos/seed/lb3/1400/900', alt: 'Ocean waves',        caption: 'Waves breaking on a rocky shore' },
+            { src: 'https://picsum.photos/seed/lb4/800/800',  alt: 'Desert dunes',       caption: 'Sand dunes at golden hour' },
+        ];
+
+        document.getElementById('demo-single')?.addEventListener('click', () => {
+            new Lightbox({ src: IMAGES[0].src, alt: IMAGES[0].alt, caption: IMAGES[0].caption }).show();
+        });
+
+        document.getElementById('demo-gallery')?.addEventListener('click', () => {
+            new Lightbox({ images: IMAGES, startIndex: 0 }).show();
+        });
+
+        document.getElementById('demo-no-caption')?.addEventListener('click', () => {
+            new Lightbox({ src: IMAGES[2].src, alt: IMAGES[2].alt }).show();
+        });
+
+        document.getElementById('demo-callbacks')?.addEventListener('click', () => {
+            new Lightbox({
+                images: IMAGES,
+                onOpen:  () => console.log('lightbox opened'),
+                onClose: () => console.log('lightbox closed'),
+            }).show();
+        });
+
+        // Declarative bind demo
+        Lightbox.bind('[data-lightbox]');
+
+        new CodeViewer('#code-single', `import { Lightbox } from '@dodlhuat/basix/js/lightbox.js';
+
+// Single image
+new Lightbox({
+  src:     'photo.jpg',
+  alt:     'A landscape',
+  caption: 'Optional caption text',
+}).show();`, 'js');
+
+        new CodeViewer('#code-gallery', `// Gallery — navigate with arrows, keyboard, or swipe
+new Lightbox({
+  images: [
+    { src: 'photo1.jpg', alt: 'Photo 1', caption: 'First image' },
+    { src: 'photo2.jpg', alt: 'Photo 2', caption: 'Second image' },
+    { src: 'photo3.jpg', alt: 'Photo 3' },
+  ],
+  startIndex: 0,   // open at this index
+  onClose: () => console.log('closed'),
+}).show();`, 'js');
+
+        new CodeViewer('#code-bind-html', `<!-- Group images into a gallery with a shared data-lightbox value -->
+<a href="full1.jpg" data-lightbox="trip" data-lightbox-caption="Day 1">
+    <img src="thumb1.jpg" alt="Day 1" />
+</a>
+<a href="full2.jpg" data-lightbox="trip" data-lightbox-caption="Day 2">
+    <img src="thumb2.jpg" alt="Day 2" />
+</a>
+
+<!-- Standalone image -->
+<img src="photo.jpg" data-lightbox data-lightbox-caption="A solo photo" />`, 'html');
+
+        new CodeViewer('#code-bind-js', `// Auto-bind all [data-lightbox] elements (default selector)
+Lightbox.bind();
+
+// Or target a custom selector
+Lightbox.bind('.gallery-thumb');`, 'js');
+    </script>
+    <style>
+        .lightbox-demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .lightbox-demo-grid a {
+            display: block;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+        .lightbox-demo-grid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.2s ease;
+        }
+        .lightbox-demo-grid a:hover img {
+            transform: scale(1.04);
+        }
+    </style>
+</head>
+<body class="primary-light-bg primary">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Lightbox</h1>
+            <p class="docs-lead">Fullscreen image viewer with gallery navigation, keyboard and swipe support, click-to-zoom, and declarative HTML binding. Built entirely in JavaScript — no markup required.</p>
+            <p class="docs-import">{ Lightbox } from '/basix/js/lightbox.js'</p>
+
+            <h2>Single image &amp; gallery</h2>
+            <div class="docs-demo centered">
+                <button class="button" id="demo-single">Single image</button>
+                <button class="button" id="demo-gallery">Gallery (4 images)</button>
+                <button class="button" id="demo-no-caption">No caption</button>
+                <button class="button ghost" id="demo-callbacks">With callbacks</button>
+            </div>
+
+            <h2>Declarative binding</h2>
+            <p>Call <code>Lightbox.bind()</code> to attach click handlers to elements with <code>data-lightbox</code>. Elements sharing the same attribute value are grouped into a gallery.</p>
+            <div class="lightbox-demo-grid">
+                <a href="https://picsum.photos/seed/lb1/1200/800" data-lightbox="demo-grid" data-lightbox-caption="A misty mountain range at dawn">
+                    <img src="https://picsum.photos/seed/lb1/240/240" alt="Mountains" />
+                </a>
+                <a href="https://picsum.photos/seed/lb2/900/1200" data-lightbox="demo-grid" data-lightbox-caption="Sunlight through a dense forest">
+                    <img src="https://picsum.photos/seed/lb2/240/240" alt="Forest" />
+                </a>
+                <a href="https://picsum.photos/seed/lb3/1400/900" data-lightbox="demo-grid" data-lightbox-caption="Waves breaking on a rocky shore">
+                    <img src="https://picsum.photos/seed/lb3/240/240" alt="Ocean" />
+                </a>
+                <a href="https://picsum.photos/seed/lb4/800/800" data-lightbox="demo-grid" data-lightbox-caption="Sand dunes at golden hour">
+                    <img src="https://picsum.photos/seed/lb4/240/240" alt="Desert" />
+                </a>
+            </div>
+
+            <h2>Single image usage</h2>
+            <div id="code-single"></div>
+
+            <h2>Gallery usage</h2>
+            <div id="code-gallery" style="margin-top:0.5rem;"></div>
+
+            <h2>Declarative HTML binding</h2>
+            <div id="code-bind-html" style="margin-top:0.5rem;"></div>
+            <div id="code-bind-js" style="margin-top:0.5rem;"></div>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>src</code></td><td>string</td><td>—</td><td>Image URL for single-image mode.</td></tr>
+                    <tr><td><code>alt</code></td><td>string</td><td>—</td><td>Alt text for the image.</td></tr>
+                    <tr><td><code>caption</code></td><td>string</td><td>—</td><td>Optional caption rendered below the image.</td></tr>
+                    <tr><td><code>images</code></td><td>LightboxImage[]</td><td>—</td><td>Array of images for gallery mode. Each item: <code>{ src, alt?, caption? }</code>. Overrides <code>src</code>/<code>alt</code>/<code>caption</code>.</td></tr>
+                    <tr><td><code>startIndex</code></td><td>number</td><td><code>0</code></td><td>Index of the image to show first in gallery mode.</td></tr>
+                    <tr><td><code>closeable</code></td><td>boolean</td><td><code>true</code></td><td>Shows × button and enables backdrop click / Escape dismissal.</td></tr>
+                    <tr><td><code>onOpen</code></td><td>function</td><td>—</td><td>Callback fired when the lightbox opens.</td></tr>
+                    <tr><td><code>onClose</code></td><td>function</td><td>—</td><td>Callback fired after the close animation completes.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Methods</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>show()</code></td><td>Opens the lightbox.</td></tr>
+                    <tr><td><code>hide()</code></td><td>Closes the lightbox.</td></tr>
+                    <tr><td><code>next()</code></td><td>Navigates to the next image in gallery mode.</td></tr>
+                    <tr><td><code>prev()</code></td><td>Navigates to the previous image in gallery mode.</td></tr>
+                    <tr><td><code>isVisible()</code></td><td>Returns <code>true</code> if the lightbox is currently open.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Closes and removes the lightbox.</td></tr>
+                    <tr><td><code>Lightbox.bind(selector?)</code></td><td>Attaches click handlers to all matching elements. Default selector: <code>[data-lightbox]</code>. Groups elements by their <code>data-lightbox</code> value into galleries.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Keyboard &amp; interaction</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Input</th><th>Action</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Escape</code></td><td>Close the lightbox (when closeable).</td></tr>
+                    <tr><td><code>→ / ←</code></td><td>Navigate to next / previous image in gallery.</td></tr>
+                    <tr><td><code>Tab / Shift+Tab</code></td><td>Cycle focus within the lightbox (focus trap).</td></tr>
+                    <tr><td>Click image</td><td>Toggle zoom (fit ↔ actual size).</td></tr>
+                    <tr><td>Swipe left / right</td><td>Navigate gallery on touch devices.</td></tr>
+                    <tr><td>Click backdrop</td><td>Close the lightbox (when closeable).</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

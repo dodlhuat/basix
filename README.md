@@ -280,6 +280,48 @@ sheet.hide();
 sheet.snapTo('full');
 ```
 
+### Lightbox
+
+The Lightbox component opens images in a fullscreen overlay with an optional gallery mode. Supports keyboard navigation (← →, Escape), touch swipe, click-to-zoom, adjacent image preloading, focus trap, and a static `bind()` method for declarative HTML wiring.
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `src` | string | — | Image URL for single-image mode |
+| `alt` | string | — | Alt text for the image |
+| `caption` | string | — | Optional caption below the image |
+| `images` | LightboxImage[] | — | Array of `{ src, alt?, caption? }` for gallery mode |
+| `startIndex` | number | `0` | Starting index when opening a gallery |
+| `closeable` | boolean | `true` | Shows × button and enables backdrop/Escape dismissal |
+| `onOpen` | function | — | Callback fired when the lightbox opens |
+| `onClose` | function | — | Callback fired after the close animation completes |
+
+``` js
+import { Lightbox } from '@dodlhuat/basix/js/lightbox.js';
+
+// Single image
+new Lightbox({ src: 'photo.jpg', alt: 'A landscape', caption: 'Taken at sunrise' }).show();
+
+// Gallery
+new Lightbox({
+    images: [
+        { src: 'photo1.jpg', alt: 'Photo 1', caption: 'Day one' },
+        { src: 'photo2.jpg', alt: 'Photo 2' },
+    ],
+    startIndex: 0,
+    onClose: () => console.log('closed'),
+}).show();
+
+// Declarative binding — groups elements by data-lightbox value into galleries
+Lightbox.bind();
+```
+
+``` html
+<!-- Declarative usage -->
+<a href="full.jpg" data-lightbox="trip" data-lightbox-caption="Arrival day">
+    <img src="thumb.jpg" alt="Arrival" />
+</a>
+```
+
 ### Tooltip
 
 The Tooltip component shows contextual information on hover.

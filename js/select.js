@@ -11,7 +11,18 @@ class Select {
         if (result === null) {
             throw new Error(`Select: Failed to initialize select for "${elementOrSelector}"`);
         }
-        this.isMultiselect = result;
+        this.isMultiselect = result.isMulti;
+        this.dropdown = result.dropdown;
+        this.documentClickHandler = (e) => {
+            if (this.dropdown && !this.dropdown.contains(e.target)) {
+                this.dropdown.classList.remove('open');
+            }
+        };
+        document.addEventListener('click', this.documentClickHandler);
+    }
+    destroy() {
+        document.removeEventListener('click', this.documentClickHandler);
+        this.dropdown?.classList.remove('open');
     }
     value() {
         if (!this.element) {
@@ -29,7 +40,16 @@ class Select {
         if (!element) {
             return null;
         }
-        return Select.initElement(element);
+        const result = Select.initElement(element);
+        if (!result)
+            return null;
+        // Static init path: add document listener without lifecycle management
+        document.addEventListener('click', (e) => {
+            if (!result.dropdown.contains(e.target)) {
+                result.dropdown.classList.remove('open');
+            }
+        });
+        return result.isMulti;
     }
     static initElement(element) {
         if (!Select.transformSelect(element)) {
@@ -74,13 +94,7 @@ class Select {
                 dropdown.classList.remove('open');
             });
         }
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!dropdown.contains(e.target)) {
-                dropdown.classList.remove('open');
-            }
-        });
-        return isMulti;
+        return { isMulti, dropdown };
     }
     static closeAllDropdowns(exceptDropdown) {
         document.querySelectorAll('.dropdown').forEach(dropdown => {

@@ -1,6 +1,7 @@
 import { Select } from "./select.js";
 class Table {
     constructor(elementOrSelector, options = {}) {
+        this.abortController = new AbortController();
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
             : elementOrSelector;
@@ -74,7 +75,7 @@ class Table {
         searchInput.className = 'search-input';
         searchInput.addEventListener('input', (e) => {
             this.handleSearch(e.target.value);
-        });
+        }, { signal: this.abortController.signal });
         controlsDiv.appendChild(searchInput);
         // Page size selector
         const selectGroup = document.createElement('div');
@@ -93,7 +94,7 @@ class Table {
         });
         pageSizeSelect.addEventListener('change', (e) => {
             this.handlePageSizeChange(parseInt(e.target.value, 10));
-        });
+        }, { signal: this.abortController.signal });
         this.assignUniqueId(pageSizeSelect, 'page-size-select-0');
         selectGroup.appendChild(pageSizeSelect);
         controlsDiv.appendChild(selectGroup);
@@ -117,7 +118,7 @@ class Table {
             th.dataset.key = col.key;
             if (col.sortable !== false) {
                 th.classList.add('sortable');
-                th.addEventListener('click', () => this.handleSort(col.key));
+                th.addEventListener('click', () => this.handleSort(col.key), { signal: this.abortController.signal });
             }
             tr.appendChild(th);
         });
@@ -354,6 +355,10 @@ class Table {
      */
     getData() {
         return this.getFilteredAndSortedData();
+    }
+    destroy() {
+        this.abortController.abort();
+        this.container.innerHTML = '';
     }
 }
 export { Table };

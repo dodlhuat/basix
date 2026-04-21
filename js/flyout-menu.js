@@ -3,6 +3,7 @@ class FlyoutMenu {
         this.closeBtn = null;
         this.submenuToggles = null;
         this.menuLinks = null;
+        this.submenuHandlers = new Map();
         this.options = {
             triggerSelector: '.menu-trigger',
             menuSelector: '#flyoutMenu',
@@ -119,7 +120,9 @@ class FlyoutMenu {
         this.flyoutOverlay?.addEventListener('click', this.close);
         // Submenus
         this.submenuToggles?.forEach(toggle => {
-            toggle.addEventListener('click', (e) => this.handleSubmenu(e, toggle));
+            const handler = (e) => this.handleSubmenu(e, toggle);
+            this.submenuHandlers.set(toggle, handler);
+            toggle.addEventListener('click', handler);
         });
         // Close on Link Click
         this.menuLinks?.forEach(link => {
@@ -183,8 +186,11 @@ class FlyoutMenu {
         this.closeBtn?.removeEventListener('click', this.close);
         this.flyoutOverlay?.removeEventListener('click', this.close);
         this.submenuToggles?.forEach(toggle => {
-            toggle.removeEventListener('click', (e) => this.handleSubmenu(e, toggle));
+            const handler = this.submenuHandlers.get(toggle);
+            if (handler)
+                toggle.removeEventListener('click', handler);
         });
+        this.submenuHandlers.clear();
         this.menuLinks?.forEach(link => {
             link.removeEventListener('click', this.close);
         });

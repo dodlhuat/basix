@@ -1,3 +1,4 @@
+import { escapeHtml } from './utils.js';
 class Toast {
     constructor(contentOrOptions, header = '', type, closeable = true) {
         this.closureIcon = '<div class="icon icon-close close"></div>';
@@ -79,15 +80,10 @@ class Toast {
             parts.push(this.closureIcon);
         }
         if (this.header) {
-            parts.push(`<div class="header">${this.escapeHtml(this.header)}</div>`);
+            parts.push(`<div class="header">${escapeHtml(this.header)}</div>`);
         }
-        parts.push(`<div class="content">${this.escapeHtml(this.content)}</div>`);
+        parts.push(`<div class="content">${escapeHtml(this.content)}</div>`);
         return parts.join('');
-    }
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 }
 export { Toast };

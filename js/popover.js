@@ -1,4 +1,5 @@
 import { computePosition } from './position.js';
+import { sanitizeHtml } from './utils.js';
 // Must match $arrow in popover.scss
 const ARROW_SIZE = 6;
 class Popover {
@@ -119,9 +120,10 @@ class Popover {
         // Wrap plain content in .popover-body so it gets proper padding.
         // Skip wrapping when content already uses structured popover elements.
         const hasStructure = /class="popover-(header|body|footer|menu)/.test(this.opts.content);
+        const safeContent = sanitizeHtml(this.opts.content);
         el.innerHTML = hasStructure
-            ? this.opts.content
-            : `<div class="popover-body">${this.opts.content}</div>`;
+            ? safeContent
+            : `<div class="popover-body">${safeContent}</div>`;
         this.trigger.setAttribute('aria-expanded', 'true');
         this.trigger.setAttribute('aria-controls', id);
         return el;

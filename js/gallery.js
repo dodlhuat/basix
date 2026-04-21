@@ -1,5 +1,6 @@
+import { escapeHtml } from './utils.js';
 class MasonryGallery {
-    constructor(containerId, options = {}) {
+    constructor(containerId, options) {
         this.columns = [];
         this.isFetching = false;
         this.resizeObserver = null;
@@ -13,9 +14,6 @@ class MasonryGallery {
                 this.loadMoreImages();
             }
         };
-        this.fetchMockImages = () => {
-            throw Error("Method not implemented.");
-        };
         const container = document.getElementById(containerId);
         if (!container) {
             throw new Error(`Container with id "${containerId}" not found`);
@@ -26,7 +24,7 @@ class MasonryGallery {
             minColumnWidth: options.minColumnWidth ?? 250,
             scrollThreshold: options.scrollThreshold ?? 100,
             reload: 2,
-            fetchFunction: options.fetchFunction ?? this.fetchMockImages,
+            fetchFunction: options.fetchFunction,
         };
         this.init();
     }
@@ -150,18 +148,13 @@ class MasonryGallery {
         const div = document.createElement("div");
         div.className = "masonry-item";
         div.innerHTML = `
-      <img src="${this.escapeHtml(data.src)}" alt="${this.escapeHtml(data.title)}" loading="lazy">
+      <img src="${escapeHtml(data.src)}" alt="${escapeHtml(data.title)}" loading="lazy">
       <div class="masonry-item-info">
-        <h3 class="masonry-item-title">${this.escapeHtml(data.title)}</h3>
-        <p class="masonry-item-desc">${this.escapeHtml(data.desc)}</p>
+        <h3 class="masonry-item-title">${escapeHtml(data.title)}</h3>
+        <p class="masonry-item-desc">${escapeHtml(data.desc)}</p>
       </div>
     `;
         return div;
-    }
-    escapeHtml(text) {
-        const div = document.createElement("div");
-        div.textContent = text;
-        return div.innerHTML;
     }
     addToShortestColumn(element) {
         if (this.columns.length === 0)

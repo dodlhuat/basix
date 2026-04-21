@@ -1,3 +1,4 @@
+import { escapeHtml } from './utils.js';
 class FileUploader {
     constructor(elementOrSelector, config = {}) {
         this.files = new Map();
@@ -51,10 +52,10 @@ class FileUploader {
         }
         this.container = container;
         this.container.classList.add('file-uploader');
-        const dropZone = container.querySelector('#drop-zone');
-        const fileInput = container.querySelector('#file-input');
-        const fileList = container.querySelector('#file-list');
-        const uploadBtn = container.querySelector('#upload-btn');
+        const dropZone = container.querySelector('.drop-zone');
+        const fileInput = container.querySelector('.file-input');
+        const fileList = container.querySelector('.file-list');
+        const uploadBtn = container.querySelector('.upload-btn');
         if (!dropZone || !fileInput || !fileList || !uploadBtn) {
             throw new Error('Required elements not found in container');
         }
@@ -119,7 +120,7 @@ class FileUploader {
         const key = this.fileKey(file);
         const item = document.createElement('div');
         item.className = 'file-item';
-        const escapedFileName = this.escapeHtml(file.name);
+        const escapedFileName = escapeHtml(file.name);
         item.innerHTML = `
       <div class="file-item-header">
         <div class="file-info">
@@ -254,11 +255,6 @@ class FileUploader {
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
-    }
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
     destroy() {
         this.abortControllers.forEach(abort => abort());
