@@ -16,9 +16,10 @@
         new TimeSpanPicker('timespan-demo', {
             defaultStart: '09:00',
             defaultEnd:   '17:00',
-            onChange: ({ start, end, durationMinutes }) => {
-                document.getElementById('ts-output').textContent =
-                    `${start} → ${end}  (${Math.floor(durationMinutes / 60)}h ${durationMinutes % 60}m)`;
+            fromString: 'From',
+            toString: 'To',
+            onChange: (start, end) => {
+                document.getElementById('ts-output').textContent = `${start} → ${end}`;
             },
         });
 
@@ -29,8 +30,10 @@
 const picker = new TimeSpanPicker('my-timespan', {
   defaultStart: '09:00',
   defaultEnd:   '17:00',
-  onChange: ({ start, end, durationMinutes }) => {
-    console.log(start, end, durationMinutes);
+  fromString: 'Von',  // localise label
+  toString: 'Bis',
+  onChange: (start, end) => {
+    console.log(start, end);
   },
 });`, 'js');
     </script>
@@ -74,7 +77,9 @@ const picker = new TimeSpanPicker('my-timespan', {
                 <tbody>
                     <tr><td><code>defaultStart</code></td><td>string</td><td>—</td><td>Pre-filled start time in <code>HH:MM</code> format.</td></tr>
                     <tr><td><code>defaultEnd</code></td><td>string</td><td>—</td><td>Pre-filled end time in <code>HH:MM</code> format.</td></tr>
-                    <tr><td><code>onChange</code></td><td>function</td><td>—</td><td>Called whenever either time changes. Receives <code>{ start, end, durationMinutes }</code>.</td></tr>
+                    <tr><td><code>fromString</code></td><td>string</td><td><code>'From'</code></td><td>Label text for the start time input. Override to localise.</td></tr>
+                    <tr><td><code>toString</code></td><td>string</td><td><code>'To'</code></td><td>Label text for the end time input. Override to localise.</td></tr>
+                    <tr><td><code>onChange</code></td><td>function</td><td>—</td><td>Called whenever either time changes. Receives <code>(start: string, end: string)</code>.</td></tr>
                 </tbody>
             </table>
         </div>

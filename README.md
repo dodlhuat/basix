@@ -1,4 +1,4 @@
-# Basix 1.2.3
+# Basix 1.2.4
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -781,6 +781,8 @@ The TimeSpanPicker component provides a paired start/end time input for selectin
 const picker = new TimeSpanPicker('my-container', {
     defaultStart: '09:00',
     defaultEnd:   '17:00',
+    fromString:   'Von',   // optional — defaults to 'From'
+    toString:     'Bis',   // optional — defaults to 'To'
     onChange: (start, end) => console.log(start, end),
 });
 

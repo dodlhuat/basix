@@ -7,6 +7,8 @@ interface TimeSpanPickerOptions {
     onChange?: (start: string, end: string) => void;
     defaultStart?: string;
     defaultEnd?: string;
+    fromString?: string;
+    toString?: string;
 }
 
 class TimeSpanPicker {
@@ -15,6 +17,8 @@ class TimeSpanPicker {
     private endTimeInput: HTMLInputElement;
     private onChange?: (start: string, end: string) => void;
     private readonly uid: string;
+    private fromString: string;
+    private toString: string;
 
     constructor(elementOrSelector: string | HTMLElement, options?: TimeSpanPickerOptions) {
         const element = typeof elementOrSelector === 'string'
@@ -30,6 +34,8 @@ class TimeSpanPicker {
         this.container = element;
         this.onChange = options?.onChange;
         this.uid = `tsp-${Math.random().toString(36).slice(2, 9)}`;
+        this.fromString = options?.fromString ?? 'From';
+        this.toString = options?.toString ?? 'To';
 
         this.render();
 
@@ -65,7 +71,7 @@ class TimeSpanPicker {
         this.container.innerHTML = `
       <div class="timespan-picker">
         <div class="timespan-field timespan-field-start">
-          <label for="${startId}">From</label>
+          <label for="${startId}">${this.fromString}</label>
           <input type="time" class="timespan-start" id="${startId}"/>
         </div>
 
@@ -75,7 +81,7 @@ class TimeSpanPicker {
         </div>
 
         <div class="timespan-field timespan-field-end">
-          <label for="${endId}">To</label>
+          <label for="${endId}">${this.toString}</label>
           <input type="time" class="timespan-end" id="${endId}"/>
         </div>
       </div>

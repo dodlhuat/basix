@@ -22,6 +22,18 @@ class TimeSpanPicker {
         if (options?.defaultEnd) {
             this.endTimeInput.value = options.defaultEnd;
         }
+        if (options?.fromString) {
+            this.fromString = options.fromString;
+        }
+        else {
+            this.fromString = 'From';
+        }
+        if (options?.toString) {
+            this.toString = options.toString;
+        }
+        else {
+            this.toString = 'To';
+        }
         this.attachEventListeners();
         // Render initial state if defaults provided
         if (options?.defaultStart || options?.defaultEnd) {
@@ -41,7 +53,7 @@ class TimeSpanPicker {
         this.container.innerHTML = `
       <div class="timespan-picker">
         <div class="timespan-field timespan-field-start">
-          <label for="${startId}">From</label>
+          <label for="${startId}">${this.fromString}</label>
           <input type="time" class="timespan-start" id="${startId}"/>
         </div>
 
@@ -51,7 +63,7 @@ class TimeSpanPicker {
         </div>
 
         <div class="timespan-field timespan-field-end">
-          <label for="${endId}">To</label>
+          <label for="${endId}">${this.toString}</label>
           <input type="time" class="timespan-end" id="${endId}"/>
         </div>
       </div>
