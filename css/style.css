@@ -845,27 +845,69 @@ tbody tr:hover {
   background: color-mix(in srgb, var(--error) 12%, transparent);
 }
 
+@keyframes field-error-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  18% {
+    transform: translateX(-5px);
+  }
+  36% {
+    transform: translateX(4px);
+  }
+  54% {
+    transform: translateX(-3px);
+  }
+  72% {
+    transform: translateX(2px);
+  }
+}
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes hint-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 textarea, select, .select .dropdown, input {
   width: 100%;
-  border: 1px solid var(--divider);
-  border-radius: 0.2rem;
-  padding: 0.5rem;
+  border: 1.5px solid var(--divider);
+  border-radius: 0.6rem;
+  padding: 0 0.65rem;
   box-sizing: border-box;
   background-color: var(--background);
-  min-height: 2rem;
+  min-height: 2.6rem;
   font-size: 1rem;
   color: var(--primary-text);
-  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: inset 0 1.5px 4px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.16s ease, box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.16s ease;
   outline: none;
 }
 textarea::placeholder, select::placeholder, .select .dropdown::placeholder, input::placeholder {
   color: var(--secondary-text);
-  opacity: 1;
+  opacity: 0.65;
+  font-weight: 400;
+}
+textarea:hover:not(:focus):not(:disabled):not([readonly]), select:hover:not(:focus):not(:disabled):not([readonly]), .select .dropdown:hover:not(:focus):not(:disabled):not([readonly]), input:hover:not(:focus):not(:disabled):not([readonly]) {
+  border-color: color-mix(in srgb, var(--accent-color) 45%, var(--divider));
+  box-shadow: inset 0 1.5px 4px rgba(0, 0, 0, 0.045), 0 2px 8px rgba(0, 0, 0, 0.07);
 }
 textarea:focus, select:focus, .select .dropdown:focus, input:focus {
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03), 0 0 0 3.5px color-mix(in srgb, var(--accent-color) 13%, transparent), 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 textarea:disabled, select:disabled, .select .dropdown:disabled, input:disabled {
   background-color: var(--secondary-background);
@@ -873,10 +915,16 @@ textarea:disabled, select:disabled, .select .dropdown:disabled, input:disabled {
   color: var(--secondary-text);
   cursor: not-allowed;
   box-shadow: none;
+  opacity: 0.58;
+}
+
+textarea {
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
 }
 
 select {
-  padding: 0.5rem;
+  padding: 0 0.65rem;
   cursor: pointer;
 }
 
@@ -885,61 +933,87 @@ select {
   background-color: var(--background);
 }
 .select-group .dropdown-selected {
-  border: 1px solid var(--divider);
-  padding: 0 0.5rem;
-  border-radius: 0.2rem;
+  border: 1.5px solid var(--divider);
+  padding: 0 0.65rem;
+  border-radius: 0.6rem;
   cursor: pointer;
   background: var(--background);
-  height: 2rem;
-  line-height: 2rem;
-  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  height: 2.6rem;
+  line-height: 2.6rem;
+  box-shadow: inset 0 1.5px 4px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.16s ease, box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+.select-group .dropdown-selected:hover {
+  border-color: color-mix(in srgb, var(--accent-color) 45%, var(--divider));
+  box-shadow: inset 0 1.5px 4px rgba(0, 0, 0, 0.045), 0 2px 8px rgba(0, 0, 0, 0.07);
 }
 .select-group .dropdown-selected:focus, .select-group .dropdown-selected:focus-visible {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03), 0 0 0 3.5px color-mix(in srgb, var(--accent-color) 13%, transparent), 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 .select-group .dropdown-selected::after {
   font-family: "Material Symbols Outlined 24pt", serif;
   content: "\e5cf";
   float: right;
   color: var(--secondary-text);
-  transition: transform 0.2s ease;
+  transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
+  line-height: inherit;
+}
+.select-group .dropdown.open .dropdown-selected {
+  border-color: var(--accent-color);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03), 0 0 0 3.5px color-mix(in srgb, var(--accent-color) 13%, transparent);
 }
 .select-group .dropdown.open .dropdown-selected::after {
   transform: rotate(180deg);
 }
 .select-group .dropdown-options {
   position: absolute;
-  top: calc(100% + 5px);
+  top: calc(100% + 6px);
   left: 0;
   right: 0;
-  border: 1px solid var(--divider);
-  border-radius: 0.2rem;
+  border: 1.5px solid var(--divider);
+  border-radius: 0.6rem;
   display: none;
   flex-direction: column;
   z-index: 10;
-  max-height: 250px;
+  max-height: 260px;
   overflow-y: auto;
   background-color: var(--background);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.11), 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 0.25rem;
+  gap: 1px;
+  transform-origin: top center;
 }
 .select-group .dropdown-option {
-  padding: 10px 0.5rem;
+  padding: 0.6rem 0.65rem;
   cursor: pointer;
+  border-radius: 0.44rem;
   transition: background 0.1s ease;
+  font-size: 0.9375rem;
+  position: relative;
 }
 .select-group .dropdown-option:hover {
-  background: var(--secondary-background);
+  background: var(--hover);
 }
 .select-group .dropdown-option.selected {
   background: color-mix(in srgb, var(--accent-color) 10%, transparent);
   color: var(--accent-color);
   font-weight: 500;
 }
+.select-group .dropdown-option.selected::after {
+  content: "✓";
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8125rem;
+  line-height: 1;
+}
 .select-group .dropdown.open .dropdown-options {
   display: flex;
+  animation: dropdown-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .select-group .hidden {
   display: none;
@@ -950,25 +1024,29 @@ select {
     top: 0;
     left: 0;
     width: 100%;
-    background: var(--secondary-background);
+    background: var(--background);
     color: var(--primary-text);
     text-align: center;
-    padding: 15px;
-    padding-top: calc(15px + env(safe-area-inset-top));
+    padding: 18px 15px;
+    padding-top: calc(18px + env(safe-area-inset-top));
     font-weight: 600;
     font-size: 1rem;
     border-bottom: 1px solid var(--divider);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     z-index: 11;
+    letter-spacing: 0.01em;
   }
   .select-group .dropdown-options-menu .dropdown-options-icon {
     position: absolute;
-    right: 45px;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: var(--accent-color);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0;
   }
   .select-group .dropdown-options {
     position: fixed;
@@ -978,16 +1056,24 @@ select {
     bottom: 0;
     border: none;
     border-radius: 0;
-    padding-top: calc(56px + env(safe-area-inset-top));
+    padding: 0;
+    padding-top: calc(62px + env(safe-area-inset-top));
     padding-bottom: env(safe-area-inset-bottom);
-    font-size: 1.1rem;
+    font-size: 1.0625rem;
     max-height: none;
     box-shadow: none;
     background-color: var(--background);
+    gap: 0;
   }
   .select-group .dropdown-option {
-    padding: 14px 0.5rem;
+    padding: 15px 20px;
     border-bottom: 1px solid var(--divider);
+    border-radius: 0;
+    font-size: 1.0625rem;
+  }
+  .select-group .dropdown-option.selected::after {
+    right: 20px;
+    font-size: 0.9375rem;
   }
 }
 
@@ -998,28 +1084,51 @@ select {
 }
 .form-group label {
   font-size: 0.8125rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--primary-text);
-  letter-spacing: 0.01em;
+  letter-spacing: 0.025em;
 }
 .form-group .form-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.3rem;
   font-size: 0.75rem;
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--secondary-text);
-  margin-top: 0.125rem;
+  margin-top: 0.1rem;
+}
+.form-group .form-hint::before {
+  content: "";
+  display: none;
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  margin-top: 0.1em;
+  font-size: 8.5px;
+  font-weight: 700;
+  line-height: 13px;
+  text-align: center;
+  color: #fff;
 }
 .form-group.error input, .form-group.error textarea, .form-group.error select {
   border-color: var(--error);
-  background-color: color-mix(in srgb, var(--error) 4%, var(--background));
+  background-color: color-mix(in srgb, var(--error) 3%, var(--background));
+  box-shadow: inset 0 1.5px 4px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.04);
+  animation: field-error-shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 .form-group.error input:focus, .form-group.error textarea:focus, .form-group.error select:focus {
   border-color: var(--error);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--error) 15%, transparent);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03), 0 0 0 3.5px color-mix(in srgb, var(--error) 13%, transparent);
 }
 .form-group.error .form-hint {
   color: var(--error);
+  animation: hint-appear 0.2s ease both;
 }
 .form-group.error .form-hint::before {
+  content: "!";
+  display: block;
+  background: var(--error);
   opacity: 1;
 }
 .form-group.success input, .form-group.success textarea, .form-group.success select {
@@ -1027,12 +1136,16 @@ select {
 }
 .form-group.success input:focus, .form-group.success textarea:focus, .form-group.success select:focus {
   border-color: var(--success);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 15%, transparent);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03), 0 0 0 3.5px color-mix(in srgb, var(--success) 13%, transparent);
 }
 .form-group.success .form-hint {
   color: var(--success);
+  animation: hint-appear 0.2s ease both;
 }
 .form-group.success .form-hint::before {
+  content: "✓";
+  display: block;
+  background: var(--success);
   opacity: 1;
 }
 
@@ -1046,17 +1159,19 @@ select {
 .input-group .input-addon {
   display: flex;
   align-items: center;
-  padding: 0 0.5rem;
+  padding: 0 0.65rem;
   background-color: var(--secondary-background);
-  border: 1px solid var(--divider);
+  border: 1.5px solid var(--divider);
   color: var(--secondary-text);
   font-size: 1rem;
   white-space: nowrap;
-  box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+  box-shadow: inset 0 1.5px 4px rgba(0, 0, 0, 0.04);
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 .input-group .input-addon:first-child {
   border-right: none;
-  border-radius: 0.2rem 0 0 0.2rem;
+  border-radius: 0.6rem 0 0 0.6rem;
 }
 .input-group .input-addon:first-child + input {
   border-top-left-radius: 0;
@@ -1064,7 +1179,7 @@ select {
 }
 .input-group .input-addon:last-child {
   border-left: none;
-  border-radius: 0 0.2rem 0.2rem 0;
+  border-radius: 0 0.6rem 0.6rem 0;
 }
 .input-group input:not(:last-child) {
   border-right: none;
@@ -1077,18 +1192,21 @@ input[readonly], textarea[readonly] {
   color: var(--secondary-text);
   cursor: default;
   box-shadow: none;
+  border-style: dashed;
 }
 
 input.input-sm, textarea.input-sm {
-  min-height: 1.6rem;
+  min-height: 1.7rem;
   font-size: 0.875rem;
-  padding: 0.25rem 0.5rem;
+  padding: 0 0.5rem;
+  border-radius: 0.44rem;
 }
 
 input.input-lg, textarea.input-lg {
-  min-height: 2.8rem;
+  min-height: 3.3rem;
   font-size: 1.125rem;
-  padding: 0.6rem 0.5rem;
+  padding: 0 0.75rem;
+  border-radius: 0.7rem;
 }
 
 @font-face {

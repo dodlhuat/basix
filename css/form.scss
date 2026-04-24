@@ -1,28 +1,82 @@
 @use "properties";
 @use "parameters" as *;
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Keyframes
+// ─────────────────────────────────────────────────────────────────────────────
+
+@keyframes field-error-shake {
+  0%, 100% { transform: translateX(0); }
+  18%       { transform: translateX(-5px); }
+  36%       { transform: translateX(4px); }
+  54%       { transform: translateX(-3px); }
+  72%       { transform: translateX(2px); }
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hint-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Base field styles
+// ─────────────────────────────────────────────────────────────────────────────
+
 textarea, select, .select .dropdown, input {
   width: 100%;
-  border: 1px solid var(--divider);
-  border-radius: calc($border-radius / 2);
-  padding: calc($spacing / 2);
+  border: 1.5px solid var(--divider);
+  border-radius: calc($border-radius * 1.5);
+  padding: 0 calc($spacing * 0.65);
   box-sizing: border-box;
   background-color: var(--background);
-  min-height: $form-height;
+  min-height: calc($form-height * 1.3);
   font-size: $spacing;
   color: var(--primary-text);
-  box-shadow: $shadow;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow:
+    inset 0 1.5px 4px rgba(0, 0, 0, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.16s ease;
   outline: none;
 
   &::placeholder {
     color: var(--secondary-text);
-    opacity: 1;
+    opacity: 0.65;
+    font-weight: 400;
+  }
+
+  &:hover:not(:focus):not(:disabled):not([readonly]) {
+    border-color: color-mix(in srgb, var(--accent-color) 45%, var(--divider));
+    box-shadow:
+      inset 0 1.5px 4px rgba(0, 0, 0, 0.045),
+      0 2px 8px rgba(0, 0, 0, 0.07);
   }
 
   &:focus {
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
+    box-shadow:
+      inset 0 1px 3px rgba(0, 0, 0, 0.03),
+      0 0 0 3.5px color-mix(in srgb, var(--accent-color) 13%, transparent),
+      0 2px 12px rgba(0, 0, 0, 0.06);
   }
 
   &:disabled {
@@ -31,13 +85,23 @@ textarea, select, .select .dropdown, input {
     color: var(--secondary-text);
     cursor: not-allowed;
     box-shadow: none;
+    opacity: 0.58;
   }
 }
 
+textarea {
+  padding-top: calc($spacing * 0.55);
+  padding-bottom: calc($spacing * 0.55);
+}
+
 select {
-  padding: calc($spacing / 2);
+  padding: 0 calc($spacing * 0.65);
   cursor: pointer;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Custom select / dropdown
+// ─────────────────────────────────────────────────────────────────────────────
 
 .select-group {
   .dropdown {
@@ -46,21 +110,36 @@ select {
   }
 
   .dropdown-selected {
-    border: 1px solid var(--divider);
-    padding: 0 calc($spacing / 2);
-    border-radius: calc($border-radius / 2);
+    border: 1.5px solid var(--divider);
+    padding: 0 calc($spacing * 0.65);
+    border-radius: calc($border-radius * 1.5);
     cursor: pointer;
     background: var(--background);
-    height: $form-height;
-    line-height: $form-height;
-    box-shadow: $shadow;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    height: calc($form-height * 1.3);
+    line-height: calc($form-height * 1.3);
+    box-shadow:
+      inset 0 1.5px 4px rgba(0, 0, 0, 0.05),
+      0 1px 2px rgba(0, 0, 0, 0.04);
+    transition:
+      border-color 0.16s ease,
+      box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--accent-color) 45%, var(--divider));
+      box-shadow:
+        inset 0 1.5px 4px rgba(0, 0, 0, 0.045),
+        0 2px 8px rgba(0, 0, 0, 0.07);
+    }
 
     &:focus,
     &:focus-visible {
       outline: none;
       border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
+      box-shadow:
+        inset 0 1px 3px rgba(0, 0, 0, 0.03),
+        0 0 0 3.5px color-mix(in srgb, var(--accent-color) 13%, transparent),
+        0 2px 12px rgba(0, 0, 0, 0.06);
     }
 
     &::after {
@@ -68,48 +147,75 @@ select {
       content: "\e5cf";
       float: right;
       color: var(--secondary-text);
-      transition: transform 0.2s ease;
+      transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
+      line-height: inherit;
     }
   }
 
-  .dropdown.open .dropdown-selected::after {
-    transform: rotate(180deg);
+  .dropdown.open .dropdown-selected {
+    border-color: var(--accent-color);
+    box-shadow:
+      inset 0 1px 3px rgba(0, 0, 0, 0.03),
+      0 0 0 3.5px color-mix(in srgb, var(--accent-color) 13%, transparent);
+
+    &::after {
+      transform: rotate(180deg);
+    }
   }
 
   .dropdown-options {
     position: absolute;
-    top: calc(100% + 5px);
+    top: calc(100% + 6px);
     left: 0;
     right: 0;
-    border: 1px solid var(--divider);
-    border-radius: calc($border-radius / 2);
+    border: 1.5px solid var(--divider);
+    border-radius: calc($border-radius * 1.5);
     display: none;
     flex-direction: column;
     z-index: 10;
-    max-height: 250px;
+    max-height: 260px;
     overflow-y: auto;
     background-color: var(--background);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.11),
+      0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 0.25rem;
+    gap: 1px;
+    transform-origin: top center;
   }
 
   .dropdown-option {
-    padding: 10px calc($spacing / 2);
+    padding: 0.6rem calc($spacing * 0.65);
     cursor: pointer;
+    border-radius: calc($border-radius * 1.1);
     transition: background 0.1s ease;
+    font-size: 0.9375rem;
+    position: relative;
   }
 
   .dropdown-option:hover {
-    background: var(--secondary-background);
+    background: var(--hover);
   }
 
   .dropdown-option.selected {
     background: color-mix(in srgb, var(--accent-color) 10%, transparent);
     color: var(--accent-color);
     font-weight: 500;
+
+    &::after {
+      content: "✓";
+      position: absolute;
+      right: calc($spacing * 0.65);
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8125rem;
+      line-height: 1;
+    }
   }
 
   .dropdown.open .dropdown-options {
     display: flex;
+    animation: dropdown-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   .hidden {
@@ -122,25 +228,29 @@ select {
       top: 0;
       left: 0;
       width: 100%;
-      background: var(--secondary-background);
+      background: var(--background);
       color: var(--primary-text);
       text-align: center;
-      padding: 15px;
-      padding-top: calc(15px + env(safe-area-inset-top));
+      padding: 18px 15px;
+      padding-top: calc(18px + env(safe-area-inset-top));
       font-weight: 600;
       font-size: $spacing;
       border-bottom: 1px solid var(--divider);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       z-index: 11;
+      letter-spacing: 0.01em;
 
       .dropdown-options-icon {
         position: absolute;
-        right: 45px;
+        right: 20px;
         top: 50%;
         transform: translateY(-50%);
         cursor: pointer;
         color: var(--accent-color);
+        font-size: 0.9375rem;
+        font-weight: 500;
+        letter-spacing: 0;
       }
     }
 
@@ -152,22 +262,34 @@ select {
       bottom: 0;
       border: none;
       border-radius: 0;
-      padding-top: calc(56px + env(safe-area-inset-top));
+      padding: 0;
+      padding-top: calc(62px + env(safe-area-inset-top));
       padding-bottom: env(safe-area-inset-bottom);
-      font-size: 1.1rem;
+      font-size: 1.0625rem;
       max-height: none;
       box-shadow: none;
       background-color: var(--background);
+      gap: 0;
     }
 
     .dropdown-option {
-      padding: 14px calc($spacing / 2);
+      padding: 15px 20px;
       border-bottom: 1px solid var(--divider);
+      border-radius: 0;
+      font-size: 1.0625rem;
+
+      &.selected::after {
+        right: 20px;
+        font-size: 0.9375rem;
+      }
     }
   }
 }
 
-// Form group — label + input + hint layout
+// ─────────────────────────────────────────────────────────────────────────────
+// Form group — label + field + hint
+// ─────────────────────────────────────────────────────────────────────────────
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -175,33 +297,61 @@ select {
 
   label {
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--primary-text);
-    letter-spacing: 0.01em;
+    letter-spacing: 0.025em;
   }
 
   .form-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.3rem;
     font-size: 0.75rem;
-    line-height: 1.45;
+    line-height: 1.5;
     color: var(--secondary-text);
-    margin-top: 0.125rem;
+    margin-top: 0.1rem;
+
+    &::before {
+      content: '';
+      display: none;
+      flex-shrink: 0;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      margin-top: 0.1em;
+      font-size: 8.5px;
+      font-weight: 700;
+      line-height: 13px;
+      text-align: center;
+      color: #fff;
+    }
   }
 
   &.error {
     input, textarea, select {
       border-color: var(--error);
-      background-color: color-mix(in srgb, var(--error) 4%, var(--background));
+      background-color: color-mix(in srgb, var(--error) 3%, var(--background));
+      box-shadow:
+        inset 0 1.5px 4px rgba(0, 0, 0, 0.05),
+        0 1px 2px rgba(0, 0, 0, 0.04);
+      animation: field-error-shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 
       &:focus {
         border-color: var(--error);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--error) 15%, transparent);
+        box-shadow:
+          inset 0 1px 3px rgba(0, 0, 0, 0.03),
+          0 0 0 3.5px color-mix(in srgb, var(--error) 13%, transparent);
       }
     }
 
     .form-hint {
       color: var(--error);
+      animation: hint-appear 0.2s ease both;
 
       &::before {
+        content: '!';
+        display: block;
+        background: var(--error);
         opacity: 1;
       }
     }
@@ -213,21 +363,30 @@ select {
 
       &:focus {
         border-color: var(--success);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 15%, transparent);
+        box-shadow:
+          inset 0 1px 3px rgba(0, 0, 0, 0.03),
+          0 0 0 3.5px color-mix(in srgb, var(--success) 13%, transparent);
       }
     }
 
     .form-hint {
       color: var(--success);
+      animation: hint-appear 0.2s ease both;
 
       &::before {
+        content: '✓';
+        display: block;
+        background: var(--success);
         opacity: 1;
       }
     }
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
 // Input group — prefix / suffix addons
+// ─────────────────────────────────────────────────────────────────────────────
+
 .input-group {
   display: flex;
 
@@ -239,17 +398,19 @@ select {
   .input-addon {
     display: flex;
     align-items: center;
-    padding: 0 calc($spacing / 2);
+    padding: 0 calc($spacing * 0.65);
     background-color: var(--secondary-background);
-    border: 1px solid var(--divider);
+    border: 1.5px solid var(--divider);
     color: var(--secondary-text);
     font-size: $spacing;
     white-space: nowrap;
-    box-shadow: $shadow;
+    box-shadow: inset 0 1.5px 4px rgba(0, 0, 0, 0.04);
+    font-weight: 500;
+    letter-spacing: 0.01em;
 
     &:first-child {
       border-right: none;
-      border-radius: calc($border-radius / 2) 0 0 calc($border-radius / 2);
+      border-radius: calc($border-radius * 1.5) 0 0 calc($border-radius * 1.5);
 
       & + input {
         border-top-left-radius: 0;
@@ -259,7 +420,7 @@ select {
 
     &:last-child {
       border-left: none;
-      border-radius: 0 calc($border-radius / 2) calc($border-radius / 2) 0;
+      border-radius: 0 calc($border-radius * 1.5) calc($border-radius * 1.5) 0;
     }
   }
 
@@ -270,23 +431,32 @@ select {
   }
 }
 
-// Readonly state
+// ─────────────────────────────────────────────────────────────────────────────
+// Readonly
+// ─────────────────────────────────────────────────────────────────────────────
+
 input[readonly], textarea[readonly] {
   background-color: var(--secondary-background);
   color: var(--secondary-text);
   cursor: default;
   box-shadow: none;
+  border-style: dashed;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
 // Size variants
+// ─────────────────────────────────────────────────────────────────────────────
+
 input.input-sm, textarea.input-sm {
-  min-height: calc($form-height * 0.8);
+  min-height: calc($form-height * 0.85);
   font-size: 0.875rem;
-  padding: calc($spacing / 4) calc($spacing / 2);
+  padding: 0 calc($spacing * 0.5);
+  border-radius: calc($border-radius * 1.1);
 }
 
 input.input-lg, textarea.input-lg {
-  min-height: calc($form-height * 1.4);
+  min-height: calc($form-height * 1.65);
   font-size: 1.125rem;
-  padding: calc($spacing * 0.6) calc($spacing / 2);
+  padding: 0 calc($spacing * 0.75);
+  border-radius: calc($border-radius * 1.75);
 }
