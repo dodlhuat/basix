@@ -13,6 +13,8 @@ class TimeSpanPicker {
         this.container = element;
         this.onChange = options?.onChange;
         this.uid = `tsp-${Math.random().toString(36).slice(2, 9)}`;
+        this.fromString = options?.fromString ?? 'From';
+        this.toString = options?.toString ?? 'To';
         this.render();
         this.startTimeInput = this.queryInput('.timespan-start');
         this.endTimeInput = this.queryInput('.timespan-end');
@@ -21,18 +23,6 @@ class TimeSpanPicker {
         }
         if (options?.defaultEnd) {
             this.endTimeInput.value = options.defaultEnd;
-        }
-        if (options?.fromString) {
-            this.fromString = options.fromString;
-        }
-        else {
-            this.fromString = 'From';
-        }
-        if (options?.toString) {
-            this.toString = options.toString;
-        }
-        else {
-            this.toString = 'To';
         }
         this.attachEventListeners();
         // Render initial state if defaults provided

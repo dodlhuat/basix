@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Calendar — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { Calendar } from '../../js/calendar.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        const today = new Date();
+        const y = today.getFullYear();
+        const m = today.getMonth();
+        const d = today.getDate();
+
+        const events = [
+            {
+                id: '1',
+                title: 'Team Meeting',
+                start: new Date(y, m, d, 9, 0),
+                end:   new Date(y, m, d, 10, 30),
+                className: 'badge-success',
+            },
+            {
+                id: '2',
+                title: 'Deployment',
+                start: new Date(y, m, d, 14, 0),
+                end:   new Date(y, m, d, 15, 0),
+                className: 'badge-warning',
+            },
+            {
+                id: '3',
+                title: 'Sprint Planning',
+                start: new Date(y, m, d + 1, 10, 0),
+                end:   new Date(y, m, d + 1, 12, 0),
+            },
+            {
+                id: '4',
+                title: 'Vacation',
+                start: new Date(y, m, d + 3),
+                end:   new Date(y, m, d + 5),
+                allDay: true,
+                className: 'badge-info',
+            },
+            {
+                id: '5',
+                title: 'Release Review',
+                start: new Date(y, m, d + 2, 16, 0),
+                end:   new Date(y, m, d + 2, 17, 0),
+                className: 'badge-error',
+            },
+        ];
+
+        new Calendar({
+            container: '#cal-month',
+            events,
+            view: 'month',
+            iconBasePath: '../../svg-icons/',
+        });
+
+        new Calendar({
+            container: '#cal-week',
+            events,
+            view: 'week',
+            iconBasePath: '../../svg-icons/',
+        });
+
+        new Calendar({
+            container: '#cal-agenda',
+            events,
+            view: 'agenda',
+            iconBasePath: '../../svg-icons/',
+        });
+
+        new CodeViewer('#code-js', `import { Calendar } from '@dodlhuat/basix/js/calendar.js';
+
+const cal = new Calendar({
+  container: '#my-calendar',
+  events: [
+    {
+      id: '1',
+      title: 'Team Meeting',
+      start: new Date(2025, 3, 10, 9, 0),
+      end:   new Date(2025, 3, 10, 10, 30),
+      className: 'badge-success', // Basix badge class for color
+    },
+    {
+      id: '2',
+      title: 'Vacation',
+      start: new Date(2025, 3, 14),
+      end:   new Date(2025, 3, 16),
+      allDay: true,
+      className: 'badge-info',
+    },
+  ],
+  view: 'month',        // 'month' | 'week' | 'agenda'
+  showOutsideDays: true,
+  onDayClick(date) { console.log('Day:', date); },
+  onEventClick(event) { console.log('Event:', event.title); },
+  onChange(date, view) { console.log('Navigate:', date, view); },
+});
+
+// Public API
+cal.next();
+cal.prev();
+cal.today();
+cal.setView('week');
+cal.addEvent({ id: '3', title: 'New', start: new Date(), end: new Date(), allDay: true });
+cal.removeEvent('3');
+cal.setEvents([]);
+cal.getEvents();
+cal.destroy();`, 'js');
+
+        new CodeViewer('#code-html', `<div id="my-calendar"></div>`, 'html');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Calendar</h1>
+            <p class="docs-lead">A full-featured calendar component with month, week, and agenda views. Supports events, all-day spans, keyboard navigation, and dark mode.</p>
+            <p class="docs-import">{ Calendar } from '/basix/js/calendar.js'</p>
+
+            <h2>Month view</h2>
+            <p>Monthly grid with up to three event pills per day and a "+n more" overflow indicator.</p>
+            <div class="docs-demo"><div id="cal-month"></div></div>
+
+            <h2>Week view</h2>
+            <p>7-column time grid with absolute-positioned timed events and an all-day row at the top.</p>
+            <div class="docs-demo"><div id="cal-week"></div></div>
+
+            <h2>Agenda view</h2>
+            <p>Compact list of days that have events, grouped by day with full time ranges.</p>
+            <div class="docs-demo"><div id="cal-agenda"></div></div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>container</code></td><td>HTMLElement | string</td><td>—</td><td>Target element or CSS selector to mount the calendar into.</td></tr>
+                    <tr><td><code>events</code></td><td>CalendarEvent[]</td><td><code>[]</code></td><td>Initial array of events.</td></tr>
+                    <tr><td><code>view</code></td><td>month | week | agenda</td><td><code>'month'</code></td><td>Initial view.</td></tr>
+                    <tr><td><code>locale</code></td><td>Partial&lt;CalendarLocale&gt;</td><td>German</td><td>Override month/day names, first day of week, and UI labels.</td></tr>
+                    <tr><td><code>showOutsideDays</code></td><td>boolean</td><td><code>true</code></td><td>Show days from adjacent months in the month grid.</td></tr>
+                    <tr><td><code>className</code></td><td>string</td><td>—</td><td>Extra CSS class added to the root <code>.cal</code> element.</td></tr>
+                    <tr><td><code>onDayClick</code></td><td>(date: Date) =&gt; void</td><td>—</td><td>Called when a day cell is clicked.</td></tr>
+                    <tr><td><code>onEventClick</code></td><td>(event: CalendarEvent) =&gt; void</td><td>—</td><td>Called when an event pill is clicked.</td></tr>
+                    <tr><td><code>onChange</code></td><td>(date: Date, view: CalendarView) =&gt; void</td><td>—</td><td>Called after navigation or view change.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>CalendarEvent</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Property</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>id</code></td><td>string</td><td>yes</td><td>Unique identifier.</td></tr>
+                    <tr><td><code>title</code></td><td>string</td><td>yes</td><td>Event label.</td></tr>
+                    <tr><td><code>start</code></td><td>Date</td><td>yes</td><td>Start date/time.</td></tr>
+                    <tr><td><code>end</code></td><td>Date</td><td>yes</td><td>End date/time.</td></tr>
+                    <tr><td><code>allDay</code></td><td>boolean</td><td>no</td><td>Marks the event as spanning a full day.</td></tr>
+                    <tr><td><code>className</code></td><td>string</td><td>no</td><td>Basix badge/alert class for color, e.g. <code>badge-success</code>.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Public API</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>next()</code></td><td>Navigate to the next month or week.</td></tr>
+                    <tr><td><code>prev()</code></td><td>Navigate to the previous month or week.</td></tr>
+                    <tr><td><code>today()</code></td><td>Jump back to today.</td></tr>
+                    <tr><td><code>setView(view)</code></td><td>Switch view programmatically.</td></tr>
+                    <tr><td><code>addEvent(event)</code></td><td>Add a single event and re-render.</td></tr>
+                    <tr><td><code>removeEvent(id)</code></td><td>Remove an event by id and re-render.</td></tr>
+                    <tr><td><code>setEvents(events)</code></td><td>Replace all events.</td></tr>
+                    <tr><td><code>getEvents()</code></td><td>Returns a copy of the current events array.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Remove event listeners and clear the container.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

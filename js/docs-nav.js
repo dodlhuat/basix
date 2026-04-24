@@ -57,6 +57,7 @@ const NAV = [
             { label: 'Gallery',          href: 'components/gallery.html' },
             { label: 'Scrollbar',        href: 'components/scrollbar.html' },
             { label: 'Chat Bubbles',     href: 'components/chat-bubbles.html' },
+            { label: 'Calendar',         href: 'components/calendar.html' },
             { label: 'Charts',           href: 'components/charts.html' },
             { label: 'Group Picker',     href: 'components/group-picker.html' },
             { label: 'Virtual Dropdown', href: 'components/virtual-dropdown.html' },
