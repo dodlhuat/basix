@@ -7035,21 +7035,11 @@ body {
   background: var(--cal-bg);
   padding: var(--cal-spacing-xs) var(--cal-spacing-sm);
   min-height: 88px;
-  cursor: pointer;
-  transition: background 0.15s ease;
+  cursor: default;
   position: relative;
-}
-.cal__day:hover {
-  background: var(--cal-bg-hover);
-}
-.cal__day:focus-visible {
-  outline: 2px solid var(--cal-accent);
-  outline-offset: -2px;
-  z-index: 1;
 }
 .cal__day--empty {
   background: var(--cal-bg-alt);
-  cursor: default;
   pointer-events: none;
 }
 .cal__day--outside .cal__day-num {
@@ -7064,16 +7054,6 @@ body {
   border-radius: 50%;
   font-weight: 700;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--cal-accent) 20%, transparent);
-}
-.cal__day.is-selected {
-  background: color-mix(in srgb, var(--cal-accent) 6%, var(--cal-bg));
-}
-.cal__day.is-selected .cal__day-num {
-  background: var(--cal-accent);
-  color: var(--cal-accent-text);
-  border-radius: 50%;
-  font-weight: 700;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--cal-accent) 35%, transparent);
 }
 .cal__day.has-events::after {
   content: "";
@@ -7263,7 +7243,7 @@ body {
   font-weight: 600;
   color: var(--cal-text-muted);
   border-left: 1px solid var(--cal-border);
-  cursor: pointer;
+  cursor: default;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -7288,16 +7268,22 @@ body {
   color: var(--cal-accent-text);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--cal-accent) 20%, transparent);
 }
-.cal__week-head-day.is-selected span {
-  background: var(--cal-accent);
-  color: var(--cal-accent-text);
-}
 
 .cal__allday {
   display: grid;
   grid-template-columns: var(--cal-time-col-width) 1fr;
   border-bottom: 1px solid var(--cal-border);
   background: var(--cal-bg);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.cal__allday::-webkit-scrollbar {
+  width: 5px;
+}
+.cal__allday::-webkit-scrollbar-track, .cal__allday::-webkit-scrollbar-thumb {
+  background: transparent;
 }
 
 .cal__allday-label {
@@ -7452,7 +7438,7 @@ body {
 
 .cal__now-line {
   position: absolute;
-  left: 0;
+  left: var(--cal-time-col-width);
   right: 0;
   height: 2px;
   background: var(--error);
@@ -7642,20 +7628,11 @@ body {
     justify-content: flex-start;
     background: transparent;
   }
-  .cal__day:hover {
-    background: transparent;
-  }
-  .cal__day:hover .cal__day-num {
-    background: var(--cal-bg-hover);
-  }
   .cal__day--empty {
     background: transparent;
   }
   .cal__day--outside .cal__day-num {
     opacity: 0.25;
-  }
-  .cal__day.is-selected {
-    background: transparent;
   }
   .cal__day.has-events::after {
     display: block;

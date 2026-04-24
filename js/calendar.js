@@ -136,6 +136,42 @@ export const CalendarLogic = {
         }
         return layouts;
     },
+    /** Compute side-by-side column layout for overlapping timed events in a day column. */
+    computeTimedLayout(events, day) {
+        if (!events.length)
+            return [];
+        const sorted = [...events].sort((a, b) => {
+            const diff = a.start.getTime() - b.start.getTime();
+            if (diff !== 0)
+                return diff;
+            return (b.end.getTime() - b.start.getTime()) - (a.end.getTime() - a.start.getTime());
+        });
+        // Greedy sub-column assignment
+        const colEnds = [];
+        const assigns = [];
+        for (const event of sorted) {
+            let col = 0;
+            while (col < colEnds.length && colEnds[col] > event.start)
+                col++;
+            if (col >= colEnds.length)
+                colEnds.push(event.end);
+            else
+                colEnds[col] = event.end;
+            assigns.push({ event, col });
+        }
+        return assigns.map(({ event, col }) => {
+            // cols = highest sub-column among events that overlap this one + 1
+            const cols = assigns
+                .filter(a => a.event.start < event.end && a.event.end > event.start)
+                .reduce((max, a) => Math.max(max, a.col), 0) + 1;
+            const pos = CalendarLogic.getEventPosition(event, day);
+            return { event, top: pos.top, height: pos.height, col, cols };
+        });
+    },
+    nowLinePct() {
+        const now = new Date();
+        return (now.getHours() * 60 + now.getMinutes()) / 1440 * 100;
+    },
 };
 // -----------------------------------------------------------
 // Default Locale
@@ -198,67 +234,59 @@ export class CalendarRenderer {
         aria-label="${event.title}"
         title="${event.title}">${event.title}</div>`;
     }
-    renderMonthDay(date, currentMonth, currentYear, events, selectedDate, showOutsideDays) {
+    renderMonthDay(date, currentMonth, currentYear, events, showOutsideDays) {
         const isOutside = !CalendarLogic.isCurrentMonth(date, currentYear, currentMonth);
         if (isOutside && !showOutsideDays) {
             return `<div class="cal__day cal__day--empty" aria-hidden="true"></div>`;
         }
         const allForDay = CalendarLogic.getEventsForDay(events, date);
-        // Pills show only single-day events; multi-day are rendered as span bars in the week row
         const pillEvents = allForDay.filter(e => !CalendarLogic.isMultiDay(e));
         const isToday = CalendarLogic.isToday(date);
-        const isSelected = selectedDate ? CalendarLogic.isSameDay(date, selectedDate) : false;
         const classes = [
             'cal__day',
             isToday ? 'is-today' : '',
-            isSelected ? 'is-selected' : '',
             isOutside ? 'cal__day--outside' : '',
             allForDay.length > 0 ? 'has-events' : '',
         ].filter(Boolean).join(' ');
         const eventsHtml = pillEvents.slice(0, 3).map(e => this.renderEvent(e, true)).join('');
         const moreCount = pillEvents.length - 3;
         const moreHtml = moreCount > 0 ? `<div class="cal__event-more">+${moreCount}</div>` : '';
-        return `<div class="${classes}"
-        role="gridcell" tabindex="0"
-        aria-label="${date.toLocaleDateString()}"
-        aria-selected="${isSelected}"
-        data-date="${date.toISOString()}">
+        return `<div class="${classes}" aria-label="${date.toLocaleDateString()}">
       <span class="cal__day-num">${date.getDate()}</span>
       <div class="cal__day-events">${eventsHtml}${moreHtml}</div>
     </div>`;
     }
-    renderWeekRow(weekDays, currentMonth, currentYear, events, selectedDate, showOutsideDays) {
+    renderWeekRow(weekDays, currentMonth, currentYear, events, showOutsideDays) {
         const multiDay = events.filter(e => CalendarLogic.isMultiDay(e));
         const spans = CalendarLogic.computeSpanLayout(weekDays, multiDay);
         const maxLanes = spans.length > 0 ? Math.max(...spans.map(s => s.lane)) + 1 : 0;
         const dayCells = weekDays
-            .map(d => this.renderMonthDay(d, currentMonth, currentYear, events, selectedDate, showOutsideDays))
+            .map(d => this.renderMonthDay(d, currentMonth, currentYear, events, showOutsideDays))
             .join('');
         const spanBars = spans.map(s => this.renderSpanBar(s)).join('');
         return `<div class="cal__week-row" style="--span-lanes:${maxLanes}">
       ${dayCells}${spanBars}
     </div>`;
     }
-    renderMonthView(year, month, events, selectedDate, showOutsideDays, firstDayOfWeek) {
+    renderMonthView(year, month, events, showOutsideDays, firstDayOfWeek) {
         const days = CalendarLogic.getMonthGrid(year, month, firstDayOfWeek);
         const weekRows = [];
         for (let i = 0; i < days.length; i += 7) {
-            weekRows.push(this.renderWeekRow(days.slice(i, i + 7), month, year, events, selectedDate, showOutsideDays));
+            weekRows.push(this.renderWeekRow(days.slice(i, i + 7), month, year, events, showOutsideDays));
         }
         return `<div class="cal__month-grid" role="grid" aria-label="${this.locale.monthNames[month]} ${year}">
       <div class="cal__month-head">${this.renderWeekdayHeaders()}</div>
       ${weekRows.join('')}
     </div>`;
     }
-    renderWeekView(date, events, selectedDate, firstDayOfWeek) {
+    renderWeekView(date, events, firstDayOfWeek, showNowLine = false) {
         const days = CalendarLogic.getWeekDays(date, firstDayOfWeek);
         const headCols = days.map(d => {
             const isToday = CalendarLogic.isToday(d);
-            const isSelected = selectedDate ? CalendarLogic.isSameDay(d, selectedDate) : false;
-            const cls = ['cal__week-head-day', isToday ? 'is-today' : '', isSelected ? 'is-selected' : '']
+            const cls = ['cal__week-head-day', isToday ? 'is-today' : '']
                 .filter(Boolean).join(' ');
             const dow = this.locale.dayNamesShort[(d.getDay() + 7) % 7];
-            return `<div class="${cls}" data-date="${d.toISOString()}">${dow}<span>${d.getDate()}</span></div>`;
+            return `<div class="${cls}">${dow}<span>${d.getDate()}</span></div>`;
         }).join('');
         // All-day row: span layout for all allDay events (both single-day and multi-day)
         const allDayEvents = events.filter(e => e.allDay);
@@ -273,18 +301,27 @@ export class CalendarRenderer {
         const dayCols = days.map(d => {
             const timedEvents = CalendarLogic.getTimedEvents(events, d);
             const hourCells = Array.from({ length: 24 }, () => `<div class="cal__day-col-hour"></div>`).join('');
-            const eventOverlays = timedEvents.map(e => {
-                const { top, height } = CalendarLogic.getEventPosition(e, d);
-                const cls = e.className ?? '';
+            const layouts = CalendarLogic.computeTimedLayout(timedEvents, d);
+            const eventOverlays = layouts.map(({ event, top, height, col, cols }) => {
+                const cls = event.className ?? '';
+                let posStyle = `top:${top.toFixed(2)}%;height:${height.toFixed(2)}%`;
+                if (cols > 1) {
+                    const l = (col / cols * 100).toFixed(2);
+                    const w = (100 / cols).toFixed(2);
+                    posStyle += `;left:calc(${l}% + 2px);right:auto;width:calc(${w}% - 4px)`;
+                }
                 return `<div class="cal__week-event ${cls}"
-              style="top:${top.toFixed(2)}%;height:${height.toFixed(2)}%"
-              data-event-id="${e.id}" role="button" tabindex="0" aria-label="${e.title}">
-              <span class="cal__event-time">${CalendarLogic.formatTime(e.start)}</span>
-              ${e.title}
+              style="${posStyle}"
+              data-event-id="${event.id}" role="button" tabindex="0" aria-label="${event.title}">
+              <span class="cal__event-time">${CalendarLogic.formatTime(event.start)}</span>
+              ${event.title}
             </div>`;
             }).join('');
             return `<div class="cal__day-col" data-date="${d.toISOString()}">${hourCells}${eventOverlays}</div>`;
         }).join('');
+        const nowLine = showNowLine
+            ? `<div class="cal__now-line" style="top:${CalendarLogic.nowLinePct().toFixed(3)}%"></div>`
+            : '';
         return `<div class="cal__week" role="grid">
       <div class="cal__week-head">
         <div class="cal__week-head-time"></div>
@@ -300,6 +337,7 @@ export class CalendarRenderer {
         <div class="cal__week-grid">
           <div class="cal__time-col">${hourLabels}</div>
           ${dayCols}
+          ${nowLine}
         </div>
       </div>
     </div>`;
@@ -361,8 +399,8 @@ export class CalendarRenderer {
 // -----------------------------------------------------------
 export class Calendar {
     constructor(options) {
-        this.selectedDate = null;
         this.events = [];
+        this.nowLineTimer = null;
         // ----------------------------------------------------------
         // Event delegation
         // ----------------------------------------------------------
@@ -446,6 +484,7 @@ export class Calendar {
         return [...this.events];
     }
     destroy() {
+        this.clearNowLineTimer();
         this.container.removeEventListener('click', this.boundHandleClick);
         this.container.removeEventListener('keydown', this.boundHandleKeydown);
         this.container.innerHTML = '';
@@ -494,20 +533,51 @@ export class Calendar {
         const m = this.currentDate.getMonth();
         switch (this.currentView) {
             case 'month':
-                return this.renderer.renderMonthView(y, m, this.events, this.selectedDate, this.options.showOutsideDays, firstDayOfWeek);
-            case 'week':
-                return this.renderer.renderWeekView(this.currentDate, this.events, this.selectedDate, firstDayOfWeek);
+                return this.renderer.renderMonthView(y, m, this.events, this.options.showOutsideDays, firstDayOfWeek);
+            case 'week': {
+                const weekDays = CalendarLogic.getWeekDays(this.currentDate, firstDayOfWeek);
+                const showNowLine = weekDays.some(d => CalendarLogic.isToday(d));
+                return this.renderer.renderWeekView(this.currentDate, this.events, firstDayOfWeek, showNowLine);
+            }
             case 'agenda':
                 return this.renderer.renderAgendaView(y, m, this.events);
         }
     }
     render() {
+        this.clearNowLineTimer();
         const rootClass = ['cal', this.options.className].filter(Boolean).join(' ');
         this.container.setAttribute('data-cal', this.currentView);
         this.container.innerHTML = `<div class="${rootClass}" role="application" aria-label="Kalender">
       ${this.buildHeader()}
       <div class="cal__body">${this.buildBody()}</div>
     </div>`;
+        if (this.currentView === 'week') {
+            const weekDays = CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek);
+            if (weekDays.some(d => CalendarLogic.isToday(d))) {
+                this.scrollToNow();
+                this.startNowLineTimer();
+            }
+        }
+    }
+    scrollToNow() {
+        const body = this.container.querySelector('.cal__week-body');
+        if (!body)
+            return;
+        const pct = CalendarLogic.nowLinePct() / 100;
+        body.scrollTop = Math.max(0, pct * body.scrollHeight - body.clientHeight / 2);
+    }
+    startNowLineTimer() {
+        this.nowLineTimer = setInterval(() => {
+            const line = this.container.querySelector('.cal__now-line');
+            if (line)
+                line.style.top = `${CalendarLogic.nowLinePct().toFixed(3)}%`;
+        }, 60000);
+    }
+    clearNowLineTimer() {
+        if (this.nowLineTimer !== null) {
+            clearInterval(this.nowLineTimer);
+            this.nowLineTimer = null;
+        }
     }
     attachEvents() {
         this.container.addEventListener('click', this.boundHandleClick);
@@ -542,38 +612,14 @@ export class Calendar {
             }
             return;
         }
-        const dayEl = target.closest('[data-date]');
-        if (dayEl?.dataset.date) {
-            this.selectedDate = new Date(dayEl.dataset.date);
-            this.options.onDayClick(this.selectedDate);
-            this.render();
-        }
     }
     handleKeydown(e) {
         const target = e.target;
         if (e.key === 'Enter' || e.key === ' ') {
-            if (target.closest('[data-date], [data-event-id], [data-action]')) {
+            if (target.closest('[data-event-id], [data-action]')) {
                 e.preventDefault();
                 target.click();
             }
         }
-        if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key))
-            return;
-        const dayEl = target.closest('.cal__day[data-date]');
-        if (!dayEl)
-            return;
-        e.preventDefault();
-        const all = Array.from(this.container.querySelectorAll('.cal__day[data-date]:not(.cal__day--empty)'));
-        const idx = all.indexOf(dayEl);
-        let next = idx;
-        if (e.key === 'ArrowRight')
-            next = idx + 1;
-        else if (e.key === 'ArrowLeft')
-            next = idx - 1;
-        else if (e.key === 'ArrowDown')
-            next = idx + 7;
-        else if (e.key === 'ArrowUp')
-            next = idx - 7;
-        all[Math.max(0, Math.min(next, all.length - 1))]?.focus();
     }
 }
