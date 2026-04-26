@@ -15,6 +15,7 @@ class VirtualDropdown {
         this.renderLimit = config.renderLimit || 20;
         this.itemHeight = config.itemHeight || 40;
         this.onSelect = config.onSelect ?? null;
+        this.anchorName = `--vd-${Math.random().toString(36).slice(2, 9)}`;
         this.selectedValues = new Set();
         this.filteredOptions = [...this.options];
         this.isOpen = false;
@@ -34,7 +35,7 @@ class VirtualDropdown {
         <span class="trigger-text">${escapeHtml(this.placeholder)}</span>
         <span class="trigger-arrow" aria-hidden="true">▼</span>
       </div>
-      <div class="dropdown-menu" role="listbox">
+      <div class="dropdown-menu" popover="manual" role="listbox">
         ${this.searchable ? '<div class="dropdown-search"><input type="text" placeholder="Search..." aria-label="Search options"></div>' : ''}
         <div class="dropdown-list-wrapper">
           <div class="dropdown-list-scroller">
@@ -51,6 +52,10 @@ class VirtualDropdown {
         this.scroller = this.querySelector('.dropdown-list-scroller');
         this.spacer = this.querySelector('.virtual-spacer');
         this.content = this.querySelector('.virtual-content');
+        // Wire up anchor positioning: each instance gets a unique anchor name
+        // so multiple dropdowns on the same page don't interfere.
+        this.trigger.style.setProperty('anchor-name', this.anchorName);
+        this.menu.style.setProperty('position-anchor', this.anchorName);
         if (this.searchable) {
             this.searchInput = this.querySelector('.dropdown-search input');
         }
@@ -77,8 +82,10 @@ class VirtualDropdown {
         };
         this.trigger.addEventListener('keydown', handleTriggerKeydown);
         this.boundHandlers.set('triggerKeydown', handleTriggerKeydown);
+        // Close when clicking outside. Still needed because popover="manual"
+        // does not auto-dismiss on outside clicks.
         const handleDocumentClick = (e) => {
-            if (!this.container.contains(e.target)) {
+            if (!this.container.contains(e.target) && !this.menu.contains(e.target)) {
                 this.close();
             }
         };
@@ -99,6 +106,19 @@ class VirtualDropdown {
         };
         this.listWrapper.addEventListener('scroll', handleScroll);
         this.boundHandlers.set('scroll', handleScroll);
+        // Sync isOpen if the browser closes the popover externally (e.g. another
+        // popover="auto" element stealing focus — not typical for "manual" but
+        // good defensive practice).
+        const handlePopoverToggle = (e) => {
+            const te = e;
+            if (te.newState === 'closed' && this.isOpen) {
+                this.isOpen = false;
+                this.container.classList.remove('open');
+                this.trigger.setAttribute('aria-expanded', 'false');
+            }
+        };
+        this.menu.addEventListener('toggle', handlePopoverToggle);
+        this.boundHandlers.set('popoverToggle', handlePopoverToggle);
     }
     toggle() {
         this.isOpen ? this.close() : this.open();
@@ -106,7 +126,7 @@ class VirtualDropdown {
     open() {
         this.isOpen = true;
         this.container.classList.add('open');
-        this.menu.classList.add('open');
+        this.menu.showPopover();
         this.trigger.setAttribute('aria-expanded', 'true');
         this.renderList();
         if (this.searchable && this.searchInput) {
@@ -116,7 +136,7 @@ class VirtualDropdown {
     close() {
         this.isOpen = false;
         this.container.classList.remove('open');
-        this.menu.classList.remove('open');
+        this.menu.hidePopover();
         this.trigger.setAttribute('aria-expanded', 'false');
     }
     handleSearch(query) {
@@ -245,6 +265,9 @@ class VirtualDropdown {
         }
     }
     destroy() {
+        if (this.isOpen) {
+            this.menu.hidePopover();
+        }
         const triggerClick = this.boundHandlers.get('triggerClick');
         if (triggerClick) {
             this.trigger.removeEventListener('click', triggerClick);
@@ -264,6 +287,10 @@ class VirtualDropdown {
         const scroll = this.boundHandlers.get('scroll');
         if (scroll) {
             this.listWrapper.removeEventListener('scroll', scroll);
+        }
+        const popoverToggle = this.boundHandlers.get('popoverToggle');
+        if (popoverToggle) {
+            this.menu.removeEventListener('toggle', popoverToggle);
         }
         this.boundHandlers.clear();
         this.container.innerHTML = '';

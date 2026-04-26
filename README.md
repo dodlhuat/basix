@@ -1,4 +1,4 @@
-# Basix 1.2.4
+# Basix 1.2.6
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
