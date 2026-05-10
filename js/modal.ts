@@ -100,7 +100,9 @@ class Modal {
 
         setTimeout(() => {
             wrapper.remove();
-            this.modalWrapper = null;
+            if (this.modalWrapper === wrapper) {
+                this.modalWrapper = null;
+            }
         }, 300);
     }
 

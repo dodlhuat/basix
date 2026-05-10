@@ -48,6 +48,7 @@ nav.push-menu {
   transition: transform $menu-duration $menu-easing;
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   will-change: transform;
 

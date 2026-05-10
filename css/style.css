@@ -2684,6 +2684,7 @@ nav.push-menu.pushed {
   transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   will-change: transform;
 }
@@ -9016,5 +9017,3 @@ body {
   display: flex;
   gap: 1.25rem;
 }
-
-/*# sourceMappingURL=style.css.map */

@@ -64,8 +64,8 @@ class Tooltip {
             requestAnimationFrame(() => {
                 this.tooltipElement?.classList.add('visible');
                 this.isVisible = true;
+                Tooltip.activeTooltip = this;
             });
-            Tooltip.activeTooltip = this;
         }, this.options.delay);
     }
     hide() {

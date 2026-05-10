@@ -106,7 +106,9 @@ class DatePicker {
                 }
             }
             setTimeout(() => {
-                document.addEventListener('click', this.handleDocumentClick);
+                if (this.calendar.classList.contains('visible')) {
+                    document.addEventListener('click', this.handleDocumentClick);
+                }
             }, 0);
         }
         this.calendar.classList.add('visible');

@@ -59,7 +59,9 @@ class Modal {
         wrapper.classList.remove('is-visible');
         setTimeout(() => {
             wrapper.remove();
-            this.modalWrapper = null;
+            if (this.modalWrapper === wrapper) {
+                this.modalWrapper = null;
+            }
         }, 300);
     }
     handleEscape(e) {

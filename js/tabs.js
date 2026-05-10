@@ -16,8 +16,8 @@ class Tabs {
             onChange: options.onChange
         };
         this.currentTab = this.options.defaultTab;
-        this.tabItems = document.querySelectorAll('.tab-item'); // Will be set in init
-        this.tabPanels = document.querySelectorAll('.tab-panel'); // Will be set in init
+        this.tabItems = this.container.querySelectorAll('.tab-item');
+        this.tabPanels = this.container.querySelectorAll('.tab-panel');
         this.init();
     }
     /**

@@ -103,11 +103,13 @@ class Lightbox {
 
         setTimeout(() => {
             wrapper.remove();
-            this.wrapper = null;
-            this.imgEl = null;
-            this.captionEl = null;
-            this.counterEl = null;
-            this.isZoomed = false;
+            if (this.wrapper === wrapper) {
+                this.wrapper = null;
+                this.imgEl = null;
+                this.captionEl = null;
+                this.counterEl = null;
+                this.isZoomed = false;
+            }
             this.onClose?.();
         }, 300);
     }
