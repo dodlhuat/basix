@@ -5,6 +5,7 @@
     "outDir": ".",
     "rootDir": ".",
     "strict": true,
+    "declaration": true,
     "types": [],
   },
   "include": [
