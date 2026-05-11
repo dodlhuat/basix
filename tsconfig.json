@@ -2,18 +2,16 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
-    "outDir": ".",
-    "rootDir": ".",
+    "rootDir": "src",
+    "outDir": "js",
     "strict": true,
     "declaration": true,
     "types": [],
   },
   "include": [
-    "*.ts"
+    "src/*.ts"
   ],
   "exclude": [
-    "dist",
-    "node_modules",
-    "../node_modules"
+    "node_modules"
   ]
 }
