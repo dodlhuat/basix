@@ -6,19 +6,21 @@
 type Placement = 'top' | 'bottom' | 'left' | 'right';
 type Align     = 'start' | 'center' | 'end';
 
+/** Options accepted by `computePosition`. */
 interface PositionOptions {
     placement:      Placement | 'auto';
     align?:         Align;
-    offset?:        number;  // gap between trigger and floating element (default: 8)
-    margin?:        number;  // minimum distance from viewport edge (default: 8)
-    arrowSize?:     number;  // if set, returns arrowOffset in result
+    offset?:        number;
+    margin?:        number;
+    arrowSize?:     number;
 }
 
+/** Result returned by `computePosition`. */
 interface PositionResult {
     left:         number;
     top:          number;
-    placement:    Placement;   // resolved (after auto/flip)
-    arrowOffset?: number;      // px offset for arrow centering on trigger axis
+    placement:    Placement;
+    arrowOffset?: number;
 }
 
 /** Pick the placement with the most available space, preferring bottom > top > right > left. */
@@ -63,7 +65,6 @@ function computePosition(trigger: DOMRect, floating: DOMRect, opts: PositionOpti
         ? bestPlacement(trigger, floating, offset)
         : maybeFlip(opts.placement, trigger, floating, offset);
 
-    // Main-axis offset
     let left = 0, top = 0;
     switch (placement) {
         case 'top':    top  = trigger.top    - floating.height - offset; break;
@@ -72,7 +73,6 @@ function computePosition(trigger: DOMRect, floating: DOMRect, opts: PositionOpti
         case 'right':  left = trigger.right  + offset;                   break;
     }
 
-    // Cross-axis alignment
     if (placement === 'top' || placement === 'bottom') {
         switch (align) {
             case 'start':  left = trigger.left;                                          break;
@@ -87,14 +87,12 @@ function computePosition(trigger: DOMRect, floating: DOMRect, opts: PositionOpti
         }
     }
 
-    // Clamp to viewport
     const l = Math.max(margin, Math.min(window.innerWidth  - floating.width  - margin, left));
     const t = Math.max(margin, Math.min(window.innerHeight - floating.height - margin, top));
 
-    // Arrow offset: keep arrow centred on the trigger even after viewport clamping
     let arrowOffset: number | undefined;
     if (opts.arrowSize !== undefined) {
-        const minOff = opts.arrowSize + 8; // min distance from rounded corner
+        const minOff = opts.arrowSize + 8;
         if (placement === 'top' || placement === 'bottom') {
             const raw = trigger.left + trigger.width  / 2 - l;
             arrowOffset = Math.max(minOff, Math.min(floating.width  - minOff, raw));

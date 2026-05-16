@@ -1,10 +1,12 @@
 import { escapeHtml } from './utils.js';
 
+/** A single selectable option for a VirtualDropdown. */
 interface DropdownOption {
     label: string;
     value: string | number;
 }
 
+/** Configuration for a VirtualDropdown instance. */
 interface VirtualDropdownConfig {
     container: string | HTMLElement;
     options: DropdownOption[];
@@ -16,6 +18,7 @@ interface VirtualDropdownConfig {
     onSelect?: (selectedValues: Array<string | number>) => void;
 }
 
+/** Virtualised dropdown that renders only visible items for performance with large option lists. */
 class VirtualDropdown {
     private readonly container: HTMLElement;
     private readonly options: DropdownOption[];

@@ -4,6 +4,7 @@ const CLOSE_ICON = '<div class="icon icon-close close"></div>';
 
 type ModalType = 'default' | 'success' | 'error' | 'warning' | 'info';
 
+/** Configuration options for a Modal dialog. */
 interface ModalOptions {
     content: string;
     header?: string;
@@ -12,6 +13,7 @@ interface ModalOptions {
     type?: ModalType;
 }
 
+/** Overlay dialog with optional header, footer, close button, and type variants. */
 class Modal {
     private content: string;
     private readonly header?: string;
@@ -86,7 +88,6 @@ class Modal {
         const wrapper = this.modalWrapper;
         if (!wrapper) return;
 
-        // Remove event listeners
         const closeBtn = wrapper.querySelector('.close');
         closeBtn?.removeEventListener('click', this.hide);
 

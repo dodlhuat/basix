@@ -1,8 +1,10 @@
+/** Localised day and month names for the DatePicker. */
 interface DatePickerLocales {
   days: string[];
   months: string[];
 }
 
+/** Configuration options for the DatePicker. */
 interface DatePickerOptions {
   mode?: 'single' | 'range';
   startDay?: number;
@@ -12,6 +14,7 @@ interface DatePickerOptions {
   onSelect?: (date: Date | DateRange) => void;
 }
 
+/** A date range with optional start and end dates. */
 interface DateRange {
   start: Date | null;
   end: Date | null;
@@ -19,6 +22,7 @@ interface DateRange {
 
 type ViewMode = 'days' | 'months' | 'years';
 
+/** Calendar-based date (or date-range) picker that attaches to an input element. */
 class DatePicker {
   private input: HTMLInputElement | null;
   private options: DatePickerOptions;
@@ -445,7 +449,6 @@ class DatePicker {
     const controls = document.createElement('div');
     controls.className = 'datepicker-time-controls';
 
-    // Hours spinner
     const hoursSpinner = this.createSpinner(
       this.selectedHours,
       0,
@@ -460,7 +463,6 @@ class DatePicker {
     separator.className = 'datepicker-time-separator';
     separator.textContent = ':';
 
-    // Minutes spinner
     const minutesSpinner = this.createSpinner(
       this.selectedMinutes,
       0,

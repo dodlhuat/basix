@@ -1,13 +1,16 @@
+/** Configuration options for a Dropdown instance. */
 interface DropdownOptions {
     closeOnSelect?: boolean;
     allowMultipleOpen?: boolean;
 }
 
+/** Event detail payload for the `dropdown-select` custom event. */
 interface DropdownSelectDetail {
     text: string;
     element: HTMLElement;
 }
 
+/** Hierarchical dropdown menu with optional multi-open and close-on-select behaviour. */
 class Dropdown {
     private container: HTMLElement;
     private trigger: HTMLElement;
@@ -52,7 +55,6 @@ class Dropdown {
     private attachEventListeners(): void {
         const { signal } = this.abortController;
 
-        // Toggle main dropdown
         this.trigger.addEventListener(
             'click',
             (e: MouseEvent) => {
@@ -62,7 +64,6 @@ class Dropdown {
             { signal }
         );
 
-        // Close when clicking outside
         document.addEventListener(
             'click',
             (e: MouseEvent) => {
@@ -73,7 +74,6 @@ class Dropdown {
             { signal }
         );
 
-        // Handle item clicks using event delegation
         this.menu.addEventListener(
             'click',
             (e: MouseEvent) => {
@@ -127,7 +127,6 @@ class Dropdown {
     private toggleSubmenu(li: HTMLLIElement): void {
         const isOpening = !li.classList.contains('open');
 
-        // Close siblings if not allowing multiple open menus
         if (isOpening && !this.options.allowMultipleOpen) {
             const parent = li.parentElement;
             if (parent) {
@@ -137,7 +136,6 @@ class Dropdown {
                     if (sibling !== li && sibling.classList.contains('open')) {
                         sibling.classList.remove('open');
 
-                        // Close deeply nested open items
                         const deepOpenItems = sibling.querySelectorAll<HTMLLIElement>('.open');
                         deepOpenItems.forEach((el) => el.classList.remove('open'));
                     }
@@ -156,7 +154,6 @@ class Dropdown {
     private handleSelection(item: HTMLElement): void {
         const text = item.textContent?.trim() ?? '';
 
-        // Dispatch custom event with proper typing
         const event = new CustomEvent<DropdownSelectDetail>('dropdown-select', {
             detail: {
                 text,
@@ -168,9 +165,6 @@ class Dropdown {
         this.container.dispatchEvent(event);
     }
 
-    /**
-     * Cleanup method to remove event listeners
-     */
     public destroy(): void {
         this.abortController.abort();
         this.close();

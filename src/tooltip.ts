@@ -1,7 +1,7 @@
-// tooltip.ts
 import { computePosition } from './position.js';
 import type { Placement } from './position.js';
 
+/** Configuration options for a Tooltip instance. */
 interface TooltipOptions {
     position?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
     offset?: number;
@@ -12,6 +12,7 @@ interface TooltipOptions {
     isHtml?: boolean;
 }
 
+/** Lightweight tooltip that positions itself relative to a trigger element. */
 class Tooltip {
     private static activeTooltip: Tooltip | null = null;
     private static idCounter: number = 0;
@@ -49,7 +50,6 @@ class Tooltip {
             }
         });
 
-        // Also support content from separate elements
         const advancedTriggers = document.querySelectorAll<HTMLElement>('[data-tooltip-id]');
         advancedTriggers.forEach(trigger => {
             const contentId = trigger.getAttribute('data-tooltip-id');

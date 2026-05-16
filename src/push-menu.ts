@@ -1,3 +1,4 @@
+/** DOM element references managed by the PushMenu static class. */
 interface PushMenuElements {
     navigation: HTMLElement | null;
     content: HTMLElement | null;
@@ -7,6 +8,7 @@ interface PushMenuElements {
     backdrop: HTMLElement | null;
 }
 
+/** Static class that manages a push-style side navigation panel. */
 class PushMenu {
     private static elements: PushMenuElements = {
         navigation: null,
@@ -42,8 +44,6 @@ class PushMenu {
         this.initialized = true;
     }
 
-    // ─── Panel construction ────────────────────────────────────────────────
-
     private static buildPanels(): void {
         const menu = this.elements.menu;
         if (!menu) return;
@@ -51,21 +51,18 @@ class PushMenu {
         const rootUl = menu.querySelector(':scope > ul');
         if (!rootUl) return;
 
-        // Wrap root ul in a panel
         const rootPanel = document.createElement('div');
         rootPanel.classList.add('push-menu-panel', 'is-active');
         rootPanel.dataset.level = '0';
         rootPanel.appendChild(rootUl);
         menu.appendChild(rootPanel);
 
-        // Recursively extract nested uls into sibling panels
         this.extractSubPanels(rootPanel, 1);
 
         this.panelStack = [rootPanel];
     }
 
     private static extractSubPanels(panel: HTMLElement, level: number): void {
-        // Collect all uls currently in this panel before any mutations
         const uls = Array.from(panel.querySelectorAll('ul')) as HTMLUListElement[];
 
         for (const ul of uls) {
@@ -75,16 +72,13 @@ class PushMenu {
                 const childUl = li.querySelector(':scope > ul') as HTMLElement | null;
                 if (!childUl) continue;
 
-                // Determine label from the immediate anchor child
                 const parentAnchor = li.querySelector(':scope > a') as HTMLElement | null;
                 const title = parentAnchor?.textContent?.trim() ?? '';
 
-                // ── Build sub-panel ──────────────────────────────────────
                 const subPanel = document.createElement('div');
                 subPanel.classList.add('push-menu-panel');
                 subPanel.dataset.level = String(level);
 
-                // Header: back button + breadcrumb title
                 const header = document.createElement('div');
                 header.classList.add('push-menu-panel-header');
 
@@ -102,18 +96,14 @@ class PushMenu {
                 header.appendChild(titleEl);
                 subPanel.appendChild(header);
 
-                // Move the child ul into the sub-panel
                 subPanel.appendChild(childUl);
 
-                // Append sub-panel as sibling inside the nav
                 this.elements.menu?.appendChild(subPanel);
 
-                // ── Replace anchor with a trigger span in the parent li ──
                 const trigger = document.createElement('span');
                 trigger.classList.add('push-menu-item');
                 trigger.textContent = title;
 
-                // Chevron icon
                 const chevron = document.createElement('span');
                 chevron.classList.add('push-menu-chevron');
                 chevron.setAttribute('aria-hidden', 'true');
@@ -128,13 +118,10 @@ class PushMenu {
 
                 trigger.addEventListener('click', () => PushMenu.openPanel(subPanel));
 
-                // Recurse into the newly created sub-panel
                 this.extractSubPanels(subPanel, level + 1);
             }
         }
     }
-
-    // ─── Panel navigation ──────────────────────────────────────────────────
 
     public static openPanel(panel: HTMLElement): void {
         const currentPanel = this.panelStack[this.panelStack.length - 1];
@@ -162,7 +149,6 @@ class PushMenu {
         const menu = this.elements.menu;
         if (!menu) return;
 
-        // Wait for the close animation before snapping panels back
         setTimeout(() => {
             const panels = Array.from(menu.querySelectorAll('.push-menu-panel')) as HTMLElement[];
             panels.forEach((panel, index) => {
@@ -175,8 +161,6 @@ class PushMenu {
             }
         }, 300);
     }
-
-    // ─── Open / close ──────────────────────────────────────────────────────
 
     private static handleNavigationChange(): void {
         const isPushed = this.elements.content?.classList.contains('pushed') ?? false;

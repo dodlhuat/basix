@@ -1,27 +1,32 @@
 import { escapeHtml } from './utils.js';
 
+/** Internal record pairing a File with its rendered list item element. */
 interface FileData {
     file: File;
     element: HTMLDivElement;
 }
 
+/** Event detail payload for the `upload-completed` custom event. */
 interface UploadCompletedDetail {
     fileCount: number;
     files: File[];
     results: PromiseSettledResult<unknown>[];
 }
 
+/** Event detail payload for the `file-validation-error` custom event. */
 interface FileValidationErrorDetail {
     file: File;
     reason: 'size' | 'type';
 }
 
+/** Configuration options for the FileUploader. */
 interface FileUploaderConfig {
     uploadUrl?: string;
     maxFileSize?: number;
     allowedTypes?: string[];
 }
 
+/** Drag-and-drop file uploader with progress tracking and XHR-based uploads. */
 class FileUploader {
     private container: HTMLElement;
     private dropZone: HTMLElement;

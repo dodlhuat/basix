@@ -1,7 +1,4 @@
-/**
- * Utility functions for DOM manipulation and element handling
- */
-
+/** Shape of the `utils` helper object. */
 interface Utils {
     ready(fn: () => void): void;
     value(element: HTMLElement): string;

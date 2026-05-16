@@ -6,6 +6,7 @@ interface EditorOptions {
     simple?: boolean;
 }
 
+/** Rich-text editor built on contenteditable with undo/redo and code/preview panels. */
 class Editor {
     private readonly editable: HTMLElement;
     private readonly code: HTMLTextAreaElement | null;

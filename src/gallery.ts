@@ -1,11 +1,13 @@
 import { escapeHtml } from './utils.js';
 
+/** A single image record for MasonryGallery. */
 interface ImageData {
   src: string;
   title: string;
   desc: string;
 }
 
+/** Configuration options for MasonryGallery. */
 interface MasonryGalleryOptions {
   fetchFunction: () => Promise<ImageData[]>;
   minColumnWidth?: number;
@@ -14,6 +16,7 @@ interface MasonryGalleryOptions {
   reload?: number;
 }
 
+/** Infinite-scroll masonry gallery that distributes images across dynamically sized columns. */
 class MasonryGallery {
   private container: HTMLElement;
   private readonly loader: HTMLElement | null;
@@ -126,8 +129,6 @@ class MasonryGallery {
     } finally {
       this.isFetching = false;
       this.toggleLoader(false);
-      // If the rendered content doesn't fill the viewport, auto-load the next
-      // batch without waiting for a scroll event (multi-column layout is shorter)
       requestAnimationFrame(() => {
         const rect = this.container.getBoundingClientRect();
         if (rect.bottom <= window.innerHeight + this.options.scrollThreshold) {

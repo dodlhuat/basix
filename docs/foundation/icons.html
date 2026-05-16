@@ -26,7 +26,7 @@
         .icon-cell:hover { background: var(--primary-light); }
         .icon-cell svg { width: 24px; height: 24px; fill: currentColor; }
         .icon-cell span { font-size: 0.65rem; color: var(--secondary-text); text-align: center; word-break: break-all; }
-        #icon-filter { width: 100%; max-width: 360px; }
+        #icon-count { font-variant-numeric: tabular-nums; }
     </style>
     <script type="module">
         import { DocsNav } from '../../js/docs-nav.js';
@@ -35,29 +35,37 @@
         new DocsNav();
         Theme.init();
 
-        const icons = ["add","add_circle","add_photo_alternate","arrow_back","arrow_circle_right","arrow_downward","arrow_drop_down","arrow_forward","attachment","autorenew","backspace","bedtime","block","calendar_month","cancel","check","check_circle","chevron_left","chevron_right","clear_day","clock_loader_10","clock_loader_20","clock_loader_40","clock_loader_60","clock_loader_80","clock_loader_90","close","code","create_new_folder","delete","delete_forever","do_not_disturb_on","download","drafts","drag_indicator","edit","event","expand_circle_down","favorite","filter_alt","filter_list","format_align_center","format_align_left","format_align_right","format_bold","format_color_text","format_italic","format_list_bulleted","format_list_numbered","format_size","format_strikethrough","format_underlined","fullscreen","home","image","key","library_add","link","list","login","logout","mail","manage_search","menu","menu_open","minimize","more_horiz","more_vert","open_in_full","person_edit","person_search","redo","refresh","remove","reply","schedule","search","send","settings","sort","stacks","star","support","sync_saved_locally","table","tune","undo","upload","zoom_in"];
+        let allIcons = [];
 
         function renderGrid(filter = '') {
             const grid = document.getElementById('icon-grid');
             grid.innerHTML = '';
-            icons
-                .filter(id => id.includes(filter.toLowerCase()))
-                .forEach(id => {
-                    const cell = document.createElement('div');
-                    cell.className = 'icon-cell';
-                    cell.title = `Click to copy: #${id}`;
-                    cell.innerHTML = `<svg viewBox="0 0 24 24"><use href="../../svg-icons/icons.svg#${id}"/></svg><span>${id}</span>`;
-                    cell.addEventListener('click', () => {
-                        navigator.clipboard.writeText(`<svg viewBox="0 0 24 24"><use href="svg-icons/icons.svg#${id}"/></svg>`);
-                        cell.style.background = 'var(--accent-tint)';
-                        setTimeout(() => cell.style.background = '', 800);
-                    });
-                    grid.appendChild(cell);
+            const term = filter.toLowerCase();
+            const visible = term ? allIcons.filter(id => id.includes(term)) : allIcons;
+            visible.forEach(id => {
+                const cell = document.createElement('div');
+                cell.className = 'icon-cell';
+                cell.title = `Click to copy: #${id}`;
+                cell.innerHTML = `<svg viewBox="0 0 24 24"><use href="../../svg-icons/icons.svg#${id}"/></svg><span>${id}</span>`;
+                cell.addEventListener('click', () => {
+                    navigator.clipboard.writeText(`<svg viewBox="0 0 24 24"><use href="svg-icons/icons.svg#${id}"/></svg>`);
+                    cell.style.background = 'var(--accent-tint)';
+                    setTimeout(() => cell.style.background = '', 800);
                 });
+                grid.appendChild(cell);
+            });
+            document.getElementById('icon-count').textContent =
+                term ? `${visible.length.toLocaleString()} of ${allIcons.length.toLocaleString()} icons` : `${allIcons.length.toLocaleString()} icons`;
         }
 
-        renderGrid();
-        document.getElementById('icon-filter').addEventListener('input', e => renderGrid(e.target.value));
+        fetch('../../svg-icons/icons.svg')
+            .then(r => r.text())
+            .then(text => {
+                const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+                allIcons = Array.from(doc.querySelectorAll('symbol[id]')).map(el => el.id).sort();
+                renderGrid();
+                document.getElementById('icon-filter').addEventListener('input', e => renderGrid(e.target.value));
+            });
 
         new CodeViewer('#code-html', `<!-- Via SVG sprite (recommended) -->
 <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -92,10 +100,13 @@
         </div>
         <div class="docs-content">
             <h1>Icons</h1>
-            <p class="docs-lead">SVG sprite icon system. 89 icons included — reference via <code>&lt;use href&gt;</code> to stay sharp at any size and inherit <code>currentColor</code>. Click any icon to copy its markup to the clipboard.</p>
+            <p class="docs-lead">Full Google Material Icon SVG sprite — reference via <code>&lt;use href&gt;</code> to stay sharp at any size and inherit <code>currentColor</code>. Click any icon to copy its markup to the clipboard.</p>
 
             <h2>Browse icons</h2>
-            <input type="search" id="icon-filter" class="input" placeholder="Filter icons…" style="margin-bottom:0.5rem;"/>
+            <div style="display:flex;gap:0.75rem;align-items:center;margin-bottom:0.5rem;">
+                <input type="search" id="icon-filter" class="input" placeholder="Filter icons…" style="flex:1;max-width:360px;margin:0;"/>
+                <span id="icon-count" style="font-size:0.85rem;color:var(--secondary-text);white-space:nowrap;"></span>
+            </div>
             <div id="icon-grid" class="icon-grid"></div>
 
             <h2>Usage</h2>

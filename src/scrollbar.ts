@@ -1,3 +1,4 @@
+/** DOM element references for a Scrollbar instance. */
 interface ScrollbarElements {
     viewport: HTMLElement;
     content: HTMLElement;
@@ -5,6 +6,7 @@ interface ScrollbarElements {
     thumb: HTMLElement;
 }
 
+/** Custom scrollbar overlay that replaces the native scrollbar with a draggable thumb. */
 class Scrollbar {
     private static readonly instances = new WeakMap<HTMLElement, Scrollbar>();
     private static activeInstance: Scrollbar | null = null;
@@ -25,7 +27,6 @@ class Scrollbar {
     private startPointerY = 0;
     private startThumbTop = 0;
 
-    // Bound methods for event handling
     private readonly boundPointerMove!: (e: PointerEvent) => void;
     private readonly boundPointerUp!: (e: PointerEvent) => void;
     private readonly boundThumbPointerDown!: (e: PointerEvent) => void;
@@ -37,17 +38,14 @@ class Scrollbar {
     private constructor(container: HTMLElement) {
         this.container = container;
 
-        // Query and validate required elements
         const elements = this.getRequiredElements(container);
         this.viewport = elements.viewport;
         this.content = elements.content;
         this.track = elements.track;
         this.thumb = elements.thumb;
 
-        // Get minimum thumb height from CSS variable or use default
         this.MIN_THUMB_HEIGHT = this.getMinThumbHeight();
 
-        // Bind all event handlers once
         this.boundPointerMove = this.handlePointerMove.bind(this);
         this.boundPointerUp = this.handlePointerUp.bind(this);
         this.boundThumbPointerDown = this.handleThumbPointerDown.bind(this);
@@ -56,20 +54,16 @@ class Scrollbar {
         this.boundUpdateThumb = this.updateThumb.bind(this);
         this.boundContainerWheel = this.handleContainerWheel.bind(this);
 
-        // Setup ResizeObserver
         this.ro = new ResizeObserver(this.boundUpdateThumb);
 
-        // Initialize
         this.attachEventListeners();
         Scrollbar.instances.set(container, this);
 
-        // Track instances and install global listeners once for all
         Scrollbar.instanceCount++;
         if (!Scrollbar.globalListenersInstalled) {
             Scrollbar.installGlobalListeners();
         }
 
-        // Initial thumb update
         requestAnimationFrame(this.boundUpdateThumb);
     }
 
@@ -120,13 +114,11 @@ class Scrollbar {
     }
 
     private attachEventListeners(): void {
-        // Instance-specific events
         this.viewport.addEventListener('scroll', this.boundViewportScroll, { passive: true });
         this.thumb.addEventListener('pointerdown', this.boundThumbPointerDown);
         this.track.addEventListener('click', this.boundTrackClick);
         this.container.addEventListener('wheel', this.boundContainerWheel, { passive: false });
 
-        // Observe size changes
         this.ro.observe(this.viewport);
         this.ro.observe(this.content);
         window.addEventListener('resize', this.boundUpdateThumb);
@@ -137,7 +129,6 @@ class Scrollbar {
         const contentHeight = this.content.scrollHeight;
         const trackHeight = this.track.clientHeight;
 
-        // Hide thumb if content fits in viewport
         if (contentHeight <= viewportHeight + 1) {
             this.thumb.style.display = 'none';
             return;
@@ -145,7 +136,6 @@ class Scrollbar {
 
         this.thumb.style.display = '';
 
-        // Calculate thumb size
         const ratio = viewportHeight / contentHeight;
         const thumbHeight = Math.max(
             Math.floor(ratio * trackHeight),
@@ -153,7 +143,6 @@ class Scrollbar {
         );
         this.thumb.style.height = `${thumbHeight}px`;
 
-        // Calculate thumb position
         const maxScroll = contentHeight - viewportHeight;
         const maxThumbTop = trackHeight - thumbHeight;
         const scrollRatio = this.viewport.scrollTop / (maxScroll || 1);
@@ -169,7 +158,6 @@ class Scrollbar {
         this.activePointerId = e.pointerId;
         Scrollbar.activeInstance = this;
 
-        // Capture pointer for reliable tracking
         try {
             this.thumb.setPointerCapture(e.pointerId);
         } catch (err) {
@@ -182,12 +170,10 @@ class Scrollbar {
         const trackRect = this.track.getBoundingClientRect();
         this.startThumbTop = thumbRect.top - trackRect.top;
 
-        // Prevent text selection during drag
         document.body.style.userSelect = 'none';
     }
 
     private handlePointerMove(e: PointerEvent): void {
-        // Only handle events for the active pointer
         if (!this.dragging || this.activePointerId !== e.pointerId) {
             return;
         }
@@ -199,14 +185,12 @@ class Scrollbar {
         const thumbHeight = this.thumb.clientHeight;
         const maxThumbTop = trackHeight - thumbHeight;
 
-        // Calculate new thumb position
         const newThumbTop = Math.max(
             0,
             Math.min(maxThumbTop, this.startThumbTop + pointerDelta)
         );
         this.thumb.style.top = `${newThumbTop}px`;
 
-        // Update viewport scroll position
         const contentHeight = this.content.scrollHeight;
         const viewportHeight = this.viewport.clientHeight;
         const maxScroll = contentHeight - viewportHeight;
@@ -222,7 +206,6 @@ class Scrollbar {
 
         this.dragging = false;
 
-        // Release pointer capture
         try {
             this.thumb.releasePointerCapture(e.pointerId);
         } catch (err) {
@@ -235,7 +218,6 @@ class Scrollbar {
     }
 
     private handleTrackClick(e: MouseEvent): void {
-        // Ignore clicks directly on the thumb
         if (e.target === this.thumb) {
             return;
         }
@@ -245,12 +227,10 @@ class Scrollbar {
         const thumbHeight = this.thumb.clientHeight;
         const trackHeight = this.track.clientHeight;
 
-        // Center thumb on click position
         const targetThumbTop = clickY - thumbHeight / 2;
         const maxThumbTop = trackHeight - thumbHeight;
         const clampedThumbTop = Math.max(0, Math.min(maxThumbTop, targetThumbTop));
 
-        // Calculate corresponding scroll position
         const contentHeight = this.content.scrollHeight;
         const viewportHeight = this.viewport.clientHeight;
         const maxScroll = contentHeight - viewportHeight;
@@ -274,25 +254,20 @@ class Scrollbar {
     }
 
     public destroy(): void {
-        // Remove event listeners
         this.viewport.removeEventListener('scroll', this.boundViewportScroll);
         this.thumb.removeEventListener('pointerdown', this.boundThumbPointerDown);
         this.track.removeEventListener('click', this.boundTrackClick);
         this.container.removeEventListener('wheel', this.boundContainerWheel);
         window.removeEventListener('resize', this.boundUpdateThumb);
 
-        // Disconnect observer
         this.ro.disconnect();
 
-        // Clear from instances map
         Scrollbar.instances.delete(this.container);
 
-        // Clear active instance if this was it
         if (Scrollbar.activeInstance === this) {
             Scrollbar.activeInstance = null;
         }
 
-        // Uninstall global listeners when last instance is destroyed
         Scrollbar.instanceCount--;
         if (Scrollbar.instanceCount === 0) {
             Scrollbar.globalListenerAbortController?.abort();
@@ -301,7 +276,6 @@ class Scrollbar {
         }
     }
 
-    // Static factory methods
     public static create(elementOrSelector: string | HTMLElement): Scrollbar {
         const container = typeof elementOrSelector === 'string'
             ? document.querySelector<HTMLElement>(elementOrSelector)

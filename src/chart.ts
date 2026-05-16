@@ -1,21 +1,22 @@
 import { escapeHtml } from './utils.js';
 
-// ─── Types ──────────────────────────────────────────────────────────────────
-
 export type ChartType  = 'line' | 'area' | 'column' | 'bar' | 'pie';
 export type ChartCurve = 'smooth' | 'linear' | 'step';
 
+/** A single labelled data value within a chart series. */
 export interface ChartDataPoint {
     label: string;
     value: number;
 }
 
+/** A named data series with optional per-series colour override. */
 export interface ChartSeries {
     name: string;
     data: ChartDataPoint[];
     color?: string;
 }
 
+/** Configuration options for a Chart instance. */
 export interface ChartOptions {
     type: ChartType;
     series: ChartSeries[];
@@ -35,9 +36,9 @@ export interface ChartOptions {
     onPointClick?: (series: ChartSeries, point: ChartDataPoint, index: number) => void;
 }
 
-// ─── Internal ───────────────────────────────────────────────────────────────
-
+/** A 2-D coordinate used for SVG path calculations. */
 interface Point { x: number; y: number; }
+/** Chart margin in pixels for each edge. */
 interface Margin { top: number; right: number; bottom: number; left: number; }
 
 const MARGIN_XY: Margin   = { top: 16, right: 24, bottom: 44, left: 52 };
@@ -51,8 +52,7 @@ const FALLBACK_COLORS = [
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-// ─── Chart ──────────────────────────────────────────────────────────────────
-
+/** SVG-based chart component supporting line, area, column, bar, and pie types. */
 class Chart {
     private container: HTMLElement;
     private opts: Required<ChartOptions>;
@@ -88,8 +88,6 @@ class Chart {
         this.attachResizeObserver();
     }
 
-    // ── Render ──────────────────────────────────────────────────────────────
-
     private render(): void {
         this.abortController.abort();
         this.abortController = new AbortController();
@@ -120,8 +118,6 @@ class Chart {
             this.container.appendChild(this.buildLegend());
         }
     }
-
-    // ── Line / Area ──────────────────────────────────────────────────────────
 
     private renderLineOrArea(canvas: HTMLElement, isArea: boolean): void {
         const { series, height, showGrid, animate, yMin } = this.opts;
@@ -176,7 +172,6 @@ class Chart {
             }
             svg.appendChild(linePath);
 
-            // Data point markers
             s.data.forEach((d, i) => {
                 const g = this.svgEl('g', {
                     class: 'chart-point-group',
@@ -204,8 +199,6 @@ class Chart {
             });
         });
     }
-
-    // ── Column ───────────────────────────────────────────────────────────────
 
     private renderColumn(canvas: HTMLElement): void {
         const { series, height, showGrid, animate, yMin } = this.opts;
@@ -259,8 +252,6 @@ class Chart {
         });
     }
 
-    // ── Bar (horizontal) ─────────────────────────────────────────────────────
-
     private renderBar(canvas: HTMLElement): void {
         const { series, height, animate } = this.opts;
         if (!series.length || !series[0].data.length) return;
@@ -279,7 +270,6 @@ class Chart {
 
         const svg = this.createSVG(canvas, svgW, svgH);
 
-        // Vertical grid lines
         const numTicks = 5;
         for (let t = 0; t <= numTicks; t++) {
             const x = m.left + (t / numTicks) * w;
@@ -297,7 +287,6 @@ class Chart {
             svg.appendChild(label);
         }
 
-        // Category labels on Y axis
         const groupH = h / numPts;
         labels.forEach((label, i) => {
             const y = m.top + i * groupH + groupH / 2;
@@ -310,7 +299,6 @@ class Chart {
             svg.appendChild(text);
         });
 
-        // Bars
         const innerPad = groupH * 0.18;
         const barH = Math.max(2, (groupH - innerPad) / numSeries - 2);
 
@@ -339,8 +327,6 @@ class Chart {
         });
     }
 
-    // ── Pie ──────────────────────────────────────────────────────────────────
-
     private renderPie(canvas: HTMLElement): void {
         const { series, height, animate, showLegend } = this.opts;
         const s = series[0];
@@ -356,7 +342,7 @@ class Chart {
         const total = s.data.reduce((sum, d) => sum + d.value, 0);
         const svg = this.createSVG(canvas, svgW, svgH);
 
-        let startAngle = -90; // start at 12 o'clock
+        let startAngle = -90;
 
         s.data.forEach((d, i) => {
             const color = this.colors[i % this.colors.length];
@@ -377,7 +363,6 @@ class Chart {
                 path.style.animationDelay = `${delay}ms`;
             }
 
-            // Hover: nudge slice outward
             const { x: dx, y: dy } = this.polar(0, 0, 8, midAngle);
             path.addEventListener('mouseenter', (e) => {
                 path.style.transform = `translate(${dx}px, ${dy}px)`;
@@ -403,8 +388,6 @@ class Chart {
             this.container.appendChild(this.buildPieLegend(s, total));
         }
     }
-
-    // ── Axis helpers ─────────────────────────────────────────────────────────
 
     private renderHGrid(svg: SVGSVGElement, m: Margin, w: number, h: number, yMin: number, yMax: number): void {
         const numTicks = 5;
@@ -453,8 +436,6 @@ class Chart {
             svg.appendChild(text);
         }
     }
-
-    // ── Geometry helpers ─────────────────────────────────────────────────────
 
     private buildPath(pts: Point[]): string {
         switch (this.opts.curve) {
@@ -512,8 +493,6 @@ class Chart {
         return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
     }
 
-    // ── Legend builders ──────────────────────────────────────────────────────
-
     private buildHeader(): HTMLElement {
         const el = this.div('chart-header');
         if (this.opts.title) {
@@ -560,8 +539,6 @@ class Chart {
         return el;
     }
 
-    // ── Tooltip ──────────────────────────────────────────────────────────────
-
     private showTooltip(e: MouseEvent, html: string): void {
         this.tooltip.innerHTML = html;
         this.tooltip.classList.add('is-visible');
@@ -574,7 +551,6 @@ class Chart {
         const vh = window.innerHeight;
         let x = e.clientX + 14;
         let y = e.clientY - 36;
-        // Keep inside viewport
         if (x + 200 > vw) x = e.clientX - 14 - tt.offsetWidth;
         if (y < 0) y = e.clientY + 14;
         if (y + tt.offsetHeight > vh) y = vh - tt.offsetHeight - 8;
@@ -585,8 +561,6 @@ class Chart {
     private hideTooltip(): void {
         this.tooltip.classList.remove('is-visible');
     }
-
-    // ── Event wiring ─────────────────────────────────────────────────────────
 
     private onPoint(g: SVGElement, s: ChartSeries, d: ChartDataPoint, i: number): void {
         const sig = { signal: this.abortController.signal };
@@ -609,8 +583,6 @@ class Chart {
         rect.addEventListener('click', () => this.opts.onPointClick(s, d, i), sig);
     }
 
-    // ── Color resolution ─────────────────────────────────────────────────────
-
     private resolveColors(): void {
         const style = getComputedStyle(this.container);
         this.colors = (this.opts.type === 'pie' ? this.opts.series[0]?.data ?? [] : this.opts.series)
@@ -619,15 +591,12 @@ class Chart {
                 return css || FALLBACK_COLORS[i % FALLBACK_COLORS.length];
             });
 
-        // Allow per-series color override (not pie)
         if (this.opts.type !== 'pie') {
             this.opts.series.forEach((s, i) => {
                 if (s.color) this.colors[i] = s.color;
             });
         }
     }
-
-    // ── DOM & SVG helpers ────────────────────────────────────────────────────
 
     private div(className: string): HTMLElement {
         const el = document.createElement('div');
@@ -660,8 +629,6 @@ class Chart {
         return v % 1 === 0  ? String(Math.round(v)) : v.toFixed(1);
     }
 
-    // ── Resize ───────────────────────────────────────────────────────────────
-
     private attachResizeObserver(): void {
         this.resizeObserver = new ResizeObserver(() => {
             if (this.resizeTimer) clearTimeout(this.resizeTimer);
@@ -669,8 +636,6 @@ class Chart {
         });
         this.resizeObserver.observe(this.container);
     }
-
-    // ── Public API ───────────────────────────────────────────────────────────
 
     public update(series: ChartSeries[]): void {
         this.opts.series = series;

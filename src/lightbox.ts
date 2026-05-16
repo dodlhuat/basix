@@ -1,9 +1,11 @@
+/** A single image entry for the Lightbox gallery. */
 interface LightboxImage {
     src: string;
     alt?: string;
     caption?: string;
 }
 
+/** Configuration options for a Lightbox instance. */
 interface LightboxOptions {
     src?: string;
     alt?: string;
@@ -15,6 +17,7 @@ interface LightboxOptions {
     onClose?: () => void;
 }
 
+/** Full-screen image viewer with gallery navigation, zoom, and touch support. */
 class Lightbox {
     private images: LightboxImage[];
     private currentIndex: number;

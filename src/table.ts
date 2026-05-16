@@ -1,15 +1,18 @@
 import { Select } from "./select.js";
 
+/** Descriptor for a single table column. */
 interface TableColumn {
     key: string;
     label: string;
     sortable?: boolean;
 }
 
+/** A single data row, keyed by column key. */
 interface TableRow {
     [key: string]: string | number | boolean;
 }
 
+/** Configuration options for a Table instance. */
 interface TableOptions {
     data?: TableRow[];
     columns?: TableColumn[];
@@ -18,6 +21,7 @@ interface TableOptions {
 
 type SortDirection = 'asc' | 'desc';
 
+/** Dynamic data table with sorting, filtering, and pagination. */
 class Table {
     private container: HTMLElement;
     private data: TableRow[];
@@ -69,7 +73,6 @@ class Table {
 
         if (!thead || !tbody) return;
 
-        // Parse columns from header
         const ths = thead.querySelectorAll('th');
         this.columns = Array.from(ths).map((th, index) => ({
             key: `col${index}`,
@@ -77,7 +80,6 @@ class Table {
             sortable: true
         }));
 
-        // Parse data from body rows
         const trs = tbody.querySelectorAll('tr');
         this.data = Array.from(trs).map(tr => {
             const row: TableRow = {};
@@ -92,7 +94,6 @@ class Table {
             return row;
         });
 
-        // Clear the existing static table
         this.container.innerHTML = '';
     }
 
@@ -112,7 +113,6 @@ class Table {
         const controlsDiv = document.createElement('div');
         controlsDiv.className = 'table-controls';
 
-        // Search input
         const searchInput = document.createElement('input');
         searchInput.type = 'text';
         searchInput.placeholder = 'Search...';
@@ -122,7 +122,6 @@ class Table {
         }, { signal: this.abortController.signal });
         controlsDiv.appendChild(searchInput);
 
-        // Page size selector
         const selectGroup = document.createElement('div');
         selectGroup.className = 'select-group';
 
@@ -164,7 +163,6 @@ class Table {
         const thead = document.createElement('thead');
         const tbody = document.createElement('tbody');
 
-        // Create header row
         const tr = document.createElement('tr');
         this.columns.forEach(col => {
             const th = document.createElement('th');
@@ -185,7 +183,6 @@ class Table {
         wrapper.appendChild(table);
         this.container.appendChild(wrapper);
 
-        // Create pagination container
         const paginationDiv = document.createElement('div');
         paginationDiv.className = 'pagination';
         this.container.appendChild(paginationDiv);
@@ -201,7 +198,6 @@ class Table {
     private getFilteredAndSortedData(): TableRow[] {
         let processedData = [...this.data];
 
-        // Apply filter
         if (this.filterText) {
             const lowerFilter = this.filterText.toLowerCase();
             processedData = processedData.filter(row => {
@@ -212,13 +208,11 @@ class Table {
             });
         }
 
-        // Apply sort
         if (this.sortColumn) {
             processedData.sort((a, b) => {
                 const valA = a[this.sortColumn!];
                 const valB = b[this.sortColumn!];
 
-                // Handle null/undefined values
                 if (valA == null && valB == null) return 0;
                 if (valA == null) return 1;
                 if (valB == null) return -1;
@@ -240,7 +234,6 @@ class Table {
         const totalItems = processedData.length;
         const totalPages = Math.ceil(totalItems / this.pageSize);
 
-        // Ensure current page is valid
         if (this.currentPage > totalPages && totalPages > 0) {
             this.currentPage = totalPages;
         }
@@ -279,7 +272,7 @@ class Table {
             this.columns.forEach(col => {
                 const td = document.createElement('td');
                 td.textContent = String(row[col.key] ?? '');
-                td.setAttribute('data-label', col.label); // For mobile view
+                td.setAttribute('data-label', col.label);
                 tr.appendChild(td);
             });
             this.tableBody.appendChild(tr);
@@ -312,17 +305,14 @@ class Table {
 
         if (totalItems === 0) return;
 
-        // Info text
         const info = document.createElement('div');
         info.className = 'pagination-info';
         info.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${totalItems} entries`;
         this.paginationContainer.appendChild(info);
 
-        // Pagination buttons
         const buttonsDiv = document.createElement('div');
         buttonsDiv.className = 'pagination-buttons';
 
-        // Previous button
         const prevBtn = document.createElement('button');
         prevBtn.className = 'page-btn';
         prevBtn.textContent = 'Previous';
@@ -330,7 +320,6 @@ class Table {
         prevBtn.addEventListener('click', () => this.setPage(this.currentPage - 1));
         buttonsDiv.appendChild(prevBtn);
 
-        // Calculate page range to display (max 5 pages)
         let startPage = Math.max(1, this.currentPage - 2);
         let endPage = Math.min(totalPages, startPage + 4);
 
@@ -338,7 +327,6 @@ class Table {
             startPage = Math.max(1, endPage - 4);
         }
 
-        // Page number buttons
         for (let i = startPage; i <= endPage; i++) {
             const btn = document.createElement('button');
             btn.className = `page-btn ${i === this.currentPage ? 'active' : ''}`;
@@ -347,7 +335,6 @@ class Table {
             buttonsDiv.appendChild(btn);
         }
 
-        // Next button
         const nextBtn = document.createElement('button');
         nextBtn.className = 'page-btn';
         nextBtn.textContent = 'Next';
@@ -363,7 +350,7 @@ class Table {
      */
     private handleSearch(text: string): void {
         this.filterText = text;
-        this.currentPage = 1; // Reset to first page on search
+        this.currentPage = 1;
         this.render();
     }
 
@@ -372,7 +359,6 @@ class Table {
      */
     private handleSort(key: string): void {
         if (this.sortColumn === key) {
-            // Toggle sort direction
             this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
             this.sortColumn = key;
@@ -407,7 +393,6 @@ class Table {
         let id = baseId;
         let counter = 1;
 
-        // If baseId already ends with a number, extract it
         const match = baseId.match(/^(.*?)(\d+)$/);
         if (match) {
             id = match[1];

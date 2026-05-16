@@ -1,6 +1,7 @@
 type TabLayout = 'horizontal' | 'vertical';
 type MenuPosition = 'top' | 'bottom' | 'left' | 'right';
 
+/** Configuration options for a Tabs instance. */
 interface TabsOptions {
     layout?: TabLayout;
     defaultTab?: number;
@@ -8,6 +9,7 @@ interface TabsOptions {
     onChange?: (index: number) => void;
 }
 
+/** Tabbed content component with horizontal/vertical layouts and keyboard navigation. */
 class Tabs {
     private container: HTMLElement;
     private options: Required<Omit<TabsOptions, 'onChange'>> & Pick<TabsOptions, 'onChange'>;
@@ -26,7 +28,6 @@ class Tabs {
 
         this.container = element;
 
-        // Set default options
         const layout = options.layout || 'horizontal';
         this.options = {
             layout,
@@ -46,7 +47,6 @@ class Tabs {
      * Initializes the tabs component
      */
     private init(): void {
-        // Apply layout class
         if (this.options.layout === 'vertical') {
             this.container.classList.add('tabs-vertical');
         }
@@ -54,7 +54,6 @@ class Tabs {
         this.tabItems = this.container.querySelectorAll('.tab-item');
         this.tabPanels = this.container.querySelectorAll('.tab-panel');
 
-        // Validate that we have tabs and panels
         if (this.tabItems.length === 0) {
             console.warn('No tab items found in container');
             return;
@@ -83,19 +82,16 @@ class Tabs {
                 this.activateTab(index);
             });
 
-            // Add keyboard navigation for accessibility
             item.addEventListener('keydown', (e: Event) => {
                 const keyEvent = e as KeyboardEvent;
                 this.handleKeyboardNavigation(keyEvent, index);
             });
 
-            // Set ARIA attributes
             item.setAttribute('role', 'tab');
             item.setAttribute('tabindex', index === this.options.defaultTab ? '0' : '-1');
             item.setAttribute('aria-selected', index === this.options.defaultTab ? 'true' : 'false');
         });
 
-        // Set ARIA attributes for panels
         this.tabPanels.forEach((panel, index) => {
             panel.setAttribute('role', 'tabpanel');
             panel.setAttribute('aria-hidden', index === this.options.defaultTab ? 'false' : 'true');
@@ -161,7 +157,6 @@ class Tabs {
             return;
         }
 
-        // Remove active class from all
         this.tabItems.forEach((item, i) => {
             item.classList.remove('active');
             item.setAttribute('tabindex', '-1');
@@ -173,7 +168,6 @@ class Tabs {
             panel.setAttribute('aria-hidden', 'true');
         });
 
-        // Add active class to selected
         this.tabItems[index].classList.add('active');
         this.tabItems[index].setAttribute('tabindex', '0');
         this.tabItems[index].setAttribute('aria-selected', 'true');
@@ -184,7 +178,6 @@ class Tabs {
         const previousTab = this.currentTab;
         this.currentTab = index;
 
-        // Call onChange callback if provided
         if (this.options.onChange && previousTab !== index) {
             this.options.onChange(index);
         }
@@ -196,7 +189,6 @@ class Tabs {
     public goToTab(index: number): void {
         this.activateTab(index);
 
-        // Focus the tab for keyboard users
         if (this.tabItems[index]) {
             (this.tabItems[index] as HTMLElement).focus();
         }
@@ -239,7 +231,6 @@ class Tabs {
         tab.setAttribute('aria-disabled', 'true');
         tab.style.pointerEvents = 'none';
 
-        // If disabling the current tab, switch to the first enabled tab
         if (index === this.currentTab) {
             const firstEnabled = Array.from(this.tabItems).findIndex(
                 (item) => !item.classList.contains('disabled')
@@ -254,16 +245,13 @@ class Tabs {
      * Public API: Destroy the tabs instance and clean up
      */
     public destroy(): void {
-        // Remove event listeners by cloning and replacing nodes
         this.tabItems.forEach((item) => {
             const newItem = item.cloneNode(true);
             item.parentNode?.replaceChild(newItem, item);
         });
 
-        // Remove classes
         this.container.classList.remove('tabs-vertical');
 
-        // Remove ARIA attributes
         this.tabItems.forEach((item) => {
             item.removeAttribute('role');
             item.removeAttribute('tabindex');

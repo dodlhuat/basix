@@ -1,11 +1,13 @@
 type ThemeMode = 'light' | 'dark';
 
+/** DOM element references used by the Theme static class. */
 interface ThemeElements {
     toggleBtn: HTMLElement;
     icon: HTMLElement;
     status: HTMLElement | null;
 }
 
+/** Static class for managing light/dark theme switching with system preference and localStorage persistence. */
 class Theme {
     private static readonly STORAGE_KEY = 'theme';
     private static root: HTMLElement;
@@ -18,12 +20,10 @@ class Theme {
     public static init(): void {
         this.root = document.documentElement;
 
-        // Get DOM elements
         const toggleBtn = document.getElementById('theme-toggle');
         const icon = document.getElementById('theme-icon');
         const status = document.getElementById('status');
 
-        // Validate required elements
         if (!toggleBtn || !icon) {
             console.error('Theme toggle: missing DOM elements', { toggleBtn, icon });
             if (status) {
@@ -34,18 +34,15 @@ class Theme {
 
         this.elements = { toggleBtn, icon, status };
 
-        // Initialize media query
         if (window.matchMedia) {
             this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         }
 
-        // Apply initial theme
         const savedTheme = this.getSavedTheme();
         const systemTheme = this.getSystemTheme();
         const initialTheme = savedTheme || systemTheme;
         this.applyTheme(initialTheme);
 
-        // Bind event listeners
         this.bindToggleClick();
         this.bindKeyboardShortcut();
         this.bindSystemThemeChange();
@@ -101,11 +98,9 @@ class Theme {
         const isDark = theme === 'dark';
         const { toggleBtn, icon } = this.elements;
 
-        // Update button state
         toggleBtn.setAttribute('aria-pressed', String(isDark));
         toggleBtn.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
 
-        // Update icon — SVG sprite via <use> or font icon via class
         const useEl = icon.querySelector('use');
         if (useEl) {
             const iconName = isDark ? icon.dataset.iconDark : icon.dataset.iconLight;
@@ -179,19 +174,15 @@ class Theme {
         if (!this.mediaQuery) return;
 
         const handler = (e: MediaQueryListEvent | MediaQueryList): void => {
-            // Only apply system theme if user hasn't saved a preference
             if (!this.getSavedTheme()) {
                 const matches = 'matches' in e ? e.matches : (e as MediaQueryList).matches;
                 this.applyTheme(matches ? 'dark' : 'light');
             }
         };
 
-        // Modern API
         if ('addEventListener' in this.mediaQuery) {
             this.mediaQuery.addEventListener('change', handler as (e: MediaQueryListEvent) => void);
-        }
-        // Legacy API (deprecated but still supported in older browsers)
-        else if ('addListener' in this.mediaQuery) {
+        } else if ('addListener' in this.mediaQuery) {
             (this.mediaQuery as any).addListener(handler);
         }
     }

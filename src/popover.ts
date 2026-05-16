@@ -6,6 +6,7 @@ type PopoverPlacement = Placement | 'auto';
 type PopoverAlign     = 'start' | 'center' | 'end';
 type PopoverTrigger   = 'click' | 'hover';
 
+/** Configuration options for a Popover instance. */
 interface PopoverOptions {
     content:              string;
     placement?:           PopoverPlacement;
@@ -20,9 +21,9 @@ interface PopoverOptions {
     onClose?:             () => void;
 }
 
-// Must match $arrow in popover.scss
 const ARROW_SIZE = 6;
 
+/** Anchored popover triggered by click or hover, with auto-placement and optional arrow. */
 class Popover {
     private static openPopovers: Set<Popover> = new Set();
     private static idCounter = 0;
@@ -56,8 +57,6 @@ class Popover {
 
         this.attachTrigger();
     }
-
-    // ── Public API ─────────────────────────────────────────────────────────────
 
     get isOpen(): boolean { return this._isOpen; }
 
@@ -130,8 +129,6 @@ class Popover {
         });
     }
 
-    // ── Build ──────────────────────────────────────────────────────────────────
-
     private buildEl(): HTMLElement {
         const id = `popover-${++Popover.idCounter}`;
         const el  = document.createElement('div');
@@ -140,8 +137,6 @@ class Popover {
         el.setAttribute('role', 'dialog');
         el.setAttribute('data-arrow', String(this.opts.arrow));
 
-        // Wrap plain content in .popover-body so it gets proper padding.
-        // Skip wrapping when content already uses structured popover elements.
         const hasStructure = /class="popover-(header|body|footer|menu)/.test(this.opts.content);
         const safeContent = sanitizeHtml(this.opts.content);
         el.innerHTML = hasStructure
@@ -153,8 +148,6 @@ class Popover {
 
         return el;
     }
-
-    // ── Positioning ────────────────────────────────────────────────────────────
 
     private reposition(): void {
         if (!this.popoverEl) return;
@@ -178,8 +171,6 @@ class Popover {
         this.popoverEl.style.left = `${left}px`;
         this.popoverEl.style.top  = `${top}px`;
     }
-
-    // ── Event handlers ─────────────────────────────────────────────────────────
 
     private onClick = (): void => { this.toggle(); };
 

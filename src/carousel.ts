@@ -1,9 +1,11 @@
+/** Options for configuring a Carousel instance. */
 interface CarouselOptions {
     loop?: boolean;
     autoPlay?: boolean;
     autoPlayInterval?: number;
 }
 
+/** Slide-based carousel with optional autoplay, loop, dot navigation, and touch support. */
 class Carousel {
     private root: HTMLElement;
     private options: CarouselOptions;
@@ -92,7 +94,6 @@ class Carousel {
 
         this.root.appendChild(this.dotsNav);
 
-        // Make focusable for keyboard nav
         this.root.setAttribute('tabindex', '0');
     }
 
@@ -114,13 +115,11 @@ class Carousel {
             this.moveToSlide(this.currentIndex, false);
         }, sig);
 
-        // Keyboard navigation
         this.root.addEventListener('keydown', (e: KeyboardEvent) => {
             if (e.key === 'ArrowLeft')  this.moveToPrevSlide();
             if (e.key === 'ArrowRight') this.moveToNextSlide();
         }, sig);
 
-        // Pause autoplay on hover / focus
         if (this.options.autoPlay) {
             this.root.addEventListener('mouseenter', () => this.pauseAutoPlay(), sig);
             this.root.addEventListener('mouseleave', () => this.resumeAutoPlay(), sig);

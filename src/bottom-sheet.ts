@@ -1,5 +1,6 @@
 import { sanitizeHtml } from './utils.js';
 
+/** Options for configuring a BottomSheet instance. */
 interface BottomSheetOptions {
     content: string;
     header?: string;
@@ -9,6 +10,7 @@ interface BottomSheetOptions {
     onClose?: () => void;
 }
 
+/** Slide-up sheet that attaches to the bottom of the viewport. */
 class BottomSheet {
     private readonly content: string;
     private readonly header?: string;
@@ -22,7 +24,6 @@ class BottomSheet {
     private handle: HTMLElement | null = null;
     private body: HTMLElement | null = null;
 
-    // Touch drag state
     private dragStartY = 0;
     private currentDragY = 0;
     private isDragging = false;
@@ -170,7 +171,6 @@ class BottomSheet {
         if (this.currentDragY > threshold) {
             this.hide();
         } else {
-            // Spring back
             this.sheet.style.transition = '';
             this.sheet.style.transform = '';
         }

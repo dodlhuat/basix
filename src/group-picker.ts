@@ -1,21 +1,25 @@
 import { escapeHtml } from './utils.js';
 
+/** A single subgroup item within a GroupPicker group. */
 interface SubgroupData {
   id: string;
   label: string;
 }
 
+/** A group with an optional list of subgroups for GroupPicker. */
 interface GroupData {
   id: string;
   label: string;
   subgroups?: SubgroupData[];
 }
 
+/** The current selection state returned by GroupPicker. */
 interface GroupPickerSelection {
   parentGroups: string[];
   subgroups: { groupId: string; subgroupId: string }[];
 }
 
+/** Configuration options for the GroupPicker component. */
 interface GroupPickerOptions {
   onSelectionChange?: (selection: GroupPickerSelection) => void;
   searchPlaceholder?: string;
@@ -25,19 +29,18 @@ interface GroupPickerOptions {
   selectionPlaceholder?: string;
 }
 
+/** Searchable picker for selecting groups and their subgroups. */
 class GroupPicker {
   private container: HTMLElement;
   private data: GroupData[];
   private options: Required<GroupPickerOptions>;
   private abortController: AbortController;
 
-  // State
   private selectedParents: Set<string> = new Set();
   private selectedSubs: Map<string, Set<string>> = new Map();
   private expandedGroups: Set<string> = new Set();
   private searchQuery: string = '';
 
-  // DOM refs
   private searchInput!: HTMLInputElement;
   private listEl!: HTMLElement;
   private selectionEl!: HTMLElement;
@@ -78,12 +81,10 @@ class GroupPicker {
   private render(): void {
     this.container.innerHTML = '';
 
-    // Selection summary — Basix .chips container
     this.selectionEl = document.createElement('div');
     this.selectionEl.className = 'chips group-picker__selection';
     this.selectionEl.dataset.placeholder = this.options.selectionPlaceholder;
 
-    // Search — Basix form input with font icon overlay
     const searchWrap = document.createElement('div');
     searchWrap.className = 'group-picker__search';
     searchWrap.innerHTML = `
@@ -93,7 +94,6 @@ class GroupPicker {
     this.searchInput = searchWrap.querySelector('input')!;
     this.searchInput.placeholder = this.options.searchPlaceholder;
 
-    // List
     this.listEl = document.createElement('div');
     this.listEl.className = 'group-picker__list';
 
@@ -166,17 +166,14 @@ class GroupPicker {
       : escapeHtml(group.label);
 
     if (hasChildren) {
-      // Chevron — Basix font icon
       const chevron = document.createElement('span');
       chevron.className = 'icon icon-navigate_next group-picker__chevron';
       chevron.setAttribute('aria-hidden', 'true');
 
-      // Count — Basix badge
       const count = document.createElement('span');
       count.className = 'badge badge-sm';
       count.textContent = `${subs.length}`;
 
-      // Action button — Basix button, button-primary when selected
       const actionBtn = document.createElement('button');
       actionBtn.className = 'group-picker__group-action';
       if (isParentSelected) {
@@ -197,7 +194,6 @@ class GroupPicker {
         this.toggleExpand(group.id);
       }, { signal: this.abortController.signal });
 
-      // Subgroups — Basix .chips container
       const subsContainer = document.createElement('div');
       subsContainer.className = 'group-picker__subgroups';
 
@@ -207,7 +203,6 @@ class GroupPicker {
       const displaySubs = query && !groupMatches ? matchingSubs : subs;
 
       for (const sub of displaySubs) {
-        // Subgroup chip — Basix .chip.clickable
         const subEl = document.createElement('span');
         subEl.className = 'chip clickable group-picker__subgroup';
         subEl.dataset.subId = sub.id;
@@ -239,7 +234,6 @@ class GroupPicker {
         });
       }
     } else {
-      // Leaf group — Basix font icon check mark
       const checkEl = document.createElement('span');
       checkEl.className = 'icon icon-check group-picker__leaf-check';
       checkEl.setAttribute('aria-hidden', 'true');
@@ -280,7 +274,6 @@ class GroupPicker {
     }
   }
 
-  // Basix .chip.closeable structure
   private createChip(label: string, isParent: boolean, onRemove: () => void): HTMLElement {
     const chip = document.createElement('span');
     chip.className = isParent
@@ -298,8 +291,6 @@ class GroupPicker {
     chip.append(document.createTextNode(label), btn);
     return chip;
   }
-
-  // State management
 
   private toggleParentGroup(groupId: string): void {
     if (this.selectedParents.has(groupId)) {
@@ -396,8 +387,6 @@ class GroupPicker {
     const regex = new RegExp(`(${escapedQuery})`, 'gi');
     return safeText.replace(regex, '<mark>$1</mark>');
   }
-
-  // Public API
 
   public getSelection(): GroupPickerSelection {
     const parentGroups = [...this.selectedParents];

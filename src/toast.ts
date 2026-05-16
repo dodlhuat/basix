@@ -2,6 +2,7 @@ import { escapeHtml } from './utils.js';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
+/** Options for creating a Toast notification. */
 interface ToastOptions {
     content: string;
     header?: string;
@@ -9,6 +10,7 @@ interface ToastOptions {
     closeable?: boolean;
 }
 
+/** Dismissible notification banner with optional auto-hide timer and progress bar. */
 class Toast {
     private readonly content: string;
     private readonly header: string;

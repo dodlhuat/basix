@@ -1,3 +1,4 @@
+/** Configuration options for the FlyoutMenu. */
 interface FlyoutMenuOptions {
     triggerSelector?: string;
     menuSelector?: string;
@@ -12,6 +13,7 @@ interface FlyoutMenuOptions {
     enableFooter?: boolean;
 }
 
+/** Off-canvas flyout navigation with nested submenu support. */
 class FlyoutMenu {
     private options: Required<FlyoutMenuOptions>;
     private menuTrigger: HTMLElement | null;
@@ -82,20 +84,17 @@ class FlyoutMenu {
     private processListItems(ul: HTMLUListElement): void {
         const items = Array.from(ul.children) as HTMLLIElement[];
         items.forEach((li, index) => {
-            // Check if it has a nested UL
             const nestedUl = li.querySelector('ul') as HTMLUListElement | null;
             if (nestedUl) {
                 li.classList.add('has-submenu');
                 nestedUl.classList.add('submenu');
 
-                // Get text content (excluding nested UL text)
                 const textNode = Array.from(li.childNodes).find(
                     node => node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== ''
                 ) as Text | undefined;
                 const text = textNode?.textContent?.trim() || 'Menu Item';
                 textNode?.remove();
 
-                // Create Toggle Button
                 const button = document.createElement('button');
                 button.className = 'submenu-toggle';
                 button.style.setProperty('--delay', `${(index + 1) * 0.1}s`);
@@ -108,10 +107,8 @@ class FlyoutMenu {
 
                 li.insertBefore(button, nestedUl);
 
-                // Recursively process nested UL
                 this.processListItems(nestedUl);
             } else {
-                // Leaf node - ensure it has a link
                 const link = li.querySelector('a');
                 if (link) {
                     link.style.setProperty('--delay', `${(index + 1) * 0.1}s`);
@@ -149,26 +146,21 @@ class FlyoutMenu {
     }
 
     private bindEvents(): void {
-        // Open
         this.menuTrigger?.addEventListener('click', this.open);
 
-        // Close
         this.closeBtn?.addEventListener('click', this.close);
         this.flyoutOverlay?.addEventListener('click', this.close);
 
-        // Submenus
         this.submenuToggles?.forEach(toggle => {
             const handler = (e: Event) => this.handleSubmenu(e, toggle);
             this.submenuHandlers.set(toggle, handler);
             toggle.addEventListener('click', handler);
         });
 
-        // Close on Link Click
         this.menuLinks?.forEach(link => {
             link.addEventListener('click', this.close);
         });
 
-        // Keyboard navigation
         document.addEventListener('keydown', this.handleKeydown);
     }
 
@@ -196,7 +188,6 @@ class FlyoutMenu {
 
         if (!parentUl || !parentLi) return;
 
-        // Close other submenus at the same level
         const siblings = Array.from(parentUl.children) as HTMLLIElement[];
         siblings.forEach(sibling => {
             if (sibling !== parentLi) {

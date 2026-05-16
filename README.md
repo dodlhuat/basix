@@ -1,4 +1,4 @@
-# Basix 1.3.1
+# Basix 1.3.2
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -77,7 +77,7 @@ Basix ships icons in two formats:
 <span class="icon icon-home"></span>
 ```
 
-**SVG sprite** — a single `svg-icons/icons.svg` sprite file. Preferred when you need consistent sizing, color inheritance via `currentColor`, or icons inside JS-generated markup.
+**SVG sprite** — the full Google Material Icon set (~6,400+ icons) in a single `svg-icons/icons.svg` sprite. Preferred for consistent sizing, `currentColor` inheritance, and use inside JS-generated markup.
 
 ``` html
 <svg class="icon-svg"><use href="svg-icons/icons.svg#home"/></svg>

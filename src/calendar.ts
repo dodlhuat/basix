@@ -1,7 +1,4 @@
-// ============================================================
-// calendar.ts — Basix Calendar Component
-// ============================================================
-
+/** Represents a single calendar event with a start/end date. */
 export interface CalendarEvent {
     id: string;
     title: string;
@@ -13,6 +10,7 @@ export interface CalendarEvent {
 
 export type CalendarView = 'month' | 'week' | 'agenda';
 
+/** Localisation strings and week-start configuration for the Calendar. */
 export interface CalendarLocale {
     monthNames: string[];
     dayNamesShort: string[];
@@ -26,6 +24,7 @@ export interface CalendarLocale {
     noEvents: string;
 }
 
+/** Configuration options for the Calendar component. */
 export interface CalendarOptions {
     container: HTMLElement | string;
     events?: CalendarEvent[];
@@ -39,6 +38,7 @@ export interface CalendarOptions {
     iconBasePath?: string;
 }
 
+/** Layout descriptor for a multi-day event spanning columns in a week row. */
 interface SpanLayout {
     event: CalendarEvent;
     colStart: number;
@@ -48,6 +48,7 @@ interface SpanLayout {
     continuesAfter: boolean;
 }
 
+/** Layout descriptor for a timed event positioned in a day column. */
 interface TimedEventLayout {
     event: CalendarEvent;
     top: number;
@@ -55,10 +56,6 @@ interface TimedEventLayout {
     col: number;
     cols: number;
 }
-
-// -----------------------------------------------------------
-// Date Logic
-// -----------------------------------------------------------
 
 export const CalendarLogic = {
     getMonthGrid(year: number, month: number, firstDayOfWeek: number): Date[] {
@@ -209,7 +206,6 @@ export const CalendarLogic = {
             return (b.end.getTime() - b.start.getTime()) - (a.end.getTime() - a.start.getTime());
         });
 
-        // Greedy sub-column assignment
         const colEnds: Date[] = [];
         const assigns: { event: CalendarEvent; col: number }[] = [];
 
@@ -222,7 +218,6 @@ export const CalendarLogic = {
         }
 
         return assigns.map(({ event, col }) => {
-            // cols = highest sub-column among events that overlap this one + 1
             const cols = assigns
                 .filter(a => a.event.start < event.end && a.event.end > event.start)
                 .reduce((max, a) => Math.max(max, a.col), 0) + 1;
@@ -236,10 +231,6 @@ export const CalendarLogic = {
         return (now.getHours() * 60 + now.getMinutes()) / 1440 * 100;
     },
 };
-
-// -----------------------------------------------------------
-// Default Locale
-// -----------------------------------------------------------
 
 const DEFAULT_LOCALE: CalendarLocale = {
     monthNames: [
@@ -257,10 +248,7 @@ const DEFAULT_LOCALE: CalendarLocale = {
     noEvents: 'Keine Termine',
 };
 
-// -----------------------------------------------------------
-// Renderer
-// -----------------------------------------------------------
-
+/** Produces HTML strings for each Calendar view (month, week, agenda). */
 export class CalendarRenderer {
     private locale: CalendarLocale;
 
@@ -401,7 +389,6 @@ export class CalendarRenderer {
             return `<div class="${cls}">${dow}<span>${d.getDate()}</span></div>`;
         }).join('');
 
-        // All-day row: span layout for all allDay events (both single-day and multi-day)
         const allDayEvents  = events.filter(e => e.allDay);
         const allDayLayouts = CalendarLogic.computeSpanLayout(days, allDayEvents);
         const allDayLanes   = allDayLayouts.length > 0 ? Math.max(...allDayLayouts.map(l => l.lane)) + 1 : 0;
@@ -472,7 +459,6 @@ export class CalendarRenderer {
             const day       = new Date(year, month, d);
             const dayEvents = CalendarLogic.getEventsForDay(events, day);
 
-            // Multi-day events show only once (first occurrence in this month)
             const filtered = dayEvents.filter(e => {
                 if (!CalendarLogic.isMultiDay(e)) return true;
                 if (shownMultiDay.has(e.id)) return false;
@@ -516,10 +502,7 @@ export class CalendarRenderer {
     }
 }
 
-// -----------------------------------------------------------
-// Calendar — main controller
-// -----------------------------------------------------------
-
+/** Main Calendar controller — manages state, rendering, and event delegation. */
 export class Calendar {
     private container: HTMLElement;
     private options: Required<CalendarOptions>;
@@ -562,10 +545,6 @@ export class Calendar {
         this.render();
         this.attachEvents();
     }
-
-    // ----------------------------------------------------------
-    // Public API
-    // ----------------------------------------------------------
 
     setView(view: CalendarView): void {
         this.currentView = view;
@@ -625,10 +604,6 @@ export class Calendar {
         this.container.innerHTML = '';
         this.container.removeAttribute('data-cal');
     }
-
-    // ----------------------------------------------------------
-    // Rendering
-    // ----------------------------------------------------------
 
     private getTitle(): string {
         const { monthNames } = this.locale;
@@ -723,10 +698,6 @@ export class Calendar {
             this.nowLineTimer = null;
         }
     }
-
-    // ----------------------------------------------------------
-    // Event delegation
-    // ----------------------------------------------------------
 
     private readonly boundHandleClick   = (e: MouseEvent)  => this.handleClick(e);
     private readonly boundHandleKeydown = (e: KeyboardEvent) => this.handleKeydown(e);
