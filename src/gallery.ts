@@ -50,21 +50,20 @@ class MasonryGallery {
 
   private setupLayout(): void {
     const containerWidth = this.container.getBoundingClientRect().width;
-    const numColumns = Math.max(
-      1,
-      Math.floor(containerWidth / this.options.minColumnWidth),
-    );
-
+    const numColumns = Math.max(1, Math.floor(containerWidth / this.options.minColumnWidth));
     if (this.columns.length !== numColumns) {
-      this.container.innerHTML = "";
-      this.columns = [];
+      this.buildColumns(numColumns);
+    }
+  }
 
-      for (let i = 0; i < numColumns; i++) {
-        const col = document.createElement("div");
-        col.className = "masonry-column";
-        this.container.appendChild(col);
-        this.columns.push(col);
-      }
+  private buildColumns(count: number): void {
+    this.container.innerHTML = '';
+    this.columns = [];
+    for (let i = 0; i < count; i++) {
+      const col = document.createElement('div');
+      col.className = 'masonry-column';
+      this.container.appendChild(col);
+      this.columns.push(col);
     }
   }
 
@@ -85,35 +84,18 @@ class MasonryGallery {
   }
 
   private reLayout(): void {
-    const items: HTMLElement[] = [];
-    this.columns.forEach((col) => {
-      Array.from(col.children).forEach((child) => {
-        items.push(child as HTMLElement);
-      });
-      col.innerHTML = "";
-    });
+    const items = this.columns.flatMap(col => Array.from(col.children) as HTMLElement[]);
 
     const availableWidth = Math.min(1200, window.innerWidth - 40);
-    const numColumns = Math.max(
-      1,
-      Math.floor(availableWidth / this.options.minColumnWidth),
-    );
+    const numColumns = Math.max(1, Math.floor(availableWidth / this.options.minColumnWidth));
 
     if (this.columns.length !== numColumns) {
-      this.container.innerHTML = "";
-      this.columns = [];
-
-      for (let i = 0; i < numColumns; i++) {
-        const col = document.createElement("div");
-        col.className = "masonry-column";
-        this.container.appendChild(col);
-        this.columns.push(col);
-      }
+      this.buildColumns(numColumns);
+    } else {
+      this.columns.forEach(col => { col.innerHTML = ''; });
     }
 
-    items.forEach((item) => {
-      this.addToShortestColumn(item);
-    });
+    items.forEach(item => this.addToShortestColumn(item));
   }
 
   private handleScroll = (): void => {

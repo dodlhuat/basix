@@ -19,7 +19,6 @@ declare class PushMenu {
     private static resetPanels;
     private static handleNavigationChange;
     static pushToggle(): void;
-    private static toggleClass;
     private static clickNav;
     private static handleBackdropClick;
     static open(): void;

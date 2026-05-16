@@ -33,7 +33,6 @@ declare class Editor {
     private insertList;
     private setAlignment;
     private setForeColor;
-    private sanitizeHTML;
     private downloadHTML;
     private refreshActiveState;
     destroy(): void;

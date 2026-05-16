@@ -60,7 +60,7 @@ class Toast {
 
                 const closeButton = this.toastElement?.querySelector<HTMLElement>('.close');
                 if (closeButton) {
-                    closeButton.addEventListener('click', this.handleClose);
+                    closeButton.addEventListener('click', this.hide);
                 }
 
                 if (ms !== undefined && ms > 0) {
@@ -79,18 +79,10 @@ class Toast {
         this.toastElement?.classList.remove('show');
 
         setTimeout(() => {
-            const closeButton = this.toastElement?.querySelector<HTMLElement>('.close');
-            if (closeButton) {
-                closeButton.removeEventListener('click', this.handleClose);
-            }
-
+            this.toastElement?.querySelector<HTMLElement>('.close')?.removeEventListener('click', this.hide);
             this.toastElement?.remove();
             this.toastElement = null;
         }, 150);
-    };
-
-    private handleClose = (): void => {
-        this.hide();
     };
 
     private startTimer(ms: number, elapsed: number = 0): void {

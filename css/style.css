@@ -1556,18 +1556,16 @@ input.input-lg, textarea.input-lg {
   width: 100%;
   overflow: auto;
   box-sizing: border-box;
-}
-.scroll-container .viewport .content {
-  margin: 0;
-  margin-right: calc(var(--track-width) + var(--track-gap));
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 .scroll-container .viewport::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
-.scroll-container .viewport {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+.scroll-container .viewport .content {
+  margin: 0;
+  margin-right: calc(var(--track-width) + var(--track-gap));
 }
 .scroll-container .scrollbar {
   position: absolute;
@@ -3926,7 +3924,7 @@ ul.tree li {
   font-size: 1rem;
   cursor: pointer;
   border-radius: 0.4rem;
-  transition: all 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .datepicker-day:hover:not(.disabled) {
@@ -3986,7 +3984,7 @@ ul.tree li {
   font-size: 0.9rem;
   cursor: pointer;
   border-radius: 0.4rem;
-  transition: all 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .datepicker-month:hover,
@@ -4278,7 +4276,6 @@ body {
   padding: 2rem;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
   transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1);
-  /* Smoother rollout */
 }
 
 /* Directional Variants */
@@ -4398,11 +4395,8 @@ body {
 
 .submenu.is-open {
   max-height: 500px;
-  /* Reduced from 2000px for tighter animation */
-  /* Arbitrary large height, increased for nesting */
   margin-top: 1rem;
   transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  /* Smoother easing */
 }
 
 .submenu li {
@@ -4413,8 +4407,7 @@ body {
   font-size: 1.25rem;
   font-weight: 400;
   color: #cbd5e1;
-  transform: none !important;
-  /* Override slide-in for submenu items */
+  transform: none !important; /* parent `.flyout-menu.is-open .flyout-links a` slides in; submenu items must not */
   transition-delay: 0s !important;
 }
 
@@ -4464,16 +4457,7 @@ body {
     right: auto !important;
     bottom: auto !important;
     border: none !important;
-    /* Remove borders for cleaner fullscreen look */
     border-right: 1px solid var(--flyout-border) !important;
-    /* Add consistent right border */
-    transform: translateX(-100%) !important;
-    /* Force ALL to slide from LEFT with !important */
-  }
-  /* Remove specific transforms and force left slide */
-  .flyout-from-right,
-  .flyout-from-left,
-  .flyout-from-top {
     transform: translateX(-100%) !important;
   }
   .flyout-menu.is-open {
@@ -6959,25 +6943,14 @@ body {
   margin-left: 0.25rem;
   color: var(--secondary-text);
 }
-.context-menu-item:hover, .context-menu-item.is-focused {
+.context-menu-item:hover, .context-menu-item.is-focused, .context-menu-item.is-active {
   background: var(--secondary-background);
   color: var(--accent-color);
 }
-.context-menu-item:hover .context-menu-icon, .context-menu-item.is-focused .context-menu-icon {
+.context-menu-item:hover .context-menu-icon, .context-menu-item.is-focused .context-menu-icon, .context-menu-item.is-active .context-menu-icon {
   color: var(--accent-color);
 }
-.context-menu-item:hover .context-menu-chevron, .context-menu-item.is-focused .context-menu-chevron {
-  color: var(--accent-color);
-  opacity: 0.8;
-}
-.context-menu-item.is-active {
-  background: var(--secondary-background);
-  color: var(--accent-color);
-}
-.context-menu-item.is-active .context-menu-icon {
-  color: var(--accent-color);
-}
-.context-menu-item.is-active .context-menu-chevron {
+.context-menu-item:hover .context-menu-chevron, .context-menu-item.is-focused .context-menu-chevron, .context-menu-item.is-active .context-menu-chevron {
   color: var(--accent-color);
   opacity: 0.8;
 }

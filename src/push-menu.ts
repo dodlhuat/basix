@@ -198,10 +198,10 @@ class PushMenu {
 
         const isPushed = this.elements.content.classList.contains('pushed');
 
-        this.toggleClass(this.elements.content, 'pushed', !isPushed);
-        this.toggleClass(this.elements.menu, 'pushed', !isPushed);
-        this.toggleClass(this.elements.header, 'pushed', !isPushed);
-        this.toggleClass(this.elements.backdrop, 'pushed', !isPushed);
+        this.elements.content.classList.toggle('pushed', !isPushed);
+        this.elements.menu.classList.toggle('pushed', !isPushed);
+        this.elements.header?.classList.toggle('pushed', !isPushed);
+        this.elements.backdrop?.classList.toggle('pushed', !isPushed);
 
         if (this.elements.controlIcon) {
             if (isPushed) {
@@ -211,15 +211,6 @@ class PushMenu {
                 this.elements.controlIcon.classList.add('icon-menu_open');
                 this.elements.controlIcon.classList.remove('icon-menu');
             }
-        }
-    }
-
-    private static toggleClass(element: HTMLElement | null, className: string, add: boolean): void {
-        if (!element) return;
-        if (add) {
-            element.classList.add(className);
-        } else {
-            element.classList.remove(className);
         }
     }
 

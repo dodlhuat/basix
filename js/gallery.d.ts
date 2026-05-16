@@ -22,6 +22,7 @@ declare class MasonryGallery {
     constructor(containerId: string, options: MasonryGalleryOptions);
     private init;
     private setupLayout;
+    private buildColumns;
     private addEventListeners;
     private reLayout;
     private handleScroll;

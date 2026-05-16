@@ -1,16 +1,3 @@
-// ============================================================
-// calendar.scss — Basix Calendar Component Styles
-//
-// Integration principles:
-//   - No hard-coded colours — uses Basix CSS custom properties
-//   - No global reset
-//   - BEM: .cal / .cal__* / is-* / has-*
-//   - State classes match Basix convention: .is-today, .is-selected,
-//     .is-disabled, .has-events, .active, .error, .success
-//   - Font, spacing, radius, border — all from Basix tokens
-//   - Event pills accept any Basix badge/alert class as className
-// ============================================================
-
 @use "parameters" as *;
 
 .cal {

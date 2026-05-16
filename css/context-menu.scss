@@ -83,23 +83,9 @@
     color: var(--secondary-text);
   }
 
-  // Hover + keyboard focus — same treatment as dropdown
+  // Hover, keyboard focus, or submenu-parent active — same treatment
   &:hover,
-  &.is-focused {
-    background: var(--secondary-background);
-    color: var(--accent-color);
-
-    .context-menu-icon {
-      color: var(--accent-color);
-    }
-
-    .context-menu-chevron {
-      color: var(--accent-color);
-      opacity: 0.8;
-    }
-  }
-
-  // Submenu-parent active (submenu is open) — keep it highlighted
+  &.is-focused,
   &.is-active {
     background: var(--secondary-background);
     color: var(--accent-color);

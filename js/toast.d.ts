@@ -18,7 +18,6 @@ declare class Toast {
     constructor(content: string, header?: string, type?: ToastType, closeable?: boolean);
     show(ms?: number): void;
     hide: () => void;
-    private handleClose;
     private startTimer;
     private buildTemplate;
 }

@@ -11,16 +11,10 @@ class Toast {
             }
             this.toastElement?.classList.remove('show');
             setTimeout(() => {
-                const closeButton = this.toastElement?.querySelector('.close');
-                if (closeButton) {
-                    closeButton.removeEventListener('click', this.handleClose);
-                }
+                this.toastElement?.querySelector('.close')?.removeEventListener('click', this.hide);
                 this.toastElement?.remove();
                 this.toastElement = null;
             }, 150);
-        };
-        this.handleClose = () => {
-            this.hide();
         };
         if (typeof contentOrOptions === 'object') {
             this.content = contentOrOptions.content;
@@ -50,7 +44,7 @@ class Toast {
                 this.toastElement?.classList.add('show');
                 const closeButton = this.toastElement?.querySelector('.close');
                 if (closeButton) {
-                    closeButton.addEventListener('click', this.handleClose);
+                    closeButton.addEventListener('click', this.hide);
                 }
                 if (ms !== undefined && ms > 0) {
                     this.startTimer(ms);

@@ -20,21 +20,18 @@
     width: 100%;
     overflow: auto;
     box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
 
     .content {
       margin: 0;
       margin-right: calc(var(--track-width) + var(--track-gap));
     }
-  }
-
-  .viewport::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-  }
-
-  .viewport {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
   }
 
   .scrollbar {

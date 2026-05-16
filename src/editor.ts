@@ -1,3 +1,5 @@
+import { sanitizeHtml } from './utils.js';
+
 interface EditorOptions {
     /** Hides the entire side panel (code/preview) permanently. Safe to use
      *  without #code, #preview, or #sidePanel in the DOM. */
@@ -110,11 +112,11 @@ class Editor {
             const code = this.code;
             const codeActions = document.querySelectorAll<HTMLButtonElement>('.code-actions button');
             codeActions[0]?.addEventListener('click', () => {
-                this.editable.innerHTML = this.sanitizeHTML(code.value);
+                this.editable.innerHTML = sanitizeHtml(code.value);
                 this.onContentChange();
             }, sig);
             codeActions[1]?.addEventListener('click', () => {
-                code.value = this.sanitizeHTML(code.value);
+                code.value = sanitizeHtml(code.value);
                 this.editable.innerHTML = code.value;
                 this.onContentChange();
             }, sig);
@@ -196,7 +198,7 @@ class Editor {
 
     private syncViews(): void {
         if (this.code)    this.code.value          = this.editable.innerHTML.trim();
-        if (this.preview) this.preview.innerHTML   = this.sanitizeHTML(this.editable.innerHTML);
+        if (this.preview) this.preview.innerHTML   = sanitizeHtml(this.editable.innerHTML);
         this.updateWordCount();
     }
 
@@ -417,25 +419,8 @@ class Editor {
         this.onContentChange();
     }
 
-    private sanitizeHTML(html: string): string {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        doc.querySelectorAll('script, style, iframe, object, embed').forEach(el => el.remove());
-
-        doc.querySelectorAll('*').forEach(el => {
-            for (const attr of Array.from(el.attributes)) {
-                if (attr.name.startsWith('on') || attr.value.trim().toLowerCase().startsWith('javascript:')) {
-                    el.removeAttribute(attr.name);
-                }
-            }
-        });
-
-        return doc.body.innerHTML;
-    }
-
     private downloadHTML(): void {
-        const content = this.sanitizeHTML(this.editable.innerHTML);
+        const content = sanitizeHtml(this.editable.innerHTML);
         const html = `<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Export</title></head>
