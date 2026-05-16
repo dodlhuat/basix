@@ -20,6 +20,20 @@ class TimeSpanPicker {
     private fromString: string;
     private toString: string;
 
+    private barEl: HTMLElement | null = null;
+    private barFillEl: HTMLElement | null = null;
+    private startHandleEl: HTMLElement | null = null;
+    private endHandleEl: HTMLElement | null = null;
+
+    private dragState: {
+        type: 'start' | 'end' | 'move';
+        barLeft: number;
+        barWidth: number;
+        startMins: number;
+        endMins: number;
+        clickOffsetMins: number;
+    } | null = null;
+
     constructor(elementOrSelector: string | HTMLElement, options?: TimeSpanPickerOptions) {
         const element = typeof elementOrSelector === 'string'
             ? (elementOrSelector.startsWith('#') || elementOrSelector.startsWith('.')
@@ -50,8 +64,8 @@ class TimeSpanPicker {
         }
 
         this.attachEventListeners();
+        this.attachBarListeners();
 
-        // Render initial state if defaults provided
         if (options?.defaultStart || options?.defaultEnd) {
             this.updateUI();
         }
@@ -86,7 +100,10 @@ class TimeSpanPicker {
         </div>
       </div>
       <div class="timespan-bar" aria-hidden="true">
-        <div class="timespan-bar-fill"></div>
+        <div class="timespan-bar-fill">
+          <div class="timespan-handle timespan-handle-start"></div>
+          <div class="timespan-handle timespan-handle-end"></div>
+        </div>
       </div>
     `;
     }
@@ -99,9 +116,108 @@ class TimeSpanPicker {
         this.endTimeInput.addEventListener('change', this.handleEndChange);
     }
 
+    private attachBarListeners(): void {
+        this.barEl = this.container.querySelector<HTMLElement>('.timespan-bar');
+        this.barFillEl = this.container.querySelector<HTMLElement>('.timespan-bar-fill');
+        this.startHandleEl = this.container.querySelector<HTMLElement>('.timespan-handle-start');
+        this.endHandleEl = this.container.querySelector<HTMLElement>('.timespan-handle-end');
+
+        this.startHandleEl?.addEventListener('pointerdown', this.onStartHandleDown);
+        this.endHandleEl?.addEventListener('pointerdown', this.onEndHandleDown);
+        this.barFillEl?.addEventListener('pointerdown', this.onFillDown);
+
+        document.addEventListener('pointermove', this.onPointerMove);
+        document.addEventListener('pointerup', this.onPointerUp);
+    }
+
+    private beginDrag(type: 'start' | 'end' | 'move', clickOffsetMins = 0): void {
+        const { start, end } = this.getValue();
+        if (!start || !end) return;
+
+        const rect = this.barEl!.getBoundingClientRect();
+        this.dragState = {
+            type,
+            barLeft: rect.left,
+            barWidth: rect.width,
+            startMins: this.toMinutes(start),
+            endMins: this.toMinutes(end),
+            clickOffsetMins,
+        };
+        this.barEl?.classList.add('is-dragging');
+    }
+
+    private readonly onStartHandleDown = (e: PointerEvent): void => {
+        e.stopPropagation();
+        e.preventDefault();
+        this.beginDrag('start');
+    };
+
+    private readonly onEndHandleDown = (e: PointerEvent): void => {
+        e.stopPropagation();
+        e.preventDefault();
+        this.beginDrag('end');
+    };
+
+    private readonly onFillDown = (e: PointerEvent): void => {
+        if ((e.target as HTMLElement).classList.contains('timespan-handle')) return;
+        e.preventDefault();
+
+        const { start } = this.getValue();
+        if (!start) return;
+
+        const rect = this.barEl!.getBoundingClientRect();
+        const clickMins = ((e.clientX - rect.left) / rect.width) * 1440;
+        const startMins = this.toMinutes(start);
+        this.beginDrag('move', clickMins - startMins);
+    };
+
+    private readonly onPointerMove = (e: PointerEvent): void => {
+        if (!this.dragState) return;
+        e.preventDefault();
+
+        const { type, barLeft, barWidth, startMins, endMins, clickOffsetMins } = this.dragState;
+        const pct = Math.max(0, Math.min(1, (e.clientX - barLeft) / barWidth));
+        const rawMins = pct * 1440;
+
+        if (type === 'start') {
+            const newStart = Math.max(0, Math.min(endMins - 5, this.snap(rawMins)));
+            this.startTimeInput.value = this.minutesToTime(newStart);
+        } else if (type === 'end') {
+            const newEnd = Math.max(startMins + 5, Math.min(1440, this.snap(rawMins)));
+            this.endTimeInput.value = this.minutesToTime(newEnd);
+        } else {
+            const duration = endMins - startMins;
+            const newStart = Math.max(0, Math.min(1440 - duration, this.snap(rawMins - clickOffsetMins)));
+            this.startTimeInput.value = this.minutesToTime(newStart);
+            this.endTimeInput.value = this.minutesToTime(newStart + duration);
+        }
+
+        this.updateUI();
+        const { start, end } = this.getValue();
+        if (this.onChange && start && end) {
+            this.onChange(start, end);
+        }
+    };
+
+    private readonly onPointerUp = (): void => {
+        if (!this.dragState) return;
+        this.dragState = null;
+        this.barEl?.classList.remove('is-dragging');
+    };
+
     private toMinutes(time: string): number {
         const [h, m] = time.split(':').map(Number);
         return h * 60 + m;
+    }
+
+    private minutesToTime(minutes: number): string {
+        const h = Math.floor(minutes / 60);
+        const m = minutes % 60;
+        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    }
+
+    private snap(mins: number, step = 5): number {
+        return Math.round(mins / step) * step;
     }
 
     private formatDuration(minutes: number): string {
@@ -115,7 +231,7 @@ class TimeSpanPicker {
     private updateUI(): void {
         const picker = this.container.querySelector<HTMLElement>('.timespan-picker');
         const durationEl = this.container.querySelector<HTMLElement>('.timespan-duration');
-        const barFill = this.container.querySelector<HTMLElement>('.timespan-bar-fill');
+        const barFill = this.barFillEl ?? this.container.querySelector<HTMLElement>('.timespan-bar-fill');
 
         const start = this.startTimeInput.value;
         const end = this.endTimeInput.value;
@@ -126,6 +242,7 @@ class TimeSpanPicker {
         if (isError) {
             this.endTimeInput.setCustomValidity('End time must be after start time');
             if (durationEl) durationEl.textContent = '!';
+            barFill?.classList.remove('is-active');
             return;
         }
 
@@ -138,15 +255,15 @@ class TimeSpanPicker {
 
             durationEl.textContent = this.formatDuration(duration);
 
-            const startPct = ((startMins / 1440) * 100).toFixed(2);
-            const widthPct = ((duration / 1440) * 100).toFixed(2);
-            barFill.style.left = `${startPct}%`;
-            barFill.style.width = `${widthPct}%`;
+            barFill.style.left = `${((startMins / 1440) * 100).toFixed(2)}%`;
+            barFill.style.width = `${((duration / 1440) * 100).toFixed(2)}%`;
+            barFill.classList.add('is-active');
         } else {
             if (durationEl) durationEl.textContent = '';
             if (barFill) {
                 barFill.style.left = '0';
                 barFill.style.width = '0';
+                barFill.classList.remove('is-active');
             }
         }
     }
@@ -180,11 +297,14 @@ class TimeSpanPicker {
 
         const picker = this.container.querySelector('.timespan-picker');
         const durationEl = this.container.querySelector<HTMLElement>('.timespan-duration');
-        const barFill = this.container.querySelector<HTMLElement>('.timespan-bar-fill');
 
         picker?.classList.remove('is-error');
         if (durationEl) durationEl.textContent = '';
-        if (barFill) { barFill.style.left = '0'; barFill.style.width = '0'; }
+        if (this.barFillEl) {
+            this.barFillEl.style.left = '0';
+            this.barFillEl.style.width = '0';
+            this.barFillEl.classList.remove('is-active');
+        }
     }
 
     public isValid(): boolean {
@@ -195,6 +315,11 @@ class TimeSpanPicker {
     public destroy(): void {
         this.startTimeInput.removeEventListener('change', this.handleStartChange);
         this.endTimeInput.removeEventListener('change', this.handleEndChange);
+        this.startHandleEl?.removeEventListener('pointerdown', this.onStartHandleDown);
+        this.endHandleEl?.removeEventListener('pointerdown', this.onEndHandleDown);
+        this.barFillEl?.removeEventListener('pointerdown', this.onFillDown);
+        document.removeEventListener('pointermove', this.onPointerMove);
+        document.removeEventListener('pointerup', this.onPointerUp);
     }
 }
 
