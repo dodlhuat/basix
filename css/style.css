@@ -4254,14 +4254,14 @@ body {
 
 .flyout-menu {
   position: fixed;
-  background: var(--flyout-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(10, 15, 30, 0.82);
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
   z-index: 210;
   display: flex;
   flex-direction: column;
-  padding: 2rem;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  padding: 1.75rem 1.5rem;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 32px 80px rgba(0, 0, 0, 0.6);
   transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -4291,29 +4291,47 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .flyout-title {
-  font-size: 1.25rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: rgba(255, 255, 255, 0.35);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
 }
 
 .close-menu {
   background: none;
   border: none;
-  color: var(--flyout-text);
+  color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
-  padding: 0.5rem;
-  transition: transform 0.2s, color 0.2s;
+  padding: 0.3rem;
+  line-height: 0;
+  transition: color 0.2s;
 }
 
 .close-menu:hover {
-  transform: rotate(90deg);
-  color: var(--accent-color);
+  color: #fff;
+}
+
+.flyout-menu button {
+  display: flex;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  font-size: inherit;
+  font-weight: inherit;
+  white-space: normal;
+  transition: color 0.2s;
+}
+.flyout-menu button:hover:not(:disabled), .flyout-menu button:active:not(:disabled), .flyout-menu button.active {
+  background: none;
+  transform: none;
+  box-shadow: none;
 }
 
 .flyout-links {
@@ -4336,7 +4354,7 @@ body {
   border: none;
   font-size: 2rem;
   font-weight: 600;
-  color: var(--flyout-text);
+  color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
   cursor: pointer;
   font-family: inherit;
@@ -4352,18 +4370,24 @@ body {
   transform: translateY(0);
 }
 
-.flyout-links a:hover,
-.submenu-toggle:hover {
+.flyout-links > li > a:hover,
+.flyout-links > li > .submenu-toggle:hover {
+  color: #fff;
+}
+
+.submenu-toggle.active {
   color: var(--accent-color);
 }
 
 .chevron {
-  transition: transform 0.3s;
-  opacity: 0.7;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;
 }
 
 .submenu-toggle.active .chevron {
   transform: rotate(180deg);
+  opacity: 1;
 }
 
 .submenu {
@@ -4372,7 +4396,7 @@ body {
   overflow: hidden;
   transition: max-height 0.3s ease-out;
   padding-left: 1rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
   margin-top: 0;
 }
 
@@ -4389,28 +4413,36 @@ body {
 .submenu a {
   font-size: 1.25rem;
   font-weight: 400;
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.45);
   transform: none !important;
+  transition: color 0.2s !important;
   transition-delay: 0s !important;
+}
+.submenu a:hover {
+  color: #fff;
 }
 
 .submenu .submenu-toggle {
   font-size: 1.25rem;
   font-weight: 400;
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.45);
   transform: none !important;
   transition-delay: 0s !important;
   padding: 0;
   margin: 0;
 }
+.submenu .submenu-toggle:hover {
+  color: #fff;
+}
 
 .flyout-footer {
-  padding-top: 2rem;
-  border-top: 1px solid var(--flyout-border);
-  color: #64748b;
-  font-size: 0.9rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(12px);
   transition: opacity 0.4s, transform 0.4s;
   transition-delay: var(--delay);
 }
