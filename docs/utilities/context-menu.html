@@ -14,37 +14,41 @@
         Theme.init();
 
         new ContextMenu('#ctx-target', [
-            { label: 'Open',    action: () => alert('Open') },
-            { label: 'Rename',  action: () => alert('Rename') },
-            { label: 'Copy',    action: () => alert('Copy') },
-            { type: 'separator' },
+            { group: 'File' },
+            { label: 'Open',   icon: 'folder_open',  shortcut: '⌘O', action: () => alert('Open') },
+            { label: 'Rename', icon: 'edit',          shortcut: 'F2', action: () => alert('Rename') },
+            { label: 'Copy',   icon: 'content_copy',  shortcut: '⌘C', action: () => alert('Copy') },
+            'separator',
             {
                 label: 'Share',
-                children: [
-                    { label: 'Copy link',    action: () => alert('Copy link') },
-                    { label: 'Send by mail', action: () => alert('Send mail') },
+                icon: 'share',
+                submenu: [
+                    { label: 'Copy link',    icon: 'link', action: () => alert('Copy link') },
+                    { label: 'Send by mail', icon: 'mail', action: () => alert('Send mail') },
                 ],
             },
-            { type: 'separator' },
-            { label: 'Delete', action: () => alert('Delete'), danger: true },
-        ]);
+            'separator',
+            { label: 'Delete', icon: 'delete', action: () => alert('Delete'), destructive: true },
+        ], { spritePath: '../../svg-icons/icons.svg' });
 
         new CodeViewer('#code-js', `import { ContextMenu } from '@dodlhuat/basix/js/context-menu.js';
 
 const menu = new ContextMenu('#my-target', [
-  { label: 'Open',   action: () => console.log('open') },
-  { label: 'Rename', action: () => console.log('rename') },
-  { type: 'separator' },
+  { group: 'File' },
+  { label: 'Open',   icon: 'folder_open',  shortcut: '⌘O', action: (target) => {} },
+  { label: 'Rename', icon: 'edit',          shortcut: 'F2', action: (target) => {} },
+  { label: 'Copy',   icon: 'content_copy',               action: (target) => {} },
+  'separator',
   {
-    label: 'Share',
-    children: [
-      { label: 'Copy link',    action: () => {} },
-      { label: 'Send by mail', action: () => {} },
+    label: 'Share', icon: 'share',
+    submenu: [
+      { label: 'Copy link',    icon: 'link', action: (target) => {} },
+      { label: 'Send by mail', icon: 'mail', action: (target) => {} },
     ],
   },
-  { type: 'separator' },
-  { label: 'Delete', action: () => {}, danger: true },
-]);
+  'separator',
+  { label: 'Delete', icon: 'delete', destructive: true, action: (target) => {} },
+], { spritePath: 'svg-icons/icons.svg' });
 
 menu.destroy();`, 'js');
     </script>
@@ -58,7 +62,7 @@ menu.destroy();`, 'js');
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
                 <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
-                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 -960 960 960"><use href="../../svg-icons/icons.svg#menu"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
                     <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
@@ -72,7 +76,7 @@ menu.destroy();`, 'js');
 
             <h2>Demo</h2>
             <div class="docs-demo">
-                <div id="ctx-target" style="padding:2rem;border:2px dashed var(--border);border-radius:var(--radius-md);text-align:center;cursor:context-menu;user-select:none;">
+                <div id="ctx-target" style="padding:2rem;border:2px dashed var(--divider);border-radius:var(--radius-md);text-align:center;cursor:context-menu;user-select:none;">
                     Right-click here to open the context menu
                 </div>
             </div>
@@ -85,11 +89,22 @@ menu.destroy();`, 'js');
                 <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
                 <tbody>
                     <tr><td><code>label</code></td><td>string</td><td>Display text of the menu item.</td></tr>
-                    <tr><td><code>action</code></td><td>function</td><td>Called when the item is clicked or activated via keyboard.</td></tr>
-                    <tr><td><code>children</code></td><td>Item[]</td><td>Nested submenu items — renders a flyout panel on hover/focus.</td></tr>
-                    <tr><td><code>type</code></td><td>'separator'</td><td>Renders a horizontal divider line instead of an interactive item.</td></tr>
-                    <tr><td><code>danger</code></td><td>boolean</td><td>Applies a destructive red colour to the item label.</td></tr>
+                    <tr><td><code>icon</code></td><td>string</td><td>SVG sprite icon ID (e.g. <code>'edit'</code>). Requires <code>spritePath</code> to be set on the constructor.</td></tr>
+                    <tr><td><code>shortcut</code></td><td>string</td><td>Optional keyboard shortcut label shown on the right.</td></tr>
+                    <tr><td><code>action</code></td><td>function</td><td>Called with the right-clicked target element when the item is activated.</td></tr>
+                    <tr><td><code>submenu</code></td><td>Item[]</td><td>Nested submenu items — renders a flyout panel on hover/focus.</td></tr>
+                    <tr><td><code>destructive</code></td><td>boolean</td><td>Applies a red colour to the item label.</td></tr>
                     <tr><td><code>disabled</code></td><td>boolean</td><td>Renders the item as non-interactive.</td></tr>
+                    <tr><td><code>'separator'</code></td><td>string literal</td><td>Pass the string <code>'separator'</code> to render a horizontal divider line.</td></tr>
+                    <tr><td><code>{ group: string }</code></td><td>object</td><td>Pass a group object to render a section label.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>spritePath</code></td><td>string</td><td>—</td><td>Path to the SVG sprite file (e.g. <code>'svg-icons/icons.svg'</code>). Icons are only rendered when this is set.</td></tr>
                 </tbody>
             </table>
 

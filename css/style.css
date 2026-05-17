@@ -6911,9 +6911,10 @@ body {
   color: var(--secondary-text);
   transition: color 0.1s ease;
 }
-.context-menu-item .context-menu-icon .icon-svg {
+.context-menu-item .context-menu-icon svg {
   width: 1rem;
   height: 1rem;
+  fill: currentColor;
 }
 .context-menu-item .context-menu-label {
   flex: 1;

@@ -158,14 +158,14 @@ class FlyoutMenu {
         document.addEventListener('keydown', this.handleKeydown, sig);
     }
 
-    private open = (): void => {
+    public open = (): void => {
         this.flyoutMenu?.classList.add('is-open');
         this.flyoutOverlay?.classList.add('is-visible');
         document.body.style.overflow = 'hidden';
         this.menuTrigger?.setAttribute('aria-expanded', 'true');
     }
 
-    private close = (): void => {
+    public close = (): void => {
         this.flyoutMenu?.classList.remove('is-open');
         this.flyoutOverlay?.classList.remove('is-visible');
         document.body.style.overflow = '';

@@ -46,9 +46,9 @@
                 const cell = document.createElement('div');
                 cell.className = 'icon-cell';
                 cell.title = `Click to copy: #${id}`;
-                cell.innerHTML = `<svg viewBox="0 0 24 24"><use href="../../svg-icons/icons.svg#${id}"/></svg><span>${id}</span>`;
+                cell.innerHTML = `<svg viewBox="0 -960 960 960"><use href="../../svg-icons/icons.svg#${id}"/></svg><span>${id}</span>`;
                 cell.addEventListener('click', () => {
-                    navigator.clipboard.writeText(`<svg viewBox="0 0 24 24"><use href="svg-icons/icons.svg#${id}"/></svg>`);
+                    navigator.clipboard.writeText(`<svg viewBox="0 -960 960 960"><use href="svg-icons/icons.svg#${id}"/></svg>`);
                     cell.style.background = 'var(--accent-tint)';
                     setTimeout(() => cell.style.background = '', 800);
                 });
@@ -67,18 +67,8 @@
                 document.getElementById('icon-filter').addEventListener('input', e => renderGrid(e.target.value));
             });
 
-        new CodeViewer('#code-html', `<!-- Via SVG sprite (recommended) -->
-<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+        new CodeViewer('#code-html', `<svg viewBox="0 -960 960 960" width="24" height="24" fill="currentColor">
   <use href="svg-icons/icons.svg#search"/>
-</svg>
-
-<!-- Inline SVG fallback (works without the sprite file) -->
-<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-  <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5
-           6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57
-           l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0
-           C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5
-           11.99 14 9.5 14z"/>
 </svg>`, 'html');
     </script>
 </head>
@@ -91,7 +81,7 @@
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
                 <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
-                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                    <svg style="fill:currentColor;width:20px;height:20px;" viewBox="0 -960 960 960"><use href="../../svg-icons/icons.svg#menu"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
                     <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
@@ -114,13 +104,13 @@
 
             <h2>Sizing &amp; colour</h2>
             <div class="docs-demo" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 0 24 24" width="32" height="32" style="color:var(--accent);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 0 24 24" width="32" height="32" style="color:var(--success);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 0 24 24" width="32" height="32" style="color:var(--error);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 -960 960 960" width="16" height="16" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 -960 960 960" width="24" height="24" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 -960 960 960" width="36" height="36" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 -960 960 960" width="48" height="48" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 -960 960 960" width="32" height="32" style="color:var(--accent);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 -960 960 960" width="32" height="32" style="color:var(--success);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg viewBox="0 -960 960 960" width="32" height="32" style="color:var(--error);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
             </div>
             <p style="margin-top:0.75rem;font-size:0.9rem;color:var(--secondary-text);">Set <code>width</code> and <code>height</code> on the <code>&lt;svg&gt;</code> element. Colour follows <code>fill: currentColor</code> so you can use any CSS <code>color</code> property.</p>
         </div>

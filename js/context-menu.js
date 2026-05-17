@@ -5,8 +5,10 @@ class ContextMenu {
     menuEl = null;
     currentTarget = null;
     abortController = new AbortController();
-    constructor(selectorOrElement, items) {
+    spritePath;
+    constructor(selectorOrElement, items, options = {}) {
         this.items = items;
+        this.spritePath = options.spritePath ?? null;
         if (typeof selectorOrElement === 'string') {
             this.targets = Array.from(document.querySelectorAll(selectorOrElement));
         }
@@ -116,8 +118,14 @@ class ContextMenu {
             li.classList.add('has-submenu');
         const iconWrap = document.createElement('span');
         iconWrap.className = 'context-menu-icon';
-        if (def.icon) {
-            iconWrap.innerHTML = `<svg class="icon-svg"><use href="svg-icons/icons.svg#${def.icon}"/></svg>`;
+        if (def.icon && this.spritePath) {
+            const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svgEl.setAttribute('aria-hidden', 'true');
+            svgEl.setAttribute('fill', 'currentColor');
+            const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+            useEl.setAttribute('href', `${this.spritePath}#${def.icon}`);
+            svgEl.appendChild(useEl);
+            iconWrap.appendChild(svgEl);
         }
         li.appendChild(iconWrap);
         const label = document.createElement('span');

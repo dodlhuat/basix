@@ -11,6 +11,11 @@ interface ContextMenuItemDef {
 
 type ContextMenuInput = ContextMenuItemDef | 'separator' | { group: string };
 
+interface ContextMenuOptions {
+    /** Path to the SVG sprite file, e.g. `'svg-icons/icons.svg'`. Required to render icons. */
+    spritePath?: string;
+}
+
 /** Right-click context menu with keyboard navigation and nested submenu support. */
 class ContextMenu {
     private items: ContextMenuInput[];
@@ -18,12 +23,15 @@ class ContextMenu {
     private menuEl: HTMLElement | null = null;
     private currentTarget: HTMLElement | null = null;
     private abortController = new AbortController();
+    private spritePath: string | null;
 
     constructor(
         selectorOrElement: string | HTMLElement | HTMLElement[],
-        items: ContextMenuInput[]
+        items: ContextMenuInput[],
+        options: ContextMenuOptions = {}
     ) {
         this.items = items;
+        this.spritePath = options.spritePath ?? null;
 
         if (typeof selectorOrElement === 'string') {
             this.targets = Array.from(document.querySelectorAll<HTMLElement>(selectorOrElement));
@@ -141,8 +149,14 @@ class ContextMenu {
 
         const iconWrap = document.createElement('span');
         iconWrap.className = 'context-menu-icon';
-        if (def.icon) {
-            iconWrap.innerHTML = `<svg class="icon-svg"><use href="svg-icons/icons.svg#${def.icon}"/></svg>`;
+        if (def.icon && this.spritePath) {
+            const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svgEl.setAttribute('aria-hidden', 'true');
+            svgEl.setAttribute('fill', 'currentColor');
+            const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+            useEl.setAttribute('href', `${this.spritePath}#${def.icon}`);
+            svgEl.appendChild(useEl);
+            iconWrap.appendChild(svgEl);
         }
         li.appendChild(iconWrap);
 
@@ -243,4 +257,4 @@ class ContextMenu {
     }
 }
 
-export { ContextMenu, type ContextMenuInput, type ContextMenuItemDef };
+export { ContextMenu, type ContextMenuInput, type ContextMenuItemDef, type ContextMenuOptions };

@@ -29,8 +29,8 @@ declare class FlyoutMenu {
     private renderHeader;
     private renderFooter;
     private bindEvents;
-    private open;
-    private close;
+    open: () => void;
+    close: () => void;
     private handleSubmenu;
     private handleKeydown;
     setDirection(direction: 'left' | 'right'): void;

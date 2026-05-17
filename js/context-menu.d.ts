@@ -11,6 +11,10 @@ interface ContextMenuItemDef {
 type ContextMenuInput = ContextMenuItemDef | 'separator' | {
     group: string;
 };
+interface ContextMenuOptions {
+    /** Path to the SVG sprite file, e.g. `'svg-icons/icons.svg'`. Required to render icons. */
+    spritePath?: string;
+}
 /** Right-click context menu with keyboard navigation and nested submenu support. */
 declare class ContextMenu {
     private items;
@@ -18,7 +22,8 @@ declare class ContextMenu {
     private menuEl;
     private currentTarget;
     private abortController;
-    constructor(selectorOrElement: string | HTMLElement | HTMLElement[], items: ContextMenuInput[]);
+    private spritePath;
+    constructor(selectorOrElement: string | HTMLElement | HTMLElement[], items: ContextMenuInput[], options?: ContextMenuOptions);
     private init;
     private open;
     private close;
@@ -30,4 +35,4 @@ declare class ContextMenu {
     private activateFocused;
     destroy(): void;
 }
-export { ContextMenu, type ContextMenuInput, type ContextMenuItemDef };
+export { ContextMenu, type ContextMenuInput, type ContextMenuItemDef, type ContextMenuOptions };

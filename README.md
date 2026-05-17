@@ -616,18 +616,24 @@ new ContextMenu('.my-element', [
     { label: 'Rename', icon: 'edit',        shortcut: 'F2', action: (target) => {} },
     'separator',
     {
-        label: 'Share', icon: 'send',
+        label: 'Share', icon: 'share',
         submenu: [
-            { label: 'Copy link',    icon: 'attachment', action: (target) => {} },
-            { label: 'Send by mail', icon: 'mail',       action: (target) => {} },
+            { label: 'Copy link',    icon: 'link', action: (target) => {} },
+            { label: 'Send by mail', icon: 'mail', action: (target) => {} },
         ]
     },
     'separator',
     { label: 'Delete', icon: 'delete', destructive: true, action: (target) => {} },
-]);
+], { spritePath: 'svg-icons/icons.svg' });
 ```
 
-The constructor accepts a CSS selector string, a single `HTMLElement`, or an array of `HTMLElement`s as the first argument.
+The constructor accepts a CSS selector string, a single `HTMLElement`, or an array of `HTMLElement`s as the first argument. The optional third argument is an options object.
+
+#### Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `spritePath` | string | — | Path to the SVG sprite file (e.g. `'svg-icons/icons.svg'`). Icons are only rendered when this is set. |
 
 #### Item types
 
@@ -642,7 +648,7 @@ The constructor accepts a CSS selector string, a single `HTMLElement`, or an arr
 | Property | Type | Description |
 |---|---|---|
 | `label` | string | Display text |
-| `icon` | string | SVG sprite icon id (e.g. `'delete'`) |
+| `icon` | string | SVG sprite icon ID (e.g. `'delete'`). Requires `spritePath` option. |
 | `shortcut` | string | Keyboard shortcut hint shown on the right (e.g. `'⌘O'`) |
 | `disabled` | boolean | Renders item at reduced opacity, non-interactive |
 | `destructive` | boolean | Renders item in error/red color |
