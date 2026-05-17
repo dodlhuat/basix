@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .styled-checkbox {
   position: absolute;
@@ -22,7 +23,7 @@
     width: $spacing;
     height: $spacing;
     border: 2px solid var(--divider);
-    border-radius: calc($border-radius / 2);
+    border-radius: $radius-sm;
     background-color: var(--background);
     margin-top: 2px;
     transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
@@ -33,7 +34,7 @@
   }
 
   &:focus-visible + label::before {
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
+    @include focus-glow(15%);
     border-color: var(--accent-color);
   }
 

@@ -10,7 +10,6 @@
   box-shadow: $shadow;
   background: var(--secondary-background);
 
-  // Gradient scrim so controls are readable over any slide content
   &::after {
     content: '';
     position: absolute;
@@ -49,7 +48,6 @@
   user-select: none;
 }
 
-// Prev / next buttons — glass pill, always visible
 .carousel-button {
   position: absolute;
   top: 50%;
@@ -92,7 +90,6 @@
 .carousel-button--left  { left:  calc($spacing * 0.75); }
 .carousel-button--right { right: calc($spacing * 0.75); }
 
-// Dot navigation
 .carousel-nav {
   display: flex;
   align-items: center;

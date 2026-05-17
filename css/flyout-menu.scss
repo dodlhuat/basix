@@ -1,6 +1,3 @@
-/* Flyout menu uses its own dark palette intentionally —
-   it renders over any background regardless of light/dark mode.
-   Scoped here rather than polluting :root. */
 .flyout-menu,
 .flyout-overlay,
 .site-header,
@@ -26,7 +23,6 @@ body {
   min-height: 100vh;
 }
 
-/* Header */
 .site-header {
   display: flex;
   justify-content: space-between;
@@ -80,7 +76,6 @@ body {
   font-size: 1.2rem;
 }
 
-/* Flyout Overlay */
 .flyout-overlay {
   position: fixed;
   top: 0;
@@ -100,7 +95,6 @@ body {
   visibility: visible;
 }
 
-/* Flyout Menu Base */
 .flyout-menu {
   position: fixed;
   background: var(--flyout-bg);
@@ -114,7 +108,6 @@ body {
   transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Directional Variants */
 .flyout-from-right {
   top: 0;
   right: 0;
@@ -137,7 +130,6 @@ body {
   transform: translate(0, 0);
 }
 
-/* Flyout Header */
 .flyout-header {
   display: flex;
   justify-content: space-between;
@@ -167,7 +159,6 @@ body {
   color: var(--accent-color);
 }
 
-/* Flyout Links */
 .flyout-links {
   list-style: none;
   flex-grow: 1;
@@ -218,7 +209,6 @@ body {
   transform: rotate(180deg);
 }
 
-/* Submenu */
 .submenu {
   list-style: none;
   max-height: 0;
@@ -243,7 +233,7 @@ body {
   font-size: 1.25rem;
   font-weight: 400;
   color: #cbd5e1;
-  transform: none !important; /* parent `.flyout-menu.is-open .flyout-links a` slides in; submenu items must not */
+  transform: none !important; 
   transition-delay: 0s !important;
 }
 
@@ -257,7 +247,6 @@ body {
   margin: 0;
 }
 
-/* Flyout Footer */
 .flyout-footer {
   padding-top: 2rem;
   border-top: 1px solid var(--flyout-border);
@@ -274,7 +263,6 @@ body {
   transform: translateY(0);
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 480px) {
   :root {
     --menu-width: 100%;
@@ -284,7 +272,7 @@ body {
     font-size: 2rem;
   }
 
-  /* Force Fullscreen for all directions */
+  
   .flyout-from-right,
   .flyout-from-left,
   .flyout-from-top {
@@ -303,7 +291,7 @@ body {
     transform: translate(0, 0) !important;
   }
 
-  /* Reset Top Menu Horizontal Layout to Vertical for Mobile */
+  
   .flyout-from-top .flyout-links {
     flex-direction: column;
     align-items: stretch;
@@ -317,7 +305,7 @@ body {
   .flyout-from-top .flyout-links>li>a,
   .flyout-from-top .flyout-links>li>.submenu-toggle {
     font-size: 2rem;
-    /* Restore larger size */
+    
     justify-content: space-between;
   }
 
@@ -342,6 +330,6 @@ body {
   .flyout-from-top .submenu a {
     font-size: 1.25rem;
     justify-content: space-between;
-    /* Match default behavior */
+    
   }
 }

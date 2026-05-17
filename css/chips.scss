@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .chips {
   display: flex;
@@ -13,7 +14,7 @@
     background: var(--secondary-background);
     color: var(--primary-text);
     padding: calc($spacing * 0.3) calc($spacing * 0.75);
-    border-radius: calc($border-radius * 4);
+    border-radius: $radius-xl;
     font-size: 0.8125rem;
     font-weight: 500;
     line-height: 1.4;
@@ -36,7 +37,7 @@
 
       &:focus-visible {
         outline: none;
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 35%, transparent);
+        @include focus-glow();
       }
     }
 
@@ -79,7 +80,6 @@
       }
     }
 
-    // Accent variant
     &-accent {
       background: color-mix(in srgb, var(--accent-color) 12%, var(--background));
       color: var(--accent-color);
@@ -91,7 +91,6 @@
       }
     }
 
-    // Success variant
     &-success {
       background: color-mix(in srgb, var(--success) 12%, var(--background));
       color: var(--success);
@@ -103,7 +102,6 @@
       }
     }
 
-    // Warning variant
     &-warning {
       background: color-mix(in srgb, var(--warning) 12%, var(--background));
       color: var(--warning);
@@ -115,7 +113,6 @@
       }
     }
 
-    // Error variant
     &-error {
       background: color-mix(in srgb, var(--error) 12%, var(--background));
       color: var(--error);
@@ -127,7 +124,6 @@
       }
     }
 
-    // Outline variant
     &-outline {
       background: transparent;
       border-color: var(--divider);

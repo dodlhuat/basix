@@ -5,15 +5,13 @@ $menu-width: 280px;
 $menu-easing: cubic-bezier(0.4, 0, 0.2, 1);
 $menu-duration: 300ms;
 
-// ─── Outer nav shell ───────────────────────────────────────────────────────
-
 nav.push-menu {
   position: fixed;
   top: 0;
   left: 0;
   width: $menu-width;
   height: 100%;
-  overflow: hidden; // clip sliding panels
+  overflow: hidden;
   transform: translateX(-100%);
   transition: transform $menu-duration $menu-easing,
               box-shadow $menu-duration $menu-easing;
@@ -33,12 +31,6 @@ nav.push-menu {
     transform: translate3d($menu-width, 0, 0);
   }
 }
-
-// ─── Panel system ──────────────────────────────────────────────────────────
-// Three states:
-//   (no class)  → translateX(105%)  hidden to the right
-//   .is-prev    → translateX(-20%)  parallax depth, previous level
-//   .is-active  → translateX(0)     current visible panel
 
 .push-menu-panel {
   position: absolute;
@@ -61,17 +53,13 @@ nav.push-menu {
   }
 }
 
-// ─── Root panel list ───────────────────────────────────────────────────────
-
 .push-menu-panel[data-level="0"] > ul {
-  padding-top: calc($spacing * 4.5); // clear the fixed header
+  padding-top: calc($spacing * 4.5);
   padding-bottom: $spacing;
   margin: 0;
   list-style: none;
   width: 100%;
 }
-
-// ─── Sub-panel header (back button + title) ────────────────────────────────
 
 .push-menu-panel-header {
   display: flex;
@@ -116,7 +104,7 @@ nav.push-menu {
   border: none;
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.65);
-  pointer-events: none; // header handles the click
+  pointer-events: none;
   transition: background 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
@@ -131,8 +119,6 @@ nav.push-menu {
   text-overflow: ellipsis;
 }
 
-// ─── Sub-panel list ────────────────────────────────────────────────────────
-
 .push-menu-panel:not([data-level="0"]) > ul {
   padding: calc($spacing * 0.5) 0;
   margin: 0;
@@ -140,13 +126,10 @@ nav.push-menu {
   width: 100%;
 }
 
-// ─── List items ────────────────────────────────────────────────────────────
-
 nav li {
   margin: 0;
 }
 
-// Shared styles: anchor links and submenu trigger spans
 nav a,
 .push-menu-item {
   color: var(--accent-color-text);
@@ -181,8 +164,6 @@ nav li + li .push-menu-item {
   border-top: 1px solid rgba(255, 255, 255, 0.055);
 }
 
-// ─── Chevron for parent items ───────────────────────────────────────────────
-
 .push-menu-chevron {
   margin-left: auto;
   flex-shrink: 0;
@@ -197,8 +178,6 @@ nav li + li .push-menu-item {
   opacity: 0.7;
   transform: translateX(2px);
 }
-
-// ─── Navigation controls (hamburger) ───────────────────────────────────────
 
 .navigation-controls {
   line-height: inherit;
@@ -221,8 +200,6 @@ nav li + li .push-menu-item {
   }
 }
 
-// ─── Backdrop ──────────────────────────────────────────────────────────────
-
 .push-menu-backdrop {
   position: fixed;
   inset: 0;
@@ -239,8 +216,6 @@ nav li + li .push-menu-item {
     visibility: visible;
   }
 }
-
-// ─── Main header ───────────────────────────────────────────────────────────
 
 .main-header {
   position: fixed;

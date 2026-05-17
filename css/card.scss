@@ -2,7 +2,6 @@
 @use "defaults";
 @use "parameters" as *;
 
-// Base card styles
 .card {
   box-shadow: $shadow;
   background: var(--secondary-background);
@@ -17,14 +16,12 @@
     flex-direction: row;
   }
 
-  // Card header
   .card-header {
     border-bottom: 1px solid var(--divider);
     margin: (-$spacing) (-$spacing) $spacing (-$spacing);
     padding: $spacing;
   }
 
-  // Card footer
   .card-footer {
     border-top: 1px solid var(--divider);
     margin: auto (-$spacing) (-$spacing) (-$spacing);
@@ -32,7 +29,6 @@
   }
 }
 
-// Card variants
 .card-flat {
   box-shadow: none;
   border: 1px solid var(--divider);
@@ -51,7 +47,6 @@
   }
 }
 
-// Utility modifiers for cards
 .card-padding-none {
   padding: 0;
 }

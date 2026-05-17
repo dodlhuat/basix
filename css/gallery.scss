@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .masonry-container {
   display: flex;
@@ -44,8 +45,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 2px;
+    @include focus-ring();
   }
 }
 
@@ -96,7 +96,6 @@
   font-size: 0.8125rem;
 }
 
-// Staggered entrance for items
 @media (prefers-reduced-motion: no-preference) {
   .masonry-item {
     animation: masonry-in 0.4s cubic-bezier(0.2, 0, 0, 1) both;

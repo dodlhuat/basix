@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 :root {
   --track-width: 12px;
@@ -52,7 +53,6 @@
     pointer-events: auto;
     transition: background 0.3s ease;
 
-    // Direct hover over the track lane → more intent, wider thumb
     &:hover {
       background: var(--hover);
 
@@ -76,7 +76,6 @@
     pointer-events: auto;
     touch-action: none;
 
-    // Thin sliver at rest, grows rightward on interaction
     transform: scaleX(0.3);
     transform-origin: right center;
     transition:
@@ -87,19 +86,16 @@
     will-change: top, height, transform, opacity;
   }
 
-  // Hover over the container → reveal thumb gently
   &:hover .thumb {
     opacity: 0.45;
     transform: scaleX(0.5);
   }
 
-  // JS: user is actively scrolling (fades out ~800ms after last scroll)
   &.is-scrolling .thumb {
     opacity: 0.6;
     transform: scaleX(0.5);
   }
 
-  // JS: thumb is being dragged
   &.is-dragging {
     cursor: grabbing;
 
@@ -111,7 +107,7 @@
       opacity: 1;
       transform: scaleX(1);
       background: var(--accent-color);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 18%, transparent);
+      @include focus-glow(18%);
       cursor: grabbing;
       transition:
         opacity 0.15s ease,

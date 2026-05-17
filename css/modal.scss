@@ -35,7 +35,7 @@
 .modal {
   background: var(--background);
   border: 1px solid var(--divider);
-  border-radius: calc($border-radius * 2);
+  border-radius: $radius-lg;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.08);
   padding: $spacing;
   position: fixed;
@@ -70,14 +70,14 @@
     margin: (-$spacing) (-$spacing) $spacing;
     padding: $spacing;
     border-bottom: 1px solid var(--divider);
-    border-radius: calc($border-radius * 2) calc($border-radius * 2) 0 0;
+    border-radius: $radius-lg $radius-lg 0 0;
   }
 
   .footer {
     margin: $spacing (-$spacing) (-$spacing);
     padding: $spacing;
     border-top: 1px solid var(--divider);
-    border-radius: 0 0 calc($border-radius * 2) calc($border-radius * 2);
+    border-radius: 0 0 $radius-lg $radius-lg;
     display: flex;
     justify-content: flex-end;
 

@@ -87,7 +87,6 @@ $connector-thickness: 2px;
   transition: opacity 0.25s ease;
 }
 
-// Connector — animated fill via ::after
 .stepper-connector {
   flex: 1;
   height: $connector-thickness;
@@ -113,7 +112,6 @@ $connector-thickness: 2px;
   }
 }
 
-// Step states
 .stepper-step {
   &.active {
     .stepper-indicator {
@@ -169,7 +167,6 @@ $connector-thickness: 2px;
   }
 }
 
-// Vertical orientation
 .stepper-vertical {
   flex-direction: column;
 
@@ -207,7 +204,6 @@ $connector-thickness: 2px;
   }
 }
 
-// Clickable steps
 .stepper-clickable {
   .stepper-step {
     &.completed,

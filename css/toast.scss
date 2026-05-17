@@ -11,7 +11,7 @@
   max-width: 380px;
   margin: 0 auto;
   background: var(--background);
-  border-radius: calc($border-radius * 2);
+  border-radius: $radius-lg;
   box-shadow: $shadow, 0 8px 24px rgba(0, 0, 0, 0.12);
   padding: calc($spacing * 0.75) $spacing;
   z-index: 1000;

@@ -1,7 +1,6 @@
 @use "properties";
 @use "parameters" as *;
 
-/* Controls */
 .table-controls {
   display: flex;
   justify-content: space-between;
@@ -11,7 +10,6 @@
   gap: calc($spacing * 0.75);
 }
 
-/* Table Styles */
 .table-wrapper {
   overflow-x: auto;
   border: 1px solid var(--divider);
@@ -81,7 +79,6 @@ tbody tr {
   }
 }
 
-/* Pagination */
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -136,7 +133,6 @@ tbody tr {
   cursor: not-allowed;
 }
 
-/* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .table-controls {
     flex-direction: column;

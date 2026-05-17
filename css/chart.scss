@@ -1,9 +1,6 @@
 @use "properties";
 @use "parameters" as *;
 
-// ─── Chart color palette ────────────────────────────────────────────────────
-// Readable via JS: getComputedStyle(el).getPropertyValue('--chart-color-1')
-
 .chart {
   --chart-color-1: var(--accent-color);
   --chart-color-2: var(--success);
@@ -15,16 +12,12 @@
   --chart-color-8: #EC4899;
 }
 
-// ─── Wrapper ────────────────────────────────────────────────────────────────
-
 .chart {
   position: relative;
   width: 100%;
   min-width: 0;
   color: var(--primary-text);
   font-size: 0.875rem;
-
-  // ─── Header ───────────────────────────────────────────────────────────────
 
   &-header {
     margin-bottom: calc($spacing * 0.75);
@@ -43,8 +36,6 @@
     margin-top: calc($spacing * 0.2);
   }
 
-  // ─── Canvas ───────────────────────────────────────────────────────────────
-
   &-canvas {
     width: 100%;
     position: relative;
@@ -56,8 +47,6 @@
     width: 100%;
     overflow: visible;
   }
-
-  // ─── Axes & grid ──────────────────────────────────────────────────────────
 
   .chart-axis-line {
     stroke: var(--divider);
@@ -77,8 +66,6 @@
     font-family: inherit;
   }
 
-  // ─── Line & area ──────────────────────────────────────────────────────────
-
   .chart-line {
     fill: none;
     stroke-linecap: round;
@@ -92,7 +79,6 @@
     animation: chart-fade-in 0.8s ease forwards;
   }
 
-  // Dots visible by default (small), expand on hover via group
   .chart-point-dot {
     transition: r 0.15s ease;
   }
@@ -113,8 +99,6 @@
       opacity: 1;
     }
   }
-
-  // ─── Column & bar ─────────────────────────────────────────────────────────
 
   .chart-bar {
     transition: opacity 0.15s ease, filter 0.15s ease;
@@ -139,8 +123,6 @@
     }
   }
 
-  // ─── Pie ──────────────────────────────────────────────────────────────────
-
   .chart-slice {
     cursor: pointer;
     transform-box: fill-box;
@@ -154,8 +136,6 @@
       filter: brightness(1.08);
     }
   }
-
-  // ─── Legend ───────────────────────────────────────────────────────────────
 
   &-legend {
     display: flex;
@@ -180,7 +160,6 @@
     flex-shrink: 0;
   }
 
-  // Pie legend variant — bigger swatches, stacked nicely
   &-pie-legend {
     display: flex;
     flex-wrap: wrap;
@@ -209,8 +188,6 @@
     color: var(--primary-text);
     margin-left: calc($spacing * 0.15);
   }
-
-  // ─── Tooltip ──────────────────────────────────────────────────────────────
 
   &-tooltip {
     position: fixed;
@@ -241,8 +218,6 @@
     }
   }
 }
-
-// ─── Animations ─────────────────────────────────────────────────────────────
 
 @keyframes chart-draw {
   from { stroke-dashoffset: var(--path-length, 9999); }

@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 $radio-size: 1.15rem;
 $radio-dot-size: 0.55rem;
@@ -31,7 +32,7 @@ $radio-dot-size: 0.55rem;
     }
 
     &:focus-visible ~ .checkmark {
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
+      @include focus-glow(15%);
       border-color: var(--accent-color);
     }
 

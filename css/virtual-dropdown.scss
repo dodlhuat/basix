@@ -1,8 +1,6 @@
-@use "parameters" as *;
 @use "properties";
+@use "parameters" as *;
 
-// Flip-above fallback: used when there isn't enough space below the trigger.
-// The browser tries this when the default (below) position overflows the viewport.
 @position-try --vd-above {
   top: auto;
   bottom: anchor(top);
@@ -10,14 +8,11 @@
   margin-bottom: 6px;
 }
 
-// All selectors scoped under .custom-dropdown to avoid conflicts with dropdown.scss
 .custom-dropdown {
   position: relative;
   width: 100%;
   user-select: none;
   display: inline-block;
-
-  // ── Trigger ──────────────────────────────────────────────────────────
 
   .dropdown-trigger {
     background: var(--background);
@@ -87,22 +82,13 @@
     transform: rotate(180deg);
   }
 
-  // ── Menu ─────────────────────────────────────────────────────────────
-  //
-  // The menu is a popover (top-layer) element. Anchor positioning places it
-  // below the trigger and automatically flips above when there isn't room.
-  //
-  // anchor-name / position-anchor are unique per instance and set as inline
-  // styles by VirtualDropdown so multiple instances don't conflict.
-
   .dropdown-menu {
-    // Reset browser popover UA defaults
+
     inset: unset;
     margin: 0;
     padding: 0;
     border: none;
 
-    // Anchor positioning: default = below trigger, fallback = above
     position: fixed;
     top: anchor(bottom);
     left: anchor(left);
@@ -110,7 +96,6 @@
     margin-top: 6px;
     position-try-fallbacks: --vd-above;
 
-    // Appearance
     background: var(--background);
     border: 1.5px solid var(--divider);
     border-radius: calc($border-radius * 1.5);
@@ -119,10 +104,6 @@
       0 2px 8px rgba(0, 0, 0, 0.06);
     transform-origin: top center;
 
-    // Entry / exit animation.
-    // Closed state = exit target (browser transitions to this on close).
-    // @starting-style defines the entry start point (same values, so it
-    // fades/slides in from the same position it would exit to).
     opacity: 0;
     transform: translateY(-6px) scale(0.975);
 
@@ -142,8 +123,6 @@
       }
     }
   }
-
-  // ── Search ───────────────────────────────────────────────────────────
 
   .dropdown-search {
     padding: calc($spacing * 0.4);
@@ -179,8 +158,6 @@
     }
   }
 
-  // ── Virtual list ─────────────────────────────────────────────────────
-
   .dropdown-list-wrapper {
     max-height: 250px;
     overflow-y: auto;
@@ -199,8 +176,6 @@
     left: 0;
     width: 100%;
   }
-
-  // ── Items ─────────────────────────────────────────────────────────────
 
   .dropdown-item {
     padding: 0 calc($spacing * 0.65);
@@ -237,7 +212,7 @@
       padding: 0;
       box-shadow: none;
       border: 1.5px solid var(--divider);
-      border-radius: calc($border-radius / 2);
+      border-radius: $radius-sm;
       background: var(--background);
       margin-right: calc($spacing * 0.6);
       pointer-events: none;

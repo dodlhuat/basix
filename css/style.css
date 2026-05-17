@@ -500,7 +500,6 @@ a:focus-visible {
   padding: 2rem;
 }
 
-/* Controls */
 .table-controls {
   display: flex;
   justify-content: space-between;
@@ -510,7 +509,6 @@ a:focus-visible {
   gap: 0.75rem;
 }
 
-/* Table Styles */
 .table-wrapper {
   overflow-x: auto;
   border: 1px solid var(--divider);
@@ -578,7 +576,6 @@ tbody tr:hover {
   background-color: var(--hover);
 }
 
-/* Pagination */
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -630,7 +627,6 @@ tbody tr:hover {
   cursor: not-allowed;
 }
 
-/* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .table-controls {
     flex-direction: column;
@@ -4026,7 +4022,6 @@ ul.tree li {
   background-color: var(--accent-color-lighten);
 }
 
-/* Time Picker */
 .datepicker-time {
   display: flex;
   align-items: center;
@@ -4100,7 +4095,6 @@ ul.tree li {
   outline-offset: -1px;
 }
 
-/* Set Button */
 .datepicker-set-btn {
   width: 100%;
   padding: 0.5rem 1rem;
@@ -4119,7 +4113,6 @@ ul.tree li {
   opacity: 0.9;
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 640px) {
   .datepicker-backdrop {
     position: fixed;
@@ -4162,9 +4155,6 @@ ul.tree li {
     padding: 0.75rem 0;
   }
 }
-/* Flyout menu uses its own dark palette intentionally —
-   it renders over any background regardless of light/dark mode.
-   Scoped here rather than polluting :root. */
 .flyout-menu,
 .flyout-overlay,
 .site-header,
@@ -4190,7 +4180,6 @@ body {
   min-height: 100vh;
 }
 
-/* Header */
 .site-header {
   display: flex;
   justify-content: space-between;
@@ -4244,7 +4233,6 @@ body {
   font-size: 1.2rem;
 }
 
-/* Flyout Overlay */
 .flyout-overlay {
   position: fixed;
   top: 0;
@@ -4264,7 +4252,6 @@ body {
   visibility: visible;
 }
 
-/* Flyout Menu Base */
 .flyout-menu {
   position: fixed;
   background: var(--flyout-bg);
@@ -4278,7 +4265,6 @@ body {
   transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Directional Variants */
 .flyout-from-right {
   top: 0;
   right: 0;
@@ -4301,7 +4287,6 @@ body {
   transform: translate(0, 0);
 }
 
-/* Flyout Header */
 .flyout-header {
   display: flex;
   justify-content: space-between;
@@ -4331,7 +4316,6 @@ body {
   color: var(--accent-color);
 }
 
-/* Flyout Links */
 .flyout-links {
   list-style: none;
   flex-grow: 1;
@@ -4382,7 +4366,6 @@ body {
   transform: rotate(180deg);
 }
 
-/* Submenu */
 .submenu {
   list-style: none;
   max-height: 0;
@@ -4407,7 +4390,7 @@ body {
   font-size: 1.25rem;
   font-weight: 400;
   color: #cbd5e1;
-  transform: none !important; /* parent `.flyout-menu.is-open .flyout-links a` slides in; submenu items must not */
+  transform: none !important;
   transition-delay: 0s !important;
 }
 
@@ -4421,7 +4404,6 @@ body {
   margin: 0;
 }
 
-/* Flyout Footer */
 .flyout-footer {
   padding-top: 2rem;
   border-top: 1px solid var(--flyout-border);
@@ -4438,7 +4420,6 @@ body {
   transform: translateY(0);
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 480px) {
   :root {
     --menu-width: 100%;
@@ -4446,7 +4427,6 @@ body {
   .main-content h1 {
     font-size: 2rem;
   }
-  /* Force Fullscreen for all directions */
   .flyout-from-right,
   .flyout-from-left,
   .flyout-from-top {
@@ -4463,7 +4443,6 @@ body {
   .flyout-menu.is-open {
     transform: translate(0, 0) !important;
   }
-  /* Reset Top Menu Horizontal Layout to Vertical for Mobile */
   .flyout-from-top .flyout-links {
     flex-direction: column;
     align-items: stretch;
@@ -4475,7 +4454,6 @@ body {
   .flyout-from-top .flyout-links > li > a,
   .flyout-from-top .flyout-links > li > .submenu-toggle {
     font-size: 2rem;
-    /* Restore larger size */
     justify-content: space-between;
   }
   .flyout-from-top .submenu {
@@ -4497,7 +4475,6 @@ body {
   .flyout-from-top .submenu a {
     font-size: 1.25rem;
     justify-content: space-between;
-    /* Match default behavior */
   }
 }
 .tabs-container {
@@ -5086,7 +5063,6 @@ body {
   color: #d4d4d4;
 }
 
-/* Syntax Highlighting — VS Code Dark+ palette */
 .keyword {
   color: #569cd6;
 }
@@ -6109,7 +6085,6 @@ body {
   cursor: not-allowed;
 }
 
-/* ── Editor Component ───────────────────────────────────────────────── */
 .editor {
   background: var(--secondary-background);
   border: 1px solid var(--divider);
@@ -6120,7 +6095,6 @@ body {
   overflow: hidden;
 }
 
-/* ── Toolbar ───────────────────────────────────────────────────────── */
 .editor-toolbar {
   display: flex;
   align-items: center;
@@ -6136,7 +6110,6 @@ body {
   display: none;
 }
 
-/* SVG icon sizing */
 .editor-toolbar .icon-svg {
   fill: currentColor;
   display: block;
@@ -6146,7 +6119,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Button base */
 .editor-toolbar button {
   display: inline-flex;
   align-items: center;
@@ -6189,7 +6161,6 @@ body {
   background: var(--accent-color);
 }
 
-/* Button clusters — pill-shaped groups */
 .toolbar-group {
   display: flex;
   align-items: center;
@@ -6203,7 +6174,6 @@ body {
   border-radius: 0.18rem;
 }
 
-/* Block-format select — reset all global form overrides */
 .editor-block-select {
   width: auto;
   flex-shrink: 0;
@@ -6236,13 +6206,11 @@ body {
   font-weight: 400;
 }
 
-/* Separators: invisible spacers — visual grouping comes from .toolbar-group */
 .toolbar-separator {
   width: 0.35rem;
   flex-shrink: 0;
 }
 
-/* Right-pinned actions */
 .toolbar-end {
   display: flex;
   align-items: center;
@@ -6255,7 +6223,6 @@ body {
   display: none;
 }
 
-/* Variant button states — scoped to avoid !important */
 .editor-toolbar button.toolbar-btn-accent {
   background: color-mix(in srgb, var(--accent-color) 10%, transparent);
   color: var(--accent-color);
@@ -6269,7 +6236,6 @@ body {
   color: var(--error);
 }
 
-/* ── Editor Body ───────────────────────────────────────────────────── */
 .editor-body {
   display: flex;
   flex: 1;
@@ -6363,7 +6329,6 @@ body {
   font-weight: 700;
 }
 
-/* ── Side Panel ────────────────────────────────────────────────────── */
 .editor-side {
   width: 320px;
   min-width: 240px;
@@ -6509,7 +6474,6 @@ body {
   text-underline-offset: 2px;
 }
 
-/* ── Footer ────────────────────────────────────────────────────────── */
 .editor-footer {
   display: flex;
   align-items: center;
@@ -6553,7 +6517,6 @@ body {
   box-shadow: 0 1px 0 var(--divider);
 }
 
-/* ── Responsive ────────────────────────────────────────────────────── */
 @media screen and (max-width: 768px) {
   .editor-body {
     flex-direction: column;
@@ -6597,7 +6560,6 @@ body {
     display: none;
   }
 }
-/* ── Link Popover ──────────────────────────────────────────────────── */
 .editor-link-popover {
   display: flex;
   flex-direction: column;

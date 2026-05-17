@@ -1,5 +1,6 @@
-@use "parameters" as *;
 @use "properties";
+@use "parameters" as *;
+@use "mixins" as *;
 
 .container {
   max-width: 800px;
@@ -188,7 +189,6 @@
   background-color: var(--accent-color-lighten);
 }
 
-/* Time Picker */
 .datepicker-time {
   display: flex;
   align-items: center;
@@ -261,12 +261,10 @@
   }
 
   &:focus {
-    outline: 2px solid var(--accent-color);
-    outline-offset: -1px;
+    @include focus-ring(-1px);
   }
 }
 
-/* Set Button */
 .datepicker-set-btn {
   width: 100%;
   padding: calc($spacing / 2) $spacing;
@@ -286,7 +284,6 @@
   }
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 640px) {
   .datepicker-backdrop {
     position: fixed;

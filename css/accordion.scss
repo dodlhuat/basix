@@ -14,12 +14,10 @@
   &:last-child { border-bottom: none; }
 }
 
-// Hidden checkbox toggle
 .accordion-toggle {
   display: none;
 }
 
-// Clickable header / trigger
 .accordion-header {
   display: flex;
   justify-content: space-between;
@@ -49,7 +47,6 @@
   }
 }
 
-// Active state
 .accordion-toggle:checked + .accordion-header {
   color: var(--accent-color);
 
@@ -59,7 +56,6 @@
   }
 }
 
-// Grid wrapper — animates height via grid-template-rows
 .accordion-content {
   display: grid;
   grid-template-rows: 0fr;
@@ -71,7 +67,6 @@
   grid-template-rows: 1fr;
 }
 
-// Inner body — min-height:0 is required for grid 0fr to collapse
 .accordion-body {
   min-height: 0;
   padding: 0;

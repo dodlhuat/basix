@@ -39,7 +39,7 @@
   background: var(--background);
   border: 1px solid var(--divider);
   border-bottom: none;
-  border-radius: calc($border-radius * 4) calc($border-radius * 4) 0 0;
+  border-radius: $radius-xl $radius-xl 0 0;
   box-shadow:
     0 -2px 0 rgba(255, 255, 255, 0.06) inset,
     0 -8px 40px rgba(0, 0, 0, 0.18),
@@ -54,7 +54,6 @@
   will-change: transform;
   overscroll-behavior: contain;
 
-  // Snap height variants
   &.snap-half {
     height: 50vh;
   }
@@ -65,7 +64,6 @@
   }
 }
 
-// Drag handle — large tap target wrapping a visual pill
 .bottom-sheet-handle {
   flex-shrink: 0;
   display: flex;
@@ -97,7 +95,6 @@
   }
 }
 
-// Scrollable content area
 .bottom-sheet-body {
   flex: 1;
   overflow-x: hidden;
@@ -106,7 +103,6 @@
   padding: 0 $spacing $spacing;
   padding-bottom: calc($spacing + env(safe-area-inset-bottom));
 
-  // fade out bottom edge when content overflows
   mask-image: linear-gradient(to bottom, black calc(100% - 2rem), transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 2rem), transparent 100%);
 
@@ -116,7 +112,6 @@
   }
 }
 
-// Header and footer are outside .bottom-sheet-body so they stay fixed
 .bottom-sheet-header {
   flex-shrink: 0;
   display: flex;
@@ -177,12 +172,12 @@
     width: 480px;
     bottom: $spacing;
     border: 1px solid var(--divider);
-    border-radius: calc($border-radius * 4);
+    border-radius: $radius-xl;
     transform: translateX(-50%) translateY(calc(100% + #{$spacing}));
     max-height: 80vh;
 
     .bottom-sheet-footer {
-      border-radius: 0 0 calc($border-radius * 4) calc($border-radius * 4);
+      border-radius: 0 0 $radius-xl $radius-xl;
     }
   }
 

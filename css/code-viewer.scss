@@ -1,9 +1,6 @@
 @use "properties";
 @use "parameters" as *;
 
-// Structural chrome uses design tokens.
-// Syntax highlight colors are intentional VS Code palette — left as-is.
-
 .code-display {
   background: #1e1e1e;
   border-radius: $border-radius;
@@ -33,7 +30,7 @@
   color: #fff;
   border: none;
   padding: calc($spacing * 0.375) calc($spacing * 0.75);
-  border-radius: calc($border-radius / 2);
+  border-radius: $radius-sm;
   cursor: pointer;
   font-size: 0.75rem;
   transition: background 0.2s;
@@ -60,7 +57,6 @@
   color: #d4d4d4;
 }
 
-/* Syntax Highlighting — VS Code Dark+ palette */
 .keyword   { color: #569cd6; }
 .string    { color: #ce9178; }
 .comment   { color: #6a9955; font-style: italic; }

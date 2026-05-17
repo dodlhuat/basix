@@ -8,7 +8,7 @@ $arrow: 6px;
   z-index: 900;
   background: var(--background);
   border: 1px solid var(--divider);
-  border-radius: calc($border-radius * 2.5);
+  border-radius: $radius-panel;
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.03),
     0 4px 6px -2px rgba(0, 0, 0, 0.05),
@@ -18,13 +18,11 @@ $arrow: 6px;
   opacity: 0;
   pointer-events: none;
 
-  // Entry: offset from the trigger side + subtle scale
   &[data-placement="top"]    { transform-origin: bottom center; transform: translateY(6px)  scale(0.95); }
   &[data-placement="bottom"] { transform-origin: top center;    transform: translateY(-6px) scale(0.95); }
   &[data-placement="left"]   { transform-origin: right center;  transform: translateX(6px)  scale(0.95); }
   &[data-placement="right"]  { transform-origin: left center;   transform: translateX(-6px) scale(0.95); }
 
-  // Shift transform-origin to the anchor corner for aligned popovers
   &[data-placement="bottom"][data-align="start"] { transform-origin: top left; }
   &[data-placement="bottom"][data-align="end"]   { transform-origin: top right; }
   &[data-placement="top"][data-align="start"]    { transform-origin: bottom left; }
@@ -40,8 +38,6 @@ $arrow: 6px;
     transform: none !important;
   }
 
-  // ── Arrows ─────────────────────────────────────────────────────────────────
-  // Two layers: ::before = border colour (1px larger), ::after = background fill
   &[data-arrow="true"] {
     &::before,
     &::after {
@@ -52,7 +48,6 @@ $arrow: 6px;
       pointer-events: none;
     }
 
-    // bottom placement → arrow ▲ at top of popover
     &[data-placement="bottom"] {
       &::before {
         top: -($arrow + 1px);
@@ -72,7 +67,6 @@ $arrow: 6px;
       }
     }
 
-    // top placement → arrow ▼ at bottom of popover
     &[data-placement="top"] {
       &::before {
         bottom: -($arrow + 1px);
@@ -92,7 +86,6 @@ $arrow: 6px;
       }
     }
 
-    // right placement → arrow ◁ at left of popover
     &[data-placement="right"] {
       &::before {
         left: -($arrow + 1px);
@@ -112,7 +105,6 @@ $arrow: 6px;
       }
     }
 
-    // left placement → arrow ▶ at right of popover
     &[data-placement="left"] {
       &::before {
         right: -($arrow + 1px);
@@ -134,8 +126,6 @@ $arrow: 6px;
   }
 }
 
-// ── Content regions ──────────────────────────────────────────────────────────
-
 .popover-header {
   padding: calc($spacing * 0.65) $spacing;
   border-bottom: 1px solid var(--divider);
@@ -146,7 +136,7 @@ $arrow: 6px;
   align-items: center;
   justify-content: space-between;
   gap: calc($spacing * 0.5);
-  border-radius: calc($border-radius * 2.5) calc($border-radius * 2.5) 0 0;
+  border-radius: $radius-panel $radius-panel 0 0;
 }
 
 .popover-body {
@@ -162,10 +152,8 @@ $arrow: 6px;
   display: flex;
   justify-content: flex-end;
   gap: calc($spacing * 0.5);
-  border-radius: 0 0 calc($border-radius * 2.5) calc($border-radius * 2.5);
+  border-radius: 0 0 $radius-panel $radius-panel;
 }
-
-// ── Action list (menu-style content) ─────────────────────────────────────────
 
 .popover-menu {
   padding: calc($spacing * 0.375) 0;

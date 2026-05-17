@@ -24,7 +24,7 @@ ul.tree {
   user-select: none;
   overflow: hidden;
   border: 1px solid transparent;
-  border-radius: calc($border-radius * 2);
+  border-radius: $radius-lg;
   transition: background 0.2s ease, border-color 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 

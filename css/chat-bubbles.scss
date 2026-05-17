@@ -5,8 +5,6 @@
   --bubble-radius: 18px;
 }
 
-// ── Container ─────────────────────────────────────────────────────────────────
-
 .chat {
   display: flex;
   flex-direction: column;
@@ -15,13 +13,10 @@
   width: 100%;
 }
 
-// Extra breathing room between direction changes
 .chat-message.incoming + .chat-message.outgoing,
 .chat-message.outgoing + .chat-message.incoming {
   margin-top: calc($spacing * 0.5);
 }
-
-// ── Message row ───────────────────────────────────────────────────────────────
 
 .chat-message {
   display: flex;
@@ -37,7 +32,6 @@
       border-bottom-right-radius: 0;
       filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
 
-      // Tail: right-angle at bubble's bottom-right corner, extends right
       &::after {
         content: '';
         position: absolute;
@@ -60,7 +54,6 @@
       border-bottom-left-radius: 0;
       filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
 
-      // Tail: right-angle at bubble's bottom-left corner, extends left
       &::after {
         content: '';
         position: absolute;
@@ -74,8 +67,6 @@
     }
   }
 }
-
-// ── Avatar ────────────────────────────────────────────────────────────────────
 
 .chat-avatar {
   flex-shrink: 0;
@@ -98,8 +89,6 @@
   }
 }
 
-// ── Bubble ────────────────────────────────────────────────────────────────────
-
 .chat-bubble {
   position: relative;
   max-width: 72%;
@@ -114,8 +103,6 @@
   }
 }
 
-// ── Timestamp ─────────────────────────────────────────────────────────────────
-
 .chat-time {
   display: block;
   font-size: 0.68rem;
@@ -125,8 +112,6 @@
   opacity: 0.5;
   color: inherit;
 }
-
-// ── Dark mode shadow ──────────────────────────────────────────────────────────
 
 [data-theme="dark"] {
   .chat-message.incoming .chat-bubble  { filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35)); }

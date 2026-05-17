@@ -1,13 +1,9 @@
 @use "parameters" as *;
 
-// ── Layout shell ──────────────────────────────────────────────────────────────
-
 .sidebar-layout {
   display: flex;
   min-height: 100vh;
 }
-
-// ── Sidebar ───────────────────────────────────────────────────────────────────
 
 .sidebar-nav {
   width: var(--sidebar-width, 240px);
@@ -30,8 +26,6 @@
   }
 }
 
-// ── Main content area ─────────────────────────────────────────────────────────
-
 .sidebar-main {
   flex: 1;
   min-width: 0;
@@ -39,8 +33,6 @@
   flex-direction: column;
   margin-left: var(--sidebar-width, 240px);
 }
-
-// ── Backdrop (mobile overlay) ─────────────────────────────────────────────────
 
 .sidebar-backdrop {
   display: none;
@@ -51,8 +43,6 @@
 
   &.is-visible { display: block; }
 }
-
-// ── Mobile toggle button ──────────────────────────────────────────────────────
 
 .sidebar-toggle {
   display: none;
@@ -66,8 +56,6 @@
   &:hover { background: var(--secondary-background); }
   svg { display: block; }
 }
-
-// ── Mobile breakpoint ─────────────────────────────────────────────────────────
 
 @media (max-width: 768px) {
   .sidebar-toggle {

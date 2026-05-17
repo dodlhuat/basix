@@ -95,7 +95,7 @@
   max-width: 100%;
   max-height: calc(90dvh - 3.5rem);
   cursor: zoom-in;
-  border-radius: calc($border-radius * 2);
+  border-radius: $radius-lg;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.04);
 
@@ -149,7 +149,6 @@
   justify-content: center;
   z-index: 1;
 
-  // Override spinner colors for the dark overlay
   .spinner {
     border-color: rgba(255, 255, 255, 0.15);
     border-top-color: rgba(255, 255, 255, 0.7);
@@ -163,7 +162,7 @@
   object-fit: contain;
   opacity: 0;
   transition: opacity 0.25s ease;
-  border-radius: calc($border-radius * 2);
+  border-radius: $radius-lg;
   user-select: none;
   -webkit-user-drag: none;
 
@@ -196,7 +195,6 @@
   user-select: none;
 }
 
-// Prev/Next buttons — glass pill, matches carousel style
 .lightbox-prev,
 .lightbox-next {
   position: fixed;

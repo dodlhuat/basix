@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .timespan-picker {
   display: flex;
@@ -13,14 +14,14 @@
 
   &:focus-within {
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 12%, transparent);
+    @include focus-glow(12%);
   }
 
   &.is-error {
     border-color: var(--error);
 
     &:focus-within {
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--error) 12%, transparent);
+      @include focus-glow(12%, 3px, var(--error));
     }
   }
 }
@@ -54,14 +55,14 @@
   }
 
   input[type="time"] {
-    // reset form.scss defaults
+
     border: none;
     box-shadow: none;
     background: transparent;
     padding: 0;
     min-height: unset;
     border-radius: 0;
-    // own styles
+
     font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -128,7 +129,7 @@
   line-height: 1;
   min-height: 0.75rem;
   padding: 2px 6px;
-  border-radius: calc($border-radius * 2);
+  border-radius: $radius-lg;
   background: color-mix(in srgb, var(--accent-color) 10%, transparent);
   transition: color 0.2s ease, background 0.2s ease, transform 0.25s cubic-bezier(0.2, 0, 0, 1);
 
@@ -143,7 +144,6 @@
   }
 }
 
-// 24h position bar
 .timespan-bar {
   margin-top: calc($spacing / 2);
   height: 6px;
@@ -222,7 +222,6 @@
   }
 }
 
-// Error shake
 @media (prefers-reduced-motion: no-preference) {
   .timespan-picker.is-error {
     animation: timespan-shake 0.35s cubic-bezier(0.2, 0, 0, 1);

@@ -1,8 +1,6 @@
 @use "properties";
 @use "parameters" as *;
 
-// ── Timeline shell ────────────────────────────────────────────────────────────
-
 $marker-size: 1.25rem;
 
 .timeline {
@@ -11,7 +9,6 @@ $marker-size: 1.25rem;
   padding: 0;
   margin: 0;
 
-  // Vertical connector line — centered on the marker column
   &::before {
     content: '';
     position: absolute;
@@ -23,8 +20,6 @@ $marker-size: 1.25rem;
   }
 }
 
-// ── Item ──────────────────────────────────────────────────────────────────────
-
 .timeline-item {
   display: flex;
   gap: calc($spacing * 1.25);
@@ -34,8 +29,6 @@ $marker-size: 1.25rem;
 
   &:last-child { margin-bottom: 0; }
 }
-
-// ── Marker dot ────────────────────────────────────────────────────────────────
 
 .timeline-marker {
   flex-shrink: 0;
@@ -50,9 +43,8 @@ $marker-size: 1.25rem;
   color: var(--secondary-text);
   position: relative;
   z-index: 1;
-  margin-top: 0.15rem; // align with first line of content text
+  margin-top: 0.15rem;
 
-  // ── Color variants ────────────────────────────────────────────────────────
   &.success {
     border-color: var(--success);
     background: var(--success);
@@ -80,8 +72,6 @@ $marker-size: 1.25rem;
   svg { display: block; }
 }
 
-// ── Content card ──────────────────────────────────────────────────────────────
-
 .timeline-content {
   flex: 1;
   min-width: 0;
@@ -91,8 +81,6 @@ $marker-size: 1.25rem;
   background: var(--background);
   box-shadow: $shadow;
 }
-
-// ── Content elements ──────────────────────────────────────────────────────────
 
 .timeline-time {
   display: block;

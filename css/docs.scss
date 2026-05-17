@@ -1,7 +1,5 @@
 @use "parameters" as *;
 
-// ── Sidebar content (logo + search) ──────────────────────────────────────────
-
 .sidebar-nav {
 
     .docs-sidebar-logo {
@@ -255,8 +253,6 @@
         tr:hover td { background: var(--secondary-background); }
     }
 }
-
-// ── Landing page ─────────────────────────────────────────────────────────────
 
 .landing-hero {
     padding: 5rem 2rem 4rem;

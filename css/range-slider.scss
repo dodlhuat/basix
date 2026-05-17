@@ -16,13 +16,12 @@ $thumb-size: 1.1rem;
     padding: calc($spacing / 2) 0;
     margin: 0;
     display: block;
-    // reset form.scss overrides
+
     min-height: auto;
     border: none;
     box-shadow: none;
     outline: none;
 
-    // ── Track ────────────────────────────────────────────────
     &::-webkit-slider-runnable-track {
       height: $track-height;
       border-radius: $track-height;
@@ -45,7 +44,6 @@ $thumb-size: 1.1rem;
       background: var(--accent-color);
     }
 
-    // ── Thumb ─────────────────────────────────────────────────
     &::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -70,7 +68,6 @@ $thumb-size: 1.1rem;
       cursor: pointer;
     }
 
-    // ── Hover ─────────────────────────────────────────────────
     &:hover::-webkit-slider-thumb {
       transform: scale(1.15);
       box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-color) 15%, transparent);
@@ -81,7 +78,6 @@ $thumb-size: 1.1rem;
       box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-color) 15%, transparent);
     }
 
-    // ── Active ────────────────────────────────────────────────
     &:active::-webkit-slider-thumb {
       transform: scale(1.22);
       box-shadow: 0 0 0 9px color-mix(in srgb, var(--accent-color) 18%, transparent);
@@ -92,7 +88,6 @@ $thumb-size: 1.1rem;
       box-shadow: 0 0 0 9px color-mix(in srgb, var(--accent-color) 18%, transparent);
     }
 
-    // ── Focus ─────────────────────────────────────────────────
     &:focus-visible::-webkit-slider-thumb {
       box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color) 25%, transparent);
     }
@@ -101,7 +96,6 @@ $thumb-size: 1.1rem;
       box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color) 25%, transparent);
     }
 
-    // ── Disabled ──────────────────────────────────────────────
     &:disabled {
       cursor: not-allowed;
 
