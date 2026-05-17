@@ -74,6 +74,9 @@ class Toast {
             }
         }, stepSize);
     }
+    destroy() {
+        this.hide();
+    }
     buildTemplate() {
         const parts = ['<div class="bar"></div>'];
         if (this.closeable) {

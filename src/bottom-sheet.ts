@@ -36,12 +36,6 @@ class BottomSheet {
         this.snapHeight = options.snapHeight ?? 'auto';
         this.onClose = options.onClose;
 
-        this.hide = this.hide.bind(this);
-        this.handleEscape = this.handleEscape.bind(this);
-        this.handleBackdropClick = this.handleBackdropClick.bind(this);
-        this.handleTouchStart = this.handleTouchStart.bind(this);
-        this.handleTouchMove = this.handleTouchMove.bind(this);
-        this.handleTouchEnd = this.handleTouchEnd.bind(this);
     }
 
     public show(): void {
@@ -84,7 +78,7 @@ class BottomSheet {
         });
     }
 
-    public hide(): void {
+    public hide = (): void => {
         if (!this.wrapper) return;
 
         const backdrop = this.wrapper.querySelector('.bottom-sheet-backdrop');
@@ -123,17 +117,17 @@ class BottomSheet {
         }
     }
 
-    private handleEscape(e: KeyboardEvent): void {
+    private handleEscape = (e: KeyboardEvent): void => {
         if (e.key === 'Escape') this.hide();
     }
 
-    private handleBackdropClick(e: Event): void {
+    private handleBackdropClick = (e: Event): void => {
         if ((e.target as HTMLElement)?.classList.contains('bottom-sheet-backdrop')) {
             this.hide();
         }
     }
 
-    private handleTouchStart(e: TouchEvent): void {
+    private handleTouchStart = (e: TouchEvent): void => {
         this.dragStartY = e.touches[0].clientY;
         this.currentDragY = 0;
         this.isDragging = true;
@@ -143,7 +137,7 @@ class BottomSheet {
         }
     }
 
-    private handleTouchMove(e: TouchEvent): void {
+    private handleTouchMove = (e: TouchEvent): void => {
         if (!this.isDragging || !this.sheet) return;
 
         const deltaY = e.touches[0].clientY - this.dragStartY;
@@ -162,7 +156,7 @@ class BottomSheet {
         e.preventDefault();
     }
 
-    private handleTouchEnd(): void {
+    private handleTouchEnd = (): void => {
         if (!this.isDragging || !this.sheet) return;
         this.isDragging = false;
 

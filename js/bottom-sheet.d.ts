@@ -24,7 +24,7 @@ declare class BottomSheet {
     private isDragging;
     constructor(options: BottomSheetOptions);
     show(): void;
-    hide(): void;
+    hide: () => void;
     snapTo(height: 'auto' | 'half' | 'full'): void;
     private handleEscape;
     private handleBackdropClick;

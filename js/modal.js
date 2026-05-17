@@ -25,9 +25,6 @@ class Modal {
             this.type = type;
         }
         this.template = this.buildTemplate();
-        this.hide = this.hide.bind(this);
-        this.handleEscape = this.handleEscape.bind(this);
-        this.handleBackgroundClick = this.handleBackgroundClick.bind(this);
     }
     show() {
         this.hide();
@@ -52,7 +49,7 @@ class Modal {
             wrapper.classList.add('is-visible');
         });
     }
-    hide() {
+    hide = () => {
         const wrapper = this.modalWrapper;
         if (!wrapper)
             return;
@@ -69,17 +66,17 @@ class Modal {
                 this.modalWrapper = null;
             }
         }, 300);
-    }
-    handleEscape(e) {
+    };
+    handleEscape = (e) => {
         if (e.key === 'Escape') {
             this.hide();
         }
-    }
-    handleBackgroundClick(e) {
+    };
+    handleBackgroundClick = (e) => {
         if (e.target?.classList.contains('modal-background')) {
             this.hide();
         }
-    }
+    };
     buildTemplate() {
         const parts = ['<div class="modal">'];
         if (this.closeable) {

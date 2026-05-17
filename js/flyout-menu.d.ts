@@ -21,7 +21,7 @@ declare class FlyoutMenu {
     private closeBtn;
     private submenuToggles;
     private menuLinks;
-    private submenuHandlers;
+    private abortController;
     constructor(options?: FlyoutMenuOptions);
     private init;
     private hydrateMenu;

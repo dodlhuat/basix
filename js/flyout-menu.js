@@ -7,7 +7,7 @@ class FlyoutMenu {
     closeBtn = null;
     submenuToggles = null;
     menuLinks = null;
-    submenuHandlers = new Map();
+    abortController = new AbortController();
     constructor(options = {}) {
         this.options = {
             triggerSelector: '.menu-trigger',
@@ -26,10 +26,6 @@ class FlyoutMenu {
         this.menuTrigger = document.querySelector(this.options.triggerSelector);
         this.flyoutMenu = document.querySelector(this.options.menuSelector);
         this.flyoutOverlay = document.querySelector(this.options.overlaySelector);
-        this.open = this.open.bind(this);
-        this.close = this.close.bind(this);
-        this.handleSubmenu = this.handleSubmenu.bind(this);
-        this.handleKeydown = this.handleKeydown.bind(this);
         this.init();
     }
     init() {
@@ -113,31 +109,30 @@ class FlyoutMenu {
         this.flyoutMenu.append(footer);
     }
     bindEvents() {
-        this.menuTrigger?.addEventListener('click', this.open);
-        this.closeBtn?.addEventListener('click', this.close);
-        this.flyoutOverlay?.addEventListener('click', this.close);
+        const sig = { signal: this.abortController.signal };
+        this.menuTrigger?.addEventListener('click', this.open, sig);
+        this.closeBtn?.addEventListener('click', this.close, sig);
+        this.flyoutOverlay?.addEventListener('click', this.close, sig);
         this.submenuToggles?.forEach(toggle => {
-            const handler = (e) => this.handleSubmenu(e, toggle);
-            this.submenuHandlers.set(toggle, handler);
-            toggle.addEventListener('click', handler);
+            toggle.addEventListener('click', (e) => this.handleSubmenu(e, toggle), sig);
         });
         this.menuLinks?.forEach(link => {
-            link.addEventListener('click', this.close);
+            link.addEventListener('click', this.close, sig);
         });
-        document.addEventListener('keydown', this.handleKeydown);
+        document.addEventListener('keydown', this.handleKeydown, sig);
     }
-    open() {
+    open = () => {
         this.flyoutMenu?.classList.add('is-open');
         this.flyoutOverlay?.classList.add('is-visible');
         document.body.style.overflow = 'hidden';
         this.menuTrigger?.setAttribute('aria-expanded', 'true');
-    }
-    close() {
+    };
+    close = () => {
         this.flyoutMenu?.classList.remove('is-open');
         this.flyoutOverlay?.classList.remove('is-visible');
         document.body.style.overflow = '';
         this.menuTrigger?.setAttribute('aria-expanded', 'false');
-    }
+    };
     handleSubmenu(e, toggle) {
         e.preventDefault();
         e.stopPropagation();
@@ -160,11 +155,11 @@ class FlyoutMenu {
         toggle.classList.toggle('active');
         submenu?.classList.toggle('is-open');
     }
-    handleKeydown(e) {
+    handleKeydown = (e) => {
         if (e.key === 'Escape' && this.flyoutMenu?.classList.contains('is-open')) {
             this.close();
         }
-    }
+    };
     setDirection(direction) {
         if (!this.flyoutMenu)
             return;
@@ -176,19 +171,7 @@ class FlyoutMenu {
         this.options.direction = direction;
     }
     destroy() {
-        this.menuTrigger?.removeEventListener('click', this.open);
-        this.closeBtn?.removeEventListener('click', this.close);
-        this.flyoutOverlay?.removeEventListener('click', this.close);
-        this.submenuToggles?.forEach(toggle => {
-            const handler = this.submenuHandlers.get(toggle);
-            if (handler)
-                toggle.removeEventListener('click', handler);
-        });
-        this.submenuHandlers.clear();
-        this.menuLinks?.forEach(link => {
-            link.removeEventListener('click', this.close);
-        });
-        document.removeEventListener('keydown', this.handleKeydown);
+        this.abortController.abort();
         document.body.style.overflow = '';
     }
 }

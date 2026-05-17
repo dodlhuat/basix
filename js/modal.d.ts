@@ -19,7 +19,7 @@ declare class Modal {
     constructor(options: ModalOptions);
     constructor(content: string, header?: string, footer?: string, closeable?: boolean, type?: ModalType);
     show(): void;
-    hide(): void;
+    hide: () => void;
     private handleEscape;
     private handleBackgroundClick;
     private buildTemplate;

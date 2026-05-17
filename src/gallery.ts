@@ -71,19 +71,16 @@ class MasonryGallery {
   }
 
   private addEventListeners(): void {
+    this.abortController = new AbortController();
+    const sig = this.abortController.signal;
+
     let resizeTimeout: number;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        this.reLayout();
-      }, 200);
-    });
+      resizeTimeout = setTimeout(() => this.reLayout(), 200);
+    }, { signal: sig });
 
-    this.abortController = new AbortController();
-    window.addEventListener("scroll", this.handleScroll, {
-      passive: true,
-      signal: this.abortController.signal,
-    });
+    window.addEventListener("scroll", this.handleScroll, { passive: true, signal: sig });
   }
 
   private reLayout(): void {

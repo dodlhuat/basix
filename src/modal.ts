@@ -47,10 +47,6 @@ class Modal {
         }
 
         this.template = this.buildTemplate();
-
-        this.hide = this.hide.bind(this);
-        this.handleEscape = this.handleEscape.bind(this);
-        this.handleBackgroundClick = this.handleBackgroundClick.bind(this);
     }
 
     public show(): void {
@@ -84,7 +80,7 @@ class Modal {
         });
     }
 
-    public hide(): void {
+    public hide = (): void => {
         const wrapper = this.modalWrapper;
         if (!wrapper) return;
 
@@ -107,13 +103,13 @@ class Modal {
         }, 300);
     }
 
-    private handleEscape(e: KeyboardEvent): void {
+    private handleEscape = (e: KeyboardEvent): void => {
         if (e.key === 'Escape') {
             this.hide();
         }
     }
 
-    private handleBackgroundClick(e: Event): void {
+    private handleBackgroundClick = (e: Event): void => {
         if ((e.target as HTMLElement)?.classList.contains('modal-background')) {
             this.hide();
         }

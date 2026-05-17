@@ -107,6 +107,10 @@ class Toast {
         }, stepSize);
     }
 
+    public destroy(): void {
+        this.hide();
+    }
+
     private buildTemplate(): string {
         const parts: string[] = ['<div class="bar"></div>'];
 

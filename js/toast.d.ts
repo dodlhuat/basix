@@ -21,6 +21,7 @@ declare class Toast {
     show(ms?: number): void;
     hide: () => void;
     private startTimer;
+    destroy(): void;
     private buildTemplate;
 }
 export { Toast };

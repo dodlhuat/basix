@@ -21,12 +21,6 @@ class BottomSheet {
         this.closeable = options.closeable ?? true;
         this.snapHeight = options.snapHeight ?? 'auto';
         this.onClose = options.onClose;
-        this.hide = this.hide.bind(this);
-        this.handleEscape = this.handleEscape.bind(this);
-        this.handleBackdropClick = this.handleBackdropClick.bind(this);
-        this.handleTouchStart = this.handleTouchStart.bind(this);
-        this.handleTouchMove = this.handleTouchMove.bind(this);
-        this.handleTouchEnd = this.handleTouchEnd.bind(this);
     }
     show() {
         this.hide();
@@ -59,7 +53,7 @@ class BottomSheet {
             wrapper.classList.add('is-visible');
         });
     }
-    hide() {
+    hide = () => {
         if (!this.wrapper)
             return;
         const backdrop = this.wrapper.querySelector('.bottom-sheet-backdrop');
@@ -81,7 +75,7 @@ class BottomSheet {
             wrapper.remove();
             this.onClose?.();
         }, 420);
-    }
+    };
     snapTo(height) {
         if (!this.sheet)
             return;
@@ -91,24 +85,24 @@ class BottomSheet {
             this.sheet.classList.add(`snap-${height}`);
         }
     }
-    handleEscape(e) {
+    handleEscape = (e) => {
         if (e.key === 'Escape')
             this.hide();
-    }
-    handleBackdropClick(e) {
+    };
+    handleBackdropClick = (e) => {
         if (e.target?.classList.contains('bottom-sheet-backdrop')) {
             this.hide();
         }
-    }
-    handleTouchStart(e) {
+    };
+    handleTouchStart = (e) => {
         this.dragStartY = e.touches[0].clientY;
         this.currentDragY = 0;
         this.isDragging = true;
         if (this.sheet) {
             this.sheet.style.transition = 'none';
         }
-    }
-    handleTouchMove(e) {
+    };
+    handleTouchMove = (e) => {
         if (!this.isDragging || !this.sheet)
             return;
         const deltaY = e.touches[0].clientY - this.dragStartY;
@@ -124,8 +118,8 @@ class BottomSheet {
         const translateX = isDesktop ? '-50%' : '0';
         this.sheet.style.transform = `translateX(${translateX}) translateY(${this.currentDragY}px)`;
         e.preventDefault();
-    }
-    handleTouchEnd() {
+    };
+    handleTouchEnd = () => {
         if (!this.isDragging || !this.sheet)
             return;
         this.isDragging = false;
@@ -137,7 +131,7 @@ class BottomSheet {
             this.sheet.style.transition = '';
             this.sheet.style.transform = '';
         }
-    }
+    };
     updateScrollMask() {
         if (!this.body)
             return;

@@ -47,18 +47,14 @@ class MasonryGallery {
         }
     }
     addEventListeners() {
+        this.abortController = new AbortController();
+        const sig = this.abortController.signal;
         let resizeTimeout;
         window.addEventListener("resize", () => {
             clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                this.reLayout();
-            }, 200);
-        });
-        this.abortController = new AbortController();
-        window.addEventListener("scroll", this.handleScroll, {
-            passive: true,
-            signal: this.abortController.signal,
-        });
+            resizeTimeout = setTimeout(() => this.reLayout(), 200);
+        }, { signal: sig });
+        window.addEventListener("scroll", this.handleScroll, { passive: true, signal: sig });
     }
     reLayout() {
         const items = this.columns.flatMap(col => Array.from(col.children));

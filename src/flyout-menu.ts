@@ -22,7 +22,7 @@ class FlyoutMenu {
     private closeBtn: HTMLElement | null = null;
     private submenuToggles: NodeListOf<HTMLElement> | null = null;
     private menuLinks: NodeListOf<HTMLAnchorElement> | null = null;
-    private submenuHandlers = new Map<HTMLElement, (e: Event) => void>();
+    private abortController = new AbortController();
 
     constructor(options: FlyoutMenuOptions = {}) {
         this.options = {
@@ -43,11 +43,6 @@ class FlyoutMenu {
         this.menuTrigger = document.querySelector(this.options.triggerSelector);
         this.flyoutMenu = document.querySelector(this.options.menuSelector);
         this.flyoutOverlay = document.querySelector(this.options.overlaySelector);
-
-        this.open = this.open.bind(this);
-        this.close = this.close.bind(this);
-        this.handleSubmenu = this.handleSubmenu.bind(this);
-        this.handleKeydown = this.handleKeydown.bind(this);
 
         this.init();
     }
@@ -146,32 +141,31 @@ class FlyoutMenu {
     }
 
     private bindEvents(): void {
-        this.menuTrigger?.addEventListener('click', this.open);
+        const sig = { signal: this.abortController.signal };
 
-        this.closeBtn?.addEventListener('click', this.close);
-        this.flyoutOverlay?.addEventListener('click', this.close);
+        this.menuTrigger?.addEventListener('click', this.open, sig);
+        this.closeBtn?.addEventListener('click', this.close, sig);
+        this.flyoutOverlay?.addEventListener('click', this.close, sig);
 
         this.submenuToggles?.forEach(toggle => {
-            const handler = (e: Event) => this.handleSubmenu(e, toggle);
-            this.submenuHandlers.set(toggle, handler);
-            toggle.addEventListener('click', handler);
+            toggle.addEventListener('click', (e) => this.handleSubmenu(e, toggle), sig);
         });
 
         this.menuLinks?.forEach(link => {
-            link.addEventListener('click', this.close);
+            link.addEventListener('click', this.close, sig);
         });
 
-        document.addEventListener('keydown', this.handleKeydown);
+        document.addEventListener('keydown', this.handleKeydown, sig);
     }
 
-    private open(): void {
+    private open = (): void => {
         this.flyoutMenu?.classList.add('is-open');
         this.flyoutOverlay?.classList.add('is-visible');
         document.body.style.overflow = 'hidden';
         this.menuTrigger?.setAttribute('aria-expanded', 'true');
     }
 
-    private close(): void {
+    private close = (): void => {
         this.flyoutMenu?.classList.remove('is-open');
         this.flyoutOverlay?.classList.remove('is-visible');
         document.body.style.overflow = '';
@@ -204,7 +198,7 @@ class FlyoutMenu {
         submenu?.classList.toggle('is-open');
     }
 
-    private handleKeydown(e: KeyboardEvent): void {
+    private handleKeydown = (e: KeyboardEvent): void => {
         if (e.key === 'Escape' && this.flyoutMenu?.classList.contains('is-open')) {
             this.close();
         }
@@ -223,22 +217,7 @@ class FlyoutMenu {
     }
 
     public destroy(): void {
-        this.menuTrigger?.removeEventListener('click', this.open);
-        this.closeBtn?.removeEventListener('click', this.close);
-        this.flyoutOverlay?.removeEventListener('click', this.close);
-
-        this.submenuToggles?.forEach(toggle => {
-            const handler = this.submenuHandlers.get(toggle);
-            if (handler) toggle.removeEventListener('click', handler);
-        });
-        this.submenuHandlers.clear();
-
-        this.menuLinks?.forEach(link => {
-            link.removeEventListener('click', this.close);
-        });
-
-        document.removeEventListener('keydown', this.handleKeydown);
-
+        this.abortController.abort();
         document.body.style.overflow = '';
     }
 }
