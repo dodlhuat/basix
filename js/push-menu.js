@@ -1,5 +1,16 @@
 /** Static class that manages a push-style side navigation panel. */
 class PushMenu {
+    static elements = {
+        navigation: null,
+        content: null,
+        menu: null,
+        header: null,
+        controlIcon: null,
+        backdrop: null
+    };
+    static initialized = false;
+    static panelStack = [];
+    static boundHandleNavigationChange;
     static init() {
         if (this.initialized) {
             console.warn('PushMenu: Already initialized');
@@ -140,6 +151,16 @@ class PushMenu {
             }
         }
     }
+    static clickNav = () => {
+        const navigation = PushMenu.elements.navigation;
+        navigation?.click();
+    };
+    static handleBackdropClick = () => {
+        if (PushMenu.isOpen()) {
+            const navigation = PushMenu.elements.navigation;
+            navigation?.click();
+        }
+    };
     static open() {
         if (!this.elements.content?.classList.contains('pushed')) {
             this.pushToggle();
@@ -180,24 +201,4 @@ class PushMenu {
         this.elements.backdrop = document.querySelector('.push-menu-backdrop');
     }
 }
-PushMenu.elements = {
-    navigation: null,
-    content: null,
-    menu: null,
-    header: null,
-    controlIcon: null,
-    backdrop: null
-};
-PushMenu.initialized = false;
-PushMenu.panelStack = [];
-PushMenu.clickNav = () => {
-    const navigation = PushMenu.elements.navigation;
-    navigation?.click();
-};
-PushMenu.handleBackdropClick = () => {
-    if (PushMenu.isOpen()) {
-        const navigation = PushMenu.elements.navigation;
-        navigation?.click();
-    }
-};
 export { PushMenu };

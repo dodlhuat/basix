@@ -1,7 +1,12 @@
 /** Multi-step progress indicator with clickable steps and connector state. */
 class Stepper {
+    container;
+    steps;
+    connectors;
+    current;
+    onChange;
+    abortController = new AbortController();
     constructor(elementOrSelector, options = {}) {
-        this.abortController = new AbortController();
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
             : elementOrSelector;

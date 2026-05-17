@@ -1,20 +1,15 @@
 import { escapeHtml } from './utils.js';
 /** Infinite-scroll masonry gallery that distributes images across dynamically sized columns. */
 class MasonryGallery {
+    container;
+    loader;
+    options;
+    columns = [];
+    isFetching = false;
+    resizeObserver = null;
+    abortController = null;
+    reloaded = 0;
     constructor(containerId, options) {
-        this.columns = [];
-        this.isFetching = false;
-        this.resizeObserver = null;
-        this.abortController = null;
-        this.reloaded = 0;
-        this.handleScroll = () => {
-            if (this.isFetching)
-                return;
-            const rect = this.container.getBoundingClientRect();
-            if (rect.bottom > 0 && rect.bottom <= window.innerHeight + this.options.scrollThreshold) {
-                this.loadMoreImages();
-            }
-        };
         const container = document.getElementById(containerId);
         if (!container) {
             throw new Error(`Container with id "${containerId}" not found`);
@@ -77,6 +72,14 @@ class MasonryGallery {
         }
         items.forEach(item => this.addToShortestColumn(item));
     }
+    handleScroll = () => {
+        if (this.isFetching)
+            return;
+        const rect = this.container.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.bottom <= window.innerHeight + this.options.scrollThreshold) {
+            this.loadMoreImages();
+        }
+    };
     async loadMoreImages(isAutoFill = false) {
         if (!isAutoFill)
             this.reloaded++;

@@ -1,8 +1,23 @@
 import { computePosition } from './position.js';
 /** Calendar-based date (or date-range) picker that attaches to an input element. */
 class DatePicker {
+    input;
+    options;
+    currentDate;
+    selectedDate;
+    rangeStart;
+    rangeEnd;
+    viewYear;
+    viewMonth;
+    viewMode;
+    yearRangeStart;
+    selectedHours;
+    selectedMinutes;
+    calendar;
+    backdrop;
+    handleDocumentClick;
+    abortController = new AbortController();
     constructor(elementOrSelector, options = {}) {
-        this.abortController = new AbortController();
         this.input = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
             : elementOrSelector;

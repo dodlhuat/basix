@@ -1,50 +1,17 @@
 import { escapeHtml } from './utils.js';
 /** Drag-and-drop file uploader with progress tracking and XHR-based uploads. */
 class FileUploader {
+    container;
+    dropZone;
+    fileInput;
+    fileList;
+    uploadBtn;
+    files = new Map();
+    uploadUrl;
+    maxFileSize;
+    allowedTypes;
+    abortControllers = new Map();
     constructor(elementOrSelector, config = {}) {
-        this.files = new Map();
-        this.abortControllers = new Map();
-        this.preventDefaults = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-        };
-        this.handleDragEnter = () => {
-            this.dropZone.classList.add('drag-over');
-        };
-        this.handleDragLeave = () => {
-            this.dropZone.classList.remove('drag-over');
-        };
-        this.handleDrop = (e) => {
-            const droppedFiles = e.dataTransfer?.files;
-            if (droppedFiles) {
-                this.handleFiles(droppedFiles);
-            }
-        };
-        this.handleDropZoneClick = () => {
-            this.fileInput.click();
-        };
-        this.handleFileInputChange = (e) => {
-            const target = e.target;
-            if (target.files) {
-                this.handleFiles(target.files);
-                target.value = '';
-            }
-        };
-        this.handleUploadClick = async () => {
-            if (this.files.size === 0)
-                return;
-            this.uploadBtn.disabled = true;
-            this.uploadBtn.textContent = 'Uploading...';
-            const uploadPromises = Array.from(this.files.values()).map(({ file, element }) => this.uploadFile(file, element));
-            const results = await Promise.allSettled(uploadPromises);
-            this.uploadBtn.textContent = 'Upload Complete';
-            setTimeout(() => {
-                this.dispatchUploadCompletedEvent(results);
-                this.fileList.innerHTML = '';
-                this.files.clear();
-                this.updateUploadButton();
-            }, 1500);
-        };
         const container = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
             : elementOrSelector;
@@ -90,6 +57,47 @@ class FileUploader {
         this.fileInput.addEventListener('change', this.handleFileInputChange);
         this.uploadBtn.addEventListener('click', this.handleUploadClick);
     }
+    preventDefaults = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    handleDragEnter = () => {
+        this.dropZone.classList.add('drag-over');
+    };
+    handleDragLeave = () => {
+        this.dropZone.classList.remove('drag-over');
+    };
+    handleDrop = (e) => {
+        const droppedFiles = e.dataTransfer?.files;
+        if (droppedFiles) {
+            this.handleFiles(droppedFiles);
+        }
+    };
+    handleDropZoneClick = () => {
+        this.fileInput.click();
+    };
+    handleFileInputChange = (e) => {
+        const target = e.target;
+        if (target.files) {
+            this.handleFiles(target.files);
+            target.value = '';
+        }
+    };
+    handleUploadClick = async () => {
+        if (this.files.size === 0)
+            return;
+        this.uploadBtn.disabled = true;
+        this.uploadBtn.textContent = 'Uploading...';
+        const uploadPromises = Array.from(this.files.values()).map(({ file, element }) => this.uploadFile(file, element));
+        const results = await Promise.allSettled(uploadPromises);
+        this.uploadBtn.textContent = 'Upload Complete';
+        setTimeout(() => {
+            this.dispatchUploadCompletedEvent(results);
+            this.fileList.innerHTML = '';
+            this.files.clear();
+            this.updateUploadButton();
+        }, 1500);
+    };
     handleFiles(fileList) {
         Array.from(fileList).forEach(file => {
             const key = this.fileKey(file);

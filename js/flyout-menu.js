@@ -1,10 +1,14 @@
 /** Off-canvas flyout navigation with nested submenu support. */
 class FlyoutMenu {
+    options;
+    menuTrigger;
+    flyoutMenu;
+    flyoutOverlay;
+    closeBtn = null;
+    submenuToggles = null;
+    menuLinks = null;
+    submenuHandlers = new Map();
     constructor(options = {}) {
-        this.closeBtn = null;
-        this.submenuToggles = null;
-        this.menuLinks = null;
-        this.submenuHandlers = new Map();
         this.options = {
             triggerSelector: '.menu-trigger',
             menuSelector: '#flyoutMenu',

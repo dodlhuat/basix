@@ -33,6 +33,6 @@
   },
   "homepage": "https://github.com/dodlhuat/basix#readme",
   "devDependencies": {
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.0"
   }
 }

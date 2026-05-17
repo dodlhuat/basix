@@ -1,5 +1,12 @@
 /** Represents a single node in a tree structure, either a file or folder. */
 class TreeNode {
+    label;
+    type;
+    children;
+    expanded;
+    selected;
+    element;
+    childrenContainer;
     constructor(label, type = 'file', children = []) {
         this.label = label;
         this.type = type;
@@ -12,6 +19,10 @@ class TreeNode {
 }
 /** Renders an interactive collapsible tree view from a list of TreeNode objects. */
 class TreeComponent {
+    container;
+    data;
+    selectedNode;
+    options;
     constructor(elementOrSelector, data, options = {}) {
         const container = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)

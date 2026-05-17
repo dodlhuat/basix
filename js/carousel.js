@@ -1,8 +1,18 @@
 /** Slide-based carousel with optional autoplay, loop, dot navigation, and touch support. */
 class Carousel {
+    root;
+    options;
+    track;
+    slides;
+    slideWidth;
+    currentIndex;
+    prevButton;
+    nextButton;
+    dotsNav;
+    dots;
+    autoPlayTimer = null;
+    abortController = new AbortController();
     constructor(elementOrSelector, options = {}) {
-        this.autoPlayTimer = null;
-        this.abortController = new AbortController();
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
             : elementOrSelector;

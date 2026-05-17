@@ -1,5 +1,10 @@
 /** Tabbed content component with horizontal/vertical layouts and keyboard navigation. */
 class Tabs {
+    container;
+    options;
+    tabItems;
+    tabPanels;
+    currentTab;
     constructor(elementOrSelector, options = {}) {
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)

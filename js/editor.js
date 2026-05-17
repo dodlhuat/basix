@@ -1,10 +1,15 @@
 import { sanitizeHtml } from './utils.js';
 /** Rich-text editor built on contenteditable with undo/redo and code/preview panels. */
 class Editor {
+    editable;
+    code;
+    preview;
+    sidePanel;
+    wordCount;
+    undoStack = [];
+    redoStack = [];
+    abortController = new AbortController();
     constructor(options = {}) {
-        this.undoStack = [];
-        this.redoStack = [];
-        this.abortController = new AbortController();
         const editable = document.getElementById('editable');
         if (!editable) {
             throw new Error('Editor: #editable element not found');

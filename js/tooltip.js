@@ -1,22 +1,15 @@
 import { computePosition } from './position.js';
 /** Lightweight tooltip that positions itself relative to a trigger element. */
 class Tooltip {
+    static activeTooltip = null;
+    static idCounter = 0;
+    trigger;
+    content;
+    options;
+    tooltipElement = null;
+    showTimeout = null;
+    isVisible = false;
     constructor(trigger, content, options = {}) {
-        this.tooltipElement = null;
-        this.showTimeout = null;
-        this.isVisible = false;
-        this.handleMouseEnter = () => {
-            this.show();
-        };
-        this.handleMouseLeave = () => {
-            this.hide();
-        };
-        this.handleFocus = () => {
-            this.show();
-        };
-        this.handleBlur = () => {
-            this.hide();
-        };
         this.trigger = trigger;
         this.content = content;
         this.options = {
@@ -126,6 +119,18 @@ class Tooltip {
         this.trigger.addEventListener('focus', this.handleFocus);
         this.trigger.addEventListener('blur', this.handleBlur);
     }
+    handleMouseEnter = () => {
+        this.show();
+    };
+    handleMouseLeave = () => {
+        this.hide();
+    };
+    handleFocus = () => {
+        this.show();
+    };
+    handleBlur = () => {
+        this.hide();
+    };
     destroy() {
         this.hide();
         this.trigger.removeEventListener('mouseenter', this.handleMouseEnter);
@@ -142,6 +147,4 @@ class Tooltip {
         this.trigger.removeAttribute('data-previous-describedby');
     }
 }
-Tooltip.activeTooltip = null;
-Tooltip.idCounter = 0;
 export { Tooltip };

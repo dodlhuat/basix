@@ -1,9 +1,11 @@
 /** Right-click context menu with keyboard navigation and nested submenu support. */
 class ContextMenu {
+    items;
+    targets;
+    menuEl = null;
+    currentTarget = null;
+    abortController = new AbortController();
     constructor(selectorOrElement, items) {
-        this.menuEl = null;
-        this.currentTarget = null;
-        this.abortController = new AbortController();
         this.items = items;
         if (typeof selectorOrElement === 'string') {
             this.targets = Array.from(document.querySelectorAll(selectorOrElement));

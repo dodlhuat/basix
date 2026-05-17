@@ -1,6 +1,30 @@
 import { escapeHtml } from './utils.js';
 /** Virtualised dropdown that renders only visible items for performance with large option lists. */
 class VirtualDropdown {
+    container;
+    options;
+    multiSelect;
+    searchable;
+    placeholder;
+    renderLimit;
+    itemHeight;
+    onSelect;
+    // Unique CSS anchor name for this instance — prevents conflicts when
+    // multiple dropdowns exist on the same page.
+    anchorName;
+    trigger;
+    triggerText;
+    menu;
+    listWrapper;
+    scroller;
+    spacer;
+    content;
+    searchInput;
+    selectedValues;
+    filteredOptions;
+    isOpen;
+    scrollTop;
+    boundHandlers;
     constructor(config) {
         const containerElement = typeof config.container === 'string'
             ? document.querySelector(config.container)

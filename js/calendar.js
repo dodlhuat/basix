@@ -182,6 +182,7 @@ const DEFAULT_LOCALE = {
 };
 /** Produces HTML strings for each Calendar view (month, week, agenda). */
 export class CalendarRenderer {
+    locale;
     constructor(locale) {
         this.locale = locale;
     }
@@ -381,11 +382,15 @@ export class CalendarRenderer {
 }
 /** Main Calendar controller — manages state, rendering, and event delegation. */
 export class Calendar {
+    container;
+    options;
+    locale;
+    renderer;
+    currentDate;
+    currentView;
+    events = [];
+    nowLineTimer = null;
     constructor(options) {
-        this.events = [];
-        this.nowLineTimer = null;
-        this.boundHandleClick = (e) => this.handleClick(e);
-        this.boundHandleKeydown = (e) => this.handleKeydown(e);
         if (typeof options.container === 'string') {
             const el = document.querySelector(options.container);
             if (!el)
@@ -545,7 +550,7 @@ export class Calendar {
             const line = this.container.querySelector('.cal__now-line');
             if (line)
                 line.style.top = `${CalendarLogic.nowLinePct().toFixed(3)}%`;
-        }, 60000);
+        }, 60_000);
     }
     clearNowLineTimer() {
         if (this.nowLineTimer !== null) {
@@ -553,6 +558,8 @@ export class Calendar {
             this.nowLineTimer = null;
         }
     }
+    boundHandleClick = (e) => this.handleClick(e);
+    boundHandleKeydown = (e) => this.handleKeydown(e);
     attachEvents() {
         this.container.addEventListener('click', this.boundHandleClick);
         this.container.addEventListener('keydown', this.boundHandleKeydown);

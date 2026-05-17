@@ -1,5 +1,10 @@
 /** Hierarchical dropdown menu with optional multi-open and close-on-select behaviour. */
 class Dropdown {
+    container;
+    trigger;
+    menu;
+    options;
+    abortController;
     constructor(selector, options = {}) {
         const container = document.querySelector(selector);
         if (!container) {

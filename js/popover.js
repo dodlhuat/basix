@@ -3,28 +3,14 @@ import { sanitizeHtml } from './utils.js';
 const ARROW_SIZE = 6;
 /** Anchored popover triggered by click or hover, with auto-placement and optional arrow. */
 class Popover {
+    static openPopovers = new Set();
+    static idCounter = 0;
+    trigger;
+    opts;
+    popoverEl = null;
+    _isOpen = false;
+    hoverTimer = null;
     constructor(triggerEl, options) {
-        this.popoverEl = null;
-        this._isOpen = false;
-        this.hoverTimer = null;
-        this.onClick = () => { this.toggle(); };
-        this.onMouseEnter = () => {
-            if (this.hoverTimer !== null)
-                clearTimeout(this.hoverTimer);
-            this.open();
-        };
-        this.onMouseLeave = () => {
-            this.hoverTimer = window.setTimeout(() => this.close(), 120);
-        };
-        this.onOutsideClick = (e) => {
-            const t = e.target;
-            if (!this.popoverEl?.contains(t) && !this.trigger.contains(t))
-                this.close();
-        };
-        this.onEscape = (e) => {
-            if (e.key === 'Escape')
-                this.close();
-        };
         const el = typeof triggerEl === 'string'
             ? document.querySelector(triggerEl)
             : triggerEl;
@@ -139,6 +125,24 @@ class Popover {
         this.popoverEl.style.left = `${left}px`;
         this.popoverEl.style.top = `${top}px`;
     }
+    onClick = () => { this.toggle(); };
+    onMouseEnter = () => {
+        if (this.hoverTimer !== null)
+            clearTimeout(this.hoverTimer);
+        this.open();
+    };
+    onMouseLeave = () => {
+        this.hoverTimer = window.setTimeout(() => this.close(), 120);
+    };
+    onOutsideClick = (e) => {
+        const t = e.target;
+        if (!this.popoverEl?.contains(t) && !this.trigger.contains(t))
+            this.close();
+    };
+    onEscape = (e) => {
+        if (e.key === 'Escape')
+            this.close();
+    };
     attachTrigger() {
         if (this.opts.triggerMode === 'click') {
             this.trigger.addEventListener('click', this.onClick);
@@ -154,6 +158,4 @@ class Popover {
         this.trigger.removeEventListener('mouseleave', this.onMouseLeave);
     }
 }
-Popover.openPopovers = new Set();
-Popover.idCounter = 0;
 export { Popover };

@@ -1,22 +1,15 @@
 import { escapeHtml } from './utils.js';
 /** Dismissible notification banner with optional auto-hide timer and progress bar. */
 class Toast {
+    content;
+    header;
+    type;
+    closeable;
+    closureIcon = '<div class="icon icon-close close"></div>';
+    template;
+    toastElement = null;
+    timerId = null;
     constructor(contentOrOptions, header = '', type, closeable = true) {
-        this.closureIcon = '<div class="icon icon-close close"></div>';
-        this.toastElement = null;
-        this.timerId = null;
-        this.hide = () => {
-            if (this.timerId !== null) {
-                clearTimeout(this.timerId);
-                this.timerId = null;
-            }
-            this.toastElement?.classList.remove('show');
-            setTimeout(() => {
-                this.toastElement?.querySelector('.close')?.removeEventListener('click', this.hide);
-                this.toastElement?.remove();
-                this.toastElement = null;
-            }, 150);
-        };
         if (typeof contentOrOptions === 'object') {
             this.content = contentOrOptions.content;
             this.header = contentOrOptions.header ?? '';
@@ -53,6 +46,18 @@ class Toast {
             });
         });
     }
+    hide = () => {
+        if (this.timerId !== null) {
+            clearTimeout(this.timerId);
+            this.timerId = null;
+        }
+        this.toastElement?.classList.remove('show');
+        setTimeout(() => {
+            this.toastElement?.querySelector('.close')?.removeEventListener('click', this.hide);
+            this.toastElement?.remove();
+            this.toastElement = null;
+        }, 150);
+    };
     startTimer(ms, elapsed = 0) {
         const stepSize = 250;
         if (elapsed >= ms) {

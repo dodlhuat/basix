@@ -1,8 +1,19 @@
 import { Select } from "./select.js";
 /** Dynamic data table with sorting, filtering, and pagination. */
 class Table {
+    container;
+    data;
+    columns;
+    pageSize;
+    currentPage;
+    sortColumn;
+    sortDirection;
+    filterText;
+    tableBody;
+    tableHeader;
+    paginationContainer;
+    abortController = new AbortController();
     constructor(elementOrSelector, options = {}) {
-        this.abortController = new AbortController();
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
             : elementOrSelector;

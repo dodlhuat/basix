@@ -1,11 +1,18 @@
 import { escapeHtml } from './utils.js';
 /** Searchable picker for selecting groups and their subgroups. */
 class GroupPicker {
+    container;
+    data;
+    options;
+    abortController;
+    selectedParents = new Set();
+    selectedSubs = new Map();
+    expandedGroups = new Set();
+    searchQuery = '';
+    searchInput;
+    listEl;
+    selectionEl;
     constructor(selector, data, options = {}) {
-        this.selectedParents = new Set();
-        this.selectedSubs = new Map();
-        this.expandedGroups = new Set();
-        this.searchQuery = '';
         const el = typeof selector === 'string'
             ? document.querySelector(selector)
             : selector;

@@ -1,12 +1,17 @@
 /** Full-screen image viewer with gallery navigation, zoom, and touch support. */
 class Lightbox {
+    images;
+    currentIndex;
+    closeable;
+    onOpen;
+    onClose;
+    wrapper = null;
+    imgEl = null;
+    captionEl = null;
+    counterEl = null;
+    isZoomed = false;
+    abortController = new AbortController();
     constructor(options) {
-        this.wrapper = null;
-        this.imgEl = null;
-        this.captionEl = null;
-        this.counterEl = null;
-        this.isZoomed = false;
-        this.abortController = new AbortController();
         if (options.images && options.images.length > 0) {
             this.images = options.images;
         }

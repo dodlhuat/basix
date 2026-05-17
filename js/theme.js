@@ -1,5 +1,9 @@
 /** Static class for managing light/dark theme switching with system preference and localStorage persistence. */
 class Theme {
+    static STORAGE_KEY = 'theme';
+    static root;
+    static elements = null;
+    static mediaQuery = null;
     /**
      * Initializes the theme system with toggle functionality and system preference detection
      */
@@ -190,7 +194,4 @@ class Theme {
         return this.getSavedTheme() !== null;
     }
 }
-Theme.STORAGE_KEY = 'theme';
-Theme.elements = null;
-Theme.mediaQuery = null;
 export { Theme };

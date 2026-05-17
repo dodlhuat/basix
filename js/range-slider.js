@@ -1,9 +1,7 @@
 /** Enhances a native range input with a CSS fill-percentage custom property. */
 class RangeSlider {
+    input;
     constructor(input) {
-        this.handleInput = () => {
-            this.update();
-        };
         this.input = input;
         this.update();
         this.input.addEventListener('input', this.handleInput);
@@ -19,6 +17,9 @@ class RangeSlider {
         const pct = ((+this.input.value - min) / (max - min)) * 100;
         this.input.style.setProperty('--range-fill', `${pct}%`);
     }
+    handleInput = () => {
+        this.update();
+    };
     destroy() {
         this.input.removeEventListener('input', this.handleInput);
         this.input.style.removeProperty('--range-fill');

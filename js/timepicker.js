@@ -1,73 +1,20 @@
 /** Interactive time-range picker with a draggable bar and dual time inputs. */
 class TimeSpanPicker {
+    container;
+    startTimeInput;
+    endTimeInput;
+    onChange;
+    uid;
+    fromString;
+    toLabel;
+    pickerEl;
+    durationEl;
+    barEl;
+    barFillEl;
+    startHandleEl;
+    endHandleEl;
+    dragState = null;
     constructor(elementOrSelector, options) {
-        this.dragState = null;
-        this.handleChange = () => {
-            this.updateUI();
-            const start = this.startTimeInput.value;
-            const end = this.endTimeInput.value;
-            if (this.onChange && start && end) {
-                this.onChange(start, end);
-            }
-        };
-        this.onStartHandleDown = (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            this.beginDrag('start');
-        };
-        this.onEndHandleDown = (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            this.beginDrag('end');
-        };
-        this.onFillDown = (e) => {
-            if (e.target.classList.contains('timespan-handle'))
-                return;
-            e.preventDefault();
-            const start = this.startTimeInput.value;
-            if (!start)
-                return;
-            const rect = this.barEl.getBoundingClientRect();
-            const clickMins = ((e.clientX - rect.left) / rect.width) * 1440;
-            this.beginDrag('move', clickMins - this.toMinutes(start), rect);
-        };
-        this.onPointerMove = (e) => {
-            if (!this.dragState)
-                return;
-            e.preventDefault();
-            const { type, barLeft, barWidth, startMins, endMins, clickOffsetMins } = this.dragState;
-            const pct = Math.max(0, Math.min(1, (e.clientX - barLeft) / barWidth));
-            const rawMins = pct * 1440;
-            let start = this.startTimeInput.value;
-            let end = this.endTimeInput.value;
-            if (type === 'start') {
-                start = this.minutesToTime(Math.max(0, Math.min(endMins - 5, this.snap(rawMins))));
-                this.startTimeInput.value = start;
-            }
-            else if (type === 'end') {
-                end = this.minutesToTime(Math.max(startMins + 5, Math.min(1440, this.snap(rawMins))));
-                this.endTimeInput.value = end;
-            }
-            else {
-                const duration = endMins - startMins;
-                const newStartMins = Math.max(0, Math.min(1440 - duration, this.snap(rawMins - clickOffsetMins)));
-                start = this.minutesToTime(newStartMins);
-                end = this.minutesToTime(newStartMins + duration);
-                this.startTimeInput.value = start;
-                this.endTimeInput.value = end;
-            }
-            this.updateUI();
-            if (this.onChange)
-                this.onChange(start, end);
-        };
-        this.onPointerUp = () => {
-            if (!this.dragState)
-                return;
-            this.dragState = null;
-            this.barEl.classList.remove('is-dragging');
-            document.removeEventListener('pointermove', this.onPointerMove);
-            document.removeEventListener('pointerup', this.onPointerUp);
-        };
         const element = typeof elementOrSelector === 'string'
             ? (elementOrSelector.startsWith('#') || elementOrSelector.startsWith('.')
                 ? document.querySelector(elementOrSelector)
@@ -128,6 +75,14 @@ class TimeSpanPicker {
       </div>
     `;
     }
+    handleChange = () => {
+        this.updateUI();
+        const start = this.startTimeInput.value;
+        const end = this.endTimeInput.value;
+        if (this.onChange && start && end) {
+            this.onChange(start, end);
+        }
+    };
     attachEventListeners() {
         this.startTimeInput.addEventListener('change', this.handleChange);
         this.endTimeInput.addEventListener('change', this.handleChange);
@@ -161,6 +116,64 @@ class TimeSpanPicker {
         document.addEventListener('pointermove', this.onPointerMove);
         document.addEventListener('pointerup', this.onPointerUp);
     }
+    onStartHandleDown = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        this.beginDrag('start');
+    };
+    onEndHandleDown = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        this.beginDrag('end');
+    };
+    onFillDown = (e) => {
+        if (e.target.classList.contains('timespan-handle'))
+            return;
+        e.preventDefault();
+        const start = this.startTimeInput.value;
+        if (!start)
+            return;
+        const rect = this.barEl.getBoundingClientRect();
+        const clickMins = ((e.clientX - rect.left) / rect.width) * 1440;
+        this.beginDrag('move', clickMins - this.toMinutes(start), rect);
+    };
+    onPointerMove = (e) => {
+        if (!this.dragState)
+            return;
+        e.preventDefault();
+        const { type, barLeft, barWidth, startMins, endMins, clickOffsetMins } = this.dragState;
+        const pct = Math.max(0, Math.min(1, (e.clientX - barLeft) / barWidth));
+        const rawMins = pct * 1440;
+        let start = this.startTimeInput.value;
+        let end = this.endTimeInput.value;
+        if (type === 'start') {
+            start = this.minutesToTime(Math.max(0, Math.min(endMins - 5, this.snap(rawMins))));
+            this.startTimeInput.value = start;
+        }
+        else if (type === 'end') {
+            end = this.minutesToTime(Math.max(startMins + 5, Math.min(1440, this.snap(rawMins))));
+            this.endTimeInput.value = end;
+        }
+        else {
+            const duration = endMins - startMins;
+            const newStartMins = Math.max(0, Math.min(1440 - duration, this.snap(rawMins - clickOffsetMins)));
+            start = this.minutesToTime(newStartMins);
+            end = this.minutesToTime(newStartMins + duration);
+            this.startTimeInput.value = start;
+            this.endTimeInput.value = end;
+        }
+        this.updateUI();
+        if (this.onChange)
+            this.onChange(start, end);
+    };
+    onPointerUp = () => {
+        if (!this.dragState)
+            return;
+        this.dragState = null;
+        this.barEl.classList.remove('is-dragging');
+        document.removeEventListener('pointermove', this.onPointerMove);
+        document.removeEventListener('pointerup', this.onPointerUp);
+    };
     toMinutes(time) {
         const [h, m] = time.split(':').map(Number);
         return h * 60 + m;

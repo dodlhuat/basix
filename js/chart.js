@@ -9,11 +9,14 @@ const FALLBACK_COLORS = [
 const SVG_NS = 'http://www.w3.org/2000/svg';
 /** SVG-based chart component supporting line, area, column, bar, and pie types. */
 class Chart {
+    container;
+    opts;
+    tooltip;
+    colors = [];
+    abortController = new AbortController();
+    resizeTimer = null;
+    resizeObserver = null;
     constructor(selector, options) {
-        this.colors = [];
-        this.abortController = new AbortController();
-        this.resizeTimer = null;
-        this.resizeObserver = null;
         const el = typeof selector === 'string'
             ? document.querySelector(selector)
             : selector;
@@ -518,10 +521,10 @@ class Chart {
         return el;
     }
     fmt(v) {
-        if (v >= 1000000)
-            return `${(v / 1000000).toFixed(1)}M`;
-        if (v >= 1000)
-            return `${(v / 1000).toFixed(1)}K`;
+        if (v >= 1_000_000)
+            return `${(v / 1_000_000).toFixed(1)}M`;
+        if (v >= 1_000)
+            return `${(v / 1_000).toFixed(1)}K`;
         return v % 1 === 0 ? String(Math.round(v)) : v.toFixed(1);
     }
     attachResizeObserver() {

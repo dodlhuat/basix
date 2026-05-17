@@ -1,5 +1,9 @@
 /** Enhances a native `<select>` element with a custom styled dropdown. */
 class Select {
+    element;
+    isMultiselect;
+    dropdown;
+    documentClickHandler;
     constructor(elementOrSelector) {
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)

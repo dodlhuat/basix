@@ -1,14 +1,20 @@
 import { sanitizeHtml } from './utils.js';
 /** Slide-up sheet that attaches to the bottom of the viewport. */
 class BottomSheet {
+    content;
+    header;
+    footer;
+    closeable;
+    snapHeight;
+    onClose;
+    wrapper = null;
+    sheet = null;
+    handle = null;
+    body = null;
+    dragStartY = 0;
+    currentDragY = 0;
+    isDragging = false;
     constructor(options) {
-        this.wrapper = null;
-        this.sheet = null;
-        this.handle = null;
-        this.body = null;
-        this.dragStartY = 0;
-        this.currentDragY = 0;
-        this.isDragging = false;
         this.content = options.content;
         this.header = options.header;
         this.footer = options.footer;

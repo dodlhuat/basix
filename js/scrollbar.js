@@ -1,10 +1,29 @@
 /** Custom scrollbar overlay that replaces the native scrollbar with a draggable thumb. */
 class Scrollbar {
+    static instances = new WeakMap();
+    static activeInstance = null;
+    static globalListenersInstalled = false;
+    static instanceCount = 0;
+    static globalListenerAbortController = null;
+    container;
+    viewport;
+    content;
+    track;
+    thumb;
+    MIN_THUMB_HEIGHT;
+    ro;
+    dragging = false;
+    activePointerId = null;
+    startPointerY = 0;
+    startThumbTop = 0;
+    boundPointerMove;
+    boundPointerUp;
+    boundThumbPointerDown;
+    boundTrackClick;
+    boundViewportScroll;
+    boundUpdateThumb;
+    boundContainerWheel;
     constructor(container) {
-        this.dragging = false;
-        this.activePointerId = null;
-        this.startPointerY = 0;
-        this.startThumbTop = 0;
         this.container = container;
         const elements = this.getRequiredElements(container);
         this.viewport = elements.viewport;
@@ -206,9 +225,4 @@ class Scrollbar {
         return Scrollbar.instances.get(container);
     }
 }
-Scrollbar.instances = new WeakMap();
-Scrollbar.activeInstance = null;
-Scrollbar.globalListenersInstalled = false;
-Scrollbar.instanceCount = 0;
-Scrollbar.globalListenerAbortController = null;
 export { Scrollbar };
