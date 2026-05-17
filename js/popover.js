@@ -1,13 +1,12 @@
 import { computePosition } from './position.js';
 import { sanitizeHtml } from './utils.js';
-// Must match $arrow in popover.scss
 const ARROW_SIZE = 6;
+/** Anchored popover triggered by click or hover, with auto-placement and optional arrow. */
 class Popover {
     constructor(triggerEl, options) {
         this.popoverEl = null;
         this._isOpen = false;
         this.hoverTimer = null;
-        // ── Event handlers ─────────────────────────────────────────────────────────
         this.onClick = () => { this.toggle(); };
         this.onMouseEnter = () => {
             if (this.hoverTimer !== null)
@@ -47,7 +46,6 @@ class Popover {
         };
         this.attachTrigger();
     }
-    // ── Public API ─────────────────────────────────────────────────────────────
     get isOpen() { return this._isOpen; }
     open() {
         if (this._isOpen)
@@ -109,7 +107,6 @@ class Popover {
             });
         });
     }
-    // ── Build ──────────────────────────────────────────────────────────────────
     buildEl() {
         const id = `popover-${++Popover.idCounter}`;
         const el = document.createElement('div');
@@ -117,8 +114,6 @@ class Popover {
         el.id = id;
         el.setAttribute('role', 'dialog');
         el.setAttribute('data-arrow', String(this.opts.arrow));
-        // Wrap plain content in .popover-body so it gets proper padding.
-        // Skip wrapping when content already uses structured popover elements.
         const hasStructure = /class="popover-(header|body|footer|menu)/.test(this.opts.content);
         const safeContent = sanitizeHtml(this.opts.content);
         el.innerHTML = hasStructure
@@ -128,7 +123,6 @@ class Popover {
         this.trigger.setAttribute('aria-controls', id);
         return el;
     }
-    // ── Positioning ────────────────────────────────────────────────────────────
     reposition() {
         if (!this.popoverEl)
             return;

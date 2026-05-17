@@ -1,7 +1,7 @@
 import { escapeHtml } from './utils.js';
+/** Searchable picker for selecting groups and their subgroups. */
 class GroupPicker {
     constructor(selector, data, options = {}) {
-        // State
         this.selectedParents = new Set();
         this.selectedSubs = new Map();
         this.expandedGroups = new Set();
@@ -31,11 +31,9 @@ class GroupPicker {
     }
     render() {
         this.container.innerHTML = '';
-        // Selection summary — Basix .chips container
         this.selectionEl = document.createElement('div');
         this.selectionEl.className = 'chips group-picker__selection';
         this.selectionEl.dataset.placeholder = this.options.selectionPlaceholder;
-        // Search — Basix form input with font icon overlay
         const searchWrap = document.createElement('div');
         searchWrap.className = 'group-picker__search';
         searchWrap.innerHTML = `
@@ -44,7 +42,6 @@ class GroupPicker {
     `;
         this.searchInput = searchWrap.querySelector('input');
         this.searchInput.placeholder = this.options.searchPlaceholder;
-        // List
         this.listEl = document.createElement('div');
         this.listEl.className = 'group-picker__list';
         this.container.append(this.selectionEl, searchWrap, this.listEl);
@@ -99,15 +96,12 @@ class GroupPicker {
             ? this.highlightText(group.label, query)
             : escapeHtml(group.label);
         if (hasChildren) {
-            // Chevron — Basix font icon
             const chevron = document.createElement('span');
             chevron.className = 'icon icon-navigate_next group-picker__chevron';
             chevron.setAttribute('aria-hidden', 'true');
-            // Count — Basix badge
             const count = document.createElement('span');
             count.className = 'badge badge-sm';
             count.textContent = `${subs.length}`;
-            // Action button — Basix button, button-primary when selected
             const actionBtn = document.createElement('button');
             actionBtn.className = 'group-picker__group-action';
             if (isParentSelected) {
@@ -125,14 +119,12 @@ class GroupPicker {
             header.addEventListener('click', () => {
                 this.toggleExpand(group.id);
             }, { signal: this.abortController.signal });
-            // Subgroups — Basix .chips container
             const subsContainer = document.createElement('div');
             subsContainer.className = 'group-picker__subgroups';
             const subsList = document.createElement('div');
             subsList.className = 'chips group-picker__subgroup-list';
             const displaySubs = query && !groupMatches ? matchingSubs : subs;
             for (const sub of displaySubs) {
-                // Subgroup chip — Basix .chip.clickable
                 const subEl = document.createElement('span');
                 subEl.className = 'chip clickable group-picker__subgroup';
                 subEl.dataset.subId = sub.id;
@@ -162,7 +154,6 @@ class GroupPicker {
             }
         }
         else {
-            // Leaf group — Basix font icon check mark
             const checkEl = document.createElement('span');
             checkEl.className = 'icon icon-check group-picker__leaf-check';
             checkEl.setAttribute('aria-hidden', 'true');
@@ -194,7 +185,6 @@ class GroupPicker {
             }
         }
     }
-    // Basix .chip.closeable structure
     createChip(label, isParent, onRemove) {
         const chip = document.createElement('span');
         chip.className = isParent
@@ -210,7 +200,6 @@ class GroupPicker {
         chip.append(document.createTextNode(label), btn);
         return chip;
     }
-    // State management
     toggleParentGroup(groupId) {
         if (this.selectedParents.has(groupId)) {
             this.selectedParents.delete(groupId);
@@ -299,7 +288,6 @@ class GroupPicker {
         const regex = new RegExp(`(${escapedQuery})`, 'gi');
         return safeText.replace(regex, '<mark>$1</mark>');
     }
-    // Public API
     getSelection() {
         const parentGroups = [...this.selectedParents];
         const subgroups = [];

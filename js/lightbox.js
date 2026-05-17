@@ -1,3 +1,4 @@
+/** Full-screen image viewer with gallery navigation, zoom, and touch support. */
 class Lightbox {
     constructor(options) {
         this.wrapper = null;

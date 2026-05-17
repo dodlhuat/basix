@@ -1,8 +1,10 @@
+/** Configuration options for a Stepper instance. */
 interface StepperOptions {
     defaultStep?: number;
     clickable?: boolean;
     onChange?: (current: number, previous: number) => void;
 }
+/** Multi-step progress indicator with clickable steps and connector state. */
 declare class Stepper {
     private container;
     private steps;

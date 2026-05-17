@@ -7,7 +7,7 @@ const FALLBACK_COLORS = [
     '#8B5CF6', '#06B6D4', '#F97316', '#EC4899',
 ];
 const SVG_NS = 'http://www.w3.org/2000/svg';
-// ─── Chart ──────────────────────────────────────────────────────────────────
+/** SVG-based chart component supporting line, area, column, bar, and pie types. */
 class Chart {
     constructor(selector, options) {
         this.colors = [];
@@ -37,7 +37,6 @@ class Chart {
         this.render();
         this.attachResizeObserver();
     }
-    // ── Render ──────────────────────────────────────────────────────────────
     render() {
         this.abortController.abort();
         this.abortController = new AbortController();
@@ -72,7 +71,6 @@ class Chart {
             this.container.appendChild(this.buildLegend());
         }
     }
-    // ── Line / Area ──────────────────────────────────────────────────────────
     renderLineOrArea(canvas, isArea) {
         const { series, height, showGrid, animate, yMin } = this.opts;
         if (!series.length || !series[0].data.length)
@@ -119,7 +117,6 @@ class Chart {
                 });
             }
             svg.appendChild(linePath);
-            // Data point markers
             s.data.forEach((d, i) => {
                 const g = this.svgEl('g', {
                     class: 'chart-point-group',
@@ -145,7 +142,6 @@ class Chart {
             });
         });
     }
-    // ── Column ───────────────────────────────────────────────────────────────
     renderColumn(canvas) {
         const { series, height, showGrid, animate, yMin } = this.opts;
         if (!series.length || !series[0].data.length)
@@ -190,7 +186,6 @@ class Chart {
             });
         });
     }
-    // ── Bar (horizontal) ─────────────────────────────────────────────────────
     renderBar(canvas) {
         const { series, height, animate } = this.opts;
         if (!series.length || !series[0].data.length)
@@ -206,7 +201,6 @@ class Chart {
         const numPts = labels.length;
         const numSeries = series.length;
         const svg = this.createSVG(canvas, svgW, svgH);
-        // Vertical grid lines
         const numTicks = 5;
         for (let t = 0; t <= numTicks; t++) {
             const x = m.left + (t / numTicks) * w;
@@ -223,7 +217,6 @@ class Chart {
             label.textContent = this.fmt(xMax * t / numTicks);
             svg.appendChild(label);
         }
-        // Category labels on Y axis
         const groupH = h / numPts;
         labels.forEach((label, i) => {
             const y = m.top + i * groupH + groupH / 2;
@@ -235,7 +228,6 @@ class Chart {
             text.textContent = label;
             svg.appendChild(text);
         });
-        // Bars
         const innerPad = groupH * 0.18;
         const barH = Math.max(2, (groupH - innerPad) / numSeries - 2);
         series.forEach((s, si) => {
@@ -259,7 +251,6 @@ class Chart {
             });
         });
     }
-    // ── Pie ──────────────────────────────────────────────────────────────────
     renderPie(canvas) {
         const { series, height, animate, showLegend } = this.opts;
         const s = series[0];
@@ -273,7 +264,7 @@ class Chart {
         const r = Math.min(svgW, svgH) / 2 - Math.max(m.top, m.left) - 8;
         const total = s.data.reduce((sum, d) => sum + d.value, 0);
         const svg = this.createSVG(canvas, svgW, svgH);
-        let startAngle = -90; // start at 12 o'clock
+        let startAngle = -90;
         s.data.forEach((d, i) => {
             const color = this.colors[i % this.colors.length];
             const sweep = (d.value / total) * 360;
@@ -290,7 +281,6 @@ class Chart {
                 const delay = i * 70;
                 path.style.animationDelay = `${delay}ms`;
             }
-            // Hover: nudge slice outward
             const { x: dx, y: dy } = this.polar(0, 0, 8, midAngle);
             path.addEventListener('mouseenter', (e) => {
                 path.style.transform = `translate(${dx}px, ${dy}px)`;
@@ -310,7 +300,6 @@ class Chart {
             this.container.appendChild(this.buildPieLegend(s, total));
         }
     }
-    // ── Axis helpers ─────────────────────────────────────────────────────────
     renderHGrid(svg, m, w, h, yMin, yMax) {
         const numTicks = 5;
         for (let i = 0; i <= numTicks; i++) {
@@ -355,7 +344,6 @@ class Chart {
             svg.appendChild(text);
         }
     }
-    // ── Geometry helpers ─────────────────────────────────────────────────────
     buildPath(pts) {
         switch (this.opts.curve) {
             case 'linear': return this.linearPath(pts);
@@ -410,7 +398,6 @@ class Chart {
         const rad = deg * Math.PI / 180;
         return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
     }
-    // ── Legend builders ──────────────────────────────────────────────────────
     buildHeader() {
         const el = this.div('chart-header');
         if (this.opts.title) {
@@ -454,7 +441,6 @@ class Chart {
         });
         return el;
     }
-    // ── Tooltip ──────────────────────────────────────────────────────────────
     showTooltip(e, html) {
         this.tooltip.innerHTML = html;
         this.tooltip.classList.add('is-visible');
@@ -466,7 +452,6 @@ class Chart {
         const vh = window.innerHeight;
         let x = e.clientX + 14;
         let y = e.clientY - 36;
-        // Keep inside viewport
         if (x + 200 > vw)
             x = e.clientX - 14 - tt.offsetWidth;
         if (y < 0)
@@ -479,7 +464,6 @@ class Chart {
     hideTooltip() {
         this.tooltip.classList.remove('is-visible');
     }
-    // ── Event wiring ─────────────────────────────────────────────────────────
     onPoint(g, s, d, i) {
         const sig = { signal: this.abortController.signal };
         g.addEventListener('mouseenter', (e) => {
@@ -499,7 +483,6 @@ class Chart {
         rect.addEventListener('mouseleave', () => this.hideTooltip(), sig);
         rect.addEventListener('click', () => this.opts.onPointClick(s, d, i), sig);
     }
-    // ── Color resolution ─────────────────────────────────────────────────────
     resolveColors() {
         const style = getComputedStyle(this.container);
         this.colors = (this.opts.type === 'pie' ? this.opts.series[0]?.data ?? [] : this.opts.series)
@@ -507,7 +490,6 @@ class Chart {
             const css = style.getPropertyValue(`--chart-color-${i + 1}`).trim();
             return css || FALLBACK_COLORS[i % FALLBACK_COLORS.length];
         });
-        // Allow per-series color override (not pie)
         if (this.opts.type !== 'pie') {
             this.opts.series.forEach((s, i) => {
                 if (s.color)
@@ -515,7 +497,6 @@ class Chart {
             });
         }
     }
-    // ── DOM & SVG helpers ────────────────────────────────────────────────────
     div(className) {
         const el = document.createElement('div');
         el.className = className;
@@ -543,7 +524,6 @@ class Chart {
             return `${(v / 1000).toFixed(1)}K`;
         return v % 1 === 0 ? String(Math.round(v)) : v.toFixed(1);
     }
-    // ── Resize ───────────────────────────────────────────────────────────────
     attachResizeObserver() {
         this.resizeObserver = new ResizeObserver(() => {
             if (this.resizeTimer)
@@ -552,7 +532,6 @@ class Chart {
         });
         this.resizeObserver.observe(this.container);
     }
-    // ── Public API ───────────────────────────────────────────────────────────
     update(series) {
         this.opts.series = series;
         this.render();

@@ -1,9 +1,3 @@
-// ============================================================
-// calendar.ts — Basix Calendar Component
-// ============================================================
-// -----------------------------------------------------------
-// Date Logic
-// -----------------------------------------------------------
 export const CalendarLogic = {
     getMonthGrid(year, month, firstDayOfWeek) {
         const firstOfMonth = new Date(year, month, 1);
@@ -146,7 +140,6 @@ export const CalendarLogic = {
                 return diff;
             return (b.end.getTime() - b.start.getTime()) - (a.end.getTime() - a.start.getTime());
         });
-        // Greedy sub-column assignment
         const colEnds = [];
         const assigns = [];
         for (const event of sorted) {
@@ -160,7 +153,6 @@ export const CalendarLogic = {
             assigns.push({ event, col });
         }
         return assigns.map(({ event, col }) => {
-            // cols = highest sub-column among events that overlap this one + 1
             const cols = assigns
                 .filter(a => a.event.start < event.end && a.event.end > event.start)
                 .reduce((max, a) => Math.max(max, a.col), 0) + 1;
@@ -173,9 +165,6 @@ export const CalendarLogic = {
         return (now.getHours() * 60 + now.getMinutes()) / 1440 * 100;
     },
 };
-// -----------------------------------------------------------
-// Default Locale
-// -----------------------------------------------------------
 const DEFAULT_LOCALE = {
     monthNames: [
         'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
@@ -191,9 +180,7 @@ const DEFAULT_LOCALE = {
     allDay: 'Ganztägig',
     noEvents: 'Keine Termine',
 };
-// -----------------------------------------------------------
-// Renderer
-// -----------------------------------------------------------
+/** Produces HTML strings for each Calendar view (month, week, agenda). */
 export class CalendarRenderer {
     constructor(locale) {
         this.locale = locale;
@@ -288,7 +275,6 @@ export class CalendarRenderer {
             const dow = this.locale.dayNamesShort[(d.getDay() + 7) % 7];
             return `<div class="${cls}">${dow}<span>${d.getDate()}</span></div>`;
         }).join('');
-        // All-day row: span layout for all allDay events (both single-day and multi-day)
         const allDayEvents = events.filter(e => e.allDay);
         const allDayLayouts = CalendarLogic.computeSpanLayout(days, allDayEvents);
         const allDayLanes = allDayLayouts.length > 0 ? Math.max(...allDayLayouts.map(l => l.lane)) + 1 : 0;
@@ -349,7 +335,6 @@ export class CalendarRenderer {
         for (let d = 1; d <= daysInMonth; d++) {
             const day = new Date(year, month, d);
             const dayEvents = CalendarLogic.getEventsForDay(events, day);
-            // Multi-day events show only once (first occurrence in this month)
             const filtered = dayEvents.filter(e => {
                 if (!CalendarLogic.isMultiDay(e))
                     return true;
@@ -394,16 +379,11 @@ export class CalendarRenderer {
         return `<div class="cal__agenda">${html}</div>`;
     }
 }
-// -----------------------------------------------------------
-// Calendar — main controller
-// -----------------------------------------------------------
+/** Main Calendar controller — manages state, rendering, and event delegation. */
 export class Calendar {
     constructor(options) {
         this.events = [];
         this.nowLineTimer = null;
-        // ----------------------------------------------------------
-        // Event delegation
-        // ----------------------------------------------------------
         this.boundHandleClick = (e) => this.handleClick(e);
         this.boundHandleKeydown = (e) => this.handleKeydown(e);
         if (typeof options.container === 'string') {
@@ -435,9 +415,6 @@ export class Calendar {
         this.render();
         this.attachEvents();
     }
-    // ----------------------------------------------------------
-    // Public API
-    // ----------------------------------------------------------
     setView(view) {
         this.currentView = view;
         this.render();
@@ -490,9 +467,6 @@ export class Calendar {
         this.container.innerHTML = '';
         this.container.removeAttribute('data-cal');
     }
-    // ----------------------------------------------------------
-    // Rendering
-    // ----------------------------------------------------------
     getTitle() {
         const { monthNames } = this.locale;
         const y = this.currentDate.getFullYear();

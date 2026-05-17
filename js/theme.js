@@ -1,14 +1,13 @@
+/** Static class for managing light/dark theme switching with system preference and localStorage persistence. */
 class Theme {
     /**
      * Initializes the theme system with toggle functionality and system preference detection
      */
     static init() {
         this.root = document.documentElement;
-        // Get DOM elements
         const toggleBtn = document.getElementById('theme-toggle');
         const icon = document.getElementById('theme-icon');
         const status = document.getElementById('status');
-        // Validate required elements
         if (!toggleBtn || !icon) {
             console.error('Theme toggle: missing DOM elements', { toggleBtn, icon });
             if (status) {
@@ -17,16 +16,13 @@ class Theme {
             return;
         }
         this.elements = { toggleBtn, icon, status };
-        // Initialize media query
         if (window.matchMedia) {
             this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         }
-        // Apply initial theme
         const savedTheme = this.getSavedTheme();
         const systemTheme = this.getSystemTheme();
         const initialTheme = savedTheme || systemTheme;
         this.applyTheme(initialTheme);
-        // Bind event listeners
         this.bindToggleClick();
         this.bindKeyboardShortcut();
         this.bindSystemThemeChange();
@@ -77,10 +73,8 @@ class Theme {
         this.root.setAttribute('data-theme', theme);
         const isDark = theme === 'dark';
         const { toggleBtn, icon } = this.elements;
-        // Update button state
         toggleBtn.setAttribute('aria-pressed', String(isDark));
         toggleBtn.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
-        // Update icon — SVG sprite via <use> or font icon via class
         const useEl = icon.querySelector('use');
         if (useEl) {
             const iconName = isDark ? icon.dataset.iconDark : icon.dataset.iconLight;
@@ -151,17 +145,14 @@ class Theme {
         if (!this.mediaQuery)
             return;
         const handler = (e) => {
-            // Only apply system theme if user hasn't saved a preference
             if (!this.getSavedTheme()) {
                 const matches = 'matches' in e ? e.matches : e.matches;
                 this.applyTheme(matches ? 'dark' : 'light');
             }
         };
-        // Modern API
         if ('addEventListener' in this.mediaQuery) {
             this.mediaQuery.addEventListener('change', handler);
         }
-        // Legacy API (deprecated but still supported in older browsers)
         else if ('addListener' in this.mediaQuery) {
             this.mediaQuery.addListener(handler);
         }

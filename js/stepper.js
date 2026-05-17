@@ -1,3 +1,4 @@
+/** Multi-step progress indicator with clickable steps and connector state. */
 class Stepper {
     constructor(elementOrSelector, options = {}) {
         this.abortController = new AbortController();

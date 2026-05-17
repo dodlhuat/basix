@@ -1,10 +1,12 @@
 type ToastType = 'success' | 'error' | 'warning' | 'info';
+/** Options for creating a Toast notification. */
 interface ToastOptions {
     content: string;
     header?: string;
     type?: ToastType;
     closeable?: boolean;
 }
+/** Dismissible notification banner with optional auto-hide timer and progress bar. */
 declare class Toast {
     private readonly content;
     private readonly header;

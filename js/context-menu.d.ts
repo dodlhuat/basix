@@ -1,3 +1,4 @@
+/** Definition for a single context menu item including optional submenu. */
 interface ContextMenuItemDef {
     label: string;
     icon?: string;
@@ -10,6 +11,7 @@ interface ContextMenuItemDef {
 type ContextMenuInput = ContextMenuItemDef | 'separator' | {
     group: string;
 };
+/** Right-click context menu with keyboard navigation and nested submenu support. */
 declare class ContextMenu {
     private items;
     private targets;

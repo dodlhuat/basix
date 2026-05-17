@@ -1,3 +1,4 @@
+/** Enhances a native `<select>` element with a custom styled dropdown. */
 declare class Select {
     private readonly element;
     private readonly isMultiselect;

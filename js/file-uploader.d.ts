@@ -1,17 +1,21 @@
+/** Event detail payload for the `upload-completed` custom event. */
 interface UploadCompletedDetail {
     fileCount: number;
     files: File[];
     results: PromiseSettledResult<unknown>[];
 }
+/** Event detail payload for the `file-validation-error` custom event. */
 interface FileValidationErrorDetail {
     file: File;
     reason: 'size' | 'type';
 }
+/** Configuration options for the FileUploader. */
 interface FileUploaderConfig {
     uploadUrl?: string;
     maxFileSize?: number;
     allowedTypes?: string[];
 }
+/** Drag-and-drop file uploader with progress tracking and XHR-based uploads. */
 declare class FileUploader {
     private container;
     private dropZone;

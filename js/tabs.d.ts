@@ -1,11 +1,13 @@
 type TabLayout = 'horizontal' | 'vertical';
 type MenuPosition = 'top' | 'bottom' | 'left' | 'right';
+/** Configuration options for a Tabs instance. */
 interface TabsOptions {
     layout?: TabLayout;
     defaultTab?: number;
     menuPos?: MenuPosition;
     onChange?: (index: number) => void;
 }
+/** Tabbed content component with horizontal/vertical layouts and keyboard navigation. */
 declare class Tabs {
     private container;
     private options;

@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+/** Virtualised dropdown that renders only visible items for performance with large option lists. */
 class VirtualDropdown {
     constructor(config) {
         const containerElement = typeof config.container === 'string'

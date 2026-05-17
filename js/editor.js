@@ -1,4 +1,5 @@
 import { sanitizeHtml } from './utils.js';
+/** Rich-text editor built on contenteditable with undo/redo and code/preview panels. */
 class Editor {
     constructor(options = {}) {
         this.undoStack = [];

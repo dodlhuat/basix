@@ -1,3 +1,4 @@
+/** Renders syntax-highlighted code inside a container element. */
 class CodeViewer {
     constructor(elementOrSelector, code, language = 'javascript') {
         const element = typeof elementOrSelector === 'string'

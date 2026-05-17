@@ -1,3 +1,4 @@
+/** Interactive time-range picker with a draggable bar and dual time inputs. */
 class TimeSpanPicker {
     constructor(elementOrSelector, options) {
         this.dragState = null;

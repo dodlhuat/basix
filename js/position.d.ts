@@ -4,6 +4,7 @@
  */
 type Placement = 'top' | 'bottom' | 'left' | 'right';
 type Align = 'start' | 'center' | 'end';
+/** Options accepted by `computePosition`. */
 interface PositionOptions {
     placement: Placement | 'auto';
     align?: Align;
@@ -11,6 +12,7 @@ interface PositionOptions {
     margin?: number;
     arrowSize?: number;
 }
+/** Result returned by `computePosition`. */
 interface PositionResult {
     left: number;
     top: number;

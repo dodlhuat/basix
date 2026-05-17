@@ -1,8 +1,10 @@
+/** A single image record for MasonryGallery. */
 interface ImageData {
     src: string;
     title: string;
     desc: string;
 }
+/** Configuration options for MasonryGallery. */
 interface MasonryGalleryOptions {
     fetchFunction: () => Promise<ImageData[]>;
     minColumnWidth?: number;
@@ -10,6 +12,7 @@ interface MasonryGalleryOptions {
     loaderSelector?: string;
     reload?: number;
 }
+/** Infinite-scroll masonry gallery that distributes images across dynamically sized columns. */
 declare class MasonryGallery {
     private container;
     private readonly loader;

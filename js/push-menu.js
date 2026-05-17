@@ -1,3 +1,4 @@
+/** Static class that manages a push-style side navigation panel. */
 class PushMenu {
     static init() {
         if (this.initialized) {
@@ -14,7 +15,6 @@ class PushMenu {
         this.elements.backdrop?.addEventListener('click', this.handleBackdropClick);
         this.initialized = true;
     }
-    // ─── Panel construction ────────────────────────────────────────────────
     static buildPanels() {
         const menu = this.elements.menu;
         if (!menu)
@@ -22,18 +22,15 @@ class PushMenu {
         const rootUl = menu.querySelector(':scope > ul');
         if (!rootUl)
             return;
-        // Wrap root ul in a panel
         const rootPanel = document.createElement('div');
         rootPanel.classList.add('push-menu-panel', 'is-active');
         rootPanel.dataset.level = '0';
         rootPanel.appendChild(rootUl);
         menu.appendChild(rootPanel);
-        // Recursively extract nested uls into sibling panels
         this.extractSubPanels(rootPanel, 1);
         this.panelStack = [rootPanel];
     }
     static extractSubPanels(panel, level) {
-        // Collect all uls currently in this panel before any mutations
         const uls = Array.from(panel.querySelectorAll('ul'));
         for (const ul of uls) {
             const listItems = Array.from(ul.children);
@@ -41,14 +38,11 @@ class PushMenu {
                 const childUl = li.querySelector(':scope > ul');
                 if (!childUl)
                     continue;
-                // Determine label from the immediate anchor child
                 const parentAnchor = li.querySelector(':scope > a');
                 const title = parentAnchor?.textContent?.trim() ?? '';
-                // ── Build sub-panel ──────────────────────────────────────
                 const subPanel = document.createElement('div');
                 subPanel.classList.add('push-menu-panel');
                 subPanel.dataset.level = String(level);
-                // Header: back button + breadcrumb title
                 const header = document.createElement('div');
                 header.classList.add('push-menu-panel-header');
                 const backBtn = document.createElement('button');
@@ -62,15 +56,11 @@ class PushMenu {
                 header.appendChild(backBtn);
                 header.appendChild(titleEl);
                 subPanel.appendChild(header);
-                // Move the child ul into the sub-panel
                 subPanel.appendChild(childUl);
-                // Append sub-panel as sibling inside the nav
                 this.elements.menu?.appendChild(subPanel);
-                // ── Replace anchor with a trigger span in the parent li ──
                 const trigger = document.createElement('span');
                 trigger.classList.add('push-menu-item');
                 trigger.textContent = title;
-                // Chevron icon
                 const chevron = document.createElement('span');
                 chevron.classList.add('push-menu-chevron');
                 chevron.setAttribute('aria-hidden', 'true');
@@ -83,12 +73,10 @@ class PushMenu {
                     li.prepend(trigger);
                 }
                 trigger.addEventListener('click', () => PushMenu.openPanel(subPanel));
-                // Recurse into the newly created sub-panel
                 this.extractSubPanels(subPanel, level + 1);
             }
         }
     }
-    // ─── Panel navigation ──────────────────────────────────────────────────
     static openPanel(panel) {
         const currentPanel = this.panelStack[this.panelStack.length - 1];
         currentPanel.classList.remove('is-active');
@@ -109,7 +97,6 @@ class PushMenu {
         const menu = this.elements.menu;
         if (!menu)
             return;
-        // Wait for the close animation before snapping panels back
         setTimeout(() => {
             const panels = Array.from(menu.querySelectorAll('.push-menu-panel'));
             panels.forEach((panel, index) => {
@@ -122,7 +109,6 @@ class PushMenu {
             }
         }, 300);
     }
-    // ─── Open / close ──────────────────────────────────────────────────────
     static handleNavigationChange() {
         const isPushed = this.elements.content?.classList.contains('pushed') ?? false;
         if (!isPushed) {

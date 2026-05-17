@@ -1,3 +1,4 @@
+/** Enhances a native `<select>` element with a custom styled dropdown. */
 class Select {
     constructor(elementOrSelector) {
         const element = typeof elementOrSelector === 'string'
@@ -43,7 +44,6 @@ class Select {
         const result = Select.initElement(element);
         if (!result)
             return null;
-        // Static init path: add document listener without lifecycle management
         document.addEventListener('click', (e) => {
             if (!result.dropdown.contains(e.target)) {
                 result.dropdown.classList.remove('open');
@@ -69,12 +69,10 @@ class Select {
             throw new Error(`Select: Required dropdown elements not found for "${element}"`);
         }
         const isMulti = dropdown.dataset.multi === 'true';
-        // Toggle dropdown on selected element click
         selected.addEventListener('click', () => {
             Select.closeAllDropdowns(dropdown);
             dropdown.classList.toggle('open');
         });
-        // Handle option selection
         options.addEventListener('click', (e) => {
             const target = e.target;
             if (!target.classList.contains('dropdown-option')) {
@@ -87,7 +85,6 @@ class Select {
                 Select.handleSingleSelect(target, options, selected, dropdown, element);
             }
         });
-        // Close dropdown when clicking the close icon
         const closeIcon = options.querySelector('.dropdown-options-icon');
         if (closeIcon) {
             closeIcon.addEventListener('click', () => {
@@ -130,14 +127,12 @@ class Select {
         const label = parent.querySelector('label');
         const isMulti = select.hasAttribute('multiple');
         const labelText = label?.textContent?.trim() || 'Select';
-        // Create hidden wrapper for original select
         const hiddenWrapper = document.createElement('div');
         hiddenWrapper.classList.add('hidden');
         if (label) {
             hiddenWrapper.appendChild(label);
         }
         hiddenWrapper.appendChild(select);
-        // Create dropdown structure
         const dropdown = document.createElement('div');
         dropdown.className = 'dropdown';
         dropdown.dataset.multi = String(isMulti);
@@ -146,12 +141,10 @@ class Select {
         dropdownSelected.textContent = labelText;
         const dropdownOptions = document.createElement('div');
         dropdownOptions.className = 'dropdown-options';
-        // Add mobile menu
         const optionsMenu = document.createElement('div');
         optionsMenu.className = 'dropdown-options-menu hidden';
         optionsMenu.innerHTML = 'Select options<span class="dropdown-options-icon icon icon-close"></span>';
         dropdownOptions.appendChild(optionsMenu);
-        // Create option elements
         Array.from(select.options).forEach(opt => {
             const optDiv = document.createElement('div');
             optDiv.className = 'dropdown-option';
@@ -159,10 +152,8 @@ class Select {
             optDiv.textContent = opt.textContent;
             dropdownOptions.appendChild(optDiv);
         });
-        // Assemble dropdown
         dropdown.appendChild(dropdownSelected);
         dropdown.appendChild(dropdownOptions);
-        // Replace original content
         parent.innerHTML = '';
         parent.appendChild(hiddenWrapper);
         parent.appendChild(dropdown);

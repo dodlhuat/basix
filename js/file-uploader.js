@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+/** Drag-and-drop file uploader with progress tracking and XHR-based uploads. */
 class FileUploader {
     constructor(elementOrSelector, config = {}) {
         this.files = new Map();

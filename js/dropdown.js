@@ -1,3 +1,4 @@
+/** Hierarchical dropdown menu with optional multi-open and close-on-select behaviour. */
 class Dropdown {
     constructor(selector, options = {}) {
         const container = document.querySelector(selector);
@@ -26,18 +27,15 @@ class Dropdown {
     }
     attachEventListeners() {
         const { signal } = this.abortController;
-        // Toggle main dropdown
         this.trigger.addEventListener('click', (e) => {
             e.stopPropagation();
             this.toggle();
         }, { signal });
-        // Close when clicking outside
         document.addEventListener('click', (e) => {
             if (!this.container.contains(e.target)) {
                 this.close();
             }
         }, { signal });
-        // Handle item clicks using event delegation
         this.menu.addEventListener('click', (e) => {
             e.stopPropagation();
             const target = e.target;
@@ -78,7 +76,6 @@ class Dropdown {
     }
     toggleSubmenu(li) {
         const isOpening = !li.classList.contains('open');
-        // Close siblings if not allowing multiple open menus
         if (isOpening && !this.options.allowMultipleOpen) {
             const parent = li.parentElement;
             if (parent) {
@@ -86,7 +83,6 @@ class Dropdown {
                 siblings.forEach((sibling) => {
                     if (sibling !== li && sibling.classList.contains('open')) {
                         sibling.classList.remove('open');
-                        // Close deeply nested open items
                         const deepOpenItems = sibling.querySelectorAll('.open');
                         deepOpenItems.forEach((el) => el.classList.remove('open'));
                     }
@@ -101,7 +97,6 @@ class Dropdown {
     }
     handleSelection(item) {
         const text = item.textContent?.trim() ?? '';
-        // Dispatch custom event with proper typing
         const event = new CustomEvent('dropdown-select', {
             detail: {
                 text,
@@ -111,9 +106,6 @@ class Dropdown {
         });
         this.container.dispatchEvent(event);
     }
-    /**
-     * Cleanup method to remove event listeners
-     */
     destroy() {
         this.abortController.abort();
         this.close();

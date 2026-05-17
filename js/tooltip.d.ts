@@ -1,3 +1,4 @@
+/** Configuration options for a Tooltip instance. */
 interface TooltipOptions {
     position?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
     offset?: number;
@@ -7,6 +8,7 @@ interface TooltipOptions {
      *  Defaults to false — content is treated as plain text and escaped. */
     isHtml?: boolean;
 }
+/** Lightweight tooltip that positions itself relative to a trigger element. */
 declare class Tooltip {
     private static activeTooltip;
     private static idCounter;

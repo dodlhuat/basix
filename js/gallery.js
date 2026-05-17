@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+/** Infinite-scroll masonry gallery that distributes images across dynamically sized columns. */
 class MasonryGallery {
     constructor(containerId, options) {
         this.columns = [];
@@ -97,8 +98,6 @@ class MasonryGallery {
         finally {
             this.isFetching = false;
             this.toggleLoader(false);
-            // If the rendered content doesn't fill the viewport, auto-load the next
-            // batch without waiting for a scroll event (multi-column layout is shorter)
             requestAnimationFrame(() => {
                 const rect = this.container.getBoundingClientRect();
                 if (rect.bottom <= window.innerHeight + this.options.scrollThreshold) {

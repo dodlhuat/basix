@@ -1,3 +1,4 @@
+/** Represents a single node in a tree structure, either a file or folder. */
 class TreeNode {
     constructor(label, type = 'file', children = []) {
         this.label = label;
@@ -9,6 +10,7 @@ class TreeNode {
         this.childrenContainer = null;
     }
 }
+/** Renders an interactive collapsible tree view from a list of TreeNode objects. */
 class TreeComponent {
     constructor(elementOrSelector, data, options = {}) {
         const container = typeof elementOrSelector === 'string'

@@ -1,14 +1,17 @@
 export type ChartType = 'line' | 'area' | 'column' | 'bar' | 'pie';
 export type ChartCurve = 'smooth' | 'linear' | 'step';
+/** A single labelled data value within a chart series. */
 export interface ChartDataPoint {
     label: string;
     value: number;
 }
+/** A named data series with optional per-series colour override. */
 export interface ChartSeries {
     name: string;
     data: ChartDataPoint[];
     color?: string;
 }
+/** Configuration options for a Chart instance. */
 export interface ChartOptions {
     type: ChartType;
     series: ChartSeries[];
@@ -27,6 +30,7 @@ export interface ChartOptions {
     yMax?: number;
     onPointClick?: (series: ChartSeries, point: ChartDataPoint, index: number) => void;
 }
+/** SVG-based chart component supporting line, area, column, bar, and pie types. */
 declare class Chart {
     private container;
     private opts;

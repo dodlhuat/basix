@@ -1,6 +1,3 @@
-/**
- * Utility functions for DOM manipulation and element handling
- */
 const utils = {
     /**
      * Execute a function when the DOM is ready

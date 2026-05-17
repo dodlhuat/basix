@@ -1,16 +1,20 @@
+/** Descriptor for a single table column. */
 interface TableColumn {
     key: string;
     label: string;
     sortable?: boolean;
 }
+/** A single data row, keyed by column key. */
 interface TableRow {
     [key: string]: string | number | boolean;
 }
+/** Configuration options for a Table instance. */
 interface TableOptions {
     data?: TableRow[];
     columns?: TableColumn[];
     pageSize?: number;
 }
+/** Dynamic data table with sorting, filtering, and pagination. */
 declare class Table {
     private container;
     private data;

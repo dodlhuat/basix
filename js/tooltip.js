@@ -1,5 +1,5 @@
-// tooltip.ts
 import { computePosition } from './position.js';
+/** Lightweight tooltip that positions itself relative to a trigger element. */
 class Tooltip {
     constructor(trigger, content, options = {}) {
         this.tooltipElement = null;
@@ -38,7 +38,6 @@ class Tooltip {
                 new Tooltip(trigger, content, { position, className, isHtml: false });
             }
         });
-        // Also support content from separate elements
         const advancedTriggers = document.querySelectorAll('[data-tooltip-id]');
         advancedTriggers.forEach(trigger => {
             const contentId = trigger.getAttribute('data-tooltip-id');

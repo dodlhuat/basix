@@ -1,4 +1,5 @@
 type ModalType = 'default' | 'success' | 'error' | 'warning' | 'info';
+/** Configuration options for a Modal dialog. */
 interface ModalOptions {
     content: string;
     header?: string;
@@ -6,6 +7,7 @@ interface ModalOptions {
     closeable?: boolean;
     type?: ModalType;
 }
+/** Overlay dialog with optional header, footer, close button, and type variants. */
 declare class Modal {
     private content;
     private readonly header?;

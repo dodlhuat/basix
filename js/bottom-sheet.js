@@ -1,11 +1,11 @@
 import { sanitizeHtml } from './utils.js';
+/** Slide-up sheet that attaches to the bottom of the viewport. */
 class BottomSheet {
     constructor(options) {
         this.wrapper = null;
         this.sheet = null;
         this.handle = null;
         this.body = null;
-        // Touch drag state
         this.dragStartY = 0;
         this.currentDragY = 0;
         this.isDragging = false;
@@ -128,7 +128,6 @@ class BottomSheet {
             this.hide();
         }
         else {
-            // Spring back
             this.sheet.style.transition = '';
             this.sheet.style.transform = '';
         }

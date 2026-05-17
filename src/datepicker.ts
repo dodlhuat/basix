@@ -1,3 +1,5 @@
+import { computePosition } from './position.js';
+
 /** Localised day and month names for the DatePicker. */
 interface DatePickerLocales {
   days: string[];
@@ -158,16 +160,20 @@ class DatePicker {
       document.body.style.overflow = '';
 
       if (this.input) {
-        const rect = this.input.getBoundingClientRect();
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        this.calendar.style.display = 'block';
+        this.calendar.style.visibility = 'hidden';
+        const calRect = this.calendar.getBoundingClientRect();
+        this.calendar.style.display = '';
+        this.calendar.style.visibility = '';
 
-        this.calendar.style.top = `${rect.bottom + scrollTop + 5}px`;
-        this.calendar.style.left = `${rect.left + scrollLeft}px`;
+        const { left, top } = computePosition(
+          this.input.getBoundingClientRect(),
+          calRect,
+          { placement: 'bottom', align: 'start', offset: 5 }
+        );
 
-        if (rect.left + 320 > window.innerWidth) {
-          this.calendar.style.left = `${rect.right + scrollLeft - 320}px`;
-        }
+        this.calendar.style.top = `${top}px`;
+        this.calendar.style.left = `${left}px`;
       }
 
       setTimeout(() => {

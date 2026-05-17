@@ -3,6 +3,7 @@ interface EditorOptions {
      *  without #code, #preview, or #sidePanel in the DOM. */
     simple?: boolean;
 }
+/** Rich-text editor built on contenteditable with undo/redo and code/preview panels. */
 declare class Editor {
     private readonly editable;
     private readonly code;

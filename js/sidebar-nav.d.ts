@@ -1,9 +1,11 @@
+/** Configuration options for a SidebarNav instance. */
 interface SidebarNavOptions {
     /** Selector for the toggle button. Default: '.sidebar-toggle' */
     toggleSelector?: string;
     /** Breakpoint (px) above which the sidebar is always visible. Default: 768 */
     breakpoint?: number;
 }
+/** Collapsible sidebar navigation with backdrop and responsive breakpoint support. */
 declare class SidebarNav {
     private nav;
     private backdrop;

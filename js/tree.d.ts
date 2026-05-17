@@ -1,7 +1,9 @@
 type NodeType = 'file' | 'folder';
+/** Configuration options for a TreeComponent instance. */
 interface TreeOptions {
     onSelect?: (node: TreeNode) => void;
 }
+/** Represents a single node in a tree structure, either a file or folder. */
 declare class TreeNode {
     label: string;
     type: NodeType;
@@ -12,6 +14,7 @@ declare class TreeNode {
     childrenContainer: HTMLUListElement | null;
     constructor(label: string, type?: NodeType, children?: TreeNode[]);
 }
+/** Renders an interactive collapsible tree view from a list of TreeNode objects. */
 declare class TreeComponent {
     private container;
     private data;

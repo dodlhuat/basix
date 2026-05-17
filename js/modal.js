@@ -1,5 +1,6 @@
 import { sanitizeHtml } from './utils.js';
 const CLOSE_ICON = '<div class="icon icon-close close"></div>';
+/** Overlay dialog with optional header, footer, close button, and type variants. */
 class Modal {
     constructor(contentOrOptions, header, footer, closeable = true, type = 'default') {
         this.modalWrapper = null;
@@ -49,7 +50,6 @@ class Modal {
         const wrapper = this.modalWrapper;
         if (!wrapper)
             return;
-        // Remove event listeners
         const closeBtn = wrapper.querySelector('.close');
         closeBtn?.removeEventListener('click', this.hide);
         const background = wrapper.querySelector('.modal-background');

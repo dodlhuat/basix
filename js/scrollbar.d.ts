@@ -1,9 +1,11 @@
+/** DOM element references for a Scrollbar instance. */
 interface ScrollbarElements {
     viewport: HTMLElement;
     content: HTMLElement;
     track: HTMLElement;
     thumb: HTMLElement;
 }
+/** Custom scrollbar overlay that replaces the native scrollbar with a draggable thumb. */
 declare class Scrollbar {
     private static readonly instances;
     private static activeInstance;

@@ -1,4 +1,5 @@
 type ThemeMode = 'light' | 'dark';
+/** Static class for managing light/dark theme switching with system preference and localStorage persistence. */
 declare class Theme {
     private static readonly STORAGE_KEY;
     private static root;

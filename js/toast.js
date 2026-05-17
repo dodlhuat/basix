@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+/** Dismissible notification banner with optional auto-hide timer and progress bar. */
 class Toast {
     constructor(contentOrOptions, header = '', type, closeable = true) {
         this.closureIcon = '<div class="icon icon-close close"></div>';

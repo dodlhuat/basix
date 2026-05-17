@@ -1,3 +1,4 @@
+/** Right-click context menu with keyboard navigation and nested submenu support. */
 class ContextMenu {
     constructor(selectorOrElement, items) {
         this.menuEl = null;
@@ -25,7 +26,6 @@ class ContextMenu {
             }, { signal });
         });
         document.addEventListener('click', () => this.close(), { signal });
-        // Close on right-click outside the menu
         document.addEventListener('contextmenu', (e) => {
             if (this.menuEl && !this.menuEl.contains(e.target)) {
                 this.close();
@@ -50,7 +50,6 @@ class ContextMenu {
                 this.activateFocused();
             }
         }, { signal });
-        // Close on scroll outside the menu
         window.addEventListener('scroll', (e) => {
             if (!this.menuEl?.contains(e.target))
                 this.close();
@@ -61,14 +60,12 @@ class ContextMenu {
         this.close();
         this.menuEl = this.buildMenu(this.items);
         document.body.appendChild(this.menuEl);
-        // Use offsetWidth/offsetHeight — unaffected by CSS transform
         const w = this.menuEl.offsetWidth;
         const h = this.menuEl.offsetHeight;
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const left = x + w > vw ? vw - w - 8 : x;
         const top = y + h > vh ? vh - h - 8 : y;
-        // Set transform-origin to match the corner the menu opens from
         const originX = x + w > vw ? 'right' : 'left';
         const originY = y + h > vh ? 'bottom' : 'top';
         this.menuEl.style.left = `${left}px`;
@@ -82,7 +79,6 @@ class ContextMenu {
         const el = this.menuEl;
         this.menuEl = null;
         el.classList.remove('is-visible');
-        // Wait for exit transition then remove from DOM
         el.addEventListener('transitionend', () => el.remove(), { once: true });
         setTimeout(() => el.isConnected && el.remove(), 200);
     }
@@ -116,7 +112,6 @@ class ContextMenu {
             li.classList.add('is-destructive');
         if (def.submenu)
             li.classList.add('has-submenu');
-        // Always render icon slot — keeps label column aligned across all items
         const iconWrap = document.createElement('span');
         iconWrap.className = 'context-menu-icon';
         if (def.icon) {
@@ -139,7 +134,6 @@ class ContextMenu {
             li.appendChild(chevron);
             const submenuEl = this.buildMenu(def.submenu);
             li.appendChild(submenuEl);
-            // Determine flip synchronously from parent position — no rAF flash
             const shouldFlip = () => {
                 const rect = li.getBoundingClientRect();
                 return rect.right + submenuEl.offsetWidth > window.innerWidth;
@@ -179,7 +173,6 @@ class ContextMenu {
         return li;
     }
     closeAllSubmenus(menu) {
-        // Only close direct-child submenus of this menu level
         Array.from(menu.children).forEach((child) => {
             child.classList.remove('is-active');
         });

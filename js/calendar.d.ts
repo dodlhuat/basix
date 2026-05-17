@@ -1,3 +1,4 @@
+/** Represents a single calendar event with a start/end date. */
 export interface CalendarEvent {
     id: string;
     title: string;
@@ -7,6 +8,7 @@ export interface CalendarEvent {
     className?: string;
 }
 export type CalendarView = 'month' | 'week' | 'agenda';
+/** Localisation strings and week-start configuration for the Calendar. */
 export interface CalendarLocale {
     monthNames: string[];
     dayNamesShort: string[];
@@ -19,6 +21,7 @@ export interface CalendarLocale {
     allDay: string;
     noEvents: string;
 }
+/** Configuration options for the Calendar component. */
 export interface CalendarOptions {
     container: HTMLElement | string;
     events?: CalendarEvent[];
@@ -31,6 +34,7 @@ export interface CalendarOptions {
     className?: string;
     iconBasePath?: string;
 }
+/** Layout descriptor for a multi-day event spanning columns in a week row. */
 interface SpanLayout {
     event: CalendarEvent;
     colStart: number;
@@ -39,6 +43,7 @@ interface SpanLayout {
     continuesBefore: boolean;
     continuesAfter: boolean;
 }
+/** Layout descriptor for a timed event positioned in a day column. */
 interface TimedEventLayout {
     event: CalendarEvent;
     top: number;
@@ -68,6 +73,7 @@ export declare const CalendarLogic: {
     computeTimedLayout(events: CalendarEvent[], day: Date): TimedEventLayout[];
     nowLinePct(): number;
 };
+/** Produces HTML strings for each Calendar view (month, week, agenda). */
 export declare class CalendarRenderer {
     private locale;
     constructor(locale: CalendarLocale);
@@ -80,6 +86,7 @@ export declare class CalendarRenderer {
     renderWeekView(date: Date, events: CalendarEvent[], firstDayOfWeek: number, showNowLine?: boolean): string;
     renderAgendaView(year: number, month: number, events: CalendarEvent[]): string;
 }
+/** Main Calendar controller — manages state, rendering, and event delegation. */
 export declare class Calendar {
     private container;
     private options;

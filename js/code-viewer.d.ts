@@ -1,4 +1,5 @@
 type SupportedLanguage = 'javascript' | 'js' | 'html' | 'css';
+/** Renders syntax-highlighted code inside a container element. */
 declare class CodeViewer {
     private container;
     private code;

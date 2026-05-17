@@ -44,7 +44,6 @@ function computePosition(trigger, floating, opts) {
     const placement = opts.placement === 'auto'
         ? bestPlacement(trigger, floating, offset)
         : maybeFlip(opts.placement, trigger, floating, offset);
-    // Main-axis offset
     let left = 0, top = 0;
     switch (placement) {
         case 'top':
@@ -60,7 +59,6 @@ function computePosition(trigger, floating, opts) {
             left = trigger.right + offset;
             break;
     }
-    // Cross-axis alignment
     if (placement === 'top' || placement === 'bottom') {
         switch (align) {
             case 'start':
@@ -87,13 +85,11 @@ function computePosition(trigger, floating, opts) {
                 break;
         }
     }
-    // Clamp to viewport
     const l = Math.max(margin, Math.min(window.innerWidth - floating.width - margin, left));
     const t = Math.max(margin, Math.min(window.innerHeight - floating.height - margin, top));
-    // Arrow offset: keep arrow centred on the trigger even after viewport clamping
     let arrowOffset;
     if (opts.arrowSize !== undefined) {
-        const minOff = opts.arrowSize + 8; // min distance from rounded corner
+        const minOff = opts.arrowSize + 8;
         if (placement === 'top' || placement === 'bottom') {
             const raw = trigger.left + trigger.width / 2 - l;
             arrowOffset = Math.max(minOff, Math.min(floating.width - minOff, raw));

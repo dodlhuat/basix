@@ -1,8 +1,10 @@
+/** Options for configuring a Carousel instance. */
 interface CarouselOptions {
     loop?: boolean;
     autoPlay?: boolean;
     autoPlayInterval?: number;
 }
+/** Slide-based carousel with optional autoplay, loop, dot navigation, and touch support. */
 declare class Carousel {
     private root;
     private options;

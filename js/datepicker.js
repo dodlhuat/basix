@@ -1,3 +1,5 @@
+import { computePosition } from './position.js';
+/** Calendar-based date (or date-range) picker that attaches to an input element. */
 class DatePicker {
     constructor(elementOrSelector, options = {}) {
         this.abortController = new AbortController();
@@ -96,14 +98,14 @@ class DatePicker {
             this.backdrop.classList.remove('visible');
             document.body.style.overflow = '';
             if (this.input) {
-                const rect = this.input.getBoundingClientRect();
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                this.calendar.style.top = `${rect.bottom + scrollTop + 5}px`;
-                this.calendar.style.left = `${rect.left + scrollLeft}px`;
-                if (rect.left + 320 > window.innerWidth) {
-                    this.calendar.style.left = `${rect.right + scrollLeft - 320}px`;
-                }
+                this.calendar.style.display = 'block';
+                this.calendar.style.visibility = 'hidden';
+                const calRect = this.calendar.getBoundingClientRect();
+                this.calendar.style.display = '';
+                this.calendar.style.visibility = '';
+                const { left, top } = computePosition(this.input.getBoundingClientRect(), calRect, { placement: 'bottom', align: 'start', offset: 5 });
+                this.calendar.style.top = `${top}px`;
+                this.calendar.style.left = `${left}px`;
             }
             setTimeout(() => {
                 if (this.calendar.classList.contains('visible')) {
@@ -345,7 +347,6 @@ class DatePicker {
         wrapper.appendChild(label);
         const controls = document.createElement('div');
         controls.className = 'datepicker-time-controls';
-        // Hours spinner
         const hoursSpinner = this.createSpinner(this.selectedHours, 0, 23, (value) => {
             this.selectedHours = value;
             this.applyTimeToSelection();
@@ -353,7 +354,6 @@ class DatePicker {
         const separator = document.createElement('span');
         separator.className = 'datepicker-time-separator';
         separator.textContent = ':';
-        // Minutes spinner
         const minutesSpinner = this.createSpinner(this.selectedMinutes, 0, 59, (value) => {
             this.selectedMinutes = value;
             this.applyTimeToSelection();

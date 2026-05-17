@@ -1,3 +1,4 @@
+/** Collapsible sidebar navigation with backdrop and responsive breakpoint support. */
 class SidebarNav {
     constructor(containerOrSelector, options = {}) {
         const container = typeof containerOrSelector === 'string'

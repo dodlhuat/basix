@@ -1,3 +1,4 @@
+/** Slide-based carousel with optional autoplay, loop, dot navigation, and touch support. */
 class Carousel {
     constructor(elementOrSelector, options = {}) {
         this.autoPlayTimer = null;
@@ -60,7 +61,6 @@ class Carousel {
             this.dots.push(dot);
         });
         this.root.appendChild(this.dotsNav);
-        // Make focusable for keyboard nav
         this.root.setAttribute('tabindex', '0');
     }
     bindEvents() {
@@ -78,14 +78,12 @@ class Carousel {
             this.slideWidth = this.slides[0].getBoundingClientRect().width;
             this.moveToSlide(this.currentIndex, false);
         }, sig);
-        // Keyboard navigation
         this.root.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft')
                 this.moveToPrevSlide();
             if (e.key === 'ArrowRight')
                 this.moveToNextSlide();
         }, sig);
-        // Pause autoplay on hover / focus
         if (this.options.autoPlay) {
             this.root.addEventListener('mouseenter', () => this.pauseAutoPlay(), sig);
             this.root.addEventListener('mouseleave', () => this.resumeAutoPlay(), sig);
