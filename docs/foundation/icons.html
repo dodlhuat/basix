@@ -18,12 +18,12 @@
             align-items: center;
             gap: 0.4rem;
             padding: 0.75rem 0.5rem;
-            border: 1px solid var(--border);
+            border: 1px solid var(--divider);
             border-radius: var(--radius-md);
             cursor: pointer;
             transition: background 0.15s;
         }
-        .icon-cell:hover { background: var(--primary-light); }
+        .icon-cell:hover { background: var(--secondary-background); }
         .icon-cell svg { width: 24px; height: 24px; fill: currentColor; }
         .icon-cell span { font-size: 0.65rem; color: var(--secondary-text); text-align: center; word-break: break-all; }
         #icon-count { font-variant-numeric: tabular-nums; }
@@ -46,10 +46,10 @@
                 const cell = document.createElement('div');
                 cell.className = 'icon-cell';
                 cell.title = `Click to copy: #${id}`;
-                cell.innerHTML = `<svg viewBox="0 -960 960 960"><use href="../../svg-icons/icons.svg#${id}"/></svg><span>${id}</span>`;
+                cell.innerHTML = `<svg><use href="#${id}"/></svg><span>${id}</span>`;
                 cell.addEventListener('click', () => {
                     navigator.clipboard.writeText(`<svg viewBox="0 -960 960 960"><use href="svg-icons/icons.svg#${id}"/></svg>`);
-                    cell.style.background = 'var(--accent-tint)';
+                    cell.style.background = 'color-mix(in srgb, var(--accent-color) 12%, transparent)';
                     setTimeout(() => cell.style.background = '', 800);
                 });
                 grid.appendChild(cell);
@@ -61,11 +61,20 @@
         fetch('../../svg-icons/icons.svg')
             .then(r => r.text())
             .then(text => {
-                const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
-                allIcons = Array.from(doc.querySelectorAll('symbol[id]')).map(el => el.id).sort();
+                const parsed = new DOMParser().parseFromString(text, 'image/svg+xml');
+                // Create a fresh SVG sprite in the document — avoids display:none on the sprite root
+                const sprite = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                sprite.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;';
+                sprite.setAttribute('aria-hidden', 'true');
+                // Array.from snapshot prevents live-NodeList mutation during adoptNode
+                Array.from(parsed.documentElement.childNodes).forEach(n => sprite.appendChild(document.adoptNode(n)));
+                document.body.prepend(sprite);
+
+                allIcons = Array.from(sprite.querySelectorAll('symbol[id]')).map(el => el.id).sort();
                 renderGrid();
                 document.getElementById('icon-filter').addEventListener('input', e => renderGrid(e.target.value));
-            });
+            })
+            .catch(err => console.error('Icons failed to load:', err));
 
         new CodeViewer('#code-html', `<svg viewBox="0 -960 960 960" width="24" height="24" fill="currentColor">
   <use href="svg-icons/icons.svg#search"/>
@@ -104,13 +113,13 @@
 
             <h2>Sizing &amp; colour</h2>
             <div class="docs-demo" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
-                <svg viewBox="0 -960 960 960" width="16" height="16" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 -960 960 960" width="24" height="24" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 -960 960 960" width="36" height="36" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 -960 960 960" width="48" height="48" fill="currentColor"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 -960 960 960" width="32" height="32" style="color:var(--accent);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 -960 960 960" width="32" height="32" style="color:var(--success);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
-                <svg viewBox="0 -960 960 960" width="32" height="32" style="color:var(--error);fill:currentColor;"><use href="../../svg-icons/icons.svg#star"/></svg>
+                <svg width="16" height="16" fill="currentColor"><use href="#star"/></svg>
+                <svg width="24" height="24" fill="currentColor"><use href="#star"/></svg>
+                <svg width="36" height="36" fill="currentColor"><use href="#star"/></svg>
+                <svg width="48" height="48" fill="currentColor"><use href="#star"/></svg>
+                <svg width="32" height="32" style="color:var(--accent-color);fill:currentColor;"><use href="#star"/></svg>
+                <svg width="32" height="32" style="color:var(--success);fill:currentColor;"><use href="#star"/></svg>
+                <svg width="32" height="32" style="color:var(--error);fill:currentColor;"><use href="#star"/></svg>
             </div>
             <p style="margin-top:0.75rem;font-size:0.9rem;color:var(--secondary-text);">Set <code>width</code> and <code>height</code> on the <code>&lt;svg&gt;</code> element. Colour follows <code>fill: currentColor</code> so you can use any CSS <code>color</code> property.</p>
         </div>

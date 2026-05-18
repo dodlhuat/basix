@@ -30,12 +30,13 @@ p {
 }
 
 code {
-  font-family: "Courier New", Courier, monospace;
+  font-family: ui-monospace, "Cascadia Code", "SF Mono", Menlo, monospace;
   font-size: 0.875em;
-  background: var(--secondary-background);
-  border: 1px solid var(--divider);
-  padding: 0.15em 0.4em;
-  border-radius: $radius-sm;
+  background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 20%, transparent);
+  color: var(--accent-color);
+  padding: 0.2em 0.45em;
+  border-radius: $border-radius;
 }
 
 pre code {
@@ -149,7 +150,7 @@ ul, ol {
 ul li {
   list-style-type: disc;
 
-  li { list-style-type: circle; }
+  li { list-style-type: '· '; }
 }
 
 ol li {
@@ -158,8 +159,36 @@ ol li {
   li { list-style-type: lower-latin; }
 }
 
+li::marker {
+  color: var(--secondary-text);
+}
+
+ol li::marker {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 0.875em;
+}
+
 li + li {
-  margin-top: 0.25em;
+  margin-top: 0.4em;
+}
+
+dl {
+  margin-bottom: $spacing-two-thirds;
+}
+
+dt {
+  font-weight: 600;
+  color: var(--primary-text);
+  margin-top: $spacing-half;
+
+  &:first-child { margin-top: 0; }
+}
+
+dd {
+  padding-left: $spacing-1-5x;
+  color: var(--secondary-text);
+  margin-top: 0.15em;
 }
 
 hr {

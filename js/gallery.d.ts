@@ -11,6 +11,7 @@ interface MasonryGalleryOptions {
     scrollThreshold?: number;
     loaderSelector?: string;
     reload?: number;
+    enableLightbox?: boolean;
 }
 /** Infinite-scroll masonry gallery that distributes images across dynamically sized columns. */
 declare class MasonryGallery {
@@ -18,6 +19,7 @@ declare class MasonryGallery {
     private readonly loader;
     private options;
     private columns;
+    private allImages;
     private isFetching;
     private resizeObserver;
     private abortController;
