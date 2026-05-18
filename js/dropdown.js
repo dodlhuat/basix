@@ -1,3 +1,4 @@
+import { bestPlacement } from './position.js';
 /** Hierarchical dropdown menu with optional multi-open and close-on-select behaviour. */
 class Dropdown {
     container;
@@ -69,7 +70,16 @@ class Dropdown {
             }
         });
     }
+    updatePosition() {
+        const triggerRect = this.trigger.getBoundingClientRect();
+        const menuRect = this.menu.getBoundingClientRect();
+        const placement = bestPlacement(triggerRect, menuRect, 6);
+        this.container.classList.toggle('drop-up', placement === 'top');
+    }
     toggle() {
+        if (!this.container.classList.contains('active')) {
+            this.updatePosition();
+        }
         this.container.classList.toggle('active');
     }
     close() {
@@ -77,6 +87,7 @@ class Dropdown {
         this.closeAllSubmenus();
     }
     open() {
+        this.updatePosition();
         this.container.classList.add('active');
     }
     toggleSubmenu(li) {

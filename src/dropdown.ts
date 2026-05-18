@@ -1,3 +1,5 @@
+import { bestPlacement } from './position.js';
+
 /** Configuration options for a Dropdown instance. */
 interface DropdownOptions {
     closeOnSelect?: boolean;
@@ -111,7 +113,17 @@ class Dropdown {
         });
     }
 
+    private updatePosition(): void {
+        const triggerRect = this.trigger.getBoundingClientRect();
+        const menuRect    = this.menu.getBoundingClientRect();
+        const placement   = bestPlacement(triggerRect, menuRect, 6);
+        this.container.classList.toggle('drop-up', placement === 'top');
+    }
+
     public toggle(): void {
+        if (!this.container.classList.contains('active')) {
+            this.updatePosition();
+        }
         this.container.classList.toggle('active');
     }
 
@@ -121,6 +133,7 @@ class Dropdown {
     }
 
     public open(): void {
+        this.updatePosition();
         this.container.classList.add('active');
     }
 

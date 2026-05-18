@@ -19,6 +19,7 @@ declare class Dropdown {
     private init;
     private attachEventListeners;
     private setupItems;
+    private updatePosition;
     toggle(): void;
     close(): void;
     open(): void;

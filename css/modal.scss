@@ -88,6 +88,27 @@
   }
 }
 
+// Coloured variants — border echoes the type colour, close icon and header text go white
+.modal-success { border-color: color-mix(in srgb, var(--success)      35%, transparent); }
+.modal-error   { border-color: color-mix(in srgb, var(--error)        35%, transparent); }
+.modal-warning { border-color: color-mix(in srgb, var(--warning)      35%, transparent); }
+.modal-info    { border-color: color-mix(in srgb, var(--accent-color) 35%, transparent); }
+
+.modal-success,
+.modal-error,
+.modal-warning,
+.modal-info {
+  .close {
+    color: rgba(255, 255, 255, 0.8);
+    &:hover { color: #fff; }
+  }
+
+  .header {
+    color: #fff;
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
 @media screen and (max-width: 768px) {
   .modal-wrapper.is-visible .modal {
     transform: translateY(0);

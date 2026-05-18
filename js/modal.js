@@ -78,7 +78,7 @@ class Modal {
         }
     };
     buildTemplate() {
-        const parts = ['<div class="modal">'];
+        const parts = [`<div class="modal modal-${this.type}">`];
         if (this.closeable) {
             parts.push(CLOSE_ICON);
         }
