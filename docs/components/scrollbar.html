@@ -13,7 +13,7 @@
         new DocsNav();
         Theme.init();
 
-        new Scrollbar('#scroll-demo-v');
+        Scrollbar.create('#scroll-demo-v');
 
         new CodeViewer('#code-html', `<div class="scroll-container" id="my-scrollbar" style="height:200px;">
   <div class="viewport">
@@ -30,7 +30,7 @@
 
         new CodeViewer('#code-js', `import { Scrollbar } from '@dodlhuat/basix/js/scrollbar.js';
 
-const sb = new Scrollbar('#my-scrollbar');
+const sb = Scrollbar.create('#my-scrollbar');
 
 // Or init multiple at once
 const all = Scrollbar.initAll('.scroll-container');
