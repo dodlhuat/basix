@@ -57,6 +57,10 @@
   svg { display: block; }
 }
 
+.sidebar-close {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .sidebar-toggle {
     display: flex;
@@ -76,5 +80,26 @@
 
   .sidebar-main {
     margin-left: 0;
+  }
+
+  .sidebar-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--secondary-background);
+    border: none;
+    border-radius: $border-radius;
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    color: var(--primary-text);
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+
+    &:hover { background: var(--divider); }
   }
 }
