@@ -97,3 +97,11 @@
     &.badge-error   { background: var(--error); }
   }
 }
+
+[data-theme="dark"] {
+  .badge-solid {
+    &.badge-success { color: var(--background); }
+    &.badge-warning { color: var(--background); }
+    &.badge-error   { color: var(--background); }
+  }
+}

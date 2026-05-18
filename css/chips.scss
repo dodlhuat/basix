@@ -39,6 +39,16 @@
         outline: none;
         @include focus-glow();
       }
+
+      &.selected {
+        background: color-mix(in srgb, var(--accent-color) 12%, var(--background));
+        color: var(--accent-color);
+        border-color: color-mix(in srgb, var(--accent-color) 25%, transparent);
+
+        &:hover {
+          background: color-mix(in srgb, var(--accent-color) 18%, var(--background));
+        }
+      }
     }
 
     &.closeable {

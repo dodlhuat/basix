@@ -34,6 +34,7 @@
 const gallery = new MasonryGallery('my-gallery', {
   minColumnWidth: 250,           // min column width in px
   scrollThreshold: 100,          // px from bottom to trigger next load
+  enableLightbox: true,          // click image to open fullscreen (default: true)
   fetchFunction: async () => [   // required — return ImageData[]
     { src: 'photo1.jpg', title: 'Mountain', desc: 'Alpine view' },
     { src: 'photo2.jpg', title: 'Forest',   desc: 'Forest trail' },
@@ -81,6 +82,7 @@ gallery.destroy();`, 'js');
                     <tr><td><code>minColumnWidth</code></td><td>number</td><td><code>250</code></td><td>Minimum column width in px — determines the number of columns.</td></tr>
                     <tr><td><code>scrollThreshold</code></td><td>number</td><td><code>100</code></td><td>Distance from container bottom (px) that triggers the next fetch.</td></tr>
                     <tr><td><code>loaderSelector</code></td><td>string</td><td><code>'.loader'</code></td><td>CSS selector for an optional loading indicator element.</td></tr>
+                    <tr><td><code>enableLightbox</code></td><td>boolean</td><td><code>true</code></td><td>Open a fullscreen lightbox when an image is clicked.</td></tr>
                 </tbody>
             </table>
         </div>

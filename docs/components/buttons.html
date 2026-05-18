@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
     <title>Buttons & Chips — Basix Docs</title>
     <link rel="stylesheet" href="../../css/style.css"/>
-    <style>
-        .icon-svg { fill: currentColor; display: inline-block; vertical-align: middle; width: 16px; height: 16px; }
-    </style>
     <script type="module">
         import { DocsNav } from '../../js/docs-nav.js';
         import { Theme } from '../../js/theme.js';
@@ -21,6 +18,20 @@
 <button class="button-success">Success</button>
 <button class="button-warning">Warning</button>
 <button class="button-error">Error</button>
+<button class="button-outline">Outline</button>
+
+<!-- Sizes -->
+<button class="button-primary button-sm">Small</button>
+<button class="button-primary">Default</button>
+<button class="button-primary button-lg">Large</button>
+
+<!-- Icon button -->
+<button class="button-icon" aria-label="Edit">
+  <span class="icon icon-edit"></span>
+</button>
+
+<!-- Pill -->
+<button class="button-primary button-pill">Pill</button>
 
 <!-- Loading state -->
 <button class="is-loading">Loading…</button>
@@ -28,12 +39,26 @@
 <!-- Disabled -->
 <button disabled>Disabled</button>`, 'html');
 
+        new CodeViewer('#code-group', `<div class="button-group">
+  <button>Left</button>
+  <button>Middle</button>
+  <button>Right</button>
+</div>
+
+<div class="button-group">
+  <button class="button-primary">Save</button>
+  <button class="button-primary button-icon" aria-label="More options">
+    <span class="icon icon-expand_more"></span>
+  </button>
+</div>`, 'html');
+
         new CodeViewer('#code-chips', `<div class="chips">
   <div class="chip">Default</div>
   <div class="chip clickable">Clickable</div>
+  <div class="chip clickable selected">Selected</div>
   <div class="chip closeable">
     Closeable
-    <button class="close">×</button>
+    <button class="close" aria-label="Remove"><span class="icon icon-close"></span></button>
   </div>
   <div class="chip chip-accent">Accent</div>
   <div class="chip chip-success">Success</div>
@@ -90,7 +115,27 @@
                 <button class="button-success">Success</button>
                 <button class="button-warning">Warning</button>
                 <button class="button-error">Error</button>
+                <button class="button-outline">Outline</button>
                 <button disabled>Disabled</button>
+            </div>
+
+            <h3>Sizes</h3>
+            <div class="docs-demo" style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+                <button class="button-sm">Small</button>
+                <button class="button-primary button-sm">Small primary</button>
+                <button>Default</button>
+                <button class="button-primary">Default primary</button>
+                <button class="button-lg">Large</button>
+                <button class="button-primary button-lg">Large primary</button>
+            </div>
+
+            <h3>Icon button &amp; Pill</h3>
+            <div class="docs-demo" style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+                <button class="button-icon" aria-label="Edit"><span class="icon icon-edit"></span></button>
+                <button class="button-icon button-primary" aria-label="Add"><span class="icon icon-add"></span></button>
+                <button class="button-icon button-error" aria-label="Delete"><span class="icon icon-delete"></span></button>
+                <button class="button-primary button-pill">Pill primary</button>
+                <button class="button-outline button-pill">Pill outline</button>
             </div>
 
             <h3>Loading state</h3>
@@ -103,13 +148,34 @@
 
             <div id="code-buttons"></div>
 
+            <h2>Button Group</h2>
+            <p>Wrap buttons in <code>.button-group</code> to join them into a single control. Works with any variant.</p>
+            <div class="docs-demo" style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
+                <div class="button-group">
+                    <button>Left</button>
+                    <button>Middle</button>
+                    <button>Right</button>
+                </div>
+                <div class="button-group">
+                    <button class="button-primary">Save</button>
+                    <button class="button-primary button-icon" aria-label="More options"><span class="icon icon-expand_more"></span></button>
+                </div>
+                <div class="button-group">
+                    <button class="active">Day</button>
+                    <button>Week</button>
+                    <button>Month</button>
+                </div>
+            </div>
+            <div id="code-group"></div>
+
             <h2>Chips</h2>
-            <p>Use <code>.chips</code> as a container and <code>.chip</code> on each item. Add <code>.clickable</code> for hover effects, <code>.closeable</code> for a close button.</p>
+            <p>Use <code>.chips</code> as a container and <code>.chip</code> on each item. Add <code>.clickable</code> for hover effects, <code>.selected</code> for active filter state, <code>.closeable</code> for a remove button.</p>
             <div class="docs-demo">
                 <div class="chips">
                     <div class="chip">Default</div>
                     <div class="chip clickable">Clickable</div>
-                    <div class="chip closeable">Closeable <button class="close">×</button></div>
+                    <div class="chip clickable selected">Selected</div>
+                    <div class="chip closeable">Closeable <button class="close" aria-label="Remove"><span class="icon icon-close"></span></button></div>
                     <div class="chip chip-accent">Accent</div>
                     <div class="chip chip-success">Success</div>
                     <div class="chip chip-warning">Warning</div>

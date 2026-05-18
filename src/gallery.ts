@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+import { Lightbox } from './lightbox.js';
 
 /** A single image record for MasonryGallery. */
 interface ImageData {
@@ -14,6 +15,7 @@ interface MasonryGalleryOptions {
   scrollThreshold?: number;
   loaderSelector?: string;
   reload?: number;
+  enableLightbox?: boolean;
 }
 
 /** Infinite-scroll masonry gallery that distributes images across dynamically sized columns. */
@@ -22,6 +24,7 @@ class MasonryGallery {
   private readonly loader: HTMLElement | null;
   private options: Required<Omit<MasonryGalleryOptions, "loaderSelector">>;
   private columns: HTMLDivElement[] = [];
+  private allImages: ImageData[] = [];
   private isFetching: boolean = false;
   private resizeObserver: ResizeObserver | null = null;
   private abortController: AbortController | null = null;
@@ -40,6 +43,7 @@ class MasonryGallery {
       scrollThreshold: options.scrollThreshold ?? 100,
       reload: 2,
       fetchFunction: options.fetchFunction,
+      enableLightbox: options.enableLightbox ?? true,
     };
 
     this.init();
@@ -61,6 +65,7 @@ class MasonryGallery {
 
   private buildColumns(count: number): void {
     this.container.innerHTML = '';
+    this.container.classList.add('masonry-container');
     this.columns = [];
     for (let i = 0; i < count; i++) {
       const col = document.createElement('div');
@@ -142,6 +147,9 @@ class MasonryGallery {
   }
 
   private renderImages(imageDataList: ImageData[]): void {
+    const startIndex = this.allImages.length;
+    this.allImages.push(...imageDataList);
+
     // Sort columns by current height so we start filling from the shortest.
     // Then round-robin across them — this avoids the problem where unloaded
     // images (0 height) cause offsetHeight-based distribution to pile all
@@ -150,9 +158,24 @@ class MasonryGallery {
       (a, b) => a.offsetHeight - b.offsetHeight,
     );
 
-    imageDataList.forEach((data, index) => {
+    imageDataList.forEach((data, i) => {
       const item = this.createCard(data);
-      const col = sorted[index % sorted.length];
+
+      if (this.options.enableLightbox) {
+        const index = startIndex + i;
+        item.addEventListener('click', () => {
+          new Lightbox({
+            images: this.allImages.map(img => ({
+              src: img.src,
+              alt: img.title,
+              caption: img.desc,
+            })),
+            startIndex: index,
+          }).show();
+        });
+      }
+
+      const col = sorted[i % sorted.length];
       col.appendChild(item);
 
       requestAnimationFrame(() => {
@@ -211,6 +234,8 @@ class MasonryGallery {
       this.abortController.abort();
       this.abortController = null;
     }
+
+    this.allImages = [];
   }
 }
 

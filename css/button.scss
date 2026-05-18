@@ -60,7 +60,7 @@ button,
   }
 
   &.active {
-    background: var(--divider);
+    background: var(--accent-color-tint);
     color: var(--accent-color);
   }
 
@@ -172,29 +172,75 @@ button.button-error {
 
   .button-success,
   button.button-success {
-    @include button-variant-dark(var(--success));
+    color: var(--background);
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--success) 82%, white); }
+    &:active:not(:disabled) { background: color-mix(in srgb, var(--success) 70%, white); }
+    &.is-loading::after { color: var(--background); }
   }
 
   .button-warning,
   button.button-warning {
-    @include button-variant-dark(var(--warning));
+    color: var(--background);
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--warning) 82%, white); }
+    &:active:not(:disabled) { background: color-mix(in srgb, var(--warning) 70%, white); }
+    &.is-loading::after { color: var(--background); }
   }
 
   .button-error,
   button.button-error {
-    @include button-variant-dark(var(--error));
+    color: var(--background);
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--error) 82%, white); }
+    &:active:not(:disabled) { background: color-mix(in srgb, var(--error) 70%, white); }
+    &.is-loading::after { color: var(--background); }
   }
 
-  .button-primary,
-  button.button-primary,
-  .button-success,
-  button.button-success,
-  .button-warning,
-  button.button-warning,
-  .button-error,
-  button.button-error {
-    &.is-loading::after {
-      color: var(--primary-text);
-    }
+  .button-primary.is-loading::after,
+  button.button-primary.is-loading::after {
+    color: var(--primary-text);
   }
+}
+
+// Size variants
+.button-sm,
+button.button-sm {
+  padding: calc($spacing * 0.35) calc($spacing * 0.75);
+  font-size: 0.8125rem;
+}
+
+.button-lg,
+button.button-lg {
+  padding: calc($spacing * 0.8) calc($spacing * 1.75);
+  font-size: 1.0625rem;
+}
+
+// Outline variant
+.button-outline,
+button.button-outline {
+  background: transparent;
+  border: 1px solid var(--divider);
+  color: var(--primary-text);
+
+  &:hover:not(:disabled) {
+    background: var(--hover);
+    border-color: color-mix(in srgb, var(--divider) 50%, var(--primary-text));
+  }
+
+  &:active:not(:disabled) {
+    background: var(--secondary-background);
+  }
+}
+
+// Icon-only button — square, equal padding
+.button-icon,
+button.button-icon {
+  padding: calc($spacing * 0.5);
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+}
+
+// Pill variant
+.button-pill,
+button.button-pill {
+  border-radius: $radius-xl;
 }

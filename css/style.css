@@ -1661,7 +1661,7 @@ button:focus-visible,
 }
 button.active,
 .button.active {
-  background: var(--divider);
+  background: var(--accent-color-tint);
   color: var(--accent-color);
 }
 button:disabled,
@@ -1789,6 +1789,42 @@ button.button-error:active:not(:disabled) {
 .button-group .button:only-child {
   border-radius: 0.4rem;
 }
+.button-sm,
+button.button-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+}
+.button-lg,
+button.button-lg {
+  padding: 0.8rem 1.75rem;
+  font-size: 1.0625rem;
+}
+.button-outline,
+button.button-outline {
+  background: transparent;
+  border: 1px solid var(--divider);
+  color: var(--primary-text);
+}
+.button-outline:hover:not(:disabled),
+button.button-outline:hover:not(:disabled) {
+  background: var(--hover);
+  border-color: color-mix(in srgb, var(--divider) 50%, var(--primary-text));
+}
+.button-outline:active:not(:disabled),
+button.button-outline:active:not(:disabled) {
+  background: var(--secondary-background);
+}
+.button-icon,
+button.button-icon {
+  padding: 0.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+}
+.button-pill,
+button.button-pill {
+  border-radius: 9999px;
+}
 
 [data-theme=dark] button:hover:not(:disabled),
 [data-theme=dark] .button:hover:not(:disabled) {
@@ -1808,7 +1844,7 @@ button.button-error:active:not(:disabled) {
 }
 [data-theme=dark] .button-success,
 [data-theme=dark] button.button-success {
-  color: var(--primary-text);
+  color: var(--background);
 }
 [data-theme=dark] .button-success:hover:not(:disabled),
 [data-theme=dark] button.button-success:hover:not(:disabled) {
@@ -1818,9 +1854,13 @@ button.button-error:active:not(:disabled) {
 [data-theme=dark] button.button-success:active:not(:disabled) {
   background: color-mix(in srgb, var(--success) 70%, white);
 }
+[data-theme=dark] .button-success.is-loading::after,
+[data-theme=dark] button.button-success.is-loading::after {
+  color: var(--background);
+}
 [data-theme=dark] .button-warning,
 [data-theme=dark] button.button-warning {
-  color: var(--primary-text);
+  color: var(--background);
 }
 [data-theme=dark] .button-warning:hover:not(:disabled),
 [data-theme=dark] button.button-warning:hover:not(:disabled) {
@@ -1830,9 +1870,13 @@ button.button-error:active:not(:disabled) {
 [data-theme=dark] button.button-warning:active:not(:disabled) {
   background: color-mix(in srgb, var(--warning) 70%, white);
 }
+[data-theme=dark] .button-warning.is-loading::after,
+[data-theme=dark] button.button-warning.is-loading::after {
+  color: var(--background);
+}
 [data-theme=dark] .button-error,
 [data-theme=dark] button.button-error {
-  color: var(--primary-text);
+  color: var(--background);
 }
 [data-theme=dark] .button-error:hover:not(:disabled),
 [data-theme=dark] button.button-error:hover:not(:disabled) {
@@ -1842,14 +1886,12 @@ button.button-error:active:not(:disabled) {
 [data-theme=dark] button.button-error:active:not(:disabled) {
   background: color-mix(in srgb, var(--error) 70%, white);
 }
-[data-theme=dark] .button-primary.is-loading::after,
-[data-theme=dark] button.button-primary.is-loading::after,
-[data-theme=dark] .button-success.is-loading::after,
-[data-theme=dark] button.button-success.is-loading::after,
-[data-theme=dark] .button-warning.is-loading::after,
-[data-theme=dark] button.button-warning.is-loading::after,
 [data-theme=dark] .button-error.is-loading::after,
 [data-theme=dark] button.button-error.is-loading::after {
+  color: var(--background);
+}
+[data-theme=dark] .button-primary.is-loading::after,
+[data-theme=dark] button.button-primary.is-loading::after {
   color: var(--primary-text);
 }
 
@@ -3319,6 +3361,14 @@ nav li + li .push-menu-item {
   outline: none;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 35%, transparent);
 }
+.chips .chip.clickable.selected {
+  background: color-mix(in srgb, var(--accent-color) 12%, var(--background));
+  color: var(--accent-color);
+  border-color: color-mix(in srgb, var(--accent-color) 25%, transparent);
+}
+.chips .chip.clickable.selected:hover {
+  background: color-mix(in srgb, var(--accent-color) 18%, var(--background));
+}
 .chips .chip.closeable {
   padding-right: 1.8rem;
 }
@@ -3455,6 +3505,9 @@ nav li + li .push-menu-item {
   color: #fff;
   border-color: transparent;
 }
+[data-theme=dark] .badge-solid.badge-success { color: var(--background); }
+[data-theme=dark] .badge-solid.badge-warning { color: var(--background); }
+[data-theme=dark] .badge-solid.badge-error   { color: var(--background); }
 .badge-outline {
   background: transparent;
   border-color: var(--divider);
