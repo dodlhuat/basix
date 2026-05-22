@@ -2013,10 +2013,21 @@ button.button-pill {
   gap: 0.5rem;
 }
 
-.modal-success { border-color: color-mix(in srgb, var(--success)      35%, transparent); }
-.modal-error   { border-color: color-mix(in srgb, var(--error)        35%, transparent); }
-.modal-warning { border-color: color-mix(in srgb, var(--warning)      35%, transparent); }
-.modal-info    { border-color: color-mix(in srgb, var(--accent-color) 35%, transparent); }
+.modal-success {
+  border-color: color-mix(in srgb, var(--success) 35%, transparent);
+}
+
+.modal-error {
+  border-color: color-mix(in srgb, var(--error) 35%, transparent);
+}
+
+.modal-warning {
+  border-color: color-mix(in srgb, var(--warning) 35%, transparent);
+}
+
+.modal-info {
+  border-color: color-mix(in srgb, var(--accent-color) 35%, transparent);
+}
 
 .modal-success .close,
 .modal-error .close,
@@ -4762,7 +4773,7 @@ body {
     position: relative;
   }
   .tabs-header::after {
-    content: '';
+    content: "";
     position: absolute;
     right: 0;
     top: 0;

@@ -1,4 +1,4 @@
-# Basix 1.3.3
+# Basix 1.3.5
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -830,24 +830,90 @@ new CodeViewer('#output', '.card { padding: 1rem; }', 'css');
 
 ### Editor
 
-The Editor component provides a contenteditable rich-text editing area with undo/redo, word count, and an optional side panel showing the raw HTML source and a live preview. Requires a `#editable` element in the DOM.
+The Editor component provides a contenteditable rich-text editing area with undo/redo, word count, and an optional side panel showing the raw HTML source and a live preview. Internal elements are located by `data-editor` attributes scoped to a `root` container — no globally unique IDs required, which makes multiple editors on the same page possible.
 
 ``` html
-<div id="editable" contenteditable="true"></div>
-<!-- Optional side panel elements -->
-<textarea id="code"></textarea>
-<div id="preview"></div>
-<div id="sidePanel"></div>
-<span id="wordCount"></span>
+<div class="editor" id="my-editor">
+    <div class="editor-toolbar">
+        <button data-editor-action="undo" title="Undo">↩</button>
+        <button data-editor-action="redo" title="Redo">↪</button>
+        <button data-cmd="bold">B</button>
+        <button data-cmd="italic">I</button>
+        <button data-editor-action="link">Link</button>
+        <!-- … -->
+    </div>
+    <div class="editor-body">
+        <div class="editor-main">
+            <div data-editor="editable" class="editable" contenteditable="true"></div>
+        </div>
+        <!-- Full mode: add side panel with code + preview -->
+        <div data-editor="side-panel" class="editor-side">
+            <div class="side-tabs">
+                <button class="side-tab active" data-tab="code-panel">HTML</button>
+                <button class="side-tab" data-tab="preview-panel">Preview</button>
+            </div>
+            <div class="side-panels">
+                <div class="side-panel active" data-editor="code-panel">
+                    <textarea data-editor="code"></textarea>
+                </div>
+                <div class="side-panel" data-editor="preview-panel">
+                    <div data-editor="preview" class="preview-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="editor-footer">
+        <span data-editor="wordcount">0 words</span>
+    </div>
+</div>
 ```
 
 ``` js
-// Full editor with side panel
-new Editor();
+// Single editor
+new Editor({ root: '#my-editor' });
 
-// Simple mode — hides the side panel permanently
-new Editor({ simple: true });
+// Simple mode — only requires [data-editor="editable"], hides the side panel
+new Editor({ root: '#my-editor', simple: true });
+
+// Multiple editors on the same page
+const editor1 = new Editor({ root: '#editor-1' });
+const editor2 = new Editor({ root: '#editor-2' });
+
+editor1.destroy();
 ```
+
+#### Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `root` | string \| HTMLElement | `document.body` | Root container. Required when multiple editors coexist on the same page. |
+| `simple` | boolean | `false` | Simple mode requires only `[data-editor="editable"]`. Full mode additionally requires `code`, `preview`, `side-panel`, `code-panel`, and `preview-panel` elements. |
+
+#### `data-editor` elements
+
+| Value | Element | Required |
+|---|---|---|
+| `editable` | `contenteditable` div — the writing area | always |
+| `code` | `<textarea>` — HTML source view | full mode |
+| `preview` | `<div>` — live preview | full mode |
+| `side-panel` | Side panel container | full mode |
+| `code-panel` | Code tab panel (matches `data-tab="code-panel"`) | full mode |
+| `preview-panel` | Preview tab panel | full mode |
+| `wordcount` | Word count display | optional |
+| `image-file` | `<input type="file">` for image insertion | optional |
+
+#### `data-editor-action` buttons
+
+| Value | Description |
+|---|---|
+| `undo` | Triggers undo |
+| `redo` | Triggers redo |
+| `link` | Opens URL prompt for link insertion |
+| `image` | Triggers the image file picker |
+| `save` | Downloads content as an HTML file (Ctrl+S) |
+| `clear` | Clears all content |
+| `clean` | Strips formatting from the current selection |
+| `toggle-code` | Shows / hides the HTML side panel |
 
 ### Custom Scrollbar
 

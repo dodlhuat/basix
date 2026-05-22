@@ -1,6 +1,7 @@
 import { sanitizeHtml } from './utils.js';
 /** Rich-text editor built on contenteditable with undo/redo and code/preview panels. */
 class Editor {
+    root;
     editable;
     code;
     preview;
@@ -10,24 +11,35 @@ class Editor {
     redoStack = [];
     abortController = new AbortController();
     constructor(options = {}) {
-        const editable = document.getElementById('editable');
-        if (!editable) {
-            throw new Error('Editor: #editable element not found');
+        if (options.root instanceof HTMLElement) {
+            this.root = options.root;
         }
+        else if (typeof options.root === 'string') {
+            const el = document.querySelector(options.root);
+            if (!el)
+                throw new Error(`Editor: root "${options.root}" not found`);
+            this.root = el;
+        }
+        else {
+            this.root = document.body;
+        }
+        const editable = this.q('[data-editor="editable"]');
+        if (!editable)
+            throw new Error('Editor: [data-editor="editable"] element not found');
         this.editable = editable;
-        this.wordCount = document.getElementById('wordCount');
+        this.wordCount = this.q('[data-editor="wordcount"]');
         if (options.simple) {
             this.code = null;
             this.preview = null;
-            this.sidePanel = document.getElementById('sidePanel');
+            this.sidePanel = this.q('[data-editor="side-panel"]');
             this.sidePanel?.classList.add('hidden');
         }
         else {
-            const code = document.getElementById('code');
-            const preview = document.getElementById('preview');
-            const sidePanel = document.getElementById('sidePanel');
+            const code = this.q('[data-editor="code"]');
+            const preview = this.q('[data-editor="preview"]');
+            const sidePanel = this.q('[data-editor="side-panel"]');
             if (!code || !preview || !sidePanel) {
-                throw new Error('Editor: #code, #preview and #sidePanel are required unless simple: true');
+                throw new Error('Editor: [data-editor="code"], [data-editor="preview"] and [data-editor="side-panel"] are required unless simple: true');
             }
             this.code = code;
             this.preview = preview;
@@ -42,9 +54,15 @@ class Editor {
         this.syncViews();
         this.saveState();
     }
+    q(selector) {
+        return this.root.querySelector(selector);
+    }
+    qAll(selector) {
+        return this.root.querySelectorAll(selector);
+    }
     bindToolbar() {
         const sig = { signal: this.abortController.signal };
-        document.querySelectorAll('[data-cmd]').forEach(btn => {
+        this.qAll('[data-cmd]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const cmd = btn.dataset.cmd;
                 const val = btn.dataset.value ?? null;
@@ -55,13 +73,13 @@ class Editor {
     }
     bindActions() {
         const sig = { signal: this.abortController.signal };
-        document.getElementById('linkBtn')?.addEventListener('click', () => {
+        this.q('[data-editor-action="link"]')?.addEventListener('click', () => {
             const url = prompt('Enter URL:', 'https://');
             if (url)
                 this.exec('createLink', url);
         }, sig);
-        const imageFile = document.getElementById('imageFile');
-        document.getElementById('imageBtn')?.addEventListener('click', () => imageFile.click(), sig);
+        const imageFile = this.q('[data-editor="image-file"]');
+        this.q('[data-editor-action="image"]')?.addEventListener('click', () => imageFile?.click(), sig);
         imageFile?.addEventListener('change', () => {
             const file = imageFile.files?.[0];
             if (!file)
@@ -75,7 +93,7 @@ class Editor {
             reader.readAsDataURL(file);
             imageFile.value = '';
         }, sig);
-        document.getElementById('cleanBtn')?.addEventListener('click', () => {
+        this.q('[data-editor-action="clean"]')?.addEventListener('click', () => {
             const sel = window.getSelection();
             if (!sel || sel.rangeCount === 0)
                 return;
@@ -85,16 +103,15 @@ class Editor {
             range.insertNode(document.createTextNode(text));
             this.onContentChange();
         }, sig);
-        document.getElementById('undoBtn')?.addEventListener('click', () => this.undo(), sig);
-        document.getElementById('redoBtn')?.addEventListener('click', () => this.redo(), sig);
-        document.getElementById('toggleCodeBtn')?.addEventListener('click', () => {
+        this.q('[data-editor-action="undo"]')?.addEventListener('click', () => this.undo(), sig);
+        this.q('[data-editor-action="redo"]')?.addEventListener('click', () => this.redo(), sig);
+        this.q('[data-editor-action="toggle-code"]')?.addEventListener('click', () => {
             this.sidePanel?.classList.toggle('hidden');
             this.syncViews();
         }, sig);
-        // Code action buttons — matched by position within .code-actions
         if (this.code) {
             const code = this.code;
-            const codeActions = document.querySelectorAll('.code-actions button');
+            const codeActions = this.qAll('.code-actions button');
             codeActions[0]?.addEventListener('click', () => {
                 this.editable.innerHTML = sanitizeHtml(code.value);
                 this.onContentChange();
@@ -111,9 +128,8 @@ class Editor {
                     .trim();
             }, sig);
         }
-        const saveBtn = document.getElementById('saveBtn');
-        saveBtn?.addEventListener('click', () => this.downloadHTML(), sig);
-        document.getElementById('clearBtn')?.addEventListener('click', () => {
+        this.q('[data-editor-action="save"]')?.addEventListener('click', () => this.downloadHTML(), sig);
+        this.q('[data-editor-action="clear"]')?.addEventListener('click', () => {
             if (confirm('Clear all content?')) {
                 this.editable.innerHTML = '';
                 this.onContentChange();
@@ -121,8 +137,9 @@ class Editor {
         }, sig);
     }
     bindKeyboard() {
-        const saveBtn = document.getElementById('saveBtn');
         window.addEventListener('keydown', (e) => {
+            if (!this.root.contains(document.activeElement))
+                return;
             const mod = e.ctrlKey || e.metaKey;
             if (!mod)
                 return;
@@ -147,7 +164,7 @@ class Editor {
             }
             else if (key === 's') {
                 e.preventDefault();
-                saveBtn?.click();
+                this.q('[data-editor-action="save"]')?.click();
             }
             else if (key === 'z' && !e.shiftKey) {
                 e.preventDefault();
@@ -172,13 +189,13 @@ class Editor {
     }
     bindTabs() {
         const sig = { signal: this.abortController.signal };
-        document.querySelectorAll('.side-tab[data-tab]').forEach(tab => {
+        this.qAll('.side-tab[data-tab]').forEach(tab => {
             tab.addEventListener('click', () => {
-                const targetId = tab.dataset.tab;
-                document.querySelectorAll('.side-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.side-panel').forEach(p => p.classList.remove('active'));
+                const target = tab.dataset.tab;
+                this.qAll('.side-tab').forEach(t => t.classList.remove('active'));
+                this.qAll('.side-panel').forEach(p => p.classList.remove('active'));
                 tab.classList.add('active');
-                document.getElementById(targetId)?.classList.add('active');
+                this.q(`[data-editor="${target}"]`)?.classList.add('active');
             }, sig);
         });
     }
@@ -365,7 +382,7 @@ class Editor {
         const lines = text ? text.split('\n').filter(l => l.trim()) : [''];
         for (const line of lines) {
             const li = document.createElement('li');
-            li.textContent = line.trim() || '\u200B';
+            li.textContent = line.trim() || '​';
             list.appendChild(li);
         }
         range.deleteContents();
@@ -439,7 +456,7 @@ ${content}
         const element = container.nodeType === Node.TEXT_NODE
             ? container.parentElement
             : container;
-        document.querySelectorAll('[data-cmd]').forEach(btn => {
+        this.qAll('[data-cmd]').forEach(btn => {
             const cmd = btn.dataset.cmd;
             let active = false;
             let current = element;
