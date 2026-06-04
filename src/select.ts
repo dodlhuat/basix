@@ -37,11 +37,7 @@ class Select {
         this.dropdown?.classList.remove('open');
     }
 
-    public value(): string | string[] | undefined {
-        if (!this.element) {
-            return undefined;
-        }
-
+    public value(): string | string[] {
         const selectedValues = Array.from(this.element.options)
             .filter(option => option.selected)
             .map(option => option.value);
@@ -49,25 +45,23 @@ class Select {
         return this.isMultiselect ? selectedValues : selectedValues[0];
     }
 
-    public static init(elementOrSelector: string | HTMLSelectElement): boolean | null {
+    public static init(elementOrSelector: string | HTMLSelectElement): (() => void) | null {
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector<HTMLSelectElement>(elementOrSelector)
             : elementOrSelector;
 
-        if (!element) {
-            return null;
-        }
+        if (!element) return null;
 
         const result = Select.initElement(element);
         if (!result) return null;
 
-        document.addEventListener('click', (e: Event) => {
+        const handler = (e: Event) => {
             if (!result.dropdown.contains(e.target as Node)) {
                 result.dropdown.classList.remove('open');
             }
-        });
-
-        return result.isMulti;
+        };
+        document.addEventListener('click', handler);
+        return () => document.removeEventListener('click', handler);
     }
 
     private static initElement(element: HTMLSelectElement): { isMulti: boolean; dropdown: HTMLElement } | null {

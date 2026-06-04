@@ -199,14 +199,12 @@ class PushMenu {
     }
 
     private static clickNav = (): void => {
-        const navigation = PushMenu.elements.navigation as HTMLElement;
-        navigation?.click();
+        (PushMenu.elements.navigation as HTMLElement).click();
     };
 
     private static handleBackdropClick = (): void => {
         if (PushMenu.isOpen()) {
-            const navigation = PushMenu.elements.navigation as HTMLElement;
-            navigation?.click();
+            (PushMenu.elements.navigation as HTMLElement).click();
         }
     };
 

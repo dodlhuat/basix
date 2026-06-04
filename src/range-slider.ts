@@ -15,8 +15,8 @@ class RangeSlider {
     }
 
     private update(): void {
-        const min = +this.input.min || 0;
-        const max = +this.input.max || 100;
+        const min = this.input.min !== '' ? +this.input.min : 0;
+        const max = this.input.max !== '' ? +this.input.max : 100;
         const pct = ((+this.input.value - min) / (max - min)) * 100;
         this.input.style.setProperty('--range-fill', `${pct}%`);
     }

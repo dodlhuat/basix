@@ -2,7 +2,6 @@ import type { Placement } from './position.js';
 type PopoverPlacement = Placement | 'auto';
 type PopoverAlign = 'start' | 'center' | 'end';
 type PopoverTrigger = 'click' | 'hover';
-/** Configuration options for a Popover instance. */
 interface PopoverOptions {
     content: string;
     placement?: PopoverPlacement;
@@ -16,7 +15,6 @@ interface PopoverOptions {
     onOpen?: () => void;
     onClose?: () => void;
 }
-/** Anchored popover triggered by click or hover, with auto-placement and optional arrow. */
 declare class Popover {
     private static openPopovers;
     private static idCounter;
@@ -32,7 +30,6 @@ declare class Popover {
     toggle(): void;
     destroy(): void;
     static closeAll(): void;
-    /** Declarative init — reads [data-popover="#selector"] attributes */
     static initAll(): void;
     private buildEl;
     private reposition;

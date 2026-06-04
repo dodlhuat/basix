@@ -1,4 +1,3 @@
-/** Full-screen image viewer with gallery navigation, zoom, and touch support. */
 class Lightbox {
     images;
     currentIndex;
@@ -22,9 +21,6 @@ class Lightbox {
         this.closeable = options.closeable ?? true;
         this.onOpen = options.onOpen;
         this.onClose = options.onClose;
-        this.hide = this.hide.bind(this);
-        this.handleKeydown = this.handleKeydown.bind(this);
-        this.handleBackgroundClick = this.handleBackgroundClick.bind(this);
     }
     show() {
         this.hide();
@@ -61,7 +57,7 @@ class Lightbox {
         });
         this.onOpen?.();
     }
-    hide() {
+    hide = () => {
         const wrapper = this.wrapper;
         if (!wrapper)
             return;
@@ -80,7 +76,7 @@ class Lightbox {
             }
             this.onClose?.();
         }, 300);
-    }
+    };
     next() {
         if (this.images.length <= 1)
             return;
@@ -168,7 +164,7 @@ class Lightbox {
         this.imgEl.classList.toggle('is-zoomed', this.isZoomed);
         this.wrapper?.querySelector('.lightbox-img-wrap')?.classList.toggle('is-zoomed', this.isZoomed);
     }
-    handleKeydown(e) {
+    handleKeydown = (e) => {
         switch (e.key) {
             case 'Escape':
                 if (this.closeable)
@@ -184,7 +180,7 @@ class Lightbox {
                 this.trapFocus(e);
                 break;
         }
-    }
+    };
     trapFocus(e) {
         if (!this.wrapper)
             return;
@@ -206,11 +202,11 @@ class Lightbox {
             }
         }
     }
-    handleBackgroundClick(e) {
+    handleBackgroundClick = (e) => {
         if (e.target?.classList.contains('lightbox-background')) {
             this.hide();
         }
-    }
+    };
     addTouchSupport() {
         const wrap = this.wrapper?.querySelector('.lightbox-img-wrap');
         if (!wrap)

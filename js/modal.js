@@ -1,6 +1,5 @@
 import { sanitizeHtml } from './utils.js';
 const CLOSE_ICON = '<div class="icon icon-close close"></div>';
-/** Overlay dialog with optional header, footer, close button, and type variants. */
 class Modal {
     content;
     header;

@@ -1,5 +1,4 @@
 import { computePosition } from './position.js';
-/** Lightweight tooltip that positions itself relative to a trigger element. */
 class Tooltip {
     static activeTooltip = null;
     static idCounter = 0;

@@ -42,9 +42,6 @@ class Lightbox {
         this.onOpen = options.onOpen;
         this.onClose = options.onClose;
 
-        this.hide = this.hide.bind(this);
-        this.handleKeydown = this.handleKeydown.bind(this);
-        this.handleBackgroundClick = this.handleBackgroundClick.bind(this);
     }
 
     public show(): void {
@@ -94,7 +91,7 @@ class Lightbox {
         this.onOpen?.();
     }
 
-    public hide(): void {
+    public hide = (): void => {
         const wrapper = this.wrapper;
         if (!wrapper) return;
 
@@ -209,7 +206,7 @@ class Lightbox {
         this.wrapper?.querySelector('.lightbox-img-wrap')?.classList.toggle('is-zoomed', this.isZoomed);
     }
 
-    private handleKeydown(e: KeyboardEvent): void {
+    private handleKeydown = (e: KeyboardEvent): void => {
         switch (e.key) {
             case 'Escape':
                 if (this.closeable) this.hide();
@@ -251,7 +248,7 @@ class Lightbox {
         }
     }
 
-    private handleBackgroundClick(e: Event): void {
+    private handleBackgroundClick = (e: Event): void => {
         if ((e.target as HTMLElement)?.classList.contains('lightbox-background')) {
             this.hide();
         }
@@ -299,7 +296,7 @@ class Lightbox {
         `;
     }
 
-    static bind(selector: string = '[data-lightbox]'): void {
+    public static bind(selector: string = '[data-lightbox]'): void {
         const elements = document.querySelectorAll<HTMLElement>(selector);
         const groups = new Map<string, { el: HTMLElement; image: LightboxImage }[]>();
 

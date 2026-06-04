@@ -1,5 +1,4 @@
 import { sanitizeHtml } from './utils.js';
-/** Rich-text editor built on contenteditable with undo/redo and code/preview panels. */
 class Editor {
     root;
     editable;
@@ -111,17 +110,16 @@ class Editor {
         }, sig);
         if (this.code) {
             const code = this.code;
-            const codeActions = this.qAll('.code-actions button');
-            codeActions[0]?.addEventListener('click', () => {
+            this.q('[data-editor-action="apply-code"]')?.addEventListener('click', () => {
                 this.editable.innerHTML = sanitizeHtml(code.value);
                 this.onContentChange();
             }, sig);
-            codeActions[1]?.addEventListener('click', () => {
+            this.q('[data-editor-action="sanitize-code"]')?.addEventListener('click', () => {
                 code.value = sanitizeHtml(code.value);
                 this.editable.innerHTML = code.value;
                 this.onContentChange();
             }, sig);
-            codeActions[2]?.addEventListener('click', () => {
+            this.q('[data-editor-action="minify-code"]')?.addEventListener('click', () => {
                 code.value = code.value
                     .replace(/\n/g, '')
                     .replace(/>\s+</g, '><')

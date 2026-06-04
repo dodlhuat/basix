@@ -1,4 +1,3 @@
-/** Enhances a native `<select>` element with a custom styled dropdown. */
 declare class Select {
     private readonly element;
     private readonly isMultiselect;
@@ -6,8 +5,8 @@ declare class Select {
     private readonly documentClickHandler;
     constructor(elementOrSelector: string | HTMLSelectElement);
     destroy(): void;
-    value(): string | string[] | undefined;
-    static init(elementOrSelector: string | HTMLSelectElement): boolean | null;
+    value(): string | string[];
+    static init(elementOrSelector: string | HTMLSelectElement): (() => void) | null;
     private static initElement;
     private static closeAllDropdowns;
     private static handleMultiSelect;

@@ -1,4 +1,3 @@
-/** Slide-based carousel with optional autoplay, loop, dot navigation, and touch support. */
 class Carousel {
     root;
     options;
@@ -121,7 +120,6 @@ class Carousel {
         const amountToMove = -1 * (this.slideWidth * targetIndex);
         this.track.style.transform = `translateX(${amountToMove}px)`;
         if (!animate) {
-            // Restore CSS transition after the paint to avoid a flash
             requestAnimationFrame(() => {
                 this.track.style.transitionDuration = '';
             });
@@ -146,7 +144,7 @@ class Carousel {
         this.track.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
             isDragging = true;
-        }, { passive: true, signal: this.abortController.signal });
+        }, { passive: true, signal: sig.signal });
         this.track.addEventListener('touchend', (e) => {
             if (!isDragging)
                 return;

@@ -1,4 +1,3 @@
-/** Multi-step progress indicator with clickable steps and connector state. */
 class Stepper {
     container;
     steps;

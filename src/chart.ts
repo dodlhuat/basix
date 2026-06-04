@@ -1,23 +1,23 @@
 import { escapeHtml } from './utils.js';
 
-export type ChartType  = 'line' | 'area' | 'column' | 'bar' | 'pie';
-export type ChartCurve = 'smooth' | 'linear' | 'step';
+type ChartType  = 'line' | 'area' | 'column' | 'bar' | 'pie';
+type ChartCurve = 'smooth' | 'linear' | 'step';
 
 /** A single labelled data value within a chart series. */
-export interface ChartDataPoint {
+interface ChartDataPoint {
     label: string;
     value: number;
 }
 
 /** A named data series with optional per-series colour override. */
-export interface ChartSeries {
+interface ChartSeries {
     name: string;
     data: ChartDataPoint[];
     color?: string;
 }
 
 /** Configuration options for a Chart instance. */
-export interface ChartOptions {
+interface ChartOptions {
     type: ChartType;
     series: ChartSeries[];
     title?: string;
@@ -55,7 +55,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 /** SVG-based chart component supporting line, area, column, bar, and pie types. */
 class Chart {
     private container: HTMLElement;
-    private opts: Required<ChartOptions>;
+    private opts: Omit<Required<ChartOptions>, 'yMax'> & { yMax?: number };
     private tooltip!: HTMLElement;
     private colors: string[] = [];
     private abortController = new AbortController();
@@ -80,7 +80,7 @@ class Chart {
             animate:      options.animate      ?? true,
             curve:        options.curve        ?? 'smooth',
             yMin:         options.yMin         ?? 0,
-            yMax:         options.yMax         ?? 0,
+            yMax:         options.yMax,
             onPointClick: options.onPointClick ?? (() => {}),
         };
 
@@ -130,7 +130,7 @@ class Chart {
         const h = height;
 
         const allValues = series.flatMap(s => s.data.map(d => d.value));
-        const yMax = this.opts.yMax || Math.max(...allValues) * 1.1;
+        const yMax = this.opts.yMax ?? Math.max(...allValues) * 1.1;
         const labels = series[0].data.map(d => d.label);
 
         const svg = this.createSVG(canvas, svgW, svgH);
@@ -211,7 +211,7 @@ class Chart {
         const h = height;
 
         const allValues = series.flatMap(s => s.data.map(d => d.value));
-        const yMax = this.opts.yMax || Math.max(...allValues) * 1.1;
+        const yMax = this.opts.yMax ?? Math.max(...allValues) * 1.1;
         const labels = series[0].data.map(d => d.label);
         const numPts = labels.length;
         const numSeries = series.length;
@@ -657,3 +657,4 @@ class Chart {
 }
 
 export { Chart };
+export type { ChartType, ChartCurve, ChartDataPoint, ChartSeries, ChartOptions };

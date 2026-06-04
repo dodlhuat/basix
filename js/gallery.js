@@ -1,6 +1,5 @@
 import { escapeHtml } from './utils.js';
 import { Lightbox } from './lightbox.js';
-/** Infinite-scroll masonry gallery that distributes images across dynamically sized columns. */
 class MasonryGallery {
     container;
     loader;
@@ -17,11 +16,11 @@ class MasonryGallery {
             throw new Error(`Container with id "${containerId}" not found`);
         }
         this.container = container;
-        this.loader = document.querySelector(options.loaderSelector || ".loader");
+        this.loader = document.querySelector(options.loaderSelector || '.loader');
         this.options = {
             minColumnWidth: options.minColumnWidth ?? 250,
             scrollThreshold: options.scrollThreshold ?? 100,
-            reload: 2,
+            reload: options.reload ?? 2,
             fetchFunction: options.fetchFunction,
             enableLightbox: options.enableLightbox ?? true,
         };
@@ -54,11 +53,11 @@ class MasonryGallery {
         this.abortController = new AbortController();
         const sig = this.abortController.signal;
         let resizeTimeout;
-        window.addEventListener("resize", () => {
+        window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => this.reLayout(), 200);
         }, { signal: sig });
-        window.addEventListener("scroll", this.handleScroll, { passive: true, signal: sig });
+        window.addEventListener('scroll', this.handleScroll, { passive: true, signal: sig });
     }
     reLayout() {
         const items = this.columns.flatMap(col => Array.from(col.children));
@@ -84,7 +83,7 @@ class MasonryGallery {
         if (!isAutoFill)
             this.reloaded++;
         if (this.options.reload > 0 && this.reloaded > this.options.reload) {
-            console.warn("Maximum reload limit reached.");
+            console.warn('Maximum reload limit reached.');
             return;
         }
         if (this.isFetching)
@@ -96,7 +95,7 @@ class MasonryGallery {
             this.renderImages(newImages);
         }
         catch (error) {
-            throw new Error("Error loading images: " + error);
+            console.error('MasonryGallery: error loading images', error);
         }
         finally {
             this.isFetching = false;
@@ -111,16 +110,12 @@ class MasonryGallery {
     }
     toggleLoader(show) {
         if (this.loader) {
-            this.loader.classList.toggle("hidden", !show);
+            this.loader.classList.toggle('hidden', !show);
         }
     }
     renderImages(imageDataList) {
         const startIndex = this.allImages.length;
         this.allImages.push(...imageDataList);
-        // Sort columns by current height so we start filling from the shortest.
-        // Then round-robin across them — this avoids the problem where unloaded
-        // images (0 height) cause offsetHeight-based distribution to pile all
-        // new items into a single column.
         const sorted = [...this.columns].sort((a, b) => a.offsetHeight - b.offsetHeight);
         imageDataList.forEach((data, i) => {
             const item = this.createCard(data);
@@ -140,28 +135,28 @@ class MasonryGallery {
             const col = sorted[i % sorted.length];
             col.appendChild(item);
             requestAnimationFrame(() => {
-                const img = item.querySelector("img");
+                const img = item.querySelector('img');
                 if (img) {
-                    img.addEventListener("load", () => img.classList.add("loaded"), {
+                    img.addEventListener('load', () => img.classList.add('loaded'), {
                         once: true,
                     });
                     if (img.complete) {
-                        img.classList.add("loaded");
+                        img.classList.add('loaded');
                     }
                 }
             });
         });
     }
     createCard(data) {
-        const div = document.createElement("div");
-        div.className = "masonry-item";
+        const div = document.createElement('div');
+        div.className = 'masonry-item';
         div.innerHTML = `
-      <img src="${escapeHtml(data.src)}" alt="${escapeHtml(data.title)}" loading="lazy">
-      <div class="masonry-item-info">
-        <h3 class="masonry-item-title">${escapeHtml(data.title)}</h3>
-        <p class="masonry-item-desc">${escapeHtml(data.desc)}</p>
-      </div>
-    `;
+            <img src="${escapeHtml(data.src)}" alt="${escapeHtml(data.title)}" loading="lazy">
+            <div class="masonry-item-info">
+                <h3 class="masonry-item-title">${escapeHtml(data.title)}</h3>
+                <p class="masonry-item-desc">${escapeHtml(data.desc)}</p>
+            </div>
+        `;
         return div;
     }
     addToShortestColumn(element) {

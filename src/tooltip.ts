@@ -1,5 +1,4 @@
 import { computePosition } from './position.js';
-import type { Placement } from './position.js';
 
 /** Configuration options for a Tooltip instance. */
 interface TooltipOptions {

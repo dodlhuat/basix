@@ -1,5 +1,4 @@
 import { escapeHtml } from './utils.js';
-/** Drag-and-drop file uploader with progress tracking and XHR-based uploads. */
 class FileUploader {
     container;
     dropZone;

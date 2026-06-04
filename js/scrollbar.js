@@ -1,4 +1,3 @@
-/** Custom scrollbar overlay that replaces the native scrollbar with a draggable thumb. */
 class Scrollbar {
     static instances = new WeakMap();
     static activeInstance = null;

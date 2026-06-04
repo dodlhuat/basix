@@ -1,5 +1,4 @@
 import { escapeHtml } from './utils.js';
-/** Searchable picker for selecting groups and their subgroups. */
 class GroupPicker {
     container;
     data;
@@ -44,9 +43,9 @@ class GroupPicker {
         const searchWrap = document.createElement('div');
         searchWrap.className = 'group-picker__search';
         searchWrap.innerHTML = `
-      <span class="icon icon-search group-picker__search-icon" aria-hidden="true"></span>
-      <input type="text" />
-    `;
+            <span class="icon icon-search group-picker__search-icon" aria-hidden="true"></span>
+            <input type="text" />
+        `;
         this.searchInput = searchWrap.querySelector('input');
         this.searchInput.placeholder = this.options.searchPlaceholder;
         this.listEl = document.createElement('div');
@@ -73,9 +72,9 @@ class GroupPicker {
             const empty = document.createElement('div');
             empty.className = 'group-picker__empty';
             empty.innerHTML = `
-        <span class="icon icon-search" aria-hidden="true"></span>
-        <span>${this.options.emptyLabel}</span>
-      `;
+                <span class="icon icon-search" aria-hidden="true"></span>
+                <span>${this.options.emptyLabel}</span>
+            `;
             this.listEl.appendChild(empty);
         }
     }
@@ -94,7 +93,6 @@ class GroupPicker {
             el.classList.add('is-expanded');
         if (isParentSelected)
             el.classList.add('is-selected');
-        // Header row
         const header = document.createElement('div');
         header.className = 'group-picker__group-header';
         const label = document.createElement('span');

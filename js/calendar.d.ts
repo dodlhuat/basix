@@ -1,5 +1,4 @@
-/** Represents a single calendar event with a start/end date. */
-export interface CalendarEvent {
+interface CalendarEvent {
     id: string;
     title: string;
     start: Date;
@@ -7,9 +6,8 @@ export interface CalendarEvent {
     allDay?: boolean;
     className?: string;
 }
-export type CalendarView = 'month' | 'week' | 'agenda';
-/** Localisation strings and week-start configuration for the Calendar. */
-export interface CalendarLocale {
+type CalendarView = 'month' | 'week' | 'agenda';
+interface CalendarLocale {
     monthNames: string[];
     dayNamesShort: string[];
     dayNamesFull: string[];
@@ -21,8 +19,7 @@ export interface CalendarLocale {
     allDay: string;
     noEvents: string;
 }
-/** Configuration options for the Calendar component. */
-export interface CalendarOptions {
+interface CalendarOptions {
     container: HTMLElement | string;
     events?: CalendarEvent[];
     view?: CalendarView;
@@ -34,7 +31,6 @@ export interface CalendarOptions {
     className?: string;
     iconBasePath?: string;
 }
-/** Layout descriptor for a multi-day event spanning columns in a week row. */
 interface SpanLayout {
     event: CalendarEvent;
     colStart: number;
@@ -43,7 +39,6 @@ interface SpanLayout {
     continuesBefore: boolean;
     continuesAfter: boolean;
 }
-/** Layout descriptor for a timed event positioned in a day column. */
 interface TimedEventLayout {
     event: CalendarEvent;
     top: number;
@@ -51,7 +46,7 @@ interface TimedEventLayout {
     col: number;
     cols: number;
 }
-export declare const CalendarLogic: {
+declare const CalendarLogic: {
     getMonthGrid(year: number, month: number, firstDayOfWeek: number): Date[];
     getWeekDays(date: Date, firstDayOfWeek: number): Date[];
     isSameDay(a: Date, b: Date): boolean;
@@ -67,14 +62,11 @@ export declare const CalendarLogic: {
         height: number;
     };
     formatTime(date: Date): string;
-    /** Compute horizontal span layout for a set of events within a 7-day row. */
     computeSpanLayout(weekDays: Date[], events: CalendarEvent[]): SpanLayout[];
-    /** Compute side-by-side column layout for overlapping timed events in a day column. */
     computeTimedLayout(events: CalendarEvent[], day: Date): TimedEventLayout[];
     nowLinePct(): number;
 };
-/** Produces HTML strings for each Calendar view (month, week, agenda). */
-export declare class CalendarRenderer {
+declare class CalendarRenderer {
     private locale;
     constructor(locale: CalendarLocale);
     renderWeekdayHeaders(): string;
@@ -86,8 +78,7 @@ export declare class CalendarRenderer {
     renderWeekView(date: Date, events: CalendarEvent[], firstDayOfWeek: number, showNowLine?: boolean): string;
     renderAgendaView(year: number, month: number, events: CalendarEvent[]): string;
 }
-/** Main Calendar controller — manages state, rendering, and event delegation. */
-export declare class Calendar {
+declare class Calendar {
     private container;
     private options;
     private locale;
@@ -119,4 +110,5 @@ export declare class Calendar {
     private handleClick;
     private handleKeydown;
 }
-export {};
+export { CalendarLogic, CalendarRenderer, Calendar };
+export type { CalendarEvent, CalendarView, CalendarLocale, CalendarOptions };

@@ -1,4 +1,3 @@
-/** Represents a single node in a tree structure, either a file or folder. */
 class TreeNode {
     label;
     type;
@@ -17,7 +16,6 @@ class TreeNode {
         this.childrenContainer = null;
     }
 }
-/** Renders an interactive collapsible tree view from a list of TreeNode objects. */
 class TreeComponent {
     container;
     data;
@@ -81,18 +79,18 @@ class TreeComponent {
         iconDiv.className = 'tree-icon';
         if (type === 'folder') {
             iconDiv.innerHTML = `
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      `;
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            `;
         }
         else {
             iconDiv.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M13 2v7h7" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      `;
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13 2v7h7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            `;
         }
         return iconDiv;
     }

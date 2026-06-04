@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Color Picker — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { ColorPicker } from '../../js/color-picker.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        // Basic
+        const picker = new ColorPicker('#cp-basic', {
+            onChange: (hex, rgb) => {
+                document.getElementById('cp-basic-out').textContent = `${hex}  —  rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+                document.getElementById('cp-basic-swatch').style.backgroundColor = hex;
+            },
+        });
+
+        // With initial value
+        new ColorPicker('#cp-preset', {
+            value: '#2E8B57',
+            onChange: (hex) => {
+                document.getElementById('cp-preset-out').textContent = hex;
+                document.getElementById('cp-preset-swatch').style.backgroundColor = hex;
+            },
+        });
+
+        // Programmatic control
+        const pickerProg = new ColorPicker('#cp-prog', {
+            value: '#3D63DD',
+            onChange: (hex) => {
+                document.getElementById('cp-prog-out').textContent = hex;
+                document.getElementById('cp-prog-swatch').style.backgroundColor = hex;
+            },
+        });
+        document.getElementById('btn-red').addEventListener('click',   () => pickerProg.setValue('#D64545'));
+        document.getElementById('btn-green').addEventListener('click', () => pickerProg.setValue('#2E8B57'));
+        document.getElementById('btn-blue').addEventListener('click',  () => pickerProg.setValue('#3D63DD'));
+
+        new CodeViewer('#code-html', `<div id="my-picker"></div>`, 'html');
+
+        new CodeViewer('#code-js', `import { ColorPicker } from '@dodlhuat/basix/js/color-picker.js';
+
+const picker = new ColorPicker('#my-picker', {
+  value: '#3d63dd',
+  onChange: (hex, rgb) => {
+    console.log(hex);            // '#3d63dd'
+    console.log(rgb.r, rgb.g, rgb.b);
+  },
+});
+
+picker.getValue();               // current hex string
+picker.setValue('#ff6b6b');      // set programmatically
+picker.destroy();`, 'js');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <div class="icon icon-menu"></div>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Color Picker</h1>
+            <p class="docs-lead">Canvas-based HSB color picker with a hue slider and hex/RGB inputs. Renders into any container and is fully mobile-friendly — drag on touch works without triggering page scroll.</p>
+            <p class="docs-import">{ ColorPicker } from '/basix/js/color-picker.js'</p>
+
+            <h2>Basic</h2>
+            <div class="docs-demo" style="max-width:320px;">
+                <div id="cp-basic"></div>
+                <p style="margin:0.75rem 0 0;font-size:0.85rem;color:var(--secondary-text);display:flex;align-items:center;gap:0.5rem;">
+                    <span id="cp-basic-swatch" style="display:inline-block;width:16px;height:16px;border-radius:50%;border:1px solid var(--divider);background:#ff0000;flex-shrink:0;"></span>
+                    <code id="cp-basic-out">#ff0000  —  rgb(255, 0, 0)</code>
+                </p>
+            </div>
+
+            <h2>With initial value</h2>
+            <div class="docs-demo" style="max-width:320px;">
+                <div id="cp-preset"></div>
+                <p style="margin:0.75rem 0 0;font-size:0.85rem;color:var(--secondary-text);display:flex;align-items:center;gap:0.5rem;">
+                    <span id="cp-preset-swatch" style="display:inline-block;width:16px;height:16px;border-radius:50%;border:1px solid var(--divider);background:#2E8B57;flex-shrink:0;"></span>
+                    <code id="cp-preset-out">#2e8b57</code>
+                </p>
+            </div>
+
+            <h2>Programmatic control</h2>
+            <div class="docs-demo" style="max-width:320px;">
+                <div id="cp-prog"></div>
+                <p style="margin:0.75rem 0 0;font-size:0.85rem;color:var(--secondary-text);display:flex;align-items:center;gap:0.5rem;">
+                    <span id="cp-prog-swatch" style="display:inline-block;width:16px;height:16px;border-radius:50%;border:1px solid var(--divider);background:#3D63DD;flex-shrink:0;"></span>
+                    <code id="cp-prog-out">#3d63dd</code>
+                </p>
+                <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+                    <button id="btn-red"   class="button button-error"   style="flex:1;">Red</button>
+                    <button id="btn-green" class="button button-success" style="flex:1;">Green</button>
+                    <button id="btn-blue"  class="button button-primary" style="flex:1;">Blue</button>
+                </div>
+            </div>
+
+            <h2>Usage</h2>
+            <div id="code-html"></div>
+            <div id="code-js" style="margin-top:0.5rem;"></div>
+
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>value</code></td><td>string</td><td><code>'#ff0000'</code></td><td>Initial hex color.</td></tr>
+                    <tr><td><code>onChange</code></td><td>(hex, rgb) =&gt; void</td><td>—</td><td>Called on every color change. Receives the hex string and an <code>{ r, g, b }</code> object.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>API</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>getValue()</code></td><td>Returns the current color as a lowercase hex string, e.g. <code>'#3d63dd'</code>.</td></tr>
+                    <tr><td><code>setValue(hex)</code></td><td>Sets the picker to a given hex color. Silently ignored if the string is not a valid 6-digit hex.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Removes all event listeners, disconnects the ResizeObserver, and clears the container DOM.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

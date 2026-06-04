@@ -16,6 +16,7 @@ class Tabs {
     private tabItems: NodeListOf<Element>;
     private tabPanels: NodeListOf<Element>;
     private currentTab: number;
+    private abortController = new AbortController();
 
     constructor(elementOrSelector: string | HTMLElement, options: TabsOptions = {}) {
         const element = typeof elementOrSelector === 'string'
@@ -28,11 +29,11 @@ class Tabs {
 
         this.container = element;
 
-        const layout = options.layout || 'horizontal';
+        const layout = options.layout ?? 'horizontal';
         this.options = {
             layout,
             defaultTab: options.defaultTab ?? 0,
-            menuPos: options.menuPos || (layout === 'vertical' ? 'left' : 'top'),
+            menuPos: options.menuPos ?? (layout === 'vertical' ? 'left' : 'top'),
             onChange: options.onChange
         };
 
@@ -43,9 +44,6 @@ class Tabs {
         this.init();
     }
 
-    /**
-     * Initializes the tabs component
-     */
     private init(): void {
         if (this.options.layout === 'vertical') {
             this.container.classList.add('tabs-vertical');
@@ -72,20 +70,18 @@ class Tabs {
         this.activateTab(this.options.defaultTab);
     }
 
-    /**
-     * Binds click events to tab items
-     */
     private bindEvents(): void {
+        const sig = { signal: this.abortController.signal };
         this.tabItems.forEach((item, index) => {
             item.addEventListener('click', (e: Event) => {
                 e.preventDefault();
                 this.activateTab(index);
-            });
+            }, sig);
 
             item.addEventListener('keydown', (e: Event) => {
                 const keyEvent = e as KeyboardEvent;
                 this.handleKeyboardNavigation(keyEvent, index);
-            });
+            }, sig);
 
             item.setAttribute('role', 'tab');
             item.setAttribute('tabindex', index === this.options.defaultTab ? '0' : '-1');
@@ -98,9 +94,6 @@ class Tabs {
         });
     }
 
-    /**
-     * Handles keyboard navigation (Arrow keys, Home, End)
-     */
     private handleKeyboardNavigation(e: KeyboardEvent, currentIndex: number): void {
         let newIndex = currentIndex;
         const isVertical = this.options.layout === 'vertical';
@@ -148,9 +141,6 @@ class Tabs {
         }
     }
 
-    /**
-     * Activates a tab by index
-     */
     private activateTab(index: number): void {
         if (index < 0 || index >= this.tabItems.length) {
             console.warn(`Invalid tab index: ${index}`);
@@ -183,9 +173,6 @@ class Tabs {
         }
     }
 
-    /**
-     * Public API: Programmatically activate a tab
-     */
     public goToTab(index: number): void {
         this.activateTab(index);
 
@@ -194,23 +181,14 @@ class Tabs {
         }
     }
 
-    /**
-     * Public API: Get the currently active tab index
-     */
     public getCurrentTab(): number {
         return this.currentTab;
     }
 
-    /**
-     * Public API: Get the total number of tabs
-     */
     public getTabCount(): number {
         return this.tabItems.length;
     }
 
-    /**
-     * Public API: Enable a tab
-     */
     public enableTab(index: number): void {
         if (index < 0 || index >= this.tabItems.length) return;
 
@@ -220,9 +198,6 @@ class Tabs {
         tab.style.pointerEvents = '';
     }
 
-    /**
-     * Public API: Disable a tab
-     */
     public disableTab(index: number): void {
         if (index < 0 || index >= this.tabItems.length) return;
 
@@ -241,14 +216,8 @@ class Tabs {
         }
     }
 
-    /**
-     * Public API: Destroy the tabs instance and clean up
-     */
     public destroy(): void {
-        this.tabItems.forEach((item) => {
-            const newItem = item.cloneNode(true);
-            item.parentNode?.replaceChild(newItem, item);
-        });
+        this.abortController.abort();
 
         this.container.classList.remove('tabs-vertical');
 

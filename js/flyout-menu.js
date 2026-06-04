@@ -1,4 +1,3 @@
-/** Off-canvas flyout navigation with nested submenu support. */
 class FlyoutMenu {
     options;
     menuTrigger;

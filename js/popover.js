@@ -1,7 +1,6 @@
 import { computePosition } from './position.js';
 import { sanitizeHtml } from './utils.js';
 const ARROW_SIZE = 6;
-/** Anchored popover triggered by click or hover, with auto-placement and optional arrow. */
 class Popover {
     static openPopovers = new Set();
     static idCounter = 0;
@@ -75,7 +74,6 @@ class Popover {
     static closeAll() {
         Popover.openPopovers.forEach(p => p.close());
     }
-    /** Declarative init — reads [data-popover="#selector"] attributes */
     static initAll() {
         document.querySelectorAll('[data-popover]').forEach(trigger => {
             const sel = trigger.getAttribute('data-popover');

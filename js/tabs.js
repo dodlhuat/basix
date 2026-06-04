@@ -1,10 +1,10 @@
-/** Tabbed content component with horizontal/vertical layouts and keyboard navigation. */
 class Tabs {
     container;
     options;
     tabItems;
     tabPanels;
     currentTab;
+    abortController = new AbortController();
     constructor(elementOrSelector, options = {}) {
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
@@ -13,11 +13,11 @@ class Tabs {
             throw new Error(`Tabs: Element not found for selector "${elementOrSelector}"`);
         }
         this.container = element;
-        const layout = options.layout || 'horizontal';
+        const layout = options.layout ?? 'horizontal';
         this.options = {
             layout,
             defaultTab: options.defaultTab ?? 0,
-            menuPos: options.menuPos || (layout === 'vertical' ? 'left' : 'top'),
+            menuPos: options.menuPos ?? (layout === 'vertical' ? 'left' : 'top'),
             onChange: options.onChange
         };
         this.currentTab = this.options.defaultTab;
@@ -25,9 +25,6 @@ class Tabs {
         this.tabPanels = this.container.querySelectorAll('.tab-panel');
         this.init();
     }
-    /**
-     * Initializes the tabs component
-     */
     init() {
         if (this.options.layout === 'vertical') {
             this.container.classList.add('tabs-vertical');
@@ -48,19 +45,17 @@ class Tabs {
         this.bindEvents();
         this.activateTab(this.options.defaultTab);
     }
-    /**
-     * Binds click events to tab items
-     */
     bindEvents() {
+        const sig = { signal: this.abortController.signal };
         this.tabItems.forEach((item, index) => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.activateTab(index);
-            });
+            }, sig);
             item.addEventListener('keydown', (e) => {
                 const keyEvent = e;
                 this.handleKeyboardNavigation(keyEvent, index);
-            });
+            }, sig);
             item.setAttribute('role', 'tab');
             item.setAttribute('tabindex', index === this.options.defaultTab ? '0' : '-1');
             item.setAttribute('aria-selected', index === this.options.defaultTab ? 'true' : 'false');
@@ -70,9 +65,6 @@ class Tabs {
             panel.setAttribute('aria-hidden', index === this.options.defaultTab ? 'false' : 'true');
         });
     }
-    /**
-     * Handles keyboard navigation (Arrow keys, Home, End)
-     */
     handleKeyboardNavigation(e, currentIndex) {
         let newIndex = currentIndex;
         const isVertical = this.options.layout === 'vertical';
@@ -117,9 +109,6 @@ class Tabs {
             this.tabItems[newIndex].focus();
         }
     }
-    /**
-     * Activates a tab by index
-     */
     activateTab(index) {
         if (index < 0 || index >= this.tabItems.length) {
             console.warn(`Invalid tab index: ${index}`);
@@ -145,30 +134,18 @@ class Tabs {
             this.options.onChange(index);
         }
     }
-    /**
-     * Public API: Programmatically activate a tab
-     */
     goToTab(index) {
         this.activateTab(index);
         if (this.tabItems[index]) {
             this.tabItems[index].focus();
         }
     }
-    /**
-     * Public API: Get the currently active tab index
-     */
     getCurrentTab() {
         return this.currentTab;
     }
-    /**
-     * Public API: Get the total number of tabs
-     */
     getTabCount() {
         return this.tabItems.length;
     }
-    /**
-     * Public API: Enable a tab
-     */
     enableTab(index) {
         if (index < 0 || index >= this.tabItems.length)
             return;
@@ -177,9 +154,6 @@ class Tabs {
         tab.removeAttribute('aria-disabled');
         tab.style.pointerEvents = '';
     }
-    /**
-     * Public API: Disable a tab
-     */
     disableTab(index) {
         if (index < 0 || index >= this.tabItems.length)
             return;
@@ -194,14 +168,8 @@ class Tabs {
             }
         }
     }
-    /**
-     * Public API: Destroy the tabs instance and clean up
-     */
     destroy() {
-        this.tabItems.forEach((item) => {
-            const newItem = item.cloneNode(true);
-            item.parentNode?.replaceChild(newItem, item);
-        });
+        this.abortController.abort();
         this.container.classList.remove('tabs-vertical');
         this.tabItems.forEach((item) => {
             item.removeAttribute('role');

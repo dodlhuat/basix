@@ -1,17 +1,14 @@
-/** A start/end time pair as HH:MM strings. */
 interface TimeSpan {
     start: string;
     end: string;
 }
-/** Configuration options for a TimeSpanPicker instance. */
 interface TimeSpanPickerOptions {
     onChange?: (start: string, end: string) => void;
     defaultStart?: string;
     defaultEnd?: string;
     fromString?: string;
-    toString?: string;
+    toLabel?: string;
 }
-/** Interactive time-range picker with a draggable bar and dual time inputs. */
 declare class TimeSpanPicker {
     private container;
     private startTimeInput;

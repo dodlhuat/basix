@@ -1,16 +1,15 @@
-/** Static utility for smooth-scrolling to a target element with header offset support. */
 class Scroll {
     static to(target, options = {}) {
-        const fixed_header = document.querySelector('.main-header');
-        const offset = fixed_header ? fixed_header.offsetHeight : 0;
+        const fixedHeader = document.querySelector('.main-header');
+        const offset = fixedHeader ? fixedHeader.offsetHeight : 0;
         const settings = {
-            behavior: "smooth",
+            behavior: 'smooth',
             offset: offset,
-            block: "start",
+            block: 'start',
             ...options
         };
         let el = target instanceof Element ? target : null;
-        if (typeof target === "string") {
+        if (typeof target === 'string') {
             el = document.querySelector(target);
         }
         if (!el)

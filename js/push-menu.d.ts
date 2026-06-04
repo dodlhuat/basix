@@ -1,4 +1,3 @@
-/** DOM element references managed by the PushMenu static class. */
 interface PushMenuElements {
     navigation: HTMLElement | null;
     content: HTMLElement | null;
@@ -7,7 +6,6 @@ interface PushMenuElements {
     controlIcon: HTMLElement | null;
     backdrop: HTMLElement | null;
 }
-/** Static class that manages a push-style side navigation panel. */
 declare class PushMenu {
     private static elements;
     private static initialized;

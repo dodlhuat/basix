@@ -1,4 +1,3 @@
-/** Enhances a native range input with a CSS fill-percentage custom property. */
 declare class RangeSlider {
     private readonly input;
     constructor(input: HTMLInputElement);

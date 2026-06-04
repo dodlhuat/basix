@@ -7,7 +7,6 @@ const FALLBACK_COLORS = [
     '#8B5CF6', '#06B6D4', '#F97316', '#EC4899',
 ];
 const SVG_NS = 'http://www.w3.org/2000/svg';
-/** SVG-based chart component supporting line, area, column, bar, and pie types. */
 class Chart {
     container;
     opts;
@@ -34,7 +33,7 @@ class Chart {
             animate: options.animate ?? true,
             curve: options.curve ?? 'smooth',
             yMin: options.yMin ?? 0,
-            yMax: options.yMax ?? 0,
+            yMax: options.yMax,
             onPointClick: options.onPointClick ?? (() => { }),
         };
         this.render();
@@ -84,7 +83,7 @@ class Chart {
         const w = svgW - m.left - m.right;
         const h = height;
         const allValues = series.flatMap(s => s.data.map(d => d.value));
-        const yMax = this.opts.yMax || Math.max(...allValues) * 1.1;
+        const yMax = this.opts.yMax ?? Math.max(...allValues) * 1.1;
         const labels = series[0].data.map(d => d.label);
         const svg = this.createSVG(canvas, svgW, svgH);
         if (showGrid)
@@ -155,7 +154,7 @@ class Chart {
         const w = svgW - m.left - m.right;
         const h = height;
         const allValues = series.flatMap(s => s.data.map(d => d.value));
-        const yMax = this.opts.yMax || Math.max(...allValues) * 1.1;
+        const yMax = this.opts.yMax ?? Math.max(...allValues) * 1.1;
         const labels = series[0].data.map(d => d.label);
         const numPts = labels.length;
         const numSeries = series.length;
@@ -368,7 +367,6 @@ class Chart {
         }
         return d;
     }
-    /** Smooth cubic bezier path through points (Catmull-Rom → cubic bezier) */
     smoothPath(pts) {
         if (pts.length === 0)
             return '';

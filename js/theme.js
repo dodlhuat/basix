@@ -1,12 +1,8 @@
-/** Static class for managing light/dark theme switching with system preference and localStorage persistence. */
 class Theme {
     static STORAGE_KEY = 'theme';
     static root;
     static elements = null;
     static mediaQuery = null;
-    /**
-     * Initializes the theme system with toggle functionality and system preference detection
-     */
     static init() {
         this.root = document.documentElement;
         const toggleBtn = document.getElementById('theme-toggle');
@@ -31,9 +27,6 @@ class Theme {
         this.bindKeyboardShortcut();
         this.bindSystemThemeChange();
     }
-    /**
-     * Safely retrieves the saved theme from localStorage
-     */
     static getSavedTheme() {
         try {
             const saved = localStorage.getItem(this.STORAGE_KEY);
@@ -44,9 +37,6 @@ class Theme {
             return null;
         }
     }
-    /**
-     * Safely saves the theme to localStorage
-     */
     static saveTheme(theme) {
         try {
             localStorage.setItem(this.STORAGE_KEY, theme);
@@ -55,22 +45,13 @@ class Theme {
             console.warn('localStorage.setItem failed', e);
         }
     }
-    /**
-     * Gets the system-preferred theme
-     */
     static getSystemTheme() {
         return this.mediaQuery?.matches ? 'dark' : 'light';
     }
-    /**
-     * Gets the current active theme
-     */
     static getCurrentTheme() {
         const current = this.root.getAttribute('data-theme');
         return current === 'dark' ? 'dark' : 'light';
     }
-    /**
-     * Applies a theme to the document
-     */
     static applyTheme(theme) {
         if (!this.elements)
             return;
@@ -99,9 +80,6 @@ class Theme {
             }
         }
     }
-    /**
-     * Toggles between light and dark theme
-     */
     static toggleTheme() {
         if (!this.elements)
             return;
@@ -118,9 +96,6 @@ class Theme {
             }
         }
     }
-    /**
-     * Binds click event to toggle button
-     */
     static bindToggleClick() {
         if (!this.elements)
             return;
@@ -128,9 +103,6 @@ class Theme {
             this.toggleTheme();
         });
     }
-    /**
-     * Binds keyboard shortcut (Ctrl/Cmd+J) for theme toggle
-     */
     static bindKeyboardShortcut() {
         window.addEventListener('keydown', (ev) => {
             const isMac = /Mac|iPhone|iPod|iPad/i.test(navigator.platform);
@@ -141,10 +113,6 @@ class Theme {
             }
         });
     }
-    /**
-     * Binds listener for system theme changes
-     * Only applies if user hasn't explicitly saved a preference
-     */
     static bindSystemThemeChange() {
         if (!this.mediaQuery)
             return;
@@ -161,22 +129,13 @@ class Theme {
             this.mediaQuery.addListener(handler);
         }
     }
-    /**
-     * Public API: Get the current theme
-     */
     static getTheme() {
         return this.getCurrentTheme();
     }
-    /**
-     * Public API: Set the theme programmatically
-     */
     static setTheme(theme) {
         this.saveTheme(theme);
         this.applyTheme(theme);
     }
-    /**
-     * Public API: Reset to system preference
-     */
     static resetToSystem() {
         try {
             localStorage.removeItem(this.STORAGE_KEY);
@@ -187,9 +146,6 @@ class Theme {
             console.warn('Failed to reset theme', e);
         }
     }
-    /**
-     * Public API: Check if user has a saved preference
-     */
     static hasSavedPreference() {
         return this.getSavedTheme() !== null;
     }

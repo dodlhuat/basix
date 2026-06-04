@@ -1,4 +1,3 @@
-/** Configuration options for the FlyoutMenu. */
 interface FlyoutMenuOptions {
     triggerSelector?: string;
     menuSelector?: string;
@@ -12,7 +11,6 @@ interface FlyoutMenuOptions {
     enableHeader?: boolean;
     enableFooter?: boolean;
 }
-/** Off-canvas flyout navigation with nested submenu support. */
 declare class FlyoutMenu {
     private options;
     private menuTrigger;

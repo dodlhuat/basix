@@ -16,6 +16,7 @@ const NAV = [
         items: [
             { label: 'Inputs & Forms',   href: 'forms/inputs.html' },
             { label: 'Date Picker',      href: 'forms/datepicker.html' },
+            { label: 'Color Picker',     href: 'forms/color-picker.html' },
             { label: 'Range Slider',     href: 'forms/range-slider.html' },
             { label: 'File Uploader',    href: 'forms/file-uploader.html' },
         ],

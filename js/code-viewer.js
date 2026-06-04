@@ -1,4 +1,3 @@
-/** Renders syntax-highlighted code inside a container element. */
 class CodeViewer {
     container;
     code;
@@ -145,8 +144,15 @@ class CodeViewer {
                 `;
         const copyButton = this.container.querySelector('.copy-button');
         if (copyButton) {
-            copyButton.addEventListener('click', () => this.copyCode());
+            copyButton.addEventListener('click', this.handleCopy);
         }
+    }
+    handleCopy = () => {
+        this.copyCode();
+    };
+    destroy() {
+        const copyButton = this.container.querySelector('.copy-button');
+        copyButton?.removeEventListener('click', this.handleCopy);
     }
 }
 export { CodeViewer };

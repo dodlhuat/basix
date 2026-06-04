@@ -178,7 +178,7 @@ class Carousel {
         this.track.addEventListener('touchstart', (e: TouchEvent) => {
             startX = e.touches[0].clientX;
             isDragging = true;
-        }, { passive: true, signal: this.abortController.signal });
+        }, { passive: true, signal: sig.signal });
 
         this.track.addEventListener('touchend', (e: TouchEvent) => {
             if (!isDragging) return;

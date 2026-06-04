@@ -1,4 +1,4 @@
-import { Select } from "./select.js";
+import { Select } from './select.js';
 
 /** Descriptor for a single table column. */
 interface TableColumn {
@@ -46,9 +46,9 @@ class Table {
         }
 
         this.container = element;
-        this.data = options.data || [];
-        this.columns = options.columns || [];
-        this.pageSize = options.pageSize || 10;
+        this.data = options.data ?? [];
+        this.columns = options.columns ?? [];
+        this.pageSize = options.pageSize ?? 10;
         this.currentPage = 1;
         this.sortColumn = null;
         this.sortDirection = 'asc';
@@ -61,9 +61,6 @@ class Table {
         this.init();
     }
 
-    /**
-     * Parses an existing HTML table in the DOM to extract data and columns
-     */
     private parseTableFromDOM(): void {
         const table = this.container.querySelector('table');
         if (!table) return;
@@ -97,18 +94,12 @@ class Table {
         this.container.innerHTML = '';
     }
 
-    /**
-     * Initializes the table by rendering controls, structure, and content
-     */
     private init(): void {
         this.renderControls();
         this.renderTableStructure();
         this.render();
     }
 
-    /**
-     * Renders the search and page size controls
-     */
     private renderControls(): void {
         const controlsDiv = document.createElement('div');
         controlsDiv.className = 'table-controls';
@@ -152,9 +143,6 @@ class Table {
         new Select('#' + pageSizeSelect.id);
     }
 
-    /**
-     * Creates the table structure (table, thead, tbody, pagination container)
-     */
     private renderTableStructure(): void {
         const wrapper = document.createElement('div');
         wrapper.className = 'table-wrapper';
@@ -192,9 +180,6 @@ class Table {
         this.paginationContainer = paginationDiv;
     }
 
-    /**
-     * Returns filtered and sorted data based on current state
-     */
     private getFilteredAndSortedData(): TableRow[] {
         let processedData = [...this.data];
 
@@ -226,9 +211,6 @@ class Table {
         return processedData;
     }
 
-    /**
-     * Renders the table body, pagination, and header sort indicators
-     */
     private render(): void {
         const processedData = this.getFilteredAndSortedData();
         const totalItems = processedData.length;
@@ -250,9 +232,6 @@ class Table {
         this.updateHeaderSortIcons();
     }
 
-    /**
-     * Renders the table body rows
-     */
     private renderBody(data: TableRow[]): void {
         this.tableBody.innerHTML = '';
 
@@ -279,9 +258,6 @@ class Table {
         });
     }
 
-    /**
-     * Updates the sort direction indicators in table headers
-     */
     private updateHeaderSortIcons(): void {
         const ths = this.tableHeader.querySelectorAll('th');
         ths.forEach(th => {
@@ -292,9 +268,6 @@ class Table {
         });
     }
 
-    /**
-     * Renders pagination controls and info
-     */
     private renderPagination(
         totalItems: number,
         totalPages: number,
@@ -345,18 +318,12 @@ class Table {
         this.paginationContainer.appendChild(buttonsDiv);
     }
 
-    /**
-     * Handles search input changes
-     */
     private handleSearch(text: string): void {
         this.filterText = text;
         this.currentPage = 1;
         this.render();
     }
 
-    /**
-     * Handles column header clicks for sorting
-     */
     private handleSort(key: string): void {
         if (this.sortColumn === key) {
             this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -367,26 +334,17 @@ class Table {
         this.render();
     }
 
-    /**
-     * Handles page size changes
-     */
     private handlePageSizeChange(size: number): void {
         this.pageSize = size;
         this.currentPage = 1;
         this.render();
     }
 
-    /**
-     * Sets the current page and re-renders
-     */
     private setPage(page: number): void {
         this.currentPage = page;
         this.render();
     }
 
-    /**
-     * Assigns a unique ID to an element, incrementing if necessary
-     */
     private assignUniqueId(element: HTMLElement, baseId: string): string | null {
         if (!element || !baseId) return null;
 
@@ -410,27 +368,18 @@ class Table {
         return uniqueId;
     }
 
-    /**
-     * Public API: Updates the table data and re-renders
-     */
     public setData(data: TableRow[]): void {
         this.data = data;
         this.currentPage = 1;
         this.render();
     }
 
-    /**
-     * Public API: Updates the columns and re-renders
-     */
     public setColumns(columns: TableColumn[]): void {
         this.columns = columns;
         this.container.innerHTML = '';
         this.init();
     }
 
-    /**
-     * Public API: Gets the current filtered and sorted data
-     */
     public getData(): TableRow[] {
         return this.getFilteredAndSortedData();
     }
@@ -441,4 +390,4 @@ class Table {
     }
 }
 
-export { Table, TableRow, TableColumn, TableOptions };
+export { Table, type TableRow, type TableColumn, type TableOptions };

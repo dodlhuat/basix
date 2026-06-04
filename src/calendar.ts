@@ -1,5 +1,5 @@
 /** Represents a single calendar event with a start/end date. */
-export interface CalendarEvent {
+interface CalendarEvent {
     id: string;
     title: string;
     start: Date;
@@ -8,10 +8,10 @@ export interface CalendarEvent {
     className?: string;
 }
 
-export type CalendarView = 'month' | 'week' | 'agenda';
+type CalendarView = 'month' | 'week' | 'agenda';
 
 /** Localisation strings and week-start configuration for the Calendar. */
-export interface CalendarLocale {
+interface CalendarLocale {
     monthNames: string[];
     dayNamesShort: string[];
     dayNamesFull: string[];
@@ -25,7 +25,7 @@ export interface CalendarLocale {
 }
 
 /** Configuration options for the Calendar component. */
-export interface CalendarOptions {
+interface CalendarOptions {
     container: HTMLElement | string;
     events?: CalendarEvent[];
     view?: CalendarView;
@@ -57,7 +57,7 @@ interface TimedEventLayout {
     cols: number;
 }
 
-export const CalendarLogic = {
+const CalendarLogic = {
     getMonthGrid(year: number, month: number, firstDayOfWeek: number): Date[] {
         const firstOfMonth = new Date(year, month, 1);
         const lastOfMonth = new Date(year, month + 1, 0);
@@ -249,7 +249,7 @@ const DEFAULT_LOCALE: CalendarLocale = {
 };
 
 /** Produces HTML strings for each Calendar view (month, week, agenda). */
-export class CalendarRenderer {
+class CalendarRenderer {
     private locale: CalendarLocale;
 
     constructor(locale: CalendarLocale) {
@@ -503,7 +503,7 @@ export class CalendarRenderer {
 }
 
 /** Main Calendar controller — manages state, rendering, and event delegation. */
-export class Calendar {
+class Calendar {
     private container: HTMLElement;
     private options: Required<CalendarOptions>;
     private locale: CalendarLocale;
@@ -743,3 +743,6 @@ export class Calendar {
         }
     }
 }
+
+export { CalendarLogic, CalendarRenderer, Calendar };
+export type { CalendarEvent, CalendarView, CalendarLocale, CalendarOptions };

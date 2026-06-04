@@ -60,7 +60,7 @@ class Popover {
 
     get isOpen(): boolean { return this._isOpen; }
 
-    open(): void {
+    public open(): void {
         if (this._isOpen) return;
         if (this.opts.triggerMode === 'click') Popover.closeAll();
 
@@ -81,7 +81,7 @@ class Popover {
         });
     }
 
-    close(): void {
+    public close(): void {
         if (!this._isOpen || !this.popoverEl) return;
 
         this.popoverEl.classList.remove('is-open');
@@ -100,19 +100,19 @@ class Popover {
         this.popoverEl = null;
     }
 
-    toggle(): void { this._isOpen ? this.close() : this.open(); }
+    public toggle(): void { this._isOpen ? this.close() : this.open(); }
 
-    destroy(): void {
+    public destroy(): void {
         this.close();
         this.detachTrigger();
     }
 
-    static closeAll(): void {
+    public static closeAll(): void {
         Popover.openPopovers.forEach(p => p.close());
     }
 
     /** Declarative init — reads [data-popover="#selector"] attributes */
-    static initAll(): void {
+    public static initAll(): void {
         document.querySelectorAll<HTMLElement>('[data-popover]').forEach(trigger => {
             const sel = trigger.getAttribute('data-popover');
             if (!sel) return;

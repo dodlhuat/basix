@@ -1,5 +1,4 @@
 import { computePosition } from './position.js';
-/** Calendar-based date (or date-range) picker that attaches to an input element. */
 class DatePicker {
     input;
     options;

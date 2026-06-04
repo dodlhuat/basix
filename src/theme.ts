@@ -14,9 +14,6 @@ class Theme {
     private static elements: ThemeElements | null = null;
     private static mediaQuery: MediaQueryList | null = null;
 
-    /**
-     * Initializes the theme system with toggle functionality and system preference detection
-     */
     public static init(): void {
         this.root = document.documentElement;
 
@@ -48,9 +45,6 @@ class Theme {
         this.bindSystemThemeChange();
     }
 
-    /**
-     * Safely retrieves the saved theme from localStorage
-     */
     private static getSavedTheme(): ThemeMode | null {
         try {
             const saved = localStorage.getItem(this.STORAGE_KEY);
@@ -61,9 +55,6 @@ class Theme {
         }
     }
 
-    /**
-     * Safely saves the theme to localStorage
-     */
     private static saveTheme(theme: ThemeMode): void {
         try {
             localStorage.setItem(this.STORAGE_KEY, theme);
@@ -72,24 +63,15 @@ class Theme {
         }
     }
 
-    /**
-     * Gets the system-preferred theme
-     */
     private static getSystemTheme(): ThemeMode {
         return this.mediaQuery?.matches ? 'dark' : 'light';
     }
 
-    /**
-     * Gets the current active theme
-     */
     private static getCurrentTheme(): ThemeMode {
         const current = this.root.getAttribute('data-theme');
         return current === 'dark' ? 'dark' : 'light';
     }
 
-    /**
-     * Applies a theme to the document
-     */
     private static applyTheme(theme: ThemeMode): void {
         if (!this.elements) return;
 
@@ -120,9 +102,6 @@ class Theme {
         }
     }
 
-    /**
-     * Toggles between light and dark theme
-     */
     private static toggleTheme(): void {
         if (!this.elements) return;
 
@@ -140,9 +119,6 @@ class Theme {
         }
     }
 
-    /**
-     * Binds click event to toggle button
-     */
     private static bindToggleClick(): void {
         if (!this.elements) return;
 
@@ -151,9 +127,6 @@ class Theme {
         });
     }
 
-    /**
-     * Binds keyboard shortcut (Ctrl/Cmd+J) for theme toggle
-     */
     private static bindKeyboardShortcut(): void {
         window.addEventListener('keydown', (ev: KeyboardEvent) => {
             const isMac = /Mac|iPhone|iPod|iPad/i.test(navigator.platform);
@@ -166,10 +139,6 @@ class Theme {
         });
     }
 
-    /**
-     * Binds listener for system theme changes
-     * Only applies if user hasn't explicitly saved a preference
-     */
     private static bindSystemThemeChange(): void {
         if (!this.mediaQuery) return;
 
@@ -187,24 +156,15 @@ class Theme {
         }
     }
 
-    /**
-     * Public API: Get the current theme
-     */
     public static getTheme(): ThemeMode {
         return this.getCurrentTheme();
     }
 
-    /**
-     * Public API: Set the theme programmatically
-     */
     public static setTheme(theme: ThemeMode): void {
         this.saveTheme(theme);
         this.applyTheme(theme);
     }
 
-    /**
-     * Public API: Reset to system preference
-     */
     public static resetToSystem(): void {
         try {
             localStorage.removeItem(this.STORAGE_KEY);
@@ -215,9 +175,6 @@ class Theme {
         }
     }
 
-    /**
-     * Public API: Check if user has a saved preference
-     */
     public static hasSavedPreference(): boolean {
         return this.getSavedTheme() !== null;
     }

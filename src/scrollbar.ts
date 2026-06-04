@@ -306,4 +306,4 @@ class Scrollbar {
 
 }
 
-export { Scrollbar, ScrollbarElements };
+export { Scrollbar, type ScrollbarElements };

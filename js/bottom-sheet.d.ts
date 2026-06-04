@@ -1,4 +1,3 @@
-/** Options for configuring a BottomSheet instance. */
 interface BottomSheetOptions {
     content: string;
     header?: string;
@@ -7,7 +6,6 @@ interface BottomSheetOptions {
     snapHeight?: 'auto' | 'half' | 'full';
     onClose?: () => void;
 }
-/** Slide-up sheet that attaches to the bottom of the viewport. */
 declare class BottomSheet {
     private readonly content;
     private readonly header?;

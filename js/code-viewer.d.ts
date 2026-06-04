@@ -1,5 +1,4 @@
 type SupportedLanguage = 'javascript' | 'js' | 'html' | 'css';
-/** Renders syntax-highlighted code inside a container element. */
 declare class CodeViewer {
     private container;
     private code;
@@ -12,6 +11,8 @@ declare class CodeViewer {
     private highlightCSS;
     private copyCode;
     private render;
+    private handleCopy;
+    destroy(): void;
 }
 export { CodeViewer };
 export type { SupportedLanguage };

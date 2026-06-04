@@ -1,5 +1,4 @@
 import { escapeHtml } from './utils.js';
-/** Dismissible notification banner with optional auto-hide timer and progress bar. */
 class Toast {
     content;
     header;

@@ -1,4 +1,3 @@
-/** Enhances a native `<select>` element with a custom styled dropdown. */
 class Select {
     element;
     isMultiselect;
@@ -30,9 +29,6 @@ class Select {
         this.dropdown?.classList.remove('open');
     }
     value() {
-        if (!this.element) {
-            return undefined;
-        }
         const selectedValues = Array.from(this.element.options)
             .filter(option => option.selected)
             .map(option => option.value);
@@ -42,18 +38,18 @@ class Select {
         const element = typeof elementOrSelector === 'string'
             ? document.querySelector(elementOrSelector)
             : elementOrSelector;
-        if (!element) {
+        if (!element)
             return null;
-        }
         const result = Select.initElement(element);
         if (!result)
             return null;
-        document.addEventListener('click', (e) => {
+        const handler = (e) => {
             if (!result.dropdown.contains(e.target)) {
                 result.dropdown.classList.remove('open');
             }
-        });
-        return result.isMulti;
+        };
+        document.addEventListener('click', handler);
+        return () => document.removeEventListener('click', handler);
     }
     static initElement(element) {
         if (!Select.transformSelect(element)) {

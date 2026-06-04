@@ -10,7 +10,7 @@ interface TimeSpanPickerOptions {
     defaultStart?: string;
     defaultEnd?: string;
     fromString?: string;
-    toString?: string;
+    toLabel?: string;
 }
 
 /** Interactive time-range picker with a draggable bar and dual time inputs. */
@@ -54,7 +54,7 @@ class TimeSpanPicker {
         this.onChange = options?.onChange;
         this.uid = `tsp-${Math.random().toString(36).slice(2, 9)}`;
         this.fromString = options?.fromString ?? 'From';
-        this.toLabel = options?.toString ?? 'To';
+        this.toLabel = options?.toLabel ?? 'To';
 
         this.render();
 

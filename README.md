@@ -1,9 +1,37 @@
-# Basix 1.3.5
+# Basix 1.4.0
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
 
 A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blank">http://www.andibauer.at/basix/</a>
+
+---
+
+## Migration Guide
+
+### 1.3.5 → 1.4.0
+
+#### Breaking changes
+
+**`TimeSpanPicker` — option `toString` renamed to `toLabel`**
+
+The `toString` option shadowed `Object.prototype.toString` and is now renamed to `toLabel`. Update any call sites that pass this option:
+
+```js
+// Before (1.3.5)
+new TimeSpanPicker('container', { toString: 'Bis' });
+
+// After (1.4.0)
+new TimeSpanPicker('container', { toLabel: 'Bis' });
+```
+
+#### Bug fixes
+
+- **`MasonryGallery`** — the `reload` option was previously hard-coded to `2` and ignored. It now respects the value you pass. The default remains `2`, so existing usage without the option is unaffected.
+- **`Tabs`** — `destroy()` no longer operates on detached DOM nodes. Event listeners are now cleaned up via `AbortController`.
+- **`gallery`** — image-load errors no longer cause an unhandled promise rejection; they are logged to `console.error` instead.
+
+---
 
 ### Benefits
 
@@ -813,9 +841,11 @@ The Select component wraps a native `<select>` element with custom Basix styling
 ``` js
 const sel = new Select('#my-select');
 sel.value();   // returns selected value string, or string[] for multi-select
+sel.destroy(); // removes the document click listener
 
-// Or initialise by passing the element directly
-Select.init(document.querySelector('#my-select'));
+// Static convenience form — returns a cleanup function to remove the document listener
+const cleanup = Select.init(document.querySelector('#my-select'));
+cleanup?.(); // call when the select is removed from the DOM
 ```
 
 ### Code Viewer
@@ -914,6 +944,9 @@ editor1.destroy();
 | `clear` | Clears all content |
 | `clean` | Strips formatting from the current selection |
 | `toggle-code` | Shows / hides the HTML side panel |
+| `apply-code` | Applies the HTML source panel content to the editable area |
+| `sanitize-code` | Sanitizes the HTML source, then applies it to the editable area |
+| `minify-code` | Minifies the HTML source (removes whitespace and newlines) |
 
 ### Custom Scrollbar
 

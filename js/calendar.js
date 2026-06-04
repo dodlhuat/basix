@@ -1,4 +1,4 @@
-export const CalendarLogic = {
+const CalendarLogic = {
     getMonthGrid(year, month, firstDayOfWeek) {
         const firstOfMonth = new Date(year, month, 1);
         const lastOfMonth = new Date(year, month + 1, 0);
@@ -77,7 +77,6 @@ export const CalendarLogic = {
     formatTime(date) {
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     },
-    /** Compute horizontal span layout for a set of events within a 7-day row. */
     computeSpanLayout(weekDays, events) {
         if (!events.length)
             return [];
@@ -130,7 +129,6 @@ export const CalendarLogic = {
         }
         return layouts;
     },
-    /** Compute side-by-side column layout for overlapping timed events in a day column. */
     computeTimedLayout(events, day) {
         if (!events.length)
             return [];
@@ -180,8 +178,7 @@ const DEFAULT_LOCALE = {
     allDay: 'Ganztägig',
     noEvents: 'Keine Termine',
 };
-/** Produces HTML strings for each Calendar view (month, week, agenda). */
-export class CalendarRenderer {
+class CalendarRenderer {
     locale;
     constructor(locale) {
         this.locale = locale;
@@ -380,8 +377,7 @@ export class CalendarRenderer {
         return `<div class="cal__agenda">${html}</div>`;
     }
 }
-/** Main Calendar controller — manages state, rendering, and event delegation. */
-export class Calendar {
+class Calendar {
     container;
     options;
     locale;
@@ -604,3 +600,4 @@ export class Calendar {
         }
     }
 }
+export { CalendarLogic, CalendarRenderer, Calendar };

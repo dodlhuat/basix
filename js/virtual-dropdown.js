@@ -1,5 +1,4 @@
 import { escapeHtml } from './utils.js';
-/** Virtualised dropdown that renders only visible items for performance with large option lists. */
 class VirtualDropdown {
     container;
     options;
@@ -9,8 +8,6 @@ class VirtualDropdown {
     renderLimit;
     itemHeight;
     onSelect;
-    // Unique CSS anchor name for this instance — prevents conflicts when
-    // multiple dropdowns exist on the same page.
     anchorName;
     trigger;
     triggerText;
@@ -77,8 +74,6 @@ class VirtualDropdown {
         this.scroller = this.querySelector('.dropdown-list-scroller');
         this.spacer = this.querySelector('.virtual-spacer');
         this.content = this.querySelector('.virtual-content');
-        // Wire up anchor positioning: each instance gets a unique anchor name
-        // so multiple dropdowns on the same page don't interfere.
         this.trigger.style.setProperty('anchor-name', this.anchorName);
         this.menu.style.setProperty('position-anchor', this.anchorName);
         if (this.searchable) {
@@ -107,8 +102,6 @@ class VirtualDropdown {
         };
         this.trigger.addEventListener('keydown', handleTriggerKeydown);
         this.boundHandlers.set('triggerKeydown', handleTriggerKeydown);
-        // Close when clicking outside. Still needed because popover="manual"
-        // does not auto-dismiss on outside clicks.
         const handleDocumentClick = (e) => {
             if (!this.container.contains(e.target) && !this.menu.contains(e.target)) {
                 this.close();
@@ -131,9 +124,6 @@ class VirtualDropdown {
         };
         this.listWrapper.addEventListener('scroll', handleScroll);
         this.boundHandlers.set('scroll', handleScroll);
-        // Sync isOpen if the browser closes the popover externally (e.g. another
-        // popover="auto" element stealing focus — not typical for "manual" but
-        // good defensive practice).
         const handlePopoverToggle = (e) => {
             const te = e;
             if (te.newState === 'closed' && this.isOpen) {

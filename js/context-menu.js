@@ -1,4 +1,3 @@
-/** Right-click context menu with keyboard navigation and nested submenu support. */
 class ContextMenu {
     items;
     targets;
@@ -148,8 +147,6 @@ class ContextMenu {
                 const rect = li.getBoundingClientRect();
                 return rect.right + submenuEl.offsetWidth > window.innerWidth;
             };
-            // Delay timer prevents the submenu closing when mouse travels from
-            // item → submenu (mouseleave fires before mouseenter on the submenu)
             let closeTimer = null;
             const openSub = () => {
                 if (closeTimer) {

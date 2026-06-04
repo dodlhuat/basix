@@ -1,14 +1,10 @@
-/** Configuration options for a Tooltip instance. */
 interface TooltipOptions {
     position?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
     offset?: number;
     delay?: number;
     className?: string;
-    /** Set to true when content is trusted HTML (e.g. from data-tooltip-id).
-     *  Defaults to false — content is treated as plain text and escaped. */
     isHtml?: boolean;
 }
-/** Lightweight tooltip that positions itself relative to a trigger element. */
 declare class Tooltip {
     private static activeTooltip;
     private static idCounter;

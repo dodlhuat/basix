@@ -1,5 +1,4 @@
-import { Select } from "./select.js";
-/** Dynamic data table with sorting, filtering, and pagination. */
+import { Select } from './select.js';
 class Table {
     container;
     data;
@@ -21,9 +20,9 @@ class Table {
             throw new Error(`Table: Element not found for selector "${elementOrSelector}"`);
         }
         this.container = element;
-        this.data = options.data || [];
-        this.columns = options.columns || [];
-        this.pageSize = options.pageSize || 10;
+        this.data = options.data ?? [];
+        this.columns = options.columns ?? [];
+        this.pageSize = options.pageSize ?? 10;
         this.currentPage = 1;
         this.sortColumn = null;
         this.sortDirection = 'asc';
@@ -33,9 +32,6 @@ class Table {
         }
         this.init();
     }
-    /**
-     * Parses an existing HTML table in the DOM to extract data and columns
-     */
     parseTableFromDOM() {
         const table = this.container.querySelector('table');
         if (!table)
@@ -63,17 +59,11 @@ class Table {
         });
         this.container.innerHTML = '';
     }
-    /**
-     * Initializes the table by rendering controls, structure, and content
-     */
     init() {
         this.renderControls();
         this.renderTableStructure();
         this.render();
     }
-    /**
-     * Renders the search and page size controls
-     */
     renderControls() {
         const controlsDiv = document.createElement('div');
         controlsDiv.className = 'table-controls';
@@ -108,9 +98,6 @@ class Table {
         this.container.appendChild(controlsDiv);
         new Select('#' + pageSizeSelect.id);
     }
-    /**
-     * Creates the table structure (table, thead, tbody, pagination container)
-     */
     renderTableStructure() {
         const wrapper = document.createElement('div');
         wrapper.className = 'table-wrapper';
@@ -140,9 +127,6 @@ class Table {
         this.tableHeader = thead;
         this.paginationContainer = paginationDiv;
     }
-    /**
-     * Returns filtered and sorted data based on current state
-     */
     getFilteredAndSortedData() {
         let processedData = [...this.data];
         if (this.filterText) {
@@ -173,9 +157,6 @@ class Table {
         }
         return processedData;
     }
-    /**
-     * Renders the table body, pagination, and header sort indicators
-     */
     render() {
         const processedData = this.getFilteredAndSortedData();
         const totalItems = processedData.length;
@@ -193,9 +174,6 @@ class Table {
         this.renderPagination(totalItems, totalPages, startIndex, endIndex);
         this.updateHeaderSortIcons();
     }
-    /**
-     * Renders the table body rows
-     */
     renderBody(data) {
         this.tableBody.innerHTML = '';
         if (data.length === 0) {
@@ -219,9 +197,6 @@ class Table {
             this.tableBody.appendChild(tr);
         });
     }
-    /**
-     * Updates the sort direction indicators in table headers
-     */
     updateHeaderSortIcons() {
         const ths = this.tableHeader.querySelectorAll('th');
         ths.forEach(th => {
@@ -231,9 +206,6 @@ class Table {
             }
         });
     }
-    /**
-     * Renders pagination controls and info
-     */
     renderPagination(totalItems, totalPages, startIndex, endIndex) {
         this.paginationContainer.innerHTML = '';
         if (totalItems === 0)
@@ -270,17 +242,11 @@ class Table {
         buttonsDiv.appendChild(nextBtn);
         this.paginationContainer.appendChild(buttonsDiv);
     }
-    /**
-     * Handles search input changes
-     */
     handleSearch(text) {
         this.filterText = text;
         this.currentPage = 1;
         this.render();
     }
-    /**
-     * Handles column header clicks for sorting
-     */
     handleSort(key) {
         if (this.sortColumn === key) {
             this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -291,24 +257,15 @@ class Table {
         }
         this.render();
     }
-    /**
-     * Handles page size changes
-     */
     handlePageSizeChange(size) {
         this.pageSize = size;
         this.currentPage = 1;
         this.render();
     }
-    /**
-     * Sets the current page and re-renders
-     */
     setPage(page) {
         this.currentPage = page;
         this.render();
     }
-    /**
-     * Assigns a unique ID to an element, incrementing if necessary
-     */
     assignUniqueId(element, baseId) {
         if (!element || !baseId)
             return null;
@@ -327,25 +284,16 @@ class Table {
         element.id = uniqueId;
         return uniqueId;
     }
-    /**
-     * Public API: Updates the table data and re-renders
-     */
     setData(data) {
         this.data = data;
         this.currentPage = 1;
         this.render();
     }
-    /**
-     * Public API: Updates the columns and re-renders
-     */
     setColumns(columns) {
         this.columns = columns;
         this.container.innerHTML = '';
         this.init();
     }
-    /**
-     * Public API: Gets the current filtered and sorted data
-     */
     getData() {
         return this.getFilteredAndSortedData();
     }

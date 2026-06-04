@@ -184,4 +184,4 @@ class Dropdown {
     }
 }
 
-export { Dropdown, DropdownSelectDetail };
+export { Dropdown, type DropdownSelectDetail };

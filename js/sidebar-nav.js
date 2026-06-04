@@ -1,18 +1,12 @@
-/** Collapsible sidebar navigation with backdrop, swipe gestures, and responsive breakpoint support. */
 class SidebarNav {
     nav;
     backdrop;
     toggleBtn;
     closeBtn = null;
     opts;
-    _touchStartX = 0;
-    _touchStartY = 0;
-    _onToggle;
-    _onBackdrop;
-    _onResize;
-    _onClose;
-    _onTouchStart;
-    _onTouchEnd;
+    touchStartX = 0;
+    touchStartY = 0;
+    abortController = new AbortController();
     constructor(containerOrSelector, options = {}) {
         const container = typeof containerOrSelector === 'string'
             ? document.querySelector(containerOrSelector)
@@ -26,39 +20,36 @@ class SidebarNav {
         this.nav = container?.querySelector('.sidebar-nav') ?? null;
         this.backdrop = container?.querySelector('.sidebar-backdrop') ?? null;
         this.toggleBtn = document.querySelector(this.opts.toggleSelector);
-        this._onToggle = () => this.toggle();
-        this._onBackdrop = () => this.close();
-        this._onResize = () => { if (window.innerWidth > this.opts.breakpoint)
-            this.close(); };
-        this._onClose = () => this.close();
-        this._onTouchStart = (e) => {
-            this._touchStartX = e.touches[0].clientX;
-            this._touchStartY = e.touches[0].clientY;
-        };
-        this._onTouchEnd = (e) => {
+        const sig = { signal: this.abortController.signal };
+        this.toggleBtn?.addEventListener('click', () => this.toggle(), sig);
+        this.backdrop?.addEventListener('click', () => this.close(), sig);
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > this.opts.breakpoint)
+                this.close();
+        }, sig);
+        document.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.touches[0].clientX;
+            this.touchStartY = e.touches[0].clientY;
+        }, { passive: true, signal: this.abortController.signal });
+        document.addEventListener('touchend', (e) => {
             if (window.innerWidth > this.opts.breakpoint)
                 return;
-            const dx = e.changedTouches[0].clientX - this._touchStartX;
-            const dy = e.changedTouches[0].clientY - this._touchStartY;
+            const dx = e.changedTouches[0].clientX - this.touchStartX;
+            const dy = e.changedTouches[0].clientY - this.touchStartY;
             if (Math.abs(dx) < Math.abs(dy))
                 return;
-            if (!this.isOpen() && this._touchStartX <= this.opts.swipeEdge && dx >= this.opts.swipeThreshold) {
+            if (!this.isOpen() && this.touchStartX <= this.opts.swipeEdge && dx >= this.opts.swipeThreshold) {
                 this.open();
             }
             else if (this.isOpen() && dx <= -this.opts.swipeThreshold) {
                 this.close();
             }
-        };
-        this.toggleBtn?.addEventListener('click', this._onToggle);
-        this.backdrop?.addEventListener('click', this._onBackdrop);
-        window.addEventListener('resize', this._onResize);
-        document.addEventListener('touchstart', this._onTouchStart, { passive: true });
-        document.addEventListener('touchend', this._onTouchEnd, { passive: true });
+        }, { passive: true, signal: this.abortController.signal });
         this.closeBtn = document.createElement('button');
         this.closeBtn.className = 'sidebar-close';
         this.closeBtn.setAttribute('aria-label', 'Close navigation');
         this.closeBtn.innerHTML = '<div class="icon icon-close"></div>';
-        this.closeBtn.addEventListener('click', this._onClose);
+        this.closeBtn.addEventListener('click', () => this.close(), sig);
         this.nav?.append(this.closeBtn);
     }
     open() {
@@ -76,13 +67,8 @@ class SidebarNav {
         return this.nav?.classList.contains('is-open') ?? false;
     }
     destroy() {
-        this.toggleBtn?.removeEventListener('click', this._onToggle);
-        this.backdrop?.removeEventListener('click', this._onBackdrop);
-        window.removeEventListener('resize', this._onResize);
-        this.closeBtn?.removeEventListener('click', this._onClose);
+        this.abortController.abort();
         this.closeBtn?.remove();
-        document.removeEventListener('touchstart', this._onTouchStart);
-        document.removeEventListener('touchend', this._onTouchEnd);
     }
 }
 export { SidebarNav };

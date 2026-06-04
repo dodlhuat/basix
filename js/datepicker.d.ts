@@ -1,9 +1,7 @@
-/** Localised day and month names for the DatePicker. */
 interface DatePickerLocales {
     days: string[];
     months: string[];
 }
-/** Configuration options for the DatePicker. */
 interface DatePickerOptions {
     mode?: 'single' | 'range';
     startDay?: number;
@@ -12,12 +10,10 @@ interface DatePickerOptions {
     format?: (date: Date) => string;
     onSelect?: (date: Date | DateRange) => void;
 }
-/** A date range with optional start and end dates. */
 interface DateRange {
     start: Date | null;
     end: Date | null;
 }
-/** Calendar-based date (or date-range) picker that attaches to an input element. */
 declare class DatePicker {
     private input;
     private options;

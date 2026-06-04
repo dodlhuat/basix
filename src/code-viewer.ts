@@ -181,8 +181,17 @@ class CodeViewer {
 
         const copyButton = this.container.querySelector<HTMLButtonElement>('.copy-button');
         if (copyButton) {
-            copyButton.addEventListener('click', () => this.copyCode());
+            copyButton.addEventListener('click', this.handleCopy);
         }
+    }
+
+    private handleCopy = (): void => {
+        this.copyCode();
+    };
+
+    public destroy(): void {
+        const copyButton = this.container.querySelector<HTMLButtonElement>('.copy-button');
+        copyButton?.removeEventListener('click', this.handleCopy);
     }
 }
 export { CodeViewer };

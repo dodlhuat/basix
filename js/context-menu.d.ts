@@ -1,4 +1,3 @@
-/** Definition for a single context menu item including optional submenu. */
 interface ContextMenuItemDef {
     label: string;
     icon?: string;
@@ -12,10 +11,8 @@ type ContextMenuInput = ContextMenuItemDef | 'separator' | {
     group: string;
 };
 interface ContextMenuOptions {
-    /** Path to the SVG sprite file, e.g. `'svg-icons/icons.svg'`. Required to render icons. */
     spritePath?: string;
 }
-/** Right-click context menu with keyboard navigation and nested submenu support. */
 declare class ContextMenu {
     private items;
     private targets;

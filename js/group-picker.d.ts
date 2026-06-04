@@ -1,15 +1,12 @@
-/** A single subgroup item within a GroupPicker group. */
 interface SubgroupData {
     id: string;
     label: string;
 }
-/** A group with an optional list of subgroups for GroupPicker. */
 interface GroupData {
     id: string;
     label: string;
     subgroups?: SubgroupData[];
 }
-/** The current selection state returned by GroupPicker. */
 interface GroupPickerSelection {
     parentGroups: string[];
     subgroups: {
@@ -17,7 +14,6 @@ interface GroupPickerSelection {
         subgroupId: string;
     }[];
 }
-/** Configuration options for the GroupPicker component. */
 interface GroupPickerOptions {
     onSelectionChange?: (selection: GroupPickerSelection) => void;
     searchPlaceholder?: string;
@@ -26,7 +22,6 @@ interface GroupPickerOptions {
     emptyLabel?: string;
     selectionPlaceholder?: string;
 }
-/** Searchable picker for selecting groups and their subgroups. */
 declare class GroupPicker {
     private container;
     private data;

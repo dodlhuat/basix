@@ -1,5 +1,4 @@
 import { sanitizeHtml } from './utils.js';
-/** Slide-up sheet that attaches to the bottom of the viewport. */
 class BottomSheet {
     content;
     header;
@@ -106,7 +105,6 @@ class BottomSheet {
         if (!this.isDragging || !this.sheet)
             return;
         const deltaY = e.touches[0].clientY - this.dragStartY;
-        // Rubber-band resistance going upward
         if (deltaY < 0) {
             const resistance = Math.log(1 + Math.abs(deltaY)) * 4;
             this.currentDragY = -resistance;

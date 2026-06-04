@@ -1,4 +1,3 @@
-/** Static class that manages a push-style side navigation panel. */
 class PushMenu {
     static elements = {
         navigation: null,
@@ -152,13 +151,11 @@ class PushMenu {
         }
     }
     static clickNav = () => {
-        const navigation = PushMenu.elements.navigation;
-        navigation?.click();
+        PushMenu.elements.navigation.click();
     };
     static handleBackdropClick = () => {
         if (PushMenu.isOpen()) {
-            const navigation = PushMenu.elements.navigation;
-            navigation?.click();
+            PushMenu.elements.navigation.click();
         }
     };
     static open() {
