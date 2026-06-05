@@ -187,7 +187,7 @@ class CodeViewer {
 
     private handleCopy = (): void => {
         this.copyCode();
-    };
+    }
 
     public destroy(): void {
         const copyButton = this.container.querySelector<HTMLButtonElement>('.copy-button');

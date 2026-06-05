@@ -16,7 +16,7 @@ class MasonryGallery {
             throw new Error(`Container with id "${containerId}" not found`);
         }
         this.container = container;
-        this.loader = document.querySelector(options.loaderSelector || '.loader');
+        this.loader = document.querySelector(options.loaderSelector ?? '.loader');
         this.options = {
             minColumnWidth: options.minColumnWidth ?? 250,
             scrollThreshold: options.scrollThreshold ?? 100,

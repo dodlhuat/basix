@@ -102,26 +102,26 @@ class FileUploader {
     private preventDefaults = (e: Event): void => {
         e.preventDefault();
         e.stopPropagation();
-    };
+    }
 
     private handleDragEnter = (): void => {
         this.dropZone.classList.add('drag-over');
-    };
+    }
 
     private handleDragLeave = (): void => {
         this.dropZone.classList.remove('drag-over');
-    };
+    }
 
     private handleDrop = (e: DragEvent): void => {
         const droppedFiles = e.dataTransfer?.files;
         if (droppedFiles) {
             this.handleFiles(droppedFiles);
         }
-    };
+    }
 
     private handleDropZoneClick = (): void => {
         this.fileInput.click();
-    };
+    }
 
     private handleFileInputChange = (e: Event): void => {
         const target = e.target as HTMLInputElement;
@@ -129,7 +129,7 @@ class FileUploader {
             this.handleFiles(target.files);
             target.value = '';
         }
-    };
+    }
 
     private handleUploadClick = async (): Promise<void> => {
         if (this.files.size === 0) return;

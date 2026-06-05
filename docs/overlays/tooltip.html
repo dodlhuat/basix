@@ -22,8 +22,8 @@
 
         // HTML content
         new Tooltip(document.getElementById('tip-html'),
-            'Supports <strong>bold</strong>, <em>italic</em> and <code>code</code>.',
-            { position: 'top' });
+            'This is <strong>bold</strong>, <em>italic</em> and <code>code</code>.',
+            { position: 'top', isHtml: true });
 
         // Declarative
         Tooltip.initializeAll();
@@ -44,6 +44,7 @@ const tip = new Tooltip(
     offset:    8,        // px gap
     delay:     0,        // show delay in ms
     className: '',       // extra CSS class
+    isHtml:    true,     // render content as HTML (default: false)
   }
 );
 
@@ -106,6 +107,7 @@ tip.destroy();`, 'js');
                     <tr><td><code>offset</code></td><td>number</td><td><code>8</code></td><td>Gap in px between trigger and tooltip.</td></tr>
                     <tr><td><code>delay</code></td><td>number</td><td><code>0</code></td><td>Show delay in ms.</td></tr>
                     <tr><td><code>className</code></td><td>string</td><td><code>''</code></td><td>Extra CSS class added to the tooltip element.</td></tr>
+                    <tr><td><code>isHtml</code></td><td>boolean</td><td><code>false</code></td><td>Render content as HTML — any valid HTML is supported. When <code>false</code> content is treated as plain text.</td></tr>
                 </tbody>
             </table>
 

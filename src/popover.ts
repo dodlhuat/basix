@@ -177,20 +177,20 @@ class Popover {
     private onMouseEnter = (): void => {
         if (this.hoverTimer !== null) clearTimeout(this.hoverTimer);
         this.open();
-    };
+    }
 
     private onMouseLeave = (): void => {
         this.hoverTimer = window.setTimeout(() => this.close(), 120);
-    };
+    }
 
     private onOutsideClick = (e: Event): void => {
         const t = e.target as Node;
         if (!this.popoverEl?.contains(t) && !this.trigger.contains(t)) this.close();
-    };
+    }
 
     private onEscape = (e: KeyboardEvent): void => {
         if (e.key === 'Escape') this.close();
-    };
+    }
 
     private attachTrigger(): void {
         if (this.opts.triggerMode === 'click') {

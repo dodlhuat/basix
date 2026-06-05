@@ -507,8 +507,19 @@ The Tabs component creates accessible tabbed interfaces. Supports horizontal/ver
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `layout` | string | `'horizontal'` | Layout of the tabs, either `'horizontal'` or `'vertical'` |
-| `defaultTab` | integer | `0` | Index of the default active tab (0-based) |
+| `layout` | string | `'horizontal'` | `'horizontal'` or `'vertical'` |
+| `defaultTab` | number | `0` | Index of the initially active tab (0-based) |
+| `menuPos` | string | `'top'` / `'left'` | Tab bar position: `'top'`, `'bottom'`, `'left'`, `'right'`. Defaults to `'top'` for horizontal layout, `'left'` for vertical. |
+| `onChange` | function | — | Callback fired on tab change: `(index: number) => void` |
+
+| Method | Description |
+|---|---|
+| `goToTab(index)` | Programmatically activate a tab and focus it |
+| `getCurrentTab()` | Returns the index of the currently active tab |
+| `getTabCount()` | Returns the total number of tabs |
+| `enableTab(index)` | Re-enables a disabled tab |
+| `disableTab(index)` | Disables a tab; if it was active, moves focus to the next enabled tab |
+| `destroy()` | Removes event listeners and cleans up ARIA attributes |
 
 ### Timeline
 
@@ -816,7 +827,7 @@ const picker = new TimeSpanPicker('my-container', {
     defaultStart: '09:00',
     defaultEnd:   '17:00',
     fromString:   'Von',   // optional — defaults to 'From'
-    toString:     'Bis',   // optional — defaults to 'To'
+    toLabel:      'Bis',   // optional — defaults to 'To'
     onChange: (start, end) => console.log(start, end),
 });
 
@@ -826,6 +837,36 @@ picker.reset();
 picker.isValid();             // boolean
 picker.destroy();
 ```
+
+### Color Picker
+
+The ColorPicker component renders a canvas-based HSB color picker with a hue slider and hex/RGB inputs. It builds its own DOM inside any container element and is fully mobile-friendly — drag gestures on the color field do not trigger page scroll.
+
+``` js
+import { ColorPicker } from '@dodlhuat/basix/js/color-picker.js';
+
+const picker = new ColorPicker('#my-picker', {
+    value: '#3d63dd',
+    onChange: (hex, rgb) => {
+        console.log(hex);                    // '#3d63dd'
+        console.log(rgb.r, rgb.g, rgb.b);   // 61, 99, 221
+    },
+});
+
+picker.getValue();           // current hex string, e.g. '#3d63dd'
+picker.setValue('#ff6b6b');  // set color programmatically
+picker.destroy();            // removes listeners, disconnects ResizeObserver, clears DOM
+```
+
+``` html
+<!-- Any empty container works — the component builds its own markup inside -->
+<div id="my-picker"></div>
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `value` | string | `'#ff0000'` | Initial hex color (e.g. `'#3d63dd'`). Must be a 6-digit hex string. |
+| `onChange` | function | — | Called on every color change: `(hex: string, rgb: { r, g, b }) => void` |
 
 ### Select
 
@@ -853,9 +894,11 @@ cleanup?.(); // call when the select is removed from the DOM
 The CodeViewer component renders syntax-highlighted code blocks inside any container. Supports JavaScript, HTML, and CSS.
 
 ``` js
-new CodeViewer('#output', '<div class="card">Hello</div>', 'html');
+const viewer = new CodeViewer('#output', '<div class="card">Hello</div>', 'html');
 new CodeViewer('#output', 'const x = 42;', 'javascript');
 new CodeViewer('#output', '.card { padding: 1rem; }', 'css');
+
+viewer.destroy(); // removes event listeners and clears the container
 ```
 
 ### Editor

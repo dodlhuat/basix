@@ -21,13 +21,7 @@ declare class Scrollbar {
     private activePointerId;
     private startPointerY;
     private startThumbTop;
-    private readonly boundPointerMove;
-    private readonly boundPointerUp;
-    private readonly boundThumbPointerDown;
-    private readonly boundTrackClick;
-    private readonly boundViewportScroll;
-    private readonly boundUpdateThumb;
-    private readonly boundContainerWheel;
+    private abortController;
     private constructor();
     private getRequiredElements;
     private getMinThumbHeight;

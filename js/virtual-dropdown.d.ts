@@ -34,7 +34,7 @@ declare class VirtualDropdown {
     private filteredOptions;
     private isOpen;
     private scrollTop;
-    private boundHandlers;
+    private abortController;
     constructor(config: VirtualDropdownConfig);
     private init;
     private renderBase;
@@ -52,4 +52,5 @@ declare class VirtualDropdown {
     clearSelection(): void;
     destroy(): void;
 }
-export { VirtualDropdown, DropdownOption, VirtualDropdownConfig };
+export { VirtualDropdown };
+export type { DropdownOption, VirtualDropdownConfig };

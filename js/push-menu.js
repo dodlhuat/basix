@@ -9,7 +9,6 @@ class PushMenu {
     };
     static initialized = false;
     static panelStack = [];
-    static boundHandleNavigationChange;
     static init() {
         if (this.initialized) {
             console.warn('PushMenu: Already initialized');
@@ -20,8 +19,7 @@ class PushMenu {
             throw new Error('PushMenu: Required elements not found (.navigation, .push-content)');
         }
         this.buildPanels();
-        this.boundHandleNavigationChange = this.handleNavigationChange.bind(this);
-        this.elements.navigation.addEventListener('change', this.boundHandleNavigationChange);
+        this.elements.navigation.addEventListener('change', this.handleNavigationChange);
         this.elements.backdrop?.addEventListener('click', this.handleBackdropClick);
         this.initialized = true;
     }
@@ -119,7 +117,7 @@ class PushMenu {
             }
         }, 300);
     }
-    static handleNavigationChange() {
+    static handleNavigationChange = () => {
         const isPushed = this.elements.content?.classList.contains('pushed') ?? false;
         if (!isPushed) {
             this.elements.content?.addEventListener('click', this.clickNav);
@@ -129,7 +127,7 @@ class PushMenu {
             this.resetPanels();
         }
         this.pushToggle();
-    }
+    };
     static pushToggle() {
         if (!this.elements.content || !this.elements.menu) {
             throw new Error('PushMenu: Required elements not found (.push-content, .push-menu)');
@@ -174,7 +172,7 @@ class PushMenu {
     static destroy() {
         if (!this.initialized)
             return;
-        this.elements.navigation?.removeEventListener('change', this.boundHandleNavigationChange);
+        this.elements.navigation?.removeEventListener('change', this.handleNavigationChange);
         this.elements.content?.removeEventListener('click', this.clickNav);
         this.elements.backdrop?.removeEventListener('click', this.handleBackdropClick);
         this.close();

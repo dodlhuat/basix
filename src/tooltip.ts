@@ -160,19 +160,19 @@ class Tooltip {
 
     private handleMouseEnter = (): void => {
         this.show();
-    };
+    }
 
     private handleMouseLeave = (): void => {
         this.hide();
-    };
+    }
 
     private handleFocus = (): void => {
         this.show();
-    };
+    }
 
     private handleBlur = (): void => {
         this.hide();
-    };
+    }
 
     public destroy(): void {
         this.hide();

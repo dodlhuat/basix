@@ -23,7 +23,7 @@ class RangeSlider {
 
     private handleInput = (): void => {
         this.update();
-    };
+    }
 
     public destroy(): void {
         this.input.removeEventListener('input', this.handleInput);

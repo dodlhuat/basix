@@ -10,7 +10,6 @@ declare class PushMenu {
     private static elements;
     private static initialized;
     private static panelStack;
-    private static boundHandleNavigationChange;
     static init(): void;
     private static buildPanels;
     private static extractSubPanels;

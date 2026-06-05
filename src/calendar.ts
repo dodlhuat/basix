@@ -256,7 +256,7 @@ class CalendarRenderer {
         this.locale = locale;
     }
 
-    renderWeekdayHeaders(): string {
+    public renderWeekdayHeaders(): string {
         const { dayNamesShort, firstDayOfWeek } = this.locale;
         const ordered = [
             ...dayNamesShort.slice(firstDayOfWeek),
@@ -267,7 +267,7 @@ class CalendarRenderer {
             .join('');
     }
 
-    renderEvent(event: CalendarEvent, compact = false): string {
+    public renderEvent(event: CalendarEvent, compact = false): string {
         const cls = event.className ?? '';
         if (compact) {
             return `<div class="cal__event-pill ${cls}" data-event-id="${event.id}" role="button" tabindex="0" aria-label="${event.title}" title="${event.title}">${event.title}</div>`;
@@ -278,7 +278,7 @@ class CalendarRenderer {
     </div>`;
     }
 
-    renderSpanBar(layout: SpanLayout): string {
+    public renderSpanBar(layout: SpanLayout): string {
         const { event, colStart, colEnd, lane, continuesBefore, continuesAfter } = layout;
         const colSpan = colEnd - colStart + 1;
         const cls = [
@@ -296,7 +296,7 @@ class CalendarRenderer {
         title="${event.title}">${event.title}</div>`;
     }
 
-    renderMonthDay(
+    public renderMonthDay(
         date: Date,
         currentMonth: number,
         currentYear: number,
@@ -330,7 +330,7 @@ class CalendarRenderer {
     </div>`;
     }
 
-    renderWeekRow(
+    public renderWeekRow(
         weekDays: Date[],
         currentMonth: number,
         currentYear: number,
@@ -351,7 +351,7 @@ class CalendarRenderer {
     </div>`;
     }
 
-    renderMonthView(
+    public renderMonthView(
         year: number,
         month: number,
         events: CalendarEvent[],
@@ -373,7 +373,7 @@ class CalendarRenderer {
     </div>`;
     }
 
-    renderWeekView(
+    public renderWeekView(
         date: Date,
         events: CalendarEvent[],
         firstDayOfWeek: number,
@@ -450,7 +450,7 @@ class CalendarRenderer {
     </div>`;
     }
 
-    renderAgendaView(year: number, month: number, events: CalendarEvent[]): string {
+    public renderAgendaView(year: number, month: number, events: CalendarEvent[]): string {
         const daysInMonth  = new Date(year, month + 1, 0).getDate();
         const shownMultiDay = new Set<string>();
         let html = '';
@@ -546,13 +546,13 @@ class Calendar {
         this.attachEvents();
     }
 
-    setView(view: CalendarView): void {
+    public setView(view: CalendarView): void {
         this.currentView = view;
         this.render();
         this.options.onChange(this.currentDate, this.currentView);
     }
 
-    next(): void {
+    public next(): void {
         if (this.currentView === 'month' || this.currentView === 'agenda') {
             this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
         } else {
@@ -562,7 +562,7 @@ class Calendar {
         this.options.onChange(this.currentDate, this.currentView);
     }
 
-    prev(): void {
+    public prev(): void {
         if (this.currentView === 'month' || this.currentView === 'agenda') {
             this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
         } else {
@@ -572,32 +572,32 @@ class Calendar {
         this.options.onChange(this.currentDate, this.currentView);
     }
 
-    today(): void {
+    public today(): void {
         this.currentDate = new Date();
         this.render();
         this.options.onChange(this.currentDate, this.currentView);
     }
 
-    addEvent(event: CalendarEvent): void {
+    public addEvent(event: CalendarEvent): void {
         this.events.push(event);
         this.render();
     }
 
-    removeEvent(id: string): void {
+    public removeEvent(id: string): void {
         this.events = this.events.filter(e => e.id !== id);
         this.render();
     }
 
-    setEvents(events: CalendarEvent[]): void {
+    public setEvents(events: CalendarEvent[]): void {
         this.events = [...events];
         this.render();
     }
 
-    getEvents(): CalendarEvent[] {
+    public getEvents(): CalendarEvent[] {
         return [...this.events];
     }
 
-    destroy(): void {
+    public destroy(): void {
         this.clearNowLineTimer();
         this.container.removeEventListener('click',   this.boundHandleClick);
         this.container.removeEventListener('keydown', this.boundHandleKeydown);

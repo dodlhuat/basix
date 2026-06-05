@@ -2877,6 +2877,13 @@ nav.push-menu.pushed {
 
 nav li {
   margin: 0;
+  list-style: none;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 nav a,
@@ -3013,6 +3020,13 @@ nav li + li .push-menu-item {
   position: absolute;
   opacity: 0;
   width: auto;
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  box-shadow: none;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
 }
 .styled-checkbox + label {
   position: relative;
@@ -3034,7 +3048,7 @@ nav li + li .push-menu-item {
   margin-top: 2px;
   transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
-.styled-checkbox:hover + label::before {
+.styled-checkbox:not(:disabled):hover + label::before {
   border-color: var(--accent-color);
 }
 .styled-checkbox:focus-visible + label::before {
@@ -3059,15 +3073,20 @@ nav li + li .push-menu-item {
 .styled-checkbox:disabled + label {
   color: var(--secondary-text);
   cursor: not-allowed;
+  pointer-events: none;
 }
 .styled-checkbox:disabled + label::before {
   background-color: var(--secondary-background);
-  border-color: var(--disabled);
+  border-color: color-mix(in srgb, var(--secondary-text) 35%, transparent);
   box-shadow: none;
 }
 .styled-checkbox:disabled:checked + label::before {
   background-color: var(--disabled);
   border-color: var(--disabled);
+}
+.styled-checkbox:disabled:checked + label::after {
+  border-right-color: color-mix(in srgb, var(--primary-text) 40%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--primary-text) 40%, transparent);
 }
 
 .radio-button-container {
@@ -3762,7 +3781,7 @@ nav li + li .push-menu-item {
   border-color: var(--accent-color);
   background: color-mix(in srgb, var(--accent-color) 10%, var(--background));
   color: var(--accent-color);
-  animation: stepper-pulse 2.4s ease-out infinite;
+  animation: stepper-pulse 2.4s ease-out 3;
 }
 .stepper-step.active .stepper-title {
   color: var(--accent-color);
@@ -4072,8 +4091,8 @@ ul.tree li {
 }
 
 .datepicker-day.in-range {
-  background-color: var(--accent-color-lighten);
-  color: var(--accent-color-text);
+  background-color: color-mix(in srgb, var(--accent-color) 15%, transparent);
+  color: var(--primary-text);
   border-radius: 0;
 }
 
@@ -4096,7 +4115,9 @@ ul.tree li {
   color: var(--accent-color);
 }
 
-.datepicker-day.selected.today {
+.datepicker-day.selected.today,
+.datepicker-day.range-start.today,
+.datepicker-day.range-end.today {
   color: var(--accent-color-text);
 }
 

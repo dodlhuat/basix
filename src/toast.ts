@@ -85,7 +85,7 @@ class Toast {
             this.toastElement?.remove();
             this.toastElement = null;
         }, 150);
-    };
+    }
 
     private startTimer(ms: number, elapsed: number = 0): void {
         const stepSize = 250;

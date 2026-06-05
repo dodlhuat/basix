@@ -21,7 +21,6 @@ class PushMenu {
 
     private static initialized = false;
     private static panelStack: HTMLElement[] = [];
-    private static boundHandleNavigationChange: () => void;
 
     public static init(): void {
         if (this.initialized) {
@@ -37,8 +36,7 @@ class PushMenu {
 
         this.buildPanels();
 
-        this.boundHandleNavigationChange = this.handleNavigationChange.bind(this);
-        this.elements.navigation.addEventListener('change', this.boundHandleNavigationChange);
+        this.elements.navigation.addEventListener('change', this.handleNavigationChange);
         this.elements.backdrop?.addEventListener('click', this.handleBackdropClick);
 
         this.initialized = true;
@@ -162,7 +160,7 @@ class PushMenu {
         }, 300);
     }
 
-    private static handleNavigationChange(): void {
+    private static handleNavigationChange = (): void => {
         const isPushed = this.elements.content?.classList.contains('pushed') ?? false;
 
         if (!isPushed) {
@@ -200,13 +198,13 @@ class PushMenu {
 
     private static clickNav = (): void => {
         (PushMenu.elements.navigation as HTMLElement).click();
-    };
+    }
 
     private static handleBackdropClick = (): void => {
         if (PushMenu.isOpen()) {
             (PushMenu.elements.navigation as HTMLElement).click();
         }
-    };
+    }
 
     public static open(): void {
         if (!this.elements.content?.classList.contains('pushed')) {
@@ -227,7 +225,7 @@ class PushMenu {
     public static destroy(): void {
         if (!this.initialized) return;
 
-        this.elements.navigation?.removeEventListener('change', this.boundHandleNavigationChange);
+        this.elements.navigation?.removeEventListener('change', this.handleNavigationChange);
         this.elements.content?.removeEventListener('click', this.clickNav);
         this.elements.backdrop?.removeEventListener('click', this.handleBackdropClick);
 

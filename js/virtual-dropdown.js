@@ -21,7 +21,7 @@ class VirtualDropdown {
     filteredOptions;
     isOpen;
     scrollTop;
-    boundHandlers;
+    abortController = new AbortController();
     constructor(config) {
         const containerElement = typeof config.container === 'string'
             ? document.querySelector(config.container)
@@ -42,7 +42,6 @@ class VirtualDropdown {
         this.filteredOptions = [...this.options];
         this.isOpen = false;
         this.scrollTop = 0;
-        this.boundHandlers = new Map();
         this.init();
     }
     init() {
@@ -88,10 +87,9 @@ class VirtualDropdown {
         return element;
     }
     bindEvents() {
-        const handleTriggerClick = () => this.toggle();
-        this.trigger.addEventListener('click', handleTriggerClick);
-        this.boundHandlers.set('triggerClick', handleTriggerClick);
-        const handleTriggerKeydown = (e) => {
+        const sig = { signal: this.abortController.signal };
+        this.trigger.addEventListener('click', () => this.toggle(), sig);
+        this.trigger.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 this.toggle();
@@ -99,41 +97,29 @@ class VirtualDropdown {
             else if (e.key === 'Escape' && this.isOpen) {
                 this.close();
             }
-        };
-        this.trigger.addEventListener('keydown', handleTriggerKeydown);
-        this.boundHandlers.set('triggerKeydown', handleTriggerKeydown);
-        const handleDocumentClick = (e) => {
+        }, sig);
+        document.addEventListener('click', (e) => {
             if (!this.container.contains(e.target) && !this.menu.contains(e.target)) {
                 this.close();
             }
-        };
-        document.addEventListener('click', handleDocumentClick);
-        this.boundHandlers.set('documentClick', handleDocumentClick);
+        }, sig);
         if (this.searchable && this.searchInput) {
-            const handleSearchInput = (e) => {
-                const target = e.target;
-                this.handleSearch(target.value);
-            };
-            this.searchInput.addEventListener('input', handleSearchInput);
-            this.boundHandlers.set('searchInput', handleSearchInput);
+            this.searchInput.addEventListener('input', (e) => {
+                this.handleSearch(e.target.value);
+            }, sig);
         }
-        const handleScroll = (e) => {
-            const target = e.target;
-            this.scrollTop = target.scrollTop;
+        this.listWrapper.addEventListener('scroll', (e) => {
+            this.scrollTop = e.target.scrollTop;
             this.renderList();
-        };
-        this.listWrapper.addEventListener('scroll', handleScroll);
-        this.boundHandlers.set('scroll', handleScroll);
-        const handlePopoverToggle = (e) => {
+        }, sig);
+        this.menu.addEventListener('toggle', (e) => {
             const te = e;
             if (te.newState === 'closed' && this.isOpen) {
                 this.isOpen = false;
                 this.container.classList.remove('open');
                 this.trigger.setAttribute('aria-expanded', 'false');
             }
-        };
-        this.menu.addEventListener('toggle', handlePopoverToggle);
-        this.boundHandlers.set('popoverToggle', handlePopoverToggle);
+        }, sig);
     }
     toggle() {
         this.isOpen ? this.close() : this.open();
@@ -280,34 +266,9 @@ class VirtualDropdown {
         }
     }
     destroy() {
-        if (this.isOpen) {
+        if (this.isOpen)
             this.menu.hidePopover();
-        }
-        const triggerClick = this.boundHandlers.get('triggerClick');
-        if (triggerClick) {
-            this.trigger.removeEventListener('click', triggerClick);
-        }
-        const triggerKeydown = this.boundHandlers.get('triggerKeydown');
-        if (triggerKeydown) {
-            this.trigger.removeEventListener('keydown', triggerKeydown);
-        }
-        const documentClick = this.boundHandlers.get('documentClick');
-        if (documentClick) {
-            document.removeEventListener('click', documentClick);
-        }
-        const searchInput = this.boundHandlers.get('searchInput');
-        if (searchInput && this.searchInput) {
-            this.searchInput.removeEventListener('input', searchInput);
-        }
-        const scroll = this.boundHandlers.get('scroll');
-        if (scroll) {
-            this.listWrapper.removeEventListener('scroll', scroll);
-        }
-        const popoverToggle = this.boundHandlers.get('popoverToggle');
-        if (popoverToggle) {
-            this.menu.removeEventListener('toggle', popoverToggle);
-        }
-        this.boundHandlers.clear();
+        this.abortController.abort();
         this.container.innerHTML = '';
         this.container.classList.remove('custom-dropdown', 'open');
     }

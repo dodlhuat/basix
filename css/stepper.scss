@@ -118,7 +118,7 @@ $connector-thickness: 2px;
       border-color: var(--accent-color);
       background: color-mix(in srgb, var(--accent-color) 10%, var(--background));
       color: var(--accent-color);
-      animation: stepper-pulse 2.4s ease-out infinite;
+      animation: stepper-pulse 2.4s ease-out 3;
     }
 
     .stepper-title {

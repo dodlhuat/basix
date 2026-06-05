@@ -14,32 +14,50 @@
         Theme.init();
 
         // Horizontal interactive demo
-        const stepper = new Stepper('#stepper-demo');
+        const stepper = new Stepper('#stepper-demo', { iconBasePath: '../../svg-icons/' });
         document.getElementById('step-prev')?.addEventListener('click', () => stepper.prev());
         document.getElementById('step-next')?.addEventListener('click', () => stepper.next());
 
+        // Vertical static demo — step 2 active, step 3 in error
+        const verticalStepper = new Stepper('#stepper-vertical-demo', { defaultStep: 2, iconBasePath: '../../svg-icons/' });
+        verticalStepper.setError(3);
+
         new CodeViewer('#code-html', `<div class="stepper" id="my-stepper">
-  <div class="stepper-step completed">
+  <div class="stepper-step">
     <div class="stepper-indicator">1</div>
-    <div class="stepper-label">Account</div>
+    <div class="stepper-label">
+      <div class="stepper-title">Account</div>
+    </div>
   </div>
-  <div class="stepper-step active">
+  <div class="stepper-step">
     <div class="stepper-indicator">2</div>
-    <div class="stepper-label">Profile</div>
+    <div class="stepper-label">
+      <div class="stepper-title">Profile</div>
+    </div>
   </div>
   <div class="stepper-step">
     <div class="stepper-indicator">3</div>
-    <div class="stepper-label">Review</div>
+    <div class="stepper-label">
+      <div class="stepper-title">Review</div>
+    </div>
   </div>
 </div>`, 'html');
 
         new CodeViewer('#code-js', `import { Stepper } from '@dodlhuat/basix/js/stepper.js';
 
-const stepper = new Stepper('#my-stepper');
+const stepper = new Stepper('#my-stepper', {
+  defaultStep: 0,
+  clickable: false,
+  iconBasePath: 'svg-icons/',
+  onChange: (current, previous) => console.log(current, previous),
+});
 
 stepper.next();          // advance one step
 stepper.prev();          // go back one step
 stepper.goTo(2);         // jump to step index (0-based)
+stepper.getStep();       // returns current step index
+stepper.isFirst();       // true if on the first step
+stepper.isLast();        // true if on the last step
 stepper.setError(1);     // mark step 1 as error
 stepper.clearError(1);   // clear error on step 1
 stepper.destroy();`, 'js');
@@ -69,21 +87,29 @@ stepper.destroy();`, 'js');
             <h2>Interactive demo</h2>
             <div class="docs-demo">
                 <div class="stepper" id="stepper-demo">
-                    <div class="stepper-step completed">
+                    <div class="stepper-step">
                         <div class="stepper-indicator">1</div>
-                        <div class="stepper-label">Account</div>
+                        <div class="stepper-label">
+                            <div class="stepper-title">Account</div>
+                        </div>
                     </div>
-                    <div class="stepper-step active">
+                    <div class="stepper-step">
                         <div class="stepper-indicator">2</div>
-                        <div class="stepper-label">Profile</div>
+                        <div class="stepper-label">
+                            <div class="stepper-title">Profile</div>
+                        </div>
                     </div>
                     <div class="stepper-step">
                         <div class="stepper-indicator">3</div>
-                        <div class="stepper-label">Review</div>
+                        <div class="stepper-label">
+                            <div class="stepper-title">Review</div>
+                        </div>
                     </div>
                     <div class="stepper-step">
                         <div class="stepper-indicator">4</div>
-                        <div class="stepper-label">Done</div>
+                        <div class="stepper-label">
+                            <div class="stepper-title">Done</div>
+                        </div>
                     </div>
                 </div>
                 <div style="display:flex;gap:0.5rem;margin-top:1.25rem;">
@@ -94,33 +120,33 @@ stepper.destroy();`, 'js');
 
             <h2>Vertical layout</h2>
             <div class="docs-demo">
-                <div class="stepper stepper-vertical">
-                    <div class="stepper-step completed">
+                <div class="stepper stepper-vertical" id="stepper-vertical-demo">
+                    <div class="stepper-step">
                         <div class="stepper-indicator">1</div>
-                        <div class="stepper-content">
-                            <div class="stepper-label">Order placed</div>
-                            <div class="stepper-description">Your order has been received.</div>
+                        <div class="stepper-label">
+                            <div class="stepper-title">Order placed</div>
+                            <div class="stepper-desc">Your order has been received.</div>
                         </div>
                     </div>
-                    <div class="stepper-step completed">
+                    <div class="stepper-step">
                         <div class="stepper-indicator">2</div>
-                        <div class="stepper-content">
-                            <div class="stepper-label">Processing</div>
-                            <div class="stepper-description">Items are being prepared.</div>
+                        <div class="stepper-label">
+                            <div class="stepper-title">Processing</div>
+                            <div class="stepper-desc">Items are being prepared.</div>
                         </div>
                     </div>
-                    <div class="stepper-step active">
+                    <div class="stepper-step">
                         <div class="stepper-indicator">3</div>
-                        <div class="stepper-content">
-                            <div class="stepper-label">Shipped</div>
-                            <div class="stepper-description">On its way to you.</div>
+                        <div class="stepper-label">
+                            <div class="stepper-title">Shipped</div>
+                            <div class="stepper-desc">On its way to you.</div>
                         </div>
                     </div>
-                    <div class="stepper-step error">
-                        <div class="stepper-indicator">!</div>
-                        <div class="stepper-content">
-                            <div class="stepper-label">Delivery</div>
-                            <div class="stepper-description">Delivery attempt failed.</div>
+                    <div class="stepper-step">
+                        <div class="stepper-indicator">4</div>
+                        <div class="stepper-label">
+                            <div class="stepper-title">Delivery</div>
+                            <div class="stepper-desc">Delivery attempt failed.</div>
                         </div>
                     </div>
                 </div>
@@ -130,13 +156,24 @@ stepper.destroy();`, 'js');
             <div id="code-html"></div>
             <div id="code-js" style="margin-top:0.5rem;"></div>
 
+            <h2>Options</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>defaultStep</code></td><td>number</td><td>0</td><td>Initial active step index.</td></tr>
+                    <tr><td><code>clickable</code></td><td>boolean</td><td>false</td><td>Allows clicking completed or active steps to navigate.</td></tr>
+                    <tr><td><code>iconBasePath</code></td><td>string</td><td>'svg-icons/'</td><td>Base path to the SVG sprite directory.</td></tr>
+                    <tr><td><code>onChange</code></td><td>(current, previous) =&gt; void</td><td>—</td><td>Callback fired when the active step changes.</td></tr>
+                </tbody>
+            </table>
+
             <h2>Step states</h2>
             <table class="docs-props-table">
                 <thead><tr><th>Class</th><th>Description</th></tr></thead>
                 <tbody>
-                    <tr><td><code>.completed</code></td><td>Step has been successfully completed.</td></tr>
+                    <tr><td><code>.completed</code></td><td>Step has been successfully completed. The indicator shows a checkmark.</td></tr>
                     <tr><td><code>.active</code></td><td>Current active step.</td></tr>
-                    <tr><td><code>.error</code></td><td>Step encountered a validation error.</td></tr>
+                    <tr><td><code>.error</code></td><td>Step encountered a validation error. Re-apply after navigation if still needed.</td></tr>
                     <tr><td><code>.stepper-vertical</code></td><td>Switches to a vertical layout with description support.</td></tr>
                 </tbody>
             </table>
@@ -148,9 +185,12 @@ stepper.destroy();`, 'js');
                     <tr><td><code>next()</code></td><td>Marks the current step as completed and advances to the next.</td></tr>
                     <tr><td><code>prev()</code></td><td>Returns to the previous step.</td></tr>
                     <tr><td><code>goTo(index)</code></td><td>Jumps directly to a step by 0-based index.</td></tr>
+                    <tr><td><code>getStep()</code></td><td>Returns the current step index.</td></tr>
+                    <tr><td><code>isFirst()</code></td><td>Returns true if on the first step.</td></tr>
+                    <tr><td><code>isLast()</code></td><td>Returns true if on the last step.</td></tr>
                     <tr><td><code>setError(index)</code></td><td>Applies the error state to the specified step.</td></tr>
                     <tr><td><code>clearError(index)</code></td><td>Removes the error state from the specified step.</td></tr>
-                    <tr><td><code>destroy()</code></td><td>Removes event listeners and resets state.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Removes event listeners and injected connector elements.</td></tr>
                 </tbody>
             </table>
         </div>

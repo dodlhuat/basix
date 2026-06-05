@@ -104,8 +104,8 @@
 }
 
 .datepicker-day.in-range {
-  background-color: var(--accent-color-lighten);
-  color: var(--accent-color-text);
+  background-color: color-mix(in srgb, var(--accent-color) 15%, transparent);
+  color: var(--primary-text);
   border-radius: 0;
 }
 
@@ -128,7 +128,9 @@
   color: var(--accent-color);
 }
 
-.datepicker-day.selected.today {
+.datepicker-day.selected.today,
+.datepicker-day.range-start.today,
+.datepicker-day.range-end.today {
   color: var(--accent-color-text);
 }
 

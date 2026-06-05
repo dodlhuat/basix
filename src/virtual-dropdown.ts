@@ -46,7 +46,7 @@ class VirtualDropdown {
     private isOpen: boolean;
     private scrollTop: number;
 
-    private boundHandlers: Map<string, EventListener>;
+    private abortController = new AbortController();
 
     constructor(config: VirtualDropdownConfig) {
         const containerElement = typeof config.container === 'string'
@@ -71,7 +71,6 @@ class VirtualDropdown {
         this.filteredOptions = [...this.options];
         this.isOpen = false;
         this.scrollTop = 0;
-        this.boundHandlers = new Map();
 
         this.init();
     }
@@ -127,61 +126,46 @@ class VirtualDropdown {
     }
 
     private bindEvents(): void {
-        const handleTriggerClick = (): void => this.toggle();
-        this.trigger.addEventListener('click', handleTriggerClick);
-        this.boundHandlers.set('triggerClick', handleTriggerClick);
+        const sig = { signal: this.abortController.signal };
 
-        const handleTriggerKeydown = (e: KeyboardEvent): void => {
+        this.trigger.addEventListener('click', () => this.toggle(), sig);
+
+        this.trigger.addEventListener('keydown', (e: KeyboardEvent) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 this.toggle();
             } else if (e.key === 'Escape' && this.isOpen) {
                 this.close();
             }
-        };
-        this.trigger.addEventListener('keydown', handleTriggerKeydown as EventListener);
-        this.boundHandlers.set('triggerKeydown', handleTriggerKeydown as EventListener);
+        }, sig);
 
-        // Close when clicking outside. Still needed because popover="manual"
-        // does not auto-dismiss on outside clicks.
-        const handleDocumentClick = (e: MouseEvent): void => {
+        // Close when clicking outside — popover="manual" does not auto-dismiss.
+        document.addEventListener('click', (e: MouseEvent) => {
             if (!this.container.contains(e.target as Node) && !this.menu.contains(e.target as Node)) {
                 this.close();
             }
-        };
-        document.addEventListener('click', handleDocumentClick as EventListener);
-        this.boundHandlers.set('documentClick', handleDocumentClick as EventListener);
+        }, sig);
 
         if (this.searchable && this.searchInput) {
-            const handleSearchInput = (e: Event): void => {
-                const target = e.target as HTMLInputElement;
-                this.handleSearch(target.value);
-            };
-            this.searchInput.addEventListener('input', handleSearchInput);
-            this.boundHandlers.set('searchInput', handleSearchInput);
+            this.searchInput.addEventListener('input', (e: Event) => {
+                this.handleSearch((e.target as HTMLInputElement).value);
+            }, sig);
         }
 
-        const handleScroll = (e: Event): void => {
-            const target = e.target as HTMLElement;
-            this.scrollTop = target.scrollTop;
+        this.listWrapper.addEventListener('scroll', (e: Event) => {
+            this.scrollTop = (e.target as HTMLElement).scrollTop;
             this.renderList();
-        };
-        this.listWrapper.addEventListener('scroll', handleScroll);
-        this.boundHandlers.set('scroll', handleScroll);
+        }, sig);
 
-        // Sync isOpen if the browser closes the popover externally (e.g. another
-        // popover="auto" element stealing focus — not typical for "manual" but
-        // good defensive practice).
-        const handlePopoverToggle = (e: Event): void => {
+        // Sync state if the browser closes the popover externally.
+        this.menu.addEventListener('toggle', (e: Event) => {
             const te = e as ToggleEvent;
             if (te.newState === 'closed' && this.isOpen) {
                 this.isOpen = false;
                 this.container.classList.remove('open');
                 this.trigger.setAttribute('aria-expanded', 'false');
             }
-        };
-        this.menu.addEventListener('toggle', handlePopoverToggle);
-        this.boundHandlers.set('popoverToggle', handlePopoverToggle);
+        }, sig);
     }
 
     private toggle(): void {
@@ -355,45 +339,12 @@ class VirtualDropdown {
     }
 
     public destroy(): void {
-        if (this.isOpen) {
-            this.menu.hidePopover();
-        }
-
-        const triggerClick = this.boundHandlers.get('triggerClick');
-        if (triggerClick) {
-            this.trigger.removeEventListener('click', triggerClick);
-        }
-
-        const triggerKeydown = this.boundHandlers.get('triggerKeydown');
-        if (triggerKeydown) {
-            this.trigger.removeEventListener('keydown', triggerKeydown);
-        }
-
-        const documentClick = this.boundHandlers.get('documentClick');
-        if (documentClick) {
-            document.removeEventListener('click', documentClick);
-        }
-
-        const searchInput = this.boundHandlers.get('searchInput');
-        if (searchInput && this.searchInput) {
-            this.searchInput.removeEventListener('input', searchInput);
-        }
-
-        const scroll = this.boundHandlers.get('scroll');
-        if (scroll) {
-            this.listWrapper.removeEventListener('scroll', scroll);
-        }
-
-        const popoverToggle = this.boundHandlers.get('popoverToggle');
-        if (popoverToggle) {
-            this.menu.removeEventListener('toggle', popoverToggle);
-        }
-
-        this.boundHandlers.clear();
-
+        if (this.isOpen) this.menu.hidePopover();
+        this.abortController.abort();
         this.container.innerHTML = '';
         this.container.classList.remove('custom-dropdown', 'open');
     }
 }
 
-export { VirtualDropdown, DropdownOption, VirtualDropdownConfig };
+export { VirtualDropdown };
+export type { DropdownOption, VirtualDropdownConfig };

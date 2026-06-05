@@ -36,7 +36,7 @@ class MasonryGallery {
             throw new Error(`Container with id "${containerId}" not found`);
         }
         this.container = container;
-        this.loader = document.querySelector(options.loaderSelector || '.loader');
+        this.loader = document.querySelector(options.loaderSelector ?? '.loader');
 
         this.options = {
             minColumnWidth: options.minColumnWidth ?? 250,
@@ -110,7 +110,7 @@ class MasonryGallery {
         if (rect.bottom > 0 && rect.bottom <= window.innerHeight + this.options.scrollThreshold) {
             this.loadMoreImages();
         }
-    };
+    }
 
     private async loadMoreImages(isAutoFill = false): Promise<void> {
         if (!isAutoFill) this.reloaded++;
