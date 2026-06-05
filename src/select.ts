@@ -161,6 +161,7 @@ class Select {
         selected.textContent = option.textContent?.trim() || '';
         dropdown.classList.remove('open');
         selectElement.value = option.dataset.value || '';
+        selectElement.dispatchEvent(new Event('change'));
     }
 
     private static transformSelect(select: HTMLSelectElement): boolean {

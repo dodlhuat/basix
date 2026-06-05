@@ -8,6 +8,13 @@
   margin-bottom: $spacing;
   flex-wrap: wrap;
   gap: calc($spacing * 0.75);
+
+  input,
+  .select-group .dropdown,
+  .select-group .dropdown-selected {
+    background: transparent;
+    box-shadow: none;
+  }
 }
 
 .table-wrapper {
@@ -76,6 +83,32 @@ tbody tr {
 
   &:hover {
     background-color: var(--hover);
+  }
+}
+
+.table-striped tbody tr:nth-child(even) {
+  background-color: var(--primary-light);
+}
+
+.table-compact {
+  th,
+  td {
+    padding: calc($spacing * 0.4) calc($spacing * 0.75);
+  }
+}
+
+.table-borderless {
+  th,
+  td {
+    border: none;
+  }
+
+  thead {
+    border-bottom: none;
+  }
+
+  .table-wrapper {
+    border: none;
   }
 }
 

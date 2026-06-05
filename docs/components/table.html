@@ -3,16 +3,47 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
-    <title>Data Table — Basix Docs</title>
+    <title>Table — Basix Docs</title>
     <link rel="stylesheet" href="../../css/style.css"/>
     <script type="module">
         import { DocsNav } from '../../js/docs-nav.js';
         import { Theme } from '../../js/theme.js';
         import { CodeViewer } from '../../js/code-viewer.js';
+        import { Table } from '../../js/table.js';
         new DocsNav();
         Theme.init();
 
-        new CodeViewer('#code-html', `<table class="table">
+        // ── JS Data Table demo ──────────────────────────────────────────
+        new Table('#js-table-demo', {
+            columns: [
+                { key: 'name',       label: 'Name',       sortable: true  },
+                { key: 'role',       label: 'Role',       sortable: true  },
+                { key: 'department', label: 'Department', sortable: true  },
+                { key: 'joined',     label: 'Joined',     sortable: true  },
+                { key: 'status',     label: 'Status',     sortable: false },
+            ],
+            data: [
+                { name: 'Alice Müller',    role: 'Admin',     department: 'Engineering', joined: '2022-03-14', status: 'Active'   },
+                { name: 'Bob Schmitt',     role: 'Editor',    department: 'Marketing',   joined: '2023-01-07', status: 'Pending'  },
+                { name: 'Carol Wang',      role: 'Viewer',    department: 'Design',      joined: '2021-11-22', status: 'Active'   },
+                { name: 'Dave Park',       role: 'Editor',    department: 'Engineering', joined: '2024-05-30', status: 'Inactive' },
+                { name: 'Eva Rossi',       role: 'Admin',     department: 'HR',          joined: '2020-08-01', status: 'Active'   },
+                { name: 'Frank Dubois',    role: 'Viewer',    department: 'Finance',     joined: '2023-09-15', status: 'Active'   },
+                { name: 'Grace Tanaka',    role: 'Editor',    department: 'Design',      joined: '2022-07-19', status: 'Active'   },
+                { name: 'Henry Okafor',    role: 'Viewer',    department: 'Marketing',   joined: '2024-02-11', status: 'Pending'  },
+                { name: 'Isla Kovač',      role: 'Admin',     department: 'Engineering', joined: '2021-04-03', status: 'Active'   },
+                { name: 'James Nguyen',    role: 'Editor',    department: 'Finance',     joined: '2023-12-20', status: 'Inactive' },
+                { name: 'Kira Svensson',   role: 'Viewer',    department: 'HR',          joined: '2022-10-08', status: 'Active'   },
+                { name: 'Luca Ferrari',    role: 'Admin',     department: 'Design',      joined: '2020-06-17', status: 'Active'   },
+                { name: 'Maya Patel',      role: 'Editor',    department: 'Engineering', joined: '2024-03-25', status: 'Pending'  },
+                { name: 'Noah Berg',       role: 'Viewer',    department: 'Marketing',   joined: '2023-07-04', status: 'Active'   },
+                { name: 'Olivia Santos',   role: 'Admin',     department: 'Finance',     joined: '2021-09-12', status: 'Active'   },
+            ],
+            pageSize: 5,
+        });
+
+        // ── CodeViewer instances ─────────────────────────────────────────
+        new CodeViewer('#code-html-css', `<table class="table">
   <thead>
     <tr>
       <th>Name</th>
@@ -22,17 +53,53 @@
   </thead>
   <tbody>
     <tr>
-      <td>Alice</td>
+      <td>Alice Müller</td>
       <td>Admin</td>
-      <td><span class="badge success">Active</span></td>
+      <td><span class="badge success solid">Active</span></td>
     </tr>
     <tr>
-      <td>Bob</td>
+      <td>Bob Schmitt</td>
       <td>Editor</td>
-      <td><span class="badge warning">Pending</span></td>
+      <td><span class="badge warning solid">Pending</span></td>
     </tr>
   </tbody>
 </table>`, 'html');
+
+        new CodeViewer('#code-html-js', `<div id="my-table"></div>`, 'html');
+
+        new CodeViewer('#code-js', `import { Table } from '@dodlhuat/basix/js/table.js';
+
+const table = new Table('#my-table', {
+  columns: [
+    { key: 'name',   label: 'Name',   sortable: true  },
+    { key: 'role',   label: 'Role',   sortable: true  },
+    { key: 'status', label: 'Status', sortable: false },
+  ],
+  data: [
+    { name: 'Alice Müller', role: 'Admin',  status: 'Active'  },
+    { name: 'Bob Schmitt',  role: 'Editor', status: 'Pending' },
+    // ...
+  ],
+  pageSize: 10,
+});
+
+table.setData(newData);   // replace data and re-render
+table.getData();          // get current filtered + sorted data
+table.destroy();          // remove listeners and clear container`, 'js');
+
+        new CodeViewer('#code-html-dom', `<!-- Table class can also read existing HTML table markup.
+     If no data option is passed, it reads thead/tbody from the DOM. -->
+<div id="my-table">
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Role</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Alice Müller</td><td>Admin</td><td>Active</td></tr>
+      <tr><td>Bob Schmitt</td><td>Editor</td><td>Pending</td></tr>
+    </tbody>
+  </table>
+</div>`, 'html');
     </script>
 </head>
 <body class="primary-light-bg primary">
@@ -52,10 +119,15 @@
             </div>
         </div>
         <div class="docs-content">
-            <h1>Data Table</h1>
-            <p class="docs-lead">Semantic HTML table with consistent styling for headers, rows, hover states, and striped variants. Compose with badges, chips, and other components inside cells.</p>
+            <h1>Table</h1>
+            <p class="docs-lead">Semantic HTML table for static data, and a JS <code>Table</code> class for dynamic data with sorting, filtering, and pagination built in.</p>
+            <p class="docs-import">{ Table, type TableRow, type TableColumn, type TableOptions } from '/basix/js/table.js'</p>
 
-            <h2>Default</h2>
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <h2>HTML Table</h2>
+            <p>Use plain HTML with the <code>.table</code> class for static, read-only tables. No JavaScript required. Compose freely with badges, chips, and other inline components inside cells.</p>
+
+            <h3>Default</h3>
             <div class="docs-demo">
                 <table class="table">
                     <thead>
@@ -95,7 +167,7 @@
                 </table>
             </div>
 
-            <h2>Striped rows</h2>
+            <h3>Striped rows</h3>
             <div class="docs-demo">
                 <table class="table table-striped">
                     <thead>
@@ -115,17 +187,109 @@
                 </table>
             </div>
 
-            <h2>Usage</h2>
-            <div id="code-html"></div>
+            <h3>Compact</h3>
+            <div class="docs-demo">
+                <table class="table table-compact">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>NODE_ENV</td><td>string</td><td>production</td></tr>
+                        <tr><td>PORT</td><td>number</td><td>3000</td></tr>
+                        <tr><td>LOG_LEVEL</td><td>string</td><td>info</td></tr>
+                        <tr><td>DB_POOL_SIZE</td><td>number</td><td>10</td></tr>
+                        <tr><td>CACHE_TTL</td><td>number</td><td>3600</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <h2>Modifiers</h2>
+            <h3>Borderless</h3>
+            <div class="docs-demo">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>This week</th>
+                            <th>Last week</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Page views</td><td>14 820</td><td>12 340</td></tr>
+                        <tr><td>Unique visitors</td><td>3 610</td><td>2 980</td></tr>
+                        <tr><td>Bounce rate</td><td>41 %</td><td>44 %</td></tr>
+                        <tr><td>Avg. session</td><td>2 m 18 s</td><td>1 m 54 s</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Usage</h3>
+            <div id="code-html-css"></div>
+
+            <h3>Modifiers</h3>
             <table class="docs-props-table">
-                <thead><tr><th>Class on <code>.table</code></th><th>Description</th></tr></thead>
+                <thead><tr><th>Class on <code>&lt;table&gt;</code></th><th>Description</th></tr></thead>
                 <tbody>
-                    <tr><td><em>(none)</em></td><td>Default bordered table with hover row highlight.</td></tr>
-                    <tr><td><code>.table-striped</code></td><td>Alternating row background for easier scanning.</td></tr>
-                    <tr><td><code>.table-compact</code></td><td>Reduced cell padding for dense data.</td></tr>
-                    <tr><td><code>.table-borderless</code></td><td>Removes all borders — rows separated by background only.</td></tr>
+                    <tr><td><code>.table</code></td><td>Required base class. Adds consistent borders, header styling, and hover row highlight.</td></tr>
+                    <tr><td><code>.table-striped</code></td><td>Alternating row background for easier scanning of wide data sets.</td></tr>
+                    <tr><td><code>.table-compact</code></td><td>Reduced cell padding for dense, information-heavy tables.</td></tr>
+                    <tr><td><code>.table-borderless</code></td><td>Removes all borders. Rows are separated by hover state and background only.</td></tr>
+                </tbody>
+            </table>
+
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <h2>JS Data Table</h2>
+            <p>The <code>Table</code> class renders a fully interactive data table from a JavaScript data array. It provides column sorting, a live search filter, and page-based pagination — all wired up automatically.</p>
+
+            <h3>Interactive demo</h3>
+            <p>The demo below has 15 rows with <code>pageSize: 5</code>. Try clicking a column header to sort, typing in the search box to filter, or navigating between pages.</p>
+            <div class="docs-demo">
+                <div id="js-table-demo"></div>
+            </div>
+
+            <h3>JS usage</h3>
+            <div id="code-js"></div>
+
+            <h3>HTML usage</h3>
+            <p>For programmatic initialisation, the only HTML you need is an empty container element.</p>
+            <div id="code-html-js"></div>
+
+            <h3>Initialising from existing markup</h3>
+            <p>If no <code>data</code> option is provided, the <code>Table</code> class will read column headers and row data directly from an existing <code>&lt;table&gt;</code> element inside the container, then replace it with the interactive version.</p>
+            <div id="code-html-dom"></div>
+
+            <h3>Options</h3>
+            <table class="docs-props-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>data</code></td><td>TableRow[]</td><td>[]</td><td>Array of row objects. Each object's keys must match the <code>key</code> values in <code>columns</code>.</td></tr>
+                    <tr><td><code>columns</code></td><td>TableColumn[]</td><td>[]</td><td>Column definitions controlling headers, sort keys, and sortability.</td></tr>
+                    <tr><td><code>pageSize</code></td><td>number</td><td>10</td><td>Number of rows shown per page. The user can also change this via the page-size selector.</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Column definition</h3>
+            <p>Each entry in the <code>columns</code> array is a <code>TableColumn</code> object:</p>
+            <table class="docs-props-table">
+                <thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>key</code></td><td>string</td><td>—</td><td>Property name used to read values from each row object.</td></tr>
+                    <tr><td><code>label</code></td><td>string</td><td>—</td><td>Text shown in the column header.</td></tr>
+                    <tr><td><code>sortable</code></td><td>boolean</td><td>true</td><td>When true, clicking the header toggles ascending / descending sort on this column.</td></tr>
+                </tbody>
+            </table>
+
+            <h3>API</h3>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>setData(data)</code></td><td>Replaces the current row data and re-renders the table from page 1.</td></tr>
+                    <tr><td><code>setColumns(columns)</code></td><td>Replaces the column definitions and fully rebuilds the table including controls.</td></tr>
+                    <tr><td><code>getData()</code></td><td>Returns the current data after applying any active search filter and sort order.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Removes all event listeners and clears the container element.</td></tr>
                 </tbody>
             </table>
         </div>

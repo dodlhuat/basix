@@ -542,6 +542,12 @@ a:focus-visible {
   flex-wrap: wrap;
   gap: 0.75rem;
 }
+.table-controls input,
+.table-controls .select-group .dropdown,
+.table-controls .select-group .dropdown-selected {
+  background: transparent;
+  box-shadow: none;
+}
 
 .table-wrapper {
   overflow-x: auto;
@@ -608,6 +614,26 @@ tbody tr {
 }
 tbody tr:hover {
   background-color: var(--hover);
+}
+
+.table-striped tbody tr:nth-child(even) {
+  background-color: var(--primary-light);
+}
+
+.table-compact th,
+.table-compact td {
+  padding: 0.4rem 0.75rem;
+}
+
+.table-borderless th,
+.table-borderless td {
+  border: none;
+}
+.table-borderless thead {
+  border-bottom: none;
+}
+.table-borderless .table-wrapper {
+  border: none;
 }
 
 .pagination {
