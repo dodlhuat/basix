@@ -10,6 +10,7 @@ interface ThemeElements {
 /** Static class for managing light/dark theme switching with system preference and localStorage persistence. */
 class Theme {
     private static readonly STORAGE_KEY = 'theme';
+    private static readonly isMac = /Mac|iPhone|iPod|iPad/i.test(navigator.platform);
     private static root: HTMLElement;
     private static elements: ThemeElements | null = null;
     private static mediaQuery: MediaQueryList | null = null;
@@ -122,16 +123,12 @@ class Theme {
     private static bindToggleClick(): void {
         if (!this.elements) return;
 
-        this.elements.toggleBtn.addEventListener('click', () => {
-            this.toggleTheme();
-        });
+        this.elements.toggleBtn.addEventListener('click', () => this.toggleTheme());
     }
 
     private static bindKeyboardShortcut(): void {
         window.addEventListener('keydown', (ev: KeyboardEvent) => {
-            const isMac = /Mac|iPhone|iPod|iPad/i.test(navigator.platform);
-            const modifierPressed = isMac ? ev.metaKey : ev.ctrlKey;
-
+            const modifierPressed = Theme.isMac ? ev.metaKey : ev.ctrlKey;
             if (modifierPressed && ev.key.toLowerCase() === 'j') {
                 ev.preventDefault();
                 this.toggleTheme();
@@ -142,18 +139,11 @@ class Theme {
     private static bindSystemThemeChange(): void {
         if (!this.mediaQuery) return;
 
-        const handler = (e: MediaQueryListEvent | MediaQueryList): void => {
+        this.mediaQuery.addEventListener('change', (e: MediaQueryListEvent) => {
             if (!this.getSavedTheme()) {
-                const matches = 'matches' in e ? e.matches : (e as MediaQueryList).matches;
-                this.applyTheme(matches ? 'dark' : 'light');
+                this.applyTheme(e.matches ? 'dark' : 'light');
             }
-        };
-
-        if ('addEventListener' in this.mediaQuery) {
-            this.mediaQuery.addEventListener('change', handler as (e: MediaQueryListEvent) => void);
-        } else if ('addListener' in this.mediaQuery) {
-            (this.mediaQuery as MediaQueryList & { addListener: (fn: (e: MediaQueryListEvent) => void) => void }).addListener(handler);
-        }
+        });
     }
 
     public static getTheme(): ThemeMode {

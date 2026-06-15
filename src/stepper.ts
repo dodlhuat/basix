@@ -46,7 +46,6 @@ class Stepper {
 
     private injectConnectors(): HTMLElement[] {
         const injected: HTMLElement[] = [];
-        // Insert a connector after each step except the last
         for (let i = 0; i < this.steps.length - 1; i++) {
             const connector = document.createElement('div');
             connector.className = 'stepper-connector';
@@ -103,9 +102,7 @@ class Stepper {
         const previous = this.current;
         this.current = index;
         this.render();
-        if (this.onChange && previous !== index) {
-            this.onChange(index, previous);
-        }
+        if (previous !== index) this.onChange?.(index, previous);
     }
 
     public setError(index: number): void {

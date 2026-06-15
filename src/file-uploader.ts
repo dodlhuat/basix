@@ -37,7 +37,8 @@ class FileUploader {
     private uploadUrl: string;
     private maxFileSize?: number;
     private allowedTypes?: string[];
-    private abortControllers: Map<string, () => void> = new Map();
+    private xhrAborts: Map<string, () => void> = new Map();
+    private abortController = new AbortController();
 
     public constructor(elementOrSelector: string | HTMLElement, config: FileUploaderConfig = {}) {
         const container = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
@@ -67,10 +68,6 @@ class FileUploader {
         this.maxFileSize = config.maxFileSize;
         this.allowedTypes = config.allowedTypes;
 
-        this.init();
-    }
-
-    private init(): void {
         this.setupEventListeners();
     }
 
@@ -79,75 +76,69 @@ class FileUploader {
     }
 
     private setupEventListeners(): void {
-        (['dragenter', 'dragover', 'dragleave', 'drop'] as const).forEach((event) => {
-            this.dropZone.addEventListener(event, this.preventDefaults);
-        });
+        const sig = { signal: this.abortController.signal };
+        const prevent = (e: Event) => {
+            e.preventDefault();
+            e.stopPropagation();
+        };
 
-        (['dragenter', 'dragover'] as const).forEach((event) => {
-            this.dropZone.addEventListener(event, this.handleDragEnter);
-        });
+        for (const event of ['dragenter', 'dragover', 'dragleave', 'drop'] as const) {
+            this.dropZone.addEventListener(event, prevent, sig);
+        }
+        for (const event of ['dragenter', 'dragover'] as const) {
+            this.dropZone.addEventListener(event, () => this.dropZone.classList.add('drag-over'), sig);
+        }
+        for (const event of ['dragleave', 'drop'] as const) {
+            this.dropZone.addEventListener(event, () => this.dropZone.classList.remove('drag-over'), sig);
+        }
 
-        (['dragleave', 'drop'] as const).forEach((event) => {
-            this.dropZone.addEventListener(event, this.handleDragLeave);
-        });
+        this.dropZone.addEventListener(
+            'drop',
+            (e: DragEvent) => {
+                const droppedFiles = e.dataTransfer?.files;
+                if (droppedFiles) this.handleFiles(droppedFiles);
+            },
+            sig,
+        );
 
-        this.dropZone.addEventListener('drop', this.handleDrop);
-        this.dropZone.addEventListener('click', this.handleDropZoneClick);
-        this.fileInput.addEventListener('change', this.handleFileInputChange);
-        this.uploadBtn.addEventListener('click', this.handleUploadClick);
+        this.dropZone.addEventListener('click', () => this.fileInput.click(), sig);
+
+        this.fileInput.addEventListener(
+            'change',
+            (e: Event) => {
+                const target = e.target as HTMLInputElement;
+                if (target.files) {
+                    this.handleFiles(target.files);
+                    target.value = '';
+                }
+            },
+            sig,
+        );
+
+        this.uploadBtn.addEventListener(
+            'click',
+            async () => {
+                if (this.files.size === 0) return;
+
+                this.uploadBtn.disabled = true;
+                this.uploadBtn.textContent = 'Uploading...';
+
+                const uploadPromises = Array.from(this.files.values()).map(({ file, element }) => this.uploadFile(file, element));
+
+                const results = await Promise.allSettled(uploadPromises);
+
+                this.uploadBtn.textContent = 'Upload Complete';
+
+                setTimeout(() => {
+                    this.dispatchUploadCompletedEvent(results);
+                    this.fileList.innerHTML = '';
+                    this.files.clear();
+                    this.updateUploadButton();
+                }, 1500);
+            },
+            sig,
+        );
     }
-
-    private preventDefaults = (e: Event): void => {
-        e.preventDefault();
-        e.stopPropagation();
-    };
-
-    private handleDragEnter = (): void => {
-        this.dropZone.classList.add('drag-over');
-    };
-
-    private handleDragLeave = (): void => {
-        this.dropZone.classList.remove('drag-over');
-    };
-
-    private handleDrop = (e: DragEvent): void => {
-        const droppedFiles = e.dataTransfer?.files;
-        if (droppedFiles) {
-            this.handleFiles(droppedFiles);
-        }
-    };
-
-    private handleDropZoneClick = (): void => {
-        this.fileInput.click();
-    };
-
-    private handleFileInputChange = (e: Event): void => {
-        const target = e.target as HTMLInputElement;
-        if (target.files) {
-            this.handleFiles(target.files);
-            target.value = '';
-        }
-    };
-
-    private handleUploadClick = async (): Promise<void> => {
-        if (this.files.size === 0) return;
-
-        this.uploadBtn.disabled = true;
-        this.uploadBtn.textContent = 'Uploading...';
-
-        const uploadPromises = Array.from(this.files.values()).map(({ file, element }) => this.uploadFile(file, element));
-
-        const results = await Promise.allSettled(uploadPromises);
-
-        this.uploadBtn.textContent = 'Upload Complete';
-
-        setTimeout(() => {
-            this.dispatchUploadCompletedEvent(results);
-            this.fileList.innerHTML = '';
-            this.files.clear();
-            this.updateUploadButton();
-        }, 1500);
-    };
 
     private handleFiles(fileList: FileList): void {
         Array.from(fileList).forEach((file) => {
@@ -249,18 +240,18 @@ class FileUploader {
 
             const xhr = new XMLHttpRequest();
             const key = this.fileKey(file);
-            this.abortControllers.set(key, () => xhr.abort());
+            this.xhrAborts.set(key, () => xhr.abort());
 
             xhr.upload.addEventListener('progress', (e) => {
                 if (e.lengthComputable) {
                     const pct = Math.round((e.loaded / e.total) * 100);
-                    progressBar.style.width = pct + '%';
-                    statusText.textContent = pct + '%';
+                    progressBar.style.width = `${pct}%`;
+                    statusText.textContent = `${pct}%`;
                 }
             });
 
             xhr.addEventListener('load', () => {
-                this.abortControllers.delete(key);
+                this.xhrAborts.delete(key);
                 if (xhr.status >= 200 && xhr.status < 300) {
                     progressBar.style.width = '100%';
                     progressBar.style.backgroundColor = 'var(--success)';
@@ -281,7 +272,7 @@ class FileUploader {
             });
 
             xhr.addEventListener('error', () => {
-                this.abortControllers.delete(key);
+                this.xhrAborts.delete(key);
                 progressBar.style.backgroundColor = 'var(--error)';
                 statusText.textContent = 'Network Error';
                 statusText.classList.add('error');
@@ -290,7 +281,7 @@ class FileUploader {
             });
 
             xhr.addEventListener('abort', () => {
-                this.abortControllers.delete(key);
+                this.xhrAborts.delete(key);
                 statusText.textContent = 'Cancelled';
                 statusText.classList.add('error');
                 removeBtn.style.display = 'flex';
@@ -305,7 +296,7 @@ class FileUploader {
     }
 
     private removeFile(key: string): void {
-        const abort = this.abortControllers.get(key);
+        const abort = this.xhrAborts.get(key);
         if (abort) abort();
 
         const fileData = this.files.get(key);
@@ -340,23 +331,9 @@ class FileUploader {
     }
 
     public destroy(): void {
-        this.abortControllers.forEach((abort) => abort());
-        this.abortControllers.clear();
-
-        (['dragenter', 'dragover', 'dragleave', 'drop'] as const).forEach((event) => {
-            this.dropZone.removeEventListener(event, this.preventDefaults);
-        });
-        (['dragenter', 'dragover'] as const).forEach((event) => {
-            this.dropZone.removeEventListener(event, this.handleDragEnter);
-        });
-        (['dragleave', 'drop'] as const).forEach((event) => {
-            this.dropZone.removeEventListener(event, this.handleDragLeave);
-        });
-        this.dropZone.removeEventListener('drop', this.handleDrop);
-        this.dropZone.removeEventListener('click', this.handleDropZoneClick);
-        this.fileInput.removeEventListener('change', this.handleFileInputChange);
-        this.uploadBtn.removeEventListener('click', this.handleUploadClick);
-
+        this.xhrAborts.forEach((abort) => abort());
+        this.xhrAborts.clear();
+        this.abortController.abort();
         this.files.clear();
         this.fileList.innerHTML = '';
     }

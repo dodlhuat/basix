@@ -1,4 +1,4 @@
-# Basix 1.4.0
+# Basix 1.4.1
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,15 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.4.0 → 1.4.1
+
+No breaking changes. Internal code quality pass across all TypeScript source files:
+
+- **All components** — event listeners migrated to `AbortController` pattern; arrow class fields replaced with regular methods. `destroy()` now consistently calls `abortController.abort()` instead of individual `removeEventListener` calls.
+- **Various** — optional chaining (`?.`) for callbacks, template literals over string concatenation, `querySelector<T>` generics over `as` casts, redundant type annotations removed.
+
+---
 
 ### 1.3.5 → 1.4.0
 

@@ -40,8 +40,8 @@ class DatePicker {
     private selectedMinutes: number;
     private calendar!: HTMLDivElement;
     private backdrop!: HTMLDivElement;
-    private handleDocumentClick!: (e: Event) => void;
     private abortController = new AbortController();
+    private showAbortController: AbortController | null = null;
 
     public constructor(elementOrSelector: string | HTMLInputElement, options: DatePickerOptions = {}) {
         this.input = typeof elementOrSelector === 'string' ? document.querySelector<HTMLInputElement>(elementOrSelector) : elementOrSelector;
@@ -102,8 +102,6 @@ class DatePicker {
         this.backdrop = document.createElement('div');
         this.backdrop.className = 'datepicker-backdrop';
         document.body.appendChild(this.backdrop);
-
-        this.backdrop.addEventListener('click', () => this.hide(), { signal: this.abortController.signal });
     }
 
     private attachEvents(): void {
@@ -131,15 +129,6 @@ class DatePicker {
             },
             sig,
         );
-
-        this.handleDocumentClick = (e: Event): void => {
-            if (this.calendar.classList.contains('mobile')) return;
-
-            const target = e.target as Node;
-            if (!this.calendar.contains(target) && target !== this.input) {
-                this.hide();
-            }
-        };
     }
 
     private show(): void {
@@ -172,7 +161,17 @@ class DatePicker {
 
             setTimeout(() => {
                 if (this.calendar.classList.contains('visible')) {
-                    document.addEventListener('click', this.handleDocumentClick);
+                    this.showAbortController = new AbortController();
+                    document.addEventListener(
+                        'click',
+                        (e: Event) => {
+                            const target = e.target as Node;
+                            if (!this.calendar.contains(target) && target !== this.input) {
+                                this.hide();
+                            }
+                        },
+                        { signal: this.showAbortController.signal },
+                    );
                 }
             }, 0);
         }
@@ -185,7 +184,8 @@ class DatePicker {
         this.backdrop.classList.remove('visible');
         document.body.style.overflow = '';
 
-        document.removeEventListener('click', this.handleDocumentClick);
+        this.showAbortController?.abort();
+        this.showAbortController = null;
     }
 
     private render(): void {
@@ -307,6 +307,7 @@ class DatePicker {
         const grid = document.createElement('div');
         grid.className = 'datepicker-grid-months';
 
+        const now = new Date();
         this.options?.locales?.months.forEach((month, index) => {
             const el = document.createElement('div');
             el.className = 'datepicker-month';
@@ -315,7 +316,7 @@ class DatePicker {
             if (index === this.viewMonth) {
                 el.classList.add('selected');
             }
-            if (index === new Date().getMonth() && this.viewYear === new Date().getFullYear()) {
+            if (index === now.getMonth() && this.viewYear === now.getFullYear()) {
                 el.classList.add('current');
             }
 
@@ -538,20 +539,20 @@ class DatePicker {
     private applyTimeToSelection(): void {
         if (this.options.mode === 'single' && this.selectedDate) {
             this.selectedDate.setHours(this.selectedHours, this.selectedMinutes, 0, 0);
-            this.updateInput(this.options!.format!(this.selectedDate));
-            this.options!.onSelect!(this.selectedDate);
+            this.updateInput(this.options.format!(this.selectedDate));
+            this.options.onSelect!(this.selectedDate);
         } else if (this.options.mode === 'range') {
             if (this.rangeStart) {
                 this.rangeStart.setHours(this.selectedHours, this.selectedMinutes, 0, 0);
             }
             if (this.rangeStart && this.rangeEnd) {
-                const startDate = this.options!.format!(this.rangeStart);
-                const endDate = this.options!.format!(this.rangeEnd);
+                const startDate = this.options.format!(this.rangeStart);
+                const endDate = this.options.format!(this.rangeEnd);
                 this.updateInput(`${startDate} - ${endDate}`);
             } else if (this.rangeStart) {
-                this.updateInput(this.options!.format!(this.rangeStart) + ' - ...');
+                this.updateInput(this.options.format!(this.rangeStart) + ' - ...');
             }
-            this.options!.onSelect!({ start: this.rangeStart, end: this.rangeEnd });
+            this.options.onSelect!({ start: this.rangeStart, end: this.rangeEnd });
         }
     }
 
@@ -576,8 +577,8 @@ class DatePicker {
 
         if (this.options.mode === 'single') {
             this.selectedDate = date;
-            this.updateInput(this.options!.format!(this.selectedDate));
-            this.options!.onSelect!(this.selectedDate);
+            this.updateInput(this.options.format!(this.selectedDate));
+            this.options.onSelect!(this.selectedDate);
             if (!this.options.timePicker) {
                 this.hide();
             }
@@ -585,7 +586,7 @@ class DatePicker {
             if (!this.rangeStart || (this.rangeStart && this.rangeEnd)) {
                 this.rangeStart = date;
                 this.rangeEnd = null;
-                this.updateInput(this.options!.format!(this.rangeStart) + ' - ...');
+                this.updateInput(this.options.format!(this.rangeStart) + ' - ...');
             } else {
                 if (date.getTime() < this.rangeStart.getTime()) {
                     this.rangeEnd = this.rangeStart;
@@ -593,8 +594,8 @@ class DatePicker {
                 } else {
                     this.rangeEnd = date;
                 }
-                const startDate = this.options!.format!(this.rangeStart);
-                const endDate = this.options!.format!(this.rangeEnd);
+                const startDate = this.options.format!(this.rangeStart);
+                const endDate = this.options.format!(this.rangeEnd);
                 if (startDate === endDate) {
                     this.updateInput(startDate);
                 } else {
@@ -604,7 +605,7 @@ class DatePicker {
                     this.hide();
                 }
             }
-            this.options!.onSelect!({ start: this.rangeStart, end: this.rangeEnd });
+            this.options.onSelect!({ start: this.rangeStart, end: this.rangeEnd });
         }
         this.render();
     }

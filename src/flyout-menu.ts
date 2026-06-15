@@ -143,34 +143,34 @@ class FlyoutMenu {
     private bindEvents(): void {
         const sig = { signal: this.abortController.signal };
 
-        this.menuTrigger?.addEventListener('click', this.open, sig);
-        this.closeBtn?.addEventListener('click', this.close, sig);
-        this.flyoutOverlay?.addEventListener('click', this.close, sig);
+        this.menuTrigger?.addEventListener('click', () => this.open(), sig);
+        this.closeBtn?.addEventListener('click', () => this.close(), sig);
+        this.flyoutOverlay?.addEventListener('click', () => this.close(), sig);
 
         this.submenuToggles?.forEach((toggle) => {
             toggle.addEventListener('click', (e) => this.handleSubmenu(e, toggle), sig);
         });
 
         this.menuLinks?.forEach((link) => {
-            link.addEventListener('click', this.close, sig);
+            link.addEventListener('click', () => this.close(), sig);
         });
 
-        document.addEventListener('keydown', this.handleKeydown, sig);
+        document.addEventListener('keydown', (e) => this.handleKeydown(e), sig);
     }
 
-    public open = (): void => {
+    public open(): void {
         this.flyoutMenu?.classList.add('is-open');
         this.flyoutOverlay?.classList.add('is-visible');
         document.body.style.overflow = 'hidden';
         this.menuTrigger?.setAttribute('aria-expanded', 'true');
-    };
+    }
 
-    public close = (): void => {
+    public close(): void {
         this.flyoutMenu?.classList.remove('is-open');
         this.flyoutOverlay?.classList.remove('is-visible');
         document.body.style.overflow = '';
         this.menuTrigger?.setAttribute('aria-expanded', 'false');
-    };
+    }
 
     private handleSubmenu(e: Event, toggle: HTMLElement): void {
         e.preventDefault();
@@ -198,17 +198,14 @@ class FlyoutMenu {
         submenu?.classList.toggle('is-open');
     }
 
-    private handleKeydown = (e: KeyboardEvent): void => {
+    private handleKeydown(e: KeyboardEvent): void {
         if (e.key === 'Escape' && this.flyoutMenu?.classList.contains('is-open')) {
             this.close();
         }
-    };
+    }
 
     public setDirection(direction: 'left' | 'right'): void {
         if (!this.flyoutMenu) return;
-
-        const validDirections: Array<'left' | 'right'> = ['left', 'right'];
-        if (!validDirections.includes(direction)) return;
 
         this.flyoutMenu.classList.remove('flyout-from-right', 'flyout-from-left');
         this.flyoutMenu.classList.add(`flyout-from-${direction}`);

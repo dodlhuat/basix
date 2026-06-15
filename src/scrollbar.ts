@@ -20,7 +20,7 @@ class Scrollbar {
     private readonly track!: HTMLElement;
     private readonly thumb!: HTMLElement;
     private readonly MIN_THUMB_HEIGHT!: number;
-    private readonly ro!: ResizeObserver;
+    private readonly resizeObserver!: ResizeObserver;
 
     private dragging = false;
     private activePointerId: number | null = null;
@@ -39,7 +39,7 @@ class Scrollbar {
 
         this.MIN_THUMB_HEIGHT = this.getMinThumbHeight();
 
-        this.ro = new ResizeObserver(this.updateThumb);
+        this.resizeObserver = new ResizeObserver(() => this.updateThumb());
 
         this.attachEventListeners();
         Scrollbar.instances.set(container, this);
@@ -49,7 +49,7 @@ class Scrollbar {
             Scrollbar.installGlobalListeners();
         }
 
-        requestAnimationFrame(this.updateThumb);
+        requestAnimationFrame(() => this.updateThumb());
     }
 
     private getRequiredElements(container: HTMLElement): ScrollbarElements {
@@ -108,17 +108,17 @@ class Scrollbar {
 
     private attachEventListeners(): void {
         const sig = { signal: this.abortController.signal };
-        this.viewport.addEventListener('scroll', this.updateThumb, { passive: true, signal: sig.signal });
-        this.thumb.addEventListener('pointerdown', this.handleThumbPointerDown, sig);
-        this.track.addEventListener('click', this.handleTrackClick, sig);
-        this.container.addEventListener('wheel', this.handleContainerWheel, { passive: false, signal: sig.signal });
-        window.addEventListener('resize', this.updateThumb, sig);
+        this.viewport.addEventListener('scroll', () => this.updateThumb(), { ...sig, passive: true });
+        this.thumb.addEventListener('pointerdown', (e: PointerEvent) => this.handleThumbPointerDown(e), sig);
+        this.track.addEventListener('click', (e: MouseEvent) => this.handleTrackClick(e), sig);
+        this.container.addEventListener('wheel', (e: WheelEvent) => this.handleContainerWheel(e), { ...sig, passive: false });
+        window.addEventListener('resize', () => this.updateThumb(), sig);
 
-        this.ro.observe(this.viewport);
-        this.ro.observe(this.content);
+        this.resizeObserver.observe(this.viewport);
+        this.resizeObserver.observe(this.content);
     }
 
-    private updateThumb = (): void => {
+    private updateThumb(): void {
         const viewportHeight = this.viewport.clientHeight;
         const contentHeight = this.content.scrollHeight;
         const trackHeight = this.track.clientHeight;
@@ -140,9 +140,9 @@ class Scrollbar {
         const thumbTop = scrollRatio * (maxThumbTop || 0);
 
         this.thumb.style.top = `${thumbTop}px`;
-    };
+    }
 
-    private handleThumbPointerDown = (e: PointerEvent): void => {
+    private handleThumbPointerDown(e: PointerEvent): void {
         e.preventDefault();
 
         this.dragging = true;
@@ -162,9 +162,9 @@ class Scrollbar {
         this.startThumbTop = thumbRect.top - trackRect.top;
 
         document.body.style.userSelect = 'none';
-    };
+    }
 
-    private handlePointerMove = (e: PointerEvent): void => {
+    private handlePointerMove(e: PointerEvent): void {
         if (!this.dragging || this.activePointerId !== e.pointerId) {
             return;
         }
@@ -185,9 +185,9 @@ class Scrollbar {
         const scrollRatio = newThumbTop / (maxThumbTop || 1);
 
         this.viewport.scrollTop = scrollRatio * (maxScroll || 0);
-    };
+    }
 
-    private handlePointerUp = (e: PointerEvent): void => {
+    private handlePointerUp(e: PointerEvent): void {
         if (!this.dragging || this.activePointerId !== e.pointerId) {
             return;
         }
@@ -203,9 +203,9 @@ class Scrollbar {
         this.activePointerId = null;
         Scrollbar.activeInstance = null;
         document.body.style.userSelect = '';
-    };
+    }
 
-    private handleTrackClick = (e: MouseEvent): void => {
+    private handleTrackClick(e: MouseEvent): void {
         if (e.target === this.thumb) {
             return;
         }
@@ -226,9 +226,9 @@ class Scrollbar {
         const scrollTop = scrollRatio * (maxScroll || 0);
 
         this.viewport.scrollTo({ top: scrollTop, behavior: 'smooth' });
-    };
+    }
 
-    private handleContainerWheel = (e: WheelEvent): void => {
+    private handleContainerWheel(e: WheelEvent): void {
         const { scrollTop, scrollHeight, clientHeight } = this.viewport;
         const scrollable = scrollHeight > clientHeight;
         const atTop = scrollTop === 0 && e.deltaY < 0;
@@ -239,11 +239,11 @@ class Scrollbar {
         }
 
         this.viewport.scrollTop += e.deltaY;
-    };
+    }
 
     public destroy(): void {
         this.abortController.abort();
-        this.ro.disconnect();
+        this.resizeObserver.disconnect();
 
         Scrollbar.instances.delete(this.container);
 

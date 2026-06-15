@@ -1,8 +1,3 @@
-/**
- * Shared floating-element positioning utility.
- * Used by Tooltip and Popover.
- */
-
 type Placement = 'top' | 'bottom' | 'left' | 'right';
 type Align = 'start' | 'center' | 'end';
 
@@ -23,7 +18,6 @@ interface PositionResult {
     arrowOffset?: number;
 }
 
-/** Pick the placement with the most available space, preferring bottom > top > right > left. */
 function bestPlacement(trigger: DOMRect, floating: DOMRect, offset: number): Placement {
     const space = {
         bottom: window.innerHeight - trigger.bottom - offset,
@@ -39,7 +33,6 @@ function bestPlacement(trigger: DOMRect, floating: DOMRect, offset: number): Pla
     return Object.entries(space).sort((a, b) => b[1] - a[1])[0][0] as Placement;
 }
 
-/** Flip to opposite side if preferred placement doesn't fit. */
 function maybeFlip(placement: Placement, trigger: DOMRect, floating: DOMRect, offset: number): Placement {
     const fits: Record<Placement, boolean> = {
         top: trigger.top - offset >= floating.height,
@@ -51,11 +44,6 @@ function maybeFlip(placement: Placement, trigger: DOMRect, floating: DOMRect, of
     return !fits[placement] && fits[opp[placement]] ? opp[placement] : placement;
 }
 
-/**
- * Compute `left` / `top` for a `position: fixed` floating element anchored to a trigger.
- * Handles placement resolution (auto + flip), cross-axis alignment, viewport clamping,
- * and optional arrow offset calculation.
- */
 function computePosition(trigger: DOMRect, floating: DOMRect, opts: PositionOptions): PositionResult {
     const offset = opts.offset ?? 8;
     const margin = opts.margin ?? 8;

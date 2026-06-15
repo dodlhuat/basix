@@ -60,8 +60,8 @@ class VirtualDropdown {
         this.multiSelect = config.multiSelect ?? false;
         this.searchable = config.searchable ?? false;
         this.placeholder = config.placeholder || 'Select...';
-        this.renderLimit = config.renderLimit || 20;
-        this.itemHeight = config.itemHeight || 40;
+        this.renderLimit = config.renderLimit ?? 20;
+        this.itemHeight = config.itemHeight ?? 40;
         this.onSelect = config.onSelect ?? null;
         this.anchorName = `--vd-${Math.random().toString(36).slice(2, 9)}`;
 
@@ -260,26 +260,18 @@ class VirtualDropdown {
             .join('');
 
         this.content.querySelectorAll('.dropdown-item').forEach((item) => {
-            const handleItemClick = (e: Event): void => {
+            item.addEventListener('click', (e: Event) => {
                 e.stopPropagation();
                 const value = (item as HTMLElement).dataset.value;
-                if (value) {
-                    this.handleSelect(value);
-                }
-            };
-
-            const handleItemKeydown = (e: KeyboardEvent): void => {
+                if (value) this.handleSelect(value);
+            });
+            item.addEventListener('keydown', (e: KeyboardEvent) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     const value = (item as HTMLElement).dataset.value;
-                    if (value) {
-                        this.handleSelect(value);
-                    }
+                    if (value) this.handleSelect(value);
                 }
-            };
-
-            item.addEventListener('click', handleItemClick);
-            item.addEventListener('keydown', handleItemKeydown as EventListener);
+            });
         });
     }
 
@@ -305,9 +297,7 @@ class VirtualDropdown {
 
         this.updateTrigger();
 
-        if (this.onSelect) {
-            this.onSelect(Array.from(this.selectedValues));
-        }
+        this.onSelect?.(Array.from(this.selectedValues));
     }
 
     private updateTrigger(): void {

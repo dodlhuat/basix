@@ -21,6 +21,8 @@ class PushMenu {
 
     private static initialized = false;
     private static panelStack: HTMLElement[] = [];
+    private static abortController = new AbortController();
+    private static clickNavAbortController: AbortController | null = null;
 
     public static init(): void {
         if (this.initialized) {
@@ -36,8 +38,9 @@ class PushMenu {
 
         this.buildPanels();
 
-        this.elements.navigation.addEventListener('change', this.handleNavigationChange);
-        this.elements.backdrop?.addEventListener('click', this.handleBackdropClick);
+        const sig = { signal: this.abortController.signal };
+        this.elements.navigation.addEventListener('change', () => this.handleNavigationChange(), sig);
+        this.elements.backdrop?.addEventListener('click', () => this.handleBackdropClick(), sig);
 
         this.initialized = true;
     }
@@ -160,18 +163,20 @@ class PushMenu {
         }, 300);
     }
 
-    private static handleNavigationChange = (): void => {
+    private static handleNavigationChange(): void {
         const isPushed = this.elements.content?.classList.contains('pushed') ?? false;
 
         if (!isPushed) {
-            this.elements.content?.addEventListener('click', this.clickNav);
+            this.clickNavAbortController = new AbortController();
+            this.elements.content?.addEventListener('click', () => this.clickNav(), { signal: this.clickNavAbortController.signal });
         } else {
-            this.elements.content?.removeEventListener('click', this.clickNav);
+            this.clickNavAbortController?.abort();
+            this.clickNavAbortController = null;
             this.resetPanels();
         }
 
         this.pushToggle();
-    };
+    }
 
     public static pushToggle(): void {
         if (!this.elements.content || !this.elements.menu) {
@@ -196,15 +201,15 @@ class PushMenu {
         }
     }
 
-    private static clickNav = (): void => {
-        (PushMenu.elements.navigation as HTMLElement).click();
-    };
+    private static clickNav(): void {
+        PushMenu.elements.navigation!.click();
+    }
 
-    private static handleBackdropClick = (): void => {
+    private static handleBackdropClick(): void {
         if (PushMenu.isOpen()) {
-            (PushMenu.elements.navigation as HTMLElement).click();
+            PushMenu.elements.navigation!.click();
         }
-    };
+    }
 
     public static open(): void {
         if (!this.elements.content?.classList.contains('pushed')) {
@@ -225,9 +230,11 @@ class PushMenu {
     public static destroy(): void {
         if (!this.initialized) return;
 
-        this.elements.navigation?.removeEventListener('change', this.handleNavigationChange);
-        this.elements.content?.removeEventListener('click', this.clickNav);
-        this.elements.backdrop?.removeEventListener('click', this.handleBackdropClick);
+        this.abortController.abort();
+        this.abortController = new AbortController();
+
+        this.clickNavAbortController?.abort();
+        this.clickNavAbortController = null;
 
         this.close();
 

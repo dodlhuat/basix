@@ -3,7 +3,7 @@ class Select {
     private readonly element: HTMLSelectElement;
     private readonly isMultiselect: boolean;
     private readonly dropdown: HTMLElement | null;
-    private readonly documentClickHandler: (e: Event) => void;
+    private abortController = new AbortController();
 
     public constructor(elementOrSelector: string | HTMLSelectElement) {
         const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLSelectElement>(elementOrSelector) : elementOrSelector;
@@ -22,16 +22,19 @@ class Select {
         this.isMultiselect = result.isMulti;
         this.dropdown = result.dropdown;
 
-        this.documentClickHandler = (e: Event) => {
-            if (this.dropdown && !this.dropdown.contains(e.target as Node)) {
-                this.dropdown.classList.remove('open');
-            }
-        };
-        document.addEventListener('click', this.documentClickHandler);
+        document.addEventListener(
+            'click',
+            (e: Event) => {
+                if (this.dropdown && !this.dropdown.contains(e.target as Node)) {
+                    this.dropdown.classList.remove('open');
+                }
+            },
+            { signal: this.abortController.signal },
+        );
     }
 
     public destroy(): void {
-        document.removeEventListener('click', this.documentClickHandler);
+        this.abortController.abort();
         this.dropdown?.classList.remove('open');
     }
 
@@ -51,13 +54,17 @@ class Select {
         const result = Select.initElement(element);
         if (!result) return null;
 
-        const handler = (e: Event) => {
-            if (!result.dropdown.contains(e.target as Node)) {
-                result.dropdown.classList.remove('open');
-            }
-        };
-        document.addEventListener('click', handler);
-        return () => document.removeEventListener('click', handler);
+        const ac = new AbortController();
+        document.addEventListener(
+            'click',
+            (e: Event) => {
+                if (!result.dropdown.contains(e.target as Node)) {
+                    result.dropdown.classList.remove('open');
+                }
+            },
+            { signal: ac.signal },
+        );
+        return () => ac.abort();
     }
 
     private static initElement(element: HTMLSelectElement): { isMulti: boolean; dropdown: HTMLElement } | null {
@@ -70,13 +77,13 @@ class Select {
             throw new Error(`Select: Parent .select-group not found for "${element}"`);
         }
 
-        const dropdown = selectGroup.querySelector('.dropdown') as HTMLElement | null;
+        const dropdown = selectGroup.querySelector<HTMLElement>('.dropdown');
         if (!dropdown) {
             throw new Error(`Select: Dropdown element not found for "${element}"`);
         }
 
-        const selected = dropdown.querySelector('.dropdown-selected') as HTMLElement | null;
-        const options = dropdown.querySelector('.dropdown-options') as HTMLElement | null;
+        const selected = dropdown.querySelector<HTMLElement>('.dropdown-selected');
+        const options = dropdown.querySelector<HTMLElement>('.dropdown-options');
 
         if (!selected || !options) {
             throw new Error(`Select: Required dropdown elements not found for "${element}"`);
@@ -103,7 +110,7 @@ class Select {
             }
         });
 
-        const closeIcon = options.querySelector('.dropdown-options-icon') as HTMLElement | null;
+        const closeIcon = options.querySelector<HTMLElement>('.dropdown-options-icon');
         if (closeIcon) {
             closeIcon.addEventListener('click', () => {
                 dropdown.classList.remove('open');
@@ -124,7 +131,7 @@ class Select {
     private static handleMultiSelect(option: HTMLElement, optionsContainer: HTMLElement, selected: HTMLElement, selectElement: HTMLSelectElement): void {
         option.classList.toggle('selected');
 
-        const selectedOptions = Array.from(optionsContainer.querySelectorAll('.dropdown-option.selected')) as HTMLElement[];
+        const selectedOptions = Array.from(optionsContainer.querySelectorAll<HTMLElement>('.dropdown-option.selected'));
 
         const values = selectedOptions.map((opt) => opt.textContent?.trim() || '');
         selected.textContent = values.length ? values.join(', ') : 'Select options';
@@ -154,7 +161,7 @@ class Select {
     }
 
     private static transformSelect(select: HTMLSelectElement): boolean {
-        const parent = select.closest('.select-group') as HTMLElement | null;
+        const parent = select.closest<HTMLElement>('.select-group');
 
         if (!parent) {
             return false;

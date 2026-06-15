@@ -63,11 +63,11 @@ class Lightbox {
         const sig = { signal: this.abortController.signal };
 
         if (this.closeable) {
-            wrapper.querySelector('.lightbox-close')?.addEventListener('click', this.hide, sig);
-            wrapper.querySelector('.lightbox-background')?.addEventListener('click', this.handleBackgroundClick, sig);
+            wrapper.querySelector('.lightbox-close')?.addEventListener('click', () => this.hide(), sig);
+            wrapper.querySelector('.lightbox-background')?.addEventListener('click', (e) => this.handleBackgroundClick(e), sig);
         }
 
-        document.addEventListener('keydown', this.handleKeydown, sig);
+        document.addEventListener('keydown', (e) => this.handleKeydown(e), sig);
 
         if (this.images.length > 1) {
             wrapper.querySelector('.lightbox-prev')?.addEventListener('click', () => this.prev(), sig);
@@ -90,7 +90,7 @@ class Lightbox {
         this.onOpen?.();
     }
 
-    public hide = (): void => {
+    public hide(): void {
         const wrapper = this.wrapper;
         if (!wrapper) return;
 
@@ -111,7 +111,7 @@ class Lightbox {
             }
             this.onClose?.();
         }, 300);
-    };
+    }
 
     public next(): void {
         if (this.images.length <= 1) return;
@@ -205,7 +205,7 @@ class Lightbox {
         this.wrapper?.querySelector('.lightbox-img-wrap')?.classList.toggle('is-zoomed', this.isZoomed);
     }
 
-    private handleKeydown = (e: KeyboardEvent): void => {
+    private handleKeydown(e: KeyboardEvent): void {
         switch (e.key) {
             case 'Escape':
                 if (this.closeable) this.hide();
@@ -220,7 +220,7 @@ class Lightbox {
                 this.trapFocus(e);
                 break;
         }
-    };
+    }
 
     private trapFocus(e: KeyboardEvent): void {
         if (!this.wrapper) return;
@@ -245,11 +245,11 @@ class Lightbox {
         }
     }
 
-    private handleBackgroundClick = (e: Event): void => {
+    private handleBackgroundClick(e: Event): void {
         if ((e.target as HTMLElement)?.classList.contains('lightbox-background')) {
             this.hide();
         }
-    };
+    }
 
     private addTouchSupport(): void {
         const wrap = this.wrapper?.querySelector('.lightbox-img-wrap');
@@ -263,7 +263,7 @@ class Lightbox {
                 startX = (e as TouchEvent).touches[0].clientX;
                 isDragging = true;
             },
-            { passive: true, signal: this.abortController.signal } as AddEventListenerOptions,
+            { passive: true, signal: this.abortController.signal },
         );
 
         wrap.addEventListener(
@@ -280,7 +280,7 @@ class Lightbox {
                 }
                 isDragging = false;
             },
-            { signal: this.abortController.signal } as AddEventListenerOptions,
+            { signal: this.abortController.signal },
         );
     }
 

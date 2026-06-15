@@ -73,16 +73,13 @@ class ContextMenu {
                 if (!this.menuEl) return;
                 if (e.key === 'Escape') {
                     this.close();
-                }
-                if (e.key === 'ArrowDown') {
+                } else if (e.key === 'ArrowDown') {
                     e.preventDefault();
                     this.moveFocus(1);
-                }
-                if (e.key === 'ArrowUp') {
+                } else if (e.key === 'ArrowUp') {
                     e.preventDefault();
                     this.moveFocus(-1);
-                }
-                if (e.key === 'Enter') {
+                } else if (e.key === 'Enter') {
                     e.preventDefault();
                     this.activateFocused();
                 }
@@ -256,7 +253,7 @@ class ContextMenu {
         if (!this.menuEl) return [];
         return Array.from(this.menuEl.children).filter(
             (el): el is HTMLElement => el.classList.contains('context-menu-item') && !el.classList.contains('is-disabled'),
-        ) as HTMLElement[];
+        );
     }
 
     private moveFocus(direction: 1 | -1): void {
@@ -264,7 +261,7 @@ class ContextMenu {
         if (!items.length) return;
 
         const currentIndex = items.findIndex((el) => el.classList.contains('is-focused'));
-        const nextIndex = (currentIndex + direction + items.length) % items.length;
+        const nextIndex = currentIndex === -1 ? (direction === 1 ? 0 : items.length - 1) : (currentIndex + direction + items.length) % items.length;
 
         items[currentIndex]?.classList.remove('is-focused');
         items[nextIndex].classList.add('is-focused');

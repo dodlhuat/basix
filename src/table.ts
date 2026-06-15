@@ -200,9 +200,10 @@ class Table {
         }
 
         if (this.sortColumn) {
+            const col = this.sortColumn;
             processedData.sort((a, b) => {
-                const valA = a[this.sortColumn!];
-                const valB = b[this.sortColumn!];
+                const valA = a[col];
+                const valB = b[col];
 
                 if (valA == null && valB == null) return 0;
                 if (valA == null) return 1;
@@ -287,11 +288,13 @@ class Table {
         const buttonsDiv = document.createElement('div');
         buttonsDiv.className = 'pagination-buttons';
 
+        const sig = { signal: this.abortController.signal };
+
         const prevBtn = document.createElement('button');
         prevBtn.className = 'page-btn';
         prevBtn.textContent = 'Previous';
         prevBtn.disabled = this.currentPage === 1;
-        prevBtn.addEventListener('click', () => this.setPage(this.currentPage - 1));
+        prevBtn.addEventListener('click', () => this.setPage(this.currentPage - 1), sig);
         buttonsDiv.appendChild(prevBtn);
 
         let startPage = Math.max(1, this.currentPage - 2);
@@ -305,7 +308,7 @@ class Table {
             const btn = document.createElement('button');
             btn.className = `page-btn ${i === this.currentPage ? 'active' : ''}`;
             btn.textContent = String(i);
-            btn.addEventListener('click', () => this.setPage(i));
+            btn.addEventListener('click', () => this.setPage(i), sig);
             buttonsDiv.appendChild(btn);
         }
 
@@ -313,7 +316,7 @@ class Table {
         nextBtn.className = 'page-btn';
         nextBtn.textContent = 'Next';
         nextBtn.disabled = this.currentPage === totalPages;
-        nextBtn.addEventListener('click', () => this.setPage(this.currentPage + 1));
+        nextBtn.addEventListener('click', () => this.setPage(this.currentPage + 1), sig);
         buttonsDiv.appendChild(nextBtn);
 
         this.paginationContainer.appendChild(buttonsDiv);

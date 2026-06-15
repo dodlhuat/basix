@@ -5,6 +5,7 @@ class CodeViewer {
     private container: HTMLElement;
     private code: string;
     private language: string;
+    private abortController = new AbortController();
 
     public constructor(elementOrSelector: string | HTMLElement, code: string, language: SupportedLanguage = 'javascript') {
         const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
@@ -109,8 +110,6 @@ class CodeViewer {
     }
 
     private highlightCSS(code: string): string {
-        code = this.escape(code);
-
         const comments: string[] = [];
         code = code.replace(/(\/\*[\s\S]*?\*\/)/g, (match) => {
             comments.push(match);
@@ -122,6 +121,8 @@ class CodeViewer {
             strings.push(match);
             return `###STRING${strings.length - 1}###`;
         });
+
+        code = this.escape(code);
 
         code = code.replace(/^([^{]+)(?={)/gm, (match) => {
             return '<span class="selector">' + match.trim() + '</span>';
@@ -177,18 +178,11 @@ class CodeViewer {
                 `;
 
         const copyButton = this.container.querySelector<HTMLButtonElement>('.copy-button');
-        if (copyButton) {
-            copyButton.addEventListener('click', this.handleCopy);
-        }
+        copyButton?.addEventListener('click', () => this.copyCode(), { signal: this.abortController.signal });
     }
 
-    private handleCopy = (): void => {
-        this.copyCode();
-    };
-
     public destroy(): void {
-        const copyButton = this.container.querySelector<HTMLButtonElement>('.copy-button');
-        copyButton?.removeEventListener('click', this.handleCopy);
+        this.abortController.abort();
     }
 }
 export { CodeViewer };

@@ -40,6 +40,11 @@ class Carousel {
     private init(): void {
         this.setupDOM();
         this.slides = Array.from(this.track.children) as HTMLElement[];
+
+        if (this.slides.length === 0) {
+            throw new Error('Carousel: no slide elements found.');
+        }
+
         this.slideWidth = this.slides[0].getBoundingClientRect().width;
         this.currentIndex = 0;
         this.bindEvents();
@@ -112,11 +117,16 @@ class Carousel {
             sig,
         );
 
+        let resizeTimer: ReturnType<typeof setTimeout> | null = null;
         window.addEventListener(
             'resize',
             () => {
-                this.slideWidth = this.slides[0].getBoundingClientRect().width;
-                this.moveToSlide(this.currentIndex, false);
+                if (resizeTimer !== null) clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    this.slideWidth = this.slides[0].getBoundingClientRect().width;
+                    this.moveToSlide(this.currentIndex, false);
+                    resizeTimer = null;
+                }, 100);
             },
             sig,
         );
@@ -191,7 +201,7 @@ class Carousel {
                 startX = e.touches[0].clientX;
                 isDragging = true;
             },
-            { passive: true, signal: sig.signal },
+            { ...sig, passive: true },
         );
 
         this.track.addEventListener(

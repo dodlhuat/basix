@@ -148,7 +148,7 @@ class Chart {
 
         const svg = this.createSVG(canvas, svgW, svgH);
 
-        if (showGrid) this.renderHGrid(svg, m, w, h, yMin, yMax);
+        if (showGrid) this.renderHGrid(svg, m, w, h);
         this.renderXAxisLine(svg, m, w, h);
         this.renderXLabels(svg, m, w, h, labels);
         this.renderYLabels(svg, m, h, yMin, yMax);
@@ -255,7 +255,7 @@ class Chart {
 
         const svg = this.createSVG(canvas, svgW, svgH);
 
-        if (showGrid) this.renderHGrid(svg, m, w, h, yMin, yMax);
+        if (showGrid) this.renderHGrid(svg, m, w, h);
         this.renderXAxisLine(svg, m, w, h);
         this.renderXLabels(svg, m, w, h, labels);
         this.renderYLabels(svg, m, h, yMin, yMax);
@@ -304,7 +304,7 @@ class Chart {
         const h = height;
 
         const allValues = series.flatMap((s) => s.data.map((d) => d.value));
-        const xMax = this.opts.yMax || Math.max(...allValues) * 1.1;
+        const xMax = this.opts.yMax ?? Math.max(...allValues) * 1.1;
         const labels = series[0].data.map((d) => d.label);
         const numPts = labels.length;
         const numSeries = series.length;
@@ -419,34 +419,28 @@ class Chart {
             }
 
             const { x: dx, y: dy } = this.polar(0, 0, 8, midAngle);
+            const sig = { signal: this.abortController.signal };
+            const tipHtml = `<strong>${escapeHtml(d.label)}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`;
+
             path.addEventListener(
                 'mouseenter',
                 (e) => {
                     path.style.transform = `translate(${dx}px, ${dy}px)`;
-                    this.showTooltip(
-                        e as MouseEvent,
-                        `<strong>${escapeHtml(d.label)}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`,
-                    );
+                    this.showTooltip(e as MouseEvent, tipHtml);
                 },
-                { signal: this.abortController.signal },
+                sig,
             );
-
+            path.addEventListener('mousemove', (e) => this.moveTooltip(e as MouseEvent), sig);
             path.addEventListener(
                 'mouseleave',
                 () => {
                     path.style.transform = '';
                     this.hideTooltip();
                 },
-                { signal: this.abortController.signal },
+                sig,
             );
 
-            path.addEventListener(
-                'click',
-                () => {
-                    this.opts.onPointClick(s, d, i);
-                },
-                { signal: this.abortController.signal },
-            );
+            path.addEventListener('click', () => this.opts.onPointClick(s, d, i), sig);
 
             svg.appendChild(path);
             startAngle = endAngle;
@@ -457,7 +451,7 @@ class Chart {
         }
     }
 
-    private renderHGrid(svg: SVGSVGElement, m: Margin, w: number, h: number, _yMin: number, _yMax: number): void {
+    private renderHGrid(svg: SVGSVGElement, m: Margin, w: number, h: number): void {
         const numTicks = 5;
         for (let i = 0; i <= numTicks; i++) {
             const y = m.top + h - (i / numTicks) * h;

@@ -318,7 +318,7 @@ class CalendarRenderer {
         const moreCount = pillEvents.length - 3;
         const moreHtml = moreCount > 0 ? `<div class="cal__event-more">+${moreCount}</div>` : '';
 
-        return `<div class="${classes}" aria-label="${date.toLocaleDateString()}">
+        return `<div class="${classes}" data-date="${date.toISOString()}" aria-label="${date.toLocaleDateString()}">
       <span class="cal__day-num">${date.getDate()}</span>
       <div class="cal__day-events">${eventsHtml}${moreHtml}</div>
     </div>`;
@@ -489,6 +489,7 @@ class Calendar {
     private currentView: CalendarView;
     private events: CalendarEvent[] = [];
     private nowLineTimer: ReturnType<typeof setInterval> | null = null;
+    private abortController = new AbortController();
 
     public constructor(options: CalendarOptions) {
         if (typeof options.container === 'string') {
@@ -576,21 +577,19 @@ class Calendar {
 
     public destroy(): void {
         this.clearNowLineTimer();
-        this.container.removeEventListener('click', this.boundHandleClick);
-        this.container.removeEventListener('keydown', this.boundHandleKeydown);
+        this.abortController.abort();
         this.container.innerHTML = '';
         this.container.removeAttribute('data-cal');
     }
 
-    private getTitle(): string {
+    private getTitle(weekDays: Date[] | null): string {
         const { monthNames } = this.locale;
         const y = this.currentDate.getFullYear();
         const m = this.currentDate.getMonth();
 
-        if (this.currentView === 'week') {
-            const days = CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek);
-            const first = days[0];
-            const last = days[6];
+        if (this.currentView === 'week' && weekDays) {
+            const first = weekDays[0];
+            const last = weekDays[6];
             return first.getMonth() === last.getMonth()
                 ? `${monthNames[first.getMonth()]} ${y}`
                 : `${monthNames[first.getMonth()]} – ${monthNames[last.getMonth()]} ${y}`;
@@ -598,7 +597,7 @@ class Calendar {
         return `${monthNames[m]} ${y}`;
     }
 
-    private buildHeader(): string {
+    private buildHeader(weekDays: Date[] | null): string {
         const v = this.currentView;
         return `<div class="cal__header">
       <div class="cal__nav">
@@ -610,7 +609,7 @@ class Calendar {
           <svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#chevron_right"/></svg>
         </button>
       </div>
-      <h2 class="cal__title" aria-live="polite">${this.getTitle()}</h2>
+      <h2 class="cal__title" aria-live="polite">${this.getTitle(weekDays)}</h2>
       <div class="cal__view-toggle" role="group" aria-label="Ansicht wählen">
         <button class="cal__btn ${v === 'month' ? 'cal__btn--active' : ''}" data-action="view-month"  aria-pressed="${v === 'month'}">${this.locale.month}</button>
         <button class="cal__btn ${v === 'week' ? 'cal__btn--active' : ''}" data-action="view-week"   aria-pressed="${v === 'week'}">${this.locale.week}</button>
@@ -619,7 +618,7 @@ class Calendar {
     </div>`;
     }
 
-    private buildBody(): string {
+    private buildBody(weekDays: Date[] | null): string {
         const { firstDayOfWeek } = this.locale;
         const y = this.currentDate.getFullYear();
         const m = this.currentDate.getMonth();
@@ -628,8 +627,7 @@ class Calendar {
             case 'month':
                 return this.renderer.renderMonthView(y, m, this.events, this.options.showOutsideDays, firstDayOfWeek);
             case 'week': {
-                const weekDays = CalendarLogic.getWeekDays(this.currentDate, firstDayOfWeek);
-                const showNowLine = weekDays.some((d) => CalendarLogic.isToday(d));
+                const showNowLine = weekDays?.some((d) => CalendarLogic.isToday(d)) ?? false;
                 return this.renderer.renderWeekView(this.currentDate, this.events, firstDayOfWeek, showNowLine);
             }
             case 'agenda':
@@ -639,19 +637,17 @@ class Calendar {
 
     private render(): void {
         this.clearNowLineTimer();
+        const weekDays = this.currentView === 'week' ? CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek) : null;
         const rootClass = ['cal', this.options.className].filter(Boolean).join(' ');
         this.container.setAttribute('data-cal', this.currentView);
         this.container.innerHTML = `<div class="${rootClass}" role="application" aria-label="Kalender">
-      ${this.buildHeader()}
-      <div class="cal__body">${this.buildBody()}</div>
+      ${this.buildHeader(weekDays)}
+      <div class="cal__body">${this.buildBody(weekDays)}</div>
     </div>`;
 
-        if (this.currentView === 'week') {
-            const weekDays = CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek);
-            if (weekDays.some((d) => CalendarLogic.isToday(d))) {
-                this.scrollToNow();
-                this.startNowLineTimer();
-            }
+        if (weekDays?.some((d) => CalendarLogic.isToday(d))) {
+            this.scrollToNow();
+            this.startNowLineTimer();
         }
     }
 
@@ -676,12 +672,10 @@ class Calendar {
         }
     }
 
-    private readonly boundHandleClick = (e: MouseEvent) => this.handleClick(e);
-    private readonly boundHandleKeydown = (e: KeyboardEvent) => this.handleKeydown(e);
-
     private attachEvents(): void {
-        this.container.addEventListener('click', this.boundHandleClick);
-        this.container.addEventListener('keydown', this.boundHandleKeydown);
+        const sig = { signal: this.abortController.signal };
+        this.container.addEventListener('click', (e: MouseEvent) => this.handleClick(e), sig);
+        this.container.addEventListener('keydown', (e: KeyboardEvent) => this.handleKeydown(e), sig);
     }
 
     private handleClick(e: MouseEvent): void {
@@ -708,6 +702,11 @@ class Calendar {
                 this.options.onEventClick(event);
             }
             return;
+        }
+
+        const dayEl = target.closest<HTMLElement>('.cal__day[data-date]');
+        if (dayEl) {
+            this.options.onDayClick(new Date(dayEl.dataset.date!));
         }
     }
 

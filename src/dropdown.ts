@@ -18,13 +18,12 @@ class Dropdown {
     private trigger: HTMLElement;
     private menu: HTMLElement;
     private options: Required<DropdownOptions>;
-    private abortController: AbortController;
+    private abortController = new AbortController();
 
     public constructor(selector: string, options: DropdownOptions = {}) {
         const container = document.querySelector<HTMLElement>(selector);
 
         if (!container) {
-            console.error(`Dropdown container not found: ${selector}`);
             throw new Error(`Dropdown container "${selector}" not found`);
         }
 
@@ -45,7 +44,6 @@ class Dropdown {
             allowMultipleOpen: options.allowMultipleOpen ?? false,
         };
 
-        this.abortController = new AbortController();
         this.init();
     }
 

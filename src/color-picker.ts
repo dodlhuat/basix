@@ -34,7 +34,7 @@ class ColorPicker {
     private isDragging = false;
 
     private abortController = new AbortController();
-    private ro!: ResizeObserver;
+    private resizeObserver!: ResizeObserver;
 
     public constructor(elementOrSelector: string | HTMLElement, options: ColorPickerOptions = {}) {
         const el = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
@@ -46,8 +46,8 @@ class ColorPicker {
         this.build();
         this.bindEvents();
 
-        this.ro = new ResizeObserver(() => this.resizeCanvas());
-        this.ro.observe(this.canvas.parentElement!);
+        this.resizeObserver = new ResizeObserver(() => this.resizeCanvas());
+        this.resizeObserver.observe(this.canvas.parentElement!);
 
         this.resizeCanvas();
 
@@ -129,21 +129,15 @@ class ColorPicker {
             sig,
         );
 
-        this.canvas.addEventListener(
-            'pointerup',
-            () => {
-                this.isDragging = false;
-            },
-            sig,
-        );
-
-        this.canvas.addEventListener(
-            'pointercancel',
-            () => {
-                this.isDragging = false;
-            },
-            sig,
-        );
+        for (const type of ['pointerup', 'pointercancel'] as const) {
+            this.canvas.addEventListener(
+                type,
+                () => {
+                    this.isDragging = false;
+                },
+                sig,
+            );
+        }
 
         this.hueSlider.addEventListener(
             'input',
@@ -197,14 +191,14 @@ class ColorPicker {
         this.saturation = (x / rect.width) * 100;
         this.brightness = 100 - (y / rect.height) * 100;
 
-        this.updateCursor();
+        this.updateCursor(rect);
         this.updateFromHSB();
     }
 
-    private updateCursor(): void {
-        const rect = this.canvas.getBoundingClientRect();
-        const x = (this.saturation / 100) * rect.width;
-        const y = (1 - this.brightness / 100) * rect.height;
+    private updateCursor(rect?: DOMRect): void {
+        const r = rect ?? this.canvas.getBoundingClientRect();
+        const x = (this.saturation / 100) * r.width;
+        const y = (1 - this.brightness / 100) * r.height;
         this.cursor.style.left = `${x}px`;
         this.cursor.style.top = `${y}px`;
         this.cursor.classList.toggle('color-picker__cursor--dark', this.brightness > 50 && this.saturation < 80);
@@ -269,7 +263,7 @@ class ColorPicker {
 
     public destroy(): void {
         this.abortController.abort();
-        this.ro.disconnect();
+        this.resizeObserver.disconnect();
         this.container.classList.remove('color-picker');
         this.container.innerHTML = '';
     }

@@ -14,14 +14,15 @@ interface TooltipOptions {
 /** Lightweight tooltip that positions itself relative to a trigger element. */
 class Tooltip {
     private static activeTooltip: Tooltip | null = null;
-    private static idCounter: number = 0;
+    private static idCounter = 0;
 
     private readonly trigger: HTMLElement;
     private readonly content: string;
     private readonly options: Required<TooltipOptions>;
     private tooltipElement: HTMLDivElement | null = null;
     private showTimeout: number | null = null;
-    private isVisible: boolean = false;
+    private isVisible = false;
+    private abortController = new AbortController();
 
     public constructor(trigger: HTMLElement, content: string, options: TooltipOptions = {}) {
         this.trigger = trigger;
@@ -151,34 +152,16 @@ class Tooltip {
     }
 
     private attachEvents(): void {
-        this.trigger.addEventListener('mouseenter', this.handleMouseEnter);
-        this.trigger.addEventListener('mouseleave', this.handleMouseLeave);
-        this.trigger.addEventListener('focus', this.handleFocus);
-        this.trigger.addEventListener('blur', this.handleBlur);
+        const sig = { signal: this.abortController.signal };
+        this.trigger.addEventListener('mouseenter', () => this.show(), sig);
+        this.trigger.addEventListener('mouseleave', () => this.hide(), sig);
+        this.trigger.addEventListener('focus', () => this.show(), sig);
+        this.trigger.addEventListener('blur', () => this.hide(), sig);
     }
-
-    private handleMouseEnter = (): void => {
-        this.show();
-    };
-
-    private handleMouseLeave = (): void => {
-        this.hide();
-    };
-
-    private handleFocus = (): void => {
-        this.show();
-    };
-
-    private handleBlur = (): void => {
-        this.hide();
-    };
 
     public destroy(): void {
         this.hide();
-        this.trigger.removeEventListener('mouseenter', this.handleMouseEnter);
-        this.trigger.removeEventListener('mouseleave', this.handleMouseLeave);
-        this.trigger.removeEventListener('focus', this.handleFocus);
-        this.trigger.removeEventListener('blur', this.handleBlur);
+        this.abortController.abort();
 
         const previousDescribedBy = this.trigger.getAttribute('data-previous-describedby');
         if (previousDescribedBy) {

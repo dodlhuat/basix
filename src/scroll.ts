@@ -8,21 +8,17 @@ interface ScrollOptions {
 /** Static utility for smooth-scrolling to a target element with header offset support. */
 class Scroll {
     public static to(target: string | Element, options: ScrollOptions = {}): void {
-        const fixedHeader = document.querySelector('.main-header') as HTMLElement | null;
+        const fixedHeader = document.querySelector<HTMLElement>('.main-header');
         const offset = fixedHeader ? fixedHeader.offsetHeight : 0;
 
         const settings: Required<ScrollOptions> = {
             behavior: 'smooth',
-            offset: offset,
+            offset,
             block: 'start',
             ...options,
         };
 
-        let el: Element | null = target instanceof Element ? target : null;
-
-        if (typeof target === 'string') {
-            el = document.querySelector(target);
-        }
+        const el: Element | null = typeof target === 'string' ? document.querySelector(target) : target;
 
         if (!el) return;
 

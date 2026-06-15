@@ -22,6 +22,7 @@ class Modal {
     private readonly type: ModalType;
     private template: string;
     private modalWrapper: HTMLElement | null = null;
+    private abortController = new AbortController();
 
     public constructor(options: ModalOptions);
     public constructor(content: string, header?: string, footer?: string, closeable?: boolean, type?: ModalType);
@@ -53,18 +54,12 @@ class Modal {
 
         this.modalWrapper = wrapper;
 
-        if (this.closeable) {
-            const closeBtn = wrapper.querySelector('.close');
-            closeBtn?.addEventListener('click', this.hide);
-        }
-
-        const background = wrapper.querySelector('.modal-background');
-        if (this.closeable && background) {
-            background.addEventListener('click', this.handleBackgroundClick);
-        }
+        const sig = { signal: this.abortController.signal };
 
         if (this.closeable) {
-            document.addEventListener('keydown', this.handleEscape);
+            wrapper.querySelector('.close')?.addEventListener('click', () => this.hide(), sig);
+            wrapper.querySelector('.modal-background')?.addEventListener('click', (e) => this.handleBackgroundClick(e), sig);
+            document.addEventListener('keydown', (e) => this.handleEscape(e), sig);
         }
 
         document.body.style.overflow = 'hidden';
@@ -74,19 +69,14 @@ class Modal {
         });
     }
 
-    public hide = (): void => {
+    public hide(): void {
         const wrapper = this.modalWrapper;
         if (!wrapper) return;
 
-        const closeBtn = wrapper.querySelector('.close');
-        closeBtn?.removeEventListener('click', this.hide);
+        this.abortController.abort();
+        this.abortController = new AbortController();
 
-        const background = wrapper.querySelector('.modal-background');
-        background?.removeEventListener('click', this.handleBackgroundClick);
-
-        document.removeEventListener('keydown', this.handleEscape);
         document.body.style.overflow = '';
-
         wrapper.classList.remove('is-visible');
 
         setTimeout(() => {
@@ -95,19 +85,19 @@ class Modal {
                 this.modalWrapper = null;
             }
         }, 300);
-    };
+    }
 
-    private handleEscape = (e: KeyboardEvent): void => {
+    private handleEscape(e: KeyboardEvent): void {
         if (e.key === 'Escape') {
             this.hide();
         }
-    };
+    }
 
-    private handleBackgroundClick = (e: Event): void => {
+    private handleBackgroundClick(e: Event): void {
         if ((e.target as HTMLElement)?.classList.contains('modal-background')) {
             this.hide();
         }
-    };
+    }
 
     private buildTemplate(): string {
         const parts: string[] = [`<div class="modal modal-${this.type}">`];

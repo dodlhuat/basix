@@ -22,8 +22,7 @@ class SidebarNav {
     private abortController = new AbortController();
 
     public constructor(containerOrSelector: string | HTMLElement, options: SidebarNavOptions = {}) {
-        const container: HTMLElement | null =
-            typeof containerOrSelector === 'string' ? (document.querySelector(containerOrSelector) as HTMLElement | null) : containerOrSelector;
+        const container = typeof containerOrSelector === 'string' ? document.querySelector<HTMLElement>(containerOrSelector) : containerOrSelector;
 
         this.opts = {
             toggleSelector: options.toggleSelector ?? '.sidebar-toggle',
@@ -55,7 +54,7 @@ class SidebarNav {
                 this.touchStartX = e.touches[0].clientX;
                 this.touchStartY = e.touches[0].clientY;
             },
-            { passive: true, signal: this.abortController.signal },
+            { ...sig, passive: true },
         );
 
         document.addEventListener(
@@ -71,7 +70,7 @@ class SidebarNav {
                     this.close();
                 }
             },
-            { passive: true, signal: this.abortController.signal },
+            { ...sig, passive: true },
         );
 
         this.closeBtn = document.createElement('button');

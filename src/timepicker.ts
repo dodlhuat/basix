@@ -39,6 +39,9 @@ class TimeSpanPicker {
         clickOffsetMins: number;
     } | null = null;
 
+    private abortController = new AbortController();
+    private dragAbortController: AbortController | null = null;
+
     public constructor(elementOrSelector: string | HTMLElement, options?: TimeSpanPickerOptions) {
         const element =
             typeof elementOrSelector === 'string'
@@ -108,18 +111,17 @@ class TimeSpanPicker {
     `;
     }
 
-    private readonly handleChange = (): void => {
+    private handleChange(): void {
         this.updateUI();
         const start = this.startTimeInput.value;
         const end = this.endTimeInput.value;
-        if (this.onChange && start && end) {
-            this.onChange(start, end);
-        }
-    };
+        if (start && end) this.onChange?.(start, end);
+    }
 
     private attachEventListeners(): void {
-        this.startTimeInput.addEventListener('change', this.handleChange);
-        this.endTimeInput.addEventListener('change', this.handleChange);
+        const sig = { signal: this.abortController.signal };
+        this.startTimeInput.addEventListener('change', () => this.handleChange(), sig);
+        this.endTimeInput.addEventListener('change', () => this.handleChange(), sig);
     }
 
     private attachBarListeners(): void {
@@ -130,9 +132,10 @@ class TimeSpanPicker {
         this.startHandleEl = this.queryEl('.timespan-handle-start');
         this.endHandleEl = this.queryEl('.timespan-handle-end');
 
-        this.startHandleEl.addEventListener('pointerdown', this.onStartHandleDown);
-        this.endHandleEl.addEventListener('pointerdown', this.onEndHandleDown);
-        this.barFillEl.addEventListener('pointerdown', this.onFillDown);
+        const sig = { signal: this.abortController.signal };
+        this.startHandleEl.addEventListener('pointerdown', (e: PointerEvent) => this.onStartHandleDown(e), sig);
+        this.endHandleEl.addEventListener('pointerdown', (e: PointerEvent) => this.onEndHandleDown(e), sig);
+        this.barFillEl.addEventListener('pointerdown', (e: PointerEvent) => this.onFillDown(e), sig);
     }
 
     private beginDrag(type: 'start' | 'end' | 'move', clickOffsetMins = 0, rect?: DOMRect): void {
@@ -150,23 +153,25 @@ class TimeSpanPicker {
             clickOffsetMins,
         };
         this.barEl.classList.add('is-dragging');
-        document.addEventListener('pointermove', this.onPointerMove);
-        document.addEventListener('pointerup', this.onPointerUp);
+        this.dragAbortController = new AbortController();
+        const dragSig = { signal: this.dragAbortController.signal };
+        document.addEventListener('pointermove', (e: PointerEvent) => this.onPointerMove(e), dragSig);
+        document.addEventListener('pointerup', () => this.onPointerUp(), dragSig);
     }
 
-    private readonly onStartHandleDown = (e: PointerEvent): void => {
+    private onStartHandleDown(e: PointerEvent): void {
         e.stopPropagation();
         e.preventDefault();
         this.beginDrag('start');
-    };
+    }
 
-    private readonly onEndHandleDown = (e: PointerEvent): void => {
+    private onEndHandleDown(e: PointerEvent): void {
         e.stopPropagation();
         e.preventDefault();
         this.beginDrag('end');
-    };
+    }
 
-    private readonly onFillDown = (e: PointerEvent): void => {
+    private onFillDown(e: PointerEvent): void {
         if ((e.target as HTMLElement).classList.contains('timespan-handle')) return;
         e.preventDefault();
 
@@ -176,9 +181,9 @@ class TimeSpanPicker {
         const rect = this.barEl.getBoundingClientRect();
         const clickMins = ((e.clientX - rect.left) / rect.width) * 1440;
         this.beginDrag('move', clickMins - this.toMinutes(start), rect);
-    };
+    }
 
-    private readonly onPointerMove = (e: PointerEvent): void => {
+    private onPointerMove(e: PointerEvent): void {
         if (!this.dragState) return;
         e.preventDefault();
 
@@ -205,16 +210,16 @@ class TimeSpanPicker {
         }
 
         this.updateUI();
-        if (this.onChange) this.onChange(start, end);
-    };
+        this.onChange?.(start, end);
+    }
 
-    private readonly onPointerUp = (): void => {
+    private onPointerUp(): void {
         if (!this.dragState) return;
         this.dragState = null;
         this.barEl.classList.remove('is-dragging');
-        document.removeEventListener('pointermove', this.onPointerMove);
-        document.removeEventListener('pointerup', this.onPointerUp);
-    };
+        this.dragAbortController?.abort();
+        this.dragAbortController = null;
+    }
 
     private toMinutes(time: string): number {
         const [h, m] = time.split(':').map(Number);
@@ -302,13 +307,8 @@ class TimeSpanPicker {
     }
 
     public destroy(): void {
-        this.startTimeInput.removeEventListener('change', this.handleChange);
-        this.endTimeInput.removeEventListener('change', this.handleChange);
-        this.startHandleEl.removeEventListener('pointerdown', this.onStartHandleDown);
-        this.endHandleEl.removeEventListener('pointerdown', this.onEndHandleDown);
-        this.barFillEl.removeEventListener('pointerdown', this.onFillDown);
-        document.removeEventListener('pointermove', this.onPointerMove);
-        document.removeEventListener('pointerup', this.onPointerUp);
+        this.abortController.abort();
+        this.dragAbortController?.abort();
     }
 }
 

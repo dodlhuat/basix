@@ -20,6 +20,7 @@ class Toast {
     private readonly template: string;
     private toastElement: HTMLDivElement | null = null;
     private timerId: number | null = null;
+    private openAbortController: AbortController | null = null;
 
     public constructor(options: ToastOptions);
     public constructor(content: string, header?: string, type?: ToastType, closeable?: boolean);
@@ -57,7 +58,8 @@ class Toast {
 
                 const closeButton = this.toastElement?.querySelector<HTMLElement>('.close');
                 if (closeButton) {
-                    closeButton.addEventListener('click', this.hide);
+                    this.openAbortController = new AbortController();
+                    closeButton.addEventListener('click', () => this.hide(), { signal: this.openAbortController.signal });
                 }
 
                 if (ms !== undefined && ms > 0) {
@@ -67,20 +69,21 @@ class Toast {
         });
     }
 
-    public hide = (): void => {
+    public hide(): void {
         if (this.timerId !== null) {
             clearTimeout(this.timerId);
             this.timerId = null;
         }
 
         this.toastElement?.classList.remove('show');
+        this.openAbortController?.abort();
+        this.openAbortController = null;
 
         setTimeout(() => {
-            this.toastElement?.querySelector<HTMLElement>('.close')?.removeEventListener('click', this.hide);
             this.toastElement?.remove();
             this.toastElement = null;
         }, 150);
-    };
+    }
 
     private startTimer(ms: number, elapsed: number = 0): void {
         const stepSize = 250;

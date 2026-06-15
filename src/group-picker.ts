@@ -34,12 +34,12 @@ class GroupPicker {
     private container: HTMLElement;
     private data: GroupData[];
     private options: Required<GroupPickerOptions>;
-    private abortController: AbortController;
+    private abortController = new AbortController();
 
     private selectedParents: Set<string> = new Set();
     private selectedSubs: Map<string, Set<string>> = new Map();
     private expandedGroups: Set<string> = new Set();
-    private searchQuery: string = '';
+    private searchQuery = '';
 
     private searchInput!: HTMLInputElement;
     private listEl!: HTMLElement;
@@ -52,7 +52,6 @@ class GroupPicker {
 
         this.container = el;
         this.data = data;
-        this.abortController = new AbortController();
 
         this.options = {
             onSelectionChange: options.onSelectionChange ?? (() => {}),
@@ -221,7 +220,7 @@ class GroupPicker {
 
             if (isExpanded) {
                 requestAnimationFrame(() => {
-                    subsContainer.style.height = subsContainer.scrollHeight + 'px';
+                    subsContainer.style.height = `${subsContainer.scrollHeight}px`;
                     subsContainer.addEventListener(
                         'transitionend',
                         () => {
@@ -334,7 +333,7 @@ class GroupPicker {
             this.expandedGroups.delete(groupId);
             groupEl?.classList.remove('is-expanded');
             if (subsEl) {
-                subsEl.style.height = subsEl.scrollHeight + 'px';
+                subsEl.style.height = `${subsEl.scrollHeight}px`;
                 requestAnimationFrame(() => {
                     subsEl.style.height = '0';
                 });
@@ -343,7 +342,7 @@ class GroupPicker {
             this.expandedGroups.add(groupId);
             groupEl?.classList.add('is-expanded');
             if (subsEl) {
-                subsEl.style.height = subsEl.scrollHeight + 'px';
+                subsEl.style.height = `${subsEl.scrollHeight}px`;
                 subsEl.addEventListener(
                     'transitionend',
                     () => {

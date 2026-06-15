@@ -277,7 +277,7 @@ class Editor {
 
     private updateWordCount(): void {
         if (!this.wordCount) return;
-        const text = this.editable.innerText || '';
+        const text = this.editable.innerText;
         const words = text
             .trim()
             .split(/\s+/)
@@ -385,9 +385,10 @@ class Editor {
         const container = range.commonAncestorContainer;
         let current: HTMLElement | null = container.nodeType === Node.TEXT_NODE ? container.parentElement : (container as HTMLElement);
 
+        const upperTag = tagName.toUpperCase();
         let wrapper: HTMLElement | null = null;
         while (current && current !== this.editable) {
-            if (current.tagName === tagName.toUpperCase()) {
+            if (current.tagName === upperTag) {
                 wrapper = current;
                 break;
             }
@@ -542,7 +543,7 @@ ${content}
 
             let current: HTMLElement | null = element;
             while (current && current !== this.editable) {
-                const tag = current.tagName?.toLowerCase();
+                const tag = current.tagName.toLowerCase();
                 if (
                     (cmd === 'bold' && (tag === 'strong' || tag === 'b')) ||
                     (cmd === 'italic' && (tag === 'em' || tag === 'i')) ||

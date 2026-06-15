@@ -1,11 +1,12 @@
 /** Enhances a native range input with a CSS fill-percentage custom property. */
 class RangeSlider {
     private readonly input: HTMLInputElement;
+    private abortController = new AbortController();
 
     public constructor(input: HTMLInputElement) {
         this.input = input;
         this.update();
-        this.input.addEventListener('input', this.handleInput);
+        this.input.addEventListener('input', () => this.update(), { signal: this.abortController.signal });
     }
 
     public static initAll(selector: string = '.range-slider input[type="range"]'): void {
@@ -21,12 +22,8 @@ class RangeSlider {
         this.input.style.setProperty('--range-fill', `${pct}%`);
     }
 
-    private handleInput = (): void => {
-        this.update();
-    };
-
     public destroy(): void {
-        this.input.removeEventListener('input', this.handleInput);
+        this.abortController.abort();
         this.input.style.removeProperty('--range-fill');
     }
 }

@@ -44,10 +44,6 @@ class TreeComponent {
         this.data = data;
         this.selectedNode = null;
         this.options = options;
-        this.init();
-    }
-
-    private init(): void {
         this.render();
     }
 
@@ -155,7 +151,7 @@ class TreeComponent {
     }
 
     private expandChildren(container: HTMLUListElement): void {
-        container.style.height = container.scrollHeight + 'px';
+        container.style.height = `${container.scrollHeight}px`;
         container.addEventListener(
             'transitionend',
             () => {
@@ -166,7 +162,7 @@ class TreeComponent {
     }
 
     private collapseChildren(container: HTMLUListElement): void {
-        container.style.height = container.offsetHeight + 'px';
+        container.style.height = `${container.offsetHeight}px`;
         requestAnimationFrame(() => {
             container.style.height = '0';
         });

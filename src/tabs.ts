@@ -47,9 +47,6 @@ class Tabs {
             this.container.classList.add('tabs-vertical');
         }
 
-        this.tabItems = this.container.querySelectorAll('.tab-item');
-        this.tabPanels = this.container.querySelectorAll('.tab-panel');
-
         if (this.tabItems.length === 0) {
             console.warn('No tab items found in container');
             return;
@@ -80,14 +77,7 @@ class Tabs {
                 sig,
             );
 
-            item.addEventListener(
-                'keydown',
-                (e: Event) => {
-                    const keyEvent = e as KeyboardEvent;
-                    this.handleKeyboardNavigation(keyEvent, index);
-                },
-                sig,
-            );
+            item.addEventListener('keydown', (e: KeyboardEvent) => this.handleKeyboardNavigation(e, index), sig);
 
             item.setAttribute('role', 'tab');
             item.setAttribute('tabindex', index === this.options.defaultTab ? '0' : '-1');
@@ -153,7 +143,7 @@ class Tabs {
             return;
         }
 
-        this.tabItems.forEach((item, _i) => {
+        this.tabItems.forEach((item) => {
             item.classList.remove('active');
             item.setAttribute('tabindex', '-1');
             item.setAttribute('aria-selected', 'false');
@@ -174,9 +164,7 @@ class Tabs {
         const previousTab = this.currentTab;
         this.currentTab = index;
 
-        if (this.options.onChange && previousTab !== index) {
-            this.options.onChange(index);
-        }
+        if (previousTab !== index) this.options.onChange?.(index);
     }
 
     public goToTab(index: number): void {

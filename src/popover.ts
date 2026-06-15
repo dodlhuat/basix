@@ -31,8 +31,9 @@ class Popover {
     private readonly trigger: HTMLElement;
     private readonly opts: Required<PopoverOptions>;
     private popoverEl: HTMLElement | null = null;
-    private _isOpen = false;
     private hoverTimer: number | null = null;
+    private abortController = new AbortController();
+    private openAbortController: AbortController | null = null;
 
     public constructor(triggerEl: HTMLElement | string, options: PopoverOptions) {
         const el = typeof triggerEl === 'string' ? document.querySelector<HTMLElement>(triggerEl) : triggerEl;
@@ -57,11 +58,11 @@ class Popover {
     }
 
     public get isOpen(): boolean {
-        return this._isOpen;
+        return this.popoverEl !== null;
     }
 
     public open(): void {
-        if (this._isOpen) return;
+        if (this.popoverEl) return;
         if (this.opts.triggerMode === 'click') Popover.closeAll();
 
         this.popoverEl = this.buildEl();
@@ -70,25 +71,25 @@ class Popover {
 
         requestAnimationFrame(() => {
             this.popoverEl?.classList.add('is-open');
-            this._isOpen = true;
             Popover.openPopovers.add(this);
             this.opts.onOpen();
 
-            if (this.opts.closeOnOutsideClick) document.addEventListener('pointerdown', this.onOutsideClick, { capture: true });
-            if (this.opts.closeOnEscape) document.addEventListener('keydown', this.onEscape);
+            this.openAbortController = new AbortController();
+            const openSig = { signal: this.openAbortController.signal };
+            if (this.opts.closeOnOutsideClick) document.addEventListener('pointerdown', (e) => this.onOutsideClick(e), { ...openSig, capture: true });
+            if (this.opts.closeOnEscape) document.addEventListener('keydown', (e) => this.onEscape(e), openSig);
         });
     }
 
     public close(): void {
-        if (!this._isOpen || !this.popoverEl) return;
+        if (!this.popoverEl) return;
 
         this.popoverEl.classList.remove('is-open');
-        this._isOpen = false;
         Popover.openPopovers.delete(this);
         this.opts.onClose();
 
-        document.removeEventListener('pointerdown', this.onOutsideClick, { capture: true });
-        document.removeEventListener('keydown', this.onEscape);
+        this.openAbortController?.abort();
+        this.openAbortController = null;
 
         this.trigger.removeAttribute('aria-expanded');
         this.trigger.removeAttribute('aria-controls');
@@ -99,7 +100,7 @@ class Popover {
     }
 
     public toggle(): void {
-        if (this._isOpen) {
+        if (this.popoverEl) {
             this.close();
         } else {
             this.open();
@@ -108,7 +109,7 @@ class Popover {
 
     public destroy(): void {
         this.close();
-        this.detachTrigger();
+        this.abortController.abort();
     }
 
     public static closeAll(): void {
@@ -169,41 +170,36 @@ class Popover {
         this.popoverEl.style.top = `${top}px`;
     }
 
-    private onClick = (): void => {
+    private onClick(): void {
         this.toggle();
-    };
-
-    private onMouseEnter = (): void => {
-        if (this.hoverTimer !== null) clearTimeout(this.hoverTimer);
-        this.open();
-    };
-
-    private onMouseLeave = (): void => {
-        this.hoverTimer = window.setTimeout(() => this.close(), 120);
-    };
-
-    private onOutsideClick = (e: Event): void => {
-        const t = e.target as Node;
-        if (!this.popoverEl?.contains(t) && !this.trigger.contains(t)) this.close();
-    };
-
-    private onEscape = (e: KeyboardEvent): void => {
-        if (e.key === 'Escape') this.close();
-    };
-
-    private attachTrigger(): void {
-        if (this.opts.triggerMode === 'click') {
-            this.trigger.addEventListener('click', this.onClick);
-        } else {
-            this.trigger.addEventListener('mouseenter', this.onMouseEnter);
-            this.trigger.addEventListener('mouseleave', this.onMouseLeave);
-        }
     }
 
-    private detachTrigger(): void {
-        this.trigger.removeEventListener('click', this.onClick);
-        this.trigger.removeEventListener('mouseenter', this.onMouseEnter);
-        this.trigger.removeEventListener('mouseleave', this.onMouseLeave);
+    private onMouseEnter(): void {
+        if (this.hoverTimer !== null) clearTimeout(this.hoverTimer);
+        this.open();
+    }
+
+    private onMouseLeave(): void {
+        this.hoverTimer = window.setTimeout(() => this.close(), 120);
+    }
+
+    private onOutsideClick(e: Event): void {
+        const t = e.target as Node;
+        if (!this.popoverEl?.contains(t) && !this.trigger.contains(t)) this.close();
+    }
+
+    private onEscape(e: KeyboardEvent): void {
+        if (e.key === 'Escape') this.close();
+    }
+
+    private attachTrigger(): void {
+        const sig = { signal: this.abortController.signal };
+        if (this.opts.triggerMode === 'click') {
+            this.trigger.addEventListener('click', () => this.onClick(), sig);
+        } else {
+            this.trigger.addEventListener('mouseenter', () => this.onMouseEnter(), sig);
+            this.trigger.addEventListener('mouseleave', () => this.onMouseLeave(), sig);
+        }
     }
 }
 

@@ -26,8 +26,7 @@ class MasonryGallery {
     private columns: HTMLDivElement[] = [];
     private allImages: ImageData[] = [];
     private isFetching: boolean = false;
-    private resizeObserver: ResizeObserver | null = null;
-    private abortController: AbortController | null = null;
+    private abortController = new AbortController();
     private reloaded = 0;
 
     public constructor(containerId: string, options: MasonryGalleryOptions) {
@@ -76,8 +75,7 @@ class MasonryGallery {
     }
 
     private addEventListeners(): void {
-        this.abortController = new AbortController();
-        const sig = this.abortController.signal;
+        const sig = { signal: this.abortController.signal };
 
         let resizeTimeout: number;
         window.addEventListener(
@@ -86,10 +84,10 @@ class MasonryGallery {
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => this.reLayout(), 200);
             },
-            { signal: sig },
+            sig,
         );
 
-        window.addEventListener('scroll', this.handleScroll, { passive: true, signal: sig });
+        window.addEventListener('scroll', () => this.handleScroll(), { ...sig, passive: true });
     }
 
     private reLayout(): void {
@@ -109,14 +107,14 @@ class MasonryGallery {
         items.forEach((item) => this.addToShortestColumn(item));
     }
 
-    private handleScroll = (): void => {
+    private handleScroll(): void {
         if (this.isFetching) return;
 
         const rect = this.container.getBoundingClientRect();
         if (rect.bottom > 0 && rect.bottom <= window.innerHeight + this.options.scrollThreshold) {
             this.loadMoreImages();
         }
-    };
+    }
 
     private async loadMoreImages(isAutoFill = false): Promise<void> {
         if (!isAutoFill) this.reloaded++;
@@ -229,16 +227,7 @@ class MasonryGallery {
     }
 
     public destroy(): void {
-        if (this.resizeObserver) {
-            this.resizeObserver.disconnect();
-            this.resizeObserver = null;
-        }
-
-        if (this.abortController) {
-            this.abortController.abort();
-            this.abortController = null;
-        }
-
+        this.abortController.abort();
         this.allImages = [];
     }
 }
