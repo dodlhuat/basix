@@ -45,14 +45,8 @@ class GroupPicker {
     private listEl!: HTMLElement;
     private selectionEl!: HTMLElement;
 
-    constructor(
-        selector: string | HTMLElement,
-        data: GroupData[],
-        options: GroupPickerOptions = {}
-    ) {
-        const el = typeof selector === 'string'
-            ? document.querySelector<HTMLElement>(selector)
-            : selector;
+    public constructor(selector: string | HTMLElement, data: GroupData[], options: GroupPickerOptions = {}) {
+        const el = typeof selector === 'string' ? document.querySelector<HTMLElement>(selector) : selector;
 
         if (!el) throw new Error(`GroupPicker: Element not found for "${selector}"`);
 
@@ -110,9 +104,7 @@ class GroupPicker {
         for (const group of this.data) {
             const subs = group.subgroups ?? [];
             const groupMatches = group.label.toLowerCase().includes(query);
-            const matchingSubs = subs.filter(s =>
-                s.label.toLowerCase().includes(query)
-            );
+            const matchingSubs = subs.filter((s) => s.label.toLowerCase().includes(query));
 
             if (!groupMatches && matchingSubs.length === 0 && query) continue;
 
@@ -132,12 +124,7 @@ class GroupPicker {
         }
     }
 
-    private createGroupElement(
-        group: GroupData,
-        query: string,
-        groupMatches: boolean,
-        matchingSubs: SubgroupData[]
-    ): HTMLElement {
+    private createGroupElement(group: GroupData, query: string, groupMatches: boolean, matchingSubs: SubgroupData[]): HTMLElement {
         const subs = group.subgroups ?? [];
         const hasChildren = subs.length > 0;
 
@@ -146,10 +133,7 @@ class GroupPicker {
         el.dataset.groupId = group.id;
         if (!hasChildren) el.classList.add('is-leaf');
 
-        const isExpanded = hasChildren && (
-            this.expandedGroups.has(group.id) ||
-            (query.length > 0 && matchingSubs.length > 0)
-        );
+        const isExpanded = hasChildren && (this.expandedGroups.has(group.id) || (query.length > 0 && matchingSubs.length > 0));
         const isParentSelected = this.selectedParents.has(group.id);
 
         if (isExpanded) el.classList.add('is-expanded');
@@ -161,9 +145,7 @@ class GroupPicker {
 
         const label = document.createElement('span');
         label.className = 'group-picker__group-label';
-        label.innerHTML = query && groupMatches
-            ? this.highlightText(group.label, query)
-            : escapeHtml(group.label);
+        label.innerHTML = query && groupMatches ? this.highlightText(group.label, query) : escapeHtml(group.label);
 
         if (hasChildren) {
             const chevron = document.createElement('span');
@@ -183,16 +165,24 @@ class GroupPicker {
                 actionBtn.textContent = this.options.selectAllLabel;
             }
 
-            actionBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.toggleParentGroup(group.id);
-            }, { signal: this.abortController.signal });
+            actionBtn.addEventListener(
+                'click',
+                (e) => {
+                    e.stopPropagation();
+                    this.toggleParentGroup(group.id);
+                },
+                { signal: this.abortController.signal },
+            );
 
             header.append(chevron, label, count, actionBtn);
 
-            header.addEventListener('click', () => {
-                this.toggleExpand(group.id);
-            }, { signal: this.abortController.signal });
+            header.addEventListener(
+                'click',
+                () => {
+                    this.toggleExpand(group.id);
+                },
+                { signal: this.abortController.signal },
+            );
 
             const subsContainer = document.createElement('div');
             subsContainer.className = 'group-picker__subgroups';
@@ -212,12 +202,16 @@ class GroupPicker {
                 if (isSubSelected) subEl.classList.add('is-selected');
                 if (isParentSelected) subEl.classList.add('is-disabled');
 
-                subEl.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (!isParentSelected) {
-                        this.toggleSubgroup(group.id, sub.id);
-                    }
-                }, { signal: this.abortController.signal });
+                subEl.addEventListener(
+                    'click',
+                    (e) => {
+                        e.stopPropagation();
+                        if (!isParentSelected) {
+                            this.toggleSubgroup(group.id, sub.id);
+                        }
+                    },
+                    { signal: this.abortController.signal },
+                );
 
                 subsList.appendChild(subEl);
             }
@@ -228,9 +222,13 @@ class GroupPicker {
             if (isExpanded) {
                 requestAnimationFrame(() => {
                     subsContainer.style.height = subsContainer.scrollHeight + 'px';
-                    subsContainer.addEventListener('transitionend', () => {
-                        subsContainer.style.height = 'auto';
-                    }, { once: true });
+                    subsContainer.addEventListener(
+                        'transitionend',
+                        () => {
+                            subsContainer.style.height = 'auto';
+                        },
+                        { once: true },
+                    );
                 });
             }
         } else {
@@ -240,9 +238,13 @@ class GroupPicker {
 
             header.append(label, checkEl);
 
-            header.addEventListener('click', () => {
-                this.toggleParentGroup(group.id);
-            }, { signal: this.abortController.signal });
+            header.addEventListener(
+                'click',
+                () => {
+                    this.toggleParentGroup(group.id);
+                },
+                { signal: this.abortController.signal },
+            );
 
             el.appendChild(header);
         }
@@ -254,39 +256,37 @@ class GroupPicker {
         this.selectionEl.innerHTML = '';
 
         for (const groupId of this.selectedParents) {
-            const group = this.data.find(g => g.id === groupId);
+            const group = this.data.find((g) => g.id === groupId);
             if (!group) continue;
-            this.selectionEl.appendChild(
-                this.createChip(group.label, true, () => this.toggleParentGroup(groupId))
-            );
+            this.selectionEl.appendChild(this.createChip(group.label, true, () => this.toggleParentGroup(groupId)));
         }
 
         for (const [groupId, subs] of this.selectedSubs) {
-            const group = this.data.find(g => g.id === groupId);
+            const group = this.data.find((g) => g.id === groupId);
             if (!group) continue;
             for (const subId of subs) {
-                const sub = group.subgroups?.find(s => s.id === subId);
+                const sub = group.subgroups?.find((s) => s.id === subId);
                 if (!sub) continue;
-                this.selectionEl.appendChild(
-                    this.createChip(sub.label, false, () => this.toggleSubgroup(groupId, subId))
-                );
+                this.selectionEl.appendChild(this.createChip(sub.label, false, () => this.toggleSubgroup(groupId, subId)));
             }
         }
     }
 
     private createChip(label: string, isParent: boolean, onRemove: () => void): HTMLElement {
         const chip = document.createElement('span');
-        chip.className = isParent
-            ? 'chip closeable group-picker__chip--parent'
-            : 'chip closeable';
+        chip.className = isParent ? 'chip closeable group-picker__chip--parent' : 'chip closeable';
 
         const btn = document.createElement('button');
         btn.setAttribute('aria-label', `${label} entfernen`);
         btn.innerHTML = `<span class="icon icon-close"></span>`;
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            onRemove();
-        }, { signal: this.abortController.signal });
+        btn.addEventListener(
+            'click',
+            (e) => {
+                e.stopPropagation();
+                onRemove();
+            },
+            { signal: this.abortController.signal },
+        );
 
         chip.append(document.createTextNode(label), btn);
         return chip;
@@ -316,7 +316,7 @@ class GroupPicker {
             subs.add(subId);
         }
 
-        const group = this.data.find(g => g.id === groupId);
+        const group = this.data.find((g) => g.id === groupId);
         if (group && subs.size === (group.subgroups ?? []).length) {
             this.selectedSubs.delete(groupId);
             this.selectedParents.add(groupId);
@@ -327,9 +327,7 @@ class GroupPicker {
     }
 
     private toggleExpand(groupId: string): void {
-        const groupEl = this.listEl.querySelector(
-            `[data-group-id="${groupId}"]`
-        ) as HTMLElement | null;
+        const groupEl = this.listEl.querySelector(`[data-group-id="${groupId}"]`) as HTMLElement | null;
         const subsEl = groupEl?.querySelector('.group-picker__subgroups') as HTMLElement | null;
 
         if (this.expandedGroups.has(groupId)) {
@@ -346,11 +344,15 @@ class GroupPicker {
             groupEl?.classList.add('is-expanded');
             if (subsEl) {
                 subsEl.style.height = subsEl.scrollHeight + 'px';
-                subsEl.addEventListener('transitionend', () => {
-                    if (this.expandedGroups.has(groupId)) {
-                        subsEl.style.height = 'auto';
-                    }
-                }, { once: true });
+                subsEl.addEventListener(
+                    'transitionend',
+                    () => {
+                        if (this.expandedGroups.has(groupId)) {
+                            subsEl.style.height = 'auto';
+                        }
+                    },
+                    { once: true },
+                );
             }
         }
     }
@@ -362,22 +364,28 @@ class GroupPicker {
 
     private attachEvents(): void {
         let debounceTimer: ReturnType<typeof setTimeout>;
-        this.searchInput.addEventListener('input', () => {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                this.searchQuery = this.searchInput.value;
-                this.renderGroups();
-            }, 120);
-        }, { signal: this.abortController.signal });
+        this.searchInput.addEventListener(
+            'input',
+            () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    this.searchQuery = this.searchInput.value;
+                    this.renderGroups();
+                }, 120);
+            },
+            { signal: this.abortController.signal },
+        );
     }
 
     private emitChange(): void {
         const selection = this.getSelection();
         this.options.onSelectionChange(selection);
-        this.container.dispatchEvent(new CustomEvent('group-picker-change', {
-            detail: selection,
-            bubbles: true,
-        }));
+        this.container.dispatchEvent(
+            new CustomEvent('group-picker-change', {
+                detail: selection,
+                bubbles: true,
+            }),
+        );
     }
 
     private highlightText(text: string, query: string): string {
@@ -420,7 +428,7 @@ class GroupPicker {
     }
 
     public expandAll(): void {
-        this.data.forEach(g => this.expandedGroups.add(g.id));
+        this.data.forEach((g) => this.expandedGroups.add(g.id));
         this.renderGroups();
     }
 

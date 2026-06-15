@@ -75,7 +75,7 @@ const utils: Utils = {
      */
     isHidden(element: HTMLElement): boolean {
         return element.offsetParent === null;
-    }
+    },
 };
 
 /**
@@ -97,14 +97,11 @@ function sanitizeHtml(html: string): string {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
-    doc.querySelectorAll('script, style, iframe, object, embed').forEach(el => el.remove());
+    doc.querySelectorAll('script, style, iframe, object, embed').forEach((el) => el.remove());
 
-    doc.querySelectorAll('*').forEach(el => {
+    doc.querySelectorAll('*').forEach((el) => {
         for (const attr of Array.from(el.attributes)) {
-            if (
-                attr.name.startsWith('on') ||
-                attr.value.trim().toLowerCase().startsWith('javascript:')
-            ) {
+            if (attr.name.startsWith('on') || attr.value.trim().toLowerCase().startsWith('javascript:')) {
                 el.removeAttribute(attr.name);
             }
         }

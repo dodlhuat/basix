@@ -15,7 +15,7 @@ class Scroll {
             behavior: 'smooth',
             offset: offset,
             block: 'start',
-            ...options
+            ...options,
         };
 
         let el: Element | null = target instanceof Element ? target : null;
@@ -32,7 +32,7 @@ class Scroll {
 
         window.scrollTo({
             top: offsetTop,
-            behavior: settings.behavior
+            behavior: settings.behavior,
         });
     }
 }

@@ -2,14 +2,14 @@
 class RangeSlider {
     private readonly input: HTMLInputElement;
 
-    constructor(input: HTMLInputElement) {
+    public constructor(input: HTMLInputElement) {
         this.input = input;
         this.update();
         this.input.addEventListener('input', this.handleInput);
     }
 
     public static initAll(selector: string = '.range-slider input[type="range"]'): void {
-        document.querySelectorAll<HTMLInputElement>(selector).forEach(input => {
+        document.querySelectorAll<HTMLInputElement>(selector).forEach((input) => {
             new RangeSlider(input);
         });
     }
@@ -23,7 +23,7 @@ class RangeSlider {
 
     private handleInput = (): void => {
         this.update();
-    }
+    };
 
     public destroy(): void {
         this.input.removeEventListener('input', this.handleInput);

@@ -15,10 +15,8 @@ class Stepper {
     private abortController = new AbortController();
     private injectedConnectors = false;
 
-    constructor(elementOrSelector: string | HTMLElement, options: StepperOptions = {}) {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLElement>(elementOrSelector)
-            : elementOrSelector;
+    public constructor(elementOrSelector: string | HTMLElement, options: StepperOptions = {}) {
+        const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
 
         if (!element) throw new Error('Stepper: element not found');
 
@@ -139,10 +137,10 @@ class Stepper {
     public destroy(): void {
         this.abortController.abort();
         if (this.injectedConnectors) {
-            this.connectors.forEach(c => c.remove());
+            this.connectors.forEach((c) => c.remove());
             this.connectors = [];
         }
-        this.steps.forEach(step => step.removeAttribute('aria-current'));
+        this.steps.forEach((step) => step.removeAttribute('aria-current'));
     }
 }
 

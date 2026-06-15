@@ -23,7 +23,7 @@ class Tooltip {
     private showTimeout: number | null = null;
     private isVisible: boolean = false;
 
-    constructor(trigger: HTMLElement, content: string, options: TooltipOptions = {}) {
+    public constructor(trigger: HTMLElement, content: string, options: TooltipOptions = {}) {
         this.trigger = trigger;
         this.content = content;
         this.options = {
@@ -39,7 +39,7 @@ class Tooltip {
 
     public static initializeAll(): void {
         const triggers = document.querySelectorAll<HTMLElement>('[data-tooltip]');
-        triggers.forEach(trigger => {
+        triggers.forEach((trigger) => {
             const content = trigger.getAttribute('data-tooltip');
             const position = (trigger.getAttribute('data-tooltip-position') as TooltipOptions['position']) ?? 'auto';
             const className = trigger.getAttribute('data-tooltip-class') ?? '';
@@ -50,7 +50,7 @@ class Tooltip {
         });
 
         const advancedTriggers = document.querySelectorAll<HTMLElement>('[data-tooltip-id]');
-        advancedTriggers.forEach(trigger => {
+        advancedTriggers.forEach((trigger) => {
             const contentId = trigger.getAttribute('data-tooltip-id');
             const position = (trigger.getAttribute('data-tooltip-position') as TooltipOptions['position']) ?? 'auto';
             const className = trigger.getAttribute('data-tooltip-class') ?? '';
@@ -74,7 +74,7 @@ class Tooltip {
             Tooltip.hideActive();
             this.createTooltip();
             this.position();
-            
+
             requestAnimationFrame(() => {
                 this.tooltipElement?.classList.add('visible');
                 this.isVisible = true;
@@ -140,14 +140,13 @@ class Tooltip {
     private position(): void {
         if (!this.tooltipElement) return;
 
-        const { left, top, placement } = computePosition(
-            this.trigger.getBoundingClientRect(),
-            this.tooltipElement.getBoundingClientRect(),
-            { placement: this.options.position, offset: this.options.offset }
-        );
+        const { left, top, placement } = computePosition(this.trigger.getBoundingClientRect(), this.tooltipElement.getBoundingClientRect(), {
+            placement: this.options.position,
+            offset: this.options.offset,
+        });
 
         this.tooltipElement.style.left = `${left}px`;
-        this.tooltipElement.style.top  = `${top}px`;
+        this.tooltipElement.style.top = `${top}px`;
         this.tooltipElement.setAttribute('data-position', placement);
     }
 
@@ -160,19 +159,19 @@ class Tooltip {
 
     private handleMouseEnter = (): void => {
         this.show();
-    }
+    };
 
     private handleMouseLeave = (): void => {
         this.hide();
-    }
+    };
 
     private handleFocus = (): void => {
         this.show();
-    }
+    };
 
     private handleBlur = (): void => {
         this.hide();
-    }
+    };
 
     public destroy(): void {
         this.hide();

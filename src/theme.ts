@@ -152,7 +152,7 @@ class Theme {
         if ('addEventListener' in this.mediaQuery) {
             this.mediaQuery.addEventListener('change', handler as (e: MediaQueryListEvent) => void);
         } else if ('addListener' in this.mediaQuery) {
-            (this.mediaQuery as any).addListener(handler);
+            (this.mediaQuery as MediaQueryList & { addListener: (fn: (e: MediaQueryListEvent) => void) => void }).addListener(handler);
         }
     }
 

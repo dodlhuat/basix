@@ -24,7 +24,7 @@ class FlyoutMenu {
     private menuLinks: NodeListOf<HTMLAnchorElement> | null = null;
     private abortController = new AbortController();
 
-    constructor(options: FlyoutMenuOptions = {}) {
+    public constructor(options: FlyoutMenuOptions = {}) {
         this.options = {
             triggerSelector: '.menu-trigger',
             menuSelector: '#flyoutMenu',
@@ -37,7 +37,7 @@ class FlyoutMenu {
             footerText: '&copy; 2025 Brand Inc.',
             enableHeader: true,
             enableFooter: true,
-            ...options
+            ...options,
         };
 
         this.menuTrigger = document.querySelector(this.options.triggerSelector);
@@ -84,9 +84,9 @@ class FlyoutMenu {
                 li.classList.add('has-submenu');
                 nestedUl.classList.add('submenu');
 
-                const textNode = Array.from(li.childNodes).find(
-                    node => node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== ''
-                ) as Text | undefined;
+                const textNode = Array.from(li.childNodes).find((node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '') as
+                    | Text
+                    | undefined;
                 const text = textNode?.textContent?.trim() || 'Menu Item';
                 textNode?.remove();
 
@@ -147,11 +147,11 @@ class FlyoutMenu {
         this.closeBtn?.addEventListener('click', this.close, sig);
         this.flyoutOverlay?.addEventListener('click', this.close, sig);
 
-        this.submenuToggles?.forEach(toggle => {
+        this.submenuToggles?.forEach((toggle) => {
             toggle.addEventListener('click', (e) => this.handleSubmenu(e, toggle), sig);
         });
 
-        this.menuLinks?.forEach(link => {
+        this.menuLinks?.forEach((link) => {
             link.addEventListener('click', this.close, sig);
         });
 
@@ -163,14 +163,14 @@ class FlyoutMenu {
         this.flyoutOverlay?.classList.add('is-visible');
         document.body.style.overflow = 'hidden';
         this.menuTrigger?.setAttribute('aria-expanded', 'true');
-    }
+    };
 
     public close = (): void => {
         this.flyoutMenu?.classList.remove('is-open');
         this.flyoutOverlay?.classList.remove('is-visible');
         document.body.style.overflow = '';
         this.menuTrigger?.setAttribute('aria-expanded', 'false');
-    }
+    };
 
     private handleSubmenu(e: Event, toggle: HTMLElement): void {
         e.preventDefault();
@@ -183,7 +183,7 @@ class FlyoutMenu {
         if (!parentUl || !parentLi) return;
 
         const siblings = Array.from(parentUl.children) as HTMLLIElement[];
-        siblings.forEach(sibling => {
+        siblings.forEach((sibling) => {
             if (sibling !== parentLi) {
                 const siblingSubmenu = sibling.querySelector('.submenu');
                 const siblingToggle = sibling.querySelector('.submenu-toggle');
@@ -202,7 +202,7 @@ class FlyoutMenu {
         if (e.key === 'Escape' && this.flyoutMenu?.classList.contains('is-open')) {
             this.close();
         }
-    }
+    };
 
     public setDirection(direction: 'left' | 'right'): void {
         if (!this.flyoutMenu) return;

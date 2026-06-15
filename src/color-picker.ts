@@ -36,14 +36,12 @@ class ColorPicker {
     private abortController = new AbortController();
     private ro!: ResizeObserver;
 
-    constructor(elementOrSelector: string | HTMLElement, options: ColorPickerOptions = {}) {
-        const el = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLElement>(elementOrSelector)
-            : elementOrSelector;
+    public constructor(elementOrSelector: string | HTMLElement, options: ColorPickerOptions = {}) {
+        const el = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
         if (!el) throw new Error(`ColorPicker: element not found for "${elementOrSelector}"`);
 
         this.container = el;
-        this.onChange  = options.onChange;
+        this.onChange = options.onChange;
 
         this.build();
         this.bindEvents();
@@ -94,48 +92,68 @@ class ColorPicker {
         `;
 
         const canvas = this.container.querySelector<HTMLCanvasElement>('.color-picker__canvas');
-        const ctx    = canvas?.getContext('2d');
+        const ctx = canvas?.getContext('2d');
         if (!canvas || !ctx) throw new Error('ColorPicker: canvas context unavailable');
 
-        this.canvas    = canvas;
-        this.ctx       = ctx;
-        this.cursor    = this.container.querySelector<HTMLElement>('.color-picker__cursor')!;
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.cursor = this.container.querySelector<HTMLElement>('.color-picker__cursor')!;
         this.hueSlider = this.container.querySelector<HTMLInputElement>('.color-picker__hue-slider')!;
-        this.hexInput  = this.container.querySelector<HTMLInputElement>('.color-picker__hex')!;
-        this.rInput    = this.container.querySelector<HTMLInputElement>('.color-picker__r')!;
-        this.gInput    = this.container.querySelector<HTMLInputElement>('.color-picker__g')!;
-        this.bInput    = this.container.querySelector<HTMLInputElement>('.color-picker__b')!;
-        this.preview   = this.container.querySelector<HTMLElement>('.color-picker__preview')!;
+        this.hexInput = this.container.querySelector<HTMLInputElement>('.color-picker__hex')!;
+        this.rInput = this.container.querySelector<HTMLInputElement>('.color-picker__r')!;
+        this.gInput = this.container.querySelector<HTMLInputElement>('.color-picker__g')!;
+        this.bInput = this.container.querySelector<HTMLInputElement>('.color-picker__b')!;
+        this.preview = this.container.querySelector<HTMLElement>('.color-picker__preview')!;
     }
 
     private bindEvents(): void {
         const sig = { signal: this.abortController.signal };
 
-        this.canvas.addEventListener('pointerdown', (e: PointerEvent) => {
-            e.preventDefault();
-            this.canvas.setPointerCapture(e.pointerId);
-            this.isDragging = true;
-            this.handleFieldInteraction(e);
-        }, sig);
+        this.canvas.addEventListener(
+            'pointerdown',
+            (e: PointerEvent) => {
+                e.preventDefault();
+                this.canvas.setPointerCapture(e.pointerId);
+                this.isDragging = true;
+                this.handleFieldInteraction(e);
+            },
+            sig,
+        );
 
-        this.canvas.addEventListener('pointermove', (e: PointerEvent) => {
-            if (!this.isDragging) return;
-            this.handleFieldInteraction(e);
-        }, sig);
+        this.canvas.addEventListener(
+            'pointermove',
+            (e: PointerEvent) => {
+                if (!this.isDragging) return;
+                this.handleFieldInteraction(e);
+            },
+            sig,
+        );
 
-        this.canvas.addEventListener('pointerup', () => {
-            this.isDragging = false;
-        }, sig);
+        this.canvas.addEventListener(
+            'pointerup',
+            () => {
+                this.isDragging = false;
+            },
+            sig,
+        );
 
-        this.canvas.addEventListener('pointercancel', () => {
-            this.isDragging = false;
-        }, sig);
+        this.canvas.addEventListener(
+            'pointercancel',
+            () => {
+                this.isDragging = false;
+            },
+            sig,
+        );
 
-        this.hueSlider.addEventListener('input', () => {
-            this.hue = +this.hueSlider.value;
-            this.drawField();
-            this.updateFromHSB();
-        }, sig);
+        this.hueSlider.addEventListener(
+            'input',
+            () => {
+                this.hue = +this.hueSlider.value;
+                this.drawField();
+                this.updateFromHSB();
+            },
+            sig,
+        );
 
         this.hexInput.addEventListener('change', () => this.handleHexInput(), sig);
         this.rInput.addEventListener('change', () => this.handleRGBInput(), sig);
@@ -148,7 +166,7 @@ class ColorPicker {
         const h = this.canvas.offsetHeight;
         if (w === 0 || h === 0) return;
         if (this.canvas.width === w && this.canvas.height === h) return;
-        this.canvas.width  = w;
+        this.canvas.width = w;
         this.canvas.height = h;
         this.drawField();
         this.updateCursor();
@@ -174,9 +192,9 @@ class ColorPicker {
     private handleFieldInteraction(e: PointerEvent): void {
         const rect = this.canvas.getBoundingClientRect();
         const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-        const y = Math.max(0, Math.min(e.clientY - rect.top,  rect.height));
+        const y = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
 
-        this.saturation = (x / rect.width)  * 100;
+        this.saturation = (x / rect.width) * 100;
         this.brightness = 100 - (y / rect.height) * 100;
 
         this.updateCursor();
@@ -188,7 +206,7 @@ class ColorPicker {
         const x = (this.saturation / 100) * rect.width;
         const y = (1 - this.brightness / 100) * rect.height;
         this.cursor.style.left = `${x}px`;
-        this.cursor.style.top  = `${y}px`;
+        this.cursor.style.top = `${y}px`;
         this.cursor.classList.toggle('color-picker__cursor--dark', this.brightness > 50 && this.saturation < 80);
     }
 
@@ -202,9 +220,9 @@ class ColorPicker {
 
     private syncInputs(rgb: ColorRGB, hex: string): void {
         this.hexInput.value = hex;
-        this.rInput.value   = String(rgb.r);
-        this.gInput.value   = String(rgb.g);
-        this.bInput.value   = String(rgb.b);
+        this.rInput.value = String(rgb.r);
+        this.gInput.value = String(rgb.g);
+        this.bInput.value = String(rgb.b);
     }
 
     private syncPreview(rgb: ColorRGB): void {
@@ -231,7 +249,7 @@ class ColorPicker {
 
     private setFromRGB(rgb: ColorRGB): void {
         const { h, s, v } = this.rgbToHsb(rgb);
-        this.hue        = h;
+        this.hue = h;
         this.saturation = s;
         this.brightness = v;
         this.hueSlider.value = String(this.hue);
@@ -262,14 +280,35 @@ class ColorPicker {
         const c = v * s;
         const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
         const m = v - c;
-        let r = 0, g = 0, b = 0;
+        let r = 0,
+            g = 0,
+            b = 0;
 
-        if      (h < 60)  { r = c; g = x; b = 0; }
-        else if (h < 120) { r = x; g = c; b = 0; }
-        else if (h < 180) { r = 0; g = c; b = x; }
-        else if (h < 240) { r = 0; g = x; b = c; }
-        else if (h < 300) { r = x; g = 0; b = c; }
-        else              { r = c; g = 0; b = x; }
+        if (h < 60) {
+            r = c;
+            g = x;
+            b = 0;
+        } else if (h < 120) {
+            r = x;
+            g = c;
+            b = 0;
+        } else if (h < 180) {
+            r = 0;
+            g = c;
+            b = x;
+        } else if (h < 240) {
+            r = 0;
+            g = x;
+            b = c;
+        } else if (h < 300) {
+            r = x;
+            g = 0;
+            b = c;
+        } else {
+            r = c;
+            g = 0;
+            b = x;
+        }
 
         return {
             r: Math.round((r + m) * 255),
@@ -279,16 +318,18 @@ class ColorPicker {
     }
 
     private rgbToHsb({ r, g, b }: ColorRGB): { h: number; s: number; v: number } {
-        r /= 255; g /= 255; b /= 255;
+        r /= 255;
+        g /= 255;
+        b /= 255;
         const max = Math.max(r, g, b);
         const min = Math.min(r, g, b);
-        const d   = max - min;
+        const d = max - min;
 
         let h = 0;
         if (d !== 0) {
-            if      (max === r) h = ((g - b) / d) % 6;
+            if (max === r) h = ((g - b) / d) % 6;
             else if (max === g) h = (b - r) / d + 2;
-            else                h = (r - g) / d + 4;
+            else h = (r - g) / d + 4;
         }
         h = Math.round(h * 60);
         if (h < 0) h += 360;
@@ -301,7 +342,7 @@ class ColorPicker {
     }
 
     private rgbToHex({ r, g, b }: ColorRGB): string {
-        return '#' + [r, g, b].map(c => c.toString(16).padStart(2, '0')).join('');
+        return '#' + [r, g, b].map((c) => c.toString(16).padStart(2, '0')).join('');
     }
 
     private hexToRgb(hex: string): ColorRGB {

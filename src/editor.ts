@@ -20,7 +20,7 @@ class Editor {
     private redoStack: string[] = [];
     private abortController = new AbortController();
 
-    constructor(options: EditorOptions = {}) {
+    public constructor(options: EditorOptions = {}) {
         if (options.root instanceof HTMLElement) {
             this.root = options.root;
         } else if (typeof options.root === 'string') {
@@ -34,25 +34,25 @@ class Editor {
         const editable = this.q<HTMLElement>('[data-editor="editable"]');
         if (!editable) throw new Error('Editor: [data-editor="editable"] element not found');
 
-        this.editable  = editable;
+        this.editable = editable;
         this.wordCount = this.q<HTMLElement>('[data-editor="wordcount"]');
 
         if (options.simple) {
-            this.code      = null;
-            this.preview   = null;
+            this.code = null;
+            this.preview = null;
             this.sidePanel = this.q<HTMLElement>('[data-editor="side-panel"]');
             this.sidePanel?.classList.add('hidden');
         } else {
-            const code      = this.q<HTMLTextAreaElement>('[data-editor="code"]');
-            const preview   = this.q<HTMLElement>('[data-editor="preview"]');
+            const code = this.q<HTMLTextAreaElement>('[data-editor="code"]');
+            const preview = this.q<HTMLElement>('[data-editor="preview"]');
             const sidePanel = this.q<HTMLElement>('[data-editor="side-panel"]');
 
             if (!code || !preview || !sidePanel) {
                 throw new Error('Editor: [data-editor="code"], [data-editor="preview"] and [data-editor="side-panel"] are required unless simple: true');
             }
 
-            this.code      = code;
-            this.preview   = preview;
+            this.code = code;
+            this.preview = preview;
             this.sidePanel = sidePanel;
             this.sidePanel.classList.add('hidden');
         }
@@ -76,120 +76,170 @@ class Editor {
 
     private bindToolbar(): void {
         const sig = { signal: this.abortController.signal };
-        this.qAll<HTMLElement>('[data-cmd]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const cmd = btn.dataset.cmd!;
-                const val = btn.dataset.value ?? null;
-                this.exec(cmd, val);
-                this.editable.focus();
-            }, sig);
+        this.qAll<HTMLElement>('[data-cmd]').forEach((btn) => {
+            btn.addEventListener(
+                'click',
+                () => {
+                    const cmd = btn.dataset.cmd!;
+                    const val = btn.dataset.value ?? null;
+                    this.exec(cmd, val);
+                    this.editable.focus();
+                },
+                sig,
+            );
         });
     }
 
     private bindActions(): void {
         const sig = { signal: this.abortController.signal };
-        this.q('[data-editor-action="link"]')?.addEventListener('click', () => {
-            const url = prompt('Enter URL:', 'https://');
-            if (url) this.exec('createLink', url);
-        }, sig);
+        this.q('[data-editor-action="link"]')?.addEventListener(
+            'click',
+            () => {
+                const url = prompt('Enter URL:', 'https://');
+                if (url) this.exec('createLink', url);
+            },
+            sig,
+        );
 
         const imageFile = this.q<HTMLInputElement>('[data-editor="image-file"]');
         this.q('[data-editor-action="image"]')?.addEventListener('click', () => imageFile?.click(), sig);
-        imageFile?.addEventListener('change', () => {
-            const file = imageFile.files?.[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (typeof reader.result === 'string') {
-                    this.insertImage(reader.result);
-                }
-            };
-            reader.readAsDataURL(file);
-            imageFile.value = '';
-        }, sig);
+        imageFile?.addEventListener(
+            'change',
+            () => {
+                const file = imageFile.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    if (typeof reader.result === 'string') {
+                        this.insertImage(reader.result);
+                    }
+                };
+                reader.readAsDataURL(file);
+                imageFile.value = '';
+            },
+            sig,
+        );
 
-        this.q('[data-editor-action="clean"]')?.addEventListener('click', () => {
-            const sel = window.getSelection();
-            if (!sel || sel.rangeCount === 0) return;
-            const range = sel.getRangeAt(0);
-            const text = range.toString();
-            range.deleteContents();
-            range.insertNode(document.createTextNode(text));
-            this.onContentChange();
-        }, sig);
+        this.q('[data-editor-action="clean"]')?.addEventListener(
+            'click',
+            () => {
+                const sel = window.getSelection();
+                if (!sel || sel.rangeCount === 0) return;
+                const range = sel.getRangeAt(0);
+                const text = range.toString();
+                range.deleteContents();
+                range.insertNode(document.createTextNode(text));
+                this.onContentChange();
+            },
+            sig,
+        );
 
         this.q('[data-editor-action="undo"]')?.addEventListener('click', () => this.undo(), sig);
         this.q('[data-editor-action="redo"]')?.addEventListener('click', () => this.redo(), sig);
 
-        this.q('[data-editor-action="toggle-code"]')?.addEventListener('click', () => {
-            this.sidePanel?.classList.toggle('hidden');
-            this.syncViews();
-        }, sig);
+        this.q('[data-editor-action="toggle-code"]')?.addEventListener(
+            'click',
+            () => {
+                this.sidePanel?.classList.toggle('hidden');
+                this.syncViews();
+            },
+            sig,
+        );
 
         if (this.code) {
             const code = this.code;
-            this.q('[data-editor-action="apply-code"]')?.addEventListener('click', () => {
-                this.editable.innerHTML = sanitizeHtml(code.value);
-                this.onContentChange();
-            }, sig);
-            this.q('[data-editor-action="sanitize-code"]')?.addEventListener('click', () => {
-                code.value = sanitizeHtml(code.value);
-                this.editable.innerHTML = code.value;
-                this.onContentChange();
-            }, sig);
-            this.q('[data-editor-action="minify-code"]')?.addEventListener('click', () => {
-                code.value = code.value
-                    .replace(/\n/g, '')
-                    .replace(/>\s+</g, '><')
-                    .trim();
-            }, sig);
+            this.q('[data-editor-action="apply-code"]')?.addEventListener(
+                'click',
+                () => {
+                    this.editable.innerHTML = sanitizeHtml(code.value);
+                    this.onContentChange();
+                },
+                sig,
+            );
+            this.q('[data-editor-action="sanitize-code"]')?.addEventListener(
+                'click',
+                () => {
+                    code.value = sanitizeHtml(code.value);
+                    this.editable.innerHTML = code.value;
+                    this.onContentChange();
+                },
+                sig,
+            );
+            this.q('[data-editor-action="minify-code"]')?.addEventListener(
+                'click',
+                () => {
+                    code.value = code.value.replace(/\n/g, '').replace(/>\s+</g, '><').trim();
+                },
+                sig,
+            );
         }
 
         this.q('[data-editor-action="save"]')?.addEventListener('click', () => this.downloadHTML(), sig);
 
-        this.q('[data-editor-action="clear"]')?.addEventListener('click', () => {
-            if (confirm('Clear all content?')) {
-                this.editable.innerHTML = '';
-                this.onContentChange();
-            }
-        }, sig);
+        this.q('[data-editor-action="clear"]')?.addEventListener(
+            'click',
+            () => {
+                if (confirm('Clear all content?')) {
+                    this.editable.innerHTML = '';
+                    this.onContentChange();
+                }
+            },
+            sig,
+        );
     }
 
     private bindKeyboard(): void {
-        window.addEventListener('keydown', (e: KeyboardEvent) => {
-            if (!this.root.contains(document.activeElement)) return;
+        window.addEventListener(
+            'keydown',
+            (e: KeyboardEvent) => {
+                if (!this.root.contains(document.activeElement)) return;
 
-            const mod = e.ctrlKey || e.metaKey;
-            if (!mod) return;
+                const mod = e.ctrlKey || e.metaKey;
+                if (!mod) return;
 
-            const key = e.key.toLowerCase();
+                const key = e.key.toLowerCase();
 
-            if (key === 'b') { e.preventDefault(); this.exec('bold'); }
-            else if (key === 'i') { e.preventDefault(); this.exec('italic'); }
-            else if (key === 'u') { e.preventDefault(); this.exec('underline'); }
-            else if (key === 'k') {
-                e.preventDefault();
-                const url = prompt('Enter URL:', 'https://');
-                if (url) this.exec('createLink', url);
-            }
-            else if (key === 's') {
-                e.preventDefault();
-                this.q<HTMLButtonElement>('[data-editor-action="save"]')?.click();
-            }
-            else if (key === 'z' && !e.shiftKey) { e.preventDefault(); this.undo(); }
-            else if (key === 'y' || (key === 'z' && e.shiftKey)) { e.preventDefault(); this.redo(); }
-        }, { signal: this.abortController.signal });
+                if (key === 'b') {
+                    e.preventDefault();
+                    this.exec('bold');
+                } else if (key === 'i') {
+                    e.preventDefault();
+                    this.exec('italic');
+                } else if (key === 'u') {
+                    e.preventDefault();
+                    this.exec('underline');
+                } else if (key === 'k') {
+                    e.preventDefault();
+                    const url = prompt('Enter URL:', 'https://');
+                    if (url) this.exec('createLink', url);
+                } else if (key === 's') {
+                    e.preventDefault();
+                    this.q<HTMLButtonElement>('[data-editor-action="save"]')?.click();
+                } else if (key === 'z' && !e.shiftKey) {
+                    e.preventDefault();
+                    this.undo();
+                } else if (key === 'y' || (key === 'z' && e.shiftKey)) {
+                    e.preventDefault();
+                    this.redo();
+                }
+            },
+            { signal: this.abortController.signal },
+        );
     }
 
     private bindEditable(): void {
         const sig = { signal: this.abortController.signal };
         this.editable.addEventListener('input', () => this.onContentChange(), sig);
 
-        this.editable.addEventListener('paste', (e: ClipboardEvent) => {
-            e.preventDefault();
-            const text = e.clipboardData?.getData('text/plain') ?? '';
-            this.insertText(text);
-        }, sig);
+        this.editable.addEventListener(
+            'paste',
+            (e: ClipboardEvent) => {
+                e.preventDefault();
+                const text = e.clipboardData?.getData('text/plain') ?? '';
+                this.insertText(text);
+            },
+            sig,
+        );
 
         this.editable.addEventListener('keyup', () => this.refreshActiveState(), sig);
         this.editable.addEventListener('mouseup', () => this.refreshActiveState(), sig);
@@ -197,16 +247,20 @@ class Editor {
 
     private bindTabs(): void {
         const sig = { signal: this.abortController.signal };
-        this.qAll<HTMLElement>('.side-tab[data-tab]').forEach(tab => {
-            tab.addEventListener('click', () => {
-                const target = tab.dataset.tab!;
+        this.qAll<HTMLElement>('.side-tab[data-tab]').forEach((tab) => {
+            tab.addEventListener(
+                'click',
+                () => {
+                    const target = tab.dataset.tab!;
 
-                this.qAll('.side-tab').forEach(t => t.classList.remove('active'));
-                this.qAll('.side-panel').forEach(p => p.classList.remove('active'));
+                    this.qAll('.side-tab').forEach((t) => t.classList.remove('active'));
+                    this.qAll('.side-panel').forEach((p) => p.classList.remove('active'));
 
-                tab.classList.add('active');
-                this.q(`[data-editor="${target}"]`)?.classList.add('active');
-            }, sig);
+                    tab.classList.add('active');
+                    this.q(`[data-editor="${target}"]`)?.classList.add('active');
+                },
+                sig,
+            );
         });
     }
 
@@ -216,15 +270,18 @@ class Editor {
     }
 
     private syncViews(): void {
-        if (this.code)    this.code.value          = this.editable.innerHTML.trim();
-        if (this.preview) this.preview.innerHTML   = sanitizeHtml(this.editable.innerHTML);
+        if (this.code) this.code.value = this.editable.innerHTML.trim();
+        if (this.preview) this.preview.innerHTML = sanitizeHtml(this.editable.innerHTML);
         this.updateWordCount();
     }
 
     private updateWordCount(): void {
         if (!this.wordCount) return;
         const text = this.editable.innerText || '';
-        const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+        const words = text
+            .trim()
+            .split(/\s+/)
+            .filter((w) => w.length > 0);
         const count = words.length;
         this.wordCount.textContent = `${count} word${count !== 1 ? 's' : ''}`;
     }
@@ -252,18 +309,38 @@ class Editor {
 
     private exec(command: string, value: string | null = null): void {
         switch (command) {
-            case 'bold': this.toggleInlineStyle('strong'); break;
-            case 'italic': this.toggleInlineStyle('em'); break;
-            case 'underline': this.toggleInlineStyle('u'); break;
-            case 'strikeThrough': this.toggleInlineStyle('s'); break;
-            case 'createLink': if (value) this.createLink(value); break;
-            case 'formatBlock': if (value) this.formatBlock(value); break;
-            case 'insertUnorderedList': this.insertList('ul'); break;
-            case 'insertOrderedList': this.insertList('ol'); break;
+            case 'bold':
+                this.toggleInlineStyle('strong');
+                break;
+            case 'italic':
+                this.toggleInlineStyle('em');
+                break;
+            case 'underline':
+                this.toggleInlineStyle('u');
+                break;
+            case 'strikeThrough':
+                this.toggleInlineStyle('s');
+                break;
+            case 'createLink':
+                if (value) this.createLink(value);
+                break;
+            case 'formatBlock':
+                if (value) this.formatBlock(value);
+                break;
+            case 'insertUnorderedList':
+                this.insertList('ul');
+                break;
+            case 'insertOrderedList':
+                this.insertList('ol');
+                break;
             case 'justifyLeft':
             case 'justifyCenter':
-            case 'justifyRight': this.setAlignment(command); break;
-            case 'foreColor': if (value) this.setForeColor(value); break;
+            case 'justifyRight':
+                this.setAlignment(command);
+                break;
+            case 'foreColor':
+                if (value) this.setForeColor(value);
+                break;
         }
     }
 
@@ -306,9 +383,7 @@ class Editor {
 
         const range = sel.getRangeAt(0);
         const container = range.commonAncestorContainer;
-        let current: HTMLElement | null = container.nodeType === Node.TEXT_NODE
-            ? container.parentElement
-            : container as HTMLElement;
+        let current: HTMLElement | null = container.nodeType === Node.TEXT_NODE ? container.parentElement : (container as HTMLElement);
 
         let wrapper: HTMLElement | null = null;
         while (current && current !== this.editable) {
@@ -358,9 +433,7 @@ class Editor {
 
         const range = sel.getRangeAt(0);
         const container = range.commonAncestorContainer;
-        let blockElement: HTMLElement | null = container.nodeType === Node.TEXT_NODE
-            ? container.parentElement
-            : container as HTMLElement;
+        let blockElement: HTMLElement | null = container.nodeType === Node.TEXT_NODE ? container.parentElement : (container as HTMLElement);
 
         while (blockElement && blockElement !== this.editable && blockElement.parentElement !== this.editable) {
             blockElement = blockElement.parentElement;
@@ -382,7 +455,7 @@ class Editor {
         const text = range.toString();
 
         const list = document.createElement(listTag);
-        const lines = text ? text.split('\n').filter(l => l.trim()) : [''];
+        const lines = text ? text.split('\n').filter((l) => l.trim()) : [''];
 
         for (const line of lines) {
             const li = document.createElement('li');
@@ -406,14 +479,14 @@ class Editor {
 
     private setAlignment(cmd: string): void {
         const align: Record<string, string> = {
-            justifyLeft: 'left', justifyCenter: 'center', justifyRight: 'right',
+            justifyLeft: 'left',
+            justifyCenter: 'center',
+            justifyRight: 'right',
         };
         const sel = window.getSelection();
         if (!sel || sel.rangeCount === 0) return;
         const container = sel.getRangeAt(0).commonAncestorContainer;
-        let block: HTMLElement | null = container.nodeType === Node.TEXT_NODE
-            ? container.parentElement
-            : container as HTMLElement;
+        let block: HTMLElement | null = container.nodeType === Node.TEXT_NODE ? container.parentElement : (container as HTMLElement);
         while (block && block !== this.editable && block.parentElement !== this.editable) {
             block = block.parentElement;
         }
@@ -461,11 +534,9 @@ ${content}
 
         const range = sel.getRangeAt(0);
         const container = range.commonAncestorContainer;
-        const element = container.nodeType === Node.TEXT_NODE
-            ? container.parentElement
-            : container as HTMLElement;
+        const element = container.nodeType === Node.TEXT_NODE ? container.parentElement : (container as HTMLElement);
 
-        this.qAll<HTMLElement>('[data-cmd]').forEach(btn => {
+        this.qAll<HTMLElement>('[data-cmd]').forEach((btn) => {
             const cmd = btn.dataset.cmd;
             let active = false;
 

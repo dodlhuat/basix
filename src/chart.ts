@@ -1,6 +1,6 @@
 import { escapeHtml } from './utils.js';
 
-type ChartType  = 'line' | 'area' | 'column' | 'bar' | 'pie';
+type ChartType = 'line' | 'area' | 'column' | 'bar' | 'pie';
 type ChartCurve = 'smooth' | 'linear' | 'step';
 
 /** A single labelled data value within a chart series. */
@@ -37,18 +37,23 @@ interface ChartOptions {
 }
 
 /** A 2-D coordinate used for SVG path calculations. */
-interface Point { x: number; y: number; }
+interface Point {
+    x: number;
+    y: number;
+}
 /** Chart margin in pixels for each edge. */
-interface Margin { top: number; right: number; bottom: number; left: number; }
+interface Margin {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+}
 
-const MARGIN_XY: Margin   = { top: 16, right: 24, bottom: 44, left: 52 };
-const MARGIN_BAR: Margin  = { top: 8,  right: 52, bottom: 24, left: 120 };
-const MARGIN_PIE: Margin  = { top: 8,  right: 8,  bottom: 8,  left: 8 };
+const MARGIN_XY: Margin = { top: 16, right: 24, bottom: 44, left: 52 };
+const MARGIN_BAR: Margin = { top: 8, right: 52, bottom: 24, left: 120 };
+const MARGIN_PIE: Margin = { top: 8, right: 8, bottom: 8, left: 8 };
 
-const FALLBACK_COLORS = [
-    '#3D63DD', '#2E8B57', '#C28A00', '#D64545',
-    '#8B5CF6', '#06B6D4', '#F97316', '#EC4899',
-];
+const FALLBACK_COLORS = ['#3D63DD', '#2E8B57', '#C28A00', '#D64545', '#8B5CF6', '#06B6D4', '#F97316', '#EC4899'];
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -62,25 +67,23 @@ class Chart {
     private resizeTimer: ReturnType<typeof setTimeout> | null = null;
     private resizeObserver: ResizeObserver | null = null;
 
-    constructor(selector: string | HTMLElement, options: ChartOptions) {
-        const el = typeof selector === 'string'
-            ? document.querySelector<HTMLElement>(selector)
-            : selector;
+    public constructor(selector: string | HTMLElement, options: ChartOptions) {
+        const el = typeof selector === 'string' ? document.querySelector<HTMLElement>(selector) : selector;
         if (!el) throw new Error(`Chart: element not found for "${selector}"`);
 
         this.container = el;
         this.opts = {
-            type:         options.type,
-            series:       options.series,
-            title:        options.title        ?? '',
-            subtitle:     options.subtitle     ?? '',
-            height:       options.height       ?? 280,
-            showLegend:   options.showLegend   ?? true,
-            showGrid:     options.showGrid     ?? true,
-            animate:      options.animate      ?? true,
-            curve:        options.curve        ?? 'smooth',
-            yMin:         options.yMin         ?? 0,
-            yMax:         options.yMax,
+            type: options.type,
+            series: options.series,
+            title: options.title ?? '',
+            subtitle: options.subtitle ?? '',
+            height: options.height ?? 280,
+            showLegend: options.showLegend ?? true,
+            showGrid: options.showGrid ?? true,
+            animate: options.animate ?? true,
+            curve: options.curve ?? 'smooth',
+            yMin: options.yMin ?? 0,
+            yMax: options.yMax,
             onPointClick: options.onPointClick ?? (() => {}),
         };
 
@@ -107,11 +110,21 @@ class Chart {
         this.container.appendChild(this.tooltip);
 
         switch (this.opts.type) {
-            case 'line':   this.renderLineOrArea(canvas, false); break;
-            case 'area':   this.renderLineOrArea(canvas, true);  break;
-            case 'column': this.renderColumn(canvas);             break;
-            case 'bar':    this.renderBar(canvas);                break;
-            case 'pie':    this.renderPie(canvas);                break;
+            case 'line':
+                this.renderLineOrArea(canvas, false);
+                break;
+            case 'area':
+                this.renderLineOrArea(canvas, true);
+                break;
+            case 'column':
+                this.renderColumn(canvas);
+                break;
+            case 'bar':
+                this.renderBar(canvas);
+                break;
+            case 'pie':
+                this.renderPie(canvas);
+                break;
         }
 
         if (this.opts.showLegend && this.opts.type !== 'pie') {
@@ -129,9 +142,9 @@ class Chart {
         const w = svgW - m.left - m.right;
         const h = height;
 
-        const allValues = series.flatMap(s => s.data.map(d => d.value));
+        const allValues = series.flatMap((s) => s.data.map((d) => d.value));
         const yMax = this.opts.yMax ?? Math.max(...allValues) * 1.1;
-        const labels = series[0].data.map(d => d.label);
+        const labels = series[0].data.map((d) => d.label);
 
         const svg = this.createSVG(canvas, svgW, svgH);
 
@@ -145,22 +158,29 @@ class Chart {
             const numPts = s.data.length;
             const pts: Point[] = s.data.map((d, i) => ({
                 x: m.left + (numPts > 1 ? (i / (numPts - 1)) * w : w / 2),
-                y: m.top  + h - ((d.value - yMin) / (yMax - yMin)) * h,
+                y: m.top + h - ((d.value - yMin) / (yMax - yMin)) * h,
             }));
 
             if (isArea) {
                 const areaD = `${this.buildPath(pts)} L ${pts[pts.length - 1].x} ${m.top + h} L ${pts[0].x} ${m.top + h} Z`;
-                svg.appendChild(this.svgEl('path', {
-                    d: areaD, fill: color,
-                    'fill-opacity': '0.12', stroke: 'none',
-                    class: 'chart-area',
-                }));
+                svg.appendChild(
+                    this.svgEl('path', {
+                        d: areaD,
+                        fill: color,
+                        'fill-opacity': '0.12',
+                        stroke: 'none',
+                        class: 'chart-area',
+                    }),
+                );
             }
 
             const linePath = this.svgEl('path', {
-                d: this.buildPath(pts), fill: 'none',
-                stroke: color, 'stroke-width': '2.5',
-                'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+                d: this.buildPath(pts),
+                fill: 'none',
+                stroke: color,
+                'stroke-width': '2.5',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
                 class: 'chart-line',
             }) as SVGPathElement;
 
@@ -179,20 +199,37 @@ class Chart {
                 });
                 const { x, y } = pts[i];
 
-                g.appendChild(this.svgEl('circle', {
-                    cx: x, cy: y, r: 14,
-                    fill: 'transparent', class: 'chart-hit',
-                }));
-                g.appendChild(this.svgEl('circle', {
-                    cx: x, cy: y, r: 7,
-                    fill: 'none', stroke: color, 'stroke-width': '2',
-                    class: 'chart-point-ring',
-                }));
-                g.appendChild(this.svgEl('circle', {
-                    cx: x, cy: y, r: 4,
-                    fill: color, stroke: 'var(--background)', 'stroke-width': '2',
-                    class: 'chart-point-dot',
-                }));
+                g.appendChild(
+                    this.svgEl('circle', {
+                        cx: x,
+                        cy: y,
+                        r: 14,
+                        fill: 'transparent',
+                        class: 'chart-hit',
+                    }),
+                );
+                g.appendChild(
+                    this.svgEl('circle', {
+                        cx: x,
+                        cy: y,
+                        r: 7,
+                        fill: 'none',
+                        stroke: color,
+                        'stroke-width': '2',
+                        class: 'chart-point-ring',
+                    }),
+                );
+                g.appendChild(
+                    this.svgEl('circle', {
+                        cx: x,
+                        cy: y,
+                        r: 4,
+                        fill: color,
+                        stroke: 'var(--background)',
+                        'stroke-width': '2',
+                        class: 'chart-point-dot',
+                    }),
+                );
 
                 this.onPoint(g, s, d, i);
                 svg.appendChild(g);
@@ -210,9 +247,9 @@ class Chart {
         const w = svgW - m.left - m.right;
         const h = height;
 
-        const allValues = series.flatMap(s => s.data.map(d => d.value));
+        const allValues = series.flatMap((s) => s.data.map((d) => d.value));
         const yMax = this.opts.yMax ?? Math.max(...allValues) * 1.1;
-        const labels = series[0].data.map(d => d.label);
+        const labels = series[0].data.map((d) => d.label);
         const numPts = labels.length;
         const numSeries = series.length;
 
@@ -235,8 +272,12 @@ class Chart {
                 const y = m.top + h - barH;
 
                 const rect = this.svgEl('rect', {
-                    x, y, width: barW, height: barH,
-                    fill: color, rx: 3,
+                    x,
+                    y,
+                    width: barW,
+                    height: barH,
+                    fill: color,
+                    rx: 3,
                     class: 'chart-bar chart-bar--vertical',
                 }) as SVGElement;
 
@@ -262,9 +303,9 @@ class Chart {
         const w = svgW - m.left - m.right;
         const h = height;
 
-        const allValues = series.flatMap(s => s.data.map(d => d.value));
+        const allValues = series.flatMap((s) => s.data.map((d) => d.value));
         const xMax = this.opts.yMax || Math.max(...allValues) * 1.1;
-        const labels = series[0].data.map(d => d.label);
+        const labels = series[0].data.map((d) => d.label);
         const numPts = labels.length;
         const numSeries = series.length;
 
@@ -273,17 +314,25 @@ class Chart {
         const numTicks = 5;
         for (let t = 0; t <= numTicks; t++) {
             const x = m.left + (t / numTicks) * w;
-            svg.appendChild(this.svgEl('line', {
-                x1: x, x2: x, y1: m.top, y2: m.top + h,
-                stroke: 'var(--divider)', 'stroke-width': '1',
-                'stroke-dasharray': t === 0 ? 'none' : '3 4',
-                class: 'chart-grid-line',
-            }));
+            svg.appendChild(
+                this.svgEl('line', {
+                    x1: x,
+                    x2: x,
+                    y1: m.top,
+                    y2: m.top + h,
+                    stroke: 'var(--divider)',
+                    'stroke-width': '1',
+                    'stroke-dasharray': t === 0 ? 'none' : '3 4',
+                    class: 'chart-grid-line',
+                }),
+            );
             const label = this.svgEl('text', {
-                x, y: m.top + h + 14,
-                'text-anchor': 'middle', class: 'chart-axis-label',
+                x,
+                y: m.top + h + 14,
+                'text-anchor': 'middle',
+                class: 'chart-axis-label',
             });
-            label.textContent = this.fmt(xMax * t / numTicks);
+            label.textContent = this.fmt((xMax * t) / numTicks);
             svg.appendChild(label);
         }
 
@@ -291,8 +340,10 @@ class Chart {
         labels.forEach((label, i) => {
             const y = m.top + i * groupH + groupH / 2;
             const text = this.svgEl('text', {
-                x: m.left - 10, y,
-                'text-anchor': 'end', 'dominant-baseline': 'middle',
+                x: m.left - 10,
+                y,
+                'text-anchor': 'end',
+                'dominant-baseline': 'middle',
                 class: 'chart-axis-label',
             });
             text.textContent = label;
@@ -310,8 +361,12 @@ class Chart {
                 const y = m.top + i * groupH + innerPad / 2 + si * (barH + 2);
 
                 const rect = this.svgEl('rect', {
-                    x, y, width: barW, height: barH,
-                    fill: color, rx: 3,
+                    x,
+                    y,
+                    width: barW,
+                    height: barH,
+                    fill: color,
+                    rx: 3,
                     class: 'chart-bar chart-bar--horizontal',
                 }) as SVGElement;
 
@@ -337,7 +392,7 @@ class Chart {
         const svgH = height + m.top + m.bottom;
         const cx = svgW / 2;
         const cy = svgH / 2;
-        const r  = Math.min(svgW, svgH) / 2 - Math.max(m.top, m.left) - 8;
+        const r = Math.min(svgW, svgH) / 2 - Math.max(m.top, m.left) - 8;
 
         const total = s.data.reduce((sum, d) => sum + d.value, 0);
         const svg = this.createSVG(canvas, svgW, svgH);
@@ -364,21 +419,34 @@ class Chart {
             }
 
             const { x: dx, y: dy } = this.polar(0, 0, 8, midAngle);
-            path.addEventListener('mouseenter', (e) => {
-                path.style.transform = `translate(${dx}px, ${dy}px)`;
-                this.showTooltip(e as MouseEvent,
-                    `<strong>${escapeHtml(d.label)}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`
-                );
-            }, { signal: this.abortController.signal });
+            path.addEventListener(
+                'mouseenter',
+                (e) => {
+                    path.style.transform = `translate(${dx}px, ${dy}px)`;
+                    this.showTooltip(
+                        e as MouseEvent,
+                        `<strong>${escapeHtml(d.label)}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`,
+                    );
+                },
+                { signal: this.abortController.signal },
+            );
 
-            path.addEventListener('mouseleave', () => {
-                path.style.transform = '';
-                this.hideTooltip();
-            }, { signal: this.abortController.signal });
+            path.addEventListener(
+                'mouseleave',
+                () => {
+                    path.style.transform = '';
+                    this.hideTooltip();
+                },
+                { signal: this.abortController.signal },
+            );
 
-            path.addEventListener('click', () => {
-                this.opts.onPointClick(s, d, i);
-            }, { signal: this.abortController.signal });
+            path.addEventListener(
+                'click',
+                () => {
+                    this.opts.onPointClick(s, d, i);
+                },
+                { signal: this.abortController.signal },
+            );
 
             svg.appendChild(path);
             startAngle = endAngle;
@@ -389,23 +457,32 @@ class Chart {
         }
     }
 
-    private renderHGrid(svg: SVGSVGElement, m: Margin, w: number, h: number, yMin: number, yMax: number): void {
+    private renderHGrid(svg: SVGSVGElement, m: Margin, w: number, h: number, _yMin: number, _yMax: number): void {
         const numTicks = 5;
         for (let i = 0; i <= numTicks; i++) {
             const y = m.top + h - (i / numTicks) * h;
-            svg.appendChild(this.svgEl('line', {
-                x1: m.left, x2: m.left + w, y1: y, y2: y,
-                class: i === 0 ? 'chart-axis-line' : 'chart-grid-line',
-            }));
+            svg.appendChild(
+                this.svgEl('line', {
+                    x1: m.left,
+                    x2: m.left + w,
+                    y1: y,
+                    y2: y,
+                    class: i === 0 ? 'chart-axis-line' : 'chart-grid-line',
+                }),
+            );
         }
     }
 
     private renderXAxisLine(svg: SVGSVGElement, m: Margin, w: number, h: number): void {
-        svg.appendChild(this.svgEl('line', {
-            x1: m.left, x2: m.left + w,
-            y1: m.top + h, y2: m.top + h,
-            class: 'chart-axis-line',
-        }));
+        svg.appendChild(
+            this.svgEl('line', {
+                x1: m.left,
+                x2: m.left + w,
+                y1: m.top + h,
+                y2: m.top + h,
+                class: 'chart-axis-line',
+            }),
+        );
     }
 
     private renderXLabels(svg: SVGSVGElement, m: Margin, w: number, h: number, labels: string[]): void {
@@ -414,8 +491,10 @@ class Chart {
         labels.forEach((label, i) => {
             const x = m.left + (n > 1 ? i * step : w / 2);
             const text = this.svgEl('text', {
-                x, y: m.top + h + 18,
-                'text-anchor': 'middle', class: 'chart-axis-label',
+                x,
+                y: m.top + h + 18,
+                'text-anchor': 'middle',
+                class: 'chart-axis-label',
             });
             text.textContent = label;
             svg.appendChild(text);
@@ -428,8 +507,10 @@ class Chart {
             const val = yMin + (yMax - yMin) * (i / numTicks);
             const y = m.top + h - (i / numTicks) * h;
             const text = this.svgEl('text', {
-                x: m.left - 8, y,
-                'text-anchor': 'end', 'dominant-baseline': 'middle',
+                x: m.left - 8,
+                y,
+                'text-anchor': 'end',
+                'dominant-baseline': 'middle',
                 class: 'chart-axis-label',
             });
             text.textContent = this.fmt(val);
@@ -439,9 +520,12 @@ class Chart {
 
     private buildPath(pts: Point[]): string {
         switch (this.opts.curve) {
-            case 'linear': return this.linearPath(pts);
-            case 'step':   return this.stepPath(pts);
-            default:       return this.smoothPath(pts);
+            case 'linear':
+                return this.linearPath(pts);
+            case 'step':
+                return this.stepPath(pts);
+            default:
+                return this.smoothPath(pts);
         }
     }
 
@@ -483,13 +567,13 @@ class Chart {
 
     private arcPath(cx: number, cy: number, r: number, startDeg: number, endDeg: number): string {
         const start = this.polar(cx, cy, r, startDeg);
-        const end   = this.polar(cx, cy, r, endDeg);
-        const large = (endDeg - startDeg) > 180 ? 1 : 0;
+        const end = this.polar(cx, cy, r, endDeg);
+        const large = endDeg - startDeg > 180 ? 1 : 0;
         return `M ${cx} ${cy} L ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)} Z`;
     }
 
     private polar(cx: number, cy: number, r: number, deg: number): Point {
-        const rad = deg * Math.PI / 180;
+        const rad = (deg * Math.PI) / 180;
         return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
     }
 
@@ -555,7 +639,7 @@ class Chart {
         if (y < 0) y = e.clientY + 14;
         if (y + tt.offsetHeight > vh) y = vh - tt.offsetHeight - 8;
         tt.style.left = `${x}px`;
-        tt.style.top  = `${y}px`;
+        tt.style.top = `${y}px`;
     }
 
     private hideTooltip(): void {
@@ -564,9 +648,13 @@ class Chart {
 
     private onPoint(g: SVGElement, s: ChartSeries, d: ChartDataPoint, i: number): void {
         const sig = { signal: this.abortController.signal };
-        g.addEventListener('mouseenter', (e) => {
-            this.showTooltip(e as MouseEvent, `<strong>${escapeHtml(d.label)}</strong>${escapeHtml(s.name)}: ${this.fmt(d.value)}`);
-        }, sig);
+        g.addEventListener(
+            'mouseenter',
+            (e) => {
+                this.showTooltip(e as MouseEvent, `<strong>${escapeHtml(d.label)}</strong>${escapeHtml(s.name)}: ${this.fmt(d.value)}`);
+            },
+            sig,
+        );
         g.addEventListener('mousemove', (e) => this.moveTooltip(e as MouseEvent), sig);
         g.addEventListener('mouseleave', () => this.hideTooltip(), sig);
         g.addEventListener('click', () => this.opts.onPointClick(s, d, i), sig);
@@ -575,9 +663,13 @@ class Chart {
     private onBar(rect: SVGElement, s: ChartSeries, d: ChartDataPoint, i: number): void {
         const sig = { signal: this.abortController.signal };
         rect.style.cursor = 'pointer';
-        rect.addEventListener('mouseenter', (e) => {
-            this.showTooltip(e as MouseEvent, `<strong>${escapeHtml(d.label)}</strong>${escapeHtml(s.name)}: ${this.fmt(d.value)}`);
-        }, sig);
+        rect.addEventListener(
+            'mouseenter',
+            (e) => {
+                this.showTooltip(e as MouseEvent, `<strong>${escapeHtml(d.label)}</strong>${escapeHtml(s.name)}: ${this.fmt(d.value)}`);
+            },
+            sig,
+        );
         rect.addEventListener('mousemove', (e) => this.moveTooltip(e as MouseEvent), sig);
         rect.addEventListener('mouseleave', () => this.hideTooltip(), sig);
         rect.addEventListener('click', () => this.opts.onPointClick(s, d, i), sig);
@@ -585,11 +677,10 @@ class Chart {
 
     private resolveColors(): void {
         const style = getComputedStyle(this.container);
-        this.colors = (this.opts.type === 'pie' ? this.opts.series[0]?.data ?? [] : this.opts.series)
-            .map((_, i) => {
-                const css = style.getPropertyValue(`--chart-color-${i + 1}`).trim();
-                return css || FALLBACK_COLORS[i % FALLBACK_COLORS.length];
-            });
+        this.colors = (this.opts.type === 'pie' ? (this.opts.series[0]?.data ?? []) : this.opts.series).map((_, i) => {
+            const css = style.getPropertyValue(`--chart-color-${i + 1}`).trim();
+            return css || FALLBACK_COLORS[i % FALLBACK_COLORS.length];
+        });
 
         if (this.opts.type !== 'pie') {
             this.opts.series.forEach((s, i) => {
@@ -614,10 +705,7 @@ class Chart {
         return svg;
     }
 
-    private svgEl<K extends keyof SVGElementTagNameMap>(
-        tag: K,
-        attrs: Record<string, string | number> = {}
-    ): SVGElementTagNameMap[K] {
+    private svgEl<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number> = {}): SVGElementTagNameMap[K] {
         const el = document.createElementNS(SVG_NS, tag);
         for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, String(v));
         return el;
@@ -625,8 +713,8 @@ class Chart {
 
     private fmt(v: number): string {
         if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
-        if (v >= 1_000)     return `${(v / 1_000).toFixed(1)}K`;
-        return v % 1 === 0  ? String(Math.round(v)) : v.toFixed(1);
+        if (v >= 1_000) return `${(v / 1_000).toFixed(1)}K`;
+        return v % 1 === 0 ? String(Math.round(v)) : v.toFixed(1);
     }
 
     private attachResizeObserver(): void {

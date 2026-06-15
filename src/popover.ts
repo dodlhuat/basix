@@ -3,22 +3,22 @@ import type { Placement } from './position.js';
 import { sanitizeHtml } from './utils.js';
 
 type PopoverPlacement = Placement | 'auto';
-type PopoverAlign     = 'start' | 'center' | 'end';
-type PopoverTrigger   = 'click' | 'hover';
+type PopoverAlign = 'start' | 'center' | 'end';
+type PopoverTrigger = 'click' | 'hover';
 
 /** Configuration options for a Popover instance. */
 interface PopoverOptions {
-    content:              string;
-    placement?:           PopoverPlacement;
-    align?:               PopoverAlign;
-    offset?:              number;
-    arrow?:               boolean;
-    triggerMode?:         PopoverTrigger;
+    content: string;
+    placement?: PopoverPlacement;
+    align?: PopoverAlign;
+    offset?: number;
+    arrow?: boolean;
+    triggerMode?: PopoverTrigger;
     closeOnOutsideClick?: boolean;
-    closeOnEscape?:       boolean;
-    className?:           string;
-    onOpen?:              () => void;
-    onClose?:             () => void;
+    closeOnEscape?: boolean;
+    className?: string;
+    onOpen?: () => void;
+    onClose?: () => void;
 }
 
 const ARROW_SIZE = 6;
@@ -34,31 +34,31 @@ class Popover {
     private _isOpen = false;
     private hoverTimer: number | null = null;
 
-    constructor(triggerEl: HTMLElement | string, options: PopoverOptions) {
-        const el = typeof triggerEl === 'string'
-            ? document.querySelector<HTMLElement>(triggerEl)
-            : triggerEl;
+    public constructor(triggerEl: HTMLElement | string, options: PopoverOptions) {
+        const el = typeof triggerEl === 'string' ? document.querySelector<HTMLElement>(triggerEl) : triggerEl;
         if (!el) throw new Error('Popover: trigger element not found');
 
         this.trigger = el;
         this.opts = {
-            content:              options.content,
-            placement:            options.placement            ?? 'bottom',
-            align:                options.align                ?? 'center',
-            offset:               options.offset               ?? 8,
-            arrow:                options.arrow                ?? true,
-            triggerMode:          options.triggerMode          ?? 'click',
-            closeOnOutsideClick:  options.closeOnOutsideClick  ?? true,
-            closeOnEscape:        options.closeOnEscape        ?? true,
-            className:            options.className            ?? '',
-            onOpen:               options.onOpen               ?? (() => {}),
-            onClose:              options.onClose              ?? (() => {}),
+            content: options.content,
+            placement: options.placement ?? 'bottom',
+            align: options.align ?? 'center',
+            offset: options.offset ?? 8,
+            arrow: options.arrow ?? true,
+            triggerMode: options.triggerMode ?? 'click',
+            closeOnOutsideClick: options.closeOnOutsideClick ?? true,
+            closeOnEscape: options.closeOnEscape ?? true,
+            className: options.className ?? '',
+            onOpen: options.onOpen ?? (() => {}),
+            onClose: options.onClose ?? (() => {}),
         };
 
         this.attachTrigger();
     }
 
-    get isOpen(): boolean { return this._isOpen; }
+    public get isOpen(): boolean {
+        return this._isOpen;
+    }
 
     public open(): void {
         if (this._isOpen) return;
@@ -74,10 +74,8 @@ class Popover {
             Popover.openPopovers.add(this);
             this.opts.onOpen();
 
-            if (this.opts.closeOnOutsideClick)
-                document.addEventListener('pointerdown', this.onOutsideClick, { capture: true });
-            if (this.opts.closeOnEscape)
-                document.addEventListener('keydown', this.onEscape);
+            if (this.opts.closeOnOutsideClick) document.addEventListener('pointerdown', this.onOutsideClick, { capture: true });
+            if (this.opts.closeOnEscape) document.addEventListener('keydown', this.onEscape);
         });
     }
 
@@ -100,7 +98,13 @@ class Popover {
         this.popoverEl = null;
     }
 
-    public toggle(): void { this._isOpen ? this.close() : this.open(); }
+    public toggle(): void {
+        if (this._isOpen) {
+            this.close();
+        } else {
+            this.open();
+        }
+    }
 
     public destroy(): void {
         this.close();
@@ -108,40 +112,38 @@ class Popover {
     }
 
     public static closeAll(): void {
-        Popover.openPopovers.forEach(p => p.close());
+        Popover.openPopovers.forEach((p) => p.close());
     }
 
     /** Declarative init — reads [data-popover="#selector"] attributes */
     public static initAll(): void {
-        document.querySelectorAll<HTMLElement>('[data-popover]').forEach(trigger => {
+        document.querySelectorAll<HTMLElement>('[data-popover]').forEach((trigger) => {
             const sel = trigger.getAttribute('data-popover');
             if (!sel) return;
             const contentEl = document.querySelector(sel);
             if (!contentEl) return;
 
             new Popover(trigger, {
-                content:    (contentEl as HTMLElement).innerHTML,
-                placement:  (trigger.getAttribute('data-popover-placement') as PopoverPlacement) ?? 'bottom',
-                align:      (trigger.getAttribute('data-popover-align')     as PopoverAlign)     ?? 'center',
-                triggerMode:(trigger.getAttribute('data-popover-trigger')   as PopoverTrigger)   ?? 'click',
-                arrow:       trigger.getAttribute('data-popover-arrow')     !== 'false',
+                content: (contentEl as HTMLElement).innerHTML,
+                placement: (trigger.getAttribute('data-popover-placement') as PopoverPlacement) ?? 'bottom',
+                align: (trigger.getAttribute('data-popover-align') as PopoverAlign) ?? 'center',
+                triggerMode: (trigger.getAttribute('data-popover-trigger') as PopoverTrigger) ?? 'click',
+                arrow: trigger.getAttribute('data-popover-arrow') !== 'false',
             });
         });
     }
 
     private buildEl(): HTMLElement {
         const id = `popover-${++Popover.idCounter}`;
-        const el  = document.createElement('div');
-        el.className   = ['popover', this.opts.className].filter(Boolean).join(' ');
-        el.id          = id;
+        const el = document.createElement('div');
+        el.className = ['popover', this.opts.className].filter(Boolean).join(' ');
+        el.id = id;
         el.setAttribute('role', 'dialog');
         el.setAttribute('data-arrow', String(this.opts.arrow));
 
         const hasStructure = /class="popover-(header|body|footer|menu)/.test(this.opts.content);
         const safeContent = sanitizeHtml(this.opts.content);
-        el.innerHTML = hasStructure
-            ? safeContent
-            : `<div class="popover-body">${safeContent}</div>`;
+        el.innerHTML = hasStructure ? safeContent : `<div class="popover-body">${safeContent}</div>`;
 
         this.trigger.setAttribute('aria-expanded', 'true');
         this.trigger.setAttribute('aria-controls', id);
@@ -152,45 +154,42 @@ class Popover {
     private reposition(): void {
         if (!this.popoverEl) return;
 
-        const { left, top, placement, arrowOffset } = computePosition(
-            this.trigger.getBoundingClientRect(),
-            this.popoverEl.getBoundingClientRect(),
-            {
-                placement: this.opts.placement,
-                align:     this.opts.align,
-                offset:    this.opts.offset,
-                arrowSize: this.opts.arrow ? ARROW_SIZE : undefined,
-            }
-        );
+        const { left, top, placement, arrowOffset } = computePosition(this.trigger.getBoundingClientRect(), this.popoverEl.getBoundingClientRect(), {
+            placement: this.opts.placement,
+            align: this.opts.align,
+            offset: this.opts.offset,
+            arrowSize: this.opts.arrow ? ARROW_SIZE : undefined,
+        });
 
-        if (arrowOffset !== undefined)
-            this.popoverEl.style.setProperty('--popover-arrow-offset', `${arrowOffset}px`);
+        if (arrowOffset !== undefined) this.popoverEl.style.setProperty('--popover-arrow-offset', `${arrowOffset}px`);
 
         this.popoverEl.setAttribute('data-placement', placement);
         this.popoverEl.setAttribute('data-align', this.opts.align);
         this.popoverEl.style.left = `${left}px`;
-        this.popoverEl.style.top  = `${top}px`;
+        this.popoverEl.style.top = `${top}px`;
     }
 
-    private onClick = (): void => { this.toggle(); };
+    private onClick = (): void => {
+        this.toggle();
+    };
 
     private onMouseEnter = (): void => {
         if (this.hoverTimer !== null) clearTimeout(this.hoverTimer);
         this.open();
-    }
+    };
 
     private onMouseLeave = (): void => {
         this.hoverTimer = window.setTimeout(() => this.close(), 120);
-    }
+    };
 
     private onOutsideClick = (e: Event): void => {
         const t = e.target as Node;
         if (!this.popoverEl?.contains(t) && !this.trigger.contains(t)) this.close();
-    }
+    };
 
     private onEscape = (e: KeyboardEvent): void => {
         if (e.key === 'Escape') this.close();
-    }
+    };
 
     private attachTrigger(): void {
         if (this.opts.triggerMode === 'click') {

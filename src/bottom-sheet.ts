@@ -28,14 +28,13 @@ class BottomSheet {
     private currentDragY = 0;
     private isDragging = false;
 
-    constructor(options: BottomSheetOptions) {
+    public constructor(options: BottomSheetOptions) {
         this.content = options.content;
         this.header = options.header;
         this.footer = options.footer;
         this.closeable = options.closeable ?? true;
         this.snapHeight = options.snapHeight ?? 'auto';
         this.onClose = options.onClose;
-
     }
 
     public show(): void {
@@ -104,7 +103,7 @@ class BottomSheet {
             wrapper.remove();
             this.onClose?.();
         }, 420);
-    }
+    };
 
     public snapTo(height: 'auto' | 'half' | 'full'): void {
         if (!this.sheet) return;
@@ -119,13 +118,13 @@ class BottomSheet {
 
     private handleEscape = (e: KeyboardEvent): void => {
         if (e.key === 'Escape') this.hide();
-    }
+    };
 
     private handleBackdropClick = (e: Event): void => {
         if ((e.target as HTMLElement)?.classList.contains('bottom-sheet-backdrop')) {
             this.hide();
         }
-    }
+    };
 
     private handleTouchStart = (e: TouchEvent): void => {
         this.dragStartY = e.touches[0].clientY;
@@ -135,7 +134,7 @@ class BottomSheet {
         if (this.sheet) {
             this.sheet.style.transition = 'none';
         }
-    }
+    };
 
     private handleTouchMove = (e: TouchEvent): void => {
         if (!this.isDragging || !this.sheet) return;
@@ -154,7 +153,7 @@ class BottomSheet {
         const translateX = isDesktop ? '-50%' : '0';
         this.sheet.style.transform = `translateX(${translateX}) translateY(${this.currentDragY}px)`;
         e.preventDefault();
-    }
+    };
 
     private handleTouchEnd = (): void => {
         if (!this.isDragging || !this.sheet) return;
@@ -168,7 +167,7 @@ class BottomSheet {
             this.sheet.style.transition = '';
             this.sheet.style.transform = '';
         }
-    }
+    };
 
     private updateScrollMask(): void {
         if (!this.body) return;
@@ -180,20 +179,17 @@ class BottomSheet {
     private buildTemplate(): string {
         const snapClass = this.snapHeight !== 'auto' ? ` snap-${this.snapHeight}` : '';
 
-        const closeButton = this.closeable
-            ? `<div class="icon icon-close close"></div>`
-            : '';
+        const closeButton = this.closeable ? `<div class="icon icon-close close"></div>` : '';
 
-        const headerHtml = this.header !== undefined
-            ? `<div class="bottom-sheet-header has-divider">
+        const headerHtml =
+            this.header !== undefined
+                ? `<div class="bottom-sheet-header has-divider">
                 <span class="title">${sanitizeHtml(this.header)}</span>
                 ${closeButton}
                </div>`
-            : '';
+                : '';
 
-        const footerHtml = this.footer !== undefined
-            ? `<div class="bottom-sheet-footer">${sanitizeHtml(this.footer)}</div>`
-            : '';
+        const footerHtml = this.footer !== undefined ? `<div class="bottom-sheet-footer">${sanitizeHtml(this.footer)}</div>` : '';
 
         return `
             <div class="bottom-sheet${snapClass}">

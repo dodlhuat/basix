@@ -48,10 +48,8 @@ class VirtualDropdown {
 
     private abortController = new AbortController();
 
-    constructor(config: VirtualDropdownConfig) {
-        const containerElement = typeof config.container === 'string'
-            ? document.querySelector<HTMLElement>(config.container)
-            : config.container;
+    public constructor(config: VirtualDropdownConfig) {
+        const containerElement = typeof config.container === 'string' ? document.querySelector<HTMLElement>(config.container) : config.container;
 
         if (!containerElement) {
             throw new Error('Container element not found');
@@ -130,46 +128,70 @@ class VirtualDropdown {
 
         this.trigger.addEventListener('click', () => this.toggle(), sig);
 
-        this.trigger.addEventListener('keydown', (e: KeyboardEvent) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.toggle();
-            } else if (e.key === 'Escape' && this.isOpen) {
-                this.close();
-            }
-        }, sig);
+        this.trigger.addEventListener(
+            'keydown',
+            (e: KeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.toggle();
+                } else if (e.key === 'Escape' && this.isOpen) {
+                    this.close();
+                }
+            },
+            sig,
+        );
 
         // Close when clicking outside — popover="manual" does not auto-dismiss.
-        document.addEventListener('click', (e: MouseEvent) => {
-            if (!this.container.contains(e.target as Node) && !this.menu.contains(e.target as Node)) {
-                this.close();
-            }
-        }, sig);
+        document.addEventListener(
+            'click',
+            (e: MouseEvent) => {
+                if (!this.container.contains(e.target as Node) && !this.menu.contains(e.target as Node)) {
+                    this.close();
+                }
+            },
+            sig,
+        );
 
         if (this.searchable && this.searchInput) {
-            this.searchInput.addEventListener('input', (e: Event) => {
-                this.handleSearch((e.target as HTMLInputElement).value);
-            }, sig);
+            this.searchInput.addEventListener(
+                'input',
+                (e: Event) => {
+                    this.handleSearch((e.target as HTMLInputElement).value);
+                },
+                sig,
+            );
         }
 
-        this.listWrapper.addEventListener('scroll', (e: Event) => {
-            this.scrollTop = (e.target as HTMLElement).scrollTop;
-            this.renderList();
-        }, sig);
+        this.listWrapper.addEventListener(
+            'scroll',
+            (e: Event) => {
+                this.scrollTop = (e.target as HTMLElement).scrollTop;
+                this.renderList();
+            },
+            sig,
+        );
 
         // Sync state if the browser closes the popover externally.
-        this.menu.addEventListener('toggle', (e: Event) => {
-            const te = e as ToggleEvent;
-            if (te.newState === 'closed' && this.isOpen) {
-                this.isOpen = false;
-                this.container.classList.remove('open');
-                this.trigger.setAttribute('aria-expanded', 'false');
-            }
-        }, sig);
+        this.menu.addEventListener(
+            'toggle',
+            (e: Event) => {
+                const te = e as ToggleEvent;
+                if (te.newState === 'closed' && this.isOpen) {
+                    this.isOpen = false;
+                    this.container.classList.remove('open');
+                    this.trigger.setAttribute('aria-expanded', 'false');
+                }
+            },
+            sig,
+        );
     }
 
     private toggle(): void {
-        this.isOpen ? this.close() : this.open();
+        if (this.isOpen) {
+            this.close();
+        } else {
+            this.open();
+        }
     }
 
     private open(): void {
@@ -196,9 +218,7 @@ class VirtualDropdown {
             this.filteredOptions = [...this.options];
         } else {
             const lowerQuery = query.toLowerCase();
-            this.filteredOptions = this.options.filter(opt =>
-                opt.label.toLowerCase().includes(lowerQuery)
-            );
+            this.filteredOptions = this.options.filter((opt) => opt.label.toLowerCase().includes(lowerQuery));
         }
 
         this.listWrapper.scrollTop = 0;
@@ -213,10 +233,7 @@ class VirtualDropdown {
         const startIdx = Math.floor(this.scrollTop / this.itemHeight);
         const buffer = 5;
         const renderStart = Math.max(0, startIdx - buffer);
-        const renderEnd = Math.min(
-            this.filteredOptions.length,
-            startIdx + this.renderLimit + buffer
-        );
+        const renderEnd = Math.min(this.filteredOptions.length, startIdx + this.renderLimit + buffer);
 
         const offsetY = renderStart * this.itemHeight;
         this.content.style.transform = `translateY(${offsetY}px)`;
@@ -242,7 +259,7 @@ class VirtualDropdown {
             })
             .join('');
 
-        this.content.querySelectorAll('.dropdown-item').forEach(item => {
+        this.content.querySelectorAll('.dropdown-item').forEach((item) => {
             const handleItemClick = (e: Event): void => {
                 e.stopPropagation();
                 const value = (item as HTMLElement).dataset.value;
@@ -267,9 +284,7 @@ class VirtualDropdown {
     }
 
     private handleSelect(valueString: string): void {
-        const selectedOpt = this.filteredOptions.find(
-            o => String(o.value) === valueString
-        );
+        const selectedOpt = this.filteredOptions.find((o) => String(o.value) === valueString);
 
         if (!selectedOpt) return;
 
@@ -307,7 +322,7 @@ class VirtualDropdown {
                 this.triggerText.textContent = `${count} item${count !== 1 ? 's' : ''} selected`;
             } else {
                 const val = Array.from(this.selectedValues)[0];
-                const opt = this.options.find(o => o.value === val);
+                const opt = this.options.find((o) => o.value === val);
                 this.triggerText.textContent = opt ? opt.label : String(val);
             }
         }
@@ -319,8 +334,8 @@ class VirtualDropdown {
 
     public setValue(values: Array<string | number>): void {
         this.selectedValues.clear();
-        values.forEach(val => {
-            if (this.options.some(opt => opt.value === val)) {
+        values.forEach((val) => {
+            if (this.options.some((opt) => opt.value === val)) {
                 this.selectedValues.add(val);
             }
         });

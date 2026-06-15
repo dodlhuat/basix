@@ -25,11 +25,7 @@ class ContextMenu {
     private abortController = new AbortController();
     private spritePath: string | null;
 
-    constructor(
-        selectorOrElement: string | HTMLElement | HTMLElement[],
-        items: ContextMenuInput[],
-        options: ContextMenuOptions = {}
-    ) {
+    public constructor(selectorOrElement: string | HTMLElement | HTMLElement[], items: ContextMenuInput[], options: ContextMenuOptions = {}) {
         this.items = items;
         this.spritePath = options.spritePath ?? null;
 
@@ -48,32 +44,59 @@ class ContextMenu {
         const { signal } = this.abortController;
 
         this.targets.forEach((target) => {
-            target.addEventListener('contextmenu', (e: MouseEvent) => {
-                e.preventDefault();
-                this.currentTarget = target;
-                this.open(e.clientX, e.clientY);
-            }, { signal });
+            target.addEventListener(
+                'contextmenu',
+                (e: MouseEvent) => {
+                    e.preventDefault();
+                    this.currentTarget = target;
+                    this.open(e.clientX, e.clientY);
+                },
+                { signal },
+            );
         });
 
         document.addEventListener('click', () => this.close(), { signal });
 
-        document.addEventListener('contextmenu', (e: MouseEvent) => {
-            if (this.menuEl && !this.menuEl.contains(e.target as Node)) {
-                this.close();
-            }
-        }, { signal, capture: true });
+        document.addEventListener(
+            'contextmenu',
+            (e: MouseEvent) => {
+                if (this.menuEl && !this.menuEl.contains(e.target as Node)) {
+                    this.close();
+                }
+            },
+            { signal, capture: true },
+        );
 
-        document.addEventListener('keydown', (e: KeyboardEvent) => {
-            if (!this.menuEl) return;
-            if (e.key === 'Escape')    { this.close(); }
-            if (e.key === 'ArrowDown') { e.preventDefault(); this.moveFocus(1); }
-            if (e.key === 'ArrowUp')   { e.preventDefault(); this.moveFocus(-1); }
-            if (e.key === 'Enter')     { e.preventDefault(); this.activateFocused(); }
-        }, { signal });
+        document.addEventListener(
+            'keydown',
+            (e: KeyboardEvent) => {
+                if (!this.menuEl) return;
+                if (e.key === 'Escape') {
+                    this.close();
+                }
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    this.moveFocus(1);
+                }
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    this.moveFocus(-1);
+                }
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.activateFocused();
+                }
+            },
+            { signal },
+        );
 
-        window.addEventListener('scroll', (e: Event) => {
-            if (!this.menuEl?.contains(e.target as Node)) this.close();
-        }, { signal, capture: true });
+        window.addEventListener(
+            'scroll',
+            (e: Event) => {
+                if (!this.menuEl?.contains(e.target as Node)) this.close();
+            },
+            { signal, capture: true },
+        );
 
         window.addEventListener('resize', () => this.close(), { signal });
     }
@@ -90,13 +113,13 @@ class ContextMenu {
         const vh = window.innerHeight;
 
         const left = x + w > vw ? vw - w - 8 : x;
-        const top  = y + h > vh ? vh - h - 8 : y;
+        const top = y + h > vh ? vh - h - 8 : y;
 
         const originX = x + w > vw ? 'right' : 'left';
         const originY = y + h > vh ? 'bottom' : 'top';
 
         this.menuEl.style.left = `${left}px`;
-        this.menuEl.style.top  = `${top}px`;
+        this.menuEl.style.top = `${top}px`;
         this.menuEl.style.transformOrigin = `${originY} ${originX}`;
 
         requestAnimationFrame(() => this.menuEl?.classList.add('is-visible'));
@@ -143,9 +166,9 @@ class ContextMenu {
         const li = document.createElement('li');
         li.className = 'context-menu-item';
 
-        if (def.disabled)    li.classList.add('is-disabled');
+        if (def.disabled) li.classList.add('is-disabled');
         if (def.destructive) li.classList.add('is-destructive');
-        if (def.submenu)     li.classList.add('has-submenu');
+        if (def.submenu) li.classList.add('has-submenu');
 
         const iconWrap = document.createElement('span');
         iconWrap.className = 'context-menu-icon';
@@ -190,7 +213,10 @@ class ContextMenu {
             let closeTimer: ReturnType<typeof setTimeout> | null = null;
 
             const openSub = () => {
-                if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+                if (closeTimer) {
+                    clearTimeout(closeTimer);
+                    closeTimer = null;
+                }
                 this.closeAllSubmenus(li.closest<HTMLElement>('.context-menu')!);
                 li.classList.toggle('submenu-flip', shouldFlip());
                 li.classList.add('is-active');
@@ -203,7 +229,10 @@ class ContextMenu {
             li.addEventListener('mouseenter', openSub);
             li.addEventListener('mouseleave', closeSub);
             submenuEl.addEventListener('mouseenter', () => {
-                if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+                if (closeTimer) {
+                    clearTimeout(closeTimer);
+                    closeTimer = null;
+                }
             });
             submenuEl.addEventListener('mouseleave', closeSub);
         } else if (!def.disabled) {
@@ -225,12 +254,8 @@ class ContextMenu {
 
     private getFocusableItems(): HTMLElement[] {
         if (!this.menuEl) return [];
-        return Array.from(
-            this.menuEl.children
-        ).filter(
-            (el): el is HTMLElement =>
-                el.classList.contains('context-menu-item') &&
-                !el.classList.contains('is-disabled')
+        return Array.from(this.menuEl.children).filter(
+            (el): el is HTMLElement => el.classList.contains('context-menu-item') && !el.classList.contains('is-disabled'),
         ) as HTMLElement[];
     }
 
@@ -246,9 +271,7 @@ class ContextMenu {
     }
 
     private activateFocused(): void {
-        this.menuEl
-            ?.querySelector<HTMLElement>('.context-menu-item.is-focused')
-            ?.click();
+        this.menuEl?.querySelector<HTMLElement>('.context-menu-item.is-focused')?.click();
     }
 
     public destroy(): void {

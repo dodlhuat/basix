@@ -39,10 +39,8 @@ class FileUploader {
     private allowedTypes?: string[];
     private abortControllers: Map<string, () => void> = new Map();
 
-    constructor(elementOrSelector: string | HTMLElement, config: FileUploaderConfig = {}) {
-        const container = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLElement>(elementOrSelector)
-            : elementOrSelector;
+    public constructor(elementOrSelector: string | HTMLElement, config: FileUploaderConfig = {}) {
+        const container = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
 
         if (!container) {
             throw new Error(`FileUploader: Element not found for selector "${elementOrSelector}"`);
@@ -81,15 +79,15 @@ class FileUploader {
     }
 
     private setupEventListeners(): void {
-        (['dragenter', 'dragover', 'dragleave', 'drop'] as const).forEach(event => {
+        (['dragenter', 'dragover', 'dragleave', 'drop'] as const).forEach((event) => {
             this.dropZone.addEventListener(event, this.preventDefaults);
         });
 
-        (['dragenter', 'dragover'] as const).forEach(event => {
+        (['dragenter', 'dragover'] as const).forEach((event) => {
             this.dropZone.addEventListener(event, this.handleDragEnter);
         });
 
-        (['dragleave', 'drop'] as const).forEach(event => {
+        (['dragleave', 'drop'] as const).forEach((event) => {
             this.dropZone.addEventListener(event, this.handleDragLeave);
         });
 
@@ -102,26 +100,26 @@ class FileUploader {
     private preventDefaults = (e: Event): void => {
         e.preventDefault();
         e.stopPropagation();
-    }
+    };
 
     private handleDragEnter = (): void => {
         this.dropZone.classList.add('drag-over');
-    }
+    };
 
     private handleDragLeave = (): void => {
         this.dropZone.classList.remove('drag-over');
-    }
+    };
 
     private handleDrop = (e: DragEvent): void => {
         const droppedFiles = e.dataTransfer?.files;
         if (droppedFiles) {
             this.handleFiles(droppedFiles);
         }
-    }
+    };
 
     private handleDropZoneClick = (): void => {
         this.fileInput.click();
-    }
+    };
 
     private handleFileInputChange = (e: Event): void => {
         const target = e.target as HTMLInputElement;
@@ -129,7 +127,7 @@ class FileUploader {
             this.handleFiles(target.files);
             target.value = '';
         }
-    }
+    };
 
     private handleUploadClick = async (): Promise<void> => {
         if (this.files.size === 0) return;
@@ -137,9 +135,7 @@ class FileUploader {
         this.uploadBtn.disabled = true;
         this.uploadBtn.textContent = 'Uploading...';
 
-        const uploadPromises = Array.from(this.files.values()).map(({ file, element }) =>
-            this.uploadFile(file, element)
-        );
+        const uploadPromises = Array.from(this.files.values()).map(({ file, element }) => this.uploadFile(file, element));
 
         const results = await Promise.allSettled(uploadPromises);
 
@@ -154,7 +150,7 @@ class FileUploader {
     };
 
     private handleFiles(fileList: FileList): void {
-        Array.from(fileList).forEach(file => {
+        Array.from(fileList).forEach((file) => {
             const key = this.fileKey(file);
             if (this.validateFile(file) && !this.files.has(key)) {
                 const element = this.addFileToUI(file);
@@ -166,18 +162,22 @@ class FileUploader {
 
     private validateFile(file: File): boolean {
         if (this.maxFileSize && file.size > this.maxFileSize) {
-            this.container.dispatchEvent(new CustomEvent<FileValidationErrorDetail>('file-validation-error', {
-                detail: { file, reason: 'size' },
-                bubbles: true,
-            }));
+            this.container.dispatchEvent(
+                new CustomEvent<FileValidationErrorDetail>('file-validation-error', {
+                    detail: { file, reason: 'size' },
+                    bubbles: true,
+                }),
+            );
             return false;
         }
 
         if (this.allowedTypes && !this.allowedTypes.includes(file.type)) {
-            this.container.dispatchEvent(new CustomEvent<FileValidationErrorDetail>('file-validation-error', {
-                detail: { file, reason: 'type' },
-                bubbles: true,
-            }));
+            this.container.dispatchEvent(
+                new CustomEvent<FileValidationErrorDetail>('file-validation-error', {
+                    detail: { file, reason: 'type' },
+                    bubbles: true,
+                }),
+            );
             return false;
         }
 
@@ -318,17 +318,17 @@ class FileUploader {
 
     private updateUploadButton(): void {
         this.uploadBtn.disabled = this.files.size === 0;
-        this.uploadBtn.textContent = this.files.size > 0
-            ? `Upload ${this.files.size} File${this.files.size === 1 ? '' : 's'}`
-            : 'Upload Files';
+        this.uploadBtn.textContent = this.files.size > 0 ? `Upload ${this.files.size} File${this.files.size === 1 ? '' : 's'}` : 'Upload Files';
     }
 
     private dispatchUploadCompletedEvent(results: PromiseSettledResult<unknown>[]): void {
         const files = Array.from(this.files.values()).map(({ file }) => file);
-        this.container.dispatchEvent(new CustomEvent<UploadCompletedDetail>('upload-completed', {
-            detail: { fileCount: this.files.size, files, results },
-            bubbles: true,
-        }));
+        this.container.dispatchEvent(
+            new CustomEvent<UploadCompletedDetail>('upload-completed', {
+                detail: { fileCount: this.files.size, files, results },
+                bubbles: true,
+            }),
+        );
     }
 
     private formatSize(bytes: number): string {
@@ -340,16 +340,16 @@ class FileUploader {
     }
 
     public destroy(): void {
-        this.abortControllers.forEach(abort => abort());
+        this.abortControllers.forEach((abort) => abort());
         this.abortControllers.clear();
 
-        (['dragenter', 'dragover', 'dragleave', 'drop'] as const).forEach(event => {
+        (['dragenter', 'dragover', 'dragleave', 'drop'] as const).forEach((event) => {
             this.dropZone.removeEventListener(event, this.preventDefaults);
         });
-        (['dragenter', 'dragover'] as const).forEach(event => {
+        (['dragenter', 'dragover'] as const).forEach((event) => {
             this.dropZone.removeEventListener(event, this.handleDragEnter);
         });
-        (['dragleave', 'drop'] as const).forEach(event => {
+        (['dragleave', 'drop'] as const).forEach((event) => {
             this.dropZone.removeEventListener(event, this.handleDragLeave);
         });
         this.dropZone.removeEventListener('drop', this.handleDrop);

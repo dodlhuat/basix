@@ -21,14 +21,9 @@ class Toast {
     private toastElement: HTMLDivElement | null = null;
     private timerId: number | null = null;
 
-    constructor(options: ToastOptions);
-    constructor(content: string, header?: string, type?: ToastType, closeable?: boolean);
-    constructor(
-        contentOrOptions: string | ToastOptions,
-        header: string = '',
-        type?: ToastType,
-        closeable: boolean = true
-    ) {
+    public constructor(options: ToastOptions);
+    public constructor(content: string, header?: string, type?: ToastType, closeable?: boolean);
+    public constructor(contentOrOptions: string | ToastOptions, header: string = '', type?: ToastType, closeable: boolean = true) {
         if (typeof contentOrOptions === 'object') {
             this.content = contentOrOptions.content;
             this.header = contentOrOptions.header ?? '';
@@ -85,7 +80,7 @@ class Toast {
             this.toastElement?.remove();
             this.toastElement = null;
         }, 150);
-    }
+    };
 
     private startTimer(ms: number, elapsed: number = 0): void {
         const stepSize = 250;

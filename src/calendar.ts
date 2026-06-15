@@ -89,9 +89,7 @@ const CalendarLogic = {
     },
 
     isSameDay(a: Date, b: Date): boolean {
-        return a.getFullYear() === b.getFullYear()
-            && a.getMonth() === b.getMonth()
-            && a.getDate() === b.getDate();
+        return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
     },
 
     isToday(date: Date): boolean {
@@ -113,27 +111,31 @@ const CalendarLogic = {
     },
 
     getEventsForDay(events: CalendarEvent[], day: Date): CalendarEvent[] {
-        const dayStart = new Date(day); dayStart.setHours(0, 0, 0, 0);
-        const dayEnd   = new Date(day); dayEnd.setHours(23, 59, 59, 999);
-        return events.filter(e => e.start <= dayEnd && e.end >= dayStart);
+        const dayStart = new Date(day);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(day);
+        dayEnd.setHours(23, 59, 59, 999);
+        return events.filter((e) => e.start <= dayEnd && e.end >= dayStart);
     },
 
     getAllDayEvents(events: CalendarEvent[], day: Date): CalendarEvent[] {
-        return CalendarLogic.getEventsForDay(events, day).filter(e => e.allDay);
+        return CalendarLogic.getEventsForDay(events, day).filter((e) => e.allDay);
     },
 
     getTimedEvents(events: CalendarEvent[], day: Date): CalendarEvent[] {
-        return CalendarLogic.getEventsForDay(events, day).filter(e => !e.allDay);
+        return CalendarLogic.getEventsForDay(events, day).filter((e) => !e.allDay);
     },
 
     getEventPosition(event: CalendarEvent, day: Date): { top: number; height: number } {
-        const dayStart = new Date(day); dayStart.setHours(0, 0, 0, 0);
-        const dayEnd   = new Date(day); dayEnd.setHours(24, 0, 0, 0);
-        const totalMs  = 24 * 60 * 60 * 1000;
-        const startMs  = Math.max(event.start.getTime(), dayStart.getTime()) - dayStart.getTime();
-        const endMs    = Math.min(event.end.getTime(),   dayEnd.getTime())   - dayStart.getTime();
+        const dayStart = new Date(day);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(day);
+        dayEnd.setHours(24, 0, 0, 0);
+        const totalMs = 24 * 60 * 60 * 1000;
+        const startMs = Math.max(event.start.getTime(), dayStart.getTime()) - dayStart.getTime();
+        const endMs = Math.min(event.end.getTime(), dayEnd.getTime()) - dayStart.getTime();
         return {
-            top:    (startMs / totalMs) * 100,
+            top: (startMs / totalMs) * 100,
             height: Math.max(((endMs - startMs) / totalMs) * 100, 2),
         };
     },
@@ -147,10 +149,10 @@ const CalendarLogic = {
         if (!events.length) return [];
 
         const weekStart = CalendarLogic.startOfDay(weekDays[0]);
-        const weekEnd   = CalendarLogic.startOfDay(weekDays[6]);
+        const weekEnd = CalendarLogic.startOfDay(weekDays[6]);
 
-        const relevant = events.filter(e => {
-            const s  = CalendarLogic.startOfDay(e.start);
+        const relevant = events.filter((e) => {
+            const s = CalendarLogic.startOfDay(e.start);
             const en = CalendarLogic.startOfDay(e.end);
             return s <= weekEnd && en >= weekStart;
         });
@@ -158,7 +160,7 @@ const CalendarLogic = {
         relevant.sort((a, b) => {
             const diff = a.start.getTime() - b.start.getTime();
             if (diff !== 0) return diff;
-            return (b.end.getTime() - b.start.getTime()) - (a.end.getTime() - a.start.getTime());
+            return b.end.getTime() - b.start.getTime() - (a.end.getTime() - a.start.getTime());
         });
 
         const laneEnds: number[] = [];
@@ -166,22 +168,28 @@ const CalendarLogic = {
 
         for (const event of relevant) {
             const eStart = CalendarLogic.startOfDay(event.start);
-            const eEnd   = CalendarLogic.startOfDay(event.end);
+            const eEnd = CalendarLogic.startOfDay(event.end);
 
             const continuesBefore = eStart < weekStart;
-            const continuesAfter  = eEnd   > weekEnd;
+            const continuesAfter = eEnd > weekEnd;
 
             let colStart = 0;
             if (!continuesBefore) {
                 for (let i = 0; i < 7; i++) {
-                    if (CalendarLogic.isSameDay(weekDays[i], eStart)) { colStart = i; break; }
+                    if (CalendarLogic.isSameDay(weekDays[i], eStart)) {
+                        colStart = i;
+                        break;
+                    }
                 }
             }
 
             let colEnd = 6;
             if (!continuesAfter) {
                 for (let i = 6; i >= 0; i--) {
-                    if (CalendarLogic.isSameDay(weekDays[i], eEnd)) { colEnd = i; break; }
+                    if (CalendarLogic.isSameDay(weekDays[i], eEnd)) {
+                        colEnd = i;
+                        break;
+                    }
                 }
             }
 
@@ -203,7 +211,7 @@ const CalendarLogic = {
         const sorted = [...events].sort((a, b) => {
             const diff = a.start.getTime() - b.start.getTime();
             if (diff !== 0) return diff;
-            return (b.end.getTime() - b.start.getTime()) - (a.end.getTime() - a.start.getTime());
+            return b.end.getTime() - b.start.getTime() - (a.end.getTime() - a.start.getTime());
         });
 
         const colEnds: Date[] = [];
@@ -218,9 +226,7 @@ const CalendarLogic = {
         }
 
         return assigns.map(({ event, col }) => {
-            const cols = assigns
-                .filter(a => a.event.start < event.end && a.event.end > event.start)
-                .reduce((max, a) => Math.max(max, a.col), 0) + 1;
+            const cols = assigns.filter((a) => a.event.start < event.end && a.event.end > event.start).reduce((max, a) => Math.max(max, a.col), 0) + 1;
             const pos = CalendarLogic.getEventPosition(event, day);
             return { event, top: pos.top, height: pos.height, col, cols };
         });
@@ -228,23 +234,20 @@ const CalendarLogic = {
 
     nowLinePct(): number {
         const now = new Date();
-        return (now.getHours() * 60 + now.getMinutes()) / 1440 * 100;
+        return ((now.getHours() * 60 + now.getMinutes()) / 1440) * 100;
     },
 };
 
 const DEFAULT_LOCALE: CalendarLocale = {
-    monthNames: [
-        'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
-        'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
-    ],
-    dayNamesShort:  ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
-    dayNamesFull:   ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+    monthNames: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+    dayNamesShort: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+    dayNamesFull: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
     firstDayOfWeek: 1,
-    today:   'Heute',
-    month:   'Monat',
-    week:    'Woche',
-    agenda:  'Agenda',
-    allDay:  'Ganztägig',
+    today: 'Heute',
+    month: 'Monat',
+    week: 'Woche',
+    agenda: 'Agenda',
+    allDay: 'Ganztägig',
     noEvents: 'Keine Termine',
 };
 
@@ -252,19 +255,14 @@ const DEFAULT_LOCALE: CalendarLocale = {
 class CalendarRenderer {
     private locale: CalendarLocale;
 
-    constructor(locale: CalendarLocale) {
+    public constructor(locale: CalendarLocale) {
         this.locale = locale;
     }
 
     public renderWeekdayHeaders(): string {
         const { dayNamesShort, firstDayOfWeek } = this.locale;
-        const ordered = [
-            ...dayNamesShort.slice(firstDayOfWeek),
-            ...dayNamesShort.slice(0, firstDayOfWeek),
-        ];
-        return ordered
-            .map(name => `<div class="cal__weekday" aria-label="${name}">${name}</div>`)
-            .join('');
+        const ordered = [...dayNamesShort.slice(firstDayOfWeek), ...dayNamesShort.slice(0, firstDayOfWeek)];
+        return ordered.map((name) => `<div class="cal__weekday" aria-label="${name}">${name}</div>`).join('');
     }
 
     public renderEvent(event: CalendarEvent, compact = false): string {
@@ -285,8 +283,10 @@ class CalendarRenderer {
             'cal__span-bar',
             event.className ?? '',
             continuesBefore ? 'cal__span-bar--cont-before' : '',
-            continuesAfter  ? 'cal__span-bar--cont-after'  : '',
-        ].filter(Boolean).join(' ');
+            continuesAfter ? 'cal__span-bar--cont-after' : '',
+        ]
+            .filter(Boolean)
+            .join(' ');
 
         return `<div class="${cls}"
         style="--span-col:${colStart};--span-len:${colSpan};--span-lane:${lane}"
@@ -296,33 +296,27 @@ class CalendarRenderer {
         title="${event.title}">${event.title}</div>`;
     }
 
-    public renderMonthDay(
-        date: Date,
-        currentMonth: number,
-        currentYear: number,
-        events: CalendarEvent[],
-        showOutsideDays: boolean,
-    ): string {
+    public renderMonthDay(date: Date, currentMonth: number, currentYear: number, events: CalendarEvent[], showOutsideDays: boolean): string {
         const isOutside = !CalendarLogic.isCurrentMonth(date, currentYear, currentMonth);
 
         if (isOutside && !showOutsideDays) {
             return `<div class="cal__day cal__day--empty" aria-hidden="true"></div>`;
         }
 
-        const allForDay  = CalendarLogic.getEventsForDay(events, date);
-        const pillEvents = allForDay.filter(e => !CalendarLogic.isMultiDay(e));
-        const isToday    = CalendarLogic.isToday(date);
+        const allForDay = CalendarLogic.getEventsForDay(events, date);
+        const pillEvents = allForDay.filter((e) => !CalendarLogic.isMultiDay(e));
+        const isToday = CalendarLogic.isToday(date);
 
-        const classes = [
-            'cal__day',
-            isToday   ? 'is-today'          : '',
-            isOutside ? 'cal__day--outside' : '',
-            allForDay.length > 0 ? 'has-events' : '',
-        ].filter(Boolean).join(' ');
+        const classes = ['cal__day', isToday ? 'is-today' : '', isOutside ? 'cal__day--outside' : '', allForDay.length > 0 ? 'has-events' : '']
+            .filter(Boolean)
+            .join(' ');
 
-        const eventsHtml = pillEvents.slice(0, 3).map(e => this.renderEvent(e, true)).join('');
-        const moreCount  = pillEvents.length - 3;
-        const moreHtml   = moreCount > 0 ? `<div class="cal__event-more">+${moreCount}</div>` : '';
+        const eventsHtml = pillEvents
+            .slice(0, 3)
+            .map((e) => this.renderEvent(e, true))
+            .join('');
+        const moreCount = pillEvents.length - 3;
+        const moreHtml = moreCount > 0 ? `<div class="cal__event-more">+${moreCount}</div>` : '';
 
         return `<div class="${classes}" aria-label="${date.toLocaleDateString()}">
       <span class="cal__day-num">${date.getDate()}</span>
@@ -330,41 +324,24 @@ class CalendarRenderer {
     </div>`;
     }
 
-    public renderWeekRow(
-        weekDays: Date[],
-        currentMonth: number,
-        currentYear: number,
-        events: CalendarEvent[],
-        showOutsideDays: boolean,
-    ): string {
-        const multiDay = events.filter(e => CalendarLogic.isMultiDay(e));
-        const spans    = CalendarLogic.computeSpanLayout(weekDays, multiDay);
-        const maxLanes = spans.length > 0 ? Math.max(...spans.map(s => s.lane)) + 1 : 0;
+    public renderWeekRow(weekDays: Date[], currentMonth: number, currentYear: number, events: CalendarEvent[], showOutsideDays: boolean): string {
+        const multiDay = events.filter((e) => CalendarLogic.isMultiDay(e));
+        const spans = CalendarLogic.computeSpanLayout(weekDays, multiDay);
+        const maxLanes = spans.length > 0 ? Math.max(...spans.map((s) => s.lane)) + 1 : 0;
 
-        const dayCells = weekDays
-            .map(d => this.renderMonthDay(d, currentMonth, currentYear, events, showOutsideDays))
-            .join('');
-        const spanBars = spans.map(s => this.renderSpanBar(s)).join('');
+        const dayCells = weekDays.map((d) => this.renderMonthDay(d, currentMonth, currentYear, events, showOutsideDays)).join('');
+        const spanBars = spans.map((s) => this.renderSpanBar(s)).join('');
 
         return `<div class="cal__week-row" style="--span-lanes:${maxLanes}">
       ${dayCells}${spanBars}
     </div>`;
     }
 
-    public renderMonthView(
-        year: number,
-        month: number,
-        events: CalendarEvent[],
-        showOutsideDays: boolean,
-        firstDayOfWeek: number,
-    ): string {
+    public renderMonthView(year: number, month: number, events: CalendarEvent[], showOutsideDays: boolean, firstDayOfWeek: number): string {
         const days = CalendarLogic.getMonthGrid(year, month, firstDayOfWeek);
         const weekRows: string[] = [];
         for (let i = 0; i < days.length; i += 7) {
-            weekRows.push(this.renderWeekRow(
-                days.slice(i, i + 7),
-                month, year, events, showOutsideDays,
-            ));
+            weekRows.push(this.renderWeekRow(days.slice(i, i + 7), month, year, events, showOutsideDays));
         }
 
         return `<div class="cal__month-grid" role="grid" aria-label="${this.locale.monthNames[month]} ${year}">
@@ -373,61 +350,59 @@ class CalendarRenderer {
     </div>`;
     }
 
-    public renderWeekView(
-        date: Date,
-        events: CalendarEvent[],
-        firstDayOfWeek: number,
-        showNowLine = false,
-    ): string {
+    public renderWeekView(date: Date, events: CalendarEvent[], firstDayOfWeek: number, showNowLine = false): string {
         const days = CalendarLogic.getWeekDays(date, firstDayOfWeek);
 
-        const headCols = days.map(d => {
-            const isToday = CalendarLogic.isToday(d);
-            const cls = ['cal__week-head-day', isToday ? 'is-today' : '']
-                .filter(Boolean).join(' ');
-            const dow = this.locale.dayNamesShort[(d.getDay() + 7) % 7];
-            return `<div class="${cls}">${dow}<span>${d.getDate()}</span></div>`;
-        }).join('');
+        const headCols = days
+            .map((d) => {
+                const isToday = CalendarLogic.isToday(d);
+                const cls = ['cal__week-head-day', isToday ? 'is-today' : ''].filter(Boolean).join(' ');
+                const dow = this.locale.dayNamesShort[(d.getDay() + 7) % 7];
+                return `<div class="${cls}">${dow}<span>${d.getDate()}</span></div>`;
+            })
+            .join('');
 
-        const allDayEvents  = events.filter(e => e.allDay);
+        const allDayEvents = events.filter((e) => e.allDay);
         const allDayLayouts = CalendarLogic.computeSpanLayout(days, allDayEvents);
-        const allDayLanes   = allDayLayouts.length > 0 ? Math.max(...allDayLayouts.map(l => l.lane)) + 1 : 0;
+        const allDayLanes = allDayLayouts.length > 0 ? Math.max(...allDayLayouts.map((l) => l.lane)) + 1 : 0;
 
         const allDayCols = days.map(() => `<div class="cal__allday-col"></div>`).join('');
-        const allDayBars = allDayLayouts.map(l => this.renderSpanBar(l)).join('');
+        const allDayBars = allDayLayouts.map((l) => this.renderSpanBar(l)).join('');
 
         const hourLabels = Array.from({ length: 24 }, (_, h) => {
             const label = h === 0 ? '' : `${String(h).padStart(2, '0')}:00`;
             return `<div class="cal__time-slot">${label}</div>`;
         }).join('');
 
-        const dayCols = days.map(d => {
-            const timedEvents = CalendarLogic.getTimedEvents(events, d);
-            const hourCells   = Array.from({ length: 24 }, () => `<div class="cal__day-col-hour"></div>`).join('');
-            const layouts     = CalendarLogic.computeTimedLayout(timedEvents, d);
+        const dayCols = days
+            .map((d) => {
+                const timedEvents = CalendarLogic.getTimedEvents(events, d);
+                const hourCells = Array.from({ length: 24 }, () => `<div class="cal__day-col-hour"></div>`).join('');
+                const layouts = CalendarLogic.computeTimedLayout(timedEvents, d);
 
-            const eventOverlays = layouts.map(({ event, top, height, col, cols }) => {
-                const cls = event.className ?? '';
-                let posStyle = `top:${top.toFixed(2)}%;height:${height.toFixed(2)}%`;
-                if (cols > 1) {
-                    const l = (col / cols * 100).toFixed(2);
-                    const w = (100 / cols).toFixed(2);
-                    posStyle += `;left:calc(${l}% + 2px);right:auto;width:calc(${w}% - 4px)`;
-                }
-                return `<div class="cal__week-event ${cls}"
+                const eventOverlays = layouts
+                    .map(({ event, top, height, col, cols }) => {
+                        const cls = event.className ?? '';
+                        let posStyle = `top:${top.toFixed(2)}%;height:${height.toFixed(2)}%`;
+                        if (cols > 1) {
+                            const l = ((col / cols) * 100).toFixed(2);
+                            const w = (100 / cols).toFixed(2);
+                            posStyle += `;left:calc(${l}% + 2px);right:auto;width:calc(${w}% - 4px)`;
+                        }
+                        return `<div class="cal__week-event ${cls}"
               style="${posStyle}"
               data-event-id="${event.id}" role="button" tabindex="0" aria-label="${event.title}">
               <span class="cal__event-time">${CalendarLogic.formatTime(event.start)}</span>
               ${event.title}
             </div>`;
-            }).join('');
+                    })
+                    .join('');
 
-            return `<div class="cal__day-col" data-date="${d.toISOString()}">${hourCells}${eventOverlays}</div>`;
-        }).join('');
+                return `<div class="cal__day-col" data-date="${d.toISOString()}">${hourCells}${eventOverlays}</div>`;
+            })
+            .join('');
 
-        const nowLine = showNowLine
-            ? `<div class="cal__now-line" style="top:${CalendarLogic.nowLinePct().toFixed(3)}%"></div>`
-            : '';
+        const nowLine = showNowLine ? `<div class="cal__now-line" style="top:${CalendarLogic.nowLinePct().toFixed(3)}%"></div>` : '';
 
         return `<div class="cal__week" role="grid">
       <div class="cal__week-head">
@@ -451,15 +426,15 @@ class CalendarRenderer {
     }
 
     public renderAgendaView(year: number, month: number, events: CalendarEvent[]): string {
-        const daysInMonth  = new Date(year, month + 1, 0).getDate();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
         const shownMultiDay = new Set<string>();
         let html = '';
 
         for (let d = 1; d <= daysInMonth; d++) {
-            const day       = new Date(year, month, d);
+            const day = new Date(year, month, d);
             const dayEvents = CalendarLogic.getEventsForDay(events, day);
 
-            const filtered = dayEvents.filter(e => {
+            const filtered = dayEvents.filter((e) => {
                 if (!CalendarLogic.isMultiDay(e)) return true;
                 if (shownMultiDay.has(e.id)) return false;
                 shownMultiDay.add(e.id);
@@ -469,7 +444,7 @@ class CalendarRenderer {
             if (!filtered.length) continue;
 
             const isToday = CalendarLogic.isToday(day);
-            const dow     = this.locale.dayNamesFull[day.getDay()];
+            const dow = this.locale.dayNamesFull[day.getDay()];
 
             html += `<div class="cal__agenda-day ${isToday ? 'is-today' : ''}">
         <div class="cal__agenda-date">
@@ -477,22 +452,24 @@ class CalendarRenderer {
           <span class="cal__agenda-num ${isToday ? 'is-today' : ''}">${d}</span>
         </div>
         <div class="cal__agenda-events">
-          ${filtered.map(e => {
-              const isMulti = CalendarLogic.isMultiDay(e);
-              let timeLabel: string;
-              if (isMulti) {
-                  timeLabel = `${e.start.toLocaleDateString()} – ${e.end.toLocaleDateString()}`;
-              } else if (e.allDay) {
-                  timeLabel = this.locale.allDay;
-              } else {
-                  timeLabel = `${CalendarLogic.formatTime(e.start)} – ${CalendarLogic.formatTime(e.end)}`;
-              }
-              return `<div class="cal__agenda-event ${e.className ?? ''}"
+          ${filtered
+              .map((e) => {
+                  const isMulti = CalendarLogic.isMultiDay(e);
+                  let timeLabel: string;
+                  if (isMulti) {
+                      timeLabel = `${e.start.toLocaleDateString()} – ${e.end.toLocaleDateString()}`;
+                  } else if (e.allDay) {
+                      timeLabel = this.locale.allDay;
+                  } else {
+                      timeLabel = `${CalendarLogic.formatTime(e.start)} – ${CalendarLogic.formatTime(e.end)}`;
+                  }
+                  return `<div class="cal__agenda-event ${e.className ?? ''}"
               data-event-id="${e.id}" role="button" tabindex="0">
               <span class="cal__agenda-event-time">${timeLabel}</span>
               <span class="cal__agenda-event-title">${e.title}</span>
             </div>`;
-          }).join('')}
+              })
+              .join('')}
         </div>
       </div>`;
         }
@@ -513,7 +490,7 @@ class Calendar {
     private events: CalendarEvent[] = [];
     private nowLineTimer: ReturnType<typeof setInterval> | null = null;
 
-    constructor(options: CalendarOptions) {
+    public constructor(options: CalendarOptions) {
         if (typeof options.container === 'string') {
             const el = document.querySelector<HTMLElement>(options.container);
             if (!el) throw new Error(`Calendar: container "${options.container}" not found.`);
@@ -522,23 +499,23 @@ class Calendar {
             this.container = options.container;
         }
 
-        this.locale   = { ...DEFAULT_LOCALE, ...(options.locale ?? {}) };
+        this.locale = { ...DEFAULT_LOCALE, ...(options.locale ?? {}) };
         this.renderer = new CalendarRenderer(this.locale);
 
         this.options = {
-            container:       this.container,
-            events:          options.events          ?? [],
-            view:            options.view            ?? 'month',
-            locale:          options.locale          ?? {},
+            container: this.container,
+            events: options.events ?? [],
+            view: options.view ?? 'month',
+            locale: options.locale ?? {},
             showOutsideDays: options.showOutsideDays ?? true,
-            onDayClick:      options.onDayClick      ?? (() => {}),
-            onEventClick:    options.onEventClick    ?? (() => {}),
-            onChange:        options.onChange        ?? (() => {}),
-            className:       options.className       ?? '',
-            iconBasePath:    options.iconBasePath    ?? 'svg-icons/',
+            onDayClick: options.onDayClick ?? (() => {}),
+            onEventClick: options.onEventClick ?? (() => {}),
+            onChange: options.onChange ?? (() => {}),
+            className: options.className ?? '',
+            iconBasePath: options.iconBasePath ?? 'svg-icons/',
         };
 
-        this.events      = [...this.options.events];
+        this.events = [...this.options.events];
         this.currentView = this.options.view;
         this.currentDate = new Date();
 
@@ -584,7 +561,7 @@ class Calendar {
     }
 
     public removeEvent(id: string): void {
-        this.events = this.events.filter(e => e.id !== id);
+        this.events = this.events.filter((e) => e.id !== id);
         this.render();
     }
 
@@ -599,7 +576,7 @@ class Calendar {
 
     public destroy(): void {
         this.clearNowLineTimer();
-        this.container.removeEventListener('click',   this.boundHandleClick);
+        this.container.removeEventListener('click', this.boundHandleClick);
         this.container.removeEventListener('keydown', this.boundHandleKeydown);
         this.container.innerHTML = '';
         this.container.removeAttribute('data-cal');
@@ -611,9 +588,9 @@ class Calendar {
         const m = this.currentDate.getMonth();
 
         if (this.currentView === 'week') {
-            const days  = CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek);
+            const days = CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek);
             const first = days[0];
-            const last  = days[6];
+            const last = days[6];
             return first.getMonth() === last.getMonth()
                 ? `${monthNames[first.getMonth()]} ${y}`
                 : `${monthNames[first.getMonth()]} – ${monthNames[last.getMonth()]} ${y}`;
@@ -635,8 +612,8 @@ class Calendar {
       </div>
       <h2 class="cal__title" aria-live="polite">${this.getTitle()}</h2>
       <div class="cal__view-toggle" role="group" aria-label="Ansicht wählen">
-        <button class="cal__btn ${v === 'month'  ? 'cal__btn--active' : ''}" data-action="view-month"  aria-pressed="${v === 'month'}">${this.locale.month}</button>
-        <button class="cal__btn ${v === 'week'   ? 'cal__btn--active' : ''}" data-action="view-week"   aria-pressed="${v === 'week'}">${this.locale.week}</button>
+        <button class="cal__btn ${v === 'month' ? 'cal__btn--active' : ''}" data-action="view-month"  aria-pressed="${v === 'month'}">${this.locale.month}</button>
+        <button class="cal__btn ${v === 'week' ? 'cal__btn--active' : ''}" data-action="view-week"   aria-pressed="${v === 'week'}">${this.locale.week}</button>
         <button class="cal__btn ${v === 'agenda' ? 'cal__btn--active' : ''}" data-action="view-agenda" aria-pressed="${v === 'agenda'}">${this.locale.agenda}</button>
       </div>
     </div>`;
@@ -651,8 +628,8 @@ class Calendar {
             case 'month':
                 return this.renderer.renderMonthView(y, m, this.events, this.options.showOutsideDays, firstDayOfWeek);
             case 'week': {
-                const weekDays     = CalendarLogic.getWeekDays(this.currentDate, firstDayOfWeek);
-                const showNowLine  = weekDays.some(d => CalendarLogic.isToday(d));
+                const weekDays = CalendarLogic.getWeekDays(this.currentDate, firstDayOfWeek);
+                const showNowLine = weekDays.some((d) => CalendarLogic.isToday(d));
                 return this.renderer.renderWeekView(this.currentDate, this.events, firstDayOfWeek, showNowLine);
             }
             case 'agenda':
@@ -671,7 +648,7 @@ class Calendar {
 
         if (this.currentView === 'week') {
             const weekDays = CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek);
-            if (weekDays.some(d => CalendarLogic.isToday(d))) {
+            if (weekDays.some((d) => CalendarLogic.isToday(d))) {
                 this.scrollToNow();
                 this.startNowLineTimer();
             }
@@ -699,11 +676,11 @@ class Calendar {
         }
     }
 
-    private readonly boundHandleClick   = (e: MouseEvent)  => this.handleClick(e);
+    private readonly boundHandleClick = (e: MouseEvent) => this.handleClick(e);
     private readonly boundHandleKeydown = (e: KeyboardEvent) => this.handleKeydown(e);
 
     private attachEvents(): void {
-        this.container.addEventListener('click',   this.boundHandleClick);
+        this.container.addEventListener('click', this.boundHandleClick);
         this.container.addEventListener('keydown', this.boundHandleKeydown);
     }
 
@@ -713,23 +690,25 @@ class Calendar {
         const btn = target.closest<HTMLElement>('[data-action]');
         if (btn) {
             const action = btn.dataset.action!;
-            if      (action === 'prev')        this.prev();
-            else if (action === 'next')        this.next();
-            else if (action === 'today')       this.today();
-            else if (action === 'view-month')  this.setView('month');
-            else if (action === 'view-week')   this.setView('week');
+            if (action === 'prev') this.prev();
+            else if (action === 'next') this.next();
+            else if (action === 'today') this.today();
+            else if (action === 'view-month') this.setView('month');
+            else if (action === 'view-week') this.setView('week');
             else if (action === 'view-agenda') this.setView('agenda');
             return;
         }
 
         const eventEl = target.closest<HTMLElement>('[data-event-id]');
         if (eventEl) {
-            const id    = eventEl.dataset.eventId!;
-            const event = this.events.find(ev => ev.id === id);
-            if (event) { e.stopPropagation(); this.options.onEventClick(event); }
+            const id = eventEl.dataset.eventId!;
+            const event = this.events.find((ev) => ev.id === id);
+            if (event) {
+                e.stopPropagation();
+                this.options.onEventClick(event);
+            }
             return;
         }
-
     }
 
     private handleKeydown(e: KeyboardEvent): void {

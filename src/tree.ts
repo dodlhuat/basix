@@ -15,7 +15,7 @@ class TreeNode {
     public element: HTMLDivElement | null;
     public childrenContainer: HTMLUListElement | null;
 
-    constructor(label: string, type: NodeType = 'file', children: TreeNode[] = []) {
+    public constructor(label: string, type: NodeType = 'file', children: TreeNode[] = []) {
         this.label = label;
         this.type = type;
         this.children = children;
@@ -33,10 +33,8 @@ class TreeComponent {
     private selectedNode: TreeNode | null;
     private readonly options: TreeOptions;
 
-    constructor(elementOrSelector: string | HTMLElement, data: TreeNode[], options: TreeOptions = {}) {
-        const container = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLElement>(elementOrSelector)
-            : elementOrSelector;
+    public constructor(elementOrSelector: string | HTMLElement, data: TreeNode[], options: TreeOptions = {}) {
+        const container = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
 
         if (!container) {
             throw new Error(`TreeComponent: Element not found for selector "${elementOrSelector}"`);
@@ -55,7 +53,7 @@ class TreeComponent {
 
     public render(): void {
         this.container.innerHTML = '';
-        this.data.forEach(node => {
+        this.data.forEach((node) => {
             this.renderNode(node, this.container);
         });
     }
@@ -135,7 +133,7 @@ class TreeComponent {
             childrenUl.style.height = 'auto';
         }
 
-        node.children.forEach(child => {
+        node.children.forEach((child) => {
             this.renderNode(child, childrenUl);
         });
 
@@ -158,9 +156,13 @@ class TreeComponent {
 
     private expandChildren(container: HTMLUListElement): void {
         container.style.height = container.scrollHeight + 'px';
-        container.addEventListener('transitionend', () => {
-            container.style.height = 'auto';
-        }, { once: true });
+        container.addEventListener(
+            'transitionend',
+            () => {
+                container.style.height = 'auto';
+            },
+            { once: true },
+        );
     }
 
     private collapseChildren(container: HTMLUListElement): void {
@@ -181,10 +183,12 @@ class TreeComponent {
         this.selectedNode = node;
 
         this.options.onSelect?.(node);
-        this.container.dispatchEvent(new CustomEvent('tree-select', {
-            detail: { node },
-            bubbles: true,
-        }));
+        this.container.dispatchEvent(
+            new CustomEvent('tree-select', {
+                detail: { node },
+                bubbles: true,
+            }),
+        );
     }
 
     public expandAll(): void {
@@ -210,7 +214,7 @@ class TreeComponent {
     }
 
     private traverseNodes(nodes: TreeNode[], callback: (node: TreeNode) => void): void {
-        nodes.forEach(node => {
+        nodes.forEach((node) => {
             callback(node);
             if (node.children.length > 0) {
                 this.traverseNodes(node.children, callback);

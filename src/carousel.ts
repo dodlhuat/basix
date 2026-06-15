@@ -20,15 +20,13 @@ class Carousel {
     private autoPlayTimer: number | null = null;
     private abortController = new AbortController();
 
-    constructor(elementOrSelector: string | HTMLElement, options: CarouselOptions = {}) {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLElement>(elementOrSelector)
-            : elementOrSelector;
+    public constructor(elementOrSelector: string | HTMLElement, options: CarouselOptions = {}) {
+        const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
 
         this.options = {
             loop: options.loop ?? false,
             autoPlay: options.autoPlay ?? false,
-            autoPlayInterval: options.autoPlayInterval ?? 3000
+            autoPlayInterval: options.autoPlayInterval ?? 3000,
         };
 
         if (!element) {
@@ -59,7 +57,7 @@ class Carousel {
         this.track = document.createElement('ul');
         this.track.classList.add('carousel-track');
 
-        slides.forEach(slide => {
+        slides.forEach((slide) => {
             slide.classList.add('carousel-slide');
             this.track.appendChild(slide);
         });
@@ -103,28 +101,40 @@ class Carousel {
         this.nextButton.addEventListener('click', () => this.moveToNextSlide(), sig);
         this.prevButton.addEventListener('click', () => this.moveToPrevSlide(), sig);
 
-        this.dotsNav.addEventListener('click', (e: MouseEvent) => {
-            const targetDot = (e.target as HTMLElement).closest('button');
-            if (!targetDot) return;
-            const targetIndex = this.dots.findIndex(dot => dot === targetDot);
-            this.moveToSlide(targetIndex);
-        }, sig);
+        this.dotsNav.addEventListener(
+            'click',
+            (e: MouseEvent) => {
+                const targetDot = (e.target as HTMLElement).closest('button');
+                if (!targetDot) return;
+                const targetIndex = this.dots.findIndex((dot) => dot === targetDot);
+                this.moveToSlide(targetIndex);
+            },
+            sig,
+        );
 
-        window.addEventListener('resize', () => {
-            this.slideWidth = this.slides[0].getBoundingClientRect().width;
-            this.moveToSlide(this.currentIndex, false);
-        }, sig);
+        window.addEventListener(
+            'resize',
+            () => {
+                this.slideWidth = this.slides[0].getBoundingClientRect().width;
+                this.moveToSlide(this.currentIndex, false);
+            },
+            sig,
+        );
 
-        this.root.addEventListener('keydown', (e: KeyboardEvent) => {
-            if (e.key === 'ArrowLeft')  this.moveToPrevSlide();
-            if (e.key === 'ArrowRight') this.moveToNextSlide();
-        }, sig);
+        this.root.addEventListener(
+            'keydown',
+            (e: KeyboardEvent) => {
+                if (e.key === 'ArrowLeft') this.moveToPrevSlide();
+                if (e.key === 'ArrowRight') this.moveToNextSlide();
+            },
+            sig,
+        );
 
         if (this.options.autoPlay) {
             this.root.addEventListener('mouseenter', () => this.pauseAutoPlay(), sig);
             this.root.addEventListener('mouseleave', () => this.resumeAutoPlay(), sig);
-            this.root.addEventListener('focusin',    () => this.pauseAutoPlay(), sig);
-            this.root.addEventListener('focusout',   () => this.resumeAutoPlay(), sig);
+            this.root.addEventListener('focusin', () => this.pauseAutoPlay(), sig);
+            this.root.addEventListener('focusout', () => this.resumeAutoPlay(), sig);
         }
 
         this.addTouchSupport();
@@ -166,7 +176,7 @@ class Carousel {
     }
 
     private updateDots(targetIndex: number): void {
-        this.dots.forEach(dot => dot.classList.remove('current-slide'));
+        this.dots.forEach((dot) => dot.classList.remove('current-slide'));
         this.dots[targetIndex].classList.add('current-slide');
     }
 
@@ -175,21 +185,29 @@ class Carousel {
         let isDragging = false;
         const sig = { signal: this.abortController.signal };
 
-        this.track.addEventListener('touchstart', (e: TouchEvent) => {
-            startX = e.touches[0].clientX;
-            isDragging = true;
-        }, { passive: true, signal: sig.signal });
+        this.track.addEventListener(
+            'touchstart',
+            (e: TouchEvent) => {
+                startX = e.touches[0].clientX;
+                isDragging = true;
+            },
+            { passive: true, signal: sig.signal },
+        );
 
-        this.track.addEventListener('touchend', (e: TouchEvent) => {
-            if (!isDragging) return;
-            const endX = e.changedTouches[0].clientX;
-            const diffX = startX - endX;
-            if (Math.abs(diffX) > 50) {
-                if (diffX > 0) this.moveToNextSlide();
-                else this.moveToPrevSlide();
-            }
-            isDragging = false;
-        }, sig);
+        this.track.addEventListener(
+            'touchend',
+            (e: TouchEvent) => {
+                if (!isDragging) return;
+                const endX = e.changedTouches[0].clientX;
+                const diffX = startX - endX;
+                if (Math.abs(diffX) > 50) {
+                    if (diffX > 0) this.moveToNextSlide();
+                    else this.moveToPrevSlide();
+                }
+                isDragging = false;
+            },
+            sig,
+        );
     }
 
     private startAutoPlay(): void {

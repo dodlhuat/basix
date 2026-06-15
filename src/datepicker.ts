@@ -43,10 +43,8 @@ class DatePicker {
     private handleDocumentClick!: (e: Event) => void;
     private abortController = new AbortController();
 
-    constructor(elementOrSelector: string | HTMLInputElement, options: DatePickerOptions = {}) {
-        this.input = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLInputElement>(elementOrSelector)
-            : elementOrSelector;
+    public constructor(elementOrSelector: string | HTMLInputElement, options: DatePickerOptions = {}) {
+        this.input = typeof elementOrSelector === 'string' ? document.querySelector<HTMLInputElement>(elementOrSelector) : elementOrSelector;
 
         if (!this.input) {
             throw new Error(`DatePicker: Element not found for selector "${elementOrSelector}"`);
@@ -60,20 +58,17 @@ class DatePicker {
             timePicker,
             locales: {
                 days: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-                months: [
-                    'January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'
-                ]
+                months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             },
             format: timePicker
                 ? (date: Date) => {
-                        const hours = String(date.getHours()).padStart(2, '0');
-                        const minutes = String(date.getMinutes()).padStart(2, '0');
-                        return `${date.toDateString()} ${hours}:${minutes}`;
-                    }
+                      const hours = String(date.getHours()).padStart(2, '0');
+                      const minutes = String(date.getMinutes()).padStart(2, '0');
+                      return `${date.toDateString()} ${hours}:${minutes}`;
+                  }
                 : (date: Date) => date.toDateString(),
             onSelect: () => {},
-            ...options
+            ...options,
         };
 
         this.currentDate = new Date();
@@ -127,11 +122,15 @@ class DatePicker {
 
         this.input?.addEventListener('click', toggle, sig);
 
-        this.backdrop.addEventListener('click', (e: Event) => {
-            e.preventDefault();
-            e.stopPropagation();
-            this.hide();
-        }, sig);
+        this.backdrop.addEventListener(
+            'click',
+            (e: Event) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.hide();
+            },
+            sig,
+        );
 
         this.handleDocumentClick = (e: Event): void => {
             if (this.calendar.classList.contains('mobile')) return;
@@ -165,11 +164,7 @@ class DatePicker {
                 this.calendar.style.display = '';
                 this.calendar.style.visibility = '';
 
-                const { left, top } = computePosition(
-                    this.input.getBoundingClientRect(),
-                    calRect,
-                    { placement: 'bottom', align: 'start', offset: 5 }
-                );
+                const { left, top } = computePosition(this.input.getBoundingClientRect(), calRect, { placement: 'bottom', align: 'start', offset: 5 });
 
                 this.calendar.style.top = `${top}px`;
                 this.calendar.style.left = `${left}px`;
@@ -373,7 +368,7 @@ class DatePicker {
         const startDay = this.options.startDay ?? 0;
         const adjustedDays = [...days.slice(startDay), ...days.slice(0, startDay)];
 
-        adjustedDays.forEach(day => {
+        adjustedDays.forEach((day) => {
             const el = document.createElement('div');
             el.className = 'datepicker-day-header';
             el.textContent = day;
@@ -454,29 +449,19 @@ class DatePicker {
         const controls = document.createElement('div');
         controls.className = 'datepicker-time-controls';
 
-        const hoursSpinner = this.createSpinner(
-            this.selectedHours,
-            0,
-            23,
-            (value) => {
-                this.selectedHours = value;
-                this.applyTimeToSelection();
-            }
-        );
+        const hoursSpinner = this.createSpinner(this.selectedHours, 0, 23, (value) => {
+            this.selectedHours = value;
+            this.applyTimeToSelection();
+        });
 
         const separator = document.createElement('span');
         separator.className = 'datepicker-time-separator';
         separator.textContent = ':';
 
-        const minutesSpinner = this.createSpinner(
-            this.selectedMinutes,
-            0,
-            59,
-            (value) => {
-                this.selectedMinutes = value;
-                this.applyTimeToSelection();
-            }
-        );
+        const minutesSpinner = this.createSpinner(this.selectedMinutes, 0, 59, (value) => {
+            this.selectedMinutes = value;
+            this.applyTimeToSelection();
+        });
 
         controls.appendChild(hoursSpinner);
         controls.appendChild(separator);
@@ -486,12 +471,7 @@ class DatePicker {
         return wrapper;
     }
 
-    private createSpinner(
-        value: number,
-        min: number,
-        max: number,
-        onChange: (value: number) => void
-    ): HTMLDivElement {
+    private createSpinner(value: number, min: number, max: number, onChange: (value: number) => void): HTMLDivElement {
         const spinner = document.createElement('div');
         spinner.className = 'datepicker-time-spinner';
 
@@ -516,7 +496,7 @@ class DatePicker {
         display.addEventListener('focus', () => display.select());
         display.addEventListener('change', (e: Event) => {
             e.stopPropagation();
-            let parsed = parseInt(display.value, 10);
+            const parsed = parseInt(display.value, 10);
             if (isNaN(parsed) || parsed < min || parsed > max) {
                 display.value = String(value).padStart(2, '0');
                 return;

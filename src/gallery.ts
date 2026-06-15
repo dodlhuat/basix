@@ -30,7 +30,7 @@ class MasonryGallery {
     private abortController: AbortController | null = null;
     private reloaded = 0;
 
-    constructor(containerId: string, options: MasonryGalleryOptions) {
+    public constructor(containerId: string, options: MasonryGalleryOptions) {
         const container = document.getElementById(containerId);
         if (!container) {
             throw new Error(`Container with id "${containerId}" not found`);
@@ -80,16 +80,20 @@ class MasonryGallery {
         const sig = this.abortController.signal;
 
         let resizeTimeout: number;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => this.reLayout(), 200);
-        }, { signal: sig });
+        window.addEventListener(
+            'resize',
+            () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => this.reLayout(), 200);
+            },
+            { signal: sig },
+        );
 
         window.addEventListener('scroll', this.handleScroll, { passive: true, signal: sig });
     }
 
     private reLayout(): void {
-        const items = this.columns.flatMap(col => Array.from(col.children) as HTMLElement[]);
+        const items = this.columns.flatMap((col) => Array.from(col.children) as HTMLElement[]);
 
         const availableWidth = Math.min(1200, window.innerWidth - 40);
         const numColumns = Math.max(1, Math.floor(availableWidth / this.options.minColumnWidth));
@@ -97,10 +101,12 @@ class MasonryGallery {
         if (this.columns.length !== numColumns) {
             this.buildColumns(numColumns);
         } else {
-            this.columns.forEach(col => { col.innerHTML = ''; });
+            this.columns.forEach((col) => {
+                col.innerHTML = '';
+            });
         }
 
-        items.forEach(item => this.addToShortestColumn(item));
+        items.forEach((item) => this.addToShortestColumn(item));
     }
 
     private handleScroll = (): void => {
@@ -110,7 +116,7 @@ class MasonryGallery {
         if (rect.bottom > 0 && rect.bottom <= window.innerHeight + this.options.scrollThreshold) {
             this.loadMoreImages();
         }
-    }
+    };
 
     private async loadMoreImages(isAutoFill = false): Promise<void> {
         if (!isAutoFill) this.reloaded++;
@@ -154,9 +160,7 @@ class MasonryGallery {
         // Then round-robin across them — this avoids the problem where unloaded
         // images (0 height) cause offsetHeight-based distribution to pile all
         // new items into a single column.
-        const sorted = [...this.columns].sort(
-            (a, b) => a.offsetHeight - b.offsetHeight,
-        );
+        const sorted = [...this.columns].sort((a, b) => a.offsetHeight - b.offsetHeight);
 
         imageDataList.forEach((data, i) => {
             const item = this.createCard(data);
@@ -165,7 +169,7 @@ class MasonryGallery {
                 const index = startIndex + i;
                 item.addEventListener('click', () => {
                     new Lightbox({
-                        images: this.allImages.map(img => ({
+                        images: this.allImages.map((img) => ({
                             src: img.src,
                             alt: img.title,
                             caption: img.desc,

@@ -39,12 +39,13 @@ class TimeSpanPicker {
         clickOffsetMins: number;
     } | null = null;
 
-    constructor(elementOrSelector: string | HTMLElement, options?: TimeSpanPickerOptions) {
-        const element = typeof elementOrSelector === 'string'
-            ? (elementOrSelector.startsWith('#') || elementOrSelector.startsWith('.')
-                ? document.querySelector<HTMLElement>(elementOrSelector)
-                : document.getElementById(elementOrSelector))
-            : elementOrSelector;
+    public constructor(elementOrSelector: string | HTMLElement, options?: TimeSpanPickerOptions) {
+        const element =
+            typeof elementOrSelector === 'string'
+                ? elementOrSelector.startsWith('#') || elementOrSelector.startsWith('.')
+                    ? document.querySelector<HTMLElement>(elementOrSelector)
+                    : document.getElementById(elementOrSelector)
+                : elementOrSelector;
 
         if (!element) {
             throw new Error(`TimeSpanPicker: Element not found for "${elementOrSelector}"`);
@@ -114,7 +115,7 @@ class TimeSpanPicker {
         if (this.onChange && start && end) {
             this.onChange(start, end);
         }
-    }
+    };
 
     private attachEventListeners(): void {
         this.startTimeInput.addEventListener('change', this.handleChange);
@@ -157,13 +158,13 @@ class TimeSpanPicker {
         e.stopPropagation();
         e.preventDefault();
         this.beginDrag('start');
-    }
+    };
 
     private readonly onEndHandleDown = (e: PointerEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.beginDrag('end');
-    }
+    };
 
     private readonly onFillDown = (e: PointerEvent): void => {
         if ((e.target as HTMLElement).classList.contains('timespan-handle')) return;
@@ -175,7 +176,7 @@ class TimeSpanPicker {
         const rect = this.barEl.getBoundingClientRect();
         const clickMins = ((e.clientX - rect.left) / rect.width) * 1440;
         this.beginDrag('move', clickMins - this.toMinutes(start), rect);
-    }
+    };
 
     private readonly onPointerMove = (e: PointerEvent): void => {
         if (!this.dragState) return;
@@ -205,7 +206,7 @@ class TimeSpanPicker {
 
         this.updateUI();
         if (this.onChange) this.onChange(start, end);
-    }
+    };
 
     private readonly onPointerUp = (): void => {
         if (!this.dragState) return;
@@ -213,7 +214,7 @@ class TimeSpanPicker {
         this.barEl.classList.remove('is-dragging');
         document.removeEventListener('pointermove', this.onPointerMove);
         document.removeEventListener('pointerup', this.onPointerUp);
-    }
+    };
 
     private toMinutes(time: string): number {
         const [h, m] = time.split(':').map(Number);
@@ -274,7 +275,7 @@ class TimeSpanPicker {
     public getValue(): TimeSpan {
         return {
             start: this.startTimeInput.value,
-            end: this.endTimeInput.value
+            end: this.endTimeInput.value,
         };
     }
 

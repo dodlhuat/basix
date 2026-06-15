@@ -59,18 +59,14 @@ class Scrollbar {
         const thumb = container.querySelector<HTMLElement>('.thumb');
 
         if (!viewport || !content || !track || !thumb) {
-            throw new Error(
-                'Required scrollbar elements not found. Expected: .viewport, .content, .track, .thumb'
-            );
+            throw new Error('Required scrollbar elements not found. Expected: .viewport, .content, .track, .thumb');
         }
 
         return { viewport, content, track, thumb };
     }
 
     private getMinThumbHeight(): number {
-        const cssValue = getComputedStyle(document.documentElement)
-            .getPropertyValue('--thumb-min')
-            .trim();
+        const cssValue = getComputedStyle(document.documentElement).getPropertyValue('--thumb-min').trim();
 
         const parsed = parseInt(cssValue, 10);
         const defaultMin = 28;
@@ -83,17 +79,29 @@ class Scrollbar {
         const ac = new AbortController();
         Scrollbar.globalListenerAbortController = ac;
 
-        document.addEventListener('pointermove', (e: PointerEvent) => {
-            Scrollbar.activeInstance?.handlePointerMove(e);
-        }, { passive: false, signal: ac.signal });
+        document.addEventListener(
+            'pointermove',
+            (e: PointerEvent) => {
+                Scrollbar.activeInstance?.handlePointerMove(e);
+            },
+            { passive: false, signal: ac.signal },
+        );
 
-        document.addEventListener('pointerup', (e: PointerEvent) => {
-            Scrollbar.activeInstance?.handlePointerUp(e);
-        }, { signal: ac.signal });
+        document.addEventListener(
+            'pointerup',
+            (e: PointerEvent) => {
+                Scrollbar.activeInstance?.handlePointerUp(e);
+            },
+            { signal: ac.signal },
+        );
 
-        document.addEventListener('pointercancel', (e: PointerEvent) => {
-            Scrollbar.activeInstance?.handlePointerUp(e);
-        }, { signal: ac.signal });
+        document.addEventListener(
+            'pointercancel',
+            (e: PointerEvent) => {
+                Scrollbar.activeInstance?.handlePointerUp(e);
+            },
+            { signal: ac.signal },
+        );
 
         Scrollbar.globalListenersInstalled = true;
     }
@@ -123,10 +131,7 @@ class Scrollbar {
         this.thumb.style.display = '';
 
         const ratio = viewportHeight / contentHeight;
-        const thumbHeight = Math.max(
-            Math.floor(ratio * trackHeight),
-            this.MIN_THUMB_HEIGHT
-        );
+        const thumbHeight = Math.max(Math.floor(ratio * trackHeight), this.MIN_THUMB_HEIGHT);
         this.thumb.style.height = `${thumbHeight}px`;
 
         const maxScroll = contentHeight - viewportHeight;
@@ -135,7 +140,7 @@ class Scrollbar {
         const thumbTop = scrollRatio * (maxThumbTop || 0);
 
         this.thumb.style.top = `${thumbTop}px`;
-    }
+    };
 
     private handleThumbPointerDown = (e: PointerEvent): void => {
         e.preventDefault();
@@ -157,7 +162,7 @@ class Scrollbar {
         this.startThumbTop = thumbRect.top - trackRect.top;
 
         document.body.style.userSelect = 'none';
-    }
+    };
 
     private handlePointerMove = (e: PointerEvent): void => {
         if (!this.dragging || this.activePointerId !== e.pointerId) {
@@ -171,10 +176,7 @@ class Scrollbar {
         const thumbHeight = this.thumb.clientHeight;
         const maxThumbTop = trackHeight - thumbHeight;
 
-        const newThumbTop = Math.max(
-            0,
-            Math.min(maxThumbTop, this.startThumbTop + pointerDelta)
-        );
+        const newThumbTop = Math.max(0, Math.min(maxThumbTop, this.startThumbTop + pointerDelta));
         this.thumb.style.top = `${newThumbTop}px`;
 
         const contentHeight = this.content.scrollHeight;
@@ -183,7 +185,7 @@ class Scrollbar {
         const scrollRatio = newThumbTop / (maxThumbTop || 1);
 
         this.viewport.scrollTop = scrollRatio * (maxScroll || 0);
-    }
+    };
 
     private handlePointerUp = (e: PointerEvent): void => {
         if (!this.dragging || this.activePointerId !== e.pointerId) {
@@ -201,7 +203,7 @@ class Scrollbar {
         this.activePointerId = null;
         Scrollbar.activeInstance = null;
         document.body.style.userSelect = '';
-    }
+    };
 
     private handleTrackClick = (e: MouseEvent): void => {
         if (e.target === this.thumb) {
@@ -224,7 +226,7 @@ class Scrollbar {
         const scrollTop = scrollRatio * (maxScroll || 0);
 
         this.viewport.scrollTo({ top: scrollTop, behavior: 'smooth' });
-    }
+    };
 
     private handleContainerWheel = (e: WheelEvent): void => {
         const { scrollTop, scrollHeight, clientHeight } = this.viewport;
@@ -237,7 +239,7 @@ class Scrollbar {
         }
 
         this.viewport.scrollTop += e.deltaY;
-    }
+    };
 
     public destroy(): void {
         this.abortController.abort();
@@ -258,9 +260,7 @@ class Scrollbar {
     }
 
     public static create(elementOrSelector: string | HTMLElement): Scrollbar {
-        const container = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLElement>(elementOrSelector)
-            : elementOrSelector;
+        const container = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
 
         if (!container) {
             throw new Error(`Scrollbar: Element not found for selector "${elementOrSelector}"`);
@@ -274,7 +274,7 @@ class Scrollbar {
 
     public static initAll(selector: string): Scrollbar[] {
         const containers = document.querySelectorAll<HTMLElement>(selector);
-        return Array.from(containers).map(container => Scrollbar.create(container));
+        return Array.from(containers).map((container) => Scrollbar.create(container));
     }
 
     public static initOne(elementOrSelector: string | HTMLElement): Scrollbar {
@@ -284,7 +284,6 @@ class Scrollbar {
     public static getInstance(container: HTMLElement): Scrollbar | undefined {
         return Scrollbar.instances.get(container);
     }
-
 }
 
 export { Scrollbar, type ScrollbarElements };

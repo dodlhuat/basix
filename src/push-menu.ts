@@ -16,7 +16,7 @@ class PushMenu {
         menu: null,
         header: null,
         controlIcon: null,
-        backdrop: null
+        backdrop: null,
     };
 
     private static initialized = false;
@@ -171,7 +171,7 @@ class PushMenu {
         }
 
         this.pushToggle();
-    }
+    };
 
     public static pushToggle(): void {
         if (!this.elements.content || !this.elements.menu) {
@@ -198,13 +198,13 @@ class PushMenu {
 
     private static clickNav = (): void => {
         (PushMenu.elements.navigation as HTMLElement).click();
-    }
+    };
 
     private static handleBackdropClick = (): void => {
         if (PushMenu.isOpen()) {
             (PushMenu.elements.navigation as HTMLElement).click();
         }
-    }
+    };
 
     public static open(): void {
         if (!this.elements.content?.classList.contains('pushed')) {
@@ -237,7 +237,7 @@ class PushMenu {
             menu: null,
             header: null,
             controlIcon: null,
-            backdrop: null
+            backdrop: null,
         };
 
         this.panelStack = [];

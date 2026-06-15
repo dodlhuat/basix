@@ -21,48 +21,58 @@ class SidebarNav {
     private touchStartY = 0;
     private abortController = new AbortController();
 
-    constructor(containerOrSelector: string | HTMLElement, options: SidebarNavOptions = {}) {
+    public constructor(containerOrSelector: string | HTMLElement, options: SidebarNavOptions = {}) {
         const container: HTMLElement | null =
-            typeof containerOrSelector === 'string'
-                ? (document.querySelector(containerOrSelector) as HTMLElement | null)
-                : containerOrSelector;
+            typeof containerOrSelector === 'string' ? (document.querySelector(containerOrSelector) as HTMLElement | null) : containerOrSelector;
 
         this.opts = {
             toggleSelector: options.toggleSelector ?? '.sidebar-toggle',
-            breakpoint:     options.breakpoint     ?? 768,
+            breakpoint: options.breakpoint ?? 768,
             swipeThreshold: options.swipeThreshold ?? 60,
-            swipeEdge:      options.swipeEdge      ?? 20,
+            swipeEdge: options.swipeEdge ?? 20,
         };
 
-        this.nav       = container?.querySelector('.sidebar-nav')     ?? null;
-        this.backdrop  = container?.querySelector('.sidebar-backdrop') ?? null;
+        this.nav = container?.querySelector('.sidebar-nav') ?? null;
+        this.backdrop = container?.querySelector('.sidebar-backdrop') ?? null;
         this.toggleBtn = document.querySelector(this.opts.toggleSelector);
 
         const sig = { signal: this.abortController.signal };
 
         this.toggleBtn?.addEventListener('click', () => this.toggle(), sig);
-        this.backdrop?.addEventListener('click',  () => this.close(),  sig);
+        this.backdrop?.addEventListener('click', () => this.close(), sig);
 
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > this.opts.breakpoint) this.close();
-        }, sig);
+        window.addEventListener(
+            'resize',
+            () => {
+                if (window.innerWidth > this.opts.breakpoint) this.close();
+            },
+            sig,
+        );
 
-        document.addEventListener('touchstart', (e: TouchEvent) => {
-            this.touchStartX = e.touches[0].clientX;
-            this.touchStartY = e.touches[0].clientY;
-        }, { passive: true, signal: this.abortController.signal });
+        document.addEventListener(
+            'touchstart',
+            (e: TouchEvent) => {
+                this.touchStartX = e.touches[0].clientX;
+                this.touchStartY = e.touches[0].clientY;
+            },
+            { passive: true, signal: this.abortController.signal },
+        );
 
-        document.addEventListener('touchend', (e: TouchEvent) => {
-            if (window.innerWidth > this.opts.breakpoint) return;
-            const dx = e.changedTouches[0].clientX - this.touchStartX;
-            const dy = e.changedTouches[0].clientY - this.touchStartY;
-            if (Math.abs(dx) < Math.abs(dy)) return;
-            if (!this.isOpen() && this.touchStartX <= this.opts.swipeEdge && dx >= this.opts.swipeThreshold) {
-                this.open();
-            } else if (this.isOpen() && dx <= -this.opts.swipeThreshold) {
-                this.close();
-            }
-        }, { passive: true, signal: this.abortController.signal });
+        document.addEventListener(
+            'touchend',
+            (e: TouchEvent) => {
+                if (window.innerWidth > this.opts.breakpoint) return;
+                const dx = e.changedTouches[0].clientX - this.touchStartX;
+                const dy = e.changedTouches[0].clientY - this.touchStartY;
+                if (Math.abs(dx) < Math.abs(dy)) return;
+                if (!this.isOpen() && this.touchStartX <= this.opts.swipeEdge && dx >= this.opts.swipeThreshold) {
+                    this.open();
+                } else if (this.isOpen() && dx <= -this.opts.swipeThreshold) {
+                    this.close();
+                }
+            },
+            { passive: true, signal: this.abortController.signal },
+        );
 
         this.closeBtn = document.createElement('button');
         this.closeBtn.className = 'sidebar-close';
@@ -83,7 +93,11 @@ class SidebarNav {
     }
 
     public toggle(): void {
-        this.nav?.classList.contains('is-open') ? this.close() : this.open();
+        if (this.nav?.classList.contains('is-open')) {
+            this.close();
+        } else {
+            this.open();
+        }
     }
 
     public isOpen(): boolean {

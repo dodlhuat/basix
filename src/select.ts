@@ -5,10 +5,8 @@ class Select {
     private readonly dropdown: HTMLElement | null;
     private readonly documentClickHandler: (e: Event) => void;
 
-    constructor(elementOrSelector: string | HTMLSelectElement) {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLSelectElement>(elementOrSelector)
-            : elementOrSelector;
+    public constructor(elementOrSelector: string | HTMLSelectElement) {
+        const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLSelectElement>(elementOrSelector) : elementOrSelector;
 
         if (!element) {
             throw new Error(`Select: Element not found for selector "${elementOrSelector}"`);
@@ -39,16 +37,14 @@ class Select {
 
     public value(): string | string[] {
         const selectedValues = Array.from(this.element.options)
-            .filter(option => option.selected)
-            .map(option => option.value);
+            .filter((option) => option.selected)
+            .map((option) => option.value);
 
         return this.isMultiselect ? selectedValues : selectedValues[0];
     }
 
     public static init(elementOrSelector: string | HTMLSelectElement): (() => void) | null {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLSelectElement>(elementOrSelector)
-            : elementOrSelector;
+        const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLSelectElement>(elementOrSelector) : elementOrSelector;
 
         if (!element) return null;
 
@@ -118,30 +114,23 @@ class Select {
     }
 
     private static closeAllDropdowns(exceptDropdown?: HTMLElement): void {
-        document.querySelectorAll('.dropdown').forEach(dropdown => {
+        document.querySelectorAll('.dropdown').forEach((dropdown) => {
             if (dropdown !== exceptDropdown) {
                 dropdown.classList.remove('open');
             }
         });
     }
 
-    private static handleMultiSelect(
-        option: HTMLElement,
-        optionsContainer: HTMLElement,
-        selected: HTMLElement,
-        selectElement: HTMLSelectElement
-    ): void {
+    private static handleMultiSelect(option: HTMLElement, optionsContainer: HTMLElement, selected: HTMLElement, selectElement: HTMLSelectElement): void {
         option.classList.toggle('selected');
 
-        const selectedOptions = Array.from(
-            optionsContainer.querySelectorAll('.dropdown-option.selected')
-        ) as HTMLElement[];
+        const selectedOptions = Array.from(optionsContainer.querySelectorAll('.dropdown-option.selected')) as HTMLElement[];
 
-        const values = selectedOptions.map(opt => opt.textContent?.trim() || '');
+        const values = selectedOptions.map((opt) => opt.textContent?.trim() || '');
         selected.textContent = values.length ? values.join(', ') : 'Select options';
 
-        const selectedValues = selectedOptions.map(opt => opt.dataset.value || '');
-        Array.from(selectElement.options).forEach(opt => {
+        const selectedValues = selectedOptions.map((opt) => opt.dataset.value || '');
+        Array.from(selectElement.options).forEach((opt) => {
             opt.selected = selectedValues.includes(opt.value);
         });
     }
@@ -151,9 +140,9 @@ class Select {
         optionsContainer: HTMLElement,
         selected: HTMLElement,
         dropdown: HTMLElement,
-        selectElement: HTMLSelectElement
+        selectElement: HTMLSelectElement,
     ): void {
-        optionsContainer.querySelectorAll('.dropdown-option').forEach(opt => {
+        optionsContainer.querySelectorAll('.dropdown-option').forEach((opt) => {
             opt.classList.remove('selected');
         });
 
@@ -199,7 +188,7 @@ class Select {
         optionsMenu.innerHTML = 'Select options<span class="dropdown-options-icon icon icon-close"></span>';
         dropdownOptions.appendChild(optionsMenu);
 
-        Array.from(select.options).forEach(opt => {
+        Array.from(select.options).forEach((opt) => {
             const optDiv = document.createElement('div');
             optDiv.className = 'dropdown-option';
             optDiv.dataset.value = opt.value;

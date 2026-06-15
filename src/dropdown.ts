@@ -20,7 +20,7 @@ class Dropdown {
     private options: Required<DropdownOptions>;
     private abortController: AbortController;
 
-    constructor(selector: string, options: DropdownOptions = {}) {
+    public constructor(selector: string, options: DropdownOptions = {}) {
         const container = document.querySelector<HTMLElement>(selector);
 
         if (!container) {
@@ -63,7 +63,7 @@ class Dropdown {
                 e.stopPropagation();
                 this.toggle();
             },
-            { signal }
+            { signal },
         );
 
         document.addEventListener(
@@ -73,7 +73,7 @@ class Dropdown {
                     this.close();
                 }
             },
-            { signal }
+            { signal },
         );
 
         this.menu.addEventListener(
@@ -98,7 +98,7 @@ class Dropdown {
                     }
                 }
             },
-            { signal }
+            { signal },
         );
     }
 
@@ -115,8 +115,8 @@ class Dropdown {
 
     private updatePosition(): void {
         const triggerRect = this.trigger.getBoundingClientRect();
-        const menuRect    = this.menu.getBoundingClientRect();
-        const placement   = bestPlacement(triggerRect, menuRect, 6);
+        const menuRect = this.menu.getBoundingClientRect();
+        const placement = bestPlacement(triggerRect, menuRect, 6);
         this.container.classList.toggle('drop-up', placement === 'top');
     }
 

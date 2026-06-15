@@ -6,15 +6,13 @@ class CodeViewer {
     private code: string;
     private language: string;
 
-    constructor(elementOrSelector: string | HTMLElement, code: string, language: SupportedLanguage = 'javascript') {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLElement>(elementOrSelector)
-            : elementOrSelector;
+    public constructor(elementOrSelector: string | HTMLElement, code: string, language: SupportedLanguage = 'javascript') {
+        const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
 
         if (!element) {
             throw new Error(`CodeViewer: Element not found for selector "${elementOrSelector}"`);
         }
-        
+
         this.container = element;
         this.code = code;
         this.language = language.toLowerCase();
@@ -22,7 +20,7 @@ class CodeViewer {
     }
 
     private highlight(code: string): string {
-        switch(this.language) {
+        switch (this.language) {
             case 'javascript':
             case 'js':
                 return this.highlightJavaScript(code);
@@ -36,12 +34,7 @@ class CodeViewer {
     }
 
     private escape(str: string): string {
-        return str
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
 
     private highlightJavaScript(code: string): string {
@@ -74,7 +67,8 @@ class CodeViewer {
 
         code = this.escape(code);
 
-        const keywords = 'const|let|var|function|class|if|else|for|while|return|new|this|super|extends|import|export|from|default|async|await|try|catch|throw|switch|case|break|continue';
+        const keywords =
+            'const|let|var|function|class|if|else|for|while|return|new|this|super|extends|import|export|from|default|async|await|try|catch|throw|switch|case|break|continue';
         code = code.replace(new RegExp(`\\b(${keywords})\\b`, 'g'), '<span class="keyword">$1</span>');
 
         code = code.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="number">$1</span>');
@@ -96,12 +90,15 @@ class CodeViewer {
         code = code.replace(/(&lt;!--[\s\S]*?--&gt;)/g, '###COMMENT_START###$1###COMMENT_END###');
 
         code = code.replace(/(&lt;\/?)([a-zA-Z0-9]+)([^&]*?)(&gt;)/g, (match, open, tagName, attrs, close) => {
-            attrs = attrs.replace(/\s+([a-zA-Z-]+)(=?)(&quot;[^&]*?&quot;|&#039;[^&]*?&#039;)?/g, (m: string, attrName: string, eq: string, attrValue?: string) => {
-                let result = ' <span class="attribute">' + attrName + '</span>';
-                if (eq) result += eq;
-                if (attrValue) result += '<span class="string">' + attrValue + '</span>';
-                return result;
-            });
+            attrs = attrs.replace(
+                /\s+([a-zA-Z-]+)(=?)(&quot;[^&]*?&quot;|&#039;[^&]*?&#039;)?/g,
+                (m: string, attrName: string, eq: string, attrValue?: string) => {
+                    let result = ' <span class="attribute">' + attrName + '</span>';
+                    if (eq) result += eq;
+                    if (attrValue) result += '<span class="string">' + attrValue + '</span>';
+                    return result;
+                },
+            );
 
             return open + '<span class="tag">' + tagName + '</span>' + attrs + '<span class="punctuation">' + close + '</span>';
         });
@@ -149,9 +146,9 @@ class CodeViewer {
         try {
             await navigator.clipboard.writeText(this.code);
             const btn = this.container.querySelector<HTMLButtonElement>('.copy-button');
-            
+
             if (!btn) return;
-            
+
             btn.textContent = 'copied!';
             btn.classList.add('copied');
 
@@ -187,7 +184,7 @@ class CodeViewer {
 
     private handleCopy = (): void => {
         this.copyCode();
-    }
+    };
 
     public destroy(): void {
         const copyButton = this.container.querySelector<HTMLButtonElement>('.copy-button');

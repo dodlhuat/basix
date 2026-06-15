@@ -18,10 +18,8 @@ class Tabs {
     private currentTab: number;
     private abortController = new AbortController();
 
-    constructor(elementOrSelector: string | HTMLElement, options: TabsOptions = {}) {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector<HTMLElement>(elementOrSelector)
-            : elementOrSelector;
+    public constructor(elementOrSelector: string | HTMLElement, options: TabsOptions = {}) {
+        const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
 
         if (!element) {
             throw new Error(`Tabs: Element not found for selector "${elementOrSelector}"`);
@@ -34,7 +32,7 @@ class Tabs {
             layout,
             defaultTab: options.defaultTab ?? 0,
             menuPos: options.menuPos ?? (layout === 'vertical' ? 'left' : 'top'),
-            onChange: options.onChange
+            onChange: options.onChange,
         };
 
         this.currentTab = this.options.defaultTab;
@@ -73,15 +71,23 @@ class Tabs {
     private bindEvents(): void {
         const sig = { signal: this.abortController.signal };
         this.tabItems.forEach((item, index) => {
-            item.addEventListener('click', (e: Event) => {
-                e.preventDefault();
-                this.activateTab(index);
-            }, sig);
+            item.addEventListener(
+                'click',
+                (e: Event) => {
+                    e.preventDefault();
+                    this.activateTab(index);
+                },
+                sig,
+            );
 
-            item.addEventListener('keydown', (e: Event) => {
-                const keyEvent = e as KeyboardEvent;
-                this.handleKeyboardNavigation(keyEvent, index);
-            }, sig);
+            item.addEventListener(
+                'keydown',
+                (e: Event) => {
+                    const keyEvent = e as KeyboardEvent;
+                    this.handleKeyboardNavigation(keyEvent, index);
+                },
+                sig,
+            );
 
             item.setAttribute('role', 'tab');
             item.setAttribute('tabindex', index === this.options.defaultTab ? '0' : '-1');
@@ -147,7 +153,7 @@ class Tabs {
             return;
         }
 
-        this.tabItems.forEach((item, i) => {
+        this.tabItems.forEach((item, _i) => {
             item.classList.remove('active');
             item.setAttribute('tabindex', '-1');
             item.setAttribute('aria-selected', 'false');
@@ -207,9 +213,7 @@ class Tabs {
         tab.style.pointerEvents = 'none';
 
         if (index === this.currentTab) {
-            const firstEnabled = Array.from(this.tabItems).findIndex(
-                (item) => !item.classList.contains('disabled')
-            );
+            const firstEnabled = Array.from(this.tabItems).findIndex((item) => !item.classList.contains('disabled'));
             if (firstEnabled !== -1) {
                 this.activateTab(firstEnabled);
             }

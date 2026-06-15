@@ -23,15 +23,9 @@ class Modal {
     private template: string;
     private modalWrapper: HTMLElement | null = null;
 
-    constructor(options: ModalOptions);
-    constructor(content: string, header?: string, footer?: string, closeable?: boolean, type?: ModalType);
-    constructor(
-        contentOrOptions: string | ModalOptions,
-        header?: string,
-        footer?: string,
-        closeable: boolean = true,
-        type: ModalType = 'default'
-    ) {
+    public constructor(options: ModalOptions);
+    public constructor(content: string, header?: string, footer?: string, closeable?: boolean, type?: ModalType);
+    public constructor(contentOrOptions: string | ModalOptions, header?: string, footer?: string, closeable: boolean = true, type: ModalType = 'default') {
         if (typeof contentOrOptions === 'object') {
             this.content = contentOrOptions.content;
             this.header = contentOrOptions.header;
@@ -101,19 +95,19 @@ class Modal {
                 this.modalWrapper = null;
             }
         }, 300);
-    }
+    };
 
     private handleEscape = (e: KeyboardEvent): void => {
         if (e.key === 'Escape') {
             this.hide();
         }
-    }
+    };
 
     private handleBackgroundClick = (e: Event): void => {
         if ((e.target as HTMLElement)?.classList.contains('modal-background')) {
             this.hide();
         }
-    }
+    };
 
     private buildTemplate(): string {
         const parts: string[] = [`<div class="modal modal-${this.type}">`];
