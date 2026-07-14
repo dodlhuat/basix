@@ -8,7 +8,7 @@
     <script type="module">
         import { DocsNav } from '../../js/docs-nav.js';
         import { Theme } from '../../js/theme.js';
-        import { RangeSlider } from '../../js/range-slider.js';
+        import { RangeSlider, RangeSliderRange } from '../../js/range-slider.js';
         import { CodeViewer } from '../../js/code-viewer.js';
         new DocsNav();
         Theme.init();
@@ -21,6 +21,13 @@
         new RangeSlider(document.querySelector('#slider-step'));
         document.querySelector('#slider-step')?.addEventListener('input', e => {
             document.getElementById('val-step').textContent = e.target.value;
+        });
+
+        new RangeSliderRange(document.querySelector('#slider-range'));
+        document.querySelector('#slider-range')?.addEventListener('input', () => {
+            const startInput = document.getElementById('slider-range-start');
+            const endInput = document.getElementById('slider-range-end');
+            document.getElementById('val-range').textContent = `${startInput.value} – ${endInput.value}`;
         });
 
         new CodeViewer('#code-html', `<div class="range-slider">
@@ -40,6 +47,29 @@ document.getElementById('my-slider').addEventListener('input', (e) => {
 // Initialise all sliders at once
 RangeSlider.initAll();            // default: .range-slider input[type="range"]
 RangeSlider.initAll('#my-form input[type="range"]'); // custom selector
+
+slider.destroy();`, 'js');
+
+        new CodeViewer('#code-html-range', `<div class="range-slider range-slider--range">
+  <input type="range" id="range-start" min="0" max="100" value="25" aria-label="Minimum value"/>
+  <input type="range" id="range-end" min="0" max="100" value="75" aria-label="Maximum value"/>
+</div>`, 'html');
+
+        new CodeViewer('#code-js-range', `import { RangeSliderRange } from '@dodlhuat/basix/js/range-slider.js';
+
+// Container must hold exactly two range inputs
+const container = document.querySelector('.range-slider--range');
+const slider = new RangeSliderRange(container);
+
+// React to value changes (fires while dragging either thumb)
+container.addEventListener('input', () => {
+  const [start, end] = slider.values();
+  console.log(start, end);
+});
+
+// Initialise all matching containers at once
+RangeSliderRange.initAll();       // default: .range-slider--range
+RangeSliderRange.initAll('#my-form .range-slider--range'); // custom selector
 
 slider.destroy();`, 'js');
     </script>
@@ -92,6 +122,30 @@ slider.destroy();`, 'js');
                     <tr><td><code>update()</code></td><td>Recalculates the fill percentage. Called automatically on <code>input</code>.</td></tr>
                     <tr><td><code>destroy()</code></td><td>Removes the event listener and clears the CSS fill property.</td></tr>
                     <tr><td><code>RangeSlider.initAll(selector?)</code></td><td>Initialises all matching inputs. Default: <code>'.range-slider input[type="range"]'</code>.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Range (start / end)</h2>
+            <p>Two-thumb variant for selecting a start and end value. Wrap two <code>&lt;input type="range"&gt;</code> elements in <code>.range-slider.range-slider--range</code> and initialise with <code>RangeSliderRange</code>. The thumbs cannot cross each other.</p>
+            <div class="docs-demo" style="max-width:480px;">
+                <div class="range-slider range-slider--range" id="slider-range">
+                    <input type="range" id="slider-range-start" min="0" max="100" value="25" aria-label="Minimum value"/>
+                    <input type="range" id="slider-range-end" min="0" max="100" value="75" aria-label="Maximum value"/>
+                </div>
+                <p style="margin:0.5rem 0 0;font-size:0.85rem;color:var(--secondary-text);">Range: <strong id="val-range">25 – 75</strong></p>
+            </div>
+
+            <h2>Range usage</h2>
+            <div id="code-html-range"></div>
+            <div id="code-js-range" style="margin-top:0.5rem;"></div>
+
+            <h2>Range API</h2>
+            <table class="docs-props-table">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>values()</code></td><td>Returns the current <code>[start, end]</code> values as numbers.</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Removes the event listeners and clears the CSS fill properties.</td></tr>
+                    <tr><td><code>RangeSliderRange.initAll(selector?)</code></td><td>Initialises all matching containers. Default: <code>'.range-slider--range'</code>.</td></tr>
                 </tbody>
             </table>
         </div>

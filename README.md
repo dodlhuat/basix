@@ -1,4 +1,4 @@
-# Basix 1.4.1
+# Basix 1.4.2
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,12 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.4.1 → 1.4.2
+
+No breaking changes.
+
+- **`RangeSlider`** — added a two-thumb start/end variant, `RangeSliderRange`. Wrap two `<input type="range">` elements in `.range-slider.range-slider--range` and initialise with `new RangeSliderRange(container)`. The thumbs cannot cross each other; read the current values with `values()`, which returns `[start, end]`.
 
 ### 1.4.0 → 1.4.1
 
@@ -187,6 +193,25 @@ new RangeSlider(document.querySelector('.range-slider input'));
 
 // Or initialise all sliders on the page at once
 RangeSlider.initAll();
+```
+
+**Range variant** — a two-thumb slider for selecting a start and end value. Wrap two range inputs in `.range-slider.range-slider--range` and initialise with `RangeSliderRange`. The thumbs cannot cross each other.
+
+``` html
+<div class="range-slider range-slider--range">
+    <input type="range" min="0" max="100" value="25" aria-label="Minimum value" />
+    <input type="range" min="0" max="100" value="75" aria-label="Maximum value" />
+</div>
+```
+
+``` js
+const slider = new RangeSliderRange(document.querySelector('.range-slider--range'));
+
+// Read the current [start, end] values
+const [start, end] = slider.values();
+
+// Or initialise all range sliders on the page at once
+RangeSliderRange.initAll();
 ```
 
 ---
