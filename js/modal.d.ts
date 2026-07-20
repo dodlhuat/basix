@@ -14,10 +14,11 @@ declare class Modal {
     private readonly type;
     private template;
     private modalWrapper;
+    private listeners;
     constructor(options: ModalOptions);
     constructor(content: string, header?: string, footer?: string, closeable?: boolean, type?: ModalType);
     show(): void;
-    hide: () => void;
+    hide(): void;
     private handleEscape;
     private handleBackgroundClick;
     private buildTemplate;

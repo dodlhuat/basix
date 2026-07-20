@@ -1,6 +1,7 @@
 import { computePosition } from './position.js';
 import type { Placement } from './position.js';
 import { sanitizeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 
 type PopoverPlacement = Placement | 'auto';
 type PopoverAlign = 'start' | 'center' | 'end';
@@ -32,8 +33,8 @@ class Popover {
     private readonly opts: Required<PopoverOptions>;
     private popoverEl: HTMLElement | null = null;
     private hoverTimer: number | null = null;
-    private abortController = new AbortController();
-    private openAbortController: AbortController | null = null;
+    private listeners = new ListenerGroup();
+    private openListeners: ListenerGroup | null = null;
 
     public constructor(triggerEl: HTMLElement | string, options: PopoverOptions) {
         const el = typeof triggerEl === 'string' ? document.querySelector<HTMLElement>(triggerEl) : triggerEl;
@@ -74,8 +75,8 @@ class Popover {
             Popover.openPopovers.add(this);
             this.opts.onOpen();
 
-            this.openAbortController = new AbortController();
-            const openSig = { signal: this.openAbortController.signal };
+            this.openListeners = new ListenerGroup();
+            const openSig = { signal: this.openListeners.signal };
             if (this.opts.closeOnOutsideClick) document.addEventListener('pointerdown', (e) => this.onOutsideClick(e), { ...openSig, capture: true });
             if (this.opts.closeOnEscape) document.addEventListener('keydown', (e) => this.onEscape(e), openSig);
         });
@@ -88,8 +89,8 @@ class Popover {
         Popover.openPopovers.delete(this);
         this.opts.onClose();
 
-        this.openAbortController?.abort();
-        this.openAbortController = null;
+        this.openListeners?.destroy();
+        this.openListeners = null;
 
         this.trigger.removeAttribute('aria-expanded');
         this.trigger.removeAttribute('aria-controls');
@@ -109,7 +110,7 @@ class Popover {
 
     public destroy(): void {
         this.close();
-        this.abortController.abort();
+        this.listeners.destroy();
     }
 
     public static closeAll(): void {
@@ -193,7 +194,7 @@ class Popover {
     }
 
     private attachTrigger(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         if (this.opts.triggerMode === 'click') {
             this.trigger.addEventListener('click', () => this.onClick(), sig);
         } else {

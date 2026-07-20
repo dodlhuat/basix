@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 
 type ChartType = 'line' | 'area' | 'column' | 'bar' | 'pie';
 type ChartCurve = 'smooth' | 'linear' | 'step';
@@ -63,7 +64,7 @@ class Chart {
     private opts: Omit<Required<ChartOptions>, 'yMax'> & { yMax?: number };
     private tooltip!: HTMLElement;
     private colors: string[] = [];
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
     private resizeTimer: ReturnType<typeof setTimeout> | null = null;
     private resizeObserver: ResizeObserver | null = null;
 
@@ -92,8 +93,7 @@ class Chart {
     }
 
     private render(): void {
-        this.abortController.abort();
-        this.abortController = new AbortController();
+        this.listeners.reset();
 
         this.container.innerHTML = '';
         this.container.classList.add('chart');
@@ -419,7 +419,7 @@ class Chart {
             }
 
             const { x: dx, y: dy } = this.polar(0, 0, 8, midAngle);
-            const sig = { signal: this.abortController.signal };
+            const sig = { signal: this.listeners.signal };
             const tipHtml = `<strong>${escapeHtml(d.label)}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`;
 
             path.addEventListener(
@@ -641,7 +641,7 @@ class Chart {
     }
 
     private onPoint(g: SVGElement, s: ChartSeries, d: ChartDataPoint, i: number): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         g.addEventListener(
             'mouseenter',
             (e) => {
@@ -655,7 +655,7 @@ class Chart {
     }
 
     private onBar(rect: SVGElement, s: ChartSeries, d: ChartDataPoint, i: number): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         rect.style.cursor = 'pointer';
         rect.addEventListener(
             'mouseenter',
@@ -730,7 +730,7 @@ class Chart {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.resizeObserver?.disconnect();
         if (this.resizeTimer) clearTimeout(this.resizeTimer);
         this.container.innerHTML = '';

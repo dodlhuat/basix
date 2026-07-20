@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 class Toast {
     content;
     header;
@@ -8,6 +9,7 @@ class Toast {
     template;
     toastElement = null;
     timerId = null;
+    openListeners = null;
     constructor(contentOrOptions, header = '', type, closeable = true) {
         if (typeof contentOrOptions === 'object') {
             this.content = contentOrOptions.content;
@@ -37,7 +39,8 @@ class Toast {
                 this.toastElement?.classList.add('show');
                 const closeButton = this.toastElement?.querySelector('.close');
                 if (closeButton) {
-                    closeButton.addEventListener('click', this.hide);
+                    this.openListeners = new ListenerGroup();
+                    closeButton.addEventListener('click', () => this.hide(), { signal: this.openListeners.signal });
                 }
                 if (ms !== undefined && ms > 0) {
                     this.startTimer(ms);
@@ -45,18 +48,19 @@ class Toast {
             });
         });
     }
-    hide = () => {
+    hide() {
         if (this.timerId !== null) {
             clearTimeout(this.timerId);
             this.timerId = null;
         }
         this.toastElement?.classList.remove('show');
+        this.openListeners?.destroy();
+        this.openListeners = null;
         setTimeout(() => {
-            this.toastElement?.querySelector('.close')?.removeEventListener('click', this.hide);
             this.toastElement?.remove();
             this.toastElement = null;
         }, 150);
-    };
+    }
     startTimer(ms, elapsed = 0) {
         const stepSize = 250;
         if (elapsed >= ms) {

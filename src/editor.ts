@@ -1,4 +1,5 @@
 import { sanitizeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 
 interface EditorOptions {
     /** Hides the entire side panel (code/preview) permanently. Safe to use
@@ -18,7 +19,7 @@ class Editor {
     private readonly wordCount: HTMLElement | null;
     private undoStack: string[] = [];
     private redoStack: string[] = [];
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(options: EditorOptions = {}) {
         if (options.root instanceof HTMLElement) {
@@ -75,7 +76,7 @@ class Editor {
     }
 
     private bindToolbar(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.qAll<HTMLElement>('[data-cmd]').forEach((btn) => {
             btn.addEventListener(
                 'click',
@@ -91,7 +92,7 @@ class Editor {
     }
 
     private bindActions(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.q('[data-editor-action="link"]')?.addEventListener(
             'click',
             () => {
@@ -223,12 +224,12 @@ class Editor {
                     this.redo();
                 }
             },
-            { signal: this.abortController.signal },
+            { signal: this.listeners.signal },
         );
     }
 
     private bindEditable(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.editable.addEventListener('input', () => this.onContentChange(), sig);
 
         this.editable.addEventListener(
@@ -246,7 +247,7 @@ class Editor {
     }
 
     private bindTabs(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.qAll<HTMLElement>('.side-tab[data-tab]').forEach((tab) => {
             tab.addEventListener(
                 'click',
@@ -561,7 +562,7 @@ ${content}
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
     }
 }
 

@@ -14,10 +14,11 @@ declare class Toast {
     private readonly template;
     private toastElement;
     private timerId;
+    private openListeners;
     constructor(options: ToastOptions);
     constructor(content: string, header?: string, type?: ToastType, closeable?: boolean);
     show(ms?: number): void;
-    hide: () => void;
+    hide(): void;
     private startTimer;
     destroy(): void;
     private buildTemplate;

@@ -1,3 +1,4 @@
+import { ListenerGroup } from './listeners.js';
 class Lightbox {
     images;
     currentIndex;
@@ -9,7 +10,7 @@ class Lightbox {
     captionEl = null;
     counterEl = null;
     isZoomed = false;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     constructor(options) {
         if (options.images && options.images.length > 0) {
             this.images = options.images;
@@ -36,12 +37,12 @@ class Lightbox {
         this.imgEl = wrapper.querySelector('.lightbox-img');
         this.captionEl = wrapper.querySelector('.lightbox-caption');
         this.counterEl = wrapper.querySelector('.lightbox-counter');
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         if (this.closeable) {
-            wrapper.querySelector('.lightbox-close')?.addEventListener('click', this.hide, sig);
-            wrapper.querySelector('.lightbox-background')?.addEventListener('click', this.handleBackgroundClick, sig);
+            wrapper.querySelector('.lightbox-close')?.addEventListener('click', () => this.hide(), sig);
+            wrapper.querySelector('.lightbox-background')?.addEventListener('click', (e) => this.handleBackgroundClick(e), sig);
         }
-        document.addEventListener('keydown', this.handleKeydown, sig);
+        document.addEventListener('keydown', (e) => this.handleKeydown(e), sig);
         if (this.images.length > 1) {
             wrapper.querySelector('.lightbox-prev')?.addEventListener('click', () => this.prev(), sig);
             wrapper.querySelector('.lightbox-next')?.addEventListener('click', () => this.next(), sig);
@@ -57,12 +58,11 @@ class Lightbox {
         });
         this.onOpen?.();
     }
-    hide = () => {
+    hide() {
         const wrapper = this.wrapper;
         if (!wrapper)
             return;
-        this.abortController.abort();
-        this.abortController = new AbortController();
+        this.listeners.reset();
         document.body.style.overflow = '';
         wrapper.classList.remove('is-visible');
         setTimeout(() => {
@@ -76,7 +76,7 @@ class Lightbox {
             }
             this.onClose?.();
         }, 300);
-    };
+    }
     next() {
         if (this.images.length <= 1)
             return;
@@ -137,7 +137,7 @@ class Lightbox {
             return;
         const prevIdx = (index - 1 + this.images.length) % this.images.length;
         const nextIdx = (index + 1) % this.images.length;
-        [prevIdx, nextIdx].forEach(i => {
+        [prevIdx, nextIdx].forEach((i) => {
             const img = new Image();
             img.src = this.images[i].src;
         });
@@ -164,7 +164,7 @@ class Lightbox {
         this.imgEl.classList.toggle('is-zoomed', this.isZoomed);
         this.wrapper?.querySelector('.lightbox-img-wrap')?.classList.toggle('is-zoomed', this.isZoomed);
     }
-    handleKeydown = (e) => {
+    handleKeydown(e) {
         switch (e.key) {
             case 'Escape':
                 if (this.closeable)
@@ -180,11 +180,11 @@ class Lightbox {
                 this.trapFocus(e);
                 break;
         }
-    };
+    }
     trapFocus(e) {
         if (!this.wrapper)
             return;
-        const focusable = Array.from(this.wrapper.querySelectorAll('button:not([hidden]), [tabindex]:not([tabindex="-1"]):not([hidden])')).filter(el => el.offsetParent !== null);
+        const focusable = Array.from(this.wrapper.querySelectorAll('button:not([hidden]), [tabindex]:not([tabindex="-1"]):not([hidden])')).filter((el) => el.offsetParent !== null);
         if (focusable.length === 0)
             return;
         const first = focusable[0];
@@ -202,11 +202,11 @@ class Lightbox {
             }
         }
     }
-    handleBackgroundClick = (e) => {
+    handleBackgroundClick(e) {
         if (e.target?.classList.contains('lightbox-background')) {
             this.hide();
         }
-    };
+    }
     addTouchSupport() {
         const wrap = this.wrapper?.querySelector('.lightbox-img-wrap');
         if (!wrap)
@@ -216,16 +216,21 @@ class Lightbox {
         wrap.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
             isDragging = true;
-        }, { passive: true, signal: this.abortController.signal });
+        }, { passive: true, signal: this.listeners.signal });
         wrap.addEventListener('touchend', (e) => {
             if (!isDragging)
                 return;
             const deltaX = e.changedTouches[0].clientX - startX;
             if (Math.abs(deltaX) > 50) {
-                deltaX < 0 ? this.next() : this.prev();
+                if (deltaX < 0) {
+                    this.next();
+                }
+                else {
+                    this.prev();
+                }
             }
             isDragging = false;
-        }, { signal: this.abortController.signal });
+        }, { signal: this.listeners.signal });
     }
     buildTemplate() {
         return `
@@ -250,13 +255,9 @@ class Lightbox {
     static bind(selector = '[data-lightbox]') {
         const elements = document.querySelectorAll(selector);
         const groups = new Map();
-        elements.forEach(el => {
+        elements.forEach((el) => {
             const groupKey = el.dataset.lightbox || `__solo__${el.dataset.lightboxId ?? Math.random()}`;
-            const src = el instanceof HTMLAnchorElement
-                ? el.href
-                : el instanceof HTMLImageElement
-                    ? el.src
-                    : (el.dataset.src ?? '');
+            const src = el instanceof HTMLAnchorElement ? el.href : el instanceof HTMLImageElement ? el.src : (el.dataset.src ?? '');
             const imgChild = el.querySelector('img');
             const alt = el instanceof HTMLImageElement ? el.alt : (imgChild?.alt ?? '');
             const caption = el.dataset.lightboxCaption;
@@ -264,13 +265,13 @@ class Lightbox {
                 groups.set(groupKey, []);
             groups.get(groupKey).push({ el, image: { src, alt, caption } });
         });
-        groups.forEach(items => {
+        groups.forEach((items) => {
             items.forEach(({ el }, idx) => {
                 el.style.cursor = 'zoom-in';
-                el.addEventListener('click', e => {
+                el.addEventListener('click', (e) => {
                     e.preventDefault();
                     new Lightbox({
-                        images: items.map(i => i.image),
+                        images: items.map((i) => i.image),
                         startIndex: idx,
                     }).show();
                 });

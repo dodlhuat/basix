@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 /** A single image entry for the Lightbox gallery. */
 interface LightboxImage {
     src: string;
@@ -29,7 +31,7 @@ class Lightbox {
     private captionEl: HTMLElement | null = null;
     private counterEl: HTMLElement | null = null;
     private isZoomed = false;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(options: LightboxOptions) {
         if (options.images && options.images.length > 0) {
@@ -60,7 +62,7 @@ class Lightbox {
         this.captionEl = wrapper.querySelector('.lightbox-caption');
         this.counterEl = wrapper.querySelector('.lightbox-counter');
 
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         if (this.closeable) {
             wrapper.querySelector('.lightbox-close')?.addEventListener('click', () => this.hide(), sig);
@@ -94,8 +96,7 @@ class Lightbox {
         const wrapper = this.wrapper;
         if (!wrapper) return;
 
-        this.abortController.abort();
-        this.abortController = new AbortController();
+        this.listeners.reset();
 
         document.body.style.overflow = '';
         wrapper.classList.remove('is-visible');
@@ -263,7 +264,7 @@ class Lightbox {
                 startX = (e as TouchEvent).touches[0].clientX;
                 isDragging = true;
             },
-            { passive: true, signal: this.abortController.signal },
+            { passive: true, signal: this.listeners.signal },
         );
 
         wrap.addEventListener(
@@ -280,7 +281,7 @@ class Lightbox {
                 }
                 isDragging = false;
             },
-            { signal: this.abortController.signal },
+            { signal: this.listeners.signal },
         );
     }
 

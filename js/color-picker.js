@@ -1,3 +1,4 @@
+import { ListenerGroup } from './listeners.js';
 class ColorPicker {
     container;
     onChange;
@@ -14,20 +15,18 @@ class ColorPicker {
     saturation = 100;
     brightness = 100;
     isDragging = false;
-    abortController = new AbortController();
-    ro;
+    listeners = new ListenerGroup();
+    resizeObserver;
     constructor(elementOrSelector, options = {}) {
-        const el = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
+        const el = typeof elementOrSelector === 'string' ? document.querySelector(elementOrSelector) : elementOrSelector;
         if (!el)
             throw new Error(`ColorPicker: element not found for "${elementOrSelector}"`);
         this.container = el;
         this.onChange = options.onChange;
         this.build();
         this.bindEvents();
-        this.ro = new ResizeObserver(() => this.resizeCanvas());
-        this.ro.observe(this.canvas.parentElement);
+        this.resizeObserver = new ResizeObserver(() => this.resizeCanvas());
+        this.resizeObserver.observe(this.canvas.parentElement);
         this.resizeCanvas();
         if (options.value) {
             this.setValue(options.value);
@@ -83,7 +82,7 @@ class ColorPicker {
         this.preview = this.container.querySelector('.color-picker__preview');
     }
     bindEvents() {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.canvas.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             this.canvas.setPointerCapture(e.pointerId);
@@ -95,12 +94,11 @@ class ColorPicker {
                 return;
             this.handleFieldInteraction(e);
         }, sig);
-        this.canvas.addEventListener('pointerup', () => {
-            this.isDragging = false;
-        }, sig);
-        this.canvas.addEventListener('pointercancel', () => {
-            this.isDragging = false;
-        }, sig);
+        for (const type of ['pointerup', 'pointercancel']) {
+            this.canvas.addEventListener(type, () => {
+                this.isDragging = false;
+            }, sig);
+        }
         this.hueSlider.addEventListener('input', () => {
             this.hue = +this.hueSlider.value;
             this.drawField();
@@ -144,13 +142,13 @@ class ColorPicker {
         const y = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
         this.saturation = (x / rect.width) * 100;
         this.brightness = 100 - (y / rect.height) * 100;
-        this.updateCursor();
+        this.updateCursor(rect);
         this.updateFromHSB();
     }
-    updateCursor() {
-        const rect = this.canvas.getBoundingClientRect();
-        const x = (this.saturation / 100) * rect.width;
-        const y = (1 - this.brightness / 100) * rect.height;
+    updateCursor(rect) {
+        const r = rect ?? this.canvas.getBoundingClientRect();
+        const x = (this.saturation / 100) * r.width;
+        const y = (1 - this.brightness / 100) * r.height;
         this.cursor.style.left = `${x}px`;
         this.cursor.style.top = `${y}px`;
         this.cursor.classList.toggle('color-picker__cursor--dark', this.brightness > 50 && this.saturation < 80);
@@ -207,8 +205,8 @@ class ColorPicker {
         this.setFromRGB(this.hexToRgb(hex));
     }
     destroy() {
-        this.abortController.abort();
-        this.ro.disconnect();
+        this.listeners.destroy();
+        this.resizeObserver.disconnect();
         this.container.classList.remove('color-picker');
         this.container.innerHTML = '';
     }
@@ -281,7 +279,7 @@ class ColorPicker {
         };
     }
     rgbToHex({ r, g, b }) {
-        return '#' + [r, g, b].map(c => c.toString(16).padStart(2, '0')).join('');
+        return '#' + [r, g, b].map((c) => c.toString(16).padStart(2, '0')).join('');
     }
     hexToRgb(hex) {
         const m = hex.match(/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);

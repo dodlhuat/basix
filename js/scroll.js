@@ -4,14 +4,11 @@ class Scroll {
         const offset = fixedHeader ? fixedHeader.offsetHeight : 0;
         const settings = {
             behavior: 'smooth',
-            offset: offset,
+            offset,
             block: 'start',
-            ...options
+            ...options,
         };
-        let el = target instanceof Element ? target : null;
-        if (typeof target === 'string') {
-            el = document.querySelector(target);
-        }
+        const el = typeof target === 'string' ? document.querySelector(target) : target;
         if (!el)
             return;
         const rect = el.getBoundingClientRect();
@@ -19,7 +16,7 @@ class Scroll {
         const offsetTop = rect.top + scrollTop - settings.offset;
         window.scrollTo({
             top: offsetTop,
-            behavior: settings.behavior
+            behavior: settings.behavior,
         });
     }
 }

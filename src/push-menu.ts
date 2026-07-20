@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 /** DOM element references managed by the PushMenu static class. */
 interface PushMenuElements {
     navigation: HTMLElement | null;
@@ -21,8 +23,8 @@ class PushMenu {
 
     private static initialized = false;
     private static panelStack: HTMLElement[] = [];
-    private static abortController = new AbortController();
-    private static clickNavAbortController: AbortController | null = null;
+    private static listeners = new ListenerGroup();
+    private static clickNavListeners: ListenerGroup | null = null;
 
     public static init(): void {
         if (this.initialized) {
@@ -38,7 +40,7 @@ class PushMenu {
 
         this.buildPanels();
 
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.elements.navigation.addEventListener('change', () => this.handleNavigationChange(), sig);
         this.elements.backdrop?.addEventListener('click', () => this.handleBackdropClick(), sig);
 
@@ -167,11 +169,11 @@ class PushMenu {
         const isPushed = this.elements.content?.classList.contains('pushed') ?? false;
 
         if (!isPushed) {
-            this.clickNavAbortController = new AbortController();
-            this.elements.content?.addEventListener('click', () => this.clickNav(), { signal: this.clickNavAbortController.signal });
+            this.clickNavListeners = new ListenerGroup();
+            this.elements.content?.addEventListener('click', () => this.clickNav(), { signal: this.clickNavListeners.signal });
         } else {
-            this.clickNavAbortController?.abort();
-            this.clickNavAbortController = null;
+            this.clickNavListeners?.destroy();
+            this.clickNavListeners = null;
             this.resetPanels();
         }
 
@@ -230,11 +232,10 @@ class PushMenu {
     public static destroy(): void {
         if (!this.initialized) return;
 
-        this.abortController.abort();
-        this.abortController = new AbortController();
+        this.listeners.reset();
 
-        this.clickNavAbortController?.abort();
-        this.clickNavAbortController = null;
+        this.clickNavListeners?.destroy();
+        this.clickNavListeners = null;
 
         this.close();
 

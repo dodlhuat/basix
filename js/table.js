@@ -1,4 +1,5 @@
 import { Select } from './select.js';
+import { ListenerGroup } from './listeners.js';
 class Table {
     container;
     data;
@@ -11,11 +12,9 @@ class Table {
     tableBody;
     tableHeader;
     paginationContainer;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     constructor(elementOrSelector, options = {}) {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
+        const element = typeof elementOrSelector === 'string' ? document.querySelector(elementOrSelector) : elementOrSelector;
         if (!element) {
             throw new Error(`Table: Element not found for selector "${elementOrSelector}"`);
         }
@@ -44,10 +43,10 @@ class Table {
         this.columns = Array.from(ths).map((th, index) => ({
             key: `col${index}`,
             label: th.textContent?.trim() || '',
-            sortable: true
+            sortable: true,
         }));
         const trs = tbody.querySelectorAll('tr');
-        this.data = Array.from(trs).map(tr => {
+        this.data = Array.from(trs).map((tr) => {
             const row = {};
             const tds = tr.querySelectorAll('td');
             tds.forEach((td, index) => {
@@ -73,7 +72,7 @@ class Table {
         searchInput.className = 'search-input';
         searchInput.addEventListener('input', (e) => {
             this.handleSearch(e.target.value);
-        }, { signal: this.abortController.signal });
+        }, { signal: this.listeners.signal });
         controlsDiv.appendChild(searchInput);
         const selectGroup = document.createElement('div');
         selectGroup.className = 'select-group';
@@ -82,7 +81,7 @@ class Table {
         selectGroup.appendChild(label);
         const pageSizeSelect = document.createElement('select');
         pageSizeSelect.className = 'page-size-select';
-        [5, 10, 20, 50].forEach(size => {
+        [5, 10, 20, 50].forEach((size) => {
             const option = document.createElement('option');
             option.value = String(size);
             option.textContent = `${size} per page`;
@@ -91,7 +90,7 @@ class Table {
         });
         pageSizeSelect.addEventListener('change', (e) => {
             this.handlePageSizeChange(parseInt(e.target.value, 10));
-        }, { signal: this.abortController.signal });
+        }, { signal: this.listeners.signal });
         this.assignUniqueId(pageSizeSelect, 'page-size-select-0');
         selectGroup.appendChild(pageSizeSelect);
         controlsDiv.appendChild(selectGroup);
@@ -105,13 +104,13 @@ class Table {
         const thead = document.createElement('thead');
         const tbody = document.createElement('tbody');
         const tr = document.createElement('tr');
-        this.columns.forEach(col => {
+        this.columns.forEach((col) => {
             const th = document.createElement('th');
             th.textContent = col.label;
             th.dataset.key = col.key;
             if (col.sortable !== false) {
                 th.classList.add('sortable');
-                th.addEventListener('click', () => this.handleSort(col.key), { signal: this.abortController.signal });
+                th.addEventListener('click', () => this.handleSort(col.key), { signal: this.listeners.signal });
             }
             tr.appendChild(th);
         });
@@ -131,17 +130,18 @@ class Table {
         let processedData = [...this.data];
         if (this.filterText) {
             const lowerFilter = this.filterText.toLowerCase();
-            processedData = processedData.filter(row => {
-                return this.columns.some(col => {
+            processedData = processedData.filter((row) => {
+                return this.columns.some((col) => {
                     const val = String(row[col.key] ?? '').toLowerCase();
                     return val.includes(lowerFilter);
                 });
             });
         }
         if (this.sortColumn) {
+            const col = this.sortColumn;
             processedData.sort((a, b) => {
-                const valA = a[this.sortColumn];
-                const valB = b[this.sortColumn];
+                const valA = a[col];
+                const valB = b[col];
                 if (valA == null && valB == null)
                     return 0;
                 if (valA == null)
@@ -186,9 +186,9 @@ class Table {
             this.tableBody.appendChild(tr);
             return;
         }
-        data.forEach(row => {
+        data.forEach((row) => {
             const tr = document.createElement('tr');
-            this.columns.forEach(col => {
+            this.columns.forEach((col) => {
                 const td = document.createElement('td');
                 td.textContent = String(row[col.key] ?? '');
                 td.setAttribute('data-label', col.label);
@@ -199,7 +199,7 @@ class Table {
     }
     updateHeaderSortIcons() {
         const ths = this.tableHeader.querySelectorAll('th');
-        ths.forEach(th => {
+        ths.forEach((th) => {
             th.classList.remove('sort-asc', 'sort-desc');
             if (th.dataset.key === this.sortColumn) {
                 th.classList.add(this.sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
@@ -216,14 +216,15 @@ class Table {
         this.paginationContainer.appendChild(info);
         const buttonsDiv = document.createElement('div');
         buttonsDiv.className = 'pagination-buttons';
+        const sig = { signal: this.listeners.signal };
         const prevBtn = document.createElement('button');
         prevBtn.className = 'page-btn';
         prevBtn.textContent = 'Previous';
         prevBtn.disabled = this.currentPage === 1;
-        prevBtn.addEventListener('click', () => this.setPage(this.currentPage - 1));
+        prevBtn.addEventListener('click', () => this.setPage(this.currentPage - 1), sig);
         buttonsDiv.appendChild(prevBtn);
         let startPage = Math.max(1, this.currentPage - 2);
-        let endPage = Math.min(totalPages, startPage + 4);
+        const endPage = Math.min(totalPages, startPage + 4);
         if (endPage - startPage < 4) {
             startPage = Math.max(1, endPage - 4);
         }
@@ -231,14 +232,14 @@ class Table {
             const btn = document.createElement('button');
             btn.className = `page-btn ${i === this.currentPage ? 'active' : ''}`;
             btn.textContent = String(i);
-            btn.addEventListener('click', () => this.setPage(i));
+            btn.addEventListener('click', () => this.setPage(i), sig);
             buttonsDiv.appendChild(btn);
         }
         const nextBtn = document.createElement('button');
         nextBtn.className = 'page-btn';
         nextBtn.textContent = 'Next';
         nextBtn.disabled = this.currentPage === totalPages;
-        nextBtn.addEventListener('click', () => this.setPage(this.currentPage + 1));
+        nextBtn.addEventListener('click', () => this.setPage(this.currentPage + 1), sig);
         buttonsDiv.appendChild(nextBtn);
         this.paginationContainer.appendChild(buttonsDiv);
     }
@@ -298,7 +299,7 @@ class Table {
         return this.getFilteredAndSortedData();
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.container.innerHTML = '';
     }
 }

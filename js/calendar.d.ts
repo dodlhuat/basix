@@ -87,6 +87,7 @@ declare class Calendar {
     private currentView;
     private events;
     private nowLineTimer;
+    private listeners;
     constructor(options: CalendarOptions);
     setView(view: CalendarView): void;
     next(): void;
@@ -104,8 +105,6 @@ declare class Calendar {
     private scrollToNow;
     private startNowLineTimer;
     private clearNowLineTimer;
-    private readonly boundHandleClick;
-    private readonly boundHandleKeydown;
     private attachEvents;
     private handleClick;
     private handleKeydown;

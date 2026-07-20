@@ -1,5 +1,6 @@
 import { computePosition } from './position.js';
 import { sanitizeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 const ARROW_SIZE = 6;
 class Popover {
     static openPopovers = new Set();
@@ -7,12 +8,11 @@ class Popover {
     trigger;
     opts;
     popoverEl = null;
-    _isOpen = false;
     hoverTimer = null;
+    listeners = new ListenerGroup();
+    openListeners = null;
     constructor(triggerEl, options) {
-        const el = typeof triggerEl === 'string'
-            ? document.querySelector(triggerEl)
-            : triggerEl;
+        const el = typeof triggerEl === 'string' ? document.querySelector(triggerEl) : triggerEl;
         if (!el)
             throw new Error('Popover: trigger element not found');
         this.trigger = el;
@@ -31,9 +31,11 @@ class Popover {
         };
         this.attachTrigger();
     }
-    get isOpen() { return this._isOpen; }
+    get isOpen() {
+        return this.popoverEl !== null;
+    }
     open() {
-        if (this._isOpen)
+        if (this.popoverEl)
             return;
         if (this.opts.triggerMode === 'click')
             Popover.closeAll();
@@ -42,40 +44,47 @@ class Popover {
         this.reposition();
         requestAnimationFrame(() => {
             this.popoverEl?.classList.add('is-open');
-            this._isOpen = true;
             Popover.openPopovers.add(this);
             this.opts.onOpen();
+            this.openListeners = new ListenerGroup();
+            const openSig = { signal: this.openListeners.signal };
             if (this.opts.closeOnOutsideClick)
-                document.addEventListener('pointerdown', this.onOutsideClick, { capture: true });
+                document.addEventListener('pointerdown', (e) => this.onOutsideClick(e), { ...openSig, capture: true });
             if (this.opts.closeOnEscape)
-                document.addEventListener('keydown', this.onEscape);
+                document.addEventListener('keydown', (e) => this.onEscape(e), openSig);
         });
     }
     close() {
-        if (!this._isOpen || !this.popoverEl)
+        if (!this.popoverEl)
             return;
         this.popoverEl.classList.remove('is-open');
-        this._isOpen = false;
         Popover.openPopovers.delete(this);
         this.opts.onClose();
-        document.removeEventListener('pointerdown', this.onOutsideClick, { capture: true });
-        document.removeEventListener('keydown', this.onEscape);
+        this.openListeners?.destroy();
+        this.openListeners = null;
         this.trigger.removeAttribute('aria-expanded');
         this.trigger.removeAttribute('aria-controls');
         const el = this.popoverEl;
         setTimeout(() => el.remove(), 200);
         this.popoverEl = null;
     }
-    toggle() { this._isOpen ? this.close() : this.open(); }
+    toggle() {
+        if (this.popoverEl) {
+            this.close();
+        }
+        else {
+            this.open();
+        }
+    }
     destroy() {
         this.close();
-        this.detachTrigger();
+        this.listeners.destroy();
     }
     static closeAll() {
-        Popover.openPopovers.forEach(p => p.close());
+        Popover.openPopovers.forEach((p) => p.close());
     }
     static initAll() {
-        document.querySelectorAll('[data-popover]').forEach(trigger => {
+        document.querySelectorAll('[data-popover]').forEach((trigger) => {
             const sel = trigger.getAttribute('data-popover');
             if (!sel)
                 return;
@@ -100,9 +109,7 @@ class Popover {
         el.setAttribute('data-arrow', String(this.opts.arrow));
         const hasStructure = /class="popover-(header|body|footer|menu)/.test(this.opts.content);
         const safeContent = sanitizeHtml(this.opts.content);
-        el.innerHTML = hasStructure
-            ? safeContent
-            : `<div class="popover-body">${safeContent}</div>`;
+        el.innerHTML = hasStructure ? safeContent : `<div class="popover-body">${safeContent}</div>`;
         this.trigger.setAttribute('aria-expanded', 'true');
         this.trigger.setAttribute('aria-controls', id);
         return el;
@@ -123,37 +130,35 @@ class Popover {
         this.popoverEl.style.left = `${left}px`;
         this.popoverEl.style.top = `${top}px`;
     }
-    onClick = () => { this.toggle(); };
-    onMouseEnter = () => {
+    onClick() {
+        this.toggle();
+    }
+    onMouseEnter() {
         if (this.hoverTimer !== null)
             clearTimeout(this.hoverTimer);
         this.open();
-    };
-    onMouseLeave = () => {
+    }
+    onMouseLeave() {
         this.hoverTimer = window.setTimeout(() => this.close(), 120);
-    };
-    onOutsideClick = (e) => {
+    }
+    onOutsideClick(e) {
         const t = e.target;
         if (!this.popoverEl?.contains(t) && !this.trigger.contains(t))
             this.close();
-    };
-    onEscape = (e) => {
+    }
+    onEscape(e) {
         if (e.key === 'Escape')
             this.close();
-    };
+    }
     attachTrigger() {
+        const sig = { signal: this.listeners.signal };
         if (this.opts.triggerMode === 'click') {
-            this.trigger.addEventListener('click', this.onClick);
+            this.trigger.addEventListener('click', () => this.onClick(), sig);
         }
         else {
-            this.trigger.addEventListener('mouseenter', this.onMouseEnter);
-            this.trigger.addEventListener('mouseleave', this.onMouseLeave);
+            this.trigger.addEventListener('mouseenter', () => this.onMouseEnter(), sig);
+            this.trigger.addEventListener('mouseleave', () => this.onMouseLeave(), sig);
         }
-    }
-    detachTrigger() {
-        this.trigger.removeEventListener('click', this.onClick);
-        this.trigger.removeEventListener('mouseenter', this.onMouseEnter);
-        this.trigger.removeEventListener('mouseleave', this.onMouseLeave);
     }
 }
 export { Popover };

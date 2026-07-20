@@ -1,5 +1,6 @@
 import { escapeHtml } from './utils.js';
 import { Lightbox } from './lightbox.js';
+import { ListenerGroup } from './listeners.js';
 
 /** A single image record for MasonryGallery. */
 interface ImageData {
@@ -26,7 +27,7 @@ class MasonryGallery {
     private columns: HTMLDivElement[] = [];
     private allImages: ImageData[] = [];
     private isFetching: boolean = false;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
     private reloaded = 0;
 
     public constructor(containerId: string, options: MasonryGalleryOptions) {
@@ -75,7 +76,7 @@ class MasonryGallery {
     }
 
     private addEventListeners(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         let resizeTimeout: number;
         window.addEventListener(
@@ -227,7 +228,7 @@ class MasonryGallery {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.allImages = [];
     }
 }

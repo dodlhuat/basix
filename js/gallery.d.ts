@@ -18,8 +18,7 @@ declare class MasonryGallery {
     private columns;
     private allImages;
     private isFetching;
-    private resizeObserver;
-    private abortController;
+    private listeners;
     private reloaded;
     constructor(containerId: string, options: MasonryGalleryOptions);
     private init;

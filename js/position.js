@@ -13,7 +13,7 @@ function bestPlacement(trigger, floating, offset) {
         return 'right';
     if (space.left >= floating.width)
         return 'left';
-    return (Object.entries(space).sort((a, b) => b[1] - a[1])[0][0]);
+    return Object.entries(space).sort((a, b) => b[1] - a[1])[0][0];
 }
 function maybeFlip(placement, trigger, floating, offset) {
     const fits = {
@@ -23,15 +23,13 @@ function maybeFlip(placement, trigger, floating, offset) {
         right: window.innerWidth - trigger.right - offset >= floating.width,
     };
     const opp = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' };
-    return (!fits[placement] && fits[opp[placement]]) ? opp[placement] : placement;
+    return !fits[placement] && fits[opp[placement]] ? opp[placement] : placement;
 }
 function computePosition(trigger, floating, opts) {
     const offset = opts.offset ?? 8;
     const margin = opts.margin ?? 8;
     const align = opts.align ?? 'center';
-    const placement = opts.placement === 'auto'
-        ? bestPlacement(trigger, floating, offset)
-        : maybeFlip(opts.placement, trigger, floating, offset);
+    const placement = opts.placement === 'auto' ? bestPlacement(trigger, floating, offset) : maybeFlip(opts.placement, trigger, floating, offset);
     let left = 0, top = 0;
     switch (placement) {
         case 'top':

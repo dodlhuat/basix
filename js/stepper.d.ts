@@ -11,7 +11,7 @@ declare class Stepper {
     private current;
     private readonly onChange?;
     private readonly iconBasePath;
-    private abortController;
+    private listeners;
     private injectedConnectors;
     constructor(elementOrSelector: string | HTMLElement, options?: StepperOptions);
     private injectConnectors;

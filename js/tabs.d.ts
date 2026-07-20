@@ -12,7 +12,7 @@ declare class Tabs {
     private tabItems;
     private tabPanels;
     private currentTab;
-    private abortController;
+    private listeners;
     constructor(elementOrSelector: string | HTMLElement, options?: TabsOptions);
     private init;
     private bindEvents;

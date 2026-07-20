@@ -1,24 +1,20 @@
 import { escapeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 const MARGIN_XY = { top: 16, right: 24, bottom: 44, left: 52 };
 const MARGIN_BAR = { top: 8, right: 52, bottom: 24, left: 120 };
 const MARGIN_PIE = { top: 8, right: 8, bottom: 8, left: 8 };
-const FALLBACK_COLORS = [
-    '#3D63DD', '#2E8B57', '#C28A00', '#D64545',
-    '#8B5CF6', '#06B6D4', '#F97316', '#EC4899',
-];
+const FALLBACK_COLORS = ['#3D63DD', '#2E8B57', '#C28A00', '#D64545', '#8B5CF6', '#06B6D4', '#F97316', '#EC4899'];
 const SVG_NS = 'http://www.w3.org/2000/svg';
 class Chart {
     container;
     opts;
     tooltip;
     colors = [];
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     resizeTimer = null;
     resizeObserver = null;
     constructor(selector, options) {
-        const el = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
+        const el = typeof selector === 'string' ? document.querySelector(selector) : selector;
         if (!el)
             throw new Error(`Chart: element not found for "${selector}"`);
         this.container = el;
@@ -40,8 +36,7 @@ class Chart {
         this.attachResizeObserver();
     }
     render() {
-        this.abortController.abort();
-        this.abortController = new AbortController();
+        this.listeners.reset();
         this.container.innerHTML = '';
         this.container.classList.add('chart');
         this.resolveColors();
@@ -82,12 +77,12 @@ class Chart {
         const svgH = height + m.top + m.bottom;
         const w = svgW - m.left - m.right;
         const h = height;
-        const allValues = series.flatMap(s => s.data.map(d => d.value));
+        const allValues = series.flatMap((s) => s.data.map((d) => d.value));
         const yMax = this.opts.yMax ?? Math.max(...allValues) * 1.1;
-        const labels = series[0].data.map(d => d.label);
+        const labels = series[0].data.map((d) => d.label);
         const svg = this.createSVG(canvas, svgW, svgH);
         if (showGrid)
-            this.renderHGrid(svg, m, w, h, yMin, yMax);
+            this.renderHGrid(svg, m, w, h);
         this.renderXAxisLine(svg, m, w, h);
         this.renderXLabels(svg, m, w, h, labels);
         this.renderYLabels(svg, m, h, yMin, yMax);
@@ -101,15 +96,20 @@ class Chart {
             if (isArea) {
                 const areaD = `${this.buildPath(pts)} L ${pts[pts.length - 1].x} ${m.top + h} L ${pts[0].x} ${m.top + h} Z`;
                 svg.appendChild(this.svgEl('path', {
-                    d: areaD, fill: color,
-                    'fill-opacity': '0.12', stroke: 'none',
+                    d: areaD,
+                    fill: color,
+                    'fill-opacity': '0.12',
+                    stroke: 'none',
                     class: 'chart-area',
                 }));
             }
             const linePath = this.svgEl('path', {
-                d: this.buildPath(pts), fill: 'none',
-                stroke: color, 'stroke-width': '2.5',
-                'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+                d: this.buildPath(pts),
+                fill: 'none',
+                stroke: color,
+                'stroke-width': '2.5',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
                 class: 'chart-line',
             });
             if (animate) {
@@ -126,17 +126,28 @@ class Chart {
                 });
                 const { x, y } = pts[i];
                 g.appendChild(this.svgEl('circle', {
-                    cx: x, cy: y, r: 14,
-                    fill: 'transparent', class: 'chart-hit',
+                    cx: x,
+                    cy: y,
+                    r: 14,
+                    fill: 'transparent',
+                    class: 'chart-hit',
                 }));
                 g.appendChild(this.svgEl('circle', {
-                    cx: x, cy: y, r: 7,
-                    fill: 'none', stroke: color, 'stroke-width': '2',
+                    cx: x,
+                    cy: y,
+                    r: 7,
+                    fill: 'none',
+                    stroke: color,
+                    'stroke-width': '2',
                     class: 'chart-point-ring',
                 }));
                 g.appendChild(this.svgEl('circle', {
-                    cx: x, cy: y, r: 4,
-                    fill: color, stroke: 'var(--background)', 'stroke-width': '2',
+                    cx: x,
+                    cy: y,
+                    r: 4,
+                    fill: color,
+                    stroke: 'var(--background)',
+                    'stroke-width': '2',
                     class: 'chart-point-dot',
                 }));
                 this.onPoint(g, s, d, i);
@@ -153,14 +164,14 @@ class Chart {
         const svgH = height + m.top + m.bottom;
         const w = svgW - m.left - m.right;
         const h = height;
-        const allValues = series.flatMap(s => s.data.map(d => d.value));
+        const allValues = series.flatMap((s) => s.data.map((d) => d.value));
         const yMax = this.opts.yMax ?? Math.max(...allValues) * 1.1;
-        const labels = series[0].data.map(d => d.label);
+        const labels = series[0].data.map((d) => d.label);
         const numPts = labels.length;
         const numSeries = series.length;
         const svg = this.createSVG(canvas, svgW, svgH);
         if (showGrid)
-            this.renderHGrid(svg, m, w, h, yMin, yMax);
+            this.renderHGrid(svg, m, w, h);
         this.renderXAxisLine(svg, m, w, h);
         this.renderXLabels(svg, m, w, h, labels);
         this.renderYLabels(svg, m, h, yMin, yMax);
@@ -174,8 +185,12 @@ class Chart {
                 const x = m.left + i * groupW + innerPad / 2 + si * (barW + 2);
                 const y = m.top + h - barH;
                 const rect = this.svgEl('rect', {
-                    x, y, width: barW, height: barH,
-                    fill: color, rx: 3,
+                    x,
+                    y,
+                    width: barW,
+                    height: barH,
+                    fill: color,
+                    rx: 3,
                     class: 'chart-bar chart-bar--vertical',
                 });
                 if (animate) {
@@ -197,9 +212,9 @@ class Chart {
         const svgH = height + m.top + m.bottom;
         const w = svgW - m.left - m.right;
         const h = height;
-        const allValues = series.flatMap(s => s.data.map(d => d.value));
-        const xMax = this.opts.yMax || Math.max(...allValues) * 1.1;
-        const labels = series[0].data.map(d => d.label);
+        const allValues = series.flatMap((s) => s.data.map((d) => d.value));
+        const xMax = this.opts.yMax ?? Math.max(...allValues) * 1.1;
+        const labels = series[0].data.map((d) => d.label);
         const numPts = labels.length;
         const numSeries = series.length;
         const svg = this.createSVG(canvas, svgW, svgH);
@@ -207,24 +222,32 @@ class Chart {
         for (let t = 0; t <= numTicks; t++) {
             const x = m.left + (t / numTicks) * w;
             svg.appendChild(this.svgEl('line', {
-                x1: x, x2: x, y1: m.top, y2: m.top + h,
-                stroke: 'var(--divider)', 'stroke-width': '1',
+                x1: x,
+                x2: x,
+                y1: m.top,
+                y2: m.top + h,
+                stroke: 'var(--divider)',
+                'stroke-width': '1',
                 'stroke-dasharray': t === 0 ? 'none' : '3 4',
                 class: 'chart-grid-line',
             }));
             const label = this.svgEl('text', {
-                x, y: m.top + h + 14,
-                'text-anchor': 'middle', class: 'chart-axis-label',
+                x,
+                y: m.top + h + 14,
+                'text-anchor': 'middle',
+                class: 'chart-axis-label',
             });
-            label.textContent = this.fmt(xMax * t / numTicks);
+            label.textContent = this.fmt((xMax * t) / numTicks);
             svg.appendChild(label);
         }
         const groupH = h / numPts;
         labels.forEach((label, i) => {
             const y = m.top + i * groupH + groupH / 2;
             const text = this.svgEl('text', {
-                x: m.left - 10, y,
-                'text-anchor': 'end', 'dominant-baseline': 'middle',
+                x: m.left - 10,
+                y,
+                'text-anchor': 'end',
+                'dominant-baseline': 'middle',
                 class: 'chart-axis-label',
             });
             text.textContent = label;
@@ -239,8 +262,12 @@ class Chart {
                 const x = m.left;
                 const y = m.top + i * groupH + innerPad / 2 + si * (barH + 2);
                 const rect = this.svgEl('rect', {
-                    x, y, width: barW, height: barH,
-                    fill: color, rx: 3,
+                    x,
+                    y,
+                    width: barW,
+                    height: barH,
+                    fill: color,
+                    rx: 3,
                     class: 'chart-bar chart-bar--horizontal',
                 });
                 if (animate) {
@@ -284,17 +311,18 @@ class Chart {
                 path.style.animationDelay = `${delay}ms`;
             }
             const { x: dx, y: dy } = this.polar(0, 0, 8, midAngle);
+            const sig = { signal: this.listeners.signal };
+            const tipHtml = `<strong>${escapeHtml(d.label)}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`;
             path.addEventListener('mouseenter', (e) => {
                 path.style.transform = `translate(${dx}px, ${dy}px)`;
-                this.showTooltip(e, `<strong>${escapeHtml(d.label)}</strong>${this.fmt(d.value)} &nbsp;·&nbsp; ${((d.value / total) * 100).toFixed(1)}%`);
-            }, { signal: this.abortController.signal });
+                this.showTooltip(e, tipHtml);
+            }, sig);
+            path.addEventListener('mousemove', (e) => this.moveTooltip(e), sig);
             path.addEventListener('mouseleave', () => {
                 path.style.transform = '';
                 this.hideTooltip();
-            }, { signal: this.abortController.signal });
-            path.addEventListener('click', () => {
-                this.opts.onPointClick(s, d, i);
-            }, { signal: this.abortController.signal });
+            }, sig);
+            path.addEventListener('click', () => this.opts.onPointClick(s, d, i), sig);
             svg.appendChild(path);
             startAngle = endAngle;
         });
@@ -302,20 +330,25 @@ class Chart {
             this.container.appendChild(this.buildPieLegend(s, total));
         }
     }
-    renderHGrid(svg, m, w, h, yMin, yMax) {
+    renderHGrid(svg, m, w, h) {
         const numTicks = 5;
         for (let i = 0; i <= numTicks; i++) {
             const y = m.top + h - (i / numTicks) * h;
             svg.appendChild(this.svgEl('line', {
-                x1: m.left, x2: m.left + w, y1: y, y2: y,
+                x1: m.left,
+                x2: m.left + w,
+                y1: y,
+                y2: y,
                 class: i === 0 ? 'chart-axis-line' : 'chart-grid-line',
             }));
         }
     }
     renderXAxisLine(svg, m, w, h) {
         svg.appendChild(this.svgEl('line', {
-            x1: m.left, x2: m.left + w,
-            y1: m.top + h, y2: m.top + h,
+            x1: m.left,
+            x2: m.left + w,
+            y1: m.top + h,
+            y2: m.top + h,
             class: 'chart-axis-line',
         }));
     }
@@ -325,8 +358,10 @@ class Chart {
         labels.forEach((label, i) => {
             const x = m.left + (n > 1 ? i * step : w / 2);
             const text = this.svgEl('text', {
-                x, y: m.top + h + 18,
-                'text-anchor': 'middle', class: 'chart-axis-label',
+                x,
+                y: m.top + h + 18,
+                'text-anchor': 'middle',
+                class: 'chart-axis-label',
             });
             text.textContent = label;
             svg.appendChild(text);
@@ -338,8 +373,10 @@ class Chart {
             const val = yMin + (yMax - yMin) * (i / numTicks);
             const y = m.top + h - (i / numTicks) * h;
             const text = this.svgEl('text', {
-                x: m.left - 8, y,
-                'text-anchor': 'end', 'dominant-baseline': 'middle',
+                x: m.left - 8,
+                y,
+                'text-anchor': 'end',
+                'dominant-baseline': 'middle',
                 class: 'chart-axis-label',
             });
             text.textContent = this.fmt(val);
@@ -348,9 +385,12 @@ class Chart {
     }
     buildPath(pts) {
         switch (this.opts.curve) {
-            case 'linear': return this.linearPath(pts);
-            case 'step': return this.stepPath(pts);
-            default: return this.smoothPath(pts);
+            case 'linear':
+                return this.linearPath(pts);
+            case 'step':
+                return this.stepPath(pts);
+            default:
+                return this.smoothPath(pts);
         }
     }
     linearPath(pts) {
@@ -392,11 +432,11 @@ class Chart {
     arcPath(cx, cy, r, startDeg, endDeg) {
         const start = this.polar(cx, cy, r, startDeg);
         const end = this.polar(cx, cy, r, endDeg);
-        const large = (endDeg - startDeg) > 180 ? 1 : 0;
+        const large = endDeg - startDeg > 180 ? 1 : 0;
         return `M ${cx} ${cy} L ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)} Z`;
     }
     polar(cx, cy, r, deg) {
-        const rad = deg * Math.PI / 180;
+        const rad = (deg * Math.PI) / 180;
         return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
     }
     buildHeader() {
@@ -466,7 +506,7 @@ class Chart {
         this.tooltip.classList.remove('is-visible');
     }
     onPoint(g, s, d, i) {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         g.addEventListener('mouseenter', (e) => {
             this.showTooltip(e, `<strong>${escapeHtml(d.label)}</strong>${escapeHtml(s.name)}: ${this.fmt(d.value)}`);
         }, sig);
@@ -475,7 +515,7 @@ class Chart {
         g.addEventListener('click', () => this.opts.onPointClick(s, d, i), sig);
     }
     onBar(rect, s, d, i) {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         rect.style.cursor = 'pointer';
         rect.addEventListener('mouseenter', (e) => {
             this.showTooltip(e, `<strong>${escapeHtml(d.label)}</strong>${escapeHtml(s.name)}: ${this.fmt(d.value)}`);
@@ -486,8 +526,7 @@ class Chart {
     }
     resolveColors() {
         const style = getComputedStyle(this.container);
-        this.colors = (this.opts.type === 'pie' ? this.opts.series[0]?.data ?? [] : this.opts.series)
-            .map((_, i) => {
+        this.colors = (this.opts.type === 'pie' ? (this.opts.series[0]?.data ?? []) : this.opts.series).map((_, i) => {
             const css = style.getPropertyValue(`--chart-color-${i + 1}`).trim();
             return css || FALLBACK_COLORS[i % FALLBACK_COLORS.length];
         });
@@ -542,7 +581,7 @@ class Chart {
         this.render();
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.resizeObserver?.disconnect();
         if (this.resizeTimer)
             clearTimeout(this.resizeTimer);

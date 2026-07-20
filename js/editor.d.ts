@@ -11,7 +11,7 @@ declare class Editor {
     private readonly wordCount;
     private undoStack;
     private redoStack;
-    private abortController;
+    private listeners;
     constructor(options?: EditorOptions);
     private q;
     private qAll;

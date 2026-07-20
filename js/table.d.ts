@@ -23,7 +23,7 @@ declare class Table {
     private tableBody;
     private tableHeader;
     private paginationContainer;
-    private abortController;
+    private listeners;
     constructor(elementOrSelector: string | HTMLElement, options?: TableOptions);
     private parseTableFromDOM;
     private init;

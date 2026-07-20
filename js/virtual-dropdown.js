@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 class VirtualDropdown {
     container;
     options;
@@ -21,11 +22,9 @@ class VirtualDropdown {
     filteredOptions;
     isOpen;
     scrollTop;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     constructor(config) {
-        const containerElement = typeof config.container === 'string'
-            ? document.querySelector(config.container)
-            : config.container;
+        const containerElement = typeof config.container === 'string' ? document.querySelector(config.container) : config.container;
         if (!containerElement) {
             throw new Error('Container element not found');
         }
@@ -34,8 +33,8 @@ class VirtualDropdown {
         this.multiSelect = config.multiSelect ?? false;
         this.searchable = config.searchable ?? false;
         this.placeholder = config.placeholder || 'Select...';
-        this.renderLimit = config.renderLimit || 20;
-        this.itemHeight = config.itemHeight || 40;
+        this.renderLimit = config.renderLimit ?? 20;
+        this.itemHeight = config.itemHeight ?? 40;
         this.onSelect = config.onSelect ?? null;
         this.anchorName = `--vd-${Math.random().toString(36).slice(2, 9)}`;
         this.selectedValues = new Set();
@@ -87,7 +86,7 @@ class VirtualDropdown {
         return element;
     }
     bindEvents() {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.trigger.addEventListener('click', () => this.toggle(), sig);
         this.trigger.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -122,7 +121,12 @@ class VirtualDropdown {
         }, sig);
     }
     toggle() {
-        this.isOpen ? this.close() : this.open();
+        if (this.isOpen) {
+            this.close();
+        }
+        else {
+            this.open();
+        }
     }
     open() {
         this.isOpen = true;
@@ -146,7 +150,7 @@ class VirtualDropdown {
         }
         else {
             const lowerQuery = query.toLowerCase();
-            this.filteredOptions = this.options.filter(opt => opt.label.toLowerCase().includes(lowerQuery));
+            this.filteredOptions = this.options.filter((opt) => opt.label.toLowerCase().includes(lowerQuery));
         }
         this.listWrapper.scrollTop = 0;
         this.scrollTop = 0;
@@ -180,29 +184,25 @@ class VirtualDropdown {
         `;
         })
             .join('');
-        this.content.querySelectorAll('.dropdown-item').forEach(item => {
-            const handleItemClick = (e) => {
+        this.content.querySelectorAll('.dropdown-item').forEach((item) => {
+            item.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const value = item.dataset.value;
-                if (value) {
+                if (value)
                     this.handleSelect(value);
-                }
-            };
-            const handleItemKeydown = (e) => {
+            });
+            item.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     const value = item.dataset.value;
-                    if (value) {
+                    if (value)
                         this.handleSelect(value);
-                    }
                 }
-            };
-            item.addEventListener('click', handleItemClick);
-            item.addEventListener('keydown', handleItemKeydown);
+            });
         });
     }
     handleSelect(valueString) {
-        const selectedOpt = this.filteredOptions.find(o => String(o.value) === valueString);
+        const selectedOpt = this.filteredOptions.find((o) => String(o.value) === valueString);
         if (!selectedOpt)
             return;
         const val = selectedOpt.value;
@@ -221,9 +221,7 @@ class VirtualDropdown {
             this.close();
         }
         this.updateTrigger();
-        if (this.onSelect) {
-            this.onSelect(Array.from(this.selectedValues));
-        }
+        this.onSelect?.(Array.from(this.selectedValues));
     }
     updateTrigger() {
         if (this.selectedValues.size === 0) {
@@ -238,7 +236,7 @@ class VirtualDropdown {
             }
             else {
                 const val = Array.from(this.selectedValues)[0];
-                const opt = this.options.find(o => o.value === val);
+                const opt = this.options.find((o) => o.value === val);
                 this.triggerText.textContent = opt ? opt.label : String(val);
             }
         }
@@ -248,8 +246,8 @@ class VirtualDropdown {
     }
     setValue(values) {
         this.selectedValues.clear();
-        values.forEach(val => {
-            if (this.options.some(opt => opt.value === val)) {
+        values.forEach((val) => {
+            if (this.options.some((opt) => opt.value === val)) {
                 this.selectedValues.add(val);
             }
         });
@@ -268,7 +266,7 @@ class VirtualDropdown {
     destroy() {
         if (this.isOpen)
             this.menu.hidePopover();
-        this.abortController.abort();
+        this.listeners.destroy();
         this.container.innerHTML = '';
         this.container.classList.remove('custom-dropdown', 'open');
     }

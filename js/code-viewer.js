@@ -1,11 +1,11 @@
+import { ListenerGroup } from './listeners.js';
 class CodeViewer {
     container;
     code;
     language;
+    listeners = new ListenerGroup();
     constructor(elementOrSelector, code, language = 'javascript') {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
+        const element = typeof elementOrSelector === 'string' ? document.querySelector(elementOrSelector) : elementOrSelector;
         if (!element) {
             throw new Error(`CodeViewer: Element not found for selector "${elementOrSelector}"`);
         }
@@ -28,12 +28,7 @@ class CodeViewer {
         }
     }
     escape(str) {
-        return str
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
     highlightJavaScript(code) {
         const strings = [];
@@ -88,7 +83,6 @@ class CodeViewer {
         return code;
     }
     highlightCSS(code) {
-        code = this.escape(code);
         const comments = [];
         code = code.replace(/(\/\*[\s\S]*?\*\/)/g, (match) => {
             comments.push(match);
@@ -99,6 +93,7 @@ class CodeViewer {
             strings.push(match);
             return `###STRING${strings.length - 1}###`;
         });
+        code = this.escape(code);
         code = code.replace(/^([^{]+)(?={)/gm, (match) => {
             return '<span class="selector">' + match.trim() + '</span>';
         });
@@ -143,16 +138,10 @@ class CodeViewer {
                     </div>
                 `;
         const copyButton = this.container.querySelector('.copy-button');
-        if (copyButton) {
-            copyButton.addEventListener('click', this.handleCopy);
-        }
+        copyButton?.addEventListener('click', () => this.copyCode(), { signal: this.listeners.signal });
     }
-    handleCopy = () => {
-        this.copyCode();
-    };
     destroy() {
-        const copyButton = this.container.querySelector('.copy-button');
-        copyButton?.removeEventListener('click', this.handleCopy);
+        this.listeners.destroy();
     }
 }
 export { CodeViewer };

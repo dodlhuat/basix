@@ -1,4 +1,5 @@
 import { sanitizeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 
 /** Options for configuring a BottomSheet instance. */
 interface BottomSheetOptions {
@@ -21,7 +22,7 @@ class BottomSheet {
 
     private wrapper: HTMLElement | null = null;
     private sheet: HTMLElement | null = null;
-    private abortController: AbortController | null = null;
+    private listeners: ListenerGroup | null = null;
 
     private dragStartY = 0;
     private currentDragY = 0;
@@ -47,8 +48,8 @@ class BottomSheet {
 
         this.wrapper = wrapper;
         this.sheet = wrapper.querySelector('.bottom-sheet');
-        this.abortController = new AbortController();
-        const sig = { signal: this.abortController.signal };
+        this.listeners = new ListenerGroup();
+        const sig = { signal: this.listeners.signal };
 
         if (this.closeable) {
             wrapper.querySelector('.bottom-sheet-backdrop')?.addEventListener('click', () => this.hide(), sig);
@@ -85,8 +86,8 @@ class BottomSheet {
     public hide(): void {
         if (!this.wrapper) return;
 
-        this.abortController?.abort();
-        this.abortController = null;
+        this.listeners?.destroy();
+        this.listeners = null;
 
         document.body.style.overflow = '';
         this.wrapper.classList.remove('is-visible');

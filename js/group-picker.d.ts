@@ -26,7 +26,7 @@ declare class GroupPicker {
     private container;
     private data;
     private options;
-    private abortController;
+    private listeners;
     private selectedParents;
     private selectedSubs;
     private expandedGroups;

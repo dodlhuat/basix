@@ -34,7 +34,7 @@ declare class VirtualDropdown {
     private filteredOptions;
     private isOpen;
     private scrollTop;
-    private abortController;
+    private listeners;
     constructor(config: VirtualDropdownConfig);
     private init;
     private renderBase;

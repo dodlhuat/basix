@@ -28,7 +28,7 @@ declare class Chart {
     private opts;
     private tooltip;
     private colors;
-    private abortController;
+    private listeners;
     private resizeTimer;
     private resizeObserver;
     constructor(selector: string | HTMLElement, options: ChartOptions);

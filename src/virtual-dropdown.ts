@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 
 /** A single selectable option for a VirtualDropdown. */
 interface DropdownOption {
@@ -46,7 +47,7 @@ class VirtualDropdown {
     private isOpen: boolean;
     private scrollTop: number;
 
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(config: VirtualDropdownConfig) {
         const containerElement = typeof config.container === 'string' ? document.querySelector<HTMLElement>(config.container) : config.container;
@@ -124,7 +125,7 @@ class VirtualDropdown {
     }
 
     private bindEvents(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         this.trigger.addEventListener('click', () => this.toggle(), sig);
 
@@ -345,7 +346,7 @@ class VirtualDropdown {
 
     public destroy(): void {
         if (this.isOpen) this.menu.hidePopover();
-        this.abortController.abort();
+        this.listeners.destroy();
         this.container.innerHTML = '';
         this.container.classList.remove('custom-dropdown', 'open');
     }

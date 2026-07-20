@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 /** Definition for a single context menu item including optional submenu. */
 interface ContextMenuItemDef {
     label: string;
@@ -22,7 +24,7 @@ class ContextMenu {
     private targets: HTMLElement[];
     private menuEl: HTMLElement | null = null;
     private currentTarget: HTMLElement | null = null;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
     private spritePath: string | null;
 
     public constructor(selectorOrElement: string | HTMLElement | HTMLElement[], items: ContextMenuInput[], options: ContextMenuOptions = {}) {
@@ -41,7 +43,7 @@ class ContextMenu {
     }
 
     private init(): void {
-        const { signal } = this.abortController;
+        const { signal } = this.listeners;
 
         this.targets.forEach((target) => {
             target.addEventListener(
@@ -273,7 +275,7 @@ class ContextMenu {
 
     public destroy(): void {
         this.close();
-        this.abortController.abort();
+        this.listeners.destroy();
     }
 }
 

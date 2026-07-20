@@ -1,4 +1,5 @@
 import { computePosition } from './position.js';
+import { ListenerGroup } from './listeners.js';
 
 /** Localised day and month names for the DatePicker. */
 interface DatePickerLocales {
@@ -40,8 +41,8 @@ class DatePicker {
     private selectedMinutes: number;
     private calendar!: HTMLDivElement;
     private backdrop!: HTMLDivElement;
-    private abortController = new AbortController();
-    private showAbortController: AbortController | null = null;
+    private listeners = new ListenerGroup();
+    private showListeners: ListenerGroup | null = null;
 
     public constructor(elementOrSelector: string | HTMLInputElement, options: DatePickerOptions = {}) {
         this.input = typeof elementOrSelector === 'string' ? document.querySelector<HTMLInputElement>(elementOrSelector) : elementOrSelector;
@@ -116,7 +117,7 @@ class DatePicker {
             }
         };
 
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         this.input?.addEventListener('click', toggle, sig);
 
@@ -161,7 +162,7 @@ class DatePicker {
 
             setTimeout(() => {
                 if (this.calendar.classList.contains('visible')) {
-                    this.showAbortController = new AbortController();
+                    this.showListeners = new ListenerGroup();
                     document.addEventListener(
                         'click',
                         (e: Event) => {
@@ -170,7 +171,7 @@ class DatePicker {
                                 this.hide();
                             }
                         },
-                        { signal: this.showAbortController.signal },
+                        { signal: this.showListeners.signal },
                     );
                 }
             }, 0);
@@ -184,8 +185,8 @@ class DatePicker {
         this.backdrop.classList.remove('visible');
         document.body.style.overflow = '';
 
-        this.showAbortController?.abort();
-        this.showAbortController = null;
+        this.showListeners?.destroy();
+        this.showListeners = null;
     }
 
     private render(): void {
@@ -618,7 +619,7 @@ class DatePicker {
 
     public destroy(): void {
         this.hide();
-        this.abortController.abort();
+        this.listeners.destroy();
         this.calendar.remove();
         this.backdrop.remove();
     }

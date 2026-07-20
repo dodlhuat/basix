@@ -18,7 +18,6 @@ declare class TreeComponent {
     private selectedNode;
     private readonly options;
     constructor(elementOrSelector: string | HTMLElement, data: TreeNode[], options?: TreeOptions);
-    private init;
     render(): void;
     private renderNode;
     private createIconElement;

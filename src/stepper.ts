@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 interface StepperOptions {
     defaultStep?: number;
     clickable?: boolean;
@@ -12,7 +14,7 @@ class Stepper {
     private current: number;
     private readonly onChange?: (current: number, previous: number) => void;
     private readonly iconBasePath: string;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
     private injectedConnectors = false;
 
     public constructor(elementOrSelector: string | HTMLElement, options: StepperOptions = {}) {
@@ -37,7 +39,7 @@ class Stepper {
         if (options.clickable) {
             this.container.classList.add('stepper-clickable');
             this.steps.forEach((step, i) => {
-                step.addEventListener('click', () => this.goTo(i), { signal: this.abortController.signal });
+                step.addEventListener('click', () => this.goTo(i), { signal: this.listeners.signal });
             });
         }
 
@@ -132,7 +134,7 @@ class Stepper {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         if (this.injectedConnectors) {
             this.connectors.forEach((c) => c.remove());
             this.connectors = [];

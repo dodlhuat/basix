@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 /** Configuration options for a SidebarNav instance. */
 interface SidebarNavOptions {
     /** Selector for the toggle button. Default: '.sidebar-toggle' */
@@ -19,7 +21,7 @@ class SidebarNav {
     private opts: Required<SidebarNavOptions>;
     private touchStartX = 0;
     private touchStartY = 0;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(containerOrSelector: string | HTMLElement, options: SidebarNavOptions = {}) {
         const container = typeof containerOrSelector === 'string' ? document.querySelector<HTMLElement>(containerOrSelector) : containerOrSelector;
@@ -35,7 +37,7 @@ class SidebarNav {
         this.backdrop = container?.querySelector('.sidebar-backdrop') ?? null;
         this.toggleBtn = document.querySelector(this.opts.toggleSelector);
 
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         this.toggleBtn?.addEventListener('click', () => this.toggle(), sig);
         this.backdrop?.addEventListener('click', () => this.close(), sig);
@@ -104,7 +106,7 @@ class SidebarNav {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.closeBtn?.remove();
     }
 }

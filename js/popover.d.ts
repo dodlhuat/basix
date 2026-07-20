@@ -21,8 +21,9 @@ declare class Popover {
     private readonly trigger;
     private readonly opts;
     private popoverEl;
-    private _isOpen;
     private hoverTimer;
+    private listeners;
+    private openListeners;
     constructor(triggerEl: HTMLElement | string, options: PopoverOptions);
     get isOpen(): boolean;
     open(): void;
@@ -39,7 +40,6 @@ declare class Popover {
     private onOutsideClick;
     private onEscape;
     private attachTrigger;
-    private detachTrigger;
 }
 export { Popover };
 export type { PopoverOptions, PopoverPlacement, PopoverAlign, PopoverTrigger };

@@ -18,7 +18,7 @@ declare class ContextMenu {
     private targets;
     private menuEl;
     private currentTarget;
-    private abortController;
+    private listeners;
     private spritePath;
     constructor(selectorOrElement: string | HTMLElement | HTMLElement[], items: ContextMenuInput[], options?: ContextMenuOptions);
     private init;

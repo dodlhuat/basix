@@ -22,9 +22,7 @@ class TreeComponent {
     selectedNode;
     options;
     constructor(elementOrSelector, data, options = {}) {
-        const container = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
+        const container = typeof elementOrSelector === 'string' ? document.querySelector(elementOrSelector) : elementOrSelector;
         if (!container) {
             throw new Error(`TreeComponent: Element not found for selector "${elementOrSelector}"`);
         }
@@ -32,14 +30,11 @@ class TreeComponent {
         this.data = data;
         this.selectedNode = null;
         this.options = options;
-        this.init();
-    }
-    init() {
         this.render();
     }
     render() {
         this.container.innerHTML = '';
-        this.data.forEach(node => {
+        this.data.forEach((node) => {
             this.renderNode(node, this.container);
         });
     }
@@ -107,7 +102,7 @@ class TreeComponent {
             childrenUl.classList.add('expanded');
             childrenUl.style.height = 'auto';
         }
-        node.children.forEach(child => {
+        node.children.forEach((child) => {
             this.renderNode(child, childrenUl);
         });
         return childrenUl;
@@ -126,13 +121,13 @@ class TreeComponent {
         }
     }
     expandChildren(container) {
-        container.style.height = container.scrollHeight + 'px';
+        container.style.height = `${container.scrollHeight}px`;
         container.addEventListener('transitionend', () => {
             container.style.height = 'auto';
         }, { once: true });
     }
     collapseChildren(container) {
-        container.style.height = container.offsetHeight + 'px';
+        container.style.height = `${container.offsetHeight}px`;
         requestAnimationFrame(() => {
             container.style.height = '0';
         });
@@ -172,7 +167,7 @@ class TreeComponent {
         });
     }
     traverseNodes(nodes, callback) {
-        nodes.forEach(node => {
+        nodes.forEach((node) => {
             callback(node);
             if (node.children.length > 0) {
                 this.traverseNodes(node.children, callback);

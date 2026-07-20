@@ -1,10 +1,11 @@
+import { ListenerGroup } from './listeners.js';
 class RangeSlider {
     input;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     constructor(input) {
         this.input = input;
         this.update();
-        this.input.addEventListener('input', () => this.update(), { signal: this.abortController.signal });
+        this.input.addEventListener('input', () => this.update(), { signal: this.listeners.signal });
     }
     static initAll(selector = '.range-slider input[type="range"]') {
         document.querySelectorAll(selector).forEach((input) => {
@@ -18,7 +19,7 @@ class RangeSlider {
         this.input.style.setProperty('--range-fill', `${pct}%`);
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.input.style.removeProperty('--range-fill');
     }
 }
@@ -28,7 +29,7 @@ class RangeSliderRange {
     endInput;
     fill;
     fillCreatedByUs;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     constructor(container) {
         const inputs = container.querySelectorAll('input[type="range"]');
         if (inputs.length !== 2) {
@@ -45,7 +46,7 @@ class RangeSliderRange {
             container.insertBefore(this.fill, container.firstChild);
         }
         this.update();
-        const signal = this.abortController.signal;
+        const signal = this.listeners.signal;
         this.startInput.addEventListener('input', () => this.handleInput(this.startInput), { signal });
         this.endInput.addEventListener('input', () => this.handleInput(this.endInput), { signal });
     }
@@ -75,7 +76,7 @@ class RangeSliderRange {
         this.container.style.setProperty('--range-end', `${endPct}%`);
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.container.style.removeProperty('--range-start');
         this.container.style.removeProperty('--range-end');
         if (this.fillCreatedByUs) {

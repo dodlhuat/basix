@@ -1,6 +1,6 @@
 declare class RangeSlider {
     private readonly input;
-    private abortController;
+    private listeners;
     constructor(input: HTMLInputElement);
     static initAll(selector?: string): void;
     private update;
@@ -12,7 +12,7 @@ declare class RangeSliderRange {
     private readonly endInput;
     private readonly fill;
     private readonly fillCreatedByUs;
-    private abortController;
+    private listeners;
     constructor(container: HTMLElement);
     static initAll(selector?: string): void;
     values(): [number, number];

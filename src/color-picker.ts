@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 /** Color value as r/g/b channels, each 0–255. */
 interface ColorRGB {
     r: number;
@@ -33,7 +35,7 @@ class ColorPicker {
     private brightness = 100;
     private isDragging = false;
 
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
     private resizeObserver!: ResizeObserver;
 
     public constructor(elementOrSelector: string | HTMLElement, options: ColorPickerOptions = {}) {
@@ -107,7 +109,7 @@ class ColorPicker {
     }
 
     private bindEvents(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         this.canvas.addEventListener(
             'pointerdown',
@@ -262,7 +264,7 @@ class ColorPicker {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.resizeObserver.disconnect();
         this.container.classList.remove('color-picker');
         this.container.innerHTML = '';

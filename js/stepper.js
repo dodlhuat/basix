@@ -1,3 +1,4 @@
+import { ListenerGroup } from './listeners.js';
 class Stepper {
     container;
     steps;
@@ -5,12 +6,10 @@ class Stepper {
     current;
     onChange;
     iconBasePath;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     injectedConnectors = false;
     constructor(elementOrSelector, options = {}) {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
+        const element = typeof elementOrSelector === 'string' ? document.querySelector(elementOrSelector) : elementOrSelector;
         if (!element)
             throw new Error('Stepper: element not found');
         this.container = element;
@@ -27,7 +26,7 @@ class Stepper {
         if (options.clickable) {
             this.container.classList.add('stepper-clickable');
             this.steps.forEach((step, i) => {
-                step.addEventListener('click', () => this.goTo(i), { signal: this.abortController.signal });
+                step.addEventListener('click', () => this.goTo(i), { signal: this.listeners.signal });
             });
         }
         this.render();
@@ -88,9 +87,8 @@ class Stepper {
         const previous = this.current;
         this.current = index;
         this.render();
-        if (this.onChange && previous !== index) {
-            this.onChange(index, previous);
-        }
+        if (previous !== index)
+            this.onChange?.(index, previous);
     }
     setError(index) {
         if (index < 0 || index >= this.steps.length)
@@ -115,12 +113,12 @@ class Stepper {
         return this.current === this.steps.length - 1;
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
         if (this.injectedConnectors) {
-            this.connectors.forEach(c => c.remove());
+            this.connectors.forEach((c) => c.remove());
             this.connectors = [];
         }
-        this.steps.forEach(step => step.removeAttribute('aria-current'));
+        this.steps.forEach((step) => step.removeAttribute('aria-current'));
     }
 }
 export { Stepper };

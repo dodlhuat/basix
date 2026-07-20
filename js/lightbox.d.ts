@@ -24,10 +24,10 @@ declare class Lightbox {
     private captionEl;
     private counterEl;
     private isZoomed;
-    private abortController;
+    private listeners;
     constructor(options: LightboxOptions);
     show(): void;
-    hide: () => void;
+    hide(): void;
     next(): void;
     prev(): void;
     isVisible(): boolean;

@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -20,7 +21,7 @@ class Toast {
     private readonly template: string;
     private toastElement: HTMLDivElement | null = null;
     private timerId: number | null = null;
-    private openAbortController: AbortController | null = null;
+    private openListeners: ListenerGroup | null = null;
 
     public constructor(options: ToastOptions);
     public constructor(content: string, header?: string, type?: ToastType, closeable?: boolean);
@@ -58,8 +59,8 @@ class Toast {
 
                 const closeButton = this.toastElement?.querySelector<HTMLElement>('.close');
                 if (closeButton) {
-                    this.openAbortController = new AbortController();
-                    closeButton.addEventListener('click', () => this.hide(), { signal: this.openAbortController.signal });
+                    this.openListeners = new ListenerGroup();
+                    closeButton.addEventListener('click', () => this.hide(), { signal: this.openListeners.signal });
                 }
 
                 if (ms !== undefined && ms > 0) {
@@ -76,8 +77,8 @@ class Toast {
         }
 
         this.toastElement?.classList.remove('show');
-        this.openAbortController?.abort();
-        this.openAbortController = null;
+        this.openListeners?.destroy();
+        this.openListeners = null;
 
         setTimeout(() => {
             this.toastElement?.remove();

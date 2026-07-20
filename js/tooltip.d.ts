@@ -14,6 +14,7 @@ declare class Tooltip {
     private tooltipElement;
     private showTimeout;
     private isVisible;
+    private listeners;
     constructor(trigger: HTMLElement, content: string, options?: TooltipOptions);
     static initializeAll(): void;
     show(): void;
@@ -22,10 +23,6 @@ declare class Tooltip {
     private createTooltip;
     private position;
     private attachEvents;
-    private handleMouseEnter;
-    private handleMouseLeave;
-    private handleFocus;
-    private handleBlur;
     destroy(): void;
 }
 export { Tooltip };

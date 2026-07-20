@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 
 /** Internal record pairing a File with its rendered list item element. */
 interface FileData {
@@ -38,7 +39,7 @@ class FileUploader {
     private maxFileSize?: number;
     private allowedTypes?: string[];
     private xhrAborts: Map<string, () => void> = new Map();
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(elementOrSelector: string | HTMLElement, config: FileUploaderConfig = {}) {
         const container = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
@@ -76,7 +77,7 @@ class FileUploader {
     }
 
     private setupEventListeners(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         const prevent = (e: Event) => {
             e.preventDefault();
             e.stopPropagation();
@@ -333,7 +334,7 @@ class FileUploader {
     public destroy(): void {
         this.xhrAborts.forEach((abort) => abort());
         this.xhrAborts.clear();
-        this.abortController.abort();
+        this.listeners.destroy();
         this.files.clear();
         this.fileList.innerHTML = '';
     }

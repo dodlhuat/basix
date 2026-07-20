@@ -1,5 +1,6 @@
 import { escapeHtml } from './utils.js';
 import { Lightbox } from './lightbox.js';
+import { ListenerGroup } from './listeners.js';
 class MasonryGallery {
     container;
     loader;
@@ -7,8 +8,7 @@ class MasonryGallery {
     columns = [];
     allImages = [];
     isFetching = false;
-    resizeObserver = null;
-    abortController = null;
+    listeners = new ListenerGroup();
     reloaded = 0;
     constructor(containerId, options) {
         const container = document.getElementById(containerId);
@@ -50,35 +50,36 @@ class MasonryGallery {
         }
     }
     addEventListeners() {
-        this.abortController = new AbortController();
-        const sig = this.abortController.signal;
+        const sig = { signal: this.listeners.signal };
         let resizeTimeout;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => this.reLayout(), 200);
-        }, { signal: sig });
-        window.addEventListener('scroll', this.handleScroll, { passive: true, signal: sig });
+        }, sig);
+        window.addEventListener('scroll', () => this.handleScroll(), { ...sig, passive: true });
     }
     reLayout() {
-        const items = this.columns.flatMap(col => Array.from(col.children));
+        const items = this.columns.flatMap((col) => Array.from(col.children));
         const availableWidth = Math.min(1200, window.innerWidth - 40);
         const numColumns = Math.max(1, Math.floor(availableWidth / this.options.minColumnWidth));
         if (this.columns.length !== numColumns) {
             this.buildColumns(numColumns);
         }
         else {
-            this.columns.forEach(col => { col.innerHTML = ''; });
+            this.columns.forEach((col) => {
+                col.innerHTML = '';
+            });
         }
-        items.forEach(item => this.addToShortestColumn(item));
+        items.forEach((item) => this.addToShortestColumn(item));
     }
-    handleScroll = () => {
+    handleScroll() {
         if (this.isFetching)
             return;
         const rect = this.container.getBoundingClientRect();
         if (rect.bottom > 0 && rect.bottom <= window.innerHeight + this.options.scrollThreshold) {
             this.loadMoreImages();
         }
-    };
+    }
     async loadMoreImages(isAutoFill = false) {
         if (!isAutoFill)
             this.reloaded++;
@@ -123,7 +124,7 @@ class MasonryGallery {
                 const index = startIndex + i;
                 item.addEventListener('click', () => {
                     new Lightbox({
-                        images: this.allImages.map(img => ({
+                        images: this.allImages.map((img) => ({
                             src: img.src,
                             alt: img.title,
                             caption: img.desc,
@@ -174,14 +175,7 @@ class MasonryGallery {
         shortestCol.appendChild(element);
     }
     destroy() {
-        if (this.resizeObserver) {
-            this.resizeObserver.disconnect();
-            this.resizeObserver = null;
-        }
-        if (this.abortController) {
-            this.abortController.abort();
-            this.abortController = null;
-        }
+        this.listeners.destroy();
         this.allImages = [];
     }
 }

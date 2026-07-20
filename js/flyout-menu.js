@@ -1,3 +1,4 @@
+import { ListenerGroup } from './listeners.js';
 class FlyoutMenu {
     options;
     menuTrigger;
@@ -6,7 +7,7 @@ class FlyoutMenu {
     closeBtn = null;
     submenuToggles = null;
     menuLinks = null;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     constructor(options = {}) {
         this.options = {
             triggerSelector: '.menu-trigger',
@@ -20,7 +21,7 @@ class FlyoutMenu {
             footerText: '&copy; 2025 Brand Inc.',
             enableHeader: true,
             enableFooter: true,
-            ...options
+            ...options,
         };
         this.menuTrigger = document.querySelector(this.options.triggerSelector);
         this.flyoutMenu = document.querySelector(this.options.menuSelector);
@@ -58,7 +59,7 @@ class FlyoutMenu {
             if (nestedUl) {
                 li.classList.add('has-submenu');
                 nestedUl.classList.add('submenu');
-                const textNode = Array.from(li.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '');
+                const textNode = Array.from(li.childNodes).find((node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '');
                 const text = textNode?.textContent?.trim() || 'Menu Item';
                 textNode?.remove();
                 const button = document.createElement('button');
@@ -108,30 +109,30 @@ class FlyoutMenu {
         this.flyoutMenu.append(footer);
     }
     bindEvents() {
-        const sig = { signal: this.abortController.signal };
-        this.menuTrigger?.addEventListener('click', this.open, sig);
-        this.closeBtn?.addEventListener('click', this.close, sig);
-        this.flyoutOverlay?.addEventListener('click', this.close, sig);
-        this.submenuToggles?.forEach(toggle => {
+        const sig = { signal: this.listeners.signal };
+        this.menuTrigger?.addEventListener('click', () => this.open(), sig);
+        this.closeBtn?.addEventListener('click', () => this.close(), sig);
+        this.flyoutOverlay?.addEventListener('click', () => this.close(), sig);
+        this.submenuToggles?.forEach((toggle) => {
             toggle.addEventListener('click', (e) => this.handleSubmenu(e, toggle), sig);
         });
-        this.menuLinks?.forEach(link => {
-            link.addEventListener('click', this.close, sig);
+        this.menuLinks?.forEach((link) => {
+            link.addEventListener('click', () => this.close(), sig);
         });
-        document.addEventListener('keydown', this.handleKeydown, sig);
+        document.addEventListener('keydown', (e) => this.handleKeydown(e), sig);
     }
-    open = () => {
+    open() {
         this.flyoutMenu?.classList.add('is-open');
         this.flyoutOverlay?.classList.add('is-visible');
         document.body.style.overflow = 'hidden';
         this.menuTrigger?.setAttribute('aria-expanded', 'true');
-    };
-    close = () => {
+    }
+    close() {
         this.flyoutMenu?.classList.remove('is-open');
         this.flyoutOverlay?.classList.remove('is-visible');
         document.body.style.overflow = '';
         this.menuTrigger?.setAttribute('aria-expanded', 'false');
-    };
+    }
     handleSubmenu(e, toggle) {
         e.preventDefault();
         e.stopPropagation();
@@ -141,7 +142,7 @@ class FlyoutMenu {
         if (!parentUl || !parentLi)
             return;
         const siblings = Array.from(parentUl.children);
-        siblings.forEach(sibling => {
+        siblings.forEach((sibling) => {
             if (sibling !== parentLi) {
                 const siblingSubmenu = sibling.querySelector('.submenu');
                 const siblingToggle = sibling.querySelector('.submenu-toggle');
@@ -154,23 +155,20 @@ class FlyoutMenu {
         toggle.classList.toggle('active');
         submenu?.classList.toggle('is-open');
     }
-    handleKeydown = (e) => {
+    handleKeydown(e) {
         if (e.key === 'Escape' && this.flyoutMenu?.classList.contains('is-open')) {
             this.close();
         }
-    };
+    }
     setDirection(direction) {
         if (!this.flyoutMenu)
-            return;
-        const validDirections = ['left', 'right'];
-        if (!validDirections.includes(direction))
             return;
         this.flyoutMenu.classList.remove('flyout-from-right', 'flyout-from-left');
         this.flyoutMenu.classList.add(`flyout-from-${direction}`);
         this.options.direction = direction;
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
         document.body.style.overflow = '';
     }
 }

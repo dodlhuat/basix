@@ -3,6 +3,7 @@ declare class CodeViewer {
     private container;
     private code;
     private language;
+    private listeners;
     constructor(elementOrSelector: string | HTMLElement, code: string, language?: SupportedLanguage);
     private highlight;
     private escape;
@@ -11,7 +12,6 @@ declare class CodeViewer {
     private highlightCSS;
     private copyCode;
     private render;
-    private handleCopy;
     destroy(): void;
 }
 export { CodeViewer };

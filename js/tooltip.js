@@ -1,4 +1,5 @@
 import { computePosition } from './position.js';
+import { ListenerGroup } from './listeners.js';
 class Tooltip {
     static activeTooltip = null;
     static idCounter = 0;
@@ -8,6 +9,7 @@ class Tooltip {
     tooltipElement = null;
     showTimeout = null;
     isVisible = false;
+    listeners = new ListenerGroup();
     constructor(trigger, content, options = {}) {
         this.trigger = trigger;
         this.content = content;
@@ -22,7 +24,7 @@ class Tooltip {
     }
     static initializeAll() {
         const triggers = document.querySelectorAll('[data-tooltip]');
-        triggers.forEach(trigger => {
+        triggers.forEach((trigger) => {
             const content = trigger.getAttribute('data-tooltip');
             const position = trigger.getAttribute('data-tooltip-position') ?? 'auto';
             const className = trigger.getAttribute('data-tooltip-class') ?? '';
@@ -31,7 +33,7 @@ class Tooltip {
             }
         });
         const advancedTriggers = document.querySelectorAll('[data-tooltip-id]');
-        advancedTriggers.forEach(trigger => {
+        advancedTriggers.forEach((trigger) => {
             const contentId = trigger.getAttribute('data-tooltip-id');
             const position = trigger.getAttribute('data-tooltip-position') ?? 'auto';
             const className = trigger.getAttribute('data-tooltip-class') ?? '';
@@ -107,35 +109,24 @@ class Tooltip {
     position() {
         if (!this.tooltipElement)
             return;
-        const { left, top, placement } = computePosition(this.trigger.getBoundingClientRect(), this.tooltipElement.getBoundingClientRect(), { placement: this.options.position, offset: this.options.offset });
+        const { left, top, placement } = computePosition(this.trigger.getBoundingClientRect(), this.tooltipElement.getBoundingClientRect(), {
+            placement: this.options.position,
+            offset: this.options.offset,
+        });
         this.tooltipElement.style.left = `${left}px`;
         this.tooltipElement.style.top = `${top}px`;
         this.tooltipElement.setAttribute('data-position', placement);
     }
     attachEvents() {
-        this.trigger.addEventListener('mouseenter', this.handleMouseEnter);
-        this.trigger.addEventListener('mouseleave', this.handleMouseLeave);
-        this.trigger.addEventListener('focus', this.handleFocus);
-        this.trigger.addEventListener('blur', this.handleBlur);
+        const sig = { signal: this.listeners.signal };
+        this.trigger.addEventListener('mouseenter', () => this.show(), sig);
+        this.trigger.addEventListener('mouseleave', () => this.hide(), sig);
+        this.trigger.addEventListener('focus', () => this.show(), sig);
+        this.trigger.addEventListener('blur', () => this.hide(), sig);
     }
-    handleMouseEnter = () => {
-        this.show();
-    };
-    handleMouseLeave = () => {
-        this.hide();
-    };
-    handleFocus = () => {
-        this.show();
-    };
-    handleBlur = () => {
-        this.hide();
-    };
     destroy() {
         this.hide();
-        this.trigger.removeEventListener('mouseenter', this.handleMouseEnter);
-        this.trigger.removeEventListener('mouseleave', this.handleMouseLeave);
-        this.trigger.removeEventListener('focus', this.handleFocus);
-        this.trigger.removeEventListener('blur', this.handleBlur);
+        this.listeners.destroy();
         const previousDescribedBy = this.trigger.getAttribute('data-previous-describedby');
         if (previousDescribedBy) {
             this.trigger.setAttribute('aria-describedby', previousDescribedBy);

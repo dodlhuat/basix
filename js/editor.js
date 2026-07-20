@@ -1,4 +1,5 @@
 import { sanitizeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 class Editor {
     root;
     editable;
@@ -8,7 +9,7 @@ class Editor {
     wordCount;
     undoStack = [];
     redoStack = [];
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     constructor(options = {}) {
         if (options.root instanceof HTMLElement) {
             this.root = options.root;
@@ -60,8 +61,8 @@ class Editor {
         return this.root.querySelectorAll(selector);
     }
     bindToolbar() {
-        const sig = { signal: this.abortController.signal };
-        this.qAll('[data-cmd]').forEach(btn => {
+        const sig = { signal: this.listeners.signal };
+        this.qAll('[data-cmd]').forEach((btn) => {
             btn.addEventListener('click', () => {
                 const cmd = btn.dataset.cmd;
                 const val = btn.dataset.value ?? null;
@@ -71,7 +72,7 @@ class Editor {
         });
     }
     bindActions() {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.q('[data-editor-action="link"]')?.addEventListener('click', () => {
             const url = prompt('Enter URL:', 'https://');
             if (url)
@@ -120,10 +121,7 @@ class Editor {
                 this.onContentChange();
             }, sig);
             this.q('[data-editor-action="minify-code"]')?.addEventListener('click', () => {
-                code.value = code.value
-                    .replace(/\n/g, '')
-                    .replace(/>\s+</g, '><')
-                    .trim();
+                code.value = code.value.replace(/\n/g, '').replace(/>\s+</g, '><').trim();
             }, sig);
         }
         this.q('[data-editor-action="save"]')?.addEventListener('click', () => this.downloadHTML(), sig);
@@ -172,10 +170,10 @@ class Editor {
                 e.preventDefault();
                 this.redo();
             }
-        }, { signal: this.abortController.signal });
+        }, { signal: this.listeners.signal });
     }
     bindEditable() {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.editable.addEventListener('input', () => this.onContentChange(), sig);
         this.editable.addEventListener('paste', (e) => {
             e.preventDefault();
@@ -186,12 +184,12 @@ class Editor {
         this.editable.addEventListener('mouseup', () => this.refreshActiveState(), sig);
     }
     bindTabs() {
-        const sig = { signal: this.abortController.signal };
-        this.qAll('.side-tab[data-tab]').forEach(tab => {
+        const sig = { signal: this.listeners.signal };
+        this.qAll('.side-tab[data-tab]').forEach((tab) => {
             tab.addEventListener('click', () => {
                 const target = tab.dataset.tab;
-                this.qAll('.side-tab').forEach(t => t.classList.remove('active'));
-                this.qAll('.side-panel').forEach(p => p.classList.remove('active'));
+                this.qAll('.side-tab').forEach((t) => t.classList.remove('active'));
+                this.qAll('.side-panel').forEach((p) => p.classList.remove('active'));
                 tab.classList.add('active');
                 this.q(`[data-editor="${target}"]`)?.classList.add('active');
             }, sig);
@@ -211,8 +209,11 @@ class Editor {
     updateWordCount() {
         if (!this.wordCount)
             return;
-        const text = this.editable.innerText || '';
-        const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+        const text = this.editable.innerText;
+        const words = text
+            .trim()
+            .split(/\s+/)
+            .filter((w) => w.length > 0);
         const count = words.length;
         this.wordCount.textContent = `${count} word${count !== 1 ? 's' : ''}`;
     }
@@ -310,12 +311,11 @@ class Editor {
             return;
         const range = sel.getRangeAt(0);
         const container = range.commonAncestorContainer;
-        let current = container.nodeType === Node.TEXT_NODE
-            ? container.parentElement
-            : container;
+        let current = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
+        const upperTag = tagName.toUpperCase();
         let wrapper = null;
         while (current && current !== this.editable) {
-            if (current.tagName === tagName.toUpperCase()) {
+            if (current.tagName === upperTag) {
                 wrapper = current;
                 break;
             }
@@ -357,9 +357,7 @@ class Editor {
             return;
         const range = sel.getRangeAt(0);
         const container = range.commonAncestorContainer;
-        let blockElement = container.nodeType === Node.TEXT_NODE
-            ? container.parentElement
-            : container;
+        let blockElement = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
         while (blockElement && blockElement !== this.editable && blockElement.parentElement !== this.editable) {
             blockElement = blockElement.parentElement;
         }
@@ -377,7 +375,7 @@ class Editor {
         const range = sel.getRangeAt(0);
         const text = range.toString();
         const list = document.createElement(listTag);
-        const lines = text ? text.split('\n').filter(l => l.trim()) : [''];
+        const lines = text ? text.split('\n').filter((l) => l.trim()) : [''];
         for (const line of lines) {
             const li = document.createElement('li');
             li.textContent = line.trim() || '​';
@@ -396,15 +394,15 @@ class Editor {
     }
     setAlignment(cmd) {
         const align = {
-            justifyLeft: 'left', justifyCenter: 'center', justifyRight: 'right',
+            justifyLeft: 'left',
+            justifyCenter: 'center',
+            justifyRight: 'right',
         };
         const sel = window.getSelection();
         if (!sel || sel.rangeCount === 0)
             return;
         const container = sel.getRangeAt(0).commonAncestorContainer;
-        let block = container.nodeType === Node.TEXT_NODE
-            ? container.parentElement
-            : container;
+        let block = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
         while (block && block !== this.editable && block.parentElement !== this.editable) {
             block = block.parentElement;
         }
@@ -451,15 +449,13 @@ ${content}
             return;
         const range = sel.getRangeAt(0);
         const container = range.commonAncestorContainer;
-        const element = container.nodeType === Node.TEXT_NODE
-            ? container.parentElement
-            : container;
-        this.qAll('[data-cmd]').forEach(btn => {
+        const element = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
+        this.qAll('[data-cmd]').forEach((btn) => {
             const cmd = btn.dataset.cmd;
             let active = false;
             let current = element;
             while (current && current !== this.editable) {
-                const tag = current.tagName?.toLowerCase();
+                const tag = current.tagName.toLowerCase();
                 if ((cmd === 'bold' && (tag === 'strong' || tag === 'b')) ||
                     (cmd === 'italic' && (tag === 'em' || tag === 'i')) ||
                     (cmd === 'underline' && tag === 'u') ||
@@ -473,7 +469,7 @@ ${content}
         });
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
     }
 }
 export { Editor };

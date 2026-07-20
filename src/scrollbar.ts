@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 /** DOM element references for a Scrollbar instance. */
 interface ScrollbarElements {
     viewport: HTMLElement;
@@ -12,7 +14,7 @@ class Scrollbar {
     private static activeInstance: Scrollbar | null = null;
     private static globalListenersInstalled = false;
     private static instanceCount = 0;
-    private static globalListenerAbortController: AbortController | null = null;
+    private static globalListeners: ListenerGroup | null = null;
 
     private readonly container!: HTMLElement;
     private readonly viewport!: HTMLElement;
@@ -26,7 +28,7 @@ class Scrollbar {
     private activePointerId: number | null = null;
     private startPointerY = 0;
     private startThumbTop = 0;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     private constructor(container: HTMLElement) {
         this.container = container;
@@ -76,15 +78,15 @@ class Scrollbar {
     }
 
     private static installGlobalListeners(): void {
-        const ac = new AbortController();
-        Scrollbar.globalListenerAbortController = ac;
+        const listeners = new ListenerGroup();
+        Scrollbar.globalListeners = listeners;
 
         document.addEventListener(
             'pointermove',
             (e: PointerEvent) => {
                 Scrollbar.activeInstance?.handlePointerMove(e);
             },
-            { passive: false, signal: ac.signal },
+            { passive: false, signal: listeners.signal },
         );
 
         document.addEventListener(
@@ -92,7 +94,7 @@ class Scrollbar {
             (e: PointerEvent) => {
                 Scrollbar.activeInstance?.handlePointerUp(e);
             },
-            { signal: ac.signal },
+            { signal: listeners.signal },
         );
 
         document.addEventListener(
@@ -100,14 +102,14 @@ class Scrollbar {
             (e: PointerEvent) => {
                 Scrollbar.activeInstance?.handlePointerUp(e);
             },
-            { signal: ac.signal },
+            { signal: listeners.signal },
         );
 
         Scrollbar.globalListenersInstalled = true;
     }
 
     private attachEventListeners(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.viewport.addEventListener('scroll', () => this.updateThumb(), { ...sig, passive: true });
         this.thumb.addEventListener('pointerdown', (e: PointerEvent) => this.handleThumbPointerDown(e), sig);
         this.track.addEventListener('click', (e: MouseEvent) => this.handleTrackClick(e), sig);
@@ -242,7 +244,7 @@ class Scrollbar {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.resizeObserver.disconnect();
 
         Scrollbar.instances.delete(this.container);
@@ -253,8 +255,8 @@ class Scrollbar {
 
         Scrollbar.instanceCount--;
         if (Scrollbar.instanceCount === 0) {
-            Scrollbar.globalListenerAbortController?.abort();
-            Scrollbar.globalListenerAbortController = null;
+            Scrollbar.globalListeners?.destroy();
+            Scrollbar.globalListeners = null;
             Scrollbar.globalListenersInstalled = false;
         }
     }

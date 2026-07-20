@@ -1,9 +1,10 @@
+import { ListenerGroup } from './listeners.js';
 class ContextMenu {
     items;
     targets;
     menuEl = null;
     currentTarget = null;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     spritePath;
     constructor(selectorOrElement, items, options = {}) {
         this.items = items;
@@ -20,7 +21,7 @@ class ContextMenu {
         this.init();
     }
     init() {
-        const { signal } = this.abortController;
+        const { signal } = this.listeners;
         this.targets.forEach((target) => {
             target.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
@@ -40,15 +41,15 @@ class ContextMenu {
             if (e.key === 'Escape') {
                 this.close();
             }
-            if (e.key === 'ArrowDown') {
+            else if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 this.moveFocus(1);
             }
-            if (e.key === 'ArrowUp') {
+            else if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 this.moveFocus(-1);
             }
-            if (e.key === 'Enter') {
+            else if (e.key === 'Enter') {
                 e.preventDefault();
                 this.activateFocused();
             }
@@ -187,26 +188,23 @@ class ContextMenu {
     getFocusableItems() {
         if (!this.menuEl)
             return [];
-        return Array.from(this.menuEl.children).filter((el) => el.classList.contains('context-menu-item') &&
-            !el.classList.contains('is-disabled'));
+        return Array.from(this.menuEl.children).filter((el) => el.classList.contains('context-menu-item') && !el.classList.contains('is-disabled'));
     }
     moveFocus(direction) {
         const items = this.getFocusableItems();
         if (!items.length)
             return;
         const currentIndex = items.findIndex((el) => el.classList.contains('is-focused'));
-        const nextIndex = (currentIndex + direction + items.length) % items.length;
+        const nextIndex = currentIndex === -1 ? (direction === 1 ? 0 : items.length - 1) : (currentIndex + direction + items.length) % items.length;
         items[currentIndex]?.classList.remove('is-focused');
         items[nextIndex].classList.add('is-focused');
     }
     activateFocused() {
-        this.menuEl
-            ?.querySelector('.context-menu-item.is-focused')
-            ?.click();
+        this.menuEl?.querySelector('.context-menu-item.is-focused')?.click();
     }
     destroy() {
         this.close();
-        this.abortController.abort();
+        this.listeners.destroy();
     }
 }
 export { ContextMenu };

@@ -1,12 +1,11 @@
+import { ListenerGroup } from './listeners.js';
 class Select {
     element;
     isMultiselect;
     dropdown;
-    documentClickHandler;
+    listeners = new ListenerGroup();
     constructor(elementOrSelector) {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
+        const element = typeof elementOrSelector === 'string' ? document.querySelector(elementOrSelector) : elementOrSelector;
         if (!element) {
             throw new Error(`Select: Element not found for selector "${elementOrSelector}"`);
         }
@@ -17,39 +16,36 @@ class Select {
         }
         this.isMultiselect = result.isMulti;
         this.dropdown = result.dropdown;
-        this.documentClickHandler = (e) => {
+        document.addEventListener('click', (e) => {
             if (this.dropdown && !this.dropdown.contains(e.target)) {
                 this.dropdown.classList.remove('open');
             }
-        };
-        document.addEventListener('click', this.documentClickHandler);
+        }, { signal: this.listeners.signal });
     }
     destroy() {
-        document.removeEventListener('click', this.documentClickHandler);
+        this.listeners.destroy();
         this.dropdown?.classList.remove('open');
     }
     value() {
         const selectedValues = Array.from(this.element.options)
-            .filter(option => option.selected)
-            .map(option => option.value);
+            .filter((option) => option.selected)
+            .map((option) => option.value);
         return this.isMultiselect ? selectedValues : selectedValues[0];
     }
     static init(elementOrSelector) {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
+        const element = typeof elementOrSelector === 'string' ? document.querySelector(elementOrSelector) : elementOrSelector;
         if (!element)
             return null;
         const result = Select.initElement(element);
         if (!result)
             return null;
-        const handler = (e) => {
+        const listeners = new ListenerGroup();
+        document.addEventListener('click', (e) => {
             if (!result.dropdown.contains(e.target)) {
                 result.dropdown.classList.remove('open');
             }
-        };
-        document.addEventListener('click', handler);
-        return () => document.removeEventListener('click', handler);
+        }, { signal: listeners.signal });
+        return () => listeners.destroy();
     }
     static initElement(element) {
         if (!Select.transformSelect(element)) {
@@ -94,7 +90,7 @@ class Select {
         return { isMulti, dropdown };
     }
     static closeAllDropdowns(exceptDropdown) {
-        document.querySelectorAll('.dropdown').forEach(dropdown => {
+        document.querySelectorAll('.dropdown').forEach((dropdown) => {
             if (dropdown !== exceptDropdown) {
                 dropdown.classList.remove('open');
             }
@@ -103,15 +99,15 @@ class Select {
     static handleMultiSelect(option, optionsContainer, selected, selectElement) {
         option.classList.toggle('selected');
         const selectedOptions = Array.from(optionsContainer.querySelectorAll('.dropdown-option.selected'));
-        const values = selectedOptions.map(opt => opt.textContent?.trim() || '');
+        const values = selectedOptions.map((opt) => opt.textContent?.trim() || '');
         selected.textContent = values.length ? values.join(', ') : 'Select options';
-        const selectedValues = selectedOptions.map(opt => opt.dataset.value || '');
-        Array.from(selectElement.options).forEach(opt => {
+        const selectedValues = selectedOptions.map((opt) => opt.dataset.value || '');
+        Array.from(selectElement.options).forEach((opt) => {
             opt.selected = selectedValues.includes(opt.value);
         });
     }
     static handleSingleSelect(option, optionsContainer, selected, dropdown, selectElement) {
-        optionsContainer.querySelectorAll('.dropdown-option').forEach(opt => {
+        optionsContainer.querySelectorAll('.dropdown-option').forEach((opt) => {
             opt.classList.remove('selected');
         });
         option.classList.add('selected');
@@ -146,7 +142,7 @@ class Select {
         optionsMenu.className = 'dropdown-options-menu hidden';
         optionsMenu.innerHTML = 'Select options<span class="dropdown-options-icon icon icon-close"></span>';
         dropdownOptions.appendChild(optionsMenu);
-        Array.from(select.options).forEach(opt => {
+        Array.from(select.options).forEach((opt) => {
             const optDiv = document.createElement('div');
             optDiv.className = 'dropdown-option';
             optDiv.dataset.value = opt.value;

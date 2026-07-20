@@ -1,3 +1,4 @@
+import { ListenerGroup } from './listeners.js';
 class SidebarNav {
     nav;
     backdrop;
@@ -6,11 +7,9 @@ class SidebarNav {
     opts;
     touchStartX = 0;
     touchStartY = 0;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     constructor(containerOrSelector, options = {}) {
-        const container = typeof containerOrSelector === 'string'
-            ? document.querySelector(containerOrSelector)
-            : containerOrSelector;
+        const container = typeof containerOrSelector === 'string' ? document.querySelector(containerOrSelector) : containerOrSelector;
         this.opts = {
             toggleSelector: options.toggleSelector ?? '.sidebar-toggle',
             breakpoint: options.breakpoint ?? 768,
@@ -20,7 +19,7 @@ class SidebarNav {
         this.nav = container?.querySelector('.sidebar-nav') ?? null;
         this.backdrop = container?.querySelector('.sidebar-backdrop') ?? null;
         this.toggleBtn = document.querySelector(this.opts.toggleSelector);
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.toggleBtn?.addEventListener('click', () => this.toggle(), sig);
         this.backdrop?.addEventListener('click', () => this.close(), sig);
         window.addEventListener('resize', () => {
@@ -30,7 +29,7 @@ class SidebarNav {
         document.addEventListener('touchstart', (e) => {
             this.touchStartX = e.touches[0].clientX;
             this.touchStartY = e.touches[0].clientY;
-        }, { passive: true, signal: this.abortController.signal });
+        }, { ...sig, passive: true });
         document.addEventListener('touchend', (e) => {
             if (window.innerWidth > this.opts.breakpoint)
                 return;
@@ -44,7 +43,7 @@ class SidebarNav {
             else if (this.isOpen() && dx <= -this.opts.swipeThreshold) {
                 this.close();
             }
-        }, { passive: true, signal: this.abortController.signal });
+        }, { ...sig, passive: true });
         this.closeBtn = document.createElement('button');
         this.closeBtn.className = 'sidebar-close';
         this.closeBtn.setAttribute('aria-label', 'Close navigation');
@@ -61,13 +60,18 @@ class SidebarNav {
         this.backdrop?.classList.remove('is-visible');
     }
     toggle() {
-        this.nav?.classList.contains('is-open') ? this.close() : this.open();
+        if (this.nav?.classList.contains('is-open')) {
+            this.close();
+        }
+        else {
+            this.open();
+        }
     }
     isOpen() {
         return this.nav?.classList.contains('is-open') ?? false;
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.closeBtn?.remove();
     }
 }

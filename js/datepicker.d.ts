@@ -29,8 +29,8 @@ declare class DatePicker {
     private selectedMinutes;
     private calendar;
     private backdrop;
-    private handleDocumentClick;
-    private abortController;
+    private listeners;
+    private showListeners;
     constructor(elementOrSelector: string | HTMLInputElement, options?: DatePickerOptions);
     private init;
     private createCalendarElement;

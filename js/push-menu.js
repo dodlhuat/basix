@@ -1,3 +1,4 @@
+import { ListenerGroup } from './listeners.js';
 class PushMenu {
     static elements = {
         navigation: null,
@@ -5,10 +6,12 @@ class PushMenu {
         menu: null,
         header: null,
         controlIcon: null,
-        backdrop: null
+        backdrop: null,
     };
     static initialized = false;
     static panelStack = [];
+    static listeners = new ListenerGroup();
+    static clickNavListeners = null;
     static init() {
         if (this.initialized) {
             console.warn('PushMenu: Already initialized');
@@ -19,8 +22,9 @@ class PushMenu {
             throw new Error('PushMenu: Required elements not found (.navigation, .push-content)');
         }
         this.buildPanels();
-        this.elements.navigation.addEventListener('change', this.handleNavigationChange);
-        this.elements.backdrop?.addEventListener('click', this.handleBackdropClick);
+        const sig = { signal: this.listeners.signal };
+        this.elements.navigation.addEventListener('change', () => this.handleNavigationChange(), sig);
+        this.elements.backdrop?.addEventListener('click', () => this.handleBackdropClick(), sig);
         this.initialized = true;
     }
     static buildPanels() {
@@ -117,17 +121,19 @@ class PushMenu {
             }
         }, 300);
     }
-    static handleNavigationChange = () => {
+    static handleNavigationChange() {
         const isPushed = this.elements.content?.classList.contains('pushed') ?? false;
         if (!isPushed) {
-            this.elements.content?.addEventListener('click', this.clickNav);
+            this.clickNavListeners = new ListenerGroup();
+            this.elements.content?.addEventListener('click', () => this.clickNav(), { signal: this.clickNavListeners.signal });
         }
         else {
-            this.elements.content?.removeEventListener('click', this.clickNav);
+            this.clickNavListeners?.destroy();
+            this.clickNavListeners = null;
             this.resetPanels();
         }
         this.pushToggle();
-    };
+    }
     static pushToggle() {
         if (!this.elements.content || !this.elements.menu) {
             throw new Error('PushMenu: Required elements not found (.push-content, .push-menu)');
@@ -148,14 +154,14 @@ class PushMenu {
             }
         }
     }
-    static clickNav = () => {
+    static clickNav() {
         PushMenu.elements.navigation.click();
-    };
-    static handleBackdropClick = () => {
+    }
+    static handleBackdropClick() {
         if (PushMenu.isOpen()) {
             PushMenu.elements.navigation.click();
         }
-    };
+    }
     static open() {
         if (!this.elements.content?.classList.contains('pushed')) {
             this.pushToggle();
@@ -172,9 +178,9 @@ class PushMenu {
     static destroy() {
         if (!this.initialized)
             return;
-        this.elements.navigation?.removeEventListener('change', this.handleNavigationChange);
-        this.elements.content?.removeEventListener('click', this.clickNav);
-        this.elements.backdrop?.removeEventListener('click', this.handleBackdropClick);
+        this.listeners.reset();
+        this.clickNavListeners?.destroy();
+        this.clickNavListeners = null;
         this.close();
         this.elements = {
             navigation: null,
@@ -182,7 +188,7 @@ class PushMenu {
             menu: null,
             header: null,
             controlIcon: null,
-            backdrop: null
+            backdrop: null,
         };
         this.panelStack = [];
         this.initialized = false;

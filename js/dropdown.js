@@ -1,14 +1,14 @@
 import { bestPlacement } from './position.js';
+import { ListenerGroup } from './listeners.js';
 class Dropdown {
     container;
     trigger;
     menu;
     options;
-    abortController;
+    listeners = new ListenerGroup();
     constructor(selector, options = {}) {
         const container = document.querySelector(selector);
         if (!container) {
-            console.error(`Dropdown container not found: ${selector}`);
             throw new Error(`Dropdown container "${selector}" not found`);
         }
         this.container = container;
@@ -23,7 +23,6 @@ class Dropdown {
             closeOnSelect: options.closeOnSelect ?? true,
             allowMultipleOpen: options.allowMultipleOpen ?? false,
         };
-        this.abortController = new AbortController();
         this.init();
     }
     init() {
@@ -31,7 +30,7 @@ class Dropdown {
         this.attachEventListeners();
     }
     attachEventListeners() {
-        const { signal } = this.abortController;
+        const { signal } = this.listeners;
         this.trigger.addEventListener('click', (e) => {
             e.stopPropagation();
             this.toggle();
@@ -122,7 +121,7 @@ class Dropdown {
         this.container.dispatchEvent(event);
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.close();
     }
 }

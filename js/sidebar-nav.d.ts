@@ -12,7 +12,7 @@ declare class SidebarNav {
     private opts;
     private touchStartX;
     private touchStartY;
-    private abortController;
+    private listeners;
     constructor(containerOrSelector: string | HTMLElement, options?: SidebarNavOptions);
     open(): void;
     close(): void;

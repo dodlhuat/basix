@@ -1,9 +1,10 @@
 import { escapeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 class GroupPicker {
     container;
     data;
     options;
-    abortController;
+    listeners = new ListenerGroup();
     selectedParents = new Set();
     selectedSubs = new Map();
     expandedGroups = new Set();
@@ -12,14 +13,11 @@ class GroupPicker {
     listEl;
     selectionEl;
     constructor(selector, data, options = {}) {
-        const el = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
+        const el = typeof selector === 'string' ? document.querySelector(selector) : selector;
         if (!el)
             throw new Error(`GroupPicker: Element not found for "${selector}"`);
         this.container = el;
         this.data = data;
-        this.abortController = new AbortController();
         this.options = {
             onSelectionChange: options.onSelectionChange ?? (() => { }),
             searchPlaceholder: options.searchPlaceholder ?? 'Gruppen durchsuchen...',
@@ -61,7 +59,7 @@ class GroupPicker {
         for (const group of this.data) {
             const subs = group.subgroups ?? [];
             const groupMatches = group.label.toLowerCase().includes(query);
-            const matchingSubs = subs.filter(s => s.label.toLowerCase().includes(query));
+            const matchingSubs = subs.filter((s) => s.label.toLowerCase().includes(query));
             if (!groupMatches && matchingSubs.length === 0 && query)
                 continue;
             visibleCount++;
@@ -86,8 +84,7 @@ class GroupPicker {
         el.dataset.groupId = group.id;
         if (!hasChildren)
             el.classList.add('is-leaf');
-        const isExpanded = hasChildren && (this.expandedGroups.has(group.id) ||
-            (query.length > 0 && matchingSubs.length > 0));
+        const isExpanded = hasChildren && (this.expandedGroups.has(group.id) || (query.length > 0 && matchingSubs.length > 0));
         const isParentSelected = this.selectedParents.has(group.id);
         if (isExpanded)
             el.classList.add('is-expanded');
@@ -97,9 +94,7 @@ class GroupPicker {
         header.className = 'group-picker__group-header';
         const label = document.createElement('span');
         label.className = 'group-picker__group-label';
-        label.innerHTML = query && groupMatches
-            ? this.highlightText(group.label, query)
-            : escapeHtml(group.label);
+        label.innerHTML = query && groupMatches ? this.highlightText(group.label, query) : escapeHtml(group.label);
         if (hasChildren) {
             const chevron = document.createElement('span');
             chevron.className = 'icon icon-navigate_next group-picker__chevron';
@@ -119,11 +114,11 @@ class GroupPicker {
             actionBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.toggleParentGroup(group.id);
-            }, { signal: this.abortController.signal });
+            }, { signal: this.listeners.signal });
             header.append(chevron, label, count, actionBtn);
             header.addEventListener('click', () => {
                 this.toggleExpand(group.id);
-            }, { signal: this.abortController.signal });
+            }, { signal: this.listeners.signal });
             const subsContainer = document.createElement('div');
             subsContainer.className = 'group-picker__subgroups';
             const subsList = document.createElement('div');
@@ -144,14 +139,14 @@ class GroupPicker {
                     if (!isParentSelected) {
                         this.toggleSubgroup(group.id, sub.id);
                     }
-                }, { signal: this.abortController.signal });
+                }, { signal: this.listeners.signal });
                 subsList.appendChild(subEl);
             }
             subsContainer.appendChild(subsList);
             el.append(header, subsContainer);
             if (isExpanded) {
                 requestAnimationFrame(() => {
-                    subsContainer.style.height = subsContainer.scrollHeight + 'px';
+                    subsContainer.style.height = `${subsContainer.scrollHeight}px`;
                     subsContainer.addEventListener('transitionend', () => {
                         subsContainer.style.height = 'auto';
                     }, { once: true });
@@ -165,7 +160,7 @@ class GroupPicker {
             header.append(label, checkEl);
             header.addEventListener('click', () => {
                 this.toggleParentGroup(group.id);
-            }, { signal: this.abortController.signal });
+            }, { signal: this.listeners.signal });
             el.appendChild(header);
         }
         return el;
@@ -173,17 +168,17 @@ class GroupPicker {
     renderSelection() {
         this.selectionEl.innerHTML = '';
         for (const groupId of this.selectedParents) {
-            const group = this.data.find(g => g.id === groupId);
+            const group = this.data.find((g) => g.id === groupId);
             if (!group)
                 continue;
             this.selectionEl.appendChild(this.createChip(group.label, true, () => this.toggleParentGroup(groupId)));
         }
         for (const [groupId, subs] of this.selectedSubs) {
-            const group = this.data.find(g => g.id === groupId);
+            const group = this.data.find((g) => g.id === groupId);
             if (!group)
                 continue;
             for (const subId of subs) {
-                const sub = group.subgroups?.find(s => s.id === subId);
+                const sub = group.subgroups?.find((s) => s.id === subId);
                 if (!sub)
                     continue;
                 this.selectionEl.appendChild(this.createChip(sub.label, false, () => this.toggleSubgroup(groupId, subId)));
@@ -192,16 +187,14 @@ class GroupPicker {
     }
     createChip(label, isParent, onRemove) {
         const chip = document.createElement('span');
-        chip.className = isParent
-            ? 'chip closeable group-picker__chip--parent'
-            : 'chip closeable';
+        chip.className = isParent ? 'chip closeable group-picker__chip--parent' : 'chip closeable';
         const btn = document.createElement('button');
         btn.setAttribute('aria-label', `${label} entfernen`);
         btn.innerHTML = `<span class="icon icon-close"></span>`;
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             onRemove();
-        }, { signal: this.abortController.signal });
+        }, { signal: this.listeners.signal });
         chip.append(document.createTextNode(label), btn);
         return chip;
     }
@@ -229,7 +222,7 @@ class GroupPicker {
         else {
             subs.add(subId);
         }
-        const group = this.data.find(g => g.id === groupId);
+        const group = this.data.find((g) => g.id === groupId);
         if (group && subs.size === (group.subgroups ?? []).length) {
             this.selectedSubs.delete(groupId);
             this.selectedParents.add(groupId);
@@ -244,7 +237,7 @@ class GroupPicker {
             this.expandedGroups.delete(groupId);
             groupEl?.classList.remove('is-expanded');
             if (subsEl) {
-                subsEl.style.height = subsEl.scrollHeight + 'px';
+                subsEl.style.height = `${subsEl.scrollHeight}px`;
                 requestAnimationFrame(() => {
                     subsEl.style.height = '0';
                 });
@@ -254,7 +247,7 @@ class GroupPicker {
             this.expandedGroups.add(groupId);
             groupEl?.classList.add('is-expanded');
             if (subsEl) {
-                subsEl.style.height = subsEl.scrollHeight + 'px';
+                subsEl.style.height = `${subsEl.scrollHeight}px`;
                 subsEl.addEventListener('transitionend', () => {
                     if (this.expandedGroups.has(groupId)) {
                         subsEl.style.height = 'auto';
@@ -275,7 +268,7 @@ class GroupPicker {
                 this.searchQuery = this.searchInput.value;
                 this.renderGroups();
             }, 120);
-        }, { signal: this.abortController.signal });
+        }, { signal: this.listeners.signal });
     }
     emitChange() {
         const selection = this.getSelection();
@@ -322,7 +315,7 @@ class GroupPicker {
         this.emitChange();
     }
     expandAll() {
-        this.data.forEach(g => this.expandedGroups.add(g.id));
+        this.data.forEach((g) => this.expandedGroups.add(g.id));
         this.renderGroups();
     }
     collapseAll() {
@@ -330,7 +323,7 @@ class GroupPicker {
         this.renderGroups();
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.container.innerHTML = '';
         this.container.classList.remove('group-picker');
     }

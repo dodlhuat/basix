@@ -1,14 +1,13 @@
+import { ListenerGroup } from './listeners.js';
 class Tabs {
     container;
     options;
     tabItems;
     tabPanels;
     currentTab;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     constructor(elementOrSelector, options = {}) {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
+        const element = typeof elementOrSelector === 'string' ? document.querySelector(elementOrSelector) : elementOrSelector;
         if (!element) {
             throw new Error(`Tabs: Element not found for selector "${elementOrSelector}"`);
         }
@@ -18,7 +17,7 @@ class Tabs {
             layout,
             defaultTab: options.defaultTab ?? 0,
             menuPos: options.menuPos ?? (layout === 'vertical' ? 'left' : 'top'),
-            onChange: options.onChange
+            onChange: options.onChange,
         };
         this.currentTab = this.options.defaultTab;
         this.tabItems = this.container.querySelectorAll('.tab-item');
@@ -29,8 +28,6 @@ class Tabs {
         if (this.options.layout === 'vertical') {
             this.container.classList.add('tabs-vertical');
         }
-        this.tabItems = this.container.querySelectorAll('.tab-item');
-        this.tabPanels = this.container.querySelectorAll('.tab-panel');
         if (this.tabItems.length === 0) {
             console.warn('No tab items found in container');
             return;
@@ -46,16 +43,13 @@ class Tabs {
         this.activateTab(this.options.defaultTab);
     }
     bindEvents() {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.tabItems.forEach((item, index) => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.activateTab(index);
             }, sig);
-            item.addEventListener('keydown', (e) => {
-                const keyEvent = e;
-                this.handleKeyboardNavigation(keyEvent, index);
-            }, sig);
+            item.addEventListener('keydown', (e) => this.handleKeyboardNavigation(e, index), sig);
             item.setAttribute('role', 'tab');
             item.setAttribute('tabindex', index === this.options.defaultTab ? '0' : '-1');
             item.setAttribute('aria-selected', index === this.options.defaultTab ? 'true' : 'false');
@@ -114,7 +108,7 @@ class Tabs {
             console.warn(`Invalid tab index: ${index}`);
             return;
         }
-        this.tabItems.forEach((item, i) => {
+        this.tabItems.forEach((item) => {
             item.classList.remove('active');
             item.setAttribute('tabindex', '-1');
             item.setAttribute('aria-selected', 'false');
@@ -130,9 +124,8 @@ class Tabs {
         this.tabPanels[index].setAttribute('aria-hidden', 'false');
         const previousTab = this.currentTab;
         this.currentTab = index;
-        if (this.options.onChange && previousTab !== index) {
-            this.options.onChange(index);
-        }
+        if (previousTab !== index)
+            this.options.onChange?.(index);
     }
     goToTab(index) {
         this.activateTab(index);
@@ -169,7 +162,7 @@ class Tabs {
         }
     }
     destroy() {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.container.classList.remove('tabs-vertical');
         this.tabItems.forEach((item) => {
             item.removeAttribute('role');

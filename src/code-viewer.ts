@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 type SupportedLanguage = 'javascript' | 'js' | 'html' | 'css';
 
 /** Renders syntax-highlighted code inside a container element. */
@@ -5,7 +7,7 @@ class CodeViewer {
     private container: HTMLElement;
     private code: string;
     private language: string;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(elementOrSelector: string | HTMLElement, code: string, language: SupportedLanguage = 'javascript') {
         const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
@@ -178,11 +180,11 @@ class CodeViewer {
                 `;
 
         const copyButton = this.container.querySelector<HTMLButtonElement>('.copy-button');
-        copyButton?.addEventListener('click', () => this.copyCode(), { signal: this.abortController.signal });
+        copyButton?.addEventListener('click', () => this.copyCode(), { signal: this.listeners.signal });
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
     }
 }
 export { CodeViewer };

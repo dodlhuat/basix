@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 /** Configuration options for the FlyoutMenu. */
 interface FlyoutMenuOptions {
     triggerSelector?: string;
@@ -22,7 +24,7 @@ class FlyoutMenu {
     private closeBtn: HTMLElement | null = null;
     private submenuToggles: NodeListOf<HTMLElement> | null = null;
     private menuLinks: NodeListOf<HTMLAnchorElement> | null = null;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(options: FlyoutMenuOptions = {}) {
         this.options = {
@@ -141,7 +143,7 @@ class FlyoutMenu {
     }
 
     private bindEvents(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         this.menuTrigger?.addEventListener('click', () => this.open(), sig);
         this.closeBtn?.addEventListener('click', () => this.close(), sig);
@@ -214,7 +216,7 @@ class FlyoutMenu {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         document.body.style.overflow = '';
     }
 }

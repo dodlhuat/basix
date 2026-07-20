@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 /** Represents a single calendar event with a start/end date. */
 interface CalendarEvent {
     id: string;
@@ -489,7 +491,7 @@ class Calendar {
     private currentView: CalendarView;
     private events: CalendarEvent[] = [];
     private nowLineTimer: ReturnType<typeof setInterval> | null = null;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(options: CalendarOptions) {
         if (typeof options.container === 'string') {
@@ -577,7 +579,7 @@ class Calendar {
 
     public destroy(): void {
         this.clearNowLineTimer();
-        this.abortController.abort();
+        this.listeners.destroy();
         this.container.innerHTML = '';
         this.container.removeAttribute('data-cal');
     }
@@ -673,7 +675,7 @@ class Calendar {
     }
 
     private attachEvents(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.container.addEventListener('click', (e: MouseEvent) => this.handleClick(e), sig);
         this.container.addEventListener('keydown', (e: KeyboardEvent) => this.handleKeydown(e), sig);
     }

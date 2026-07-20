@@ -1,4 +1,5 @@
 import { computePosition } from './position.js';
+import { ListenerGroup } from './listeners.js';
 class DatePicker {
     input;
     options;
@@ -14,12 +15,10 @@ class DatePicker {
     selectedMinutes;
     calendar;
     backdrop;
-    handleDocumentClick;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
+    showListeners = null;
     constructor(elementOrSelector, options = {}) {
-        this.input = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
+        this.input = typeof elementOrSelector === 'string' ? document.querySelector(elementOrSelector) : elementOrSelector;
         if (!this.input) {
             throw new Error(`DatePicker: Element not found for selector "${elementOrSelector}"`);
         }
@@ -30,10 +29,7 @@ class DatePicker {
             timePicker,
             locales: {
                 days: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-                months: [
-                    'January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'
-                ]
+                months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             },
             format: timePicker
                 ? (date) => {
@@ -43,7 +39,7 @@ class DatePicker {
                 }
                 : (date) => date.toDateString(),
             onSelect: () => { },
-            ...options
+            ...options,
         };
         this.currentDate = new Date();
         this.selectedDate = null;
@@ -69,7 +65,6 @@ class DatePicker {
         this.backdrop = document.createElement('div');
         this.backdrop.className = 'datepicker-backdrop';
         document.body.appendChild(this.backdrop);
-        this.backdrop.addEventListener('click', () => this.hide(), { signal: this.abortController.signal });
     }
     attachEvents() {
         const toggle = (e) => {
@@ -82,21 +77,13 @@ class DatePicker {
                 this.show();
             }
         };
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.input?.addEventListener('click', toggle, sig);
         this.backdrop.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             this.hide();
         }, sig);
-        this.handleDocumentClick = (e) => {
-            if (this.calendar.classList.contains('mobile'))
-                return;
-            const target = e.target;
-            if (!this.calendar.contains(target) && target !== this.input) {
-                this.hide();
-            }
-        };
     }
     show() {
         const isMobile = window.innerWidth <= 640;
@@ -123,7 +110,13 @@ class DatePicker {
             }
             setTimeout(() => {
                 if (this.calendar.classList.contains('visible')) {
-                    document.addEventListener('click', this.handleDocumentClick);
+                    this.showListeners = new ListenerGroup();
+                    document.addEventListener('click', (e) => {
+                        const target = e.target;
+                        if (!this.calendar.contains(target) && target !== this.input) {
+                            this.hide();
+                        }
+                    }, { signal: this.showListeners.signal });
                 }
             }, 0);
         }
@@ -133,7 +126,8 @@ class DatePicker {
         this.calendar.classList.remove('visible');
         this.backdrop.classList.remove('visible');
         document.body.style.overflow = '';
-        document.removeEventListener('click', this.handleDocumentClick);
+        this.showListeners?.destroy();
+        this.showListeners = null;
     }
     render() {
         this.calendar.innerHTML = '';
@@ -242,6 +236,7 @@ class DatePicker {
     createMonthGrid() {
         const grid = document.createElement('div');
         grid.className = 'datepicker-grid-months';
+        const now = new Date();
         this.options?.locales?.months.forEach((month, index) => {
             const el = document.createElement('div');
             el.className = 'datepicker-month';
@@ -249,7 +244,7 @@ class DatePicker {
             if (index === this.viewMonth) {
                 el.classList.add('selected');
             }
-            if (index === new Date().getMonth() && this.viewYear === new Date().getFullYear()) {
+            if (index === now.getMonth() && this.viewYear === now.getFullYear()) {
                 el.classList.add('current');
             }
             el.onclick = (e) => {
@@ -292,7 +287,7 @@ class DatePicker {
         const days = this.options?.locales?.days ?? ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
         const startDay = this.options.startDay ?? 0;
         const adjustedDays = [...days.slice(startDay), ...days.slice(0, startDay)];
-        adjustedDays.forEach(day => {
+        adjustedDays.forEach((day) => {
             const el = document.createElement('div');
             el.className = 'datepicker-day-header';
             el.textContent = day;
@@ -400,7 +395,7 @@ class DatePicker {
         display.addEventListener('focus', () => display.select());
         display.addEventListener('change', (e) => {
             e.stopPropagation();
-            let parsed = parseInt(display.value, 10);
+            const parsed = parseInt(display.value, 10);
             if (isNaN(parsed) || parsed < min || parsed > max) {
                 display.value = String(value).padStart(2, '0');
                 return;
@@ -521,7 +516,7 @@ class DatePicker {
     }
     destroy() {
         this.hide();
-        this.abortController.abort();
+        this.listeners.destroy();
         this.calendar.remove();
         this.backdrop.remove();
     }

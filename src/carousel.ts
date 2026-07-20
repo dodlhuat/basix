@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 /** Options for configuring a Carousel instance. */
 interface CarouselOptions {
     loop?: boolean;
@@ -18,7 +20,7 @@ class Carousel {
     private dotsNav!: HTMLDivElement;
     private dots!: HTMLButtonElement[];
     private autoPlayTimer: number | null = null;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(elementOrSelector: string | HTMLElement, options: CarouselOptions = {}) {
         const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
@@ -101,7 +103,7 @@ class Carousel {
     }
 
     private bindEvents(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         this.nextButton.addEventListener('click', () => this.moveToNextSlide(), sig);
         this.prevButton.addEventListener('click', () => this.moveToPrevSlide(), sig);
@@ -193,7 +195,7 @@ class Carousel {
     private addTouchSupport(): void {
         let startX = 0;
         let isDragging = false;
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         this.track.addEventListener(
             'touchstart',
@@ -241,7 +243,7 @@ class Carousel {
 
     public destroy(): void {
         this.pauseAutoPlay();
-        this.abortController.abort();
+        this.listeners.destroy();
     }
 }
 

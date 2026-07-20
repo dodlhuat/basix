@@ -11,7 +11,7 @@ declare class Dropdown {
     private trigger;
     private menu;
     private options;
-    private abortController;
+    private listeners;
     constructor(selector: string, options?: DropdownOptions);
     private init;
     private attachEventListeners;

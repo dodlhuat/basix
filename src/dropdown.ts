@@ -1,4 +1,5 @@
 import { bestPlacement } from './position.js';
+import { ListenerGroup } from './listeners.js';
 
 /** Configuration options for a Dropdown instance. */
 interface DropdownOptions {
@@ -18,7 +19,7 @@ class Dropdown {
     private trigger: HTMLElement;
     private menu: HTMLElement;
     private options: Required<DropdownOptions>;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(selector: string, options: DropdownOptions = {}) {
         const container = document.querySelector<HTMLElement>(selector);
@@ -53,7 +54,7 @@ class Dropdown {
     }
 
     private attachEventListeners(): void {
-        const { signal } = this.abortController;
+        const { signal } = this.listeners;
 
         this.trigger.addEventListener(
             'click',
@@ -177,7 +178,7 @@ class Dropdown {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.close();
     }
 }

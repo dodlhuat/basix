@@ -1,9 +1,11 @@
+import { ListenerGroup } from './listeners.js';
+
 /** Enhances a native `<select>` element with a custom styled dropdown. */
 class Select {
     private readonly element: HTMLSelectElement;
     private readonly isMultiselect: boolean;
     private readonly dropdown: HTMLElement | null;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(elementOrSelector: string | HTMLSelectElement) {
         const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLSelectElement>(elementOrSelector) : elementOrSelector;
@@ -29,12 +31,12 @@ class Select {
                     this.dropdown.classList.remove('open');
                 }
             },
-            { signal: this.abortController.signal },
+            { signal: this.listeners.signal },
         );
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.dropdown?.classList.remove('open');
     }
 
@@ -54,7 +56,7 @@ class Select {
         const result = Select.initElement(element);
         if (!result) return null;
 
-        const ac = new AbortController();
+        const listeners = new ListenerGroup();
         document.addEventListener(
             'click',
             (e: Event) => {
@@ -62,9 +64,9 @@ class Select {
                     result.dropdown.classList.remove('open');
                 }
             },
-            { signal: ac.signal },
+            { signal: listeners.signal },
         );
-        return () => ac.abort();
+        return () => listeners.destroy();
     }
 
     private static initElement(element: HTMLSelectElement): { isMulti: boolean; dropdown: HTMLElement } | null {

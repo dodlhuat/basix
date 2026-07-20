@@ -23,8 +23,8 @@ declare class ColorPicker {
     private saturation;
     private brightness;
     private isDragging;
-    private abortController;
-    private ro;
+    private listeners;
+    private resizeObserver;
     constructor(elementOrSelector: string | HTMLElement, options?: ColorPickerOptions);
     private build;
     private bindEvents;

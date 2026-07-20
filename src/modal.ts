@@ -1,4 +1,5 @@
 import { sanitizeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 
 const CLOSE_ICON = '<div class="icon icon-close close"></div>';
 
@@ -22,7 +23,7 @@ class Modal {
     private readonly type: ModalType;
     private template: string;
     private modalWrapper: HTMLElement | null = null;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(options: ModalOptions);
     public constructor(content: string, header?: string, footer?: string, closeable?: boolean, type?: ModalType);
@@ -54,7 +55,7 @@ class Modal {
 
         this.modalWrapper = wrapper;
 
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         if (this.closeable) {
             wrapper.querySelector('.close')?.addEventListener('click', () => this.hide(), sig);
@@ -73,8 +74,7 @@ class Modal {
         const wrapper = this.modalWrapper;
         if (!wrapper) return;
 
-        this.abortController.abort();
-        this.abortController = new AbortController();
+        this.listeners.reset();
 
         document.body.style.overflow = '';
         wrapper.classList.remove('is-visible');

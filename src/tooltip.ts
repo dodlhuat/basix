@@ -1,4 +1,5 @@
 import { computePosition } from './position.js';
+import { ListenerGroup } from './listeners.js';
 
 /** Configuration options for a Tooltip instance. */
 interface TooltipOptions {
@@ -22,7 +23,7 @@ class Tooltip {
     private tooltipElement: HTMLDivElement | null = null;
     private showTimeout: number | null = null;
     private isVisible = false;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(trigger: HTMLElement, content: string, options: TooltipOptions = {}) {
         this.trigger = trigger;
@@ -152,7 +153,7 @@ class Tooltip {
     }
 
     private attachEvents(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.trigger.addEventListener('mouseenter', () => this.show(), sig);
         this.trigger.addEventListener('mouseleave', () => this.hide(), sig);
         this.trigger.addEventListener('focus', () => this.show(), sig);
@@ -161,7 +162,7 @@ class Tooltip {
 
     public destroy(): void {
         this.hide();
-        this.abortController.abort();
+        this.listeners.destroy();
 
         const previousDescribedBy = this.trigger.getAttribute('data-previous-describedby');
         if (previousDescribedBy) {

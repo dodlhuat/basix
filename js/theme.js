@@ -1,5 +1,6 @@
 class Theme {
     static STORAGE_KEY = 'theme';
+    static isMac = /Mac|iPhone|iPod|iPad/i.test(navigator.platform);
     static root;
     static elements = null;
     static mediaQuery = null;
@@ -99,14 +100,11 @@ class Theme {
     static bindToggleClick() {
         if (!this.elements)
             return;
-        this.elements.toggleBtn.addEventListener('click', () => {
-            this.toggleTheme();
-        });
+        this.elements.toggleBtn.addEventListener('click', () => this.toggleTheme());
     }
     static bindKeyboardShortcut() {
         window.addEventListener('keydown', (ev) => {
-            const isMac = /Mac|iPhone|iPod|iPad/i.test(navigator.platform);
-            const modifierPressed = isMac ? ev.metaKey : ev.ctrlKey;
+            const modifierPressed = Theme.isMac ? ev.metaKey : ev.ctrlKey;
             if (modifierPressed && ev.key.toLowerCase() === 'j') {
                 ev.preventDefault();
                 this.toggleTheme();
@@ -116,18 +114,11 @@ class Theme {
     static bindSystemThemeChange() {
         if (!this.mediaQuery)
             return;
-        const handler = (e) => {
+        this.mediaQuery.addEventListener('change', (e) => {
             if (!this.getSavedTheme()) {
-                const matches = 'matches' in e ? e.matches : e.matches;
-                this.applyTheme(matches ? 'dark' : 'light');
+                this.applyTheme(e.matches ? 'dark' : 'light');
             }
-        };
-        if ('addEventListener' in this.mediaQuery) {
-            this.mediaQuery.addEventListener('change', handler);
-        }
-        else if ('addListener' in this.mediaQuery) {
-            this.mediaQuery.addListener(handler);
-        }
+        });
     }
     static getTheme() {
         return this.getCurrentTheme();

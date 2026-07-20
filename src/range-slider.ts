@@ -1,12 +1,14 @@
+import { ListenerGroup } from './listeners.js';
+
 /** Enhances a native range input with a CSS fill-percentage custom property. */
 class RangeSlider {
     private readonly input: HTMLInputElement;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(input: HTMLInputElement) {
         this.input = input;
         this.update();
-        this.input.addEventListener('input', () => this.update(), { signal: this.abortController.signal });
+        this.input.addEventListener('input', () => this.update(), { signal: this.listeners.signal });
     }
 
     public static initAll(selector: string = '.range-slider input[type="range"]'): void {
@@ -23,7 +25,7 @@ class RangeSlider {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.input.style.removeProperty('--range-fill');
     }
 }
@@ -35,7 +37,7 @@ class RangeSliderRange {
     private readonly endInput: HTMLInputElement;
     private readonly fill: HTMLElement;
     private readonly fillCreatedByUs: boolean;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(container: HTMLElement) {
         const inputs = container.querySelectorAll<HTMLInputElement>('input[type="range"]');
@@ -58,7 +60,7 @@ class RangeSliderRange {
 
         this.update();
 
-        const signal = this.abortController.signal;
+        const signal = this.listeners.signal;
         this.startInput.addEventListener('input', () => this.handleInput(this.startInput), { signal });
         this.endInput.addEventListener('input', () => this.handleInput(this.endInput), { signal });
     }
@@ -93,7 +95,7 @@ class RangeSliderRange {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.container.style.removeProperty('--range-start');
         this.container.style.removeProperty('--range-end');
         if (this.fillCreatedByUs) {

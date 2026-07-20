@@ -1,6 +1,7 @@
 type ThemeMode = 'light' | 'dark';
 declare class Theme {
     private static readonly STORAGE_KEY;
+    private static readonly isMac;
     private static root;
     private static elements;
     private static mediaQuery;

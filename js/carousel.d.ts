@@ -15,7 +15,7 @@ declare class Carousel {
     private dotsNav;
     private dots;
     private autoPlayTimer;
-    private abortController;
+    private listeners;
     constructor(elementOrSelector: string | HTMLElement, options?: CarouselOptions);
     private init;
     private setupDOM;

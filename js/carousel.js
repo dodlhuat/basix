@@ -1,3 +1,4 @@
+import { ListenerGroup } from './listeners.js';
 class Carousel {
     root;
     options;
@@ -10,15 +11,13 @@ class Carousel {
     dotsNav;
     dots;
     autoPlayTimer = null;
-    abortController = new AbortController();
+    listeners = new ListenerGroup();
     constructor(elementOrSelector, options = {}) {
-        const element = typeof elementOrSelector === 'string'
-            ? document.querySelector(elementOrSelector)
-            : elementOrSelector;
+        const element = typeof elementOrSelector === 'string' ? document.querySelector(elementOrSelector) : elementOrSelector;
         this.options = {
             loop: options.loop ?? false,
             autoPlay: options.autoPlay ?? false,
-            autoPlayInterval: options.autoPlayInterval ?? 3000
+            autoPlayInterval: options.autoPlayInterval ?? 3000,
         };
         if (!element) {
             throw new Error(`Carousel: Element not found for selector "${elementOrSelector}"`);
@@ -29,6 +28,9 @@ class Carousel {
     init() {
         this.setupDOM();
         this.slides = Array.from(this.track.children);
+        if (this.slides.length === 0) {
+            throw new Error('Carousel: no slide elements found.');
+        }
         this.slideWidth = this.slides[0].getBoundingClientRect().width;
         this.currentIndex = 0;
         this.bindEvents();
@@ -43,7 +45,7 @@ class Carousel {
         container.classList.add('carousel-track-container');
         this.track = document.createElement('ul');
         this.track.classList.add('carousel-track');
-        slides.forEach(slide => {
+        slides.forEach((slide) => {
             slide.classList.add('carousel-slide');
             this.track.appendChild(slide);
         });
@@ -73,19 +75,25 @@ class Carousel {
         this.root.setAttribute('tabindex', '0');
     }
     bindEvents() {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.nextButton.addEventListener('click', () => this.moveToNextSlide(), sig);
         this.prevButton.addEventListener('click', () => this.moveToPrevSlide(), sig);
         this.dotsNav.addEventListener('click', (e) => {
             const targetDot = e.target.closest('button');
             if (!targetDot)
                 return;
-            const targetIndex = this.dots.findIndex(dot => dot === targetDot);
+            const targetIndex = this.dots.findIndex((dot) => dot === targetDot);
             this.moveToSlide(targetIndex);
         }, sig);
+        let resizeTimer = null;
         window.addEventListener('resize', () => {
-            this.slideWidth = this.slides[0].getBoundingClientRect().width;
-            this.moveToSlide(this.currentIndex, false);
+            if (resizeTimer !== null)
+                clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                this.slideWidth = this.slides[0].getBoundingClientRect().width;
+                this.moveToSlide(this.currentIndex, false);
+                resizeTimer = null;
+            }, 100);
         }, sig);
         this.root.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft')
@@ -134,17 +142,17 @@ class Carousel {
         this.moveToSlide(this.currentIndex - 1);
     }
     updateDots(targetIndex) {
-        this.dots.forEach(dot => dot.classList.remove('current-slide'));
+        this.dots.forEach((dot) => dot.classList.remove('current-slide'));
         this.dots[targetIndex].classList.add('current-slide');
     }
     addTouchSupport() {
         let startX = 0;
         let isDragging = false;
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.track.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
             isDragging = true;
-        }, { passive: true, signal: sig.signal });
+        }, { ...sig, passive: true });
         this.track.addEventListener('touchend', (e) => {
             if (!isDragging)
                 return;
@@ -177,7 +185,7 @@ class Carousel {
     }
     destroy() {
         this.pauseAutoPlay();
-        this.abortController.abort();
+        this.listeners.destroy();
     }
 }
 export { Carousel };

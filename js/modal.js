@@ -1,4 +1,5 @@
 import { sanitizeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 const CLOSE_ICON = '<div class="icon icon-close close"></div>';
 class Modal {
     content;
@@ -8,6 +9,7 @@ class Modal {
     type;
     template;
     modalWrapper = null;
+    listeners = new ListenerGroup();
     constructor(contentOrOptions, header, footer, closeable = true, type = 'default') {
         if (typeof contentOrOptions === 'object') {
             this.content = contentOrOptions.content;
@@ -32,31 +34,22 @@ class Modal {
         wrapper.innerHTML = this.template;
         document.body.append(wrapper);
         this.modalWrapper = wrapper;
+        const sig = { signal: this.listeners.signal };
         if (this.closeable) {
-            const closeBtn = wrapper.querySelector('.close');
-            closeBtn?.addEventListener('click', this.hide);
-        }
-        const background = wrapper.querySelector('.modal-background');
-        if (this.closeable && background) {
-            background.addEventListener('click', this.handleBackgroundClick);
-        }
-        if (this.closeable) {
-            document.addEventListener('keydown', this.handleEscape);
+            wrapper.querySelector('.close')?.addEventListener('click', () => this.hide(), sig);
+            wrapper.querySelector('.modal-background')?.addEventListener('click', (e) => this.handleBackgroundClick(e), sig);
+            document.addEventListener('keydown', (e) => this.handleEscape(e), sig);
         }
         document.body.style.overflow = 'hidden';
         requestAnimationFrame(() => {
             wrapper.classList.add('is-visible');
         });
     }
-    hide = () => {
+    hide() {
         const wrapper = this.modalWrapper;
         if (!wrapper)
             return;
-        const closeBtn = wrapper.querySelector('.close');
-        closeBtn?.removeEventListener('click', this.hide);
-        const background = wrapper.querySelector('.modal-background');
-        background?.removeEventListener('click', this.handleBackgroundClick);
-        document.removeEventListener('keydown', this.handleEscape);
+        this.listeners.reset();
         document.body.style.overflow = '';
         wrapper.classList.remove('is-visible');
         setTimeout(() => {
@@ -65,17 +58,17 @@ class Modal {
                 this.modalWrapper = null;
             }
         }, 300);
-    };
-    handleEscape = (e) => {
+    }
+    handleEscape(e) {
         if (e.key === 'Escape') {
             this.hide();
         }
-    };
-    handleBackgroundClick = (e) => {
+    }
+    handleBackgroundClick(e) {
         if (e.target?.classList.contains('modal-background')) {
             this.hide();
         }
-    };
+    }
     buildTemplate() {
         const parts = [`<div class="modal modal-${this.type}">`];
         if (this.closeable) {

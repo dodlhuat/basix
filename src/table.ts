@@ -1,4 +1,5 @@
 import { Select } from './select.js';
+import { ListenerGroup } from './listeners.js';
 
 /** Descriptor for a single table column. */
 interface TableColumn {
@@ -34,7 +35,7 @@ class Table {
     private tableBody!: HTMLTableSectionElement;
     private tableHeader!: HTMLTableSectionElement;
     private paginationContainer!: HTMLDivElement;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(elementOrSelector: string | HTMLElement, options: TableOptions = {}) {
         const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
@@ -111,7 +112,7 @@ class Table {
             (e) => {
                 this.handleSearch((e.target as HTMLInputElement).value);
             },
-            { signal: this.abortController.signal },
+            { signal: this.listeners.signal },
         );
         controlsDiv.appendChild(searchInput);
 
@@ -138,7 +139,7 @@ class Table {
             (e) => {
                 this.handlePageSizeChange(parseInt((e.target as HTMLSelectElement).value, 10));
             },
-            { signal: this.abortController.signal },
+            { signal: this.listeners.signal },
         );
 
         this.assignUniqueId(pageSizeSelect, 'page-size-select-0');
@@ -165,7 +166,7 @@ class Table {
 
             if (col.sortable !== false) {
                 th.classList.add('sortable');
-                th.addEventListener('click', () => this.handleSort(col.key), { signal: this.abortController.signal });
+                th.addEventListener('click', () => this.handleSort(col.key), { signal: this.listeners.signal });
             }
 
             tr.appendChild(th);
@@ -288,7 +289,7 @@ class Table {
         const buttonsDiv = document.createElement('div');
         buttonsDiv.className = 'pagination-buttons';
 
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
 
         const prevBtn = document.createElement('button');
         prevBtn.className = 'page-btn';
@@ -389,7 +390,7 @@ class Table {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.container.innerHTML = '';
     }
 }

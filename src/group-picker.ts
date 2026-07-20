@@ -1,4 +1,5 @@
 import { escapeHtml } from './utils.js';
+import { ListenerGroup } from './listeners.js';
 
 /** A single subgroup item within a GroupPicker group. */
 interface SubgroupData {
@@ -34,7 +35,7 @@ class GroupPicker {
     private container: HTMLElement;
     private data: GroupData[];
     private options: Required<GroupPickerOptions>;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     private selectedParents: Set<string> = new Set();
     private selectedSubs: Map<string, Set<string>> = new Map();
@@ -170,7 +171,7 @@ class GroupPicker {
                     e.stopPropagation();
                     this.toggleParentGroup(group.id);
                 },
-                { signal: this.abortController.signal },
+                { signal: this.listeners.signal },
             );
 
             header.append(chevron, label, count, actionBtn);
@@ -180,7 +181,7 @@ class GroupPicker {
                 () => {
                     this.toggleExpand(group.id);
                 },
-                { signal: this.abortController.signal },
+                { signal: this.listeners.signal },
             );
 
             const subsContainer = document.createElement('div');
@@ -209,7 +210,7 @@ class GroupPicker {
                             this.toggleSubgroup(group.id, sub.id);
                         }
                     },
-                    { signal: this.abortController.signal },
+                    { signal: this.listeners.signal },
                 );
 
                 subsList.appendChild(subEl);
@@ -242,7 +243,7 @@ class GroupPicker {
                 () => {
                     this.toggleParentGroup(group.id);
                 },
-                { signal: this.abortController.signal },
+                { signal: this.listeners.signal },
             );
 
             el.appendChild(header);
@@ -284,7 +285,7 @@ class GroupPicker {
                 e.stopPropagation();
                 onRemove();
             },
-            { signal: this.abortController.signal },
+            { signal: this.listeners.signal },
         );
 
         chip.append(document.createTextNode(label), btn);
@@ -372,7 +373,7 @@ class GroupPicker {
                     this.renderGroups();
                 }, 120);
             },
-            { signal: this.abortController.signal },
+            { signal: this.listeners.signal },
         );
     }
 
@@ -437,7 +438,7 @@ class GroupPicker {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
         this.container.innerHTML = '';
         this.container.classList.remove('group-picker');
     }

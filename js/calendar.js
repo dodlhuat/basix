@@ -1,3 +1,4 @@
+import { ListenerGroup } from './listeners.js';
 const CalendarLogic = {
     getMonthGrid(year, month, firstDayOfWeek) {
         const firstOfMonth = new Date(year, month, 1);
@@ -30,9 +31,7 @@ const CalendarLogic = {
         });
     },
     isSameDay(a, b) {
-        return a.getFullYear() === b.getFullYear()
-            && a.getMonth() === b.getMonth()
-            && a.getDate() === b.getDate();
+        return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
     },
     isToday(date) {
         return CalendarLogic.isSameDay(date, new Date());
@@ -53,13 +52,13 @@ const CalendarLogic = {
         dayStart.setHours(0, 0, 0, 0);
         const dayEnd = new Date(day);
         dayEnd.setHours(23, 59, 59, 999);
-        return events.filter(e => e.start <= dayEnd && e.end >= dayStart);
+        return events.filter((e) => e.start <= dayEnd && e.end >= dayStart);
     },
     getAllDayEvents(events, day) {
-        return CalendarLogic.getEventsForDay(events, day).filter(e => e.allDay);
+        return CalendarLogic.getEventsForDay(events, day).filter((e) => e.allDay);
     },
     getTimedEvents(events, day) {
-        return CalendarLogic.getEventsForDay(events, day).filter(e => !e.allDay);
+        return CalendarLogic.getEventsForDay(events, day).filter((e) => !e.allDay);
     },
     getEventPosition(event, day) {
         const dayStart = new Date(day);
@@ -82,7 +81,7 @@ const CalendarLogic = {
             return [];
         const weekStart = CalendarLogic.startOfDay(weekDays[0]);
         const weekEnd = CalendarLogic.startOfDay(weekDays[6]);
-        const relevant = events.filter(e => {
+        const relevant = events.filter((e) => {
             const s = CalendarLogic.startOfDay(e.start);
             const en = CalendarLogic.startOfDay(e.end);
             return s <= weekEnd && en >= weekStart;
@@ -91,7 +90,7 @@ const CalendarLogic = {
             const diff = a.start.getTime() - b.start.getTime();
             if (diff !== 0)
                 return diff;
-            return (b.end.getTime() - b.start.getTime()) - (a.end.getTime() - a.start.getTime());
+            return b.end.getTime() - b.start.getTime() - (a.end.getTime() - a.start.getTime());
         });
         const laneEnds = [];
         const layouts = [];
@@ -136,7 +135,7 @@ const CalendarLogic = {
             const diff = a.start.getTime() - b.start.getTime();
             if (diff !== 0)
                 return diff;
-            return (b.end.getTime() - b.start.getTime()) - (a.end.getTime() - a.start.getTime());
+            return b.end.getTime() - b.start.getTime() - (a.end.getTime() - a.start.getTime());
         });
         const colEnds = [];
         const assigns = [];
@@ -151,23 +150,18 @@ const CalendarLogic = {
             assigns.push({ event, col });
         }
         return assigns.map(({ event, col }) => {
-            const cols = assigns
-                .filter(a => a.event.start < event.end && a.event.end > event.start)
-                .reduce((max, a) => Math.max(max, a.col), 0) + 1;
+            const cols = assigns.filter((a) => a.event.start < event.end && a.event.end > event.start).reduce((max, a) => Math.max(max, a.col), 0) + 1;
             const pos = CalendarLogic.getEventPosition(event, day);
             return { event, top: pos.top, height: pos.height, col, cols };
         });
     },
     nowLinePct() {
         const now = new Date();
-        return (now.getHours() * 60 + now.getMinutes()) / 1440 * 100;
+        return ((now.getHours() * 60 + now.getMinutes()) / 1440) * 100;
     },
 };
 const DEFAULT_LOCALE = {
-    monthNames: [
-        'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
-        'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
-    ],
+    monthNames: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
     dayNamesShort: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
     dayNamesFull: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
     firstDayOfWeek: 1,
@@ -185,13 +179,8 @@ class CalendarRenderer {
     }
     renderWeekdayHeaders() {
         const { dayNamesShort, firstDayOfWeek } = this.locale;
-        const ordered = [
-            ...dayNamesShort.slice(firstDayOfWeek),
-            ...dayNamesShort.slice(0, firstDayOfWeek),
-        ];
-        return ordered
-            .map(name => `<div class="cal__weekday" aria-label="${name}">${name}</div>`)
-            .join('');
+        const ordered = [...dayNamesShort.slice(firstDayOfWeek), ...dayNamesShort.slice(0, firstDayOfWeek)];
+        return ordered.map((name) => `<div class="cal__weekday" aria-label="${name}">${name}</div>`).join('');
     }
     renderEvent(event, compact = false) {
         const cls = event.className ?? '';
@@ -211,7 +200,9 @@ class CalendarRenderer {
             event.className ?? '',
             continuesBefore ? 'cal__span-bar--cont-before' : '',
             continuesAfter ? 'cal__span-bar--cont-after' : '',
-        ].filter(Boolean).join(' ');
+        ]
+            .filter(Boolean)
+            .join(' ');
         return `<div class="${cls}"
         style="--span-col:${colStart};--span-len:${colSpan};--span-lane:${lane}"
         data-event-id="${event.id}"
@@ -225,30 +216,28 @@ class CalendarRenderer {
             return `<div class="cal__day cal__day--empty" aria-hidden="true"></div>`;
         }
         const allForDay = CalendarLogic.getEventsForDay(events, date);
-        const pillEvents = allForDay.filter(e => !CalendarLogic.isMultiDay(e));
+        const pillEvents = allForDay.filter((e) => !CalendarLogic.isMultiDay(e));
         const isToday = CalendarLogic.isToday(date);
-        const classes = [
-            'cal__day',
-            isToday ? 'is-today' : '',
-            isOutside ? 'cal__day--outside' : '',
-            allForDay.length > 0 ? 'has-events' : '',
-        ].filter(Boolean).join(' ');
-        const eventsHtml = pillEvents.slice(0, 3).map(e => this.renderEvent(e, true)).join('');
+        const classes = ['cal__day', isToday ? 'is-today' : '', isOutside ? 'cal__day--outside' : '', allForDay.length > 0 ? 'has-events' : '']
+            .filter(Boolean)
+            .join(' ');
+        const eventsHtml = pillEvents
+            .slice(0, 3)
+            .map((e) => this.renderEvent(e, true))
+            .join('');
         const moreCount = pillEvents.length - 3;
         const moreHtml = moreCount > 0 ? `<div class="cal__event-more">+${moreCount}</div>` : '';
-        return `<div class="${classes}" aria-label="${date.toLocaleDateString()}">
+        return `<div class="${classes}" data-date="${date.toISOString()}" aria-label="${date.toLocaleDateString()}">
       <span class="cal__day-num">${date.getDate()}</span>
       <div class="cal__day-events">${eventsHtml}${moreHtml}</div>
     </div>`;
     }
     renderWeekRow(weekDays, currentMonth, currentYear, events, showOutsideDays) {
-        const multiDay = events.filter(e => CalendarLogic.isMultiDay(e));
+        const multiDay = events.filter((e) => CalendarLogic.isMultiDay(e));
         const spans = CalendarLogic.computeSpanLayout(weekDays, multiDay);
-        const maxLanes = spans.length > 0 ? Math.max(...spans.map(s => s.lane)) + 1 : 0;
-        const dayCells = weekDays
-            .map(d => this.renderMonthDay(d, currentMonth, currentYear, events, showOutsideDays))
-            .join('');
-        const spanBars = spans.map(s => this.renderSpanBar(s)).join('');
+        const maxLanes = spans.length > 0 ? Math.max(...spans.map((s) => s.lane)) + 1 : 0;
+        const dayCells = weekDays.map((d) => this.renderMonthDay(d, currentMonth, currentYear, events, showOutsideDays)).join('');
+        const spanBars = spans.map((s) => this.renderSpanBar(s)).join('');
         return `<div class="cal__week-row" style="--span-lanes:${maxLanes}">
       ${dayCells}${spanBars}
     </div>`;
@@ -266,31 +255,34 @@ class CalendarRenderer {
     }
     renderWeekView(date, events, firstDayOfWeek, showNowLine = false) {
         const days = CalendarLogic.getWeekDays(date, firstDayOfWeek);
-        const headCols = days.map(d => {
+        const headCols = days
+            .map((d) => {
             const isToday = CalendarLogic.isToday(d);
-            const cls = ['cal__week-head-day', isToday ? 'is-today' : '']
-                .filter(Boolean).join(' ');
+            const cls = ['cal__week-head-day', isToday ? 'is-today' : ''].filter(Boolean).join(' ');
             const dow = this.locale.dayNamesShort[(d.getDay() + 7) % 7];
             return `<div class="${cls}">${dow}<span>${d.getDate()}</span></div>`;
-        }).join('');
-        const allDayEvents = events.filter(e => e.allDay);
+        })
+            .join('');
+        const allDayEvents = events.filter((e) => e.allDay);
         const allDayLayouts = CalendarLogic.computeSpanLayout(days, allDayEvents);
-        const allDayLanes = allDayLayouts.length > 0 ? Math.max(...allDayLayouts.map(l => l.lane)) + 1 : 0;
+        const allDayLanes = allDayLayouts.length > 0 ? Math.max(...allDayLayouts.map((l) => l.lane)) + 1 : 0;
         const allDayCols = days.map(() => `<div class="cal__allday-col"></div>`).join('');
-        const allDayBars = allDayLayouts.map(l => this.renderSpanBar(l)).join('');
+        const allDayBars = allDayLayouts.map((l) => this.renderSpanBar(l)).join('');
         const hourLabels = Array.from({ length: 24 }, (_, h) => {
             const label = h === 0 ? '' : `${String(h).padStart(2, '0')}:00`;
             return `<div class="cal__time-slot">${label}</div>`;
         }).join('');
-        const dayCols = days.map(d => {
+        const dayCols = days
+            .map((d) => {
             const timedEvents = CalendarLogic.getTimedEvents(events, d);
             const hourCells = Array.from({ length: 24 }, () => `<div class="cal__day-col-hour"></div>`).join('');
             const layouts = CalendarLogic.computeTimedLayout(timedEvents, d);
-            const eventOverlays = layouts.map(({ event, top, height, col, cols }) => {
+            const eventOverlays = layouts
+                .map(({ event, top, height, col, cols }) => {
                 const cls = event.className ?? '';
                 let posStyle = `top:${top.toFixed(2)}%;height:${height.toFixed(2)}%`;
                 if (cols > 1) {
-                    const l = (col / cols * 100).toFixed(2);
+                    const l = ((col / cols) * 100).toFixed(2);
                     const w = (100 / cols).toFixed(2);
                     posStyle += `;left:calc(${l}% + 2px);right:auto;width:calc(${w}% - 4px)`;
                 }
@@ -300,12 +292,12 @@ class CalendarRenderer {
               <span class="cal__event-time">${CalendarLogic.formatTime(event.start)}</span>
               ${event.title}
             </div>`;
-            }).join('');
+            })
+                .join('');
             return `<div class="cal__day-col" data-date="${d.toISOString()}">${hourCells}${eventOverlays}</div>`;
-        }).join('');
-        const nowLine = showNowLine
-            ? `<div class="cal__now-line" style="top:${CalendarLogic.nowLinePct().toFixed(3)}%"></div>`
-            : '';
+        })
+            .join('');
+        const nowLine = showNowLine ? `<div class="cal__now-line" style="top:${CalendarLogic.nowLinePct().toFixed(3)}%"></div>` : '';
         return `<div class="cal__week" role="grid">
       <div class="cal__week-head">
         <div class="cal__week-head-time"></div>
@@ -333,7 +325,7 @@ class CalendarRenderer {
         for (let d = 1; d <= daysInMonth; d++) {
             const day = new Date(year, month, d);
             const dayEvents = CalendarLogic.getEventsForDay(events, day);
-            const filtered = dayEvents.filter(e => {
+            const filtered = dayEvents.filter((e) => {
                 if (!CalendarLogic.isMultiDay(e))
                     return true;
                 if (shownMultiDay.has(e.id))
@@ -351,7 +343,8 @@ class CalendarRenderer {
           <span class="cal__agenda-num ${isToday ? 'is-today' : ''}">${d}</span>
         </div>
         <div class="cal__agenda-events">
-          ${filtered.map(e => {
+          ${filtered
+                .map((e) => {
                 const isMulti = CalendarLogic.isMultiDay(e);
                 let timeLabel;
                 if (isMulti) {
@@ -368,7 +361,8 @@ class CalendarRenderer {
               <span class="cal__agenda-event-time">${timeLabel}</span>
               <span class="cal__agenda-event-title">${e.title}</span>
             </div>`;
-            }).join('')}
+            })
+                .join('')}
         </div>
       </div>`;
         }
@@ -386,6 +380,7 @@ class Calendar {
     currentView;
     events = [];
     nowLineTimer = null;
+    listeners = new ListenerGroup();
     constructor(options) {
         if (typeof options.container === 'string') {
             const el = document.querySelector(options.container);
@@ -451,7 +446,7 @@ class Calendar {
         this.render();
     }
     removeEvent(id) {
-        this.events = this.events.filter(e => e.id !== id);
+        this.events = this.events.filter((e) => e.id !== id);
         this.render();
     }
     setEvents(events) {
@@ -463,26 +458,24 @@ class Calendar {
     }
     destroy() {
         this.clearNowLineTimer();
-        this.container.removeEventListener('click', this.boundHandleClick);
-        this.container.removeEventListener('keydown', this.boundHandleKeydown);
+        this.listeners.destroy();
         this.container.innerHTML = '';
         this.container.removeAttribute('data-cal');
     }
-    getTitle() {
+    getTitle(weekDays) {
         const { monthNames } = this.locale;
         const y = this.currentDate.getFullYear();
         const m = this.currentDate.getMonth();
-        if (this.currentView === 'week') {
-            const days = CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek);
-            const first = days[0];
-            const last = days[6];
+        if (this.currentView === 'week' && weekDays) {
+            const first = weekDays[0];
+            const last = weekDays[6];
             return first.getMonth() === last.getMonth()
                 ? `${monthNames[first.getMonth()]} ${y}`
                 : `${monthNames[first.getMonth()]} – ${monthNames[last.getMonth()]} ${y}`;
         }
         return `${monthNames[m]} ${y}`;
     }
-    buildHeader() {
+    buildHeader(weekDays) {
         const v = this.currentView;
         return `<div class="cal__header">
       <div class="cal__nav">
@@ -494,7 +487,7 @@ class Calendar {
           <svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#chevron_right"/></svg>
         </button>
       </div>
-      <h2 class="cal__title" aria-live="polite">${this.getTitle()}</h2>
+      <h2 class="cal__title" aria-live="polite">${this.getTitle(weekDays)}</h2>
       <div class="cal__view-toggle" role="group" aria-label="Ansicht wählen">
         <button class="cal__btn ${v === 'month' ? 'cal__btn--active' : ''}" data-action="view-month"  aria-pressed="${v === 'month'}">${this.locale.month}</button>
         <button class="cal__btn ${v === 'week' ? 'cal__btn--active' : ''}" data-action="view-week"   aria-pressed="${v === 'week'}">${this.locale.week}</button>
@@ -502,7 +495,7 @@ class Calendar {
       </div>
     </div>`;
     }
-    buildBody() {
+    buildBody(weekDays) {
         const { firstDayOfWeek } = this.locale;
         const y = this.currentDate.getFullYear();
         const m = this.currentDate.getMonth();
@@ -510,8 +503,7 @@ class Calendar {
             case 'month':
                 return this.renderer.renderMonthView(y, m, this.events, this.options.showOutsideDays, firstDayOfWeek);
             case 'week': {
-                const weekDays = CalendarLogic.getWeekDays(this.currentDate, firstDayOfWeek);
-                const showNowLine = weekDays.some(d => CalendarLogic.isToday(d));
+                const showNowLine = weekDays?.some((d) => CalendarLogic.isToday(d)) ?? false;
                 return this.renderer.renderWeekView(this.currentDate, this.events, firstDayOfWeek, showNowLine);
             }
             case 'agenda':
@@ -520,18 +512,16 @@ class Calendar {
     }
     render() {
         this.clearNowLineTimer();
+        const weekDays = this.currentView === 'week' ? CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek) : null;
         const rootClass = ['cal', this.options.className].filter(Boolean).join(' ');
         this.container.setAttribute('data-cal', this.currentView);
         this.container.innerHTML = `<div class="${rootClass}" role="application" aria-label="Kalender">
-      ${this.buildHeader()}
-      <div class="cal__body">${this.buildBody()}</div>
+      ${this.buildHeader(weekDays)}
+      <div class="cal__body">${this.buildBody(weekDays)}</div>
     </div>`;
-        if (this.currentView === 'week') {
-            const weekDays = CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek);
-            if (weekDays.some(d => CalendarLogic.isToday(d))) {
-                this.scrollToNow();
-                this.startNowLineTimer();
-            }
+        if (weekDays?.some((d) => CalendarLogic.isToday(d))) {
+            this.scrollToNow();
+            this.startNowLineTimer();
         }
     }
     scrollToNow() {
@@ -554,11 +544,10 @@ class Calendar {
             this.nowLineTimer = null;
         }
     }
-    boundHandleClick = (e) => this.handleClick(e);
-    boundHandleKeydown = (e) => this.handleKeydown(e);
     attachEvents() {
-        this.container.addEventListener('click', this.boundHandleClick);
-        this.container.addEventListener('keydown', this.boundHandleKeydown);
+        const sig = { signal: this.listeners.signal };
+        this.container.addEventListener('click', (e) => this.handleClick(e), sig);
+        this.container.addEventListener('keydown', (e) => this.handleKeydown(e), sig);
     }
     handleClick(e) {
         const target = e.target;
@@ -582,12 +571,16 @@ class Calendar {
         const eventEl = target.closest('[data-event-id]');
         if (eventEl) {
             const id = eventEl.dataset.eventId;
-            const event = this.events.find(ev => ev.id === id);
+            const event = this.events.find((ev) => ev.id === id);
             if (event) {
                 e.stopPropagation();
                 this.options.onEventClick(event);
             }
             return;
+        }
+        const dayEl = target.closest('.cal__day[data-date]');
+        if (dayEl) {
+            this.options.onDayClick(new Date(dayEl.dataset.date));
         }
     }
     handleKeydown(e) {

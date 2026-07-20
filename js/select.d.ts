@@ -2,7 +2,7 @@ declare class Select {
     private readonly element;
     private readonly isMultiselect;
     private readonly dropdown;
-    private readonly documentClickHandler;
+    private listeners;
     constructor(elementOrSelector: string | HTMLSelectElement);
     destroy(): void;
     value(): string | string[];

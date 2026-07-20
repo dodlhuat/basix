@@ -1,3 +1,5 @@
+import { ListenerGroup } from './listeners.js';
+
 type TabLayout = 'horizontal' | 'vertical';
 type MenuPosition = 'top' | 'bottom' | 'left' | 'right';
 
@@ -16,7 +18,7 @@ class Tabs {
     private tabItems: NodeListOf<Element>;
     private tabPanels: NodeListOf<Element>;
     private currentTab: number;
-    private abortController = new AbortController();
+    private listeners = new ListenerGroup();
 
     public constructor(elementOrSelector: string | HTMLElement, options: TabsOptions = {}) {
         const element = typeof elementOrSelector === 'string' ? document.querySelector<HTMLElement>(elementOrSelector) : elementOrSelector;
@@ -66,7 +68,7 @@ class Tabs {
     }
 
     private bindEvents(): void {
-        const sig = { signal: this.abortController.signal };
+        const sig = { signal: this.listeners.signal };
         this.tabItems.forEach((item, index) => {
             item.addEventListener(
                 'click',
@@ -209,7 +211,7 @@ class Tabs {
     }
 
     public destroy(): void {
-        this.abortController.abort();
+        this.listeners.destroy();
 
         this.container.classList.remove('tabs-vertical');
 
