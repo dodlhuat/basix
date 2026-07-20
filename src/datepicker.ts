@@ -140,7 +140,7 @@ class DatePicker {
     private show(): void {
         if (this.options.timePicker) {
             this.clockMode = 'hours';
-            this.render();
+            this.renderTimePicker();
         }
 
         const isMobile = window.innerWidth <= 640;
@@ -217,8 +217,7 @@ class DatePicker {
         this.calendar.appendChild(content);
 
         if (this.options.timePicker && this.viewMode === 'days') {
-            const timeSection = this.createTimePicker();
-            this.calendar.appendChild(timeSection);
+            this.calendar.appendChild(this.createTimePicker());
 
             const setBtn = document.createElement('button');
             setBtn.className = 'datepicker-set-btn';
@@ -229,6 +228,18 @@ class DatePicker {
             };
             this.calendar.appendChild(setBtn);
         }
+    }
+
+    private renderTimePicker(): void {
+        if (!this.options.timePicker || this.viewMode !== 'days') return;
+
+        const existing = this.calendar.querySelector('.datepicker-clock');
+        if (!existing) {
+            this.render();
+            return;
+        }
+
+        existing.replaceWith(this.createTimePicker());
     }
 
     private createHeader(): HTMLDivElement {
@@ -476,7 +487,7 @@ class DatePicker {
         hourSeg.onclick = (e: MouseEvent) => {
             e.stopPropagation();
             this.clockMode = 'hours';
-            this.render();
+            this.renderTimePicker();
         };
 
         const separator = document.createElement('span');
@@ -490,7 +501,7 @@ class DatePicker {
         minuteSeg.onclick = (e: MouseEvent) => {
             e.stopPropagation();
             this.clockMode = 'minutes';
-            this.render();
+            this.renderTimePicker();
         };
 
         display.appendChild(hourSeg);
@@ -633,7 +644,7 @@ class DatePicker {
             this.selectedMinutes = value;
             this.applyTimeToSelection();
         }
-        this.render();
+        this.renderTimePicker();
     }
 
     private applyTimeToSelection(): void {

@@ -1,4 +1,5 @@
 @use "parameters" as *;
+@use "mixins" as *;
 
 .cal {
   --cal-spacing-xs: 4px;
@@ -207,7 +208,7 @@
     color: var(--cal-accent-text);
     border-radius: 50%;
     font-weight: 700;
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cal-accent) 20%, transparent);
+    @include focus-glow($tint: 20%, $size: 3px, $color: var(--cal-accent));
   }
 
   &.has-events::after {
@@ -402,7 +403,7 @@
   &.is-today span {
     background: var(--cal-today-ring);
     color: var(--cal-accent-text);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cal-accent) 20%, transparent);
+    @include focus-glow($tint: 20%, $size: 3px, $color: var(--cal-accent));
   }
 
 }
@@ -660,7 +661,7 @@
   &.is-today {
     background: var(--cal-today-ring);
     color: var(--cal-accent-text);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cal-accent) 20%, transparent);
+    @include focus-glow($tint: 20%, $size: 3px, $color: var(--cal-accent));
   }
 }
 

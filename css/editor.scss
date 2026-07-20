@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .editor {
   background: var(--secondary-background);
@@ -551,7 +552,7 @@
 
   &:focus {
     border-color: color-mix(in srgb, var(--accent-color) 60%, transparent);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-color) 12%, transparent);
+    @include focus-glow($tint: 12%, $size: 2px);
   }
 
   &::placeholder {

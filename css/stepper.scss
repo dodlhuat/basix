@@ -1,11 +1,12 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 $indicator-size: 2rem;
 $connector-thickness: 2px;
 
 @keyframes stepper-pulse {
-  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-color) 35%, transparent); }
+  0%   { @include focus-glow($tint: 35%, $size: 0); }
   65%  { box-shadow: 0 0 0 6px transparent; }
   100% { box-shadow: 0 0 0 0 transparent; }
 }

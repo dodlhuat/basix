@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 $track-height: 4px;
 $thumb-size: 1.1rem;
@@ -70,30 +71,30 @@ $thumb-size: 1.1rem;
 
     &:hover::-webkit-slider-thumb {
       transform: scale(1.15);
-      box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-color) 15%, transparent);
+      @include focus-glow($tint: 15%, $size: 6px);
     }
 
     &:hover::-moz-range-thumb {
       transform: scale(1.15);
-      box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-color) 15%, transparent);
+      @include focus-glow($tint: 15%, $size: 6px);
     }
 
     &:active::-webkit-slider-thumb {
       transform: scale(1.22);
-      box-shadow: 0 0 0 9px color-mix(in srgb, var(--accent-color) 18%, transparent);
+      @include focus-glow($tint: 18%, $size: 9px);
     }
 
     &:active::-moz-range-thumb {
       transform: scale(1.22);
-      box-shadow: 0 0 0 9px color-mix(in srgb, var(--accent-color) 18%, transparent);
+      @include focus-glow($tint: 18%, $size: 9px);
     }
 
     &:focus-visible::-webkit-slider-thumb {
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color) 25%, transparent);
+      @include focus-glow($tint: 25%, $size: 4px);
     }
 
     &:focus-visible::-moz-range-thumb {
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color) 25%, transparent);
+      @include focus-glow($tint: 25%, $size: 4px);
     }
 
     &:disabled {

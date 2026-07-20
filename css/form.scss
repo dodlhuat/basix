@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 @keyframes field-error-shake {
   0%, 100% { transform: translateX(0); }
@@ -41,9 +42,7 @@ textarea, select, .select .dropdown, input {
   min-height: calc($form-height * 1.3);
   font-size: $spacing;
   color: var(--primary-text);
-  box-shadow:
-    inset 0 1.5px 4px rgba(0, 0, 0, 0.05),
-    0 1px 2px rgba(0, 0, 0, 0.04);
+  @include field-shadow-rest();
   transition:
     border-color 0.16s ease,
     box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
@@ -58,17 +57,12 @@ textarea, select, .select .dropdown, input {
 
   &:hover:not(:focus):not(:disabled):not([readonly]) {
     border-color: color-mix(in srgb, var(--accent-color) 45%, var(--divider));
-    box-shadow:
-      inset 0 1.5px 4px rgba(0, 0, 0, 0.045),
-      0 2px 8px rgba(0, 0, 0, 0.07);
+    @include field-shadow-hover();
   }
 
   &:focus {
     border-color: var(--accent-color);
-    box-shadow:
-      inset 0 1px 3px rgba(0, 0, 0, 0.03),
-      0 0 0 3.5px color-mix(in srgb, var(--accent-color) 13%, transparent),
-      0 2px 12px rgba(0, 0, 0, 0.06);
+    @include field-shadow-focus();
   }
 
   &:disabled {
@@ -105,9 +99,7 @@ select {
     background: var(--background);
     height: calc($form-height * 1.3);
     line-height: calc($form-height * 1.3);
-    box-shadow:
-      inset 0 1.5px 4px rgba(0, 0, 0, 0.05),
-      0 1px 2px rgba(0, 0, 0, 0.04);
+    @include field-shadow-rest();
     transition:
       border-color 0.16s ease,
       box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
@@ -115,19 +107,14 @@ select {
 
     &:hover {
       border-color: color-mix(in srgb, var(--accent-color) 45%, var(--divider));
-      box-shadow:
-        inset 0 1.5px 4px rgba(0, 0, 0, 0.045),
-        0 2px 8px rgba(0, 0, 0, 0.07);
+      @include field-shadow-hover();
     }
 
     &:focus,
     &:focus-visible {
       outline: none;
       border-color: var(--accent-color);
-      box-shadow:
-        inset 0 1px 3px rgba(0, 0, 0, 0.03),
-        0 0 0 3.5px color-mix(in srgb, var(--accent-color) 13%, transparent),
-        0 2px 12px rgba(0, 0, 0, 0.06);
+      @include field-shadow-focus();
     }
 
     &::after {
@@ -142,9 +129,7 @@ select {
 
   .dropdown.open .dropdown-selected {
     border-color: var(--accent-color);
-    box-shadow:
-      inset 0 1px 3px rgba(0, 0, 0, 0.03),
-      0 0 0 3.5px color-mix(in srgb, var(--accent-color) 13%, transparent);
+    @include field-shadow-focus($ambient: false);
 
     &::after {
       transform: rotate(180deg);
@@ -315,16 +300,12 @@ select {
     input, textarea, select {
       border-color: var(--error);
       background-color: color-mix(in srgb, var(--error) 3%, var(--background));
-      box-shadow:
-        inset 0 1.5px 4px rgba(0, 0, 0, 0.05),
-        0 1px 2px rgba(0, 0, 0, 0.04);
+      @include field-shadow-rest();
       animation: field-error-shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 
       &:focus {
         border-color: var(--error);
-        box-shadow:
-          inset 0 1px 3px rgba(0, 0, 0, 0.03),
-          0 0 0 3.5px color-mix(in srgb, var(--error) 13%, transparent);
+        @include field-shadow-focus($color: var(--error), $ambient: false);
       }
     }
 
@@ -347,9 +328,7 @@ select {
 
       &:focus {
         border-color: var(--success);
-        box-shadow:
-          inset 0 1px 3px rgba(0, 0, 0, 0.03),
-          0 0 0 3.5px color-mix(in srgb, var(--success) 13%, transparent);
+        @include field-shadow-focus($color: var(--success), $ambient: false);
       }
     }
 

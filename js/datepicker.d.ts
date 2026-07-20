@@ -42,6 +42,7 @@ declare class DatePicker {
     private show;
     private hide;
     private render;
+    private renderTimePicker;
     private createHeader;
     private navigate;
     private createMonthGrid;

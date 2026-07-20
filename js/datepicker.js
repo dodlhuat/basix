@@ -92,7 +92,7 @@ class DatePicker {
     show() {
         if (this.options.timePicker) {
             this.clockMode = 'hours';
-            this.render();
+            this.renderTimePicker();
         }
         const isMobile = window.innerWidth <= 640;
         if (isMobile) {
@@ -153,8 +153,7 @@ class DatePicker {
         this.calendar.appendChild(header);
         this.calendar.appendChild(content);
         if (this.options.timePicker && this.viewMode === 'days') {
-            const timeSection = this.createTimePicker();
-            this.calendar.appendChild(timeSection);
+            this.calendar.appendChild(this.createTimePicker());
             const setBtn = document.createElement('button');
             setBtn.className = 'datepicker-set-btn';
             setBtn.textContent = 'Set';
@@ -164,6 +163,16 @@ class DatePicker {
             };
             this.calendar.appendChild(setBtn);
         }
+    }
+    renderTimePicker() {
+        if (!this.options.timePicker || this.viewMode !== 'days')
+            return;
+        const existing = this.calendar.querySelector('.datepicker-clock');
+        if (!existing) {
+            this.render();
+            return;
+        }
+        existing.replaceWith(this.createTimePicker());
     }
     createHeader() {
         const header = document.createElement('div');
@@ -376,7 +385,7 @@ class DatePicker {
         hourSeg.onclick = (e) => {
             e.stopPropagation();
             this.clockMode = 'hours';
-            this.render();
+            this.renderTimePicker();
         };
         const separator = document.createElement('span');
         separator.className = 'datepicker-clock-display-separator';
@@ -388,7 +397,7 @@ class DatePicker {
         minuteSeg.onclick = (e) => {
             e.stopPropagation();
             this.clockMode = 'minutes';
-            this.render();
+            this.renderTimePicker();
         };
         display.appendChild(hourSeg);
         display.appendChild(separator);
@@ -505,7 +514,7 @@ class DatePicker {
             this.selectedMinutes = value;
             this.applyTimeToSelection();
         }
-        this.render();
+        this.renderTimePicker();
     }
     applyTimeToSelection() {
         if (this.options.mode === 'single' && this.selectedDate) {
