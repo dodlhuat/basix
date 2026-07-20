@@ -1,4 +1,4 @@
-# Basix 1.4.2
+# Basix 1.4.3
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,18 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.4.2 → 1.4.3
+
+No breaking changes.
+
+- **`DatePicker`** — the `timePicker: true` hour/minute picker is now an Android-style analog clock instead of up/down spinners. Tap or drag to pick the hour, then the minute, on a 24-hour dual-ring face (outer ring = even hours, inner ring = odd hours). `selectedHours`/`selectedMinutes` and all existing options are unchanged.
+- **`DatePicker`** — clock interactions (hour/minute selection, AM/PM-less 24h switching) now only re-render the time picker instead of rebuilding the whole calendar, avoiding unnecessary DOM churn.
+- **Internal** — the remaining per-component `AbortController` boilerplate (introduced in 1.4.1) has been consolidated into a small shared `ListenerGroup` utility (`src/listeners.ts`) used by every component's event lifecycle.
+- **CSS bug fix** — several component hover states (`DatePicker`'s Set button and nav buttons, `CodeViewer`'s copy button, `FlyoutMenu`'s close button) were silently overridden by the global button reset due to a CSS specificity collision, so the intended hover color/background never rendered. Fixed by scoping each rule against the global reset.
+- **CSS cleanup** — consolidated duplicated `box-shadow` glow/focus-ring declarations across `Calendar`, `Editor`, `Stepper`, `RangeSlider`, `TimePicker`, form fields, and `VirtualDropdown` into shared mixins (`field-shadow-rest`, `field-shadow-hover`, `field-shadow-focus`) in `mixins.scss`. No visual change.
+- **Cleanup** — removed unused legacy files (`form-builder.js`, `guitar-chords.js`/`.css`, `lazy-loader.js`, `request.js`) and a stale, pre-integration copy of `calendar.css`, plus dead `.datepicker-select` CSS.
+- **Type fixes** — resolved two pre-existing TypeScript errors in `Tabs` and `VirtualDropdown` (`keydown` listeners typed against `Element` instead of `HTMLElement`).
 
 ### 1.4.1 → 1.4.2
 
