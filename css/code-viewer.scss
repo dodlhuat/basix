@@ -36,7 +36,7 @@
   transition: background 0.2s;
 }
 
-.copy-button:hover {
+.copy-button:hover:not(:disabled) {
   background: #5a5a5a;
 }
 

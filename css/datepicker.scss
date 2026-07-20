@@ -42,7 +42,7 @@
   transition: background-color 0.2s;
 }
 
-.datepicker-nav:hover {
+.datepicker-nav:hover:not(:disabled) {
   background-color: var(--accent-color-lighten);
   color: var(--accent-color-text);
 }
@@ -51,21 +51,6 @@
   display: flex;
   gap: calc($spacing / 2);
   font-weight: 600;
-}
-
-.datepicker-select {
-  border: none;
-  background: none;
-  font-family: inherit;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: calc($spacing / 4);
-  border-radius: calc($spacing / 4);
-}
-
-.datepicker-select:hover {
-  background-color: var(--accent-color-lighten);
 }
 
 .datepicker-grid {
@@ -187,7 +172,7 @@
   transition: background-color 0.2s;
 }
 
-.datepicker-title-btn:hover {
+.datepicker-title-btn:hover:not(:disabled) {
   background-color: var(--accent-color-lighten);
 }
 

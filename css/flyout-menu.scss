@@ -157,7 +157,8 @@ body {
   transition: color 0.2s;
 }
 
-.close-menu:hover {
+.close-menu:hover:not(:disabled) {
+  background: none;
   color: #fff;
 }
 
