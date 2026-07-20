@@ -191,79 +191,107 @@
   background-color: var(--accent-color-lighten);
 }
 
-.datepicker-time {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.datepicker-clock {
   border-top: 1px solid var(--divider);
   margin-top: $spacing;
   padding-top: $spacing;
 }
 
-.datepicker-time-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--primary-text);
-}
-
-.datepicker-time-controls {
+.datepicker-clock-header {
   display: flex;
   align-items: center;
-  gap: calc($spacing / 4);
+  justify-content: center;
+  gap: $spacing;
+  margin-bottom: $spacing;
 }
 
-.datepicker-time-separator {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--primary-text);
-  padding: 0 calc($spacing / 8);
-}
-
-.datepicker-time-spinner {
+.datepicker-clock-display {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: calc($spacing / 8);
-}
-
-.datepicker-time-btn {
-  background: none;
-  border: 1px solid var(--divider);
-  border-radius: $border-radius;
-  cursor: pointer;
-  padding: calc($spacing / 8) calc($spacing / 2);
-  font-size: 0.6rem;
+  align-items: baseline;
+  font-size: 2rem;
+  font-weight: 600;
   line-height: 1;
-  color: var(--primary-text);
-  transition: background-color 0.2s;
+}
+
+.datepicker-clock-display-segment {
+  cursor: pointer;
+  color: var(--text-muted);
+  border-radius: calc($border-radius / 2);
+  padding: 0 calc($spacing / 8);
+  transition: color 0.2s, background-color 0.2s;
 
   &:hover {
     background-color: var(--accent-color-lighten);
-    color: var(--accent-color-text);
+  }
+
+  &.active {
+    color: var(--accent-color);
   }
 }
 
-.datepicker-time-display {
-  width: 2.5rem;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 600;
-  font-family: inherit;
-  border: 1px solid var(--divider);
-  border-radius: $border-radius;
-  padding: calc($spacing / 4) 0;
-  background: var(--background);
-  color: var(--primary-text);
-  -moz-appearance: textfield;
+.datepicker-clock-display-separator {
+  color: var(--text-muted);
+}
 
-  &::-webkit-inner-spin-button,
-  &::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+.datepicker-clock-face {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background-color: var(--accent-color-lighten);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+
+.datepicker-clock-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.datepicker-clock-hand {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 2px;
+  height: 38%;
+  margin-left: -1px;
+  background-color: var(--accent-color);
+  transform-origin: bottom center;
+  pointer-events: none;
+}
+
+.datepicker-clock-number {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.875rem;
+  color: var(--primary-text);
+  pointer-events: none;
+
+  &.inner {
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
   }
 
-  &:focus {
-    @include focus-ring(-1px);
+  &.selected {
+    background-color: var(--accent-color);
+    color: var(--accent-color-text);
   }
 }
 
@@ -279,10 +307,10 @@
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: background-color 0.2s;
 
-  &:hover {
-    opacity: 0.9;
+  &:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--accent-color) 85%, black);
   }
 }
 

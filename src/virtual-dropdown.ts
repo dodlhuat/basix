@@ -260,16 +260,16 @@ class VirtualDropdown {
             })
             .join('');
 
-        this.content.querySelectorAll('.dropdown-item').forEach((item) => {
+        this.content.querySelectorAll<HTMLElement>('.dropdown-item').forEach((item) => {
             item.addEventListener('click', (e: Event) => {
                 e.stopPropagation();
-                const value = (item as HTMLElement).dataset.value;
+                const value = item.dataset.value;
                 if (value) this.handleSelect(value);
             });
             item.addEventListener('keydown', (e: KeyboardEvent) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    const value = (item as HTMLElement).dataset.value;
+                    const value = item.dataset.value;
                     if (value) this.handleSelect(value);
                 }
             });

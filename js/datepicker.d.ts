@@ -15,6 +15,8 @@ interface DateRange {
     end: Date | null;
 }
 declare class DatePicker {
+    private static readonly CLOCK_OUTER_RADIUS_PERCENT;
+    private static readonly CLOCK_INNER_RADIUS_PERCENT;
     private input;
     private options;
     private currentDate;
@@ -29,8 +31,10 @@ declare class DatePicker {
     private selectedMinutes;
     private calendar;
     private backdrop;
+    private clockMode;
     private listeners;
     private showListeners;
+    private clockListeners;
     constructor(elementOrSelector: string | HTMLInputElement, options?: DatePickerOptions);
     private init;
     private createCalendarElement;
@@ -44,7 +48,13 @@ declare class DatePicker {
     private createYearGrid;
     private createGrid;
     private createTimePicker;
-    private createSpinner;
+    private createClockHeader;
+    private createClockFace;
+    private createClockNumber;
+    private clockPosition;
+    private positionHand;
+    private bindClockDrag;
+    private selectClockValue;
     private applyTimeToSelection;
     private changeMonth;
     private handleDateClick;

@@ -15,7 +15,7 @@ interface TabsOptions {
 class Tabs {
     private container: HTMLElement;
     private options: Required<Omit<TabsOptions, 'onChange'>> & Pick<TabsOptions, 'onChange'>;
-    private tabItems: NodeListOf<Element>;
+    private tabItems: NodeListOf<HTMLElement>;
     private tabPanels: NodeListOf<Element>;
     private currentTab: number;
     private listeners = new ListenerGroup();
@@ -38,7 +38,7 @@ class Tabs {
         };
 
         this.currentTab = this.options.defaultTab;
-        this.tabItems = this.container.querySelectorAll('.tab-item');
+        this.tabItems = this.container.querySelectorAll<HTMLElement>('.tab-item');
         this.tabPanels = this.container.querySelectorAll('.tab-panel');
 
         this.init();

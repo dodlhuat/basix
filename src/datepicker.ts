@@ -27,6 +27,9 @@ type ViewMode = 'days' | 'months' | 'years';
 
 /** Calendar-based date (or date-range) picker that attaches to an input element. */
 class DatePicker {
+    private static readonly CLOCK_OUTER_RADIUS_PERCENT = 38;
+    private static readonly CLOCK_INNER_RADIUS_PERCENT = 23;
+
     private input: HTMLInputElement | null;
     private options: DatePickerOptions;
     private currentDate: Date;
@@ -41,8 +44,10 @@ class DatePicker {
     private selectedMinutes: number;
     private calendar!: HTMLDivElement;
     private backdrop!: HTMLDivElement;
+    private clockMode: 'hours' | 'minutes' = 'hours';
     private listeners = new ListenerGroup();
     private showListeners: ListenerGroup | null = null;
+    private clockListeners: ListenerGroup | null = null;
 
     public constructor(elementOrSelector: string | HTMLInputElement, options: DatePickerOptions = {}) {
         this.input = typeof elementOrSelector === 'string' ? document.querySelector<HTMLInputElement>(elementOrSelector) : elementOrSelector;
@@ -133,6 +138,11 @@ class DatePicker {
     }
 
     private show(): void {
+        if (this.options.timePicker) {
+            this.clockMode = 'hours';
+            this.render();
+        }
+
         const isMobile = window.innerWidth <= 640;
 
         if (isMobile) {
@@ -440,101 +450,190 @@ class DatePicker {
     }
 
     private createTimePicker(): HTMLDivElement {
+        this.clockListeners?.destroy();
+        this.clockListeners = new ListenerGroup();
+
         const wrapper = document.createElement('div');
-        wrapper.className = 'datepicker-time';
+        wrapper.className = 'datepicker-clock';
 
-        const label = document.createElement('div');
-        label.className = 'datepicker-time-label';
-        label.textContent = 'Time';
-        wrapper.appendChild(label);
-
-        const controls = document.createElement('div');
-        controls.className = 'datepicker-time-controls';
-
-        const hoursSpinner = this.createSpinner(this.selectedHours, 0, 23, (value) => {
-            this.selectedHours = value;
-            this.applyTimeToSelection();
-        });
-
-        const separator = document.createElement('span');
-        separator.className = 'datepicker-time-separator';
-        separator.textContent = ':';
-
-        const minutesSpinner = this.createSpinner(this.selectedMinutes, 0, 59, (value) => {
-            this.selectedMinutes = value;
-            this.applyTimeToSelection();
-        });
-
-        controls.appendChild(hoursSpinner);
-        controls.appendChild(separator);
-        controls.appendChild(minutesSpinner);
-        wrapper.appendChild(controls);
+        wrapper.appendChild(this.createClockHeader());
+        wrapper.appendChild(this.createClockFace());
 
         return wrapper;
     }
 
-    private createSpinner(value: number, min: number, max: number, onChange: (value: number) => void): HTMLDivElement {
-        const spinner = document.createElement('div');
-        spinner.className = 'datepicker-time-spinner';
+    private createClockHeader(): HTMLDivElement {
+        const header = document.createElement('div');
+        header.className = 'datepicker-clock-header';
 
-        const upBtn = document.createElement('button');
-        upBtn.className = 'datepicker-time-btn';
-        upBtn.innerHTML = '&#9650;';
-        upBtn.onclick = (e: MouseEvent) => {
+        const display = document.createElement('div');
+        display.className = 'datepicker-clock-display';
+
+        const hourSeg = document.createElement('span');
+        hourSeg.className = 'datepicker-clock-display-segment';
+        hourSeg.classList.toggle('active', this.clockMode === 'hours');
+        hourSeg.textContent = String(this.selectedHours).padStart(2, '0');
+        hourSeg.onclick = (e: MouseEvent) => {
             e.stopPropagation();
-            const next = value + 1 > max ? min : value + 1;
-            onChange(next);
+            this.clockMode = 'hours';
             this.render();
         };
 
-        const display = document.createElement('input');
-        display.className = 'datepicker-time-display';
-        display.type = 'text';
-        display.inputMode = 'numeric';
-        display.value = String(value).padStart(2, '0');
-        display.maxLength = 2;
+        const separator = document.createElement('span');
+        separator.className = 'datepicker-clock-display-separator';
+        separator.textContent = ':';
 
-        display.addEventListener('click', (e: Event) => e.stopPropagation());
-        display.addEventListener('focus', () => display.select());
-        display.addEventListener('change', (e: Event) => {
+        const minuteSeg = document.createElement('span');
+        minuteSeg.className = 'datepicker-clock-display-segment';
+        minuteSeg.classList.toggle('active', this.clockMode === 'minutes');
+        minuteSeg.textContent = String(this.selectedMinutes).padStart(2, '0');
+        minuteSeg.onclick = (e: MouseEvent) => {
             e.stopPropagation();
-            const parsed = parseInt(display.value, 10);
-            if (isNaN(parsed) || parsed < min || parsed > max) {
-                display.value = String(value).padStart(2, '0');
-                return;
-            }
-            onChange(parsed);
-            this.render();
-        });
-        display.addEventListener('keydown', (e: KeyboardEvent) => {
-            if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                const next = value + 1 > max ? min : value + 1;
-                onChange(next);
-                this.render();
-            } else if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                const next = value - 1 < min ? max : value - 1;
-                onChange(next);
-                this.render();
-            }
-        });
-
-        const downBtn = document.createElement('button');
-        downBtn.className = 'datepicker-time-btn';
-        downBtn.innerHTML = '&#9660;';
-        downBtn.onclick = (e: MouseEvent) => {
-            e.stopPropagation();
-            const next = value - 1 < min ? max : value - 1;
-            onChange(next);
+            this.clockMode = 'minutes';
             this.render();
         };
 
-        spinner.appendChild(upBtn);
-        spinner.appendChild(display);
-        spinner.appendChild(downBtn);
+        display.appendChild(hourSeg);
+        display.appendChild(separator);
+        display.appendChild(minuteSeg);
+        header.appendChild(display);
 
-        return spinner;
+        return header;
+    }
+
+    private createClockFace(): HTMLDivElement {
+        const face = document.createElement('div');
+        face.className = 'datepicker-clock-face';
+
+        const center = document.createElement('div');
+        center.className = 'datepicker-clock-center';
+        face.appendChild(center);
+
+        const hand = document.createElement('div');
+        hand.className = 'datepicker-clock-hand';
+        face.appendChild(hand);
+
+        if (this.clockMode === 'hours') {
+            for (let slot = 0; slot < 12; slot++) {
+                const outerValue = slot * 2;
+                const innerValue = slot * 2 + 1;
+
+                face.appendChild(this.createClockNumber(outerValue, this.clockPosition(slot, 12, DatePicker.CLOCK_OUTER_RADIUS_PERCENT), outerValue === this.selectedHours, false));
+                face.appendChild(this.createClockNumber(innerValue, this.clockPosition(slot, 12, DatePicker.CLOCK_INNER_RADIUS_PERCENT), innerValue === this.selectedHours, true));
+            }
+        } else {
+            for (let slot = 0; slot < 12; slot++) {
+                const value = slot * 5;
+                const isSelected = Math.round(this.selectedMinutes / 5) % 12 === slot;
+                face.appendChild(this.createClockNumber(value, this.clockPosition(slot, 12, DatePicker.CLOCK_OUTER_RADIUS_PERCENT), isSelected, false));
+            }
+        }
+
+        const activeValue = this.clockMode === 'hours' ? this.selectedHours : this.selectedMinutes;
+        this.positionHand(hand, activeValue);
+        this.bindClockDrag(face, hand);
+
+        return face;
+    }
+
+    private createClockNumber(value: number, position: { x: number; y: number }, selected: boolean, inner: boolean): HTMLDivElement {
+        const number = document.createElement('div');
+        number.className = 'datepicker-clock-number';
+        number.classList.toggle('inner', inner);
+        number.classList.toggle('selected', selected);
+        number.style.left = `${position.x}%`;
+        number.style.top = `${position.y}%`;
+        number.textContent = String(value).padStart(2, '0');
+        return number;
+    }
+
+    private clockPosition(index: number, count: number, radiusPercent: number): { x: number; y: number } {
+        const angle = (index / count) * 2 * Math.PI - Math.PI / 2;
+        const x = 50 + radiusPercent * Math.cos(angle);
+        const y = 50 + radiusPercent * Math.sin(angle);
+        return { x, y };
+    }
+
+    private positionHand(hand: HTMLElement, value: number): void {
+        if (this.clockMode === 'hours') {
+            const slot = Math.floor(value / 2) % 12;
+            const isInner = value % 2 === 1;
+            hand.style.transform = `rotate(${(slot / 12) * 360}deg)`;
+            hand.style.height = `${isInner ? DatePicker.CLOCK_INNER_RADIUS_PERCENT : DatePicker.CLOCK_OUTER_RADIUS_PERCENT}%`;
+        } else {
+            hand.style.transform = `rotate(${(value / 60) * 360}deg)`;
+            hand.style.height = `${DatePicker.CLOCK_OUTER_RADIUS_PERCENT}%`;
+        }
+    }
+
+    private bindClockDrag(face: HTMLElement, hand: HTMLElement): void {
+        const sig = { signal: this.clockListeners!.signal };
+        let dragging = false;
+
+        const valueFromPointer = (e: PointerEvent): number => {
+            const rect = face.getBoundingClientRect();
+            const dx = e.clientX - (rect.left + rect.width / 2);
+            const dy = e.clientY - (rect.top + rect.height / 2);
+            const angle = Math.atan2(dy, dx) + Math.PI / 2;
+            const normalized = (angle / (2 * Math.PI) + 1) % 1;
+            const slot = Math.round(normalized * 12) % 12;
+
+            let value: number;
+            if (this.clockMode === 'hours') {
+                const distancePercent = (Math.sqrt(dx * dx + dy * dy) / rect.width) * 100;
+                const ringThreshold = (DatePicker.CLOCK_OUTER_RADIUS_PERCENT + DatePicker.CLOCK_INNER_RADIUS_PERCENT) / 2;
+                value = distancePercent > ringThreshold ? slot * 2 : slot * 2 + 1;
+            } else {
+                value = Math.round(normalized * 60) % 60;
+            }
+
+            this.positionHand(hand, value);
+            return value;
+        };
+
+        face.addEventListener(
+            'pointerdown',
+            (e: PointerEvent) => {
+                e.stopPropagation();
+                face.setPointerCapture(e.pointerId);
+                dragging = true;
+                valueFromPointer(e);
+            },
+            sig,
+        );
+
+        face.addEventListener(
+            'pointermove',
+            (e: PointerEvent) => {
+                if (!dragging) return;
+                valueFromPointer(e);
+            },
+            sig,
+        );
+
+        for (const type of ['pointerup', 'pointercancel'] as const) {
+            face.addEventListener(
+                type,
+                (e: PointerEvent) => {
+                    if (!dragging) return;
+                    dragging = false;
+                    this.selectClockValue(valueFromPointer(e));
+                },
+                sig,
+            );
+        }
+    }
+
+    private selectClockValue(value: number): void {
+        if (this.clockMode === 'hours') {
+            this.selectedHours = value;
+            this.applyTimeToSelection();
+            this.clockMode = 'minutes';
+        } else {
+            this.selectedMinutes = value;
+            this.applyTimeToSelection();
+        }
+        this.render();
     }
 
     private applyTimeToSelection(): void {
@@ -620,6 +719,7 @@ class DatePicker {
     public destroy(): void {
         this.hide();
         this.listeners.destroy();
+        this.clockListeners?.destroy();
         this.calendar.remove();
         this.backdrop.remove();
     }
