@@ -9,6 +9,7 @@ interface BottomSheetOptions {
     closeable?: boolean;
     snapHeight?: 'auto' | 'half' | 'full';
     onClose?: () => void;
+    iconBasePath?: string;
 }
 
 /** Slide-up sheet that attaches to the bottom of the viewport. */
@@ -19,6 +20,7 @@ class BottomSheet {
     private readonly closeable: boolean;
     private snapHeight: 'auto' | 'half' | 'full';
     private readonly onClose?: () => void;
+    private readonly iconBasePath: string;
 
     private wrapper: HTMLElement | null = null;
     private sheet: HTMLElement | null = null;
@@ -36,6 +38,7 @@ class BottomSheet {
         this.closeable = options.closeable ?? true;
         this.snapHeight = options.snapHeight ?? 'auto';
         this.onClose = options.onClose;
+        this.iconBasePath = options.iconBasePath ?? 'svg-icons/';
     }
 
     public show(): void {
@@ -165,7 +168,7 @@ class BottomSheet {
     private buildTemplate(): string {
         const snapClass = this.snapHeight !== 'auto' ? ` snap-${this.snapHeight}` : '';
 
-        const closeButton = this.closeable ? `<div class="icon icon-close close"></div>` : '';
+        const closeButton = this.closeable ? `<svg class="icon-svg close" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#close"/></svg>` : '';
 
         const headerHtml =
             this.header !== undefined

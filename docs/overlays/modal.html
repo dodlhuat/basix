@@ -14,19 +14,19 @@
         Theme.init();
 
         document.getElementById('demo-default')?.addEventListener('click', () => {
-            new Modal({ header: 'Default Modal', content: '<p>This is a basic modal with a header and content area.</p>', footer: '<button class="button" onclick="this.closest(\'.modal-wrapper\').remove()">Close</button>', closeable: true }).show();
+            new Modal({ iconBasePath: '../../svg-icons/', header: 'Default Modal', content: '<p>This is a basic modal with a header and content area.</p>', footer: '<button class="button" onclick="this.closest(\'.modal-wrapper\').remove()">Close</button>', closeable: true }).show();
         });
         document.getElementById('demo-success')?.addEventListener('click', () => {
-            new Modal({ header: 'Success', content: '<p>Your changes have been saved successfully.</p>', type: 'success', closeable: true }).show();
+            new Modal({ iconBasePath: '../../svg-icons/', header: 'Success', content: '<p>Your changes have been saved successfully.</p>', type: 'success', closeable: true }).show();
         });
         document.getElementById('demo-error')?.addEventListener('click', () => {
-            new Modal({ header: 'Error', content: '<p>Something went wrong. Please try again.</p>', type: 'error', closeable: true }).show();
+            new Modal({ iconBasePath: '../../svg-icons/', header: 'Error', content: '<p>Something went wrong. Please try again.</p>', type: 'error', closeable: true }).show();
         });
         document.getElementById('demo-warning')?.addEventListener('click', () => {
-            new Modal({ header: 'Warning', content: '<p>This action cannot be undone. Are you sure?</p>', type: 'warning', closeable: true, footer: '<button class="button" onclick="this.closest(\'.modal-wrapper\').remove()">Cancel</button><button class="button-primary" style="margin-left:0.5rem">Confirm</button>' }).show();
+            new Modal({ iconBasePath: '../../svg-icons/', header: 'Warning', content: '<p>This action cannot be undone. Are you sure?</p>', type: 'warning', closeable: true, footer: '<button class="button" onclick="this.closest(\'.modal-wrapper\').remove()">Cancel</button><button class="button-primary" style="margin-left:0.5rem">Confirm</button>' }).show();
         });
         document.getElementById('demo-info')?.addEventListener('click', () => {
-            new Modal({ header: 'Information', content: '<p>Here is some important information for you.</p>', type: 'info', closeable: true }).show();
+            new Modal({ iconBasePath: '../../svg-icons/', header: 'Information', content: '<p>Here is some important information for you.</p>', type: 'info', closeable: true }).show();
         });
 
         new CodeViewer('#code-html', `<!-- No HTML markup needed — modal is built entirely in JS -->`, 'html');
@@ -50,7 +50,7 @@ new Modal({
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
                 <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
-                    <div class="icon icon-menu"></div>
+                    <svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#menu"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
                     <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>

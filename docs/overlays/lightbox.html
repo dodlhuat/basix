@@ -20,16 +20,18 @@
             { src: 'https://picsum.photos/seed/lb4/800/800',  alt: 'Desert dunes',       caption: 'Sand dunes at golden hour' },
         ];
 
+        const iconBasePath = '../../svg-icons/';
+
         document.getElementById('demo-single')?.addEventListener('click', () => {
-            new Lightbox({ src: IMAGES[0].src, alt: IMAGES[0].alt, caption: IMAGES[0].caption }).show();
+            new Lightbox({ src: IMAGES[0].src, alt: IMAGES[0].alt, caption: IMAGES[0].caption, iconBasePath }).show();
         });
 
         document.getElementById('demo-gallery')?.addEventListener('click', () => {
-            new Lightbox({ images: IMAGES, startIndex: 0 }).show();
+            new Lightbox({ images: IMAGES, startIndex: 0, iconBasePath }).show();
         });
 
         document.getElementById('demo-no-caption')?.addEventListener('click', () => {
-            new Lightbox({ src: IMAGES[2].src, alt: IMAGES[2].alt }).show();
+            new Lightbox({ src: IMAGES[2].src, alt: IMAGES[2].alt, iconBasePath }).show();
         });
 
         document.getElementById('demo-callbacks')?.addEventListener('click', () => {
@@ -37,11 +39,12 @@
                 images: IMAGES,
                 onOpen:  () => console.log('lightbox opened'),
                 onClose: () => console.log('lightbox closed'),
+                iconBasePath,
             }).show();
         });
 
         // Declarative bind demo
-        Lightbox.bind('[data-lightbox]');
+        Lightbox.bind('[data-lightbox]', iconBasePath);
 
         new CodeViewer('#code-single', `import { Lightbox } from '@dodlhuat/basix/js/lightbox.js';
 
@@ -114,7 +117,7 @@ Lightbox.bind('.gallery-thumb');`, 'js');
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
                 <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
-                    <div class="icon icon-menu"></div>
+                    <svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#menu"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
                     <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>

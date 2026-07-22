@@ -1,4 +1,4 @@
-# Basix 1.4.3
+# Basix 1.5.0
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,40 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.4.3 → 1.5.0
+
+#### Breaking changes
+
+**Font icons removed — SVG sprite is now the only icon system**
+
+The `.icon` base class, all `.icon-*` glyph classes, and the bundled `MaterialSymbolsOutlined.woff2` font have been removed from `icons.scss` and `fonts/`. Every component that rendered a font-icon glyph now renders an inline `<svg><use href="svg-icons/icons.svg#name"/></svg>` instead. If your own markup used the font classes directly, replace them:
+
+```html
+<!-- Before (1.4.3) -->
+<span class="icon icon-close"></span>
+
+<!-- After (1.5.0) -->
+<svg class="icon-svg"><use href="svg-icons/icons.svg#close"/></svg>
+```
+
+A handful of glyph names used by the font don't exist under the same name in the sprite; use the sprite's equivalents:
+
+| Font glyph | SVG sprite equivalent |
+|---|---|
+| `icon-navigate_before` / `icon-navigate_next` | `chevron_left` / `chevron_right` |
+| `icon-expand_more` | `keyboard_arrow_down` |
+| `icon-light` / `icon-dark` | `light_mode` / `dark_mode` |
+
+#### Other changes
+
+- **`BottomSheet`, `Lightbox`, `GroupPicker`, `Modal`, `Toast`, `SidebarNav`, `Carousel`, `Select`** — gained an `iconBasePath` option (default `'svg-icons/'`) controlling where each component looks for the SVG sprite, matching the existing `Calendar`/`Stepper` convention.
+- **`PushMenu.init()`** now accepts an optional `{ iconBasePath }` argument (previously took no arguments).
+- **`Lightbox.bind()`** now accepts an optional second `iconBasePath` argument, threaded through to every lightbox it opens.
+- **New design tokens** in `parameters.scss`: a 3-step tint scale (`$tint-subtle`/`$tint-medium`/`$tint-strong`) for state-color backgrounds, and an expanded, properly-ordered radius scale (`$radius-xs/sm/md/lg/panel/xl`). Several components' corner radii and background tints shifted slightly to align to these scales — no component's visual language changed, just consolidated toward consistent steps.
+- **New shared mixins** in `mixins.scss`: `float-panel` (floating dropdown/menu/popover shell), `hide-scrollbar`, `tinted-tag` (badge/chip tint), `muted-icon-color` (close-button hover).
+- **Bug fix** — `DatePicker`'s day-of-week headers and clock labels referenced an undefined `--text-muted` custom property (silently falling back to inherited text color). Fixed to use the existing `--secondary-text` token.
+- **CI** — added a GitHub Actions workflow (lint, typecheck, build, and a check that committed `js/`/`css` build output matches source) and `sass` is now a real `devDependency` instead of relying on a global install.
 
 ### 1.4.2 → 1.4.3
 
@@ -124,19 +158,19 @@ The Card component is a CSS-only component that creates visually contained conte
 
 ### Icons
 
-Basix ships icons in two formats:
-
-**Font icons** — a reduced Google Material Icon font (~5.5 KB vs the full 242.5 KB). Use the `.icon` class with a modifier.
-
-``` html
-<span class="icon icon-home"></span>
-```
-
-**SVG sprite** — the full Google Material Icon set (~6,400+ icons) in a single `svg-icons/icons.svg` sprite. Preferred for consistent sizing, `currentColor` inheritance, and use inside JS-generated markup.
+Basix ships the full Google Material Icon set (~6,400+ icons) as a single `svg-icons/icons.svg` sprite. Reference any icon by name with `<use>`, and style size/color with the `.icon-svg` class — it inherits `currentColor`, so the icon follows the surrounding text color automatically.
 
 ``` html
 <svg class="icon-svg"><use href="svg-icons/icons.svg#home"/></svg>
 ```
+
+Components that render icons from JS (`Modal`, `Toast`, `BottomSheet`, `Lightbox`, `Carousel`, `GroupPicker`, `SidebarNav`, `Calendar`, `Stepper`, `PushMenu`, `Select`, `ContextMenu`) accept an `iconBasePath` option (default `'svg-icons/'`) so you can point them at the sprite's location relative to your page:
+
+``` js
+new Modal({ content: '…', iconBasePath: '../svg-icons/' });
+```
+
+A couple of purely-decorative icons that need to render with zero markup (the `Breadcrumb` separator, the native `<select>` dropdown arrow) use `mask-image` against small standalone SVGs (`svg-icons/chevron_right.svg`, `svg-icons/keyboard_arrow_down.svg`) instead of the sprite, since sprite symbols are only instantiable via `<use>`.
 
 ---
 
@@ -443,7 +477,7 @@ The Chips component displays small interactive elements like tags or filters. CS
     <div class="chip clickable">Clickable Chip</div>
     <div class="chip closeable">
         Closeable Chip
-        <button class="close"><span class="icon icon-close"></span></button>
+        <button class="close"><svg class="icon-svg"><use href="svg-icons/icons.svg#close"/></svg></button>
     </div>
 </div>
 ```

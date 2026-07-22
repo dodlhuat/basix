@@ -59,9 +59,9 @@
   transition: background 0.2s ease, color 0.2s ease, opacity 0.3s ease;
   -webkit-tap-highlight-color: transparent;
 
-  .icon {
-    font-size: 1.25rem;
-    line-height: 1;
+  .icon-svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 
   &:hover {
@@ -219,9 +219,9 @@
               transform 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 
-  .icon {
-    font-size: 1.5rem;
-    line-height: 1;
+  .icon-svg {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   &:hover {
@@ -247,7 +247,7 @@
     width: 2rem;
     height: 2rem;
 
-    .icon { font-size: 1.25rem; }
+    .icon-svg { width: 1.25rem; height: 1.25rem; }
   }
 
   .lightbox-prev { left: calc($spacing * 0.5); }

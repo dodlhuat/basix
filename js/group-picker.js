@@ -25,6 +25,7 @@ class GroupPicker {
             deselectLabel: options.deselectLabel ?? 'Abwählen',
             emptyLabel: options.emptyLabel ?? 'Keine Ergebnisse',
             selectionPlaceholder: options.selectionPlaceholder ?? 'Noch keine Auswahl getroffen',
+            iconBasePath: options.iconBasePath ?? 'svg-icons/',
         };
         this.init();
     }
@@ -41,7 +42,7 @@ class GroupPicker {
         const searchWrap = document.createElement('div');
         searchWrap.className = 'group-picker__search';
         searchWrap.innerHTML = `
-            <span class="icon icon-search group-picker__search-icon" aria-hidden="true"></span>
+            <svg class="icon-svg group-picker__search-icon" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#search"/></svg>
             <input type="text" />
         `;
         this.searchInput = searchWrap.querySelector('input');
@@ -70,7 +71,7 @@ class GroupPicker {
             const empty = document.createElement('div');
             empty.className = 'group-picker__empty';
             empty.innerHTML = `
-                <span class="icon icon-search" aria-hidden="true"></span>
+                <svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#search"/></svg>
                 <span>${this.options.emptyLabel}</span>
             `;
             this.listEl.appendChild(empty);
@@ -97,8 +98,9 @@ class GroupPicker {
         label.innerHTML = query && groupMatches ? this.highlightText(group.label, query) : escapeHtml(group.label);
         if (hasChildren) {
             const chevron = document.createElement('span');
-            chevron.className = 'icon icon-navigate_next group-picker__chevron';
+            chevron.className = 'group-picker__chevron';
             chevron.setAttribute('aria-hidden', 'true');
+            chevron.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#chevron_right"/></svg>`;
             const count = document.createElement('span');
             count.className = 'badge badge-sm';
             count.textContent = `${subs.length}`;
@@ -155,8 +157,9 @@ class GroupPicker {
         }
         else {
             const checkEl = document.createElement('span');
-            checkEl.className = 'icon icon-check group-picker__leaf-check';
+            checkEl.className = 'group-picker__leaf-check';
             checkEl.setAttribute('aria-hidden', 'true');
+            checkEl.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#check"/></svg>`;
             header.append(label, checkEl);
             header.addEventListener('click', () => {
                 this.toggleParentGroup(group.id);
@@ -190,7 +193,7 @@ class GroupPicker {
         chip.className = isParent ? 'chip closeable group-picker__chip--parent' : 'chip closeable';
         const btn = document.createElement('button');
         btn.setAttribute('aria-label', `${label} entfernen`);
-        btn.innerHTML = `<span class="icon icon-close"></span>`;
+        btn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#close"/></svg>`;
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             onRemove();

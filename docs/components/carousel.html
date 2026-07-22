@@ -13,8 +13,8 @@
         new DocsNav();
         Theme.init();
 
-        new Carousel('#carousel-default', { loop: true });
-        new Carousel('#carousel-auto',    { loop: true, autoPlay: true, autoPlayInterval: 2500 });
+        new Carousel('#carousel-default', { loop: true, iconBasePath: '../../svg-icons/' });
+        new Carousel('#carousel-auto',    { loop: true, autoPlay: true, autoPlayInterval: 2500, iconBasePath: '../../svg-icons/' });
 
         new CodeViewer('#code-html', `<!-- Place slide content as direct children — the component builds track, controls, and dots -->
 <div class="carousel" id="my-carousel">
@@ -48,7 +48,7 @@ c.destroy();`, 'js');
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
                 <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
-                    <div class="icon icon-menu"></div>
+                    <svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#menu"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" style="cursor:pointer;">
                     <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>

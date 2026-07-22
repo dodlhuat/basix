@@ -1,5 +1,6 @@
 import { ListenerGroup } from './listeners.js';
 class PushMenu {
+    static iconBasePath = 'svg-icons/';
     static elements = {
         navigation: null,
         content: null,
@@ -12,11 +13,12 @@ class PushMenu {
     static panelStack = [];
     static listeners = new ListenerGroup();
     static clickNavListeners = null;
-    static init() {
+    static init(options = {}) {
         if (this.initialized) {
             console.warn('PushMenu: Already initialized');
             return;
         }
+        this.iconBasePath = options.iconBasePath ?? 'svg-icons/';
         this.refresh();
         if (!this.elements.navigation || !this.elements.content) {
             throw new Error('PushMenu: Required elements not found (.navigation, .push-content)');
@@ -60,7 +62,7 @@ class PushMenu {
                 const backBtn = document.createElement('button');
                 backBtn.classList.add('push-menu-back');
                 backBtn.setAttribute('aria-label', 'Back');
-                backBtn.innerHTML = `<span class="icon icon-navigate_before" aria-hidden="true"></span>`;
+                backBtn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${PushMenu.iconBasePath}icons.svg#chevron_left"/></svg>`;
                 header.addEventListener('click', () => PushMenu.goBack());
                 const titleEl = document.createElement('span');
                 titleEl.classList.add('push-menu-panel-title');
@@ -76,7 +78,7 @@ class PushMenu {
                 const chevron = document.createElement('span');
                 chevron.classList.add('push-menu-chevron');
                 chevron.setAttribute('aria-hidden', 'true');
-                chevron.innerHTML = `<span class="icon icon-navigate_next" aria-hidden="true"></span>`;
+                chevron.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${PushMenu.iconBasePath}icons.svg#chevron_right"/></svg>`;
                 trigger.appendChild(chevron);
                 if (parentAnchor) {
                     parentAnchor.replaceWith(trigger);
@@ -144,13 +146,16 @@ class PushMenu {
         this.elements.header?.classList.toggle('pushed', !isPushed);
         this.elements.backdrop?.classList.toggle('pushed', !isPushed);
         if (this.elements.controlIcon) {
-            if (isPushed) {
-                this.elements.controlIcon.classList.remove('icon-menu_open');
-                this.elements.controlIcon.classList.add('icon-menu');
+            const iconName = isPushed ? 'menu' : 'menu_open';
+            const useEl = this.elements.controlIcon.querySelector('use');
+            if (useEl) {
+                const existingHref = useEl.getAttribute('href') ?? '';
+                const basePath = existingHref.includes('#') ? existingHref.split('#')[0] : PushMenu.iconBasePath + 'icons.svg';
+                useEl.setAttribute('href', `${basePath}#${iconName}`);
             }
             else {
-                this.elements.controlIcon.classList.add('icon-menu_open');
-                this.elements.controlIcon.classList.remove('icon-menu');
+                this.elements.controlIcon.classList.remove('icon-menu_open', 'icon-menu');
+                this.elements.controlIcon.classList.add(`icon-${iconName}`);
             }
         }
     }

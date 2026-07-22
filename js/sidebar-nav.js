@@ -15,6 +15,7 @@ class SidebarNav {
             breakpoint: options.breakpoint ?? 768,
             swipeThreshold: options.swipeThreshold ?? 60,
             swipeEdge: options.swipeEdge ?? 20,
+            iconBasePath: options.iconBasePath ?? 'svg-icons/',
         };
         this.nav = container?.querySelector('.sidebar-nav') ?? null;
         this.backdrop = container?.querySelector('.sidebar-backdrop') ?? null;
@@ -47,7 +48,7 @@ class SidebarNav {
         this.closeBtn = document.createElement('button');
         this.closeBtn.className = 'sidebar-close';
         this.closeBtn.setAttribute('aria-label', 'Close navigation');
-        this.closeBtn.innerHTML = '<div class="icon icon-close"></div>';
+        this.closeBtn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.opts.iconBasePath}icons.svg#close"/></svg>`;
         this.closeBtn.addEventListener('click', () => this.close(), sig);
         this.nav?.append(this.closeBtn);
     }

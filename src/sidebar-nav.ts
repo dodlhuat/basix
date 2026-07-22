@@ -10,6 +10,8 @@ interface SidebarNavOptions {
     swipeThreshold?: number;
     /** Width of the left-edge zone (px) that triggers open on swipe-right. Default: 20 */
     swipeEdge?: number;
+    /** Base path to the SVG icon sprite. Default: 'svg-icons/' */
+    iconBasePath?: string;
 }
 
 /** Collapsible sidebar navigation with backdrop, swipe gestures, and responsive breakpoint support. */
@@ -31,6 +33,7 @@ class SidebarNav {
             breakpoint: options.breakpoint ?? 768,
             swipeThreshold: options.swipeThreshold ?? 60,
             swipeEdge: options.swipeEdge ?? 20,
+            iconBasePath: options.iconBasePath ?? 'svg-icons/',
         };
 
         this.nav = container?.querySelector('.sidebar-nav') ?? null;
@@ -78,7 +81,7 @@ class SidebarNav {
         this.closeBtn = document.createElement('button');
         this.closeBtn.className = 'sidebar-close';
         this.closeBtn.setAttribute('aria-label', 'Close navigation');
-        this.closeBtn.innerHTML = '<div class="icon icon-close"></div>';
+        this.closeBtn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.opts.iconBasePath}icons.svg#close"/></svg>`;
         this.closeBtn.addEventListener('click', () => this.close(), sig);
         this.nav?.append(this.closeBtn);
     }

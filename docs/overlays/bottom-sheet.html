@@ -15,9 +15,9 @@
 
         const content = '<p>This is the bottom sheet content. It can contain any HTML including forms, lists, or action buttons.</p><p>Try dragging it down to dismiss.</p>';
 
-        document.getElementById('demo-auto')?.addEventListener('click', () => new BottomSheet({ header: 'Auto height', content, closeable: true, snapHeight: 'auto' }).show());
-        document.getElementById('demo-half')?.addEventListener('click', () => new BottomSheet({ header: 'Half screen', content, closeable: true, snapHeight: 'half' }).show());
-        document.getElementById('demo-full')?.addEventListener('click', () => new BottomSheet({ header: 'Full screen', content, closeable: true, snapHeight: 'full' }).show());
+        document.getElementById('demo-auto')?.addEventListener('click', () => new BottomSheet({ iconBasePath: '../../svg-icons/', header: 'Auto height', content, closeable: true, snapHeight: 'auto' }).show());
+        document.getElementById('demo-half')?.addEventListener('click', () => new BottomSheet({ iconBasePath: '../../svg-icons/', header: 'Half screen', content, closeable: true, snapHeight: 'half' }).show());
+        document.getElementById('demo-full')?.addEventListener('click', () => new BottomSheet({ iconBasePath: '../../svg-icons/', header: 'Full screen', content, closeable: true, snapHeight: 'full' }).show());
 
         new CodeViewer('#code-js', `import { BottomSheet } from '@dodlhuat/basix/js/bottom-sheet.js';
 
@@ -39,7 +39,7 @@ new BottomSheet({
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
                 <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
-                    <div class="icon icon-menu"></div>
+                    <svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#menu"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
                     <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>

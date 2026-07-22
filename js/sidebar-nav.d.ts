@@ -3,6 +3,7 @@ interface SidebarNavOptions {
     breakpoint?: number;
     swipeThreshold?: number;
     swipeEdge?: number;
+    iconBasePath?: string;
 }
 declare class SidebarNav {
     private nav;

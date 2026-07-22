@@ -5,6 +5,7 @@ class Lightbox {
     closeable;
     onOpen;
     onClose;
+    iconBasePath;
     wrapper = null;
     imgEl = null;
     captionEl = null;
@@ -22,6 +23,7 @@ class Lightbox {
         this.closeable = options.closeable ?? true;
         this.onOpen = options.onOpen;
         this.onClose = options.onClose;
+        this.iconBasePath = options.iconBasePath ?? 'svg-icons/';
     }
     show() {
         this.hide();
@@ -233,8 +235,9 @@ class Lightbox {
         }, { signal: this.listeners.signal });
     }
     buildTemplate() {
+        const icon = (name) => `<svg class="icon-svg" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#${name}"/></svg>`;
         return `
-            ${this.closeable ? '<button class="lightbox-close" aria-label="Close lightbox"><span class="icon icon-close"></span></button>' : ''}
+            ${this.closeable ? `<button class="lightbox-close" aria-label="Close lightbox">${icon('close')}</button>` : ''}
             <div class="lightbox" role="document">
                 <div class="lightbox-img-wrap">
                     <div class="lightbox-spinner"><div class="spinner"></div></div>
@@ -244,15 +247,15 @@ class Lightbox {
                 <div class="lightbox-counter" hidden></div>
             </div>
             <button class="lightbox-prev" aria-label="Previous image" hidden>
-                <span class="icon icon-navigate_before"></span>
+                ${icon('chevron_left')}
             </button>
             <button class="lightbox-next" aria-label="Next image" hidden>
-                <span class="icon icon-navigate_next"></span>
+                ${icon('chevron_right')}
             </button>
             <div class="lightbox-background"></div>
         `;
     }
-    static bind(selector = '[data-lightbox]') {
+    static bind(selector = '[data-lightbox]', iconBasePath) {
         const elements = document.querySelectorAll(selector);
         const groups = new Map();
         elements.forEach((el) => {
@@ -273,6 +276,7 @@ class Lightbox {
                     new Lightbox({
                         images: items.map((i) => i.image),
                         startIndex: idx,
+                        iconBasePath,
                     }).show();
                 });
             });

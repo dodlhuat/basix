@@ -5,6 +5,7 @@ interface ModalOptions {
     footer?: string;
     closeable?: boolean;
     type?: ModalType;
+    iconBasePath?: string;
 }
 declare class Modal {
     private content;
@@ -12,6 +13,7 @@ declare class Modal {
     private readonly footer?;
     private readonly closeable;
     private readonly type;
+    private readonly iconBasePath;
     private template;
     private modalWrapper;
     private listeners;

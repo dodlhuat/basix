@@ -2,6 +2,7 @@ interface CarouselOptions {
     loop?: boolean;
     autoPlay?: boolean;
     autoPlayInterval?: number;
+    iconBasePath?: string;
 }
 declare class Carousel {
     private root;

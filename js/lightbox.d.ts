@@ -12,6 +12,7 @@ interface LightboxOptions {
     startIndex?: number;
     onOpen?: () => void;
     onClose?: () => void;
+    iconBasePath?: string;
 }
 declare class Lightbox {
     private images;
@@ -19,6 +20,7 @@ declare class Lightbox {
     private readonly closeable;
     private readonly onOpen?;
     private readonly onClose?;
+    private readonly iconBasePath;
     private wrapper;
     private imgEl;
     private captionEl;
@@ -41,6 +43,6 @@ declare class Lightbox {
     private handleBackgroundClick;
     private addTouchSupport;
     private buildTemplate;
-    static bind(selector?: string): void;
+    static bind(selector?: string, iconBasePath?: string): void;
 }
 export { Lightbox, type LightboxOptions, type LightboxImage };

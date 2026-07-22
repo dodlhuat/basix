@@ -194,7 +194,7 @@ class Select {
 
         const optionsMenu = document.createElement('div');
         optionsMenu.className = 'dropdown-options-menu hidden';
-        optionsMenu.innerHTML = 'Select options<span class="dropdown-options-icon icon icon-close"></span>';
+        optionsMenu.innerHTML = 'Select options<svg class="icon-svg dropdown-options-icon" aria-hidden="true"><use href="svg-icons/icons.svg#close"/></svg>';
         dropdownOptions.appendChild(optionsMenu);
 
         Array.from(select.options).forEach((opt) => {

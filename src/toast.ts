@@ -9,6 +9,7 @@ interface ToastOptions {
     header?: string;
     type?: ToastType;
     closeable?: boolean;
+    iconBasePath?: string;
 }
 
 /** Dismissible notification banner with optional auto-hide timer and progress bar. */
@@ -17,7 +18,8 @@ class Toast {
     private readonly header: string;
     private readonly type?: ToastType;
     private readonly closeable: boolean;
-    private readonly closureIcon: string = '<div class="icon icon-close close"></div>';
+    private readonly iconBasePath: string;
+    private readonly closureIcon: string;
     private readonly template: string;
     private toastElement: HTMLDivElement | null = null;
     private timerId: number | null = null;
@@ -31,13 +33,16 @@ class Toast {
             this.header = contentOrOptions.header ?? '';
             this.type = contentOrOptions.type;
             this.closeable = contentOrOptions.closeable ?? true;
+            this.iconBasePath = contentOrOptions.iconBasePath ?? 'svg-icons/';
         } else {
             this.content = contentOrOptions;
             this.header = header;
             this.type = type;
             this.closeable = closeable;
+            this.iconBasePath = 'svg-icons/';
         }
 
+        this.closureIcon = `<svg class="icon-svg close" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#close"/></svg>`;
         this.template = this.buildTemplate();
     }
 

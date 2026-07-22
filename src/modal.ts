@@ -1,8 +1,6 @@
 import { sanitizeHtml } from './utils.js';
 import { ListenerGroup } from './listeners.js';
 
-const CLOSE_ICON = '<div class="icon icon-close close"></div>';
-
 type ModalType = 'default' | 'success' | 'error' | 'warning' | 'info';
 
 /** Configuration options for a Modal dialog. */
@@ -12,6 +10,7 @@ interface ModalOptions {
     footer?: string;
     closeable?: boolean;
     type?: ModalType;
+    iconBasePath?: string;
 }
 
 /** Overlay dialog with optional header, footer, close button, and type variants. */
@@ -21,6 +20,7 @@ class Modal {
     private readonly footer?: string;
     private readonly closeable: boolean;
     private readonly type: ModalType;
+    private readonly iconBasePath: string;
     private template: string;
     private modalWrapper: HTMLElement | null = null;
     private listeners = new ListenerGroup();
@@ -34,12 +34,14 @@ class Modal {
             this.footer = contentOrOptions.footer;
             this.closeable = contentOrOptions.closeable ?? true;
             this.type = contentOrOptions.type ?? 'default';
+            this.iconBasePath = contentOrOptions.iconBasePath ?? 'svg-icons/';
         } else {
             this.content = contentOrOptions;
             this.header = header;
             this.footer = footer;
             this.closeable = closeable;
             this.type = type;
+            this.iconBasePath = 'svg-icons/';
         }
 
         this.template = this.buildTemplate();
@@ -103,7 +105,7 @@ class Modal {
         const parts: string[] = [`<div class="modal modal-${this.type}">`];
 
         if (this.closeable) {
-            parts.push(CLOSE_ICON);
+            parts.push(`<svg class="icon-svg close" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#close"/></svg>`);
         }
 
         if (this.header !== undefined) {

@@ -17,6 +17,7 @@ interface LightboxOptions {
     startIndex?: number;
     onOpen?: () => void;
     onClose?: () => void;
+    iconBasePath?: string;
 }
 
 /** Full-screen image viewer with gallery navigation, zoom, and touch support. */
@@ -26,6 +27,7 @@ class Lightbox {
     private readonly closeable: boolean;
     private readonly onOpen?: () => void;
     private readonly onClose?: () => void;
+    private readonly iconBasePath: string;
     private wrapper: HTMLElement | null = null;
     private imgEl: HTMLImageElement | null = null;
     private captionEl: HTMLElement | null = null;
@@ -43,6 +45,7 @@ class Lightbox {
         this.closeable = options.closeable ?? true;
         this.onOpen = options.onOpen;
         this.onClose = options.onClose;
+        this.iconBasePath = options.iconBasePath ?? 'svg-icons/';
     }
 
     public show(): void {
@@ -286,8 +289,10 @@ class Lightbox {
     }
 
     private buildTemplate(): string {
+        const icon = (name: string): string => `<svg class="icon-svg" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#${name}"/></svg>`;
+
         return `
-            ${this.closeable ? '<button class="lightbox-close" aria-label="Close lightbox"><span class="icon icon-close"></span></button>' : ''}
+            ${this.closeable ? `<button class="lightbox-close" aria-label="Close lightbox">${icon('close')}</button>` : ''}
             <div class="lightbox" role="document">
                 <div class="lightbox-img-wrap">
                     <div class="lightbox-spinner"><div class="spinner"></div></div>
@@ -297,16 +302,16 @@ class Lightbox {
                 <div class="lightbox-counter" hidden></div>
             </div>
             <button class="lightbox-prev" aria-label="Previous image" hidden>
-                <span class="icon icon-navigate_before"></span>
+                ${icon('chevron_left')}
             </button>
             <button class="lightbox-next" aria-label="Next image" hidden>
-                <span class="icon icon-navigate_next"></span>
+                ${icon('chevron_right')}
             </button>
             <div class="lightbox-background"></div>
         `;
     }
 
-    public static bind(selector: string = '[data-lightbox]'): void {
+    public static bind(selector: string = '[data-lightbox]', iconBasePath?: string): void {
         const elements = document.querySelectorAll<HTMLElement>(selector);
         const groups = new Map<string, { el: HTMLElement; image: LightboxImage }[]>();
 
@@ -329,6 +334,7 @@ class Lightbox {
                     new Lightbox({
                         images: items.map((i) => i.image),
                         startIndex: idx,
+                        iconBasePath,
                     }).show();
                 });
             });

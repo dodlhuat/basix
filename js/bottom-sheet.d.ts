@@ -5,6 +5,7 @@ interface BottomSheetOptions {
     closeable?: boolean;
     snapHeight?: 'auto' | 'half' | 'full';
     onClose?: () => void;
+    iconBasePath?: string;
 }
 declare class BottomSheet {
     private readonly content;
@@ -13,6 +14,7 @@ declare class BottomSheet {
     private readonly closeable;
     private snapHeight;
     private readonly onClose?;
+    private readonly iconBasePath;
     private wrapper;
     private sheet;
     private listeners;

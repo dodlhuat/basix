@@ -6,13 +6,17 @@ interface PushMenuElements {
     controlIcon: HTMLElement | null;
     backdrop: HTMLElement | null;
 }
+interface PushMenuOptions {
+    iconBasePath?: string;
+}
 declare class PushMenu {
+    private static iconBasePath;
     private static elements;
     private static initialized;
     private static panelStack;
     private static listeners;
     private static clickNavListeners;
-    static init(): void;
+    static init(options?: PushMenuOptions): void;
     private static buildPanels;
     private static extractSubPanels;
     static openPanel(panel: HTMLElement): void;
@@ -28,4 +32,4 @@ declare class PushMenu {
     static destroy(): void;
     static refresh(): void;
 }
-export { PushMenu, type PushMenuElements };
+export { PushMenu, type PushMenuElements, type PushMenuOptions };

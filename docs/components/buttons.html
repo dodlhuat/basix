@@ -27,7 +27,7 @@
 
 <!-- Icon button -->
 <button class="button-icon" aria-label="Edit">
-  <span class="icon icon-edit"></span>
+  <svg class="icon-svg"><use href="../../svg-icons/icons.svg#edit"/></svg>
 </button>
 
 <!-- Pill -->
@@ -48,7 +48,7 @@
 <div class="button-group">
   <button class="button-primary">Save</button>
   <button class="button-primary button-icon" aria-label="More options">
-    <span class="icon icon-expand_more"></span>
+    <svg class="icon-svg"><use href="../../svg-icons/icons.svg#keyboard_arrow_down"/></svg>
   </button>
 </div>`, 'html');
 
@@ -58,7 +58,7 @@
   <div class="chip clickable selected">Selected</div>
   <div class="chip closeable">
     Closeable
-    <button class="close" aria-label="Remove"><span class="icon icon-close"></span></button>
+    <button class="close" aria-label="Remove"><svg class="icon-svg"><use href="../../svg-icons/icons.svg#close"/></svg></button>
   </div>
   <div class="chip chip-accent">Accent</div>
   <div class="chip chip-success">Success</div>
@@ -97,7 +97,7 @@
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
                 <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
-                    <div class="icon icon-menu"></div>
+                    <svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#menu"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
                     <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
@@ -131,9 +131,9 @@
 
             <h3>Icon button &amp; Pill</h3>
             <div class="docs-demo" style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
-                <button class="button-icon" aria-label="Edit"><span class="icon icon-edit"></span></button>
-                <button class="button-icon button-primary" aria-label="Add"><span class="icon icon-add"></span></button>
-                <button class="button-icon button-error" aria-label="Delete"><span class="icon icon-delete"></span></button>
+                <button class="button-icon" aria-label="Edit"><svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#edit"/></svg></button>
+                <button class="button-icon button-primary" aria-label="Add"><svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#add"/></svg></button>
+                <button class="button-icon button-error" aria-label="Delete"><svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#delete"/></svg></button>
                 <button class="button-primary button-pill">Pill primary</button>
                 <button class="button-outline button-pill">Pill outline</button>
             </div>
@@ -158,7 +158,7 @@
                 </div>
                 <div class="button-group">
                     <button class="button-primary">Save</button>
-                    <button class="button-primary button-icon" aria-label="More options"><span class="icon icon-expand_more"></span></button>
+                    <button class="button-primary button-icon" aria-label="More options"><svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#keyboard_arrow_down"/></svg></button>
                 </div>
                 <div class="button-group">
                     <button class="active">Day</button>
@@ -175,7 +175,7 @@
                     <div class="chip">Default</div>
                     <div class="chip clickable">Clickable</div>
                     <div class="chip clickable selected">Selected</div>
-                    <div class="chip closeable">Closeable <button class="close" aria-label="Remove"><span class="icon icon-close"></span></button></div>
+                    <div class="chip closeable">Closeable <button class="close" aria-label="Remove"><svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#close"/></svg></button></div>
                     <div class="chip chip-accent">Accent</div>
                     <div class="chip chip-success">Success</div>
                     <div class="chip chip-warning">Warning</div>

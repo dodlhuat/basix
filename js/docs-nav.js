@@ -200,7 +200,7 @@ class DocsNav {
 
     bindMobile() {
         const layout = document.querySelector('.sidebar-layout');
-        if (layout) new SidebarNav(layout, { toggleSelector: '#docs-mobile-toggle' });
+        if (layout) new SidebarNav(layout, { toggleSelector: '#docs-mobile-toggle', iconBasePath: this.prefix + '../svg-icons/' });
     }
 }
 

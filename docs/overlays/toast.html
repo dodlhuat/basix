@@ -13,10 +13,10 @@
         new DocsNav();
         Theme.init();
 
-        document.getElementById('demo-default')?.addEventListener('click', () => new Toast({ header: 'Default', content: 'A plain notification message.', closeable: true }).show(4000));
-        document.getElementById('demo-success')?.addEventListener('click', () => new Toast({ header: 'Success', content: 'Your changes were saved.', type: 'success', closeable: true }).show(4000));
-        document.getElementById('demo-warning')?.addEventListener('click', () => new Toast({ header: 'Warning', content: 'Please review your input.', type: 'warning', closeable: true }).show(4000));
-        document.getElementById('demo-error')?.addEventListener('click', () => new Toast({ header: 'Error', content: 'Something went wrong.', type: 'error', closeable: true }).show(4000));
+        document.getElementById('demo-default')?.addEventListener('click', () => new Toast({ iconBasePath: '../../svg-icons/', header: 'Default', content: 'A plain notification message.', closeable: true }).show(4000));
+        document.getElementById('demo-success')?.addEventListener('click', () => new Toast({ iconBasePath: '../../svg-icons/', header: 'Success', content: 'Your changes were saved.', type: 'success', closeable: true }).show(4000));
+        document.getElementById('demo-warning')?.addEventListener('click', () => new Toast({ iconBasePath: '../../svg-icons/', header: 'Warning', content: 'Please review your input.', type: 'warning', closeable: true }).show(4000));
+        document.getElementById('demo-error')?.addEventListener('click', () => new Toast({ iconBasePath: '../../svg-icons/', header: 'Error', content: 'Something went wrong.', type: 'error', closeable: true }).show(4000));
 
         new CodeViewer('#code-js', `import { Toast } from '@dodlhuat/basix/js/toast.js';
 
@@ -37,7 +37,7 @@ new Toast({
             <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
             <div class="docs-topbar-actions">
                 <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
-                    <div class="icon icon-menu"></div>
+                    <svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#menu"/></svg>
                 </button>
                 <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
                     <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>

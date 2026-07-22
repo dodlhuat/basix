@@ -21,6 +21,7 @@ interface GroupPickerOptions {
     deselectLabel?: string;
     emptyLabel?: string;
     selectionPlaceholder?: string;
+    iconBasePath?: string;
 }
 declare class GroupPicker {
     private container;

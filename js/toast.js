@@ -5,7 +5,8 @@ class Toast {
     header;
     type;
     closeable;
-    closureIcon = '<div class="icon icon-close close"></div>';
+    iconBasePath;
+    closureIcon;
     template;
     toastElement = null;
     timerId = null;
@@ -16,13 +17,16 @@ class Toast {
             this.header = contentOrOptions.header ?? '';
             this.type = contentOrOptions.type;
             this.closeable = contentOrOptions.closeable ?? true;
+            this.iconBasePath = contentOrOptions.iconBasePath ?? 'svg-icons/';
         }
         else {
             this.content = contentOrOptions;
             this.header = header;
             this.type = type;
             this.closeable = closeable;
+            this.iconBasePath = 'svg-icons/';
         }
+        this.closureIcon = `<svg class="icon-svg close" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#close"/></svg>`;
         this.template = this.buildTemplate();
     }
     show(ms) {

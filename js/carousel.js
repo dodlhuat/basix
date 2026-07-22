@@ -18,6 +18,7 @@ class Carousel {
             loop: options.loop ?? false,
             autoPlay: options.autoPlay ?? false,
             autoPlayInterval: options.autoPlayInterval ?? 3000,
+            iconBasePath: options.iconBasePath ?? 'svg-icons/',
         };
         if (!element) {
             throw new Error(`Carousel: Element not found for selector "${elementOrSelector}"`);
@@ -53,11 +54,11 @@ class Carousel {
         this.root.appendChild(container);
         this.prevButton = document.createElement('button');
         this.prevButton.classList.add('carousel-button', 'carousel-button--left');
-        this.prevButton.innerHTML = '<span class="icon-navigate_before icon"></span>';
+        this.prevButton.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#chevron_left"/></svg>`;
         this.prevButton.setAttribute('aria-label', 'Previous Slide');
         this.nextButton = document.createElement('button');
         this.nextButton.classList.add('carousel-button', 'carousel-button--right');
-        this.nextButton.innerHTML = '<span class="icon-navigate_next icon"></span>';
+        this.nextButton.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#chevron_right"/></svg>`;
         this.nextButton.setAttribute('aria-label', 'Next Slide');
         this.root.appendChild(this.prevButton);
         this.root.appendChild(this.nextButton);

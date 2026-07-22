@@ -10,8 +10,16 @@ interface PushMenuElements {
     backdrop: HTMLElement | null;
 }
 
+/** Options for initializing the PushMenu static class. */
+interface PushMenuOptions {
+    /** Base path to the SVG icon sprite. Default: 'svg-icons/' */
+    iconBasePath?: string;
+}
+
 /** Static class that manages a push-style side navigation panel. */
 class PushMenu {
+    private static iconBasePath = 'svg-icons/';
+
     private static elements: PushMenuElements = {
         navigation: null,
         content: null,
@@ -26,11 +34,13 @@ class PushMenu {
     private static listeners = new ListenerGroup();
     private static clickNavListeners: ListenerGroup | null = null;
 
-    public static init(): void {
+    public static init(options: PushMenuOptions = {}): void {
         if (this.initialized) {
             console.warn('PushMenu: Already initialized');
             return;
         }
+
+        this.iconBasePath = options.iconBasePath ?? 'svg-icons/';
 
         this.refresh();
 
@@ -88,7 +98,7 @@ class PushMenu {
                 const backBtn = document.createElement('button');
                 backBtn.classList.add('push-menu-back');
                 backBtn.setAttribute('aria-label', 'Back');
-                backBtn.innerHTML = `<span class="icon icon-navigate_before" aria-hidden="true"></span>`;
+                backBtn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${PushMenu.iconBasePath}icons.svg#chevron_left"/></svg>`;
                 header.addEventListener('click', () => PushMenu.goBack());
 
                 const titleEl = document.createElement('span');
@@ -110,7 +120,7 @@ class PushMenu {
                 const chevron = document.createElement('span');
                 chevron.classList.add('push-menu-chevron');
                 chevron.setAttribute('aria-hidden', 'true');
-                chevron.innerHTML = `<span class="icon icon-navigate_next" aria-hidden="true"></span>`;
+                chevron.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${PushMenu.iconBasePath}icons.svg#chevron_right"/></svg>`;
                 trigger.appendChild(chevron);
 
                 if (parentAnchor) {
@@ -193,12 +203,16 @@ class PushMenu {
         this.elements.backdrop?.classList.toggle('pushed', !isPushed);
 
         if (this.elements.controlIcon) {
-            if (isPushed) {
-                this.elements.controlIcon.classList.remove('icon-menu_open');
-                this.elements.controlIcon.classList.add('icon-menu');
+            const iconName = isPushed ? 'menu' : 'menu_open';
+            const useEl = this.elements.controlIcon.querySelector('use');
+
+            if (useEl) {
+                const existingHref = useEl.getAttribute('href') ?? '';
+                const basePath = existingHref.includes('#') ? existingHref.split('#')[0] : PushMenu.iconBasePath + 'icons.svg';
+                useEl.setAttribute('href', `${basePath}#${iconName}`);
             } else {
-                this.elements.controlIcon.classList.add('icon-menu_open');
-                this.elements.controlIcon.classList.remove('icon-menu');
+                this.elements.controlIcon.classList.remove('icon-menu_open', 'icon-menu');
+                this.elements.controlIcon.classList.add(`icon-${iconName}`);
             }
         }
     }
@@ -262,4 +276,4 @@ class PushMenu {
     }
 }
 
-export { PushMenu, type PushMenuElements };
+export { PushMenu, type PushMenuElements, type PushMenuOptions };

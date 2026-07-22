@@ -4,12 +4,14 @@ interface ToastOptions {
     header?: string;
     type?: ToastType;
     closeable?: boolean;
+    iconBasePath?: string;
 }
 declare class Toast {
     private readonly content;
     private readonly header;
     private readonly type?;
     private readonly closeable;
+    private readonly iconBasePath;
     private readonly closureIcon;
     private readonly template;
     private toastElement;
