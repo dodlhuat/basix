@@ -25,7 +25,7 @@
     &:hover,
     &.drag-over {
       border-color: var(--accent-color);
-      background-color: color-mix(in srgb, var(--accent-color) 6%, var(--background));
+      background-color: color-mix(in srgb, var(--accent-color) $tint-subtle, var(--background));
     }
   }
 
@@ -41,7 +41,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: color-mix(in srgb, var(--accent-color) 12%, var(--background));
+    background-color: color-mix(in srgb, var(--accent-color) $tint-medium, var(--background));
     color: var(--accent-color);
     display: flex;
     align-items: center;
@@ -125,7 +125,7 @@
     color: var(--secondary-text);
     cursor: pointer;
     padding: 0.25rem;
-    border-radius: $radius-sm;
+    border-radius: $radius-xs;
     transition: color 0.15s ease, background-color 0.15s ease;
     display: flex;
     align-items: center;
@@ -133,7 +133,7 @@
 
     &:hover {
       color: var(--error);
-      background-color: color-mix(in srgb, var(--error) 10%, var(--background));
+      background-color: color-mix(in srgb, var(--error) $tint-medium, var(--background));
     }
   }
 
@@ -141,7 +141,7 @@
     width: 100%;
     height: 4px;
     background-color: var(--divider);
-    border-radius: $radius-sm;
+    border-radius: $radius-xs;
     overflow: hidden;
     display: none;
   }

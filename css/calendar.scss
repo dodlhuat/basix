@@ -324,10 +324,10 @@
   &--cont-after  { border-radius: var(--cal-radius-sm) 0 0 var(--cal-radius-sm); }
   &--cont-before#{&}--cont-after { border-radius: 0; }
 
-  &.badge-success { border-left-color: var(--success); background: color-mix(in srgb, var(--success) 14%, var(--cal-bg)); }
-  &.badge-warning { border-left-color: var(--warning); background: color-mix(in srgb, var(--warning) 14%, var(--cal-bg)); }
-  &.badge-error   { border-left-color: var(--error);   background: color-mix(in srgb, var(--error)   14%, var(--cal-bg)); }
-  &.badge-info    { border-left-color: var(--accent-color); background: color-mix(in srgb, var(--accent-color) 14%, var(--cal-bg)); }
+  &.badge-success { border-left-color: var(--success); background: color-mix(in srgb, var(--success) $tint-medium, var(--cal-bg)); }
+  &.badge-warning { border-left-color: var(--warning); background: color-mix(in srgb, var(--warning) $tint-medium, var(--cal-bg)); }
+  &.badge-error   { border-left-color: var(--error);   background: color-mix(in srgb, var(--error) $tint-medium, var(--cal-bg)); }
+  &.badge-info    { border-left-color: var(--accent-color); background: color-mix(in srgb, var(--accent-color) $tint-medium, var(--cal-bg)); }
 }
 
 .cal__week-row > .cal__span-bar {
@@ -545,7 +545,7 @@
   padding: 3px 6px;
   overflow: hidden;
   cursor: pointer;
-  background: color-mix(in srgb, var(--cal-accent) 10%, var(--cal-bg));
+  background: color-mix(in srgb, var(--cal-accent) $tint-medium, var(--cal-bg));
   color: var(--cal-text);
   border-left: 3px solid var(--cal-accent);
   z-index: 1;
@@ -569,19 +569,19 @@
 
   &.badge-success {
     border-left-color: var(--success);
-    background: color-mix(in srgb, var(--success) 10%, var(--cal-bg));
+    background: color-mix(in srgb, var(--success) $tint-medium, var(--cal-bg));
   }
   &.badge-warning {
     border-left-color: var(--warning);
-    background: color-mix(in srgb, var(--warning) 10%, var(--cal-bg));
+    background: color-mix(in srgb, var(--warning) $tint-medium, var(--cal-bg));
   }
   &.badge-error {
     border-left-color: var(--error);
-    background: color-mix(in srgb, var(--error) 10%, var(--cal-bg));
+    background: color-mix(in srgb, var(--error) $tint-medium, var(--cal-bg));
   }
   &.badge-info {
     border-left-color: var(--accent-color);
-    background: color-mix(in srgb, var(--accent-color) 10%, var(--cal-bg));
+    background: color-mix(in srgb, var(--accent-color) $tint-medium, var(--cal-bg));
   }
 }
 
@@ -625,7 +625,7 @@
   }
 
   &.is-today {
-    background: color-mix(in srgb, var(--cal-accent) 4%, var(--cal-bg));
+    background: color-mix(in srgb, var(--cal-accent) $tint-subtle, var(--cal-bg));
   }
 }
 

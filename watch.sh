@@ -1,4 +1,4 @@
 #!/bin/bash
-sass --watch css/style.scss:css/style.css --style=expanded --no-source-map &
-tsc --watch &
+npx sass --watch css/style.scss:css/style.css --style=expanded --no-source-map &
+npx tsc --watch &
 wait

@@ -41,12 +41,12 @@
       }
 
       &.selected {
-        background: color-mix(in srgb, var(--accent-color) 12%, var(--background));
+        background: color-mix(in srgb, var(--accent-color) $tint-medium, var(--background));
         color: var(--accent-color);
-        border-color: color-mix(in srgb, var(--accent-color) 25%, transparent);
+        border-color: color-mix(in srgb, var(--accent-color) $tint-strong, transparent);
 
         &:hover {
-          background: color-mix(in srgb, var(--accent-color) 18%, var(--background));
+          background: color-mix(in srgb, var(--accent-color) $tint-strong, var(--background));
         }
       }
     }
@@ -73,12 +73,12 @@
         transition: background 0.15s ease, color 0.15s ease;
 
         &:hover {
-          background: color-mix(in srgb, var(--primary-text) 12%, transparent);
+          background: color-mix(in srgb, var(--primary-text) $tint-medium, transparent);
           color: var(--primary-text);
         }
 
         &:active {
-          background: color-mix(in srgb, var(--primary-text) 18%, transparent);
+          background: color-mix(in srgb, var(--primary-text) $tint-strong, transparent);
         }
 
         .icon,
@@ -94,7 +94,7 @@
       @include tinted-tag(var(--accent-color));
 
       &.closeable button:hover {
-        background: color-mix(in srgb, var(--accent-color) 15%, transparent);
+        background: color-mix(in srgb, var(--accent-color) $tint-strong, transparent);
         color: var(--accent-color);
       }
     }
@@ -103,7 +103,7 @@
       @include tinted-tag(var(--success));
 
       &.closeable button:hover {
-        background: color-mix(in srgb, var(--success) 15%, transparent);
+        background: color-mix(in srgb, var(--success) $tint-strong, transparent);
         color: var(--success);
       }
     }
@@ -112,7 +112,7 @@
       @include tinted-tag(var(--warning));
 
       &.closeable button:hover {
-        background: color-mix(in srgb, var(--warning) 15%, transparent);
+        background: color-mix(in srgb, var(--warning) $tint-strong, transparent);
         color: var(--warning);
       }
     }
@@ -121,7 +121,7 @@
       @include tinted-tag(var(--error));
 
       &.closeable button:hover {
-        background: color-mix(in srgb, var(--error) 15%, transparent);
+        background: color-mix(in srgb, var(--error) $tint-strong, transparent);
         color: var(--error);
       }
     }

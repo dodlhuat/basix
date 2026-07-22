@@ -56,7 +56,7 @@
 
 // Tinted "tag" look shared by badges and chips: a translucent tint of $color
 // over the background, plus a matching tinted border.
-@mixin tinted-tag($color, $bg-tint: 12%, $border-tint: 20%) {
+@mixin tinted-tag($color, $bg-tint: $tint-medium, $border-tint: $tint-strong) {
   background: color-mix(in srgb, #{$color} #{$bg-tint}, var(--background));
   color: $color;
   border-color: color-mix(in srgb, #{$color} #{$border-tint}, transparent);

@@ -130,7 +130,7 @@
   min-height: 0.75rem;
   padding: 2px 6px;
   border-radius: $radius-lg;
-  background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+  background: color-mix(in srgb, var(--accent-color) $tint-medium, transparent);
   transition: color 0.2s ease, background 0.2s ease, transform 0.25s cubic-bezier(0.2, 0, 0, 1);
 
   &:empty {
@@ -140,7 +140,7 @@
 
   .timespan-picker.is-error & {
     color: var(--error);
-    background: color-mix(in srgb, var(--error) 10%, transparent);
+    background: color-mix(in srgb, var(--error) $tint-medium, transparent);
   }
 }
 

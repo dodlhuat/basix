@@ -117,7 +117,7 @@ $connector-thickness: 2px;
   &.active {
     .stepper-indicator {
       border-color: var(--accent-color);
-      background: color-mix(in srgb, var(--accent-color) 10%, var(--background));
+      background: color-mix(in srgb, var(--accent-color) $tint-medium, var(--background));
       color: var(--accent-color);
       animation: stepper-pulse 2.4s ease-out 3;
     }
@@ -152,7 +152,7 @@ $connector-thickness: 2px;
   &.error {
     .stepper-indicator {
       border-color: var(--error);
-      background: color-mix(in srgb, var(--error) 10%, var(--background));
+      background: color-mix(in srgb, var(--error) $tint-medium, var(--background));
       color: var(--error);
       animation: none;
     }

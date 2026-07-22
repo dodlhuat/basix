@@ -17,7 +17,7 @@ $alert-border-width: 4px;
   }
 
   .alert-close:hover {
-    background: color-mix(in srgb, $accent 12%, transparent);
+    background: color-mix(in srgb, $accent $tint-medium, transparent);
   }
 }
 
@@ -48,28 +48,28 @@ $alert-border-width: 4px;
   &-info {
     @include alert-variant(
       var(--accent-color),
-      color-mix(in srgb, var(--accent-color) 8%, var(--background))
+      color-mix(in srgb, var(--accent-color) $tint-subtle, var(--background))
     );
   }
 
   &-success {
     @include alert-variant(
       var(--success),
-      color-mix(in srgb, var(--success) 8%, var(--background))
+      color-mix(in srgb, var(--success) $tint-subtle, var(--background))
     );
   }
 
   &-warning {
     @include alert-variant(
       var(--warning),
-      color-mix(in srgb, var(--warning) 8%, var(--background))
+      color-mix(in srgb, var(--warning) $tint-subtle, var(--background))
     );
   }
 
   &-error {
     @include alert-variant(
       var(--error),
-      color-mix(in srgb, var(--error) 8%, var(--background))
+      color-mix(in srgb, var(--error) $tint-subtle, var(--background))
     );
   }
 
@@ -110,28 +110,28 @@ $alert-border-width: 4px;
     &-info {
       @include alert-variant(
         var(--accent-color),
-        color-mix(in srgb, var(--accent-color) 10%, var(--background))
+        color-mix(in srgb, var(--accent-color) $tint-medium, var(--background))
       );
     }
 
     &-success {
       @include alert-variant(
         var(--success),
-        color-mix(in srgb, var(--success) 10%, var(--background))
+        color-mix(in srgb, var(--success) $tint-medium, var(--background))
       );
     }
 
     &-warning {
       @include alert-variant(
         var(--warning),
-        color-mix(in srgb, var(--warning) 10%, var(--background))
+        color-mix(in srgb, var(--warning) $tint-medium, var(--background))
       );
     }
 
     &-error {
       @include alert-variant(
         var(--error),
-        color-mix(in srgb, var(--error) 10%, var(--background))
+        color-mix(in srgb, var(--error) $tint-medium, var(--background))
       );
     }
   }

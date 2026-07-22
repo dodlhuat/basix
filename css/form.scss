@@ -35,7 +35,7 @@
 textarea, select, .select .dropdown, input {
   width: 100%;
   border: 1.5px solid var(--divider);
-  border-radius: calc($border-radius * 1.5);
+  border-radius: $radius-md;
   padding: 0 calc($spacing * 0.65);
   box-sizing: border-box;
   background-color: var(--background);
@@ -94,7 +94,7 @@ select {
   .dropdown-selected {
     border: 1.5px solid var(--divider);
     padding: 0 calc($spacing * 0.65);
-    border-radius: calc($border-radius * 1.5);
+    border-radius: $radius-md;
     cursor: pointer;
     background: var(--background);
     height: calc($form-height * 1.3);
@@ -146,7 +146,7 @@ select {
     z-index: 10;
     max-height: 260px;
     overflow-y: auto;
-    @include float-panel(calc($border-radius * 1.5));
+    @include float-panel($radius-md);
     padding: 0.25rem;
     gap: 1px;
     transform-origin: top center;
@@ -155,7 +155,7 @@ select {
   .dropdown-option {
     padding: 0.6rem calc($spacing * 0.65);
     cursor: pointer;
-    border-radius: calc($border-radius * 1.1);
+    border-radius: $border-radius;
     transition: background 0.1s ease;
     font-size: 0.9375rem;
     position: relative;
@@ -166,7 +166,7 @@ select {
   }
 
   .dropdown-option.selected {
-    background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+    background: color-mix(in srgb, var(--accent-color) $tint-medium, transparent);
     color: var(--accent-color);
     font-weight: 500;
 
@@ -294,7 +294,7 @@ select {
   &.error {
     input, textarea, select {
       border-color: var(--error);
-      background-color: color-mix(in srgb, var(--error) 3%, var(--background));
+      background-color: color-mix(in srgb, var(--error) $tint-subtle, var(--background));
       @include field-shadow-rest();
       animation: field-error-shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 
@@ -364,7 +364,7 @@ select {
 
     &:first-child {
       border-right: none;
-      border-radius: calc($border-radius * 1.5) 0 0 calc($border-radius * 1.5);
+      border-radius: $radius-md 0 0 $radius-md;
 
       & + input {
         border-top-left-radius: 0;
@@ -374,7 +374,7 @@ select {
 
     &:last-child {
       border-left: none;
-      border-radius: 0 calc($border-radius * 1.5) calc($border-radius * 1.5) 0;
+      border-radius: 0 $radius-md $radius-md 0;
     }
   }
 
@@ -397,12 +397,12 @@ input.input-sm, textarea.input-sm {
   min-height: calc($form-height * 0.85);
   font-size: 0.875rem;
   padding: 0 calc($spacing * 0.5);
-  border-radius: calc($border-radius * 1.1);
+  border-radius: $border-radius;
 }
 
 input.input-lg, textarea.input-lg {
   min-height: calc($form-height * 1.65);
   font-size: 1.125rem;
   padding: 0 calc($spacing * 0.75);
-  border-radius: calc($border-radius * 1.75);
+  border-radius: $radius-lg;
 }

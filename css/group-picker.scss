@@ -16,7 +16,7 @@
     padding: calc($spacing * 0.35) calc($spacing * 0.6);
     background: var(--background);
     border: 1px solid var(--divider);
-    border-radius: $radius-sm;
+    border-radius: $radius-xs;
     margin-bottom: calc($spacing * 0.75);
     box-shadow: $shadow;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -86,7 +86,7 @@
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     border: 1px solid var(--divider);
-    border-radius: $radius-sm;
+    border-radius: $radius-xs;
     background: var(--background);
     box-shadow: $shadow;
   }
@@ -116,7 +116,7 @@
     }
 
     &.is-expanded > .group-picker__group-header {
-      background: color-mix(in srgb, var(--accent-color) 4%, transparent);
+      background: color-mix(in srgb, var(--accent-color) $tint-subtle, transparent);
 
       .group-picker__group-label {
         color: var(--accent-color);
@@ -167,7 +167,7 @@
     transition: color 0.15s ease;
 
     mark {
-      background: color-mix(in srgb, var(--warning) 22%, transparent);
+      background: color-mix(in srgb, var(--warning) $tint-strong, transparent);
       color: inherit;
       border-radius: 2px;
       padding: 0 2px;
@@ -181,7 +181,7 @@
     letter-spacing: 0.025em;
     text-transform: uppercase;
     padding: calc($spacing * 0.15) calc($spacing * 0.6);
-    border-radius: calc($border-radius * 3);
+    border-radius: $radius-xl;
     border: 1px solid var(--divider);
     background: transparent;
     color: var(--secondary-text);
@@ -192,7 +192,7 @@
     &:hover:not(.button-primary):not(:disabled) {
       border-color: var(--accent-color);
       color: var(--accent-color);
-      background: color-mix(in srgb, var(--accent-color) 6%, transparent);
+      background: color-mix(in srgb, var(--accent-color) $tint-subtle, transparent);
       transform: none;
     }
 
@@ -201,7 +201,7 @@
     }
 
     &.button-primary {
-      border-radius: calc($border-radius * 3);
+      border-radius: $radius-xl;
       font-size: 0.6875rem;
       font-weight: 500;
       letter-spacing: 0.025em;
@@ -216,7 +216,7 @@
     cursor: pointer;
 
     &.is-selected > .group-picker__group-header {
-      background: color-mix(in srgb, var(--accent-color) 6%, transparent);
+      background: color-mix(in srgb, var(--accent-color) $tint-subtle, transparent);
 
       .group-picker__group-label {
         color: var(--accent-color);
@@ -266,7 +266,7 @@
     transition: background 0.15s ease, color 0.15s ease, outline-color 0.15s ease;
 
     &.is-selected {
-      background: color-mix(in srgb, var(--accent-color) 12%, var(--background));
+      background: color-mix(in srgb, var(--accent-color) $tint-medium, var(--background));
       color: var(--accent-color);
       outline: 1px solid color-mix(in srgb, var(--accent-color) 35%, transparent);
       font-weight: 500;
@@ -279,7 +279,7 @@
     }
 
     mark {
-      background: color-mix(in srgb, var(--warning) 22%, transparent);
+      background: color-mix(in srgb, var(--warning) $tint-strong, transparent);
       color: inherit;
       border-radius: 2px;
       padding: 0 2px;

@@ -115,7 +115,7 @@
 
   .tab-item {
     border-bottom: none;
-    border-radius: calc($border-radius * 5);
+    border-radius: $radius-xl;
     padding: calc($spacing * 0.4) calc($spacing * 1);
     background: transparent;
 
@@ -131,7 +131,7 @@
     }
 
     &:focus-visible {
-      border-radius: calc($border-radius * 5);
+      border-radius: $radius-xl;
     }
   }
 }

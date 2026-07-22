@@ -100,7 +100,7 @@ nav.push-menu {
   flex-shrink: 0;
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: calc($border-radius * 0.75);
+  border-radius: $radius-sm;
   border: none;
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.65);

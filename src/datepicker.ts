@@ -529,8 +529,22 @@ class DatePicker {
                 const outerValue = slot * 2;
                 const innerValue = slot * 2 + 1;
 
-                face.appendChild(this.createClockNumber(outerValue, this.clockPosition(slot, 12, DatePicker.CLOCK_OUTER_RADIUS_PERCENT), outerValue === this.selectedHours, false));
-                face.appendChild(this.createClockNumber(innerValue, this.clockPosition(slot, 12, DatePicker.CLOCK_INNER_RADIUS_PERCENT), innerValue === this.selectedHours, true));
+                face.appendChild(
+                    this.createClockNumber(
+                        outerValue,
+                        this.clockPosition(slot, 12, DatePicker.CLOCK_OUTER_RADIUS_PERCENT),
+                        outerValue === this.selectedHours,
+                        false,
+                    ),
+                );
+                face.appendChild(
+                    this.createClockNumber(
+                        innerValue,
+                        this.clockPosition(slot, 12, DatePicker.CLOCK_INNER_RADIUS_PERCENT),
+                        innerValue === this.selectedHours,
+                        true,
+                    ),
+                );
             }
         } else {
             for (let slot = 0; slot < 12; slot++) {

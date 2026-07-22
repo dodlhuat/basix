@@ -103,7 +103,7 @@
 
     &:hover,
     &.is-focused {
-      background: color-mix(in srgb, var(--error) 8%, var(--background));
+      background: color-mix(in srgb, var(--error) $tint-subtle, var(--background));
       color: var(--error);
 
       .context-menu-icon {

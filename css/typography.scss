@@ -32,8 +32,8 @@ p {
 code {
   font-family: ui-monospace, "Cascadia Code", "SF Mono", Menlo, monospace;
   font-size: 0.875em;
-  background: color-mix(in srgb, var(--accent-color) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent-color) 20%, transparent);
+  background: color-mix(in srgb, var(--accent-color) $tint-medium, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-color) $tint-strong, transparent);
   color: var(--accent-color);
   padding: 0.2em 0.45em;
   border-radius: $border-radius;
@@ -135,7 +135,7 @@ blockquote {
 }
 
 mark {
-  background-color: color-mix(in srgb, var(--accent-color) 18%, transparent);
+  background-color: color-mix(in srgb, var(--accent-color) $tint-strong, transparent);
   color: var(--primary-text);
   border-radius: calc($border-radius / 4);
   padding: 0 0.2em;
