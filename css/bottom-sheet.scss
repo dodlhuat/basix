@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .bottom-sheet-wrapper {
   position: fixed;
@@ -142,12 +143,7 @@
 
   .close {
     cursor: pointer;
-    color: var(--secondary-text);
-    transition: color 0.15s ease;
-
-    &:hover {
-      color: var(--primary-text);
-    }
+    @include muted-icon-color;
   }
 }
 

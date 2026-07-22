@@ -1,10 +1,6 @@
 @use "properties";
 @use "parameters" as *;
-
-@mixin badge-variant($color, $bg) {
-  background: $bg;
-  color: $color;
-}
+@use "mixins" as *;
 
 .badge {
   display: inline-flex;
@@ -24,35 +20,19 @@
   color: var(--secondary-text);
 
   &-info {
-    @include badge-variant(
-      var(--accent-color),
-      color-mix(in srgb, var(--accent-color) 12%, var(--background))
-    );
-    border-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
+    @include tinted-tag(var(--accent-color));
   }
 
   &-success {
-    @include badge-variant(
-      var(--success),
-      color-mix(in srgb, var(--success) 12%, var(--background))
-    );
-    border-color: color-mix(in srgb, var(--success) 20%, transparent);
+    @include tinted-tag(var(--success));
   }
 
   &-warning {
-    @include badge-variant(
-      var(--warning),
-      color-mix(in srgb, var(--warning) 12%, var(--background))
-    );
-    border-color: color-mix(in srgb, var(--warning) 20%, transparent);
+    @include tinted-tag(var(--warning));
   }
 
   &-error {
-    @include badge-variant(
-      var(--error),
-      color-mix(in srgb, var(--error) 12%, var(--background))
-    );
-    border-color: color-mix(in srgb, var(--error) 20%, transparent);
+    @include tinted-tag(var(--error));
   }
 
   &-solid {

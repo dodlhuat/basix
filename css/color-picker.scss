@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 $thumb-size:        18px;
 $thumb-size-touch:  22px;
@@ -9,15 +10,12 @@ $preview-size:      40px;
 
 .color-picker {
   width: 100%;
-  background: var(--background);
-  border: 1px solid var(--divider);
-  border-radius: $radius-lg;
+  @include float-panel($radius-lg);
   padding: $spacing;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: calc($spacing * 0.75);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 // ─── Saturation / brightness field ────────────────────────────────────────────
@@ -232,7 +230,7 @@ $preview-size:      40px;
 
   &:focus {
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 2px var(--accent-color-tint);
+    @include focus-glow($tint: 12%, $size: 2px);
   }
 }
 

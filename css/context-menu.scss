@@ -1,18 +1,13 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .context-menu {
   position: fixed;
   z-index: 9999;
   min-width: 200px;
   padding: calc($spacing * 0.375) 0;
-  background: var(--background);
-  border: 1px solid var(--divider);
-  border-radius: $radius-panel;
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.08),
-    0 1px 2px rgba(0, 0, 0, 0.04);
+  @include float-panel;
   list-style: none;
   margin: 0;
   opacity: 0;

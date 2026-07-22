@@ -88,12 +88,7 @@
     margin-top: 6px;
     position-try-fallbacks: --vd-above;
 
-    background: var(--background);
-    border: 1.5px solid var(--divider);
-    border-radius: calc($border-radius * 1.5);
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.11),
-      0 2px 8px rgba(0, 0, 0, 0.06);
+    @include float-panel(calc($border-radius * 1.5));
     transform-origin: top center;
 
     opacity: 0;

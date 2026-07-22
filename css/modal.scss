@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .modal-wrapper {
   position: fixed;
@@ -58,12 +59,7 @@
     right: $spacing;
     cursor: pointer;
     z-index: 1;
-    color: var(--secondary-text);
-    transition: color 0.15s ease;
-
-    &:hover {
-      color: var(--primary-text);
-    }
+    @include muted-icon-color;
   }
 
   .header {

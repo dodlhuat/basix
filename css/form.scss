@@ -141,17 +141,12 @@ select {
     top: calc(100% + 6px);
     left: 0;
     right: 0;
-    border: 1.5px solid var(--divider);
-    border-radius: calc($border-radius * 1.5);
     display: none;
     flex-direction: column;
     z-index: 10;
     max-height: 260px;
     overflow-y: auto;
-    background-color: var(--background);
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.11),
-      0 2px 8px rgba(0, 0, 0, 0.06);
+    @include float-panel(calc($border-radius * 1.5));
     padding: 0.25rem;
     gap: 1px;
     transform-origin: top center;

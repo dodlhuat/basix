@@ -1,3 +1,5 @@
+@use "parameters" as *;
+
 @mixin focus-ring($offset: 2px) {
   outline: 2px solid var(--accent-color);
   outline-offset: $offset;
@@ -29,5 +31,42 @@
     box-shadow:
       inset 0 1px 3px rgba(0, 0, 0, 0.03),
       0 0 0 3.5px color-mix(in srgb, #{$color} 13%, transparent);
+  }
+}
+
+// Shared shell for floating panels (dropdowns, menus, popovers): background,
+// border and elevation. Radius stays per-caller since components intentionally
+// vary there.
+@mixin float-panel($radius: $radius-panel) {
+  background: var(--background);
+  border: 1px solid var(--divider);
+  border-radius: $radius;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.11),
+    0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+@mixin hide-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// Tinted "tag" look shared by badges and chips: a translucent tint of $color
+// over the background, plus a matching tinted border.
+@mixin tinted-tag($color, $bg-tint: 12%, $border-tint: 20%) {
+  background: color-mix(in srgb, #{$color} #{$bg-tint}, var(--background));
+  color: $color;
+  border-color: color-mix(in srgb, #{$color} #{$border-tint}, transparent);
+}
+
+@mixin muted-icon-color {
+  color: var(--secondary-text);
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--primary-text);
   }
 }

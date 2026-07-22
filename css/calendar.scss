@@ -2,10 +2,10 @@
 @use "mixins" as *;
 
 .cal {
-  --cal-spacing-xs: 4px;
-  --cal-spacing-sm: 8px;
-  --cal-spacing-md: 12px;
-  --cal-spacing-lg: 16px;
+  --cal-spacing-xs: #{calc($spacing * 0.25)};
+  --cal-spacing-sm: #{calc($spacing * 0.5)};
+  --cal-spacing-md: #{calc($spacing * 0.75)};
+  --cal-spacing-lg: #{$spacing};
 
   --cal-bg:          var(--background);
   --cal-bg-alt:      var(--secondary-background);
@@ -887,7 +887,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .cal__body {
-    animation: cal-slide-in 0.25s cubic-bezier(0.2, 0, 0, 1);
+    animation: bx-fade-slide-up 0.25s cubic-bezier(0.2, 0, 0, 1);
   }
 
   .cal__day,
@@ -905,17 +905,6 @@
     .cal__agenda-day:nth-child(#{$i}) {
       animation-delay: #{0.03s * $i};
     }
-  }
-}
-
-@keyframes cal-slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 

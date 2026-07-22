@@ -68,11 +68,6 @@ table {
   --primary-dark: #1A1B1F;
   --primary-light: #F0F1F3;
   --hover: rgba(0, 0, 0, 0.04);
-  --radius-sm: 0.25rem;
-  --radius-md: 0.4rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-full: 9999px;
 }
 
 [data-theme=dark] {
@@ -222,6 +217,24 @@ code.code .code-content {
   display: flex;
 }
 
+@keyframes bx-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes bx-fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .row {
   display: flex;
   flex-direction: row;
@@ -1029,14 +1042,14 @@ select {
   top: calc(100% + 6px);
   left: 0;
   right: 0;
-  border: 1.5px solid var(--divider);
-  border-radius: 0.6rem;
   display: none;
   flex-direction: column;
   z-index: 10;
   max-height: 260px;
   overflow-y: auto;
-  background-color: var(--background);
+  background: var(--background);
+  border: 1px solid var(--divider);
+  border-radius: 0.6rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.11), 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 0.25rem;
   gap: 1px;
@@ -2359,7 +2372,7 @@ button.button-pill {
   background: var(--background);
   border: 1px solid var(--divider);
   border-radius: 1rem;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 12px 24px -4px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.11), 0 2px 8px rgba(0, 0, 0, 0.06);
   min-width: 160px;
   max-width: 320px;
   opacity: 0;
@@ -4075,7 +4088,7 @@ ul.tree li {
 
 .datepicker-day-header {
   font-size: 0.875rem;
-  color: var(--text-muted);
+  color: var(--secondary-text);
   font-weight: 500;
   padding: 0.5rem 0;
 }
@@ -4213,7 +4226,7 @@ ul.tree li {
 
 .datepicker-clock-display-segment {
   cursor: pointer;
-  color: var(--text-muted);
+  color: var(--secondary-text);
   border-radius: 0.2rem;
   padding: 0 0.125rem;
   transition: color 0.2s, background-color 0.2s;
@@ -4226,7 +4239,7 @@ ul.tree li {
 }
 
 .datepicker-clock-display-separator {
-  color: var(--text-muted);
+  color: var(--secondary-text);
 }
 
 .datepicker-clock-face {
@@ -4282,7 +4295,7 @@ ul.tree li {
   width: 26px;
   height: 26px;
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: var(--secondary-text);
 }
 .datepicker-clock-number.selected {
   background-color: var(--accent-color);
@@ -5368,16 +5381,6 @@ body {
   color: #d4d4d4;
 }
 
-@keyframes fileSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 .file-uploader .header h2 {
   font-size: 1.25rem;
   font-weight: 600;
@@ -5442,7 +5445,7 @@ body {
   background-color: var(--secondary-background);
   border: 1px solid var(--divider);
   border-radius: 0.4rem;
-  animation: fileSlideIn 0.2s ease-out;
+  animation: bx-fade-slide-up 0.2s ease-out;
   gap: 0.75rem;
 }
 .file-uploader .file-item-header {
@@ -5713,7 +5716,7 @@ body {
   background: var(--background);
   border: 1px solid var(--divider);
   border-radius: 0.4rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.11), 0 2px 8px rgba(0, 0, 0, 0.06);
   min-width: 220px;
   padding: 0.5rem 0;
   list-style: none;
@@ -5746,10 +5749,10 @@ body {
   top: 0;
   left: 100%;
   margin-left: 4px;
-  background-color: var(--background);
+  background: var(--background);
   border: 1px solid var(--divider);
   border-radius: 0.4rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.11), 0 2px 8px rgba(0, 0, 0, 0.06);
   min-width: 220px;
   padding: 0.5rem 0;
   list-style: none;
@@ -5897,7 +5900,7 @@ body {
   margin-top: 6px;
   position-try-fallbacks: --vd-above;
   background: var(--background);
-  border: 1.5px solid var(--divider);
+  border: 1px solid var(--divider);
   border-radius: 0.6rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.11), 0 2px 8px rgba(0, 0, 0, 0.06);
   transform-origin: top center;
@@ -7155,7 +7158,7 @@ body {
   background: var(--background);
   border: 1px solid var(--divider);
   border-radius: 1rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.11), 0 2px 8px rgba(0, 0, 0, 0.06);
   list-style: none;
   margin: 0;
   opacity: 0;
@@ -7287,10 +7290,10 @@ body {
 }
 
 .cal {
-  --cal-spacing-xs: 4px;
-  --cal-spacing-sm: 8px;
-  --cal-spacing-md: 12px;
-  --cal-spacing-lg: 16px;
+  --cal-spacing-xs: 0.25rem;
+  --cal-spacing-sm: 0.5rem;
+  --cal-spacing-md: 0.75rem;
+  --cal-spacing-lg: 1rem;
   --cal-bg: var(--background);
   --cal-bg-alt: var(--secondary-background);
   --cal-bg-hover: var(--hover);
@@ -8126,7 +8129,7 @@ body {
 }
 @media (prefers-reduced-motion: no-preference) {
   .cal__body {
-    animation: cal-slide-in 0.25s cubic-bezier(0.2, 0, 0, 1);
+    animation: bx-fade-slide-up 0.25s cubic-bezier(0.2, 0, 0, 1);
   }
   .cal__day,
   .cal__agenda-day {
@@ -8182,16 +8185,6 @@ body {
   }
   .cal__agenda-day:nth-child(10) {
     animation-delay: 0.3s;
-  }
-}
-@keyframes cal-slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 @keyframes cal-cell-in {
@@ -8539,7 +8532,7 @@ body {
   animation: chart-draw 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 .chart .chart-area {
-  animation: chart-fade-in 0.8s ease forwards;
+  animation: bx-fade-in 0.8s ease forwards;
 }
 .chart .chart-point-dot {
   transition: r 0.15s ease;
@@ -8667,14 +8660,6 @@ body {
     stroke-dashoffset: 0;
   }
 }
-@keyframes chart-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 @keyframes chart-grow-y {
   from {
     transform: scaleY(0);
@@ -8706,12 +8691,12 @@ body {
   background: var(--background);
   border: 1px solid var(--divider);
   border-radius: 0.8rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.11), 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 1rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .color-picker__field {
@@ -8896,7 +8881,7 @@ body {
 .color-picker__g:focus,
 .color-picker__b:focus {
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px var(--accent-color-tint);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-color) 12%, transparent);
 }
 
 @media (max-width: 480px) {

@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .dropdown-container {
   position: relative;
@@ -33,10 +34,7 @@
     top: 100%;
     left: 0;
     margin-top: 6px;
-    background: var(--background);
-    border: 1px solid var(--divider);
-    border-radius: $border-radius;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
+    @include float-panel($border-radius);
     min-width: 220px;
     padding: calc($spacing / 2) 0;
     list-style: none;
@@ -75,10 +73,7 @@
       top: 0;
       left: 100%;
       margin-left: 4px;
-      background-color: var(--background);
-      border: 1px solid var(--divider);
-      border-radius: $border-radius;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
+      @include float-panel($border-radius);
       min-width: 220px;
       padding: calc($spacing / 2) 0;
       list-style: none;

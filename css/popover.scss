@@ -1,18 +1,13 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 $arrow: 6px;
 
 .popover {
   position: fixed;
   z-index: 900;
-  background: var(--background);
-  border: 1px solid var(--divider);
-  border-radius: $radius-panel;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.03),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05),
-    0 12px 24px -4px rgba(0, 0, 0, 0.12);
+  @include float-panel;
   min-width: 160px;
   max-width: 320px;
   opacity: 0;

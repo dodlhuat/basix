@@ -62,7 +62,7 @@
 
 .datepicker-day-header {
   font-size: 0.875rem;
-  color: var(--text-muted);
+  color: var(--secondary-text);
   font-weight: 500;
   padding: calc($spacing / 2) 0;
 }
@@ -200,7 +200,7 @@
 
 .datepicker-clock-display-segment {
   cursor: pointer;
-  color: var(--text-muted);
+  color: var(--secondary-text);
   border-radius: calc($border-radius / 2);
   padding: 0 calc($spacing / 8);
   transition: color 0.2s, background-color 0.2s;
@@ -215,7 +215,7 @@
 }
 
 .datepicker-clock-display-separator {
-  color: var(--text-muted);
+  color: var(--secondary-text);
 }
 
 .datepicker-clock-face {
@@ -271,7 +271,7 @@
     width: 26px;
     height: 26px;
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: var(--secondary-text);
   }
 
   &.selected {
