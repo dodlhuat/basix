@@ -10,6 +10,8 @@ class MasonryGallery {
     isFetching = false;
     listeners = new ListenerGroup();
     reloaded = 0;
+    showingSkeleton = false;
+    static SKELETON_HEIGHTS = [180, 260, 220, 300, 240, 190];
     constructor(containerId, options) {
         const container = document.getElementById(containerId);
         if (!container) {
@@ -28,8 +30,31 @@ class MasonryGallery {
     }
     init() {
         this.setupLayout();
+        this.renderSkeleton();
         this.loadMoreImages();
         this.addEventListeners();
+    }
+    renderSkeleton() {
+        this.showingSkeleton = true;
+        this.columns.forEach((col, colIndex) => {
+            for (let i = 0; i < 2; i++) {
+                const height = MasonryGallery.SKELETON_HEIGHTS[(colIndex + i) % MasonryGallery.SKELETON_HEIGHTS.length];
+                col.appendChild(this.createSkeletonCard(height));
+            }
+        });
+    }
+    createSkeletonCard(height) {
+        const div = document.createElement('div');
+        div.className = 'masonry-item masonry-item--skeleton';
+        div.setAttribute('aria-hidden', 'true');
+        div.innerHTML = `
+            <div class="masonry-item-skeleton-img" style="height:${height}px"></div>
+            <div class="masonry-item-info">
+                <div class="placeholder w-8" style="display: block;"></div>
+                <div class="placeholder w-5" style="display: block; margin-top: 6px;"></div>
+            </div>
+        `;
+        return div;
     }
     setupLayout() {
         const containerWidth = this.container.getBoundingClientRect().width;
@@ -97,6 +122,7 @@ class MasonryGallery {
         }
         catch (error) {
             console.error('MasonryGallery: error loading images', error);
+            this.clearSkeleton();
         }
         finally {
             this.isFetching = false;
@@ -114,7 +140,16 @@ class MasonryGallery {
             this.loader.classList.toggle('hidden', !show);
         }
     }
+    clearSkeleton() {
+        if (!this.showingSkeleton)
+            return;
+        this.showingSkeleton = false;
+        this.columns.forEach((col) => {
+            col.innerHTML = '';
+        });
+    }
     renderImages(imageDataList) {
+        this.clearSkeleton();
         const startIndex = this.allImages.length;
         this.allImages.push(...imageDataList);
         const sorted = [...this.columns].sort((a, b) => a.offsetHeight - b.offsetHeight);

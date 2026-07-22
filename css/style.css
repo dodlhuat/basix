@@ -235,6 +235,14 @@ code.code .code-content {
     transform: translateY(0);
   }
 }
+@keyframes placeholder-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
 .row {
   display: flex;
   flex-direction: row;
@@ -2293,14 +2301,6 @@ button.button-pill {
   width: 100%;
 }
 
-@keyframes placeholder-shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
 .progress {
   width: 100%;
   height: 8px;
@@ -5254,6 +5254,11 @@ body {
   position: relative;
   cursor: pointer;
 }
+.masonry-item:has(img:not(.loaded)) {
+  background: linear-gradient(90deg, var(--divider) 25%, var(--secondary-background) 50%, var(--divider) 75%);
+  background-size: 200% 100%;
+  animation: placeholder-shimmer 1.5s ease-in-out infinite;
+}
 .masonry-item:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -5268,6 +5273,18 @@ body {
 .masonry-item:focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
+}
+
+.masonry-item--skeleton {
+  cursor: default;
+  pointer-events: none;
+}
+.masonry-item--skeleton .masonry-item-skeleton-img {
+  display: block;
+  width: 100%;
+  background: linear-gradient(90deg, var(--divider) 25%, var(--secondary-background) 50%, var(--divider) 75%);
+  background-size: 200% 100%;
+  animation: placeholder-shimmer 1.5s ease-in-out infinite;
 }
 
 .masonry-item img {

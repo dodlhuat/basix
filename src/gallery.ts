@@ -29,6 +29,9 @@ class MasonryGallery {
     private isFetching: boolean = false;
     private listeners = new ListenerGroup();
     private reloaded = 0;
+    private showingSkeleton = false;
+
+    private static readonly SKELETON_HEIGHTS = [180, 260, 220, 300, 240, 190];
 
     public constructor(containerId: string, options: MasonryGalleryOptions) {
         const container = document.getElementById(containerId);
@@ -51,8 +54,34 @@ class MasonryGallery {
 
     private init(): void {
         this.setupLayout();
+        this.renderSkeleton();
         this.loadMoreImages();
         this.addEventListeners();
+    }
+
+    private renderSkeleton(): void {
+        this.showingSkeleton = true;
+
+        this.columns.forEach((col, colIndex) => {
+            for (let i = 0; i < 2; i++) {
+                const height = MasonryGallery.SKELETON_HEIGHTS[(colIndex + i) % MasonryGallery.SKELETON_HEIGHTS.length];
+                col.appendChild(this.createSkeletonCard(height));
+            }
+        });
+    }
+
+    private createSkeletonCard(height: number): HTMLDivElement {
+        const div = document.createElement('div');
+        div.className = 'masonry-item masonry-item--skeleton';
+        div.setAttribute('aria-hidden', 'true');
+        div.innerHTML = `
+            <div class="masonry-item-skeleton-img" style="height:${height}px"></div>
+            <div class="masonry-item-info">
+                <div class="placeholder w-8" style="display: block;"></div>
+                <div class="placeholder w-5" style="display: block; margin-top: 6px;"></div>
+            </div>
+        `;
+        return div;
     }
 
     private setupLayout(): void {
@@ -133,6 +162,7 @@ class MasonryGallery {
             this.renderImages(newImages);
         } catch (error) {
             console.error('MasonryGallery: error loading images', error);
+            this.clearSkeleton();
         } finally {
             this.isFetching = false;
             this.toggleLoader(false);
@@ -151,7 +181,18 @@ class MasonryGallery {
         }
     }
 
+    private clearSkeleton(): void {
+        if (!this.showingSkeleton) return;
+
+        this.showingSkeleton = false;
+        this.columns.forEach((col) => {
+            col.innerHTML = '';
+        });
+    }
+
     private renderImages(imageDataList: ImageData[]): void {
+        this.clearSkeleton();
+
         const startIndex = this.allImages.length;
         this.allImages.push(...imageDataList);
 

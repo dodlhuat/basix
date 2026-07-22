@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .placeholder {
   display: inline-block;
@@ -7,27 +8,11 @@
   min-height: calc($spacing * 0.65);
   margin-right: calc($spacing / 2);
   border-radius: $border-radius;
-  background: linear-gradient(
-    90deg,
-    var(--divider) 25%,
-    var(--secondary-background) 50%,
-    var(--divider) 75%
-  );
-  background-size: 200% 100%;
-  animation: placeholder-shimmer 1.5s ease-in-out infinite;
+  @include shimmer-bg;
 
   @for $i from 1 through 12 {
     &.w-#{$i} {
       width: calc(100% / (12 / $i));
     }
-  }
-}
-
-@keyframes placeholder-shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
   }
 }

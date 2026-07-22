@@ -62,6 +62,19 @@
   border-color: color-mix(in srgb, #{$color} #{$border-tint}, transparent);
 }
 
+// Loading shimmer, shared by the .placeholder utility and any component's
+// own skeleton state. Relies on the global `placeholder-shimmer` keyframe.
+@mixin shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    var(--divider) 25%,
+    var(--secondary-background) 50%,
+    var(--divider) 75%
+  );
+  background-size: 200% 100%;
+  animation: placeholder-shimmer 1.5s ease-in-out infinite;
+}
+
 @mixin muted-icon-color {
   color: var(--secondary-text);
   transition: color 0.15s ease;

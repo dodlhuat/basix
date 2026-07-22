@@ -20,8 +20,12 @@ declare class MasonryGallery {
     private isFetching;
     private listeners;
     private reloaded;
+    private showingSkeleton;
+    private static readonly SKELETON_HEIGHTS;
     constructor(containerId: string, options: MasonryGalleryOptions);
     private init;
+    private renderSkeleton;
+    private createSkeletonCard;
     private setupLayout;
     private buildColumns;
     private addEventListeners;
@@ -29,6 +33,7 @@ declare class MasonryGallery {
     private handleScroll;
     private loadMoreImages;
     private toggleLoader;
+    private clearSkeleton;
     private renderImages;
     private createCard;
     private addToShortestColumn;
