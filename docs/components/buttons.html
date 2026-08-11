@@ -36,6 +36,9 @@
 <!-- Loading state -->
 <button class="is-loading">Loading…</button>
 
+<!-- Success state (toggle from is-loading via JS once a request resolves) -->
+<button class="button-primary is-success">Saved</button>
+
 <!-- Disabled -->
 <button disabled>Disabled</button>`, 'html');
 
@@ -144,6 +147,12 @@
                 <button class="button-primary is-loading">Primary</button>
                 <button class="button-success is-loading">Success</button>
                 <button class="button-error is-loading">Error</button>
+            </div>
+
+            <h3>Success state</h3>
+            <p>Once an async action resolves, swap <code>is-loading</code> for <code>is-success</code> — the spinner morphs into a checkmark. Click the button below to try it.</p>
+            <div class="docs-demo" style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+                <button class="button-primary" onclick="var b=this;if(b.classList.contains('is-loading')||b.classList.contains('is-success'))return;b.classList.add('is-loading');setTimeout(function(){b.classList.remove('is-loading');b.classList.add('is-success');setTimeout(function(){b.classList.remove('is-success');},1400);},900);">Submit</button>
             </div>
 
             <div id="code-buttons"></div>

@@ -39,11 +39,29 @@
 }
 
 .card-hover {
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  transition: box-shadow $duration-slow ease;
 
   &:hover {
     box-shadow: 0 4px 8px var(--divider);
-    transform: translateY(-2px);
+  }
+
+  &:active {
+    box-shadow: 0 2px 4px var(--divider);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card-hover {
+    transition: box-shadow $duration-slow ease, transform $duration-slow ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.99);
+    }
   }
 }
 

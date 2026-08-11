@@ -1,4 +1,4 @@
-# Basix 1.5.0
+# Basix 1.5.1
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,17 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.5.0 → 1.5.1
+
+No breaking changes.
+
+- **`Button`** — new `.is-success` state, meant to be toggled on after `.is-loading` once an async action resolves. Morphs the spinner into a checkmark; colored variants (`button-primary`/`-success`/`-warning`/`-error`, light and dark) are covered the same way `.is-loading` already was.
+- **Icons** — new `.icon-toggle` class for clickable icons (favorite, bookmark, star): press feedback via scale, plus a short pop and accent tint when `.is-active` is toggled on.
+- **`parameters.scss`** — new shared motion tokens: `$duration-fast`/`$duration-base`/`$duration-slow` and `$ease-standard`/`$ease-spring`/`$ease-out-soft`.
+- **`mixins.scss`** — new `icon-rotate-transition` and `icon-pop` mixins; the existing select-dropdown chevron now uses `icon-rotate-transition` internally (no visual change).
+- **`.card-hover`** — gained an `:active` press state (shadow settles, slight scale-back) as click feedback, in addition to the existing hover lift.
+- **Accessibility** — the form validation shake/hint-fade (`.form-group.error`/`.success`) and `.card-hover`'s lift/press transform now respect `prefers-reduced-motion`; users who request reduced motion see the same end state without the animated transition.
 
 ### 1.4.3 → 1.5.0
 

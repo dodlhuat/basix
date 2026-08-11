@@ -1,3 +1,6 @@
+@use "parameters" as *;
+@use "mixins" as *;
+
 .icon-svg {
   display: inline-block;
   width: 24px;
@@ -5,4 +8,32 @@
   fill: currentColor;
   flex-shrink: 0;
   vertical-align: middle;
+}
+
+// Toggleable icon (favorite, bookmark, star): press gives instant feedback,
+// going active adds a short pop once reduced-motion allows it.
+.icon-toggle {
+  @include icon-pop();
+  cursor: pointer;
+  color: var(--secondary-text);
+
+  &:hover {
+    color: var(--primary-text);
+  }
+
+  &.is-active {
+    color: var(--accent-color);
+  }
+}
+
+@keyframes icon-pop-in {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .icon-toggle.is-active {
+    animation: icon-pop-in $duration-base $ease-spring;
+  }
 }

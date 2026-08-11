@@ -122,6 +122,14 @@
                 <svg width="32" height="32" style="color:var(--error);fill:currentColor;"><use href="#star"/></svg>
             </div>
             <p style="margin-top:0.75rem;font-size:0.9rem;color:var(--secondary-text);">Set <code>width</code> and <code>height</code> on the <code>&lt;svg&gt;</code> element. Colour follows <code>fill: currentColor</code> so you can use any CSS <code>color</code> property.</p>
+
+            <h2>Toggle icons</h2>
+            <p>Add <code>.icon-toggle</code> to a clickable icon (favorite, bookmark, star). Pressing it gives instant scale feedback; toggling <code>.is-active</code> tints it and plays a short pop — both skipped under <code>prefers-reduced-motion</code>.</p>
+            <div class="docs-demo" style="display:flex;gap:1rem;align-items:center;">
+                <svg class="icon-svg icon-toggle" width="28" height="28" onclick="this.classList.toggle('is-active')"><use href="#favorite"/></svg>
+                <svg class="icon-svg icon-toggle is-active" width="28" height="28" onclick="this.classList.toggle('is-active')"><use href="#star"/></svg>
+                <svg class="icon-svg icon-toggle" width="28" height="28" onclick="this.classList.toggle('is-active')"><use href="#bookmark_check"/></svg>
+            </div>
         </div>
     </div>
 </div>

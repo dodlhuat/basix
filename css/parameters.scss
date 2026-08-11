@@ -13,3 +13,11 @@ $radius-xl:    calc($border-radius * 4);
 $tint-subtle: 8%;
 $tint-medium: 12%;
 $tint-strong: 20%;
+
+$duration-fast: 0.15s;
+$duration-base: 0.22s;
+$duration-slow: 0.3s;
+
+$ease-standard: cubic-bezier(0.2, 0, 0, 1);
+$ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+$ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);

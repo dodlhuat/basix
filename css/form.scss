@@ -135,7 +135,7 @@ select {
       mask-size: contain;
       -webkit-mask-size: contain;
       transform: translateY(-50%);
-      transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
+      @include icon-rotate-transition(0.26s);
       pointer-events: none;
     }
   }
@@ -308,7 +308,6 @@ select {
       border-color: var(--error);
       background-color: color-mix(in srgb, var(--error) $tint-subtle, var(--background));
       @include field-shadow-rest();
-      animation: field-error-shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 
       &:focus {
         border-color: var(--error);
@@ -318,7 +317,6 @@ select {
 
     .form-hint {
       color: var(--error);
-      animation: hint-appear 0.2s ease both;
 
       &::before {
         content: '!';
@@ -341,7 +339,6 @@ select {
 
     .form-hint {
       color: var(--success);
-      animation: hint-appear 0.2s ease both;
 
       &::before {
         content: '✓';
@@ -350,6 +347,19 @@ select {
         opacity: 1;
       }
     }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .form-group.error input,
+  .form-group.error textarea,
+  .form-group.error select {
+    animation: field-error-shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  .form-group.error .form-hint,
+  .form-group.success .form-hint {
+    animation: hint-appear 0.2s ease both;
   }
 }
 

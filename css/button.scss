@@ -44,7 +44,7 @@ button,
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
-  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  transition: background $duration-fast ease, transform 0.1s ease, box-shadow $duration-fast ease;
 
   &:hover:not(:disabled) {
     background: var(--divider);
@@ -90,6 +90,48 @@ button,
       visibility: hidden;
     }
   }
+
+  // Toggle after an async action resolves successfully (consumer swaps
+  // is-loading for is-success once the request completes).
+  &.is-success {
+    pointer-events: none;
+    position: relative;
+    color: transparent !important;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.6em;
+      height: 0.3em;
+      border-left: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      color: var(--primary-text);
+      transform: translate(-50%, -65%) rotate(-45deg) scale(0.5);
+      opacity: 0;
+      animation: button-success-in $duration-base $ease-standard forwards;
+    }
+
+    > * {
+      visibility: hidden;
+    }
+  }
+}
+
+@keyframes button-success-in {
+  to {
+    transform: translate(-50%, -65%) rotate(-45deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-success::after {
+    animation: none !important;
+    transform: translate(-50%, -65%) rotate(-45deg) scale(1) !important;
+    opacity: 1 !important;
+  }
 }
 
 .button-primary,
@@ -100,7 +142,8 @@ button.button-success,
 button.button-warning,
 .button-error,
 button.button-error {
-  &.is-loading::after {
+  &.is-loading::after,
+  &.is-success::after {
     color: var(--background);
   }
 }
@@ -175,7 +218,8 @@ button.button-error {
     color: var(--background);
     &:hover:not(:disabled) { background: color-mix(in srgb, var(--success) 82%, white); }
     &:active:not(:disabled) { background: color-mix(in srgb, var(--success) 70%, white); }
-    &.is-loading::after { color: var(--background); }
+    &.is-loading::after,
+    &.is-success::after { color: var(--background); }
   }
 
   .button-warning,
@@ -183,7 +227,8 @@ button.button-error {
     color: var(--background);
     &:hover:not(:disabled) { background: color-mix(in srgb, var(--warning) 82%, white); }
     &:active:not(:disabled) { background: color-mix(in srgb, var(--warning) 70%, white); }
-    &.is-loading::after { color: var(--background); }
+    &.is-loading::after,
+    &.is-success::after { color: var(--background); }
   }
 
   .button-error,
@@ -191,11 +236,14 @@ button.button-error {
     color: var(--background);
     &:hover:not(:disabled) { background: color-mix(in srgb, var(--error) 82%, white); }
     &:active:not(:disabled) { background: color-mix(in srgb, var(--error) 70%, white); }
-    &.is-loading::after { color: var(--background); }
+    &.is-loading::after,
+    &.is-success::after { color: var(--background); }
   }
 
   .button-primary.is-loading::after,
-  button.button-primary.is-loading::after {
+  button.button-primary.is-loading::after,
+  .button-primary.is-success::after,
+  button.button-primary.is-success::after {
     color: var(--primary-text);
   }
 }
