@@ -22,6 +22,7 @@ declare class Popover {
     private readonly opts;
     private popoverEl;
     private hoverTimer;
+    private previouslyFocused;
     private listeners;
     private openListeners;
     constructor(triggerEl: HTMLElement | string, options: PopoverOptions);
@@ -39,6 +40,9 @@ declare class Popover {
     private onMouseLeave;
     private onOutsideClick;
     private onEscape;
+    private getFocusable;
+    private focusInto;
+    private onTrapTab;
     private attachTrigger;
 }
 export { Popover };

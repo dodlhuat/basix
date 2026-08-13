@@ -123,7 +123,7 @@
 .timespan-duration {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--accent-color);
+  color: var(--link-color);
   letter-spacing: 0.02em;
   white-space: nowrap;
   line-height: 1;
@@ -139,7 +139,7 @@
   }
 
   .timespan-picker.is-error & {
-    color: var(--error);
+    color: var(--error-text);
     background: color-mix(in srgb, var(--error) $tint-medium, transparent);
   }
 }
@@ -220,6 +220,23 @@
   .timespan-picker.is-error ~ .timespan-bar & {
     background: var(--error);
   }
+
+  // The visible dot stays 12px; the drag hit area reaches the WCAG 2.2 24px
+  // minimum (44px on touch viewports) via this invisible, centred pseudo-element.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    transform: translate(-50%, -50%);
+
+    @media (max-width: $bp-md) {
+      width: 44px;
+      height: 44px;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -236,7 +253,7 @@
   80%      { transform: translateX(2px); }
 }
 
-@media (max-width: 480px) {
+@media (max-width: $bp-sm) {
   .timespan-picker {
     flex-direction: column;
   }

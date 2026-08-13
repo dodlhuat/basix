@@ -55,10 +55,14 @@
 }
 
 // Tinted "tag" look shared by badges and chips: a translucent tint of $color
-// over the background, plus a matching tinted border.
-@mixin tinted-tag($color, $bg-tint: $tint-medium, $border-tint: $tint-strong) {
+// over the background, plus a matching tinted border. $color drives the
+// background/border tints (only need 3:1); pass $text separately when
+// $color itself doesn't clear 4.5:1 against --background as copy — the
+// tag's background stays mostly --background at these tint strengths, so
+// the text sits on essentially the same contrast problem as raw body text.
+@mixin tinted-tag($color, $text: $color, $bg-tint: $tint-medium, $border-tint: $tint-strong) {
   background: color-mix(in srgb, #{$color} #{$bg-tint}, var(--background));
-  color: $color;
+  color: $text;
   border-color: color-mix(in srgb, #{$color} #{$border-tint}, transparent);
 }
 

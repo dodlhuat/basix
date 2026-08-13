@@ -46,11 +46,11 @@ ul.tree {
     border-color: var(--accent-color);
 
     .tree-label {
-      color: var(--accent-color-text);
+      color: var(--on-accent);
     }
 
     .tree-icon svg {
-      stroke: var(--accent-color-text);
+      stroke: var(--on-accent);
     }
   }
 
@@ -113,7 +113,7 @@ ul.tree {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $bp-md) {
   .tree-item {
     min-height: calc($spacing * 3.5);
     padding: $spacing;

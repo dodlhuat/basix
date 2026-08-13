@@ -2,12 +2,14 @@
   --primary-text: #1E1F24;
   --secondary-text: #62636C;
   --divider: #D8D9E0;
-  --accent-text: #3D63DD;
   --error: #D64545;
+  --error-text: #C13327;
   --error-tint: color-mix(in srgb, #D64545 12%, transparent);
   --warning: #C28A00;
+  --warning-text: #8A6D00;
   --warning-tint: color-mix(in srgb, #C28A00 12%, transparent);
   --success: #2E8B57;
+  --success-text: #1F7A4C;
   --success-tint: color-mix(in srgb, #2E8B57 12%, transparent);
   --secondary-background: #E7E8EC;
   --background: #F9F9FB;
@@ -16,6 +18,8 @@
   --accent-color-lighten: #87A5EF;
   --accent-color-tint: color-mix(in srgb, #3D63DD 12%, transparent);
   --accent-color-text: #D8D9E0;
+  --on-accent: #FFFFFF;
+  --link-color: var(--accent-color);
   --disabled: #D8D9E0;
   --primary-dark: #1A1B1F;
   --primary-light: #F0F1F3;
@@ -26,12 +30,14 @@
   --primary-text: #EEEEF0;
   --secondary-text: #B2B3BD;
   --divider: #393A40;
-  --accent-text: #0E496D;
   --error: #FF6B6B;
+  --error-text: var(--error);
   --error-tint: color-mix(in srgb, #FF6B6B 12%, transparent);
   --warning: #F7B500;
+  --warning-text: var(--warning);
   --warning-tint: color-mix(in srgb, #F7B500 12%, transparent);
   --success: #5CC689;
+  --success-text: var(--success);
   --success-tint: color-mix(in srgb, #5CC689 12%, transparent);
   --background: #111113;
   --primary-bg: #111113;
@@ -40,8 +46,41 @@
   --accent-color-lighten: #175982;
   --accent-color-tint: color-mix(in srgb, #1B7BB4 12%, transparent);
   --accent-color-text: #B2B3BD;
+  --link-color: #2B8CC4;
   --disabled: #303136;
   --primary-dark: #0C0C0E;
   --primary-light: #1E1F23;
   --hover: rgba(255, 255, 255, 0.05);
+}
+
+// Mirrors [data-theme="dark"] so the palette is correct before theme.ts
+// attaches data-theme, and for consumers who never wire up the JS toggle.
+// An explicit data-theme (either value) always wins over this.
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --primary-text: #EEEEF0;
+    --secondary-text: #B2B3BD;
+    --divider: #393A40;
+    --error: #FF6B6B;
+    --error-text: var(--error);
+    --error-tint: color-mix(in srgb, #FF6B6B 12%, transparent);
+    --warning: #F7B500;
+    --warning-text: var(--warning);
+    --warning-tint: color-mix(in srgb, #F7B500 12%, transparent);
+    --success: #5CC689;
+    --success-text: var(--success);
+    --success-tint: color-mix(in srgb, #5CC689 12%, transparent);
+    --background: #111113;
+    --primary-bg: #111113;
+    --secondary-background: #19191B;
+    --accent-color: #1B7BB4;
+    --accent-color-lighten: #175982;
+    --accent-color-tint: color-mix(in srgb, #1B7BB4 12%, transparent);
+    --accent-color-text: #B2B3BD;
+    --link-color: #2B8CC4;
+    --disabled: #303136;
+    --primary-dark: #0C0C0E;
+    --primary-light: #1E1F23;
+    --hover: rgba(255, 255, 255, 0.05);
+  }
 }

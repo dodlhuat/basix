@@ -164,11 +164,23 @@ $arrow: 6px;
     transition: background 0.12s ease, color 0.12s ease;
     user-select: none;
 
-    &:hover { background: var(--hover); }
+    &:hover,
+    &:focus-visible {
+      background: var(--hover);
+    }
+
+    &:focus-visible {
+      outline: none;
+      @include focus-glow(15%);
+    }
 
     &.is-destructive {
       color: var(--error);
-      &:hover { background: color-mix(in srgb, var(--error) 8%, transparent); }
+
+      &:hover,
+      &:focus-visible {
+        background: color-mix(in srgb, var(--error) 8%, transparent);
+      }
     }
   }
 

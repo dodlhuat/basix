@@ -20,26 +20,26 @@
   color: var(--secondary-text);
 
   &-info {
-    @include tinted-tag(var(--accent-color));
+    @include tinted-tag(var(--accent-color), $text: var(--link-color));
   }
 
   &-success {
-    @include tinted-tag(var(--success));
+    @include tinted-tag(var(--success), $text: var(--success-text));
   }
 
   &-warning {
-    @include tinted-tag(var(--warning));
+    @include tinted-tag(var(--warning), $text: var(--warning-text));
   }
 
   &-error {
-    @include tinted-tag(var(--error));
+    @include tinted-tag(var(--error), $text: var(--error-text));
   }
 
   &-solid {
-    &.badge-info    { background: var(--accent-color); color: #fff; border-color: transparent; }
-    &.badge-success { background: var(--success);      color: #fff; border-color: transparent; }
-    &.badge-warning { background: var(--warning);      color: #fff; border-color: transparent; }
-    &.badge-error   { background: var(--error);        color: #fff; border-color: transparent; }
+    &.badge-info    { background: var(--accent-color); color: var(--on-accent); border-color: transparent; }
+    &.badge-success { background: var(--success);      color: var(--on-accent); border-color: transparent; }
+    &.badge-warning { background: var(--warning);      color: var(--on-accent); border-color: transparent; }
+    &.badge-error   { background: var(--error);        color: var(--on-accent); border-color: transparent; }
   }
 
   &-outline {
@@ -47,10 +47,12 @@
     border-color: var(--divider);
     color: var(--secondary-text);
 
-    &.badge-info    { border-color: var(--accent-color); color: var(--accent-color); }
-    &.badge-success { border-color: var(--success);      color: var(--success); }
-    &.badge-warning { border-color: var(--warning);      color: var(--warning); }
-    &.badge-error   { border-color: var(--error);        color: var(--error); }
+    // Border stays on the vivid base color (only needs 3:1); text uses the
+    // darkened -text / theme-safe link variant so it clears 4.5:1 as copy.
+    &.badge-info    { border-color: var(--accent-color); color: var(--link-color); }
+    &.badge-success { border-color: var(--success);      color: var(--success-text); }
+    &.badge-warning { border-color: var(--warning);      color: var(--warning-text); }
+    &.badge-error   { border-color: var(--error);        color: var(--error-text); }
   }
 
   &-sm {

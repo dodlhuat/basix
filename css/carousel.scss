@@ -102,6 +102,7 @@
 }
 
 .carousel-indicator {
+  position: relative;
   padding: 0;
   border: none;
   width: calc($spacing * 0.5);
@@ -112,6 +113,24 @@
   cursor: pointer;
   transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
               background 0.25s ease;
+
+  // The dot itself stays small for a clean look; the actual hit area
+  // reaches the WCAG 2.2 24px minimum (44px on touch viewports) via this
+  // invisible, centred pseudo-element rather than resizing the dot.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    transform: translate(-50%, -50%);
+
+    @media (max-width: $bp-md) {
+      width: 44px;
+      height: 44px;
+    }
+  }
 
   &.current-slide {
     width: calc($spacing * 1.5);

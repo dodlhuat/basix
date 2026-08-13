@@ -309,7 +309,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $bp-md) {
   .group-picker {
     &__list {
       max-height: 55vh;

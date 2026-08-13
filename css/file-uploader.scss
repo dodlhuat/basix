@@ -160,15 +160,15 @@
     display: none;
 
     &.error {
-      color: var(--error);
+      color: var(--error-text);
     }
 
     &.success {
-      color: var(--success);
+      color: var(--success-text);
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: $bp-sm) {
     .drop-zone {
       padding: 1.5rem 1rem;
     }

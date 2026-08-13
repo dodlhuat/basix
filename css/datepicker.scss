@@ -44,7 +44,6 @@
 
 .datepicker-nav:hover:not(:disabled) {
   background-color: var(--accent-color-lighten);
-  color: var(--accent-color-text);
 }
 
 .datepicker-title {
@@ -85,7 +84,7 @@
 
 .datepicker-day.selected {
   background-color: var(--accent-color);
-  color: var(--accent-color-text);
+  color: var(--on-accent);
 }
 
 .datepicker-day.in-range {
@@ -96,14 +95,14 @@
 
 .datepicker-day.range-start {
   background-color: var(--accent-color);
-  color: var(--accent-color-text);
+  color: var(--on-accent);
   border-top-left-radius: $border-radius;
   border-bottom-left-radius: $border-radius;
 }
 
 .datepicker-day.range-end {
   background-color: var(--accent-color);
-  color: var(--accent-color-text);
+  color: var(--on-accent);
   border-top-right-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
 }
@@ -116,7 +115,7 @@
 .datepicker-day.selected.today,
 .datepicker-day.range-start.today,
 .datepicker-day.range-end.today {
-  color: var(--accent-color-text);
+  color: var(--on-accent);
 }
 
 .datepicker-grid-months,
@@ -145,7 +144,7 @@
 .datepicker-month.selected,
 .datepicker-year.selected {
   background-color: var(--accent-color);
-  color: var(--accent-color-text);
+  color: var(--on-accent);
 }
 
 .datepicker-month.current,
@@ -156,7 +155,7 @@
 
 .datepicker-month.selected.current,
 .datepicker-year.selected.current {
-  color: var(--accent-color-text);
+  color: var(--on-accent);
 }
 
 .datepicker-title-btn {
@@ -276,7 +275,7 @@
 
   &.selected {
     background-color: var(--accent-color);
-    color: var(--accent-color-text);
+    color: var(--on-accent);
   }
 }
 
@@ -285,7 +284,7 @@
   padding: calc($spacing / 2) $spacing;
   margin-top: $spacing;
   background-color: var(--accent-color);
-  color: var(--accent-color-text);
+  color: var(--on-accent);
   border: none;
   border-radius: $border-radius;
   font-family: inherit;
@@ -299,7 +298,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: $bp-md) {
   .datepicker-backdrop {
     position: fixed;
     top: 0;

@@ -3,6 +3,13 @@ $border-radius: 0.4rem;
 $form-height: 2rem;
 $shadow: 0 1px 2px rgba(56, 65, 74, .15);
 
+// Breakpoints round UP to the nearest step rather than to whichever number
+// is numerically closer, so folding old one-off values into these never
+// makes a component switch to its compact/mobile layout later than before.
+$bp-sm: 480px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+
 $radius-xs:    calc($border-radius * 0.5);
 $radius-sm:    calc($border-radius * 0.75);
 $radius-md:    calc($border-radius * 1.5);

@@ -1,4 +1,4 @@
-# Basix 1.5.1
+# Basix 1.5.2
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,31 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.5.1 → 1.5.2
+
+An accessibility and contrast pass across the whole framework, driven by an audit that measured actual WCAG contrast ratios rather than eyeballing them. Mostly bug fixes; a few components gained real functionality they were missing.
+
+#### Breaking changes
+
+**Global `box-sizing: border-box`**
+
+`reset.scss` now sets `box-sizing: border-box` on `*, *::before, *::after`. Most components already declared this themselves, so the practical effect is limited — but if your own custom CSS sizes an element with both padding/border and an explicit width while relying on the browser default (`content-box`), it will now render slightly smaller. `.styled-checkbox`'s checkmark position was tuned for the old sizing and has been corrected; check any custom pixel-tuned absolute positioning of your own the same way.
+
+#### Other changes
+
+- **Contrast fixes** — several color tokens were validated as fills (which only need 3:1) but were also being used directly as text (which needs 4.5:1), and failed once actually measured — worst case 2.12:1. Fixed across `DatePicker`, `Table` pagination, `Tree`, `Tooltip`, form validation hints, `Badge`/`Chip`/`Alert` variants, `ChatBubbles` (message text, timestamps, avatar initials), and body-link hover/focus color in both themes.
+- **New tokens** in `properties.scss`: `--on-accent` (text/icons on an `--accent-color` fill), `--link-color` (body link color — `--accent-color` itself falls just under 4.5:1 as text in dark theme), `--warning-text`/`--success-text`/`--error-text` (text-safe variants of the status colors, which are calibrated as fills).
+- **Removed** the unused `--accent-text` token (dead code, not referenced anywhere).
+- **`Accordion`** — the toggle input is no longer `display: none`, which silently removed it from the tab order in every major browser. It's visually hidden instead, so the accordion is keyboard-operable again.
+- **`Switch`** — gained a focus-visible ring; it previously had no focus state at all, unlike `Checkbox`/`RadioButton` right next to it.
+- **`Dropdown`** — gained real keyboard navigation (arrow keys, Enter, Escape, submenu open/close) and basic ARIA (`role="menu"`/`"menuitem"`, `aria-expanded`, `aria-activedescendant`). Previously mouse/touch only.
+- **`Popover`** — gained focus management for click-triggered popovers: focus moves into the panel on open, Tab is contained within it, and focus returns to the trigger on close. Hover-triggered popovers are unaffected (focus is never stolen from what you're doing on hover).
+- **New breakpoint tokens** in `parameters.scss`: `$bp-sm` (480px), `$bp-md` (768px), `$bp-lg` (1024px), replacing eight ad hoc pixel values used inconsistently across components. A few components' mobile-layout cutover shifted slightly wider as part of consolidating onto these (never narrower, so nothing gets more cramped than before).
+- **`FlyoutMenu`** — rebuilt on design tokens with proper dark-theme support; previously used a fixed dark palette regardless of `[data-theme]`. Also removed an unscoped global reset (`* { box-sizing; margin; padding }` and a `body` override) it was shipping, and some unused CSS (`.site-header`/`.main-content`/`.logo`) left over from an earlier mockup.
+- **Touch targets** — carousel indicator dots and the timespan-picker drag handle now have an invisible hit area reaching the WCAG 2.2 minimum (24px, 44px on touch viewports); the visible dot/handle size is unchanged.
+- **`ChatBubbles`** — the incoming bubble's background is now a subtle accent tint instead of plain `--secondary-background`, which is also the framework's standard card background (`.card`, `.docs-demo`) — the bubble was invisible against any card-like container it was placed in.
+- **`VirtualDropdown`** — new `selectedLabel?: (count: number) => string` option, called whenever the selection changes in `multiSelect` mode. Replaces the hardcoded English "N items selected" trigger summary for non-English UIs; the component doesn't pluralise for you, so return whatever's grammatically correct for `count` yourself (a ternary for languages with two plural forms, or `Intl.PluralRules` for languages with more). See `docs/components/virtual-dropdown.html` for examples.
 
 ### 1.5.0 → 1.5.1
 

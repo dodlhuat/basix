@@ -71,7 +71,7 @@
   &.tooltip-info {
     --tooltip-bg: var(--accent-color);
     background: var(--accent-color);
-    color: var(--accent-color-text);
+    color: var(--on-accent);
   }
 
   &.tooltip-success {

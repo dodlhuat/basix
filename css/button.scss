@@ -69,6 +69,12 @@ button,
     cursor: not-allowed;
   }
 
+  // !important is load-bearing here, not a shortcut: the documented usage
+  // is a raw text label directly inside the button (see docs/components/
+  // buttons.html), so `> * { visibility: hidden }` alone can't hide it —
+  // only `color` can, and it must beat .button-primary/-success/-warning/
+  // -error's own `color` at equal specificity regardless of which variant
+  // class the button also carries, in both themes.
   &.is-loading {
     pointer-events: none;
     position: relative;
@@ -93,6 +99,7 @@ button,
 
   // Toggle after an async action resolves successfully (consumer swaps
   // is-loading for is-success once the request completes).
+  // Same reasoning as .is-loading above.
   &.is-success {
     pointer-events: none;
     position: relative;

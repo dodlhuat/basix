@@ -136,7 +136,7 @@ $connector-thickness: 2px;
     .stepper-indicator {
       border-color: var(--accent-color);
       background: var(--accent-color);
-      color: #fff;
+      color: var(--on-accent);
       animation: stepper-complete-pop 0.35s ease-out;
 
       .icon-svg {
@@ -232,7 +232,7 @@ $connector-thickness: 2px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: $bp-sm) {
   .stepper:not(.stepper-vertical) {
     .stepper-label {
       display: none;

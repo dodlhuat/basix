@@ -11,6 +11,7 @@ interface VirtualDropdownConfig {
     renderLimit?: number;
     itemHeight?: number;
     onSelect?: (selectedValues: Array<string | number>) => void;
+    selectedLabel?: (count: number) => string;
 }
 declare class VirtualDropdown {
     private readonly container;
@@ -21,6 +22,7 @@ declare class VirtualDropdown {
     private readonly renderLimit;
     private readonly itemHeight;
     private readonly onSelect;
+    private readonly selectedLabel;
     private readonly anchorName;
     private trigger;
     private triggerText;

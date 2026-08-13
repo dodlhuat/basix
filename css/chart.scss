@@ -213,7 +213,9 @@
     strong {
       display: block;
       font-weight: 600;
-      color: #fff;
+      // Tooltip sits on --primary-dark, not --accent-color — accent-color-text
+      // is the token calibrated for text on that dark-neutral surface.
+      color: var(--accent-color-text);
       margin-bottom: 1px;
     }
   }

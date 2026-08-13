@@ -50,11 +50,14 @@
     border-color: var(--accent-color);
   }
 
+  // Anchored to label::before's own box-border-box center (margin-top: 2px,
+  // then half of its $spacing side) — not the old content-box center, where
+  // the border added an extra 2px per side on top of the $spacing square.
   &:checked + label::after {
     content: '';
     position: absolute;
-    left: calc(2px + 0.5rem);
-    top: calc(4px + $spacing / 2);
+    left: calc($spacing / 2);
+    top: calc(2px + $spacing / 2);
     width: calc($spacing * 0.28);
     height: calc($spacing * 0.5);
     border-right: 2px solid white;

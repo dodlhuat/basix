@@ -22,6 +22,14 @@ declare class Dropdown {
     open(): void;
     private toggleSubmenu;
     private closeAllSubmenus;
+    private getActiveList;
+    private getFocusableItems;
+    private clearFocus;
+    private moveFocus;
+    private activateFocused;
+    private openFocusedSubmenu;
+    private closeCurrentLevel;
+    private handleKeydown;
     private handleSelection;
     destroy(): void;
 }

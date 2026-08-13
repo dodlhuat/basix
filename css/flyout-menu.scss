@@ -1,82 +1,17 @@
 @use "properties";
 @use "parameters" as *;
 
+// A deliberately different surface from the rest of the framework's flat,
+// opaque panels (float-panel mixin) — a dark glass off-canvas drawer, which
+// is a common convention for overlay nav regardless of site theme. Every
+// color below still reads from --primary-dark / --accent-color-text /
+// --on-accent, each of which already has its own [data-theme="dark"] value,
+// so the panel adapts without needing a separate dark-theme block here.
 .flyout-menu,
-.flyout-overlay,
-.site-header,
-.main-content {
-  --flyout-text: #f8fafc;
-  --flyout-bg: rgba(15, 23, 42, 0.7);
-  --flyout-border: rgba(255, 255, 255, 0.1);
-}
-
-:root {
+.flyout-overlay {
   --menu-width: 320px;
   --transition-speed: 0.4s;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  overflow-x: hidden;
-  min-height: 100vh;
-}
-
-.site-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 2rem;
-  position: relative;
-  z-index: 10;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.menu-trigger {
-  background: none;
-  border: none;
-  color: var(--flyout-text);
-  cursor: pointer;
-  padding: 0.5rem;
-  transition: transform 0.2s;
-}
-
-.menu-trigger:hover {
-  transform: scale(1.1);
-  color: var(--accent-color);
-}
-
-.main-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 80vh;
-  text-align: center;
-  padding: 2rem;
-}
-
-.main-content h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  background: linear-gradient(to right, #c084fc, #6366f1);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.main-content p {
-  color: #94a3b8;
-  font-size: 1.2rem;
+  --flyout-border: color-mix(in srgb, var(--accent-color-text) 15%, transparent);
 }
 
 .flyout-overlay {
@@ -87,6 +22,7 @@ body {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition-speed), visibility var(--transition-speed);
@@ -100,14 +36,16 @@ body {
 
 .flyout-menu {
   position: fixed;
-  background: rgba(10, 15, 30, 0.82);
+  background: color-mix(in srgb, var(--primary-dark) 82%, transparent);
   backdrop-filter: blur(28px) saturate(1.4);
   -webkit-backdrop-filter: blur(28px) saturate(1.4);
   z-index: 210;
   display: flex;
   flex-direction: column;
   padding: 1.75rem 1.5rem;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 32px 80px rgba(0, 0, 0, 0.6);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent-color-text) 10%, transparent),
+    0 32px 80px rgba(0, 0, 0, 0.6);
   transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -139,13 +77,13 @@ body {
   align-items: center;
   margin-bottom: 2.5rem;
   padding-bottom: 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-color-text) 12%, transparent);
 }
 
 .flyout-title {
   font-size: 0.65rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.35);
+  color: color-mix(in srgb, var(--accent-color-text) 55%, transparent);
   text-transform: uppercase;
   letter-spacing: 0.14em;
 }
@@ -153,7 +91,7 @@ body {
 .close-menu {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: color-mix(in srgb, var(--accent-color-text) 65%, transparent);
   cursor: pointer;
   padding: 0.3rem;
   line-height: 0;
@@ -162,7 +100,7 @@ body {
 
 .close-menu:hover:not(:disabled) {
   background: none;
-  color: #fff;
+  color: var(--on-accent);
 }
 
 .flyout-menu button {
@@ -204,7 +142,7 @@ body {
   border: none;
   font-size: 2rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
+  color: color-mix(in srgb, var(--accent-color-text) 75%, transparent);
   text-decoration: none;
   cursor: pointer;
   font-family: inherit;
@@ -222,7 +160,7 @@ body {
 
 .flyout-links > li > a:hover,
 .flyout-links > li > .submenu-toggle:hover {
-  color: #fff;
+  color: var(--on-accent);
 }
 
 .submenu-toggle.active {
@@ -246,7 +184,7 @@ body {
   overflow: hidden;
   transition: max-height 0.3s ease-out;
   padding-left: 1rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 1px solid color-mix(in srgb, var(--accent-color-text) 20%, transparent);
   margin-top: 0;
 }
 
@@ -256,7 +194,6 @@ body {
   transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-
 .submenu li {
   margin-bottom: 0.5rem;
 }
@@ -264,30 +201,30 @@ body {
 .submenu a {
   font-size: 1.25rem;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.45);
+  color: color-mix(in srgb, var(--accent-color-text) 60%, transparent);
   transform: none !important;
   transition: color 0.2s !important;
   transition-delay: 0s !important;
 
-  &:hover { color: #fff; }
+  &:hover { color: var(--on-accent); }
 }
 
 .submenu .submenu-toggle {
   font-size: 1.25rem;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.45);
+  color: color-mix(in srgb, var(--accent-color-text) 60%, transparent);
   transform: none !important;
   transition-delay: 0s !important;
   padding: 0;
   margin: 0;
 
-  &:hover { color: #fff; }
+  &:hover { color: var(--on-accent); }
 }
 
 .flyout-footer {
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
-  color: rgba(255, 255, 255, 0.25);
+  border-top: 1px solid color-mix(in srgb, var(--accent-color-text) 12%, transparent);
+  color: color-mix(in srgb, var(--accent-color-text) 35%, transparent);
   font-size: 0.72rem;
   letter-spacing: 0.03em;
   opacity: 0;
@@ -301,16 +238,15 @@ body {
   transform: translateY(0);
 }
 
-@media (max-width: 480px) {
-  :root {
+@media (max-width: $bp-sm) {
+  .flyout-menu,
+  .flyout-overlay {
     --menu-width: 100%;
   }
 
-  .main-content h1 {
-    font-size: 2rem;
-  }
-
-  
+  // Below the smallest phones every configured direction collapses to a
+  // single full-screen sliding panel — deliberate, not a leftover default,
+  // which is why it overrides the desktop per-direction rules with !important.
   .flyout-from-right,
   .flyout-from-left,
   .flyout-from-top {
@@ -329,21 +265,19 @@ body {
     transform: translate(0, 0) !important;
   }
 
-  
   .flyout-from-top .flyout-links {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
   }
 
-  .flyout-from-top .flyout-links>li {
+  .flyout-from-top .flyout-links > li {
     margin-bottom: 1.5rem;
   }
 
-  .flyout-from-top .flyout-links>li>a,
-  .flyout-from-top .flyout-links>li>.submenu-toggle {
+  .flyout-from-top .flyout-links > li > a,
+  .flyout-from-top .flyout-links > li > .submenu-toggle {
     font-size: 2rem;
-    
     justify-content: space-between;
   }
 
@@ -356,7 +290,7 @@ body {
     border: none;
     background: transparent;
     padding-left: 1rem;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid color-mix(in srgb, var(--accent-color-text) 10%, transparent);
     text-align: left;
   }
 
@@ -368,6 +302,5 @@ body {
   .flyout-from-top .submenu a {
     font-size: 1.25rem;
     justify-content: space-between;
-    
   }
 }

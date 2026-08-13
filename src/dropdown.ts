@@ -65,6 +65,8 @@ class Dropdown {
             { signal },
         );
 
+        this.trigger.addEventListener('keydown', (e: KeyboardEvent) => this.handleKeydown(e), { signal });
+
         document.addEventListener(
             'click',
             (e: MouseEvent) => {
@@ -102,12 +104,24 @@ class Dropdown {
     }
 
     private setupItems(): void {
+        this.menu.setAttribute('role', 'menu');
+        this.trigger.setAttribute('aria-haspopup', 'true');
+        this.trigger.setAttribute('aria-expanded', 'false');
+
         const items = this.menu.querySelectorAll<HTMLElement>('.dropdown-item');
 
-        items.forEach((item) => {
+        items.forEach((item, index) => {
             const li = item.parentElement as HTMLLIElement;
-            if (li.querySelector('ul')) {
+            const submenu = li.querySelector('ul');
+
+            item.setAttribute('role', 'menuitem');
+            item.id ||= `${this.container.id || 'dropdown'}-item-${index}`;
+
+            if (submenu) {
                 item.classList.add('has-children');
+                item.setAttribute('aria-haspopup', 'true');
+                item.setAttribute('aria-expanded', 'false');
+                submenu.setAttribute('role', 'menu');
             }
         });
     }
@@ -120,24 +134,29 @@ class Dropdown {
     }
 
     public toggle(): void {
-        if (!this.container.classList.contains('active')) {
-            this.updatePosition();
+        if (this.container.classList.contains('active')) {
+            this.close();
+        } else {
+            this.open();
         }
-        this.container.classList.toggle('active');
     }
 
     public close(): void {
         this.container.classList.remove('active');
+        this.trigger.setAttribute('aria-expanded', 'false');
         this.closeAllSubmenus();
+        this.clearFocus();
     }
 
     public open(): void {
         this.updatePosition();
         this.container.classList.add('active');
+        this.trigger.setAttribute('aria-expanded', 'true');
     }
 
     private toggleSubmenu(li: HTMLLIElement): void {
         const isOpening = !li.classList.contains('open');
+        const item = li.querySelector<HTMLElement>(':scope > .dropdown-item');
 
         if (isOpening && !this.options.allowMultipleOpen) {
             const parent = li.parentElement;
@@ -147,20 +166,115 @@ class Dropdown {
                 siblings.forEach((sibling) => {
                     if (sibling !== li && sibling.classList.contains('open')) {
                         sibling.classList.remove('open');
+                        sibling.querySelector<HTMLElement>(':scope > .dropdown-item')?.setAttribute('aria-expanded', 'false');
 
                         const deepOpenItems = sibling.querySelectorAll<HTMLLIElement>('.open');
-                        deepOpenItems.forEach((el) => el.classList.remove('open'));
+                        deepOpenItems.forEach((el) => {
+                            el.classList.remove('open');
+                            el.querySelector<HTMLElement>(':scope > .dropdown-item')?.setAttribute('aria-expanded', 'false');
+                        });
                     }
                 });
             }
         }
 
         li.classList.toggle('open');
+        item?.setAttribute('aria-expanded', String(isOpening));
     }
 
     private closeAllSubmenus(): void {
         const openItems = this.menu.querySelectorAll<HTMLLIElement>('li.open');
-        openItems.forEach((item) => item.classList.remove('open'));
+        openItems.forEach((item) => {
+            item.classList.remove('open');
+            item.querySelector<HTMLElement>(':scope > .dropdown-item')?.setAttribute('aria-expanded', 'false');
+        });
+    }
+
+    private getActiveList(): HTMLElement {
+        const focused = this.menu.querySelector<HTMLElement>('.dropdown-item.is-focused');
+        const parentUl = focused?.closest('ul');
+        return parentUl ?? this.menu;
+    }
+
+    private getFocusableItems(): HTMLElement[] {
+        const list = this.getActiveList();
+        return Array.from(list.children)
+            .map((li) => li.querySelector<HTMLElement>(':scope > .dropdown-item'))
+            .filter((el): el is HTMLElement => el !== null);
+    }
+
+    private clearFocus(): void {
+        this.menu.querySelectorAll<HTMLElement>('.dropdown-item.is-focused').forEach((el) => el.classList.remove('is-focused'));
+        this.trigger.removeAttribute('aria-activedescendant');
+    }
+
+    private moveFocus(direction: 1 | -1): void {
+        const items = this.getFocusableItems();
+        if (!items.length) return;
+
+        const currentIndex = items.findIndex((el) => el.classList.contains('is-focused'));
+        const nextIndex = currentIndex === -1 ? (direction === 1 ? 0 : items.length - 1) : (currentIndex + direction + items.length) % items.length;
+
+        items[currentIndex]?.classList.remove('is-focused');
+        items[nextIndex].classList.add('is-focused');
+        this.trigger.setAttribute('aria-activedescendant', items[nextIndex].id);
+    }
+
+    private activateFocused(): void {
+        this.getActiveList().querySelector<HTMLElement>(':scope > li > .dropdown-item.is-focused')?.click();
+    }
+
+    private openFocusedSubmenu(): void {
+        const focused = this.getActiveList().querySelector<HTMLElement>(':scope > li > .dropdown-item.is-focused.has-children');
+        if (!focused) return;
+
+        const li = focused.parentElement as HTMLLIElement;
+        focused.classList.remove('is-focused');
+        focused.click();
+
+        const submenu = li.querySelector<HTMLElement>(':scope > ul');
+        const firstItem = submenu?.querySelector<HTMLElement>(':scope > li > .dropdown-item');
+        firstItem?.classList.add('is-focused');
+        if (firstItem) this.trigger.setAttribute('aria-activedescendant', firstItem.id);
+    }
+
+    private closeCurrentLevel(): void {
+        const list = this.getActiveList();
+        if (list === this.menu) return;
+
+        const parentLi = list.parentElement as HTMLLIElement | null;
+        if (!parentLi) return;
+
+        this.getFocusableItems().forEach((el) => el.classList.remove('is-focused'));
+        this.toggleSubmenu(parentLi);
+
+        const parentItem = parentLi.querySelector<HTMLElement>(':scope > .dropdown-item');
+        parentItem?.classList.add('is-focused');
+        if (parentItem) this.trigger.setAttribute('aria-activedescendant', parentItem.id);
+    }
+
+    private handleKeydown(e: KeyboardEvent): void {
+        if (!this.container.classList.contains('active')) return;
+
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            this.close();
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            this.moveFocus(1);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            this.moveFocus(-1);
+        } else if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.activateFocused();
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            this.openFocusedSubmenu();
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            this.closeCurrentLevel();
+        }
     }
 
     private handleSelection(item: HTMLElement): void {

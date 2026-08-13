@@ -17,6 +17,7 @@ interface VirtualDropdownConfig {
     renderLimit?: number;
     itemHeight?: number;
     onSelect?: (selectedValues: Array<string | number>) => void;
+    selectedLabel?: (count: number) => string;
 }
 
 /** Virtualised dropdown that renders only visible items for performance with large option lists. */
@@ -29,6 +30,7 @@ class VirtualDropdown {
     private readonly renderLimit: number;
     private readonly itemHeight: number;
     private readonly onSelect: ((selectedValues: Array<string | number>) => void) | null;
+    private readonly selectedLabel: (count: number) => string;
     // Unique CSS anchor name for this instance — prevents conflicts when
     // multiple dropdowns exist on the same page.
     private readonly anchorName: string;
@@ -64,6 +66,7 @@ class VirtualDropdown {
         this.renderLimit = config.renderLimit ?? 20;
         this.itemHeight = config.itemHeight ?? 40;
         this.onSelect = config.onSelect ?? null;
+        this.selectedLabel = config.selectedLabel ?? ((count) => `${count} item${count !== 1 ? 's' : ''} selected`);
         this.anchorName = `--vd-${Math.random().toString(36).slice(2, 9)}`;
 
         this.selectedValues = new Set();
@@ -309,8 +312,7 @@ class VirtualDropdown {
             this.triggerText.classList.add('has-value');
 
             if (this.multiSelect) {
-                const count = this.selectedValues.size;
-                this.triggerText.textContent = `${count} item${count !== 1 ? 's' : ''} selected`;
+                this.triggerText.textContent = this.selectedLabel(this.selectedValues.size);
             } else {
                 const val = Array.from(this.selectedValues)[0];
                 const opt = this.options.find((o) => o.value === val);

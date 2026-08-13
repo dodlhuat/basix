@@ -199,18 +199,18 @@ hr {
 }
 
 a {
-  color: var(--accent-color);
+  color: var(--link-color);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
 
+  // Underline, not a color swap, signals hover/focus: --accent-color-lighten
+  // reads fine as a hover *background* tint elsewhere, but as link text it
+  // drops well under 4.5:1 in both themes — a non-color signal can't fail
+  // a contrast check the way a second color always risks doing.
   &:hover,
   &:focus-visible {
-    color: var(--accent-color-lighten);
-  }
-
-  &:active {
-    color: var(--accent-color);
+    text-decoration: underline;
   }
 
   &:focus-visible {

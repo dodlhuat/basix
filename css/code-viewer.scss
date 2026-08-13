@@ -1,6 +1,10 @@
 @use "properties";
 @use "parameters" as *;
 
+// Deliberately fixed, not themed: this is a syntax-highlight palette, and
+// staying on one dark editor theme regardless of [data-theme] is the same
+// convention most code viewers/editors follow (VS Code, GitHub, etc.) — a
+// syntax theme and a UI theme are different axes. Not an oversight.
 .code-display {
   background: #1e1e1e;
   border-radius: $border-radius;

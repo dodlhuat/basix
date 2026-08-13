@@ -50,6 +50,9 @@
             placeholder: 'Select countries…',
             searchable:  true,
             multiSelect: true,
+            // Try it: select a few countries above and watch the trigger
+            // text below use this instead of the default "N items selected".
+            selectedLabel: (count) => count === 1 ? '1 Land ausgewählt' : `${count} Länder ausgewählt`,
         });
 
         new CodeViewer('#code-js', `import { VirtualDropdown } from '@dodlhuat/basix/js/virtual-dropdown.js';
@@ -69,6 +72,31 @@ const dropdown = new VirtualDropdown({
   onSelect: (values) => {
     console.log(values); // Array of selected values
   },
+});`, 'js');
+
+        new CodeViewer('#code-selected-label', `new VirtualDropdown({
+  container:   '#my-dropdown',
+  options:     [ /* ... */ ],
+  multiSelect: true,
+
+  // Same config object as everything else above — just one more property.
+  // Called every time the selection changes; whatever string you return
+  // is shown on the trigger as-is, no placeholder token, no magic:
+  selectedLabel: (count) => count === 1
+    ? '1 Element ausgewählt'
+    : \`\${count} Elemente ausgewählt\`,
+});`, 'js');
+
+        new CodeViewer('#code-selected-label-plural', `// For languages with more than two plural forms (Polish, Russian, Arabic...),
+// hand-rolled if/else gets unwieldy fast — use Intl.PluralRules instead:
+const pluralRules = new Intl.PluralRules('pl');
+const wordFor = { one: 'element', few: 'elementy', many: 'elementów', other: 'elementu' };
+
+new VirtualDropdown({
+  container:   '#my-dropdown',
+  options:     [ /* ... */ ],
+  multiSelect: true,
+  selectedLabel: (count) => \`\${count} \${wordFor[pluralRules.select(count)]} wybrano\`,
 });`, 'js');
     </script>
 </head>
@@ -106,6 +134,27 @@ const dropdown = new VirtualDropdown({
             <h2>Usage</h2>
             <div id="code-js"></div>
 
+            <h2>Customising the selection summary</h2>
+            <p>
+                When <code>multiSelect</code> is on, the trigger shows a summary like "3 items selected" once
+                something is picked. <code>selectedLabel</code> replaces that summary — it's a property in the
+                <em>same</em> config object you already pass to <code>new VirtualDropdown({ ... })</code>, sitting
+                right next to <code>container</code>, <code>options</code>, <code>multiSelect</code>, etc.
+            </p>
+            <p>
+                It's a plain JavaScript function, not a template string — there's no <code>"N Elemente ausgewählt"</code>
+                placeholder text to type in. The component calls your function with the current selection count
+                every time it changes, and shows whatever string comes back, unmodified:
+            </p>
+            <div id="code-selected-label"></div>
+            <p>
+                Try it in the multi-select demo above — the trigger text uses exactly this pattern. For languages
+                with more than a simple singular/plural split, build the string with
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules" target="_blank" rel="noopener">Intl.PluralRules</a>
+                inside the same callback instead of chained <code>if</code>/<code>else</code>:
+            </p>
+            <div id="code-selected-label-plural"></div>
+
             <h2>Options</h2>
             <table class="docs-props-table">
                 <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
@@ -118,6 +167,7 @@ const dropdown = new VirtualDropdown({
                     <tr><td><code>renderLimit</code></td><td>number</td><td><code>20</code></td><td>Number of items rendered per virtual scroll window.</td></tr>
                     <tr><td><code>itemHeight</code></td><td>number</td><td><code>40</code></td><td>Row height in px — must match CSS to calculate scroll positions correctly.</td></tr>
                     <tr><td><code>onSelect</code></td><td>function</td><td>—</td><td>Called with <code>(selectedValues: Array&lt;string|number&gt;)</code> on any selection change.</td></tr>
+                    <tr><td><code>selectedLabel</code></td><td>function</td><td>English "N items selected"</td><td><code>(count: number) =&gt; string</code> — the trigger's summary text when <code>multiSelect</code> is on and at least one item is selected. The component doesn't pluralise for you; return whatever's grammatically correct for <code>count</code> in your language.</td></tr>
                 </tbody>
             </table>
 

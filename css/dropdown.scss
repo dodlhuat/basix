@@ -97,7 +97,8 @@
     transition: background-color 0.15s ease, color 0.15s ease;
     user-select: none;
 
-    &:hover {
+    &:hover,
+    &.is-focused {
       background-color: var(--secondary-background);
       color: var(--accent-color);
     }
@@ -116,7 +117,7 @@
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: $bp-md) {
     .dropdown-menu {
       width: 100%;
       min-width: 250px;

@@ -241,7 +241,7 @@
 .lightbox-prev { left: $spacing; }
 .lightbox-next { right: $spacing; }
 
-@media (max-width: 768px) {
+@media (max-width: $bp-md) {
   .lightbox-prev,
   .lightbox-next {
     width: 2rem;

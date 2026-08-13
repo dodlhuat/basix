@@ -3,13 +3,16 @@
 
 $alert-border-width: 4px;
 
-@mixin alert-variant($accent, $bg-tint) {
+// $accent drives the border/icon/hover tint (only need 3:1); $text is the
+// darkened variant used for the "strong" lead-in, which sits on the mostly
+// -background $bg-tint at the same contrast risk as raw body text.
+@mixin alert-variant($accent, $bg-tint, $text: $accent) {
   background: $bg-tint;
   border-left-color: $accent;
   color: var(--primary-text);
 
   strong {
-    color: $accent;
+    color: $text;
   }
 
   .alert-icon {
@@ -48,28 +51,32 @@ $alert-border-width: 4px;
   &-info {
     @include alert-variant(
       var(--accent-color),
-      color-mix(in srgb, var(--accent-color) $tint-subtle, var(--background))
+      color-mix(in srgb, var(--accent-color) $tint-subtle, var(--background)),
+      $text: var(--link-color)
     );
   }
 
   &-success {
     @include alert-variant(
       var(--success),
-      color-mix(in srgb, var(--success) $tint-subtle, var(--background))
+      color-mix(in srgb, var(--success) $tint-subtle, var(--background)),
+      $text: var(--success-text)
     );
   }
 
   &-warning {
     @include alert-variant(
       var(--warning),
-      color-mix(in srgb, var(--warning) $tint-subtle, var(--background))
+      color-mix(in srgb, var(--warning) $tint-subtle, var(--background)),
+      $text: var(--warning-text)
     );
   }
 
   &-error {
     @include alert-variant(
       var(--error),
-      color-mix(in srgb, var(--error) $tint-subtle, var(--background))
+      color-mix(in srgb, var(--error) $tint-subtle, var(--background)),
+      $text: var(--error-text)
     );
   }
 
@@ -110,28 +117,32 @@ $alert-border-width: 4px;
     &-info {
       @include alert-variant(
         var(--accent-color),
-        color-mix(in srgb, var(--accent-color) $tint-medium, var(--background))
+        color-mix(in srgb, var(--accent-color) $tint-medium, var(--background)),
+        $text: var(--link-color)
       );
     }
 
     &-success {
       @include alert-variant(
         var(--success),
-        color-mix(in srgb, var(--success) $tint-medium, var(--background))
+        color-mix(in srgb, var(--success) $tint-medium, var(--background)),
+        $text: var(--success-text)
       );
     }
 
     &-warning {
       @include alert-variant(
         var(--warning),
-        color-mix(in srgb, var(--warning) $tint-medium, var(--background))
+        color-mix(in srgb, var(--warning) $tint-medium, var(--background)),
+        $text: var(--warning-text)
       );
     }
 
     &-error {
       @include alert-variant(
         var(--error),
-        color-mix(in srgb, var(--error) $tint-medium, var(--background))
+        color-mix(in srgb, var(--error) $tint-medium, var(--background)),
+        $text: var(--error-text)
       );
     }
   }

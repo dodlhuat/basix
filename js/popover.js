@@ -9,6 +9,7 @@ class Popover {
     opts;
     popoverEl = null;
     hoverTimer = null;
+    previouslyFocused = null;
     listeners = new ListenerGroup();
     openListeners = null;
     constructor(triggerEl, options) {
@@ -39,6 +40,7 @@ class Popover {
             return;
         if (this.opts.triggerMode === 'click')
             Popover.closeAll();
+        this.previouslyFocused = document.activeElement;
         this.popoverEl = this.buildEl();
         document.body.appendChild(this.popoverEl);
         this.reposition();
@@ -52,6 +54,10 @@ class Popover {
                 document.addEventListener('pointerdown', (e) => this.onOutsideClick(e), { ...openSig, capture: true });
             if (this.opts.closeOnEscape)
                 document.addEventListener('keydown', (e) => this.onEscape(e), openSig);
+            if (this.opts.triggerMode === 'click') {
+                this.focusInto();
+                document.addEventListener('keydown', (e) => this.onTrapTab(e), openSig);
+            }
         });
     }
     close() {
@@ -67,6 +73,9 @@ class Popover {
         const el = this.popoverEl;
         setTimeout(() => el.remove(), 200);
         this.popoverEl = null;
+        if (this.opts.triggerMode === 'click')
+            this.previouslyFocused?.focus();
+        this.previouslyFocused = null;
     }
     toggle() {
         if (this.popoverEl) {
@@ -149,6 +158,42 @@ class Popover {
     onEscape(e) {
         if (e.key === 'Escape')
             this.close();
+    }
+    getFocusable() {
+        if (!this.popoverEl)
+            return [];
+        return Array.from(this.popoverEl.querySelectorAll('a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])'));
+    }
+    focusInto() {
+        if (!this.popoverEl)
+            return;
+        const [first] = this.getFocusable();
+        if (first) {
+            first.focus();
+        }
+        else {
+            this.popoverEl.setAttribute('tabindex', '-1');
+            this.popoverEl.focus();
+        }
+    }
+    onTrapTab(e) {
+        if (e.key !== 'Tab')
+            return;
+        const focusable = this.getFocusable();
+        if (!focusable.length) {
+            e.preventDefault();
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        }
+        else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
     }
     attachTrigger() {
         const sig = { signal: this.listeners.signal };

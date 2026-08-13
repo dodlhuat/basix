@@ -29,6 +29,8 @@ $preview-size:      40px;
   touch-action: none;
   flex-shrink: 0;
 
+  // Below the smallest phones the saturation field needs to shrink further
+  // still — a genuinely component-specific cutoff, not a shared breakpoint.
   @media (min-width: 380px) {
     height: 200px;
   }
@@ -236,7 +238,7 @@ $preview-size:      40px;
 
 // ─── Mobile ───────────────────────────────────────────────────────────────────
 
-@media (max-width: 480px) {
+@media (max-width: $bp-sm) {
   .color-picker__field {
     height: 160px;
   }

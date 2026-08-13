@@ -161,7 +161,7 @@
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: $bp-md) {
   .bottom-sheet {
     left: 50%;
     right: auto;

@@ -203,7 +203,7 @@ select {
     display: none;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: $bp-md) {
     .dropdown-options-menu {
       position: fixed;
       top: 0;
@@ -299,7 +299,7 @@ select {
       font-weight: 700;
       line-height: 13px;
       text-align: center;
-      color: #fff;
+      color: var(--on-accent);
     }
   }
 
@@ -316,7 +316,7 @@ select {
     }
 
     .form-hint {
-      color: var(--error);
+      color: var(--error-text);
 
       &::before {
         content: '!';
@@ -338,7 +338,7 @@ select {
     }
 
     .form-hint {
-      color: var(--success);
+      color: var(--success-text);
 
       &::before {
         content: '✓';
@@ -347,6 +347,15 @@ select {
         opacity: 1;
       }
     }
+  }
+}
+
+// var(--on-accent) is calibrated against --accent-color, which stays
+// comparably dark in both themes. --error/--success flip to lighter, pastel
+// values in dark theme, so the hint glyph needs a dark glyph color there.
+[data-theme="dark"] {
+  .form-hint::before {
+    color: var(--background);
   }
 }
 

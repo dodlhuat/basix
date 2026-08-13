@@ -189,8 +189,11 @@
   caret-color: var(--accent-color);
   transition: box-shadow 0.15s ease;
 
+  // Inset-only, not the shared field-shadow-focus mixin: this surface sits
+  // flush against the toolbar and .editor's own overflow:hidden, so an
+  // outward ring would be clipped on the edges that touch the container.
   &:focus {
-    box-shadow: inset 2px 0 0 var(--accent-color);
+    box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent-color) 22%, transparent);
   }
 
   &:empty::before {
@@ -289,7 +292,8 @@
     transition: border-color 0.12s ease;
 
     &:focus {
-      border-color: color-mix(in srgb, var(--accent-color) 50%, transparent);
+      border-color: var(--accent-color);
+      box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent-color) 22%, transparent);
     }
 
     &::placeholder {
@@ -461,7 +465,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $bp-md) {
   .editor-body {
     flex-direction: column;
   }
@@ -610,7 +614,7 @@
 
 .link-popover-confirm {
   background: var(--accent-color);
-  color: #fff;
+  color: var(--on-accent);
 
   &:hover {
     opacity: 0.88;
@@ -627,7 +631,7 @@
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: $bp-sm) {
   .editor-toolbar button {
     width: 2.125rem;
     height: 2.125rem;

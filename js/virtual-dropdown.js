@@ -9,6 +9,7 @@ class VirtualDropdown {
     renderLimit;
     itemHeight;
     onSelect;
+    selectedLabel;
     anchorName;
     trigger;
     triggerText;
@@ -36,6 +37,7 @@ class VirtualDropdown {
         this.renderLimit = config.renderLimit ?? 20;
         this.itemHeight = config.itemHeight ?? 40;
         this.onSelect = config.onSelect ?? null;
+        this.selectedLabel = config.selectedLabel ?? ((count) => `${count} item${count !== 1 ? 's' : ''} selected`);
         this.anchorName = `--vd-${Math.random().toString(36).slice(2, 9)}`;
         this.selectedValues = new Set();
         this.filteredOptions = [...this.options];
@@ -231,8 +233,7 @@ class VirtualDropdown {
         else {
             this.triggerText.classList.add('has-value');
             if (this.multiSelect) {
-                const count = this.selectedValues.size;
-                this.triggerText.textContent = `${count} item${count !== 1 ? 's' : ''} selected`;
+                this.triggerText.textContent = this.selectedLabel(this.selectedValues.size);
             }
             else {
                 const val = Array.from(this.selectedValues)[0];

@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .accordion {
   margin: 0 auto;
@@ -14,8 +15,18 @@
   &:last-child { border-bottom: none; }
 }
 
+// Kept focusable (not display:none) so the toggle stays reachable by keyboard —
+// a display:none checkbox drops out of the tab order in every major browser.
 .accordion-toggle {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .accordion-header {
@@ -54,6 +65,10 @@
     transform: rotate(-135deg);
     border-color: var(--accent-color);
   }
+}
+
+.accordion-toggle:focus-visible + .accordion-header {
+  @include focus-ring(-2px);
 }
 
 .accordion-content {

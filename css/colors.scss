@@ -5,7 +5,7 @@ body {
 }
 
 .warning {
-  color: var(--warning);
+  color: var(--warning-text);
 }
 
 .warning-bg {
@@ -13,7 +13,7 @@ body {
 }
 
 .error {
-  color: var(--error);
+  color: var(--error-text);
 }
 
 .error-bg {
@@ -21,7 +21,7 @@ body {
 }
 
 .success {
-  color: var(--success);
+  color: var(--success-text);
 }
 
 .success-bg {

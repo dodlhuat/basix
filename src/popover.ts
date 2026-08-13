@@ -33,6 +33,7 @@ class Popover {
     private readonly opts: Required<PopoverOptions>;
     private popoverEl: HTMLElement | null = null;
     private hoverTimer: number | null = null;
+    private previouslyFocused: HTMLElement | null = null;
     private listeners = new ListenerGroup();
     private openListeners: ListenerGroup | null = null;
 
@@ -66,6 +67,8 @@ class Popover {
         if (this.popoverEl) return;
         if (this.opts.triggerMode === 'click') Popover.closeAll();
 
+        this.previouslyFocused = document.activeElement as HTMLElement | null;
+
         this.popoverEl = this.buildEl();
         document.body.appendChild(this.popoverEl);
         this.reposition();
@@ -79,6 +82,13 @@ class Popover {
             const openSig = { signal: this.openListeners.signal };
             if (this.opts.closeOnOutsideClick) document.addEventListener('pointerdown', (e) => this.onOutsideClick(e), { ...openSig, capture: true });
             if (this.opts.closeOnEscape) document.addEventListener('keydown', (e) => this.onEscape(e), openSig);
+
+            // Hover-triggered popovers (tooltips, previews) must never steal
+            // keyboard focus just because the pointer passed over the trigger.
+            if (this.opts.triggerMode === 'click') {
+                this.focusInto();
+                document.addEventListener('keydown', (e) => this.onTrapTab(e), openSig);
+            }
         });
     }
 
@@ -98,6 +108,9 @@ class Popover {
         const el = this.popoverEl;
         setTimeout(() => el.remove(), 200);
         this.popoverEl = null;
+
+        if (this.opts.triggerMode === 'click') this.previouslyFocused?.focus();
+        this.previouslyFocused = null;
     }
 
     public toggle(): void {
@@ -191,6 +204,48 @@ class Popover {
 
     private onEscape(e: KeyboardEvent): void {
         if (e.key === 'Escape') this.close();
+    }
+
+    private getFocusable(): HTMLElement[] {
+        if (!this.popoverEl) return [];
+        return Array.from(
+            this.popoverEl.querySelectorAll<HTMLElement>(
+                'a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+            ),
+        );
+    }
+
+    private focusInto(): void {
+        if (!this.popoverEl) return;
+
+        const [first] = this.getFocusable();
+        if (first) {
+            first.focus();
+        } else {
+            this.popoverEl.setAttribute('tabindex', '-1');
+            this.popoverEl.focus();
+        }
+    }
+
+    private onTrapTab(e: KeyboardEvent): void {
+        if (e.key !== 'Tab') return;
+
+        const focusable = this.getFocusable();
+        if (!focusable.length) {
+            e.preventDefault();
+            return;
+        }
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
     }
 
     private attachTrigger(): void {

@@ -1,11 +1,16 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .switch {
   input[type=checkbox] {
     position: absolute;
     opacity: 0;
     width: auto;
+  }
+
+  input[type=checkbox]:focus-visible + label {
+    @include focus-glow(15%);
   }
 
   label {

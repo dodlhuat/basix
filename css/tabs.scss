@@ -126,7 +126,7 @@
 
     &.active {
       background: var(--accent-color);
-      color: #fff;
+      color: var(--on-accent);
       border-bottom-color: transparent;
     }
 
@@ -136,7 +136,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $bp-md) {
   .tab-item {
     // bump vertical padding so touch targets reach ~44px
     padding: calc($spacing * 0.875) calc($spacing * 1.25);

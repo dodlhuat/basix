@@ -42,7 +42,7 @@
 
       &.selected {
         background: color-mix(in srgb, var(--accent-color) $tint-medium, var(--background));
-        color: var(--accent-color);
+        color: var(--link-color);
         border-color: color-mix(in srgb, var(--accent-color) $tint-strong, transparent);
 
         &:hover {
@@ -89,38 +89,38 @@
     }
 
     &-accent {
-      @include tinted-tag(var(--accent-color));
+      @include tinted-tag(var(--accent-color), $text: var(--link-color));
 
       &.closeable button:hover {
         background: color-mix(in srgb, var(--accent-color) $tint-strong, transparent);
-        color: var(--accent-color);
+        color: var(--link-color);
       }
     }
 
     &-success {
-      @include tinted-tag(var(--success));
+      @include tinted-tag(var(--success), $text: var(--success-text));
 
       &.closeable button:hover {
         background: color-mix(in srgb, var(--success) $tint-strong, transparent);
-        color: var(--success);
+        color: var(--success-text);
       }
     }
 
     &-warning {
-      @include tinted-tag(var(--warning));
+      @include tinted-tag(var(--warning), $text: var(--warning-text));
 
       &.closeable button:hover {
         background: color-mix(in srgb, var(--warning) $tint-strong, transparent);
-        color: var(--warning);
+        color: var(--warning-text);
       }
     }
 
     &-error {
-      @include tinted-tag(var(--error));
+      @include tinted-tag(var(--error), $text: var(--error-text));
 
       &.closeable button:hover {
         background: color-mix(in srgb, var(--error) $tint-strong, transparent);
-        color: var(--error);
+        color: var(--error-text);
       }
     }
 

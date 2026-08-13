@@ -18,7 +18,7 @@
 
   --cal-accent:      var(--accent-color);
   --cal-accent-light: var(--accent-color-lighten);
-  --cal-accent-text: #fff;
+  --cal-accent-text: var(--on-accent);
 
   --cal-today-ring:  var(--accent-color);
 
@@ -730,7 +730,7 @@
   text-align: center;
 }
 
-@media (max-width: 600px) {
+@media (max-width: $bp-md) {
   .cal__header {
     gap: var(--cal-spacing-xs);
   }

@@ -21,6 +21,11 @@
   &.warning { background: var(--warning); }
   &.error   { background: var(--error); }
 
+  // !important is load-bearing here: consumers commonly set a determinate
+  // bar's width via inline style="width:...%" (see docs/components/
+  // progress.html), which always outranks a stylesheet rule regardless of
+  // selector specificity — only !important can override it when a bar
+  // switches into the indeterminate .animated state.
   &.animated {
     width: 40% !important;
     background: var(--accent-color);

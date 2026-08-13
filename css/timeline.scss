@@ -45,28 +45,31 @@ $marker-size: 1.25rem;
   z-index: 1;
   margin-top: 0.15rem;
 
+  // success/warning/error turn into light, pastel tones in dark theme, so
+  // white text (fine against --accent-color in both themes) fails badly
+  // against them there — --primary-dark stays dark in both themes instead.
   &.success {
     border-color: var(--success);
     background: var(--success);
-    color: #fff;
+    color: var(--primary-dark);
   }
 
   &.warning {
     border-color: var(--warning);
     background: var(--warning);
-    color: #fff;
+    color: var(--primary-dark);
   }
 
   &.error {
     border-color: var(--error);
     background: var(--error);
-    color: #fff;
+    color: var(--primary-dark);
   }
 
   &.accent {
     border-color: var(--accent-color);
     background: var(--accent-color);
-    color: #fff;
+    color: var(--on-accent);
   }
 
   svg { display: block; }

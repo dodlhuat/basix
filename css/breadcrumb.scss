@@ -80,7 +80,7 @@
   }
 
   &--collapse {
-    @media (max-width: 600px) {
+    @media (max-width: $bp-md) {
       li:not(:nth-last-child(-n+2)) {
         display: none;
       }
@@ -139,7 +139,7 @@
     margin-bottom: calc($spacing * 1.5);
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: $bp-md) {
     &__title-row {
       flex-wrap: wrap;
     }
