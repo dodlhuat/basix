@@ -1,5 +1,6 @@
 @use "properties";
 @use "parameters" as *;
+@use "mixins" as *;
 
 .chart {
   --chart-color-1: var(--accent-color);
@@ -40,6 +41,10 @@
     width: 100%;
     position: relative;
     overflow: hidden;
+
+    &:has(.chart-empty) {
+      display: flex;
+    }
   }
 
   &-svg {
@@ -90,13 +95,20 @@
 
   .chart-point-group {
     cursor: pointer;
+    outline: none;
 
-    &:hover .chart-point-dot {
+    &:hover .chart-point-dot,
+    &:focus-visible .chart-point-dot {
       r: 5;
     }
 
-    &:hover .chart-point-ring {
+    &:hover .chart-point-ring,
+    &:focus-visible .chart-point-ring {
       opacity: 1;
+    }
+
+    &:focus-visible .chart-point-ring {
+      stroke-width: 3;
     }
   }
 
@@ -121,10 +133,17 @@
       opacity: 0.85;
       filter: brightness(1.08);
     }
+
+    &:focus-visible {
+      opacity: 0.85;
+      filter: brightness(1.08);
+      @include focus-ring();
+    }
   }
 
   .chart-slice {
     cursor: pointer;
+    outline: none;
     transform-box: fill-box;
     transform-origin: center;
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -132,8 +151,74 @@
     animation: chart-slice-in 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
     animation-delay: var(--animation-delay, 0ms);
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       filter: brightness(1.08);
+    }
+
+    &:focus-visible {
+      // CSS outline hugs the SVG path's bounding box, not its shape — a huge
+      // rectangle for a pie slice. A thicker stroke traces the slice itself.
+      // primary-text (not accent-color) because the first slice's default
+      // fill IS --accent-color — an accent stroke would vanish against it.
+      stroke: var(--primary-text);
+      stroke-width: 3px;
+    }
+  }
+
+  .chart-zero-line {
+    stroke-width: 1.5;
+  }
+
+  .chart-data-label {
+    fill: var(--secondary-text);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-family: inherit;
+    pointer-events: none;
+  }
+
+  .chart-slice-label {
+    fill: #fff;
+    stroke: rgba(0, 0, 0, 0.35);
+    stroke-width: 2px;
+    paint-order: stroke fill;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-family: inherit;
+    pointer-events: none;
+  }
+
+  .chart-donut-value {
+    fill: var(--primary-text);
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-family: inherit;
+    pointer-events: none;
+  }
+
+  .chart-donut-label {
+    fill: var(--secondary-text);
+    font-size: 0.75rem;
+    font-family: inherit;
+    pointer-events: none;
+  }
+
+  &-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: calc($spacing * 0.5);
+    width: 100%;
+    color: var(--secondary-text);
+    font-size: 0.8125rem;
+    text-align: center;
+
+    .icon-svg {
+      width: 28px;
+      height: 28px;
+      opacity: 0.6;
     }
   }
 
@@ -150,7 +235,24 @@
     gap: calc($spacing * 0.4);
     font-size: 0.75rem;
     color: var(--secondary-text);
-    cursor: default;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    border-radius: 3px;
+
+    &:focus-visible {
+      @include focus-ring();
+    }
+
+    &.is-hidden {
+      opacity: 0.45;
+
+      span {
+        text-decoration: line-through;
+      }
+    }
   }
 
   &-legend-swatch {
@@ -174,6 +276,24 @@
     gap: calc($spacing * 0.5);
     font-size: 0.8125rem;
     color: var(--secondary-text);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    border-radius: 3px;
+
+    &:focus-visible {
+      @include focus-ring();
+    }
+
+    &.is-hidden {
+      opacity: 0.45;
+
+      span {
+        text-decoration: line-through;
+      }
+    }
   }
 
   &-pie-legend-swatch {

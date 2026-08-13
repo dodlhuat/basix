@@ -8385,6 +8385,9 @@ ul.tree li {
   position: relative;
   overflow: hidden;
 }
+.chart-canvas:has(.chart-empty) {
+  display: flex;
+}
 .chart-svg {
   display: block;
   width: 100%;
@@ -8425,12 +8428,16 @@ ul.tree li {
 }
 .chart .chart-point-group {
   cursor: pointer;
+  outline: none;
 }
-.chart .chart-point-group:hover .chart-point-dot {
+.chart .chart-point-group:hover .chart-point-dot, .chart .chart-point-group:focus-visible .chart-point-dot {
   r: 5;
 }
-.chart .chart-point-group:hover .chart-point-ring {
+.chart .chart-point-group:hover .chart-point-ring, .chart .chart-point-group:focus-visible .chart-point-ring {
   opacity: 1;
+}
+.chart .chart-point-group:focus-visible .chart-point-ring {
+  stroke-width: 3;
 }
 .chart .chart-bar {
   transition: opacity 0.15s ease, filter 0.15s ease;
@@ -8451,16 +8458,76 @@ ul.tree li {
   opacity: 0.85;
   filter: brightness(1.08);
 }
+.chart .chart-bar:focus-visible {
+  opacity: 0.85;
+  filter: brightness(1.08);
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
 .chart .chart-slice {
   cursor: pointer;
+  outline: none;
   transform-box: fill-box;
   transform-origin: center;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.15s ease;
   animation: chart-slice-in 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
   animation-delay: var(--animation-delay, 0ms);
 }
-.chart .chart-slice:hover {
+.chart .chart-slice:hover, .chart .chart-slice:focus-visible {
   filter: brightness(1.08);
+}
+.chart .chart-slice:focus-visible {
+  stroke: var(--primary-text);
+  stroke-width: 3px;
+}
+.chart .chart-zero-line {
+  stroke-width: 1.5;
+}
+.chart .chart-data-label {
+  fill: var(--secondary-text);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-family: inherit;
+  pointer-events: none;
+}
+.chart .chart-slice-label {
+  fill: #fff;
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 2px;
+  paint-order: stroke fill;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-family: inherit;
+  pointer-events: none;
+}
+.chart .chart-donut-value {
+  fill: var(--primary-text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: inherit;
+  pointer-events: none;
+}
+.chart .chart-donut-label {
+  fill: var(--secondary-text);
+  font-size: 0.75rem;
+  font-family: inherit;
+  pointer-events: none;
+}
+.chart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  color: var(--secondary-text);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+.chart-empty .icon-svg {
+  width: 28px;
+  height: 28px;
+  opacity: 0.6;
 }
 .chart-legend {
   display: flex;
@@ -8474,7 +8541,22 @@ ul.tree li {
   gap: 0.4rem;
   font-size: 0.75rem;
   color: var(--secondary-text);
-  cursor: default;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  border-radius: 3px;
+}
+.chart-legend-item:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+.chart-legend-item.is-hidden {
+  opacity: 0.45;
+}
+.chart-legend-item.is-hidden span {
+  text-decoration: line-through;
 }
 .chart-legend-swatch {
   width: 10px;
@@ -8495,6 +8577,22 @@ ul.tree li {
   gap: 0.5rem;
   font-size: 0.8125rem;
   color: var(--secondary-text);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  border-radius: 3px;
+}
+.chart-pie-legend-item:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+.chart-pie-legend-item.is-hidden {
+  opacity: 0.45;
+}
+.chart-pie-legend-item.is-hidden span {
+  text-decoration: line-through;
 }
 .chart-pie-legend-swatch {
   width: 12px;

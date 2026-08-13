@@ -1,4 +1,4 @@
-# Basix 1.5.2
+# Basix 1.5.3
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,19 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.5.2 → 1.5.3
+
+`Chart` gained keyboard/screen-reader support and several new capabilities, following on from the 1.5.2 accessibility pass. No breaking changes.
+
+- **Keyboard & screen reader access** — every point, bar, and slice is now reachable with `Tab` and activatable with `Enter`/`Space` (fires `onPointClick`), with a visible focus indicator and an `aria-label` describing the value. The chart `<svg>` gets an accessible name via `<title>` (built from `title` or the series/segment names).
+- **Pointer events replace mouse events** — hover/tooltip handling now uses `pointerenter`/`pointermove`/`pointerleave` instead of the mouse-only equivalents, for better pen/touch behaviour.
+- **Negative values fixed** — `column` and `bar` bars used to clip negative values to `0`. They now hang from a zero baseline, and `yMin`/`yMax` auto-detect the correct range when the data goes negative (only affects charts with negative values and no explicit `yMin`).
+- **Clickable legend** — legend entries are real `<button>`s that toggle their series (or pie slice) on/off, with a dimmed/struck-through state. Toggling all series off shows the empty state.
+- **`stacked`** — new option for `column`/`bar` to stack series instead of grouping them side-by-side.
+- **`innerRadius`** — new option for `pie` to render a donut, with a center label showing the total (or the hovered/focused slice).
+- **`showDataLabels`** — new option to print the value directly on each point/bar/slice.
+- **Empty state** — a chart with no data (or every series hidden via the legend) now shows an icon + message instead of a blank box. Configurable via the new `iconBasePath` and `emptyMessage` options.
 
 ### 1.5.1 → 1.5.2
 
@@ -677,7 +690,7 @@ The Placeholder component creates skeleton loading states. Use `.placeholder` wi
 
 ### Chart
 
-The Chart component renders SVG-based charts with no external dependencies. Supports line, area, column, bar, and pie chart types. Animates on first render and redraws on container resize.
+The Chart component renders SVG-based charts with no external dependencies. Supports line, area, column, bar, and pie chart types (with optional stacking and a donut mode). Animates on first render and redraws on container resize. Every point/bar/slice is keyboard-reachable and screen-reader labelled, and the legend is clickable to toggle series/slices on and off.
 
 ``` js
 const chart = new Chart('#chart-container', {
@@ -707,13 +720,18 @@ chart.destroy();           // remove listeners and DOM
 | `title` | string | — | Optional chart title |
 | `subtitle` | string | — | Optional subtitle below the title |
 | `height` | number | `280` | Inner chart height in px |
-| `showLegend` | boolean | `true` | Renders the series legend |
+| `showLegend` | boolean | `true` | Renders the series legend. Entries are clickable to toggle a series/slice |
 | `showGrid` | boolean | `true` | Renders background grid lines |
+| `showDataLabels` | boolean | `false` | Prints the value on each point/bar/slice |
 | `animate` | boolean | `true` | Animates on first render |
 | `curve` | string | `'smooth'` | Line interpolation for line/area: `'smooth'`, `'linear'`, `'step'` |
-| `yMin` | number | `0` | Fixed y-axis minimum |
-| `yMax` | number | auto | Fixed y-axis maximum (defaults to max value × 1.1) |
-| `onPointClick` | function | — | Callback `(series, point, index) => void` fired on data point click |
+| `stacked` | boolean | `false` | Stack series on top of each other. `column`/`bar` only |
+| `innerRadius` | number | `0` | Donut hole radius as a fraction of the pie radius (0–1). `pie` only |
+| `yMin` | number | auto | Fixed axis minimum (defaults to `0`, or the lowest value × 1.1 if negative) |
+| `yMax` | number | auto | Fixed axis maximum (defaults to max value × 1.1) |
+| `iconBasePath` | string | `'svg-icons/'` | Base path to the SVG sprite, used by the empty-state icon |
+| `emptyMessage` | string | `'No data to display'` | Message shown when there is no data to render |
+| `onPointClick` | function | — | Callback `(series, point, index) => void` fired on activation (click, or `Enter`/`Space` while focused) |
 
 ### Calendar
 

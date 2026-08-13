@@ -52,6 +52,41 @@
         new Chart('#chart-curve-linear', { type: 'line', curve: 'linear', series: curveSeries, showLegend: false });
         new Chart('#chart-curve-step',   { type: 'line', curve: 'step',   series: curveSeries, showLegend: false });
 
+        new Chart('#chart-stacked', {
+            type: 'column',
+            stacked: true,
+            series: [
+                { name: 'Direct',   data: mkData(months, [18, 22, 20, 26, 24, 30]) },
+                { name: 'Referral', data: mkData(months, [10, 14, 12, 16, 15, 18]) },
+                { name: 'Social',   data: mkData(months, [6, 8, 9, 11, 12, 14]) },
+            ],
+        });
+
+        new Chart('#chart-donut', {
+            type: 'pie',
+            innerRadius: 0.65,
+            showDataLabels: true,
+            series: [{ name: 'Share', data: mkData(['Chrome', 'Safari', 'Firefox', 'Edge', 'Other'], [35, 25, 20, 15, 5]) }],
+        });
+
+        new Chart('#chart-negative', {
+            type: 'column',
+            series: [{ name: 'Net change', data: mkData(months, [12, -8, 15, -4, -11, 20]) }],
+        });
+
+        new Chart('#chart-labels', {
+            type: 'bar',
+            showDataLabels: true,
+            showLegend: false,
+            series: [{ name: 'Score', data: mkData(['Design', 'Development', 'Performance', 'Accessibility', 'SEO'], [80, 65, 90, 55, 70]) }],
+        });
+
+        new Chart('#chart-empty-demo', {
+            type: 'line',
+            iconBasePath: '../../svg-icons/',
+            series: [{ name: 'Revenue', data: [] }],
+        });
+
         new CodeViewer('#code-js', `import { Chart } from '@dodlhuat/basix/js/chart.js';
 
 new Chart('#my-chart', {
@@ -98,8 +133,9 @@ new Chart('#my-chart', {
         </div>
         <div class="docs-content">
             <h1>Charts</h1>
-            <p class="docs-lead">Pure SVG chart components — no external dependencies. Five types with enter animations, hover tooltips, legends, and full dark mode support.</p>
+            <p class="docs-lead">Pure SVG chart components — no external dependencies. Five types with enter animations, hover tooltips, clickable legends, and full dark mode support.</p>
             <p class="docs-import">{ Chart } from '/basix/js/chart.js'</p>
+            <p>Every point, bar, and slice is keyboard-reachable (<code>Tab</code>, activate with <code>Enter</code>/<code>Space</code>) and exposes an accessible name for screen readers. Legend entries are real buttons — click one to hide or re-show its series/slice.</p>
 
             <h2>Line</h2>
             <p>Smooth Catmull-Rom bezier curves. Supports multiple series and hover tooltips.</p>
@@ -138,6 +174,26 @@ new Chart('#my-chart', {
                 </div>
             </div>
 
+            <h2>Stacked</h2>
+            <p>Set <code>stacked: true</code> on a <code>column</code> or <code>bar</code> chart to stack series instead of grouping them side-by-side. Mixed positive/negative values stack correctly on either side of the zero line.</p>
+            <div class="docs-demo"><div id="chart-stacked"></div></div>
+
+            <h2>Donut</h2>
+            <p>Set <code>innerRadius</code> (0–1) on a <code>pie</code> chart to cut a hole in the middle. The center shows the total, and swaps to the hovered/focused slice's value.</p>
+            <div class="docs-demo"><div id="chart-donut"></div></div>
+
+            <h2>Negative values</h2>
+            <p>Bars and columns hang from a zero baseline instead of clipping negative values to <code>0</code>. The axis range auto-adjusts to fit the data on both sides.</p>
+            <div class="docs-demo"><div id="chart-negative"></div></div>
+
+            <h2>Data labels</h2>
+            <p>Set <code>showDataLabels: true</code> to print the value directly on each bar, point, or slice.</p>
+            <div class="docs-demo"><div id="chart-labels"></div></div>
+
+            <h2>Empty state</h2>
+            <p>When a chart has no data to plot (or every series has been toggled off via the legend), it shows a placeholder instead of a blank canvas. Customize the icon path and message with <code>iconBasePath</code> and <code>emptyMessage</code>.</p>
+            <div class="docs-demo"><div id="chart-empty-demo"></div></div>
+
             <h2>Usage</h2>
             <div id="code-html"></div>
             <div id="code-js" style="margin-top:0.5rem;"></div>
@@ -149,12 +205,18 @@ new Chart('#my-chart', {
                     <tr><td><code>type</code></td><td>line | area | column | bar | pie</td><td>—</td><td>Chart type to render.</td></tr>
                     <tr><td><code>series</code></td><td>Array&lt;{name, data[]}&gt;</td><td>—</td><td>One or more data series. Each has a <code>name</code> and an array of <code>{ label, value }</code> data points.</td></tr>
                     <tr><td><code>height</code></td><td>number</td><td><code>280</code></td><td>Inner chart height in px.</td></tr>
-                    <tr><td><code>showLegend</code></td><td>boolean</td><td><code>true</code></td><td>Show the legend below the chart.</td></tr>
+                    <tr><td><code>showLegend</code></td><td>boolean</td><td><code>true</code></td><td>Show the legend below the chart. Entries are clickable to toggle a series/slice.</td></tr>
                     <tr><td><code>showGrid</code></td><td>boolean</td><td><code>true</code></td><td>Show horizontal grid lines.</td></tr>
+                    <tr><td><code>showDataLabels</code></td><td>boolean</td><td><code>false</code></td><td>Print the value on each point/bar/slice.</td></tr>
                     <tr><td><code>animate</code></td><td>boolean</td><td><code>true</code></td><td>Enable enter animations.</td></tr>
                     <tr><td><code>curve</code></td><td>smooth | linear | step</td><td><code>'smooth'</code></td><td>Line interpolation style for <code>line</code> and <code>area</code> charts.</td></tr>
-                    <tr><td><code>yMin</code></td><td>number</td><td><code>0</code></td><td>Fixed y-axis minimum.</td></tr>
-                    <tr><td><code>yMax</code></td><td>number</td><td>auto</td><td>Fixed y-axis maximum. Defaults to max value × 1.1.</td></tr>
+                    <tr><td><code>stacked</code></td><td>boolean</td><td><code>false</code></td><td>Stack series on top of each other. <code>column</code>/<code>bar</code> only.</td></tr>
+                    <tr><td><code>innerRadius</code></td><td>number</td><td><code>0</code></td><td>Donut hole radius as a fraction of the pie radius (0–1). <code>pie</code> only.</td></tr>
+                    <tr><td><code>yMin</code></td><td>number</td><td>auto</td><td>Fixed axis minimum. Defaults to <code>0</code>, or the lowest value × 1.1 if negative.</td></tr>
+                    <tr><td><code>yMax</code></td><td>number</td><td>auto</td><td>Fixed axis maximum. Defaults to the highest value × 1.1.</td></tr>
+                    <tr><td><code>iconBasePath</code></td><td>string</td><td><code>'svg-icons/'</code></td><td>Base path to the SVG sprite, used by the empty state icon.</td></tr>
+                    <tr><td><code>emptyMessage</code></td><td>string</td><td><code>'No data to display'</code></td><td>Message shown when there is no data to render.</td></tr>
+                    <tr><td><code>onPointClick</code></td><td>function</td><td>—</td><td>Callback <code>(series, point, index) =&gt; void</code> fired when a point/bar/slice is activated (click, or <code>Enter</code>/<code>Space</code> while focused).</td></tr>
                 </tbody>
             </table>
         </div>
