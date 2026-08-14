@@ -317,11 +317,93 @@ RangeSliderRange.initAll();
 
 ### Push Menu
 
-The PushMenu component creates a sidebar navigation that "pushes" the main content when opened. Uses a checkbox-based toggle mechanism.
+The PushMenu component creates a sidebar navigation that "pushes" the main content when opened. Built on a CSS checkbox toggle — no JS required to open/close. Nested `<ul>` items are automatically extracted into sliding sub-panels. It's a static class: call `PushMenu.init()` once after the required elements exist in the DOM.
+
+``` html
+<!-- Header: hamburger toggle -->
+<div class="main-header">
+    <div class="navigation-controls">
+        <input type="checkbox" id="menu-navigation" class="navigation"/>
+        <label for="menu-navigation"><svg class="icon-svg"><use href="svg-icons/icons.svg#menu"/></svg></label>
+    </div>
+</div>
+
+<!-- Sidebar nav -->
+<nav class="push-menu">
+    <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li>
+            <a>Settings</a>
+            <ul>
+                <li><a href="#">Account</a></li>
+                <li><a href="#">Privacy</a></li>
+            </ul>
+        </li>
+        <li><a href="#">Logout</a></li>
+    </ul>
+</nav>
+<div class="push-menu-backdrop"></div>
+
+<!-- Main content area -->
+<div class="content push-content"><!-- page content --></div>
+```
+
+``` js
+import { PushMenu } from '@dodlhuat/basix/js/push-menu.js';
+
+PushMenu.init();          // call once after DOM is ready
+
+PushMenu.open();
+PushMenu.close();
+PushMenu.isOpen();        // boolean
+PushMenu.refresh();       // re-query DOM elements after dynamic changes
+PushMenu.destroy();       // remove listeners and reset state
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `iconBasePath` | string | `'svg-icons/'` | Base path to the SVG icon sprite, used by sub-panel back/chevron icons |
+
+Required selectors: `.navigation` (the checkbox), `.push-menu` (the `<nav>`), `.push-content` (the pushed content wrapper), `.main-header` (the top bar that moves with the content), `.push-menu-backdrop` (closes the menu on click).
 
 ### Flyout Menu
 
 The Flyout Menu component creates slide-in navigation menus with nested submenus. Supports left/right direction, header/footer and keyboard navigation (Escape to close).
+
+``` html
+<button id="my-trigger">Open menu</button>
+<div class="flyout-overlay" id="flyoutOverlay"></div>
+<div class="flyout-menu" id="flyoutMenu">
+    <ul>
+        <li>Section
+            <ul>
+                <li><a href="#">Item A</a></li>
+                <li><a href="#">Item B</a></li>
+            </ul>
+        </li>
+        <li><a href="#">Standalone link</a></li>
+    </ul>
+</div>
+```
+
+``` js
+const flyout = new FlyoutMenu({
+    triggerSelector: '.trigger-flyout-menu', // opens the menu
+    menuSelector:    '#flyoutMenu',
+    overlaySelector: '#flyoutOverlay',
+    closeSelector:   '.close-menu',          // elements inside that close on click
+    direction:       'right',                // 'right' | 'left'
+    title:           'Navigation',
+    enableHeader:    true,
+    footerText:      '&copy; 2026 Brand Inc.',
+    enableFooter:    true,
+});
+
+flyout.open();
+flyout.close();
+flyout.setDirection('left');
+flyout.destroy();
+```
 
 | Option | Type | Default | Description |
 |---|---|---|---|
@@ -329,11 +411,49 @@ The Flyout Menu component creates slide-in navigation menus with nested submenus
 | `menuSelector` | string | `'#flyoutMenu'` | CSS selector for the flyout menu element |
 | `overlaySelector` | string | `'#flyoutOverlay'` | CSS selector for the backdrop overlay |
 | `closeSelector` | string | `'.close-menu'` | CSS selector for close button(s) inside the menu |
+| `submenuToggleSelector` | string | `'.submenu-toggle'` | CSS selector for nested submenu toggle elements |
 | `direction` | string | `'right'` | Slide-in direction, either `'right'` or `'left'` |
 | `title` | string | `'Menu'` | Shown in the header if enabled |
 | `enableHeader` | boolean | `true` | Shows the menu header |
 | `footerText` | string | `'© 2025 Brand Inc.'` | Shown in the footer if enabled |
 | `enableFooter` | boolean | `true` | Shows the menu footer |
+
+### Sidebar Nav
+
+The SidebarNav component wraps an always-visible sidebar on desktop that collapses into a slide-in drawer on mobile — a backdrop, swipe-to-open/close gestures, and auto-scroll to the active nav item on init.
+
+``` html
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="my-sidebar"><!-- nav content --></aside>
+    <div class="sidebar-backdrop"></div>
+    <div class="sidebar-main">
+        <button class="sidebar-toggle" aria-label="Open sidebar">☰</button>
+        <!-- page content -->
+    </div>
+</div>
+```
+
+``` js
+const nav = new SidebarNav('.sidebar-layout', {
+    toggleSelector: '#my-toggle',
+    breakpoint: 768,
+});
+
+nav.open();
+nav.close();
+nav.toggle();
+nav.isOpen();   // boolean
+nav.destroy();
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `toggleSelector` | string | `'.sidebar-toggle'` | CSS selector for the hamburger toggle button |
+| `breakpoint` | number | `768` | Viewport width (px) above which the sidebar is permanently visible and the drawer auto-closes |
+| `swipeThreshold` | number | `60` | Minimum horizontal swipe distance (px) to trigger open/close on touch |
+| `swipeEdge` | number | `20` | Width (px) of the left-edge zone that triggers open on swipe-right |
+| `iconBasePath` | string | `'svg-icons/'` | Base path to the SVG icon sprite, used by the injected close button |
+| `activeSelector` | string | `'.is-active'` | Selector (searched within the sidebar) for the active nav item, scrolled into view on init if present |
 
 ### Popover
 
@@ -391,15 +511,31 @@ The Dropdown Menu allows to create multi-level dropdown menus with nested submen
 
 ### Modal
 
-The Modal component creates dialog overlays with header, content, and footer sections. Supports types (success, error, warning, info) and close on Escape key.
+The Modal component creates dialog overlays with header, content, and footer sections. Supports type variants (success, error, warning, info) and closes on Escape key or backdrop click.
 
-| Parameter | Type | Description |
-|---|---|---|
-| `content` | string | Content of the modal. Can be HTML or a simple string |
-| `header` | string | Header of the modal. Can be HTML or a simple string |
-| `footer` | string | Footer of the modal. Can be HTML or a simple string |
-| `closeable` | boolean | Shows a close button |
-| `type` | ModalType | The type of the modal (success, error, warning, info, default) |
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `content` | string | — | Content of the modal. Can be HTML or a simple string |
+| `header` | string | — | Header of the modal. Can be HTML or a simple string |
+| `footer` | string | — | Footer of the modal. Can be HTML or a simple string |
+| `closeable` | boolean | `true` | Shows a close button and enables Escape/backdrop-click dismissal |
+| `type` | ModalType | `'default'` | `'default'`, `'success'`, `'error'`, `'warning'`, or `'info'` |
+| `iconBasePath` | string | `'svg-icons/'` | Base path to the SVG icon sprite, used by the close icon |
+
+``` js
+const modal = new Modal({
+    header: 'Delete item?',
+    content: 'This action cannot be undone.',
+    footer: '<div class="buttons"><button>Cancel</button><button>Delete</button></div>',
+    type: 'error',
+});
+
+modal.show();
+modal.hide();
+modal.updateContent('<p>New content</p>');
+modal.isVisible();   // boolean
+modal.destroy();
+```
 
 ### Toast
 
@@ -840,7 +976,33 @@ The constructor accepts a CSS selector string, a single `HTMLElement`, or an arr
 
 ### Data Tables
 
-The Table component provides sortable, searchable, and paginated data tables. It can parse existing HTML tables or accept data programmatically.
+The Table component provides sortable, searchable, and paginated data tables. Pass `data`/`columns` programmatically, or omit them and it reads an existing `<table>`'s `thead`/`tbody` markup inside the container instead.
+
+``` js
+const table = new Table('#my-table', {
+    columns: [
+        { key: 'name',   label: 'Name',   sortable: true },
+        { key: 'role',   label: 'Role',   sortable: true },
+        { key: 'status', label: 'Status', sortable: false },
+    ],
+    data: [
+        { name: 'Alice Müller', role: 'Admin',  status: 'Active' },
+        { name: 'Bob Schmitt',  role: 'Editor', status: 'Pending' },
+    ],
+    pageSize: 10,
+});
+
+table.setData(newData);       // replace data and re-render
+table.setColumns(newColumns); // replace columns and re-render
+table.getData();              // current filtered + sorted data
+table.destroy();              // remove listeners and clear container
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `data` | TableRow[] | `[]` | Row data, each an object keyed by column `key` |
+| `columns` | TableColumn[] | `[]` | Column definitions: `{ key, label, sortable? }` |
+| `pageSize` | number | `10` | Rows shown per page |
 
 ### Date Picker
 
@@ -875,29 +1037,125 @@ The DatePicker component provides a calendar interface for date selection. Suppo
 
 The TreeComponent renders hierarchical data as an expandable/collapsible tree. Supports file/folder icons, selection, and programmatic expand/collapse.
 
-#### TreeComponent Parameters
+``` js
+import { TreeComponent, TreeNode } from '@dodlhuat/basix/js/tree.js';
 
-| Parameter | Type | Description |
-|---|---|---|
-| `container` | HTMLElement \| string | The container element |
-| `data` | TreeNode[] | An array of TreeNodes to render |
-| `selectedNode` | TreeNode \| null | The currently selected TreeNode |
+const data = [
+    new TreeNode('src', 'folder', [
+        new TreeNode('index.ts'),
+        new TreeNode('components', 'folder', [
+            new TreeNode('Button.ts'),
+            new TreeNode('Modal.ts'),
+        ]),
+    ]),
+];
+
+const tree = new TreeComponent('#my-tree', data, {
+    onSelect: (node) => console.log('selected:', node.label),
+});
+
+tree.expandAll();
+tree.collapseAll();
+tree.selectNode(data[0]);
+tree.getSelectedNode();          // TreeNode | null
+tree.findNodeByLabel('Modal.ts'); // TreeNode | null
+tree.destroy();
+```
+
+`new TreeComponent(elementOrSelector, data, options)` — `options` only has `onSelect?: (node: TreeNode) => void`.
 
 #### TreeNode
 
-| Parameter | Type | Description |
+`new TreeNode(label, type = 'file', children = [])`
+
+| Property | Type | Description |
 |---|---|---|
-| `label` | string | The label of the TreeNode |
-| `type` | NodeType | The type of the TreeNode: `'file'` \| `'folder'` |
-| `children` | TreeNode[] | An array of child TreeNodes |
+| `label` | string | The node's label |
+| `type` | NodeType | `'file'` or `'folder'` |
+| `children` | TreeNode[] | Child nodes (folders only) |
+| `expanded` | boolean | Whether a folder node is currently expanded |
+| `selected` | boolean | Whether the node is currently selected |
 
 ### File Uploader
 
-The FileUploader component provides drag-and-drop file upload functionality with progress indication. Supports file validation (size, type), multiple files, and upload cancellation.
+The FileUploader component provides drag-and-drop file upload functionality with progress indication. Supports file validation (size, type), multiple files, and upload cancellation. It hydrates existing markup rather than rendering its own — the container must already contain `.file-input`, `.drop-zone`, `.file-list`, and `.upload-btn`.
+
+``` html
+<div id="my-uploader">
+    <input type="file" class="file-input" multiple hidden/>
+    <div class="drop-zone">
+        <div class="drop-zone-content">
+            <p class="primary-text">Click to upload or drag and drop</p>
+            <p class="secondary-text">PNG, JPG, GIF, SVG (max 5 MB)</p>
+        </div>
+    </div>
+    <div class="file-list"></div>
+    <div class="actions">
+        <button class="upload-btn" disabled>Upload Files</button>
+    </div>
+</div>
+```
+
+``` js
+const uploader = new FileUploader('#my-uploader', {
+    uploadUrl:    'https://api.example.com/upload',
+    maxFileSize:  5 * 1024 * 1024,          // 5 MB in bytes
+    allowedTypes: ['image/png', 'image/jpeg'],
+});
+
+// Events fired on the container element
+document.getElementById('my-uploader').addEventListener('upload-completed', (e) => {
+    console.log('All uploads done', e.detail); // { fileCount, files, results }
+});
+
+document.getElementById('my-uploader').addEventListener('file-validation-error', (e) => {
+    console.warn('Rejected:', e.detail.file.name, '—', e.detail.reason); // 'size' | 'type'
+});
+
+uploader.destroy();
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `uploadUrl` | string | `'https://httpbin.org/post'` | Endpoint the files are uploaded to via XHR |
+| `maxFileSize` | number | — | Max file size in bytes; larger files are rejected with a `file-validation-error` |
+| `allowedTypes` | string[] | — | Allowed MIME types; other files are rejected with a `file-validation-error` |
 
 ### Virtual Dropdown
 
 Virtual Dropdown is a performant, virtualized dropdown component that efficiently renders large option lists by only drawing visible items in the DOM. Supports single and multi-select modes, built-in search/filtering, keyboard navigation, and configurable item height and render limits — making it ideal for scenarios with hundreds or thousands of selectable options.
+
+``` js
+const dropdown = new VirtualDropdown({
+    container:    '#my-dropdown',    // CSS selector or element
+    options:      [                  // array of { value, label }
+        { value: 'a', label: 'Option A' },
+        { value: 'b', label: 'Option B' },
+        // …up to 10,000+ items
+    ],
+    placeholder:  'Select…',
+    searchable:   true,
+    multiSelect:  true,
+    onSelect: (values) => console.log('Selected:', values),
+});
+
+dropdown.getValue();            // Array<string | number>
+dropdown.setValue(['a', 'b']);
+dropdown.clearSelection();
+dropdown.destroy();
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `container` | HTMLElement \| string | — | Target container element or CSS selector |
+| `options` | DropdownOption[] | — | Array of `{ value, label }` selectable options |
+| `multiSelect` | boolean | `false` | Allow selecting more than one option |
+| `searchable` | boolean | `false` | Shows a search input to filter options |
+| `placeholder` | string | `'Select...'` | Trigger text shown when nothing is selected |
+| `renderLimit` | number | `20` | Max options rendered into the DOM at once (virtualization window) |
+| `itemHeight` | number | `40` | Row height in px, used to compute the virtual scroll |
+| `onSelect` | function | — | Callback `(selectedValues) => void` fired on selection change |
+| `selectedLabel` | function | `"N item(s) selected"` | Callback `(count) => string` formatting the trigger text in multi-select mode |
 
 ### Group Picker
 
@@ -1200,7 +1458,27 @@ A responsive, infinite-scroll masonry gallery that dynamically arranges image ca
 
 ### Theme Toggle
 
-The Theme component manages light/dark mode switching. Persists preference to localStorage, respects system preference, and supports keyboard shortcut (Ctrl/Cmd+J). Any element with id `theme-toggle` can work as a switch.
+The Theme component manages light/dark mode switching. Persists preference to localStorage, respects system preference, and supports a keyboard shortcut (Ctrl/Cmd+J). Any element with id `theme-toggle` can work as a switch.
+
+``` html
+<!-- Toggle button — any element works -->
+<div id="theme-toggle" aria-label="Toggle dark mode">
+    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" width="20" height="20">
+        <use href="svg-icons/icons.svg#clear_day"/>
+    </svg>
+</div>
+```
+
+``` js
+import { Theme } from '@dodlhuat/basix/js/theme.js';
+
+Theme.init();                 // wire up toggle button + icon, restore saved/system preference
+
+Theme.getTheme();             // 'light' | 'dark' — current theme
+Theme.setTheme('dark');       // set explicitly and persist
+Theme.resetToSystem();        // clear saved preference, follow OS setting again
+Theme.hasSavedPreference();   // boolean — true once the user has toggled manually
+```
 
 ### Scroll Utility
 
