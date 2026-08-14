@@ -22,6 +22,8 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 - **`showDataLabels`** — new option to print the value directly on each point/bar/slice.
 - **Empty state** — a chart with no data (or every series hidden via the legend) now shows an icon + message instead of a blank box. Configurable via the new `iconBasePath` and `emptyMessage` options.
 
+`SidebarNav` now scrolls the active nav item into view on init, via a new `activeSelector` option (default `'.is-active'`) — useful for a long nav list where the current page's link would otherwise be scrolled out of sight below the fold.
+
 ### 1.5.1 → 1.5.2
 
 An accessibility and contrast pass across the whole framework, driven by an audit that measured actual WCAG contrast ratios rather than eyeballing them. Mostly bug fixes; a few components gained real functionality they were missing.

@@ -12,6 +12,8 @@ interface SidebarNavOptions {
     swipeEdge?: number;
     /** Base path to the SVG icon sprite. Default: 'svg-icons/' */
     iconBasePath?: string;
+    /** Selector (within the sidebar) for the active nav item to scroll into view on init. Default: '.is-active' */
+    activeSelector?: string;
 }
 
 /** Collapsible sidebar navigation with backdrop, swipe gestures, and responsive breakpoint support. */
@@ -34,11 +36,14 @@ class SidebarNav {
             swipeThreshold: options.swipeThreshold ?? 60,
             swipeEdge: options.swipeEdge ?? 20,
             iconBasePath: options.iconBasePath ?? 'svg-icons/',
+            activeSelector: options.activeSelector ?? '.is-active',
         };
 
         this.nav = container?.querySelector('.sidebar-nav') ?? null;
         this.backdrop = container?.querySelector('.sidebar-backdrop') ?? null;
         this.toggleBtn = document.querySelector(this.opts.toggleSelector);
+
+        this.nav?.querySelector<HTMLElement>(this.opts.activeSelector)?.scrollIntoView({ block: 'nearest' });
 
         const sig = { signal: this.listeners.signal };
 

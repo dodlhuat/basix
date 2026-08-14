@@ -80,6 +80,7 @@
         border-radius: 0;
         transition: color 0.15s, background 0.15s;
         border-left: 2px solid transparent;
+        scroll-margin-block: calc($spacing * 3);
 
         &:hover {
             color: var(--primary-text);

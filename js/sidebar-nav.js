@@ -16,10 +16,12 @@ class SidebarNav {
             swipeThreshold: options.swipeThreshold ?? 60,
             swipeEdge: options.swipeEdge ?? 20,
             iconBasePath: options.iconBasePath ?? 'svg-icons/',
+            activeSelector: options.activeSelector ?? '.is-active',
         };
         this.nav = container?.querySelector('.sidebar-nav') ?? null;
         this.backdrop = container?.querySelector('.sidebar-backdrop') ?? null;
         this.toggleBtn = document.querySelector(this.opts.toggleSelector);
+        this.nav?.querySelector(this.opts.activeSelector)?.scrollIntoView({ block: 'nearest' });
         const sig = { signal: this.listeners.signal };
         this.toggleBtn?.addEventListener('click', () => this.toggle(), sig);
         this.backdrop?.addEventListener('click', () => this.close(), sig);

@@ -47,6 +47,7 @@ nav.destroy();  // remove all listeners`, 'js');
         new CodeViewer('#code-options', `new SidebarNav(container, {
     toggleSelector: '.sidebar-toggle', // CSS selector for the hamburger button
     breakpoint:     768,               // close drawer when viewport > breakpoint
+    activeSelector: '.is-active',      // scrolled into view on init, if present
 });`, 'js');
     </script>
 </head>
@@ -106,6 +107,7 @@ nav.destroy();  // remove all listeners`, 'js');
                 <tbody>
                     <tr><td><code>toggleSelector</code></td><td>string</td><td><code>'.sidebar-toggle'</code></td><td>CSS selector for the hamburger toggle button.</td></tr>
                     <tr><td><code>breakpoint</code></td><td>number</td><td><code>768</code></td><td>Viewport width (px) above which the sidebar is permanently visible and the drawer auto-closes.</td></tr>
+                    <tr><td><code>activeSelector</code></td><td>string</td><td><code>'.is-active'</code></td><td>Selector (searched within the sidebar) for the active nav item. If found, it's scrolled into view on init — handy for a long nav list where the current page's link would otherwise be scrolled out of sight. Add <code>scroll-margin-block</code> in your own CSS if you want breathing room around it rather than a flush edge.</td></tr>
                 </tbody>
             </table>
 

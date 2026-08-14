@@ -4,6 +4,7 @@ interface SidebarNavOptions {
     swipeThreshold?: number;
     swipeEdge?: number;
     iconBasePath?: string;
+    activeSelector?: string;
 }
 declare class SidebarNav {
     private nav;
