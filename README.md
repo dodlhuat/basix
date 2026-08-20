@@ -1,4 +1,4 @@
-# Basix 1.5.3
+# Basix 1.5.4
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,12 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.5.3 → 1.5.4
+
+No breaking changes.
+
+- **`DatePicker`** — new `min`/`max` options to restrict the selectable date range. Either, both, or neither can be set. Individual days outside the range are disabled (greyed out, unclickable); months/years fully outside the range are disabled in the month/year picker views, and the prev/next navigation buttons disable themselves once navigating would land entirely outside the range.
 
 ### 1.5.2 → 1.5.3
 
@@ -1006,7 +1012,7 @@ table.destroy();              // remove listeners and clear container
 
 ### Date Picker
 
-The DatePicker component provides a calendar interface for date selection. Supports single date or date range modes, customizable locales, and mobile-responsive design.
+The DatePicker component provides a calendar interface for date selection. Supports single date or date range modes, an optional selectable date range via `min`/`max`, customizable locales, and mobile-responsive design.
 
 #### DatePicker Parameters
 
@@ -1029,6 +1035,8 @@ The DatePicker component provides a calendar interface for date selection. Suppo
 |---|---|---|---|
 | `mode` | string | `'single'` | Mode of the date picker, either `'single'` or `'range'` |
 | `startDay` | number | `0` | Start day of the week (0 = Sunday, 1 = Monday, etc.) |
+| `min` | Date | — | Earliest selectable date; dates, months, and years fully before it are disabled |
+| `max` | Date | — | Latest selectable date; dates, months, and years fully after it are disabled |
 | `locales` | DatePickerLocales | — | Locales object containing a `days` array and a `months` array with localized names |
 | `format` | `(date: Date) => string` | — | Function to format the date for display; defaults to `'YYYY-MM-DD'` |
 | `onSelect` | `(date: Date \| DateRange) => void` | — | Callback when a date is selected |

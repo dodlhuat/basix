@@ -12,6 +12,8 @@ interface DatePickerOptions {
     mode?: 'single' | 'range';
     startDay?: number;
     timePicker?: boolean;
+    min?: Date;
+    max?: Date;
     locales?: DatePickerLocales;
     format?: (date: Date) => string;
     onSelect?: (date: Date | DateRange) => void;
@@ -242,13 +244,49 @@ class DatePicker {
         existing.replaceWith(this.createTimePicker());
     }
 
+    private getNavDisabled(): { prevDisabled: boolean; nextDisabled: boolean } {
+        if (this.viewMode === 'days') {
+            let prevMonth = this.viewMonth - 1;
+            let prevYear = this.viewYear;
+            if (prevMonth < 0) {
+                prevMonth = 11;
+                prevYear--;
+            }
+
+            let nextMonth = this.viewMonth + 1;
+            let nextYear = this.viewYear;
+            if (nextMonth > 11) {
+                nextMonth = 0;
+                nextYear++;
+            }
+
+            return {
+                prevDisabled: this.isMonthFullyDisabled(prevYear, prevMonth),
+                nextDisabled: this.isMonthFullyDisabled(nextYear, nextMonth),
+            };
+        } else if (this.viewMode === 'months') {
+            return {
+                prevDisabled: this.isYearFullyDisabled(this.viewYear - 1),
+                nextDisabled: this.isYearFullyDisabled(this.viewYear + 1),
+            };
+        } else {
+            return {
+                prevDisabled: this.isYearRangeFullyDisabled(this.yearRangeStart - 12, this.yearRangeStart - 1),
+                nextDisabled: this.isYearRangeFullyDisabled(this.yearRangeStart + 12, this.yearRangeStart + 23),
+            };
+        }
+    }
+
     private createHeader(): HTMLDivElement {
         const header = document.createElement('div');
         header.className = 'datepicker-header';
 
+        const { prevDisabled, nextDisabled } = this.getNavDisabled();
+
         const prevBtn = document.createElement('button');
         prevBtn.className = 'datepicker-nav';
         prevBtn.innerHTML = '&lt;';
+        prevBtn.disabled = prevDisabled;
         prevBtn.onclick = (e: MouseEvent) => {
             e.stopPropagation();
             this.navigate(-1);
@@ -301,6 +339,7 @@ class DatePicker {
         const nextBtn = document.createElement('button');
         nextBtn.className = 'datepicker-nav';
         nextBtn.innerHTML = '&gt;';
+        nextBtn.disabled = nextDisabled;
         nextBtn.onclick = (e: MouseEvent) => {
             e.stopPropagation();
             this.navigate(1);
@@ -325,6 +364,46 @@ class DatePicker {
         }
     }
 
+    private isRangeFullyDisabled(start: Date, end: Date): boolean {
+        if (this.options.max) {
+            const max = new Date(this.options.max);
+            max.setHours(0, 0, 0, 0);
+            if (start.getTime() > max.getTime()) return true;
+        }
+        if (this.options.min) {
+            const min = new Date(this.options.min);
+            min.setHours(0, 0, 0, 0);
+            if (end.getTime() < min.getTime()) return true;
+        }
+        return false;
+    }
+
+    private isDateDisabled(date: Date): boolean {
+        const day = new Date(date);
+        day.setHours(0, 0, 0, 0);
+        return this.isRangeFullyDisabled(day, day);
+    }
+
+    private isMonthFullyDisabled(year: number, month: number): boolean {
+        const start = new Date(year, month, 1);
+        const end = new Date(year, month + 1, 0);
+        start.setHours(0, 0, 0, 0);
+        end.setHours(0, 0, 0, 0);
+        return this.isRangeFullyDisabled(start, end);
+    }
+
+    private isYearFullyDisabled(year: number): boolean {
+        return this.isYearRangeFullyDisabled(year, year);
+    }
+
+    private isYearRangeFullyDisabled(startYear: number, endYear: number): boolean {
+        const start = new Date(startYear, 0, 1);
+        const end = new Date(endYear, 11, 31);
+        start.setHours(0, 0, 0, 0);
+        end.setHours(0, 0, 0, 0);
+        return this.isRangeFullyDisabled(start, end);
+    }
+
     private createMonthGrid(): HTMLDivElement {
         const grid = document.createElement('div');
         grid.className = 'datepicker-grid-months';
@@ -342,8 +421,12 @@ class DatePicker {
                 el.classList.add('current');
             }
 
+            const disabled = this.isMonthFullyDisabled(this.viewYear, index);
+            el.classList.toggle('disabled', disabled);
+
             el.onclick = (e: MouseEvent) => {
                 e.stopPropagation();
+                if (disabled) return;
                 this.viewMonth = index;
                 this.viewMode = 'days';
                 this.render();
@@ -371,8 +454,12 @@ class DatePicker {
                 el.classList.add('current');
             }
 
+            const disabled = this.isYearFullyDisabled(year);
+            el.classList.toggle('disabled', disabled);
+
             el.onclick = (e: MouseEvent) => {
                 e.stopPropagation();
+                if (disabled) return;
                 this.viewYear = year;
                 this.viewMode = 'months';
                 this.render();
@@ -450,8 +537,12 @@ class DatePicker {
                 }
             }
 
+            const disabled = this.isDateDisabled(date);
+            day.classList.toggle('disabled', disabled);
+
             day.onclick = (e: MouseEvent) => {
                 e.stopPropagation();
+                if (disabled) return;
                 this.handleDateClick(date);
             };
             grid.appendChild(day);
@@ -694,6 +785,8 @@ class DatePicker {
     }
 
     private handleDateClick(date: Date): void {
+        if (this.isDateDisabled(date)) return;
+
         if (this.options.timePicker) {
             date.setHours(this.selectedHours, this.selectedMinutes, 0, 0);
         } else {

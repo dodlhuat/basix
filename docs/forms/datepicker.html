@@ -25,6 +25,11 @@
             },
         });
 
+        const minMaxToday = new Date();
+        const minMaxMax = new Date();
+        minMaxMax.setDate(minMaxToday.getDate() + 30);
+        new DatePicker('#dp-minmax', { mode: 'single', min: minMaxToday, max: minMaxMax });
+
         new CodeViewer('#code-html', `<input type="text" id="my-date" class="datepicker-input"
        placeholder="Select a date" readonly/>`, 'html');
 
@@ -54,6 +59,13 @@ new DatePicker('#my-de', {
 new DatePicker('#my-fmt', {
   mode:   'single',
   format: (date) => date.toLocaleDateString('en-GB'),
+});
+
+// Restrict selectable range (min only, max only, or both)
+new DatePicker('#my-minmax', {
+  mode: 'single',
+  min:  new Date(),                                  // no dates before today
+  max:  new Date(new Date().setDate(new Date().getDate() + 30)), // 30 days out
 });`, 'js');
     </script>
 </head>
@@ -102,6 +114,13 @@ new DatePicker('#my-fmt', {
                 <input type="text" id="dp-locale" class="datepicker-input" placeholder="Datum auswählen" readonly/>
             </div>
 
+            <h2>Restricted range (min / max)</h2>
+            <p>Only dates within the next 30 days from today are selectable. Days, months, and years fully outside the range are disabled and navigation stops at the boundary.</p>
+            <div class="docs-demo" style="max-width:320px;">
+                <label for="dp-minmax">Pick a date (next 30 days)</label>
+                <input type="text" id="dp-minmax" class="datepicker-input" placeholder="Select a date" readonly/>
+            </div>
+
             <h2>Usage</h2>
             <div id="code-html"></div>
             <div id="code-js" style="margin-top:0.5rem;"></div>
@@ -113,6 +132,8 @@ new DatePicker('#my-fmt', {
                     <tr><td><code>mode</code></td><td>single | range</td><td><code>'single'</code></td><td>Single date or date range selection.</td></tr>
                     <tr><td><code>startDay</code></td><td>0–6</td><td><code>0</code></td><td>First day of the week. 0 = Sunday, 1 = Monday.</td></tr>
                     <tr><td><code>timePicker</code></td><td>boolean</td><td><code>false</code></td><td>Show an Android-style analog clock (hour, then minute) below the calendar.</td></tr>
+                    <tr><td><code>min</code></td><td>Date</td><td>—</td><td>Earliest selectable date. Dates before it (and months/years fully before it) are disabled. Omit for no lower bound.</td></tr>
+                    <tr><td><code>max</code></td><td>Date</td><td>—</td><td>Latest selectable date. Dates after it (and months/years fully after it) are disabled. Omit for no upper bound.</td></tr>
                     <tr><td><code>format</code></td><td>(date: Date) =&gt; string</td><td>—</td><td>Custom display format function.</td></tr>
                     <tr><td><code>locales</code></td><td>{ days: string[], months: string[] }</td><td>English</td><td>Localised day and month names.</td></tr>
                     <tr><td><code>selectedDate</code></td><td>Date</td><td><code>null</code></td><td>Pre-selected date on init.</td></tr>

@@ -174,12 +174,46 @@ class DatePicker {
         }
         existing.replaceWith(this.createTimePicker());
     }
+    getNavDisabled() {
+        if (this.viewMode === 'days') {
+            let prevMonth = this.viewMonth - 1;
+            let prevYear = this.viewYear;
+            if (prevMonth < 0) {
+                prevMonth = 11;
+                prevYear--;
+            }
+            let nextMonth = this.viewMonth + 1;
+            let nextYear = this.viewYear;
+            if (nextMonth > 11) {
+                nextMonth = 0;
+                nextYear++;
+            }
+            return {
+                prevDisabled: this.isMonthFullyDisabled(prevYear, prevMonth),
+                nextDisabled: this.isMonthFullyDisabled(nextYear, nextMonth),
+            };
+        }
+        else if (this.viewMode === 'months') {
+            return {
+                prevDisabled: this.isYearFullyDisabled(this.viewYear - 1),
+                nextDisabled: this.isYearFullyDisabled(this.viewYear + 1),
+            };
+        }
+        else {
+            return {
+                prevDisabled: this.isYearRangeFullyDisabled(this.yearRangeStart - 12, this.yearRangeStart - 1),
+                nextDisabled: this.isYearRangeFullyDisabled(this.yearRangeStart + 12, this.yearRangeStart + 23),
+            };
+        }
+    }
     createHeader() {
         const header = document.createElement('div');
         header.className = 'datepicker-header';
+        const { prevDisabled, nextDisabled } = this.getNavDisabled();
         const prevBtn = document.createElement('button');
         prevBtn.className = 'datepicker-nav';
         prevBtn.innerHTML = '&lt;';
+        prevBtn.disabled = prevDisabled;
         prevBtn.onclick = (e) => {
             e.stopPropagation();
             this.navigate(-1);
@@ -228,6 +262,7 @@ class DatePicker {
         const nextBtn = document.createElement('button');
         nextBtn.className = 'datepicker-nav';
         nextBtn.innerHTML = '&gt;';
+        nextBtn.disabled = nextDisabled;
         nextBtn.onclick = (e) => {
             e.stopPropagation();
             this.navigate(1);
@@ -250,6 +285,43 @@ class DatePicker {
             this.render();
         }
     }
+    isRangeFullyDisabled(start, end) {
+        if (this.options.max) {
+            const max = new Date(this.options.max);
+            max.setHours(0, 0, 0, 0);
+            if (start.getTime() > max.getTime())
+                return true;
+        }
+        if (this.options.min) {
+            const min = new Date(this.options.min);
+            min.setHours(0, 0, 0, 0);
+            if (end.getTime() < min.getTime())
+                return true;
+        }
+        return false;
+    }
+    isDateDisabled(date) {
+        const day = new Date(date);
+        day.setHours(0, 0, 0, 0);
+        return this.isRangeFullyDisabled(day, day);
+    }
+    isMonthFullyDisabled(year, month) {
+        const start = new Date(year, month, 1);
+        const end = new Date(year, month + 1, 0);
+        start.setHours(0, 0, 0, 0);
+        end.setHours(0, 0, 0, 0);
+        return this.isRangeFullyDisabled(start, end);
+    }
+    isYearFullyDisabled(year) {
+        return this.isYearRangeFullyDisabled(year, year);
+    }
+    isYearRangeFullyDisabled(startYear, endYear) {
+        const start = new Date(startYear, 0, 1);
+        const end = new Date(endYear, 11, 31);
+        start.setHours(0, 0, 0, 0);
+        end.setHours(0, 0, 0, 0);
+        return this.isRangeFullyDisabled(start, end);
+    }
     createMonthGrid() {
         const grid = document.createElement('div');
         grid.className = 'datepicker-grid-months';
@@ -264,8 +336,12 @@ class DatePicker {
             if (index === now.getMonth() && this.viewYear === now.getFullYear()) {
                 el.classList.add('current');
             }
+            const disabled = this.isMonthFullyDisabled(this.viewYear, index);
+            el.classList.toggle('disabled', disabled);
             el.onclick = (e) => {
                 e.stopPropagation();
+                if (disabled)
+                    return;
                 this.viewMonth = index;
                 this.viewMode = 'days';
                 this.render();
@@ -288,8 +364,12 @@ class DatePicker {
             if (year === new Date().getFullYear()) {
                 el.classList.add('current');
             }
+            const disabled = this.isYearFullyDisabled(year);
+            el.classList.toggle('disabled', disabled);
             el.onclick = (e) => {
                 e.stopPropagation();
+                if (disabled)
+                    return;
                 this.viewYear = year;
                 this.viewMode = 'months';
                 this.render();
@@ -356,8 +436,12 @@ class DatePicker {
                     day.classList.add('selected');
                 }
             }
+            const disabled = this.isDateDisabled(date);
+            day.classList.toggle('disabled', disabled);
             day.onclick = (e) => {
                 e.stopPropagation();
+                if (disabled)
+                    return;
                 this.handleDateClick(date);
             };
             grid.appendChild(day);
@@ -550,6 +634,8 @@ class DatePicker {
         this.render();
     }
     handleDateClick(date) {
+        if (this.isDateDisabled(date))
+            return;
         if (this.options.timePicker) {
             date.setHours(this.selectedHours, this.selectedMinutes, 0, 0);
         }

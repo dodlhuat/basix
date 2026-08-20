@@ -6,6 +6,8 @@ interface DatePickerOptions {
     mode?: 'single' | 'range';
     startDay?: number;
     timePicker?: boolean;
+    min?: Date;
+    max?: Date;
     locales?: DatePickerLocales;
     format?: (date: Date) => string;
     onSelect?: (date: Date | DateRange) => void;
@@ -43,8 +45,14 @@ declare class DatePicker {
     private hide;
     private render;
     private renderTimePicker;
+    private getNavDisabled;
     private createHeader;
     private navigate;
+    private isRangeFullyDisabled;
+    private isDateDisabled;
+    private isMonthFullyDisabled;
+    private isYearFullyDisabled;
+    private isYearRangeFullyDisabled;
     private createMonthGrid;
     private createYearGrid;
     private createGrid;

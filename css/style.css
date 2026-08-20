@@ -3952,6 +3952,11 @@ ul.tree li {
   background-color: var(--accent-color-lighten);
 }
 
+.datepicker-nav:disabled {
+  color: var(--disabled);
+  cursor: not-allowed;
+}
+
 .datepicker-title {
   display: flex;
   gap: 0.5rem;
@@ -3986,6 +3991,12 @@ ul.tree li {
 
 .datepicker-day.other-month {
   color: var(--disabled);
+}
+
+.datepicker-day.disabled {
+  color: var(--disabled);
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .datepicker-day.selected {
@@ -4042,9 +4053,16 @@ ul.tree li {
   transition: background-color 0.2s, color 0.2s;
 }
 
-.datepicker-month:hover,
-.datepicker-year:hover {
+.datepicker-month:hover:not(.disabled),
+.datepicker-year:hover:not(.disabled) {
   background-color: var(--accent-color-lighten);
+}
+
+.datepicker-month.disabled,
+.datepicker-year.disabled {
+  color: var(--disabled);
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .datepicker-month.selected,
