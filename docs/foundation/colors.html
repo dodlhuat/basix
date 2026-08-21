@@ -135,20 +135,28 @@
             <h2>Border radius</h2>
             <div class="docs-demo" style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;">
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
+                    <div style="width:48px;height:48px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-xs);"></div>
+                    <code style="font-size:0.75rem;">--radius-xs<br/>0.2rem</code>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
                     <div style="width:56px;height:56px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-sm);"></div>
-                    <code style="font-size:0.75rem;">--radius-sm<br/>0.25rem</code>
+                    <code style="font-size:0.75rem;">--radius-sm<br/>0.3rem</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
                     <div style="width:64px;height:64px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-md);"></div>
-                    <code style="font-size:0.75rem;">--radius-md<br/>0.4rem</code>
+                    <code style="font-size:0.75rem;">--radius-md<br/>0.6rem</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
                     <div style="width:72px;height:72px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-lg);"></div>
-                    <code style="font-size:0.75rem;">--radius-lg<br/>0.75rem</code>
+                    <code style="font-size:0.75rem;">--radius-lg<br/>0.8rem</code>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
+                    <div style="width:76px;height:76px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-panel);"></div>
+                    <code style="font-size:0.75rem;">--radius-panel<br/>1rem</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
                     <div style="width:80px;height:80px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-xl);"></div>
-                    <code style="font-size:0.75rem;">--radius-xl<br/>1rem</code>
+                    <code style="font-size:0.75rem;">--radius-xl<br/>1.6rem</code>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
                     <div style="width:88px;height:88px;background:var(--secondary-background);border:2px solid var(--accent-color);border-radius:var(--radius-full);"></div>
@@ -157,7 +165,7 @@
             </div>
 
             <h2>Overriding tokens</h2>
-            <p>Override any token in your own stylesheet after importing Basix. All components will pick up the new values immediately.</p>
+            <p>Override any token in your own stylesheet after importing Basix. All components will pick up the new values immediately. For the full token reference — including which tokens are scoped to a component instead of <code>:root</code>, and how dark mode affects overrides — see <a href="customizing.html">Customizing</a>.</p>
             <div id="code-override"></div>
         </div>
     </div>

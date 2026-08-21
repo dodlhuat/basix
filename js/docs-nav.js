@@ -8,6 +8,7 @@ const NAV = [
             { label: 'Layout & Grid',   href: 'foundation/layout.html' },
             { label: 'Typography',       href: 'foundation/typography.html' },
             { label: 'Colors & Tokens',  href: 'foundation/colors.html' },
+            { label: 'Customizing',      href: 'foundation/customizing.html' },
             { label: 'Icons',            href: 'foundation/icons.html' },
         ],
     },

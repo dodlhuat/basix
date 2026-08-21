@@ -39,3 +39,62 @@
     }
   }
 }
+
+$grid-columns: 12;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
+  gap: $spacing;
+  margin-bottom: $spacing;
+
+  &.spacing-top {
+    padding-top: calc($spacing / 2);
+  }
+
+  @for $i from 1 through $grid-columns {
+    &.cols-#{$i} {
+      grid-template-columns: repeat($i, minmax(0, 1fr));
+    }
+  }
+
+  > .cell {
+    min-width: 0;
+
+    @for $i from 2 through $grid-columns {
+      &.span-#{$i} {
+        grid-column: span $i;
+      }
+    }
+
+    &.span-full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .grid {
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: $bp-md) {
+  .grid {
+    @for $i from 2 through $grid-columns {
+      &.cols-#{$i} {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    > .cell {
+      @for $i from 2 through $grid-columns {
+        &.span-#{$i} {
+          grid-column: auto;
+        }
+      }
+
+      &.span-full {
+        grid-column: auto;
+      }
+    }
+  }
+}

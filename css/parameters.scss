@@ -1,30 +1,30 @@
-$spacing: 1rem;
-$border-radius: 0.4rem;
-$form-height: 2rem;
-$shadow: 0 1px 2px rgba(56, 65, 74, .15);
+$spacing: 1rem !default;
+$border-radius: 0.4rem !default;
+$form-height: 2rem !default;
+$shadow: 0 1px 2px rgba(56, 65, 74, .15) !default;
 
 // Breakpoints round UP to the nearest step rather than to whichever number
 // is numerically closer, so folding old one-off values into these never
 // makes a component switch to its compact/mobile layout later than before.
-$bp-sm: 480px;
-$bp-md: 768px;
-$bp-lg: 1024px;
+$bp-sm: 480px !default;
+$bp-md: 768px !default;
+$bp-lg: 1024px !default;
 
-$radius-xs:    calc($border-radius * 0.5);
-$radius-sm:    calc($border-radius * 0.75);
-$radius-md:    calc($border-radius * 1.5);
-$radius-lg:    calc($border-radius * 2);
-$radius-panel: calc($border-radius * 2.5);
-$radius-xl:    calc($border-radius * 4);
+$radius-xs:    calc($border-radius * 0.5) !default;
+$radius-sm:    calc($border-radius * 0.75) !default;
+$radius-md:    calc($border-radius * 1.5) !default;
+$radius-lg:    calc($border-radius * 2) !default;
+$radius-panel: calc($border-radius * 2.5) !default;
+$radius-xl:    calc($border-radius * 4) !default;
 
-$tint-subtle: 8%;
-$tint-medium: 12%;
-$tint-strong: 20%;
+$tint-subtle: 8% !default;
+$tint-medium: 12% !default;
+$tint-strong: 20% !default;
 
-$duration-fast: 0.15s;
-$duration-base: 0.22s;
-$duration-slow: 0.3s;
+$duration-fast: 0.15s !default;
+$duration-base: 0.22s !default;
+$duration-slow: 0.3s !default;
 
-$ease-standard: cubic-bezier(0.2, 0, 0, 1);
-$ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
-$ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-standard: cubic-bezier(0.2, 0, 0, 1) !default;
+$ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1) !default;
+$ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1) !default;

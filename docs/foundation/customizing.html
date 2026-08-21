@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"/>
+    <title>Customizing — Basix Docs</title>
+    <link rel="stylesheet" href="../../css/style.css"/>
+    <script type="module">
+        import { DocsNav } from '../../js/docs-nav.js';
+        import { Theme } from '../../js/theme.js';
+        import { CodeViewer } from '../../js/code-viewer.js';
+        new DocsNav();
+        Theme.init();
+
+        new CodeViewer('#code-override-basic', `/* your-theme.css — loaded AFTER css/style.css */
+:root {
+  --accent-color: #6C47FF;
+  --radius-md: 0.5rem;
+}`, 'css');
+
+        new CodeViewer('#code-override-dark', `/* Covers all three cascade layers Basix ships colours in */
+:root {
+  --accent-color: #6C47FF;
+}
+
+[data-theme="dark"] {
+  --accent-color: #A78BFA;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --accent-color: #A78BFA;
+  }
+}`, 'css');
+
+        new CodeViewer('#code-scope-wrong', `/* Does NOT work — .cal sets --cal-accent on itself,
+   so a directly-matched class rule always wins over :root */
+:root {
+  --cal-accent: #E11D48;
+}`, 'css');
+
+        new CodeViewer('#code-scope-right', `/* Works — same selector the component uses */
+.cal {
+  --cal-accent: #E11D48;
+}`, 'css');
+
+        new CodeViewer('#code-flyout-both', `/* Both selectors needed, or the overlay keeps the old timing
+   and the panel/backdrop animate out of sync */
+.flyout-menu,
+.flyout-overlay {
+  --menu-width: 400px;
+  --transition-speed: 0.25s;
+}`, 'css');
+    </script>
+</head>
+<body class="primary-light-bg primary">
+<div class="sidebar-layout">
+    <aside class="sidebar-nav" id="docs-sidebar"></aside>
+    <div class="sidebar-backdrop" id="docs-sidebar-backdrop"></div>
+    <div class="sidebar-main">
+        <div class="docs-topbar">
+            <div class="docs-breadcrumb" id="docs-breadcrumb"></div>
+            <div class="docs-topbar-actions">
+                <button class="sidebar-toggle" id="docs-mobile-toggle" aria-label="Open navigation">
+                    <svg class="icon-svg" aria-hidden="true"><use href="../../svg-icons/icons.svg#menu"/></svg>
+                </button>
+                <div id="theme-toggle" class="theme-toggle flex" aria-label="Toggle dark mode" style="cursor:pointer;">
+                    <svg id="theme-icon" data-icon-light="clear_day" data-icon-dark="bedtime" style="fill:currentColor;width:20px;height:20px;display:block;" width="20" height="20"><use href="../../svg-icons/icons.svg#clear_day"/></svg>
+                </div>
+            </div>
+        </div>
+        <div class="docs-content">
+            <h1>Customizing</h1>
+            <p class="docs-lead">What you can override, and how. See <a href="colors.html">Colors &amp; Tokens</a> for a visual swatch preview of the palette.</p>
+
+            <h2>Two ways to customize</h2>
+            <p>Basix exposes two independent customization surfaces:</p>
+            <table class="docs-props-table">
+                <thead><tr><th>Mechanism</th><th>When it applies</th><th>Use for</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>CSS custom properties</strong></td><td>Runtime, in the browser — no build step, no access to the source needed</td><td>Colours, radii, per-component sizing — anything you'd want to change on a live site or per-instance</td></tr>
+                    <tr><td><strong>SCSS variables</strong></td><td>Compile time, via <code>@use … with (…)</code> before running <code>sass</code></td><td>Breakpoints, animation timing, the base spacing/radius scale — values every custom property is itself computed from</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Token layers</h2>
+            <p>Two layers of custom properties, not three — Basix does not use a separate primitive/raw-palette layer, since it targets a single brand rather than many themes sharing one palette.</p>
+            <table class="docs-props-table">
+                <thead><tr><th>Layer</th><th>Scope</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Semantic tokens</strong></td><td><code>:root</code>, defined once in <code>properties.scss</code></td><td><code>--accent-color</code>, <code>--divider</code>, <code>--error</code></td></tr>
+                    <tr><td><strong>Component tokens</strong></td><td>The component's own class — <em>not</em> <code>:root</code>, see <a href="#scope-matters">Scope matters</a> below</td><td><code>--cal-accent</code>, <code>--chart-color-1</code>, <code>--menu-width</code></td></tr>
+                </tbody>
+            </table>
+            <p>Component tokens usually default to a semantic token, so re-theming <code>--accent-color</code> already re-themes most components — the component tokens exist for the cases where you want a component to diverge from the global palette without touching anything else:</p>
+            <pre style="background:var(--secondary-background);border:1px solid var(--divider);border-radius:0.4rem;padding:1rem;font-size:0.85rem;overflow-x:auto;"><code>/* css/calendar.scss */
+.cal {
+  --cal-accent: var(--accent-color);
+}</code></pre>
+
+            <h2>Semantic tokens</h2>
+            <p>Defined on <code>:root</code> in <code>properties.scss</code>. Colour tokens have a separate dark-mode value; spacing/radius tokens don't change with the theme.</p>
+            <table class="docs-props-table">
+                <thead><tr><th>Token</th><th>Purpose</th><th>Light</th><th>Dark</th></tr></thead>
+                <tbody>
+                    <tr><td><code>--primary-text</code></td><td>Primary body &amp; heading text</td><td><code>#1E1F24</code></td><td><code>#EEEEF0</code></td></tr>
+                    <tr><td><code>--secondary-text</code></td><td>Muted / secondary text</td><td><code>#62636C</code></td><td><code>#B2B3BD</code></td></tr>
+                    <tr><td><code>--divider</code></td><td>Borders, dividers, hairlines</td><td><code>#D8D9E0</code></td><td><code>#393A40</code></td></tr>
+                    <tr><td><code>--background</code> / <code>--primary-bg</code></td><td>Page background (two names, same value)</td><td><code>#F9F9FB</code></td><td><code>#111113</code></td></tr>
+                    <tr><td><code>--secondary-background</code></td><td>Card / panel background</td><td><code>#E7E8EC</code></td><td><code>#19191B</code></td></tr>
+                    <tr><td><code>--accent-color</code></td><td>Brand / accent colour</td><td><code>#3D63DD</code></td><td><code>#1B7BB4</code></td></tr>
+                    <tr><td><code>--accent-color-lighten</code></td><td>Lighter accent variant (gradients, hover)</td><td><code>#87A5EF</code></td><td><code>#175982</code></td></tr>
+                    <tr><td><code>--accent-color-tint</code></td><td>12% accent tint, for subtle backgrounds</td><td><code>color-mix(…)</code></td><td><code>color-mix(…)</code></td></tr>
+                    <tr><td><code>--accent-color-text</code></td><td>Muted tone for text/borders on accent-tinted surfaces</td><td><code>#D8D9E0</code></td><td><code>#B2B3BD</code></td></tr>
+                    <tr><td><code>--on-accent</code></td><td>Text/icon colour on top of accent-coloured surfaces</td><td><code>#FFFFFF</code></td><td><em>not redefined — stays</em> <code>#FFFFFF</code></td></tr>
+                    <tr><td><code>--link-color</code></td><td>Hyperlink colour</td><td><code>var(--accent-color)</code></td><td><code>#2B8CC4</code></td></tr>
+                    <tr><td><code>--error</code></td><td>Error state colour</td><td><code>#D64545</code></td><td><code>#FF6B6B</code></td></tr>
+                    <tr><td><code>--error-text</code></td><td>Error text colour</td><td><code>#C13327</code></td><td><code>var(--error)</code></td></tr>
+                    <tr><td><code>--error-tint</code></td><td>12% error tint background</td><td><code>color-mix(…)</code></td><td><code>color-mix(…)</code></td></tr>
+                    <tr><td><code>--warning</code></td><td>Warning state colour</td><td><code>#C28A00</code></td><td><code>#F7B500</code></td></tr>
+                    <tr><td><code>--warning-text</code></td><td>Warning text colour</td><td><code>#8A6D00</code></td><td><code>var(--warning)</code></td></tr>
+                    <tr><td><code>--warning-tint</code></td><td>12% warning tint background</td><td><code>color-mix(…)</code></td><td><code>color-mix(…)</code></td></tr>
+                    <tr><td><code>--success</code></td><td>Success state colour</td><td><code>#2E8B57</code></td><td><code>#5CC689</code></td></tr>
+                    <tr><td><code>--success-text</code></td><td>Success text colour</td><td><code>#1F7A4C</code></td><td><code>var(--success)</code></td></tr>
+                    <tr><td><code>--success-tint</code></td><td>12% success tint background</td><td><code>color-mix(…)</code></td><td><code>color-mix(…)</code></td></tr>
+                    <tr><td><code>--disabled</code></td><td>Disabled control colour</td><td><code>#D8D9E0</code></td><td><code>#303136</code></td></tr>
+                    <tr><td><code>--primary-dark</code></td><td>Fixed dark surface (chart tooltip, push-menu panel) — same role in both themes</td><td><code>#1A1B1F</code></td><td><code>#0C0C0E</code></td></tr>
+                    <tr><td><code>--primary-light</code></td><td>Text/surface colour paired with <code>--primary-dark</code></td><td><code>#F0F1F3</code></td><td><code>#1E1F23</code></td></tr>
+                    <tr><td><code>--hover</code></td><td>Hover-state overlay</td><td><code>rgba(0,0,0,.04)</code></td><td><code>rgba(255,255,255,.05)</code></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Spacing &amp; radius</h3>
+            <p>Not colour tokens — same value in light and dark. Compiled from the SCSS variables of the same name (see <a href="#scss-variables">SCSS variables</a>), so they always match what the components themselves use.</p>
+            <table class="docs-props-table">
+                <thead><tr><th>Token</th><th>Value</th></tr></thead>
+                <tbody>
+                    <tr><td><code>--spacing</code></td><td><code>1rem</code></td></tr>
+                    <tr><td><code>--border-radius</code></td><td><code>0.4rem</code></td></tr>
+                    <tr><td><code>--radius-xs</code></td><td><code>0.2rem</code></td></tr>
+                    <tr><td><code>--radius-sm</code></td><td><code>0.3rem</code></td></tr>
+                    <tr><td><code>--radius-md</code></td><td><code>0.6rem</code></td></tr>
+                    <tr><td><code>--radius-lg</code></td><td><code>0.8rem</code></td></tr>
+                    <tr><td><code>--radius-panel</code></td><td><code>1rem</code></td></tr>
+                    <tr><td><code>--radius-xl</code></td><td><code>1.6rem</code></td></tr>
+                    <tr><td><code>--radius-full</code></td><td><code>9999px</code></td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.9rem;color:var(--secondary-text);">These custom properties make the values available to <em>your</em> CSS and reflect what Basix uses — they don't make the components themselves re-read the property at runtime. The components still compile their radius from the SCSS variables at build time. Change <code>--radius-md</code> from <code>:root</code> and your own elements pick it up instantly; changing what Basix's own buttons/cards use requires the SCSS route below.</p>
+
+            <h2>Overriding semantic tokens</h2>
+            <p>Load your stylesheet <strong>after</strong> <code>css/style.css</code> — both declare on <code>:root</code> at equal specificity, so source order decides:</p>
+            <div id="code-override-basic"></div>
+
+            <h3>The dark-mode trap</h3>
+            <p>Basix ships its palette in three blocks: <code>:root</code>, <code>[data-theme="dark"]</code> (set by the theme toggle), and <code>@media (prefers-color-scheme: dark)</code> (the fallback before the toggle runs, or for pages that never wire it up). An override placed only on <code>:root</code> gets replaced again by whichever dark block applies — the accent color reverts to the default the moment dark mode activates. Cover all three:</p>
+            <div id="code-override-dark"></div>
+
+            <h2>Component tokens</h2>
+            <p>Six components declare their own custom properties on top of the semantic layer. Most default to <code>var(--some-semantic-token)</code>, so they follow a semantic override automatically — set them directly only when you want that one component to diverge.</p>
+
+            <table class="docs-props-table">
+                <thead><tr><th>Component</th><th>Scope</th><th>Tokens</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>Calendar</td>
+                        <td><code>.cal</code></td>
+                        <td><code>--cal-spacing-xs/sm/md/lg</code>, <code>--cal-bg</code>, <code>--cal-bg-alt</code>, <code>--cal-bg-hover</code>, <code>--cal-border</code>, <code>--cal-text</code>, <code>--cal-text-muted</code>, <code>--cal-accent</code>, <code>--cal-accent-light</code>, <code>--cal-accent-text</code>, <code>--cal-today-ring</code>, <code>--cal-hour-height</code> (<code>48px</code>), <code>--cal-time-col-width</code> (<code>52px</code>, becomes <code>40px</code> under 768px), <code>--cal-radius</code>, <code>--cal-radius-sm</code></td>
+                    </tr>
+                    <tr>
+                        <td>Chart</td>
+                        <td><code>.chart</code></td>
+                        <td><code>--chart-color-1</code> … <code>-4</code> default to accent/success/warning/error. <code>--chart-color-5</code> … <code>-8</code> are fixed hex values (<code>#8B5CF6</code>, <code>#06B6D4</code>, <code>#F97316</code>, <code>#EC4899</code>) with <strong>no dark-mode variant</strong> — override them yourself if they need to change with the theme.</td>
+                    </tr>
+                    <tr>
+                        <td>Flyout Menu</td>
+                        <td><code>.flyout-menu, .flyout-overlay</code></td>
+                        <td><code>--menu-width</code> (<code>320px</code>, becomes <code>100%</code> under 480px), <code>--transition-speed</code> (<code>0.4s</code>), <code>--flyout-border</code></td>
+                    </tr>
+                    <tr>
+                        <td>Tooltip</td>
+                        <td><code>.tooltip</code></td>
+                        <td><code>--tooltip-bg</code>. The <code>.tooltip-info</code>/<code>-success</code>/<code>-warning</code>/<code>-error</code> variants set it at two-class specificity — match or exceed that to override a variant</td>
+                    </tr>
+                    <tr>
+                        <td>Chat Bubbles</td>
+                        <td><code>:root</code></td>
+                        <td><code>--bubble-radius</code> (<code>18px</code>)</td>
+                    </tr>
+                    <tr>
+                        <td>Scrollbar</td>
+                        <td><code>:root</code></td>
+                        <td><code>--track-width</code> (<code>12px</code>), <code>--track-radius</code> (<code>8px</code>), <code>--thumb-min</code> (<code>28px</code> — also set per-element by the component's JS, which wins at runtime), <code>--track-gap</code> (<code>6px</code>)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Tokens without a declaration block</h3>
+            <p>These behave like tokens — settable from <code>:root</code>, inherited normally — but no stylesheet declares a default with a value; they only appear as a fallback inside <code>var(--foo, fallback)</code>. Searching a checkout for <code>--foo:</code> won't find them.</p>
+            <table class="docs-props-table">
+                <thead><tr><th>Token</th><th>Default</th><th>Used in</th></tr></thead>
+                <tbody>
+                    <tr><td><code>--sidebar-width</code></td><td><code>240px</code></td><td><code>sidebar-nav.scss</code></td></tr>
+                    <tr><td><code>--grid-min</code></td><td><code>16rem</code></td><td><code>grid.scss</code> — minimum column width for the auto-responsive <code>.grid</code></td></tr>
+                    <tr><td><code>--cal-span-lane-height</code></td><td><code>20px</code></td><td><code>calendar.scss</code> — the one <code>--cal-*</code> token that isn't declared in the <code>.cal</code> block, unlike its siblings above</td></tr>
+                    <tr><td><code>--font-family</code></td><td><code>'Outfit', sans-serif</code></td><td><code>calendar.scss</code> only — no other component reads it</td></tr>
+                </tbody>
+            </table>
+
+            <h2 id="scope-matters">Scope matters</h2>
+            <p>Component tokens are declared on the component's own class, not <code>:root</code>. A directly-matched class selector always beats an inherited <code>:root</code> value, regardless of how the property is spelled — this is the single most common reason a token override silently does nothing:</p>
+            <div id="code-scope-wrong"></div>
+            <div id="code-scope-right"></div>
+
+            <p>Two more scoping pitfalls:</p>
+            <ul>
+                <li>Flyout Menu's tokens are declared on <em>two</em> selectors together. Overriding only <code>.flyout-menu</code> leaves <code>.flyout-overlay</code> on the old <code>--transition-speed</code>, so the panel and its backdrop animate out of sync:
+                    <div id="code-flyout-both"></div>
+                </li>
+                <li>The Calendar's <code>--cal-time-col-width</code> and Flyout Menu's <code>--menu-width</code> are re-declared inside a mobile media query, at the same specificity but later in the source. An override that only targets the base selector gets silently reset below 768px / 480px.</li>
+            </ul>
+
+            <h2 id="scss-variables">SCSS variables</h2>
+            <p>For values components read at build time rather than runtime. Requires a rebuild (<code>make css</code>) — there is no live/runtime path for these.</p>
+            <table class="docs-props-table">
+                <thead><tr><th>Variable</th><th>Default</th><th>Purpose</th></tr></thead>
+                <tbody>
+                    <tr><td><code>$spacing</code></td><td><code>1rem</code></td><td>Base spacing unit, the source of <code>--spacing</code> and the <code>.row</code>/<code>.grid</code> gap</td></tr>
+                    <tr><td><code>$border-radius</code></td><td><code>0.4rem</code></td><td>Base radius, the source of the whole <code>$radius-*</code> scale</td></tr>
+                    <tr><td><code>$form-height</code></td><td><code>2rem</code></td><td>Height of form controls (inputs, buttons)</td></tr>
+                    <tr><td><code>$shadow</code></td><td><code>0 1px 2px rgba(56,65,74,.15)</code></td><td>Default elevation shadow (cards, panels)</td></tr>
+                    <tr><td><code>$bp-sm / $bp-md / $bp-lg</code></td><td><code>480px / 768px / 1024px</code></td><td>Responsive breakpoints</td></tr>
+                    <tr><td><code>$radius-xs … $radius-xl</code>, <code>$radius-panel</code></td><td>see table above</td><td>Radius scale, all derived from <code>$border-radius</code></td></tr>
+                    <tr><td><code>$tint-subtle / -medium / -strong</code></td><td><code>8% / 12% / 20%</code></td><td>Opacity steps used by the <code>color-mix()</code> tint tokens</td></tr>
+                    <tr><td><code>$duration-fast / -base / -slow</code></td><td><code>0.15s / 0.22s / 0.3s</code></td><td>Animation durations</td></tr>
+                    <tr><td><code>$ease-standard / -spring / -out-soft</code></td><td>cubic-bezier curves</td><td>Animation easings</td></tr>
+                </tbody>
+            </table>
+            <p>All of the above carry <code>!default</code>, so they can be configured from a consuming stylesheet without forking the file:</p>
+            <pre style="background:var(--secondary-background);border:1px solid var(--divider);border-radius:0.4rem;padding:1rem;font-size:0.85rem;overflow-x:auto;"><code>// your-entry.scss
+@use "@dodlhuat/basix/css/style" with (
+  $spacing: 1.25rem,
+  $border-radius: 0.5rem,
+  $bp-md: 800px
+);</code></pre>
+
+            <h2>Runtime properties — don't override</h2>
+            <p>Set by component JavaScript to position and animate individual elements. They aren't theming knobs — overriding them fights the component's own layout logic instead of customizing it:</p>
+            <p style="font-size:0.85rem;"><code>--path-length</code>, <code>--animation-delay</code>, <code>--delay</code>, <code>--span-col</code>, <code>--span-len</code>, <code>--span-lane</code>, <code>--span-lanes</code>, <code>--allday-lanes</code>, <code>--cont-before</code>, <code>--cont-after</code>, <code>--range-start</code>, <code>--range-end</code>, <code>--range-fill</code>, <code>--left</code>, <code>--right</code>, <code>--hex</code>, <code>--parent</code>, <code>--popover-arrow-offset</code></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -6,7 +6,8 @@
     <title>Layout & Grid — Basix Docs</title>
     <link rel="stylesheet" href="../../css/style.css"/>
     <style>
-        .grid-demo .column {
+        .grid-demo .column,
+        .grid-demo .cell {
             border-radius: 0.4rem;
             padding: 0.5rem 0.75rem;
             text-align: center;
@@ -33,6 +34,27 @@
   <div class="column">1x</div>
   <div class="column grow-2">2x</div>
   <div class="column grow-3">3x</div>
+</div>`, 'html');
+
+        new CodeViewer('#code-grid-css', `<!-- Auto-responsive: reflows without a breakpoint -->
+<div class="grid">
+  <div class="cell">Cell</div>
+  <div class="cell">Cell</div>
+  <div class="cell">Cell</div>
+</div>
+
+<!-- Fixed number of tracks -->
+<div class="grid cols-3">
+  <div class="cell">1</div>
+  <div class="cell">2</div>
+  <div class="cell">3</div>
+</div>
+
+<!-- 12-column system -->
+<div class="grid cols-12">
+  <div class="cell span-8">Main</div>
+  <div class="cell span-4">Aside</div>
+  <div class="cell span-full">Footer</div>
 </div>`, 'html');
 
         new CodeViewer('#code-card', `<!-- Basic card -->
@@ -74,7 +96,31 @@
         </div>
         <div class="docs-content">
             <h1>Layout &amp; Grid</h1>
-            <p class="docs-lead">A flexbox-based grid system using <code>.row</code> and <code>.column</code>. Columns stack on mobile automatically. Use <code>grow-2</code> through <code>grow-6</code> for proportional sizing.</p>
+            <p class="docs-lead">Two layout systems: a flexbox-based <code>.row</code>/<code>.column</code> grid, and a CSS Grid-based <code>.grid</code>/<code>.cell</code> grid. Both stack on mobile automatically.</p>
+
+            <h2>Flexbox or Grid?</h2>
+            <div class="docs-demo">
+                <div class="grid cols-2">
+                    <div class="card card-bordered">
+                        <div class="card-header"><strong>Use <code>.row</code> / <code>.column</code></strong></div>
+                        <ul style="margin:0;padding-left:1.2rem;">
+                            <li>A single row where content should size the columns</li>
+                            <li>Toolbars, button groups, form rows</li>
+                            <li>Proportional widths via <code>grow-2</code>…<code>grow-6</code></li>
+                        </ul>
+                    </div>
+                    <div class="card card-bordered">
+                        <div class="card-header"><strong>Use <code>.grid</code> / <code>.cell</code></strong></div>
+                        <ul style="margin:0;padding-left:1.2rem;">
+                            <li>Card or product grids with an unknown item count</li>
+                            <li>Layouts that should reflow without a breakpoint</li>
+                            <li>Content that must align across multiple rows</li>
+                            <li>An explicit column count, e.g. "8 of 12" via <code>.cols-12</code> + <code>.span-8</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-top:0.75rem;font-size:0.9rem;color:var(--secondary-text);"><strong>Rule of thumb:</strong> content sizes the layout → flexbox. Layout sizes the content → grid. Both systems mix freely — a <code>.cell</code> can hold a <code>.row</code> and vice versa — and <code>.row</code>/<code>.column</code> is not deprecated.</p>
 
             <h2>Equal columns</h2>
             <div class="docs-demo grid-demo">
@@ -103,8 +149,45 @@
                 </div>
             </div>
 
-            <h2>Grid code</h2>
+            <h2>Row &amp; column code</h2>
             <div id="code-grid"></div>
+
+            <h2>CSS Grid</h2>
+            <p>A CSS Grid-based layout system using <code>.grid</code> and <code>.cell</code>. Reflows automatically without a breakpoint by default, or use <code>.cols-1</code> through <code>.cols-12</code> for a fixed number of tracks. Add <code>.span-2</code> through <code>.span-12</code> (or <code>.span-full</code>) on a <code>.cell</code> for an explicit column layout. Stacks to a single column on mobile.</p>
+
+            <h2>Auto-responsive columns</h2>
+            <div class="docs-demo grid-demo">
+                <div class="grid">
+                    <div class="cell" style="background:var(--accent-color-tint);color:var(--accent-color);">Cell</div>
+                    <div class="cell" style="background:var(--success-tint);color:var(--success);">Cell</div>
+                    <div class="cell" style="background:var(--warning-tint);color:var(--warning);">Cell</div>
+                    <div class="cell" style="background:var(--accent-color-tint);color:var(--accent-color);">Cell</div>
+                </div>
+            </div>
+
+            <h2>Fixed column count</h2>
+            <div class="docs-demo grid-demo">
+                <div class="grid cols-3">
+                    <div class="cell" style="background:var(--accent-color-tint);color:var(--accent-color);">1</div>
+                    <div class="cell" style="background:var(--success-tint);color:var(--success);">2</div>
+                    <div class="cell" style="background:var(--warning-tint);color:var(--warning);">3</div>
+                    <div class="cell" style="background:var(--accent-color-tint);color:var(--accent-color);">4</div>
+                    <div class="cell" style="background:var(--success-tint);color:var(--success);">5</div>
+                    <div class="cell" style="background:var(--warning-tint);color:var(--warning);">6</div>
+                </div>
+            </div>
+
+            <h2>12-column layout</h2>
+            <div class="docs-demo grid-demo">
+                <div class="grid cols-12">
+                    <div class="cell span-8" style="background:var(--accent-color-tint);color:var(--accent-color);">span-8</div>
+                    <div class="cell span-4" style="background:var(--success-tint);color:var(--success);">span-4</div>
+                    <div class="cell span-full" style="background:var(--warning-tint);color:var(--warning);">span-full</div>
+                </div>
+            </div>
+
+            <h2>CSS Grid code</h2>
+            <div id="code-grid-css"></div>
 
             <h2>Cards</h2>
             <p>The <code>.card</code> class wraps any content in a contained section with padding, background and shadow. Combine with <code>.row</code> and <code>.column</code> for layout.</p>

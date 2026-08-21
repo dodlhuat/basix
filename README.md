@@ -1,4 +1,4 @@
-# Basix 1.5.4
+# Basix 1.5.5
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,18 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.5.4 → 1.5.5
+
+No breaking changes.
+
+#### Other changes
+
+- **`Grid`** — new CSS Grid-based layout system, `.grid`/`.cell`, alongside the existing flexbox `.row`/`.column`. Auto-responsive by default (reflows without a breakpoint), or use `.cols-1`–`.cols-12` for a fixed number of tracks with `.span-2`–`.span-12`/`.span-full` on cells. See [CSS Grid Layout](#css-grid-layout) below.
+- **Tokens** — new `--spacing`, `--border-radius`, and `--radius-xs`/`-sm`/`-md`/`-lg`/`-panel`/`-xl`/`-full` custom properties on `:root`, mirroring the SCSS `$spacing`/`$border-radius`/`$radius-*` scale. Previously `docs/foundation/colors.html` referenced several `--radius-*` tokens that didn't actually exist; they're now real.
+- All SCSS variables in `parameters.scss` now carry `!default`, so they can be configured from a consuming stylesheet via `@use "@dodlhuat/basix/css/style" with (...)` without forking the file — this didn't compile before.
+- New **Customizing** docs page (`docs/foundation/customizing.html`) — full reference for every semantic and component-scoped token, which selector each one must be overridden on, and the dark-mode override pitfall. See [Customizing](docs/foundation/customizing.html) below.
+- Fixed several docs pages that referenced custom properties that don't exist (typos like `--secondary-bg` for `--secondary-background`, `--surface`/`--border` for `--secondary-background`/`--divider`, `--accent-tint` for `--accent-color-tint`, `--border-color` for `--divider`, `--primary-background` for `--background`) — those elements were silently rendering without their intended background/border.
 
 ### 1.5.3 → 1.5.4
 
@@ -199,6 +211,17 @@ The Grid component provides a flexbox-based layout system. Use `.row` with `.col
 </div>
 ```
 
+### CSS Grid Layout
+
+The Grid component also offers a CSS Grid-based layout, `.grid` with `.cell` children, as an alternative to `.row`/`.column`. By default it reflows automatically without a breakpoint; use `.cols-1` through `.cols-12` for a fixed number of tracks, and `.span-2` through `.span-12` (or `.span-full`) on a `.cell` for an explicit column layout. Responsive — stacks to a single column on mobile. Rule of thumb: use `.row`/`.column` when content should size the layout (toolbars, form rows), and `.grid`/`.cell` when the layout should size the content (card grids, anything that needs to align across multiple rows) — both are independent, neither is deprecated in favor of the other.
+
+``` html
+<div class="grid cols-12">
+    <div class="cell span-8">Main</div>
+    <div class="cell span-4">Aside</div>
+</div>
+```
+
 ### Typography
 
 The typography system is built around the Outfit variable font, providing a modern, readable base for all text. Headings follow a clear scale with bold weight and tighter line spacing for strong visual hierarchy. Utility classes enable simple text alignment. Monospace fonts are reserved for code.
@@ -228,6 +251,35 @@ new Modal({ content: '…', iconBasePath: '../svg-icons/' });
 ```
 
 A couple of purely-decorative icons that need to render with zero markup (the `Breadcrumb` separator, the native `<select>` dropdown arrow) use `mask-image` against small standalone SVGs (`svg-icons/chevron_right.svg`, `svg-icons/keyboard_arrow_down.svg`) instead of the sprite, since sprite symbols are only instantiable via `<use>`.
+
+---
+
+## Theming & Customization
+
+Basix has two independent customization surfaces: **CSS custom properties**, overridable at runtime with no build step, and **SCSS variables**, configured at compile time via `@use … with (…)`.
+
+Custom properties come in two layers — semantic tokens on `:root` (`--accent-color`, `--divider`, `--error`, …, defined in `css/properties.scss`) and component-scoped tokens declared on the component's own class rather than `:root` (`--cal-accent` on `.cal`, `--chart-color-1` on `.chart`, `--menu-width` on `.flyout-menu`, …), which default to a semantic token but can diverge per component. Because component tokens are scoped to their component's class, `:root { --cal-accent: red }` has no effect — it must be `.cal { --cal-accent: red }`, since a directly-matched class selector always wins over an inherited `:root` value.
+
+``` css
+/* your-theme.css — loaded AFTER css/style.css */
+:root {
+    --accent-color: #6C47FF;
+    --radius-md: 0.5rem;
+}
+```
+
+Basix ships its palette in three blocks (`:root`, `[data-theme="dark"]`, and a `prefers-color-scheme` fallback) — an override placed only on `:root` reverts the moment dark mode activates, so re-theme all three when touching a colour token.
+
+SCSS variables in `parameters.scss` (`$spacing`, `$border-radius`, `$bp-sm`/`$bp-md`/`$bp-lg`, `$duration-*`, …) all carry `!default` and can be configured without forking the file:
+
+``` scss
+@use "@dodlhuat/basix/css/style" with (
+    $spacing: 1.25rem,
+    $border-radius: 0.5rem
+);
+```
+
+For the full token reference — every semantic and component token, its default, and which selector it must be overridden on — see the [Customizing](docs/foundation/customizing.html) docs page.
 
 ---
 

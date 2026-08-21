@@ -1,4 +1,15 @@
+@use "parameters" as *;
+
 :root {
+  --spacing:       #{$spacing};
+  --border-radius: #{$border-radius};
+  --radius-xs:     #{$radius-xs};
+  --radius-sm:     #{$radius-sm};
+  --radius-md:     #{$radius-md};
+  --radius-lg:     #{$radius-lg};
+  --radius-panel:  #{$radius-panel};
+  --radius-xl:     #{$radius-xl};
+  --radius-full:   9999px;
   --primary-text: #1E1F24;
   --secondary-text: #62636C;
   --divider: #D8D9E0;
