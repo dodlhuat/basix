@@ -20,6 +20,18 @@ interface CalendarLocale {
     agenda: string;
     allDay: string;
     noEvents: string;
+    previous?: string;
+    next?: string;
+    viewSwitch?: string;
+    calendar?: string;
+}
+interface CalendarRange {
+    from: Date;
+    to: Date;
+}
+interface CalendarFormat {
+    dateLocale?: string;
+    hour12?: boolean;
 }
 interface CalendarOptions {
     container: HTMLElement | string;
@@ -29,9 +41,11 @@ interface CalendarOptions {
     showOutsideDays?: boolean;
     onDayClick?: (date: Date) => void;
     onEventClick?: (event: CalendarEvent) => void;
-    onChange?: (date: Date, view: CalendarView) => void;
+    onChange?: (date: Date, view: CalendarView, range: CalendarRange) => void;
     className?: string;
     iconBasePath?: string;
+    dateLocale?: string;
+    hour12?: boolean;
 }
 interface SpanLayout {
     event: CalendarEvent;
@@ -64,14 +78,17 @@ declare const CalendarLogic: {
         top: number;
         height: number;
     };
-    formatTime(date: Date): string;
+    formatTime(date: Date, format?: CalendarFormat): string;
     computeSpanLayout(weekDays: Date[], events: CalendarEvent[]): SpanLayout[];
     computeTimedLayout(events: CalendarEvent[], day: Date): TimedEventLayout[];
     nowLinePct(): number;
 };
 declare class CalendarRenderer {
     private locale;
-    constructor(locale: CalendarLocale);
+    private format;
+    constructor(locale: CalendarLocale, format?: CalendarFormat);
+    private time;
+    private date;
     renderWeekdayHeaders(): string;
     renderBadge(event: CalendarEvent): string;
     private ariaLabel;
@@ -88,12 +105,15 @@ declare class Calendar {
     private options;
     private locale;
     private renderer;
+    private format;
     private currentDate;
     private currentView;
     private events;
+    private focusDate;
     private nowLineTimer;
     private listeners;
     constructor(options: CalendarOptions);
+    getVisibleRange(): CalendarRange;
     setView(view: CalendarView): void;
     next(): void;
     prev(): void;
@@ -103,10 +123,16 @@ declare class Calendar {
     setEvents(events: CalendarEvent[]): void;
     getEvents(): CalendarEvent[];
     destroy(): void;
+    private emitChange;
     private getTitle;
     private buildHeader;
     private buildBody;
     private render;
+    private dayCells;
+    private findDayCell;
+    private applyRovingTabindex;
+    private moveDayFocus;
+    private handleDayKeydown;
     private scrollToNow;
     private startNowLineTimer;
     private clearNowLineTimer;
@@ -115,4 +141,4 @@ declare class Calendar {
     private handleKeydown;
 }
 export { CalendarLogic, CalendarRenderer, Calendar };
-export type { CalendarEvent, CalendarView, CalendarLocale, CalendarOptions };
+export type { CalendarEvent, CalendarView, CalendarLocale, CalendarOptions, CalendarRange, CalendarFormat };

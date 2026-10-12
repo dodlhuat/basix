@@ -10,5 +10,9 @@ declare const utils: Utils;
 declare function escapeHtml(text: string): string;
 declare function escapeAttr(text: string): string;
 declare function isSafeUrl(url: string, allowDataImage?: boolean): boolean;
-declare function sanitizeHtml(html: string): string;
+interface SanitizeOptions {
+    strict?: boolean;
+}
+declare function sanitizeHtml(html: string, options?: SanitizeOptions): string;
 export { utils, escapeHtml, escapeAttr, isSafeUrl, sanitizeHtml };
+export type { SanitizeOptions };

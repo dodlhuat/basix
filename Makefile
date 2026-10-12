@@ -13,7 +13,10 @@ typecheck:
 	npx tsc --noEmit
 
 test: build
-	node --test --test-force-exit test/*.test.mjs
+	@for tz in UTC Europe/Vienna America/New_York; do \
+		echo "== TZ=$$tz"; \
+		TZ=$$tz node --test --test-force-exit test/*.test.mjs || exit 1; \
+		done
 
 build: css
 	npx tsc

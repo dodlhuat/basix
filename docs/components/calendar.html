@@ -163,12 +163,14 @@ cal.destroy();`, 'js');
                     <tr><td><code>container</code></td><td>HTMLElement | string</td><td>—</td><td>Target element or CSS selector to mount the calendar into.</td></tr>
                     <tr><td><code>events</code></td><td>CalendarEvent[]</td><td><code>[]</code></td><td>Initial array of events.</td></tr>
                     <tr><td><code>view</code></td><td>month | week | agenda</td><td><code>'month'</code></td><td>Initial view.</td></tr>
-                    <tr><td><code>locale</code></td><td>Partial&lt;CalendarLocale&gt;</td><td>German</td><td>Override month/day names, first day of week, and UI labels.</td></tr>
+                    <tr><td><code>locale</code></td><td>Partial&lt;CalendarLocale&gt;</td><td>German</td><td>Override month/day names, first day of week, and UI labels. Accessible names can be set with <code>previous</code>, <code>next</code>, <code>viewSwitch</code> and <code>calendar</code> (defaults: <code>Zurück</code>, <code>Vor</code>, <code>Ansicht wählen</code>, <code>Kalender</code>).</td></tr>
+                    <tr><td><code>dateLocale</code></td><td>string</td><td>browser locale</td><td>BCP 47 tag used for dates and times, e.g. <code>'de-AT'</code>.</td></tr>
+                    <tr><td><code>hour12</code></td><td>boolean</td><td>locale default</td><td><code>true</code> for a 12-hour clock, <code>false</code> for 24-hour.</td></tr>
                     <tr><td><code>showOutsideDays</code></td><td>boolean</td><td><code>true</code></td><td>Show days from adjacent months in the month grid.</td></tr>
                     <tr><td><code>className</code></td><td>string</td><td>—</td><td>Extra CSS class added to the root <code>.cal</code> element.</td></tr>
                     <tr><td><code>onDayClick</code></td><td>(date: Date) =&gt; void</td><td>—</td><td>Called when a day cell is clicked.</td></tr>
                     <tr><td><code>onEventClick</code></td><td>(event: CalendarEvent) =&gt; void</td><td>—</td><td>Called when an event pill is clicked.</td></tr>
-                    <tr><td><code>onChange</code></td><td>(date: Date, view: CalendarView) =&gt; void</td><td>—</td><td>Called after navigation or view change.</td></tr>
+                    <tr><td><code>onChange</code></td><td>(date: Date, view: CalendarView, range: CalendarRange) =&gt; void</td><td>—</td><td>Called after navigation or view change. <code>range</code> is <code>{ from, to }</code>, the days the view covers (<code>from</code> 00:00:00.000, <code>to</code> 23:59:59.999) — use it to fetch events.</td></tr>
                 </tbody>
             </table>
 
@@ -187,6 +189,9 @@ cal.destroy();`, 'js');
                 </tbody>
             </table>
 
+            <h2>Keyboard</h2>
+            <p>In month view the grid is a single tab stop. With a day focused: <kbd>←</kbd> <kbd>→</kbd> previous / next day, <kbd>↑</kbd> <kbd>↓</kbd> previous / next week, <kbd>Home</kbd> <kbd>End</kbd> start / end of the week, <kbd>PageUp</kbd> <kbd>PageDown</kbd> previous / next month, <kbd>Enter</kbd> / <kbd>Space</kbd> select the day (<code>onDayClick</code>). Moving past the edge of the month switches the month and fires <code>onChange</code>. Events inside a day are separate tab stops.</p>
+
             <h2>Public API</h2>
             <table class="docs-props-table">
                 <thead><tr><th>Method</th><th>Description</th></tr></thead>
@@ -194,6 +199,7 @@ cal.destroy();`, 'js');
                     <tr><td><code>next()</code></td><td>Navigate to the next month or week.</td></tr>
                     <tr><td><code>prev()</code></td><td>Navigate to the previous month or week.</td></tr>
                     <tr><td><code>today()</code></td><td>Jump back to today.</td></tr>
+                    <tr><td><code>getVisibleRange()</code></td><td>Returns <code>{ from, to }</code> for the current view (month grid incl. outside days if shown, the week, or the month in agenda view).</td></tr>
                     <tr><td><code>setView(view)</code></td><td>Switch view programmatically.</td></tr>
                     <tr><td><code>addEvent(event)</code></td><td>Add a single event and re-render.</td></tr>
                     <tr><td><code>removeEvent(id)</code></td><td>Remove an event by id and re-render.</td></tr>

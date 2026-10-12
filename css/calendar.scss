@@ -189,6 +189,12 @@
   cursor: default;
   position: relative;
 
+  &:focus-visible {
+    outline: 2px solid var(--cal-accent);
+    outline-offset: -2px;
+    z-index: 1;
+  }
+
   &--empty {
     background: var(--cal-bg-alt);
     pointer-events: none;

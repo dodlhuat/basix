@@ -29,6 +29,30 @@ interface CalendarLocale {
     agenda: string;
     allDay: string;
     noEvents: string;
+    /** Accessible name of the "previous" button. Default `'Zurück'`. */
+    previous?: string;
+    /** Accessible name of the "next" button. Default `'Vor'`. */
+    next?: string;
+    /** Accessible name of the month/week/agenda switch group. Default `'Ansicht wählen'`. */
+    viewSwitch?: string;
+    /** Accessible name of the whole calendar. Default `'Kalender'`. */
+    calendar?: string;
+}
+
+/** Inclusive date range currently covered by the rendered view. */
+interface CalendarRange {
+    /** 00:00:00.000 of the first visible day. */
+    from: Date;
+    /** 23:59:59.999 of the last visible day. */
+    to: Date;
+}
+
+/** Date/time formatting options for the Calendar. */
+interface CalendarFormat {
+    /** BCP 47 tag used for dates and times (e.g. `'de-AT'`). Default: the browser locale. */
+    dateLocale?: string;
+    /** `true` for 12-hour, `false` for 24-hour clock. Default: the locale's own convention. */
+    hour12?: boolean;
 }
 
 /** Configuration options for the Calendar component. */
@@ -40,9 +64,13 @@ interface CalendarOptions {
     showOutsideDays?: boolean;
     onDayClick?: (date: Date) => void;
     onEventClick?: (event: CalendarEvent) => void;
-    onChange?: (date: Date, view: CalendarView) => void;
+    onChange?: (date: Date, view: CalendarView, range: CalendarRange) => void;
     className?: string;
     iconBasePath?: string;
+    /** BCP 47 tag used for dates and times. Default: the browser locale. */
+    dateLocale?: string;
+    /** `true` for 12-hour, `false` for 24-hour clock. Default: the locale's own convention. */
+    hour12?: boolean;
 }
 
 /** Layout descriptor for a multi-day event spanning columns in a week row. */
@@ -143,17 +171,24 @@ const CalendarLogic = {
         dayStart.setHours(0, 0, 0, 0);
         const dayEnd = new Date(day);
         dayEnd.setHours(24, 0, 0, 0);
-        const totalMs = 24 * 60 * 60 * 1000;
-        const startMs = Math.max(event.start.getTime(), dayStart.getTime()) - dayStart.getTime();
-        const endMs = Math.min(CalendarLogic.endOf(event).getTime(), dayEnd.getTime()) - dayStart.getTime();
+        // Wall-clock minutes, not elapsed milliseconds: the grid has 24 equal hour rows
+        // even on a daylight-saving day that is 23 or 25 hours long.
+        const wallMinutes = (d: Date): number => d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60;
+        const end = CalendarLogic.endOf(event);
+        const startMin = event.start <= dayStart ? 0 : wallMinutes(event.start);
+        const endMin = end >= dayEnd ? 1440 : wallMinutes(end);
         return {
-            top: (startMs / totalMs) * 100,
-            height: Math.max(((endMs - startMs) / totalMs) * 100, 2),
+            top: (startMin / 1440) * 100,
+            height: Math.max(((endMin - startMin) / 1440) * 100, 2),
         };
     },
 
-    formatTime(date: Date): string {
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    formatTime(date: Date, format: CalendarFormat = {}): string {
+        return date.toLocaleTimeString(format.dateLocale ?? [], {
+            hour: '2-digit',
+            minute: '2-digit',
+            ...(format.hour12 === undefined ? {} : { hour12: format.hour12 }),
+        });
     },
 
     /** Compute horizontal span layout for a set of events within a 7-day row. */
@@ -264,20 +299,34 @@ const DEFAULT_LOCALE: CalendarLocale = {
     agenda: 'Agenda',
     allDay: 'Ganztägig',
     noEvents: 'Keine Termine',
+    previous: 'Zurück',
+    next: 'Vor',
+    viewSwitch: 'Ansicht wählen',
+    calendar: 'Kalender',
 };
 
 /** Produces HTML strings for each Calendar view (month, week, agenda). */
 class CalendarRenderer {
     private locale: CalendarLocale;
+    private format: CalendarFormat;
 
-    public constructor(locale: CalendarLocale) {
+    public constructor(locale: CalendarLocale, format: CalendarFormat = {}) {
         this.locale = locale;
+        this.format = format;
+    }
+
+    private time(date: Date): string {
+        return CalendarLogic.formatTime(date, this.format);
+    }
+
+    private date(date: Date): string {
+        return date.toLocaleDateString(this.format.dateLocale);
     }
 
     public renderWeekdayHeaders(): string {
         const { dayNamesShort, firstDayOfWeek } = this.locale;
         const ordered = [...dayNamesShort.slice(firstDayOfWeek), ...dayNamesShort.slice(0, firstDayOfWeek)];
-        return ordered.map((name) => `<div class="cal__weekday" aria-label="${escapeAttr(name)}">${escapeHtml(name)}</div>`).join('');
+        return ordered.map((name) => `<div class="cal__weekday" role="columnheader" aria-label="${escapeAttr(name)}">${escapeHtml(name)}</div>`).join('');
     }
 
     public renderBadge(event: CalendarEvent): string {
@@ -297,8 +346,8 @@ class CalendarRenderer {
         if (compact) {
             return `<div class="cal__event-pill ${cls}" data-event-id="${id}" role="button" tabindex="0" aria-label="${this.ariaLabel(event)}" title="${this.ariaLabel(event)}">${title}</div>`;
         }
-        return `<div class="cal__event-pill ${cls}" data-event-id="${id}" role="button" tabindex="0" aria-label="${this.ariaLabel(event, `, ${CalendarLogic.formatTime(event.start)} – ${CalendarLogic.formatTime(CalendarLogic.endOf(event))}`)}" title="${titleAttr}">
-      <span class="cal__event-time">${CalendarLogic.formatTime(event.start)}</span>
+        return `<div class="cal__event-pill ${cls}" data-event-id="${id}" role="button" tabindex="0" aria-label="${this.ariaLabel(event, `, ${this.time(event.start)} – ${this.time(CalendarLogic.endOf(event))}`)}" title="${titleAttr}">
+      <span class="cal__event-time">${this.time(event.start)}</span>
       ${title}
     </div>`;
     }
@@ -327,7 +376,7 @@ class CalendarRenderer {
         const isOutside = !CalendarLogic.isCurrentMonth(date, currentYear, currentMonth);
 
         if (isOutside && !showOutsideDays) {
-            return `<div class="cal__day cal__day--empty" aria-hidden="true"></div>`;
+            return `<div class="cal__day cal__day--empty" role="gridcell" aria-hidden="true"></div>`;
         }
 
         const allForDay = CalendarLogic.getEventsForDay(events, date);
@@ -345,7 +394,7 @@ class CalendarRenderer {
         const moreCount = pillEvents.length - 3;
         const moreHtml = moreCount > 0 ? `<div class="cal__event-more">+${moreCount}</div>` : '';
 
-        return `<div class="${classes}" data-date="${date.toISOString()}" aria-label="${date.toLocaleDateString()}">
+        return `<div class="${classes}" role="gridcell"${isToday ? ' aria-current="date"' : ''} data-date="${date.toISOString()}" aria-label="${this.date(date)}">
       <span class="cal__day-num">${date.getDate()}</span>
       <div class="cal__day-events">${eventsHtml}${moreHtml}</div>
     </div>`;
@@ -359,7 +408,7 @@ class CalendarRenderer {
         const dayCells = weekDays.map((d) => this.renderMonthDay(d, currentMonth, currentYear, events, showOutsideDays)).join('');
         const spanBars = spans.map((s) => this.renderSpanBar(s)).join('');
 
-        return `<div class="cal__week-row" style="--span-lanes:${maxLanes}">
+        return `<div class="cal__week-row" role="row" style="--span-lanes:${maxLanes}">
       ${dayCells}${spanBars}
     </div>`;
     }
@@ -372,7 +421,7 @@ class CalendarRenderer {
         }
 
         return `<div class="cal__month-grid" role="grid" aria-label="${escapeAttr(this.locale.monthNames[month])} ${year}">
-      <div class="cal__month-head">${this.renderWeekdayHeaders()}</div>
+      <div class="cal__month-head" role="row">${this.renderWeekdayHeaders()}</div>
       ${weekRows.join('')}
     </div>`;
     }
@@ -419,7 +468,7 @@ class CalendarRenderer {
                         return `<div class="cal__week-event ${cls}"
               style="${posStyle}"
               data-event-id="${escapeAttr(event.id)}" role="button" tabindex="0" aria-label="${this.ariaLabel(event)}">
-              <span class="cal__event-time">${CalendarLogic.formatTime(event.start)}</span>
+              <span class="cal__event-time">${this.time(event.start)}</span>
               ${escapeHtml(event.title)}${this.renderBadge(event)}
             </div>`;
                     })
@@ -485,13 +534,13 @@ class CalendarRenderer {
                   let timeLabel: string;
                   const end = CalendarLogic.endOf(e);
                   if (isMulti && e.allDay) {
-                      timeLabel = `${e.start.toLocaleDateString()} – ${end.toLocaleDateString()}`;
+                      timeLabel = `${this.date(e.start)} – ${this.date(end)}`;
                   } else if (isMulti) {
-                      timeLabel = `${e.start.toLocaleDateString()} ${CalendarLogic.formatTime(e.start)} – ${end.toLocaleDateString()} ${CalendarLogic.formatTime(end)}`;
+                      timeLabel = `${this.date(e.start)} ${this.time(e.start)} – ${this.date(end)} ${this.time(end)}`;
                   } else if (e.allDay) {
                       timeLabel = escapeHtml(this.locale.allDay);
                   } else {
-                      timeLabel = `${CalendarLogic.formatTime(e.start)} – ${CalendarLogic.formatTime(end)}`;
+                      timeLabel = `${this.time(e.start)} – ${this.time(end)}`;
                   }
                   const timeClass = isMulti && !e.allDay ? 'cal__agenda-event-time cal__agenda-event-time--range' : 'cal__agenda-event-time';
                   return `<div class="cal__agenda-event ${escapeAttr(e.className ?? '')}"
@@ -513,12 +562,14 @@ class CalendarRenderer {
 /** Main Calendar controller — manages state, rendering, and event delegation. */
 class Calendar {
     private container: HTMLElement;
-    private options: Required<CalendarOptions>;
+    private options: Required<Omit<CalendarOptions, 'dateLocale' | 'hour12'>>;
     private locale: CalendarLocale;
     private renderer: CalendarRenderer;
+    private format: CalendarFormat;
     private currentDate: Date;
     private currentView: CalendarView;
     private events: CalendarEvent[] = [];
+    private focusDate: Date | null = null;
     private nowLineTimer: ReturnType<typeof setInterval> | null = null;
     private listeners = new ListenerGroup();
 
@@ -532,7 +583,8 @@ class Calendar {
         }
 
         this.locale = { ...DEFAULT_LOCALE, ...(options.locale ?? {}) };
-        this.renderer = new CalendarRenderer(this.locale);
+        this.format = { dateLocale: options.dateLocale || undefined, hour12: options.hour12 };
+        this.renderer = new CalendarRenderer(this.locale, this.format);
 
         this.options = {
             container: this.container,
@@ -555,10 +607,34 @@ class Calendar {
         this.attachEvents();
     }
 
+    /** Inclusive range of days covered by the current view, e.g. for fetching events. */
+    public getVisibleRange(): CalendarRange {
+        const y = this.currentDate.getFullYear();
+        const m = this.currentDate.getMonth();
+        let first: Date;
+        let last: Date;
+        if (this.currentView === 'week') {
+            const week = CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek);
+            first = week[0];
+            last = week[6];
+        } else if (this.currentView === 'month' && this.options.showOutsideDays) {
+            const grid = CalendarLogic.getMonthGrid(y, m, this.locale.firstDayOfWeek);
+            first = grid[0];
+            last = grid[grid.length - 1];
+        } else {
+            first = new Date(y, m, 1);
+            last = new Date(y, m + 1, 0);
+        }
+        return {
+            from: CalendarLogic.startOfDay(first),
+            to: new Date(last.getFullYear(), last.getMonth(), last.getDate(), 23, 59, 59, 999),
+        };
+    }
+
     public setView(view: CalendarView): void {
         this.currentView = view;
         this.render();
-        this.options.onChange(this.currentDate, this.currentView);
+        this.emitChange();
     }
 
     public next(): void {
@@ -568,7 +644,7 @@ class Calendar {
             this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate() + 7);
         }
         this.render();
-        this.options.onChange(this.currentDate, this.currentView);
+        this.emitChange();
     }
 
     public prev(): void {
@@ -578,13 +654,13 @@ class Calendar {
             this.currentDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate() - 7);
         }
         this.render();
-        this.options.onChange(this.currentDate, this.currentView);
+        this.emitChange();
     }
 
     public today(): void {
         this.currentDate = new Date();
         this.render();
-        this.options.onChange(this.currentDate, this.currentView);
+        this.emitChange();
     }
 
     public addEvent(event: CalendarEvent): void {
@@ -613,6 +689,10 @@ class Calendar {
         this.container.removeAttribute('data-cal');
     }
 
+    private emitChange(): void {
+        this.options.onChange(this.currentDate, this.currentView, this.getVisibleRange());
+    }
+
     private getTitle(weekDays: Date[] | null): string {
         const { monthNames } = this.locale;
         const y = this.currentDate.getFullYear();
@@ -633,15 +713,15 @@ class Calendar {
         return `<div class="cal__header">
       <div class="cal__nav">
         <button class="cal__btn cal__btn--today" data-action="today" aria-label="${escapeAttr(this.locale.today)}">${escapeHtml(this.locale.today)}</button>
-        <button class="cal__btn" data-action="prev" aria-label="Zurück">
+        <button class="cal__btn" data-action="prev" aria-label="${escapeAttr(this.locale.previous ?? DEFAULT_LOCALE.previous!)}">
           <svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath)}icons.svg#chevron_left"/></svg>
         </button>
-        <button class="cal__btn" data-action="next" aria-label="Vor">
+        <button class="cal__btn" data-action="next" aria-label="${escapeAttr(this.locale.next ?? DEFAULT_LOCALE.next!)}">
           <svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath)}icons.svg#chevron_right"/></svg>
         </button>
       </div>
       <h2 class="cal__title" aria-live="polite">${escapeHtml(this.getTitle(weekDays))}</h2>
-      <div class="cal__view-toggle" role="group" aria-label="Ansicht wählen">
+      <div class="cal__view-toggle" role="group" aria-label="${escapeAttr(this.locale.viewSwitch ?? DEFAULT_LOCALE.viewSwitch!)}">
         <button class="cal__btn ${v === 'month' ? 'cal__btn--active' : ''}" data-action="view-month"  aria-pressed="${v === 'month'}">${escapeHtml(this.locale.month)}</button>
         <button class="cal__btn ${v === 'week' ? 'cal__btn--active' : ''}" data-action="view-week"   aria-pressed="${v === 'week'}">${escapeHtml(this.locale.week)}</button>
         <button class="cal__btn ${v === 'agenda' ? 'cal__btn--active' : ''}" data-action="view-agenda" aria-pressed="${v === 'agenda'}">${escapeHtml(this.locale.agenda)}</button>
@@ -671,7 +751,7 @@ class Calendar {
         const weekDays = this.currentView === 'week' ? CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek) : null;
         const rootClass = ['cal', this.options.className].filter(Boolean).join(' ');
         this.container.setAttribute('data-cal', this.currentView);
-        this.container.innerHTML = `<div class="${escapeAttr(rootClass)}" role="application" aria-label="Kalender">
+        this.container.innerHTML = `<div class="${escapeAttr(rootClass)}" role="application" aria-label="${escapeAttr(this.locale.calendar ?? DEFAULT_LOCALE.calendar!)}">
       ${this.buildHeader(weekDays)}
       <div class="cal__body">${this.buildBody(weekDays)}</div>
     </div>`;
@@ -680,6 +760,86 @@ class Calendar {
             this.scrollToNow();
             this.startNowLineTimer();
         }
+
+        this.applyRovingTabindex();
+    }
+
+    private dayCells(): HTMLElement[] {
+        return Array.from(this.container.querySelectorAll<HTMLElement>('.cal__day[data-date]'));
+    }
+
+    private findDayCell(date: Date): HTMLElement | undefined {
+        return this.dayCells().find((cell) => CalendarLogic.isSameDay(new Date(cell.dataset.date!), date));
+    }
+
+    /** Month grid is a single tab stop; arrow keys move between days. */
+    private applyRovingTabindex(): void {
+        if (this.currentView !== 'month') return;
+        const cells = this.dayCells();
+        if (!cells.length) return;
+        const target =
+            (this.focusDate && this.findDayCell(this.focusDate)) ||
+            cells.find((c) => c.classList.contains('is-today')) ||
+            cells.find((c) => !c.classList.contains('cal__day--outside')) ||
+            cells[0];
+        cells.forEach((cell) => cell.setAttribute('tabindex', cell === target ? '0' : '-1'));
+    }
+
+    private moveDayFocus(date: Date): void {
+        this.focusDate = date;
+        if (date.getFullYear() !== this.currentDate.getFullYear() || date.getMonth() !== this.currentDate.getMonth()) {
+            this.currentDate = new Date(date.getFullYear(), date.getMonth(), 1);
+            this.render();
+            this.emitChange();
+        } else {
+            this.applyRovingTabindex();
+        }
+        this.findDayCell(date)?.focus();
+    }
+
+    private handleDayKeydown(e: KeyboardEvent, cell: HTMLElement): boolean {
+        const from = new Date(cell.dataset.date!);
+        const y = from.getFullYear();
+        const m = from.getMonth();
+        const dd = from.getDate();
+        let next: Date | null = null;
+        switch (e.key) {
+            case 'ArrowLeft':
+                next = new Date(y, m, dd - 1);
+                break;
+            case 'ArrowRight':
+                next = new Date(y, m, dd + 1);
+                break;
+            case 'ArrowUp':
+                next = new Date(y, m, dd - 7);
+                break;
+            case 'ArrowDown':
+                next = new Date(y, m, dd + 7);
+                break;
+            case 'Home':
+            case 'End': {
+                const col = (from.getDay() - this.locale.firstDayOfWeek + 7) % 7;
+                next = new Date(y, m, dd - col + (e.key === 'End' ? 6 : 0));
+                break;
+            }
+            case 'PageUp':
+            case 'PageDown': {
+                const target = m + (e.key === 'PageDown' ? 1 : -1);
+                const lastDay = new Date(y, target + 1, 0).getDate();
+                next = new Date(y, target, Math.min(dd, lastDay));
+                break;
+            }
+            case 'Enter':
+            case ' ':
+                e.preventDefault();
+                cell.click();
+                return true;
+            default:
+                return false;
+        }
+        e.preventDefault();
+        this.moveDayFocus(next);
+        return true;
     }
 
     private scrollToNow(): void {
@@ -744,6 +904,10 @@ class Calendar {
     private handleKeydown(e: KeyboardEvent): void {
         const target = e.target as HTMLElement;
 
+        if (this.currentView === 'month' && target.classList.contains('cal__day') && target.dataset.date) {
+            if (this.handleDayKeydown(e, target)) return;
+        }
+
         if (e.key === 'Enter' || e.key === ' ') {
             if (target.closest('[data-event-id], [data-action]')) {
                 e.preventDefault();
@@ -754,4 +918,4 @@ class Calendar {
 }
 
 export { CalendarLogic, CalendarRenderer, Calendar };
-export type { CalendarEvent, CalendarView, CalendarLocale, CalendarOptions };
+export type { CalendarEvent, CalendarView, CalendarLocale, CalendarOptions, CalendarRange, CalendarFormat };

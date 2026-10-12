@@ -85,13 +85,97 @@ function isSafeUrl(url: string, allowDataImage = false): boolean {
     return allowDataImage && SAFE_DATA_IMAGE.test(normalized);
 }
 
+/** Options for {@link sanitizeHtml}. */
+interface SanitizeOptions {
+    /**
+     * Keep only a small set of text-level tags and attributes (no `style`, `id`, forms,
+     * SVG, media, …). Unknown tags are replaced by their text content. Default `false`.
+     */
+    strict?: boolean;
+}
+
+const STRICT_TAGS = new Set([
+    'a',
+    'abbr',
+    'b',
+    'blockquote',
+    'br',
+    'caption',
+    'code',
+    'dd',
+    'del',
+    'div',
+    'dl',
+    'dt',
+    'em',
+    'figcaption',
+    'figure',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'hr',
+    'i',
+    'img',
+    'ins',
+    'li',
+    'mark',
+    'ol',
+    'p',
+    'pre',
+    's',
+    'small',
+    'span',
+    'strong',
+    'sub',
+    'sup',
+    'table',
+    'tbody',
+    'td',
+    'tfoot',
+    'th',
+    'thead',
+    'time',
+    'tr',
+    'u',
+    'ul',
+]);
+const STRICT_GLOBAL_ATTRS = new Set(['class', 'title', 'lang', 'dir']);
+const STRICT_TAG_ATTRS: Record<string, string[]> = {
+    a: ['href', 'target', 'rel'],
+    img: ['src', 'alt', 'width', 'height'],
+    td: ['colspan', 'rowspan'],
+    th: ['colspan', 'rowspan', 'scope'],
+    time: ['datetime'],
+};
+
+function applyStrict(body: HTMLElement): void {
+    for (const el of Array.from(body.querySelectorAll('*'))) {
+        const tag = el.tagName.toLowerCase();
+        if (!STRICT_TAGS.has(tag)) {
+            el.replaceWith(...Array.from(el.childNodes));
+            continue;
+        }
+        const allowed = STRICT_TAG_ATTRS[tag] ?? [];
+        for (const attr of Array.from(el.attributes)) {
+            const name = attr.name.toLowerCase();
+            if (!STRICT_GLOBAL_ATTRS.has(name) && !allowed.includes(name)) el.removeAttribute(attr.name);
+        }
+        if (tag === 'a' && el.getAttribute('target') === '_blank') el.setAttribute('rel', 'noopener noreferrer');
+    }
+}
+
 /**
  * Sanitize an HTML string by removing dangerous elements and attributes
  * (script, iframe, base, meta, link, on* handlers, srcdoc, and URLs whose scheme is not
  * http/https/mailto/tel) while preserving safe markup. Remote images and CSS `url()`
- * are not blocked. Use this when a component intentionally accepts rich HTML from callers.
+ * are not blocked. Pass `{ strict: true }` to additionally reduce the result to a small
+ * allowlist of text-level tags and attributes. Use this when a component intentionally
+ * accepts rich HTML from callers.
  */
-function sanitizeHtml(html: string): string {
+function sanitizeHtml(html: string, options: SanitizeOptions = {}): string {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
@@ -111,7 +195,10 @@ function sanitizeHtml(html: string): string {
         }
     });
 
+    if (options.strict) applyStrict(doc.body);
+
     return doc.body.innerHTML;
 }
 
 export { utils, escapeHtml, escapeAttr, isSafeUrl, sanitizeHtml };
+export type { SanitizeOptions };

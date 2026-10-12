@@ -52,7 +52,80 @@ function isSafeUrl(url, allowDataImage = false) {
         return true;
     return allowDataImage && SAFE_DATA_IMAGE.test(normalized);
 }
-function sanitizeHtml(html) {
+const STRICT_TAGS = new Set([
+    'a',
+    'abbr',
+    'b',
+    'blockquote',
+    'br',
+    'caption',
+    'code',
+    'dd',
+    'del',
+    'div',
+    'dl',
+    'dt',
+    'em',
+    'figcaption',
+    'figure',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'hr',
+    'i',
+    'img',
+    'ins',
+    'li',
+    'mark',
+    'ol',
+    'p',
+    'pre',
+    's',
+    'small',
+    'span',
+    'strong',
+    'sub',
+    'sup',
+    'table',
+    'tbody',
+    'td',
+    'tfoot',
+    'th',
+    'thead',
+    'time',
+    'tr',
+    'u',
+    'ul',
+]);
+const STRICT_GLOBAL_ATTRS = new Set(['class', 'title', 'lang', 'dir']);
+const STRICT_TAG_ATTRS = {
+    a: ['href', 'target', 'rel'],
+    img: ['src', 'alt', 'width', 'height'],
+    td: ['colspan', 'rowspan'],
+    th: ['colspan', 'rowspan', 'scope'],
+    time: ['datetime'],
+};
+function applyStrict(body) {
+    for (const el of Array.from(body.querySelectorAll('*'))) {
+        const tag = el.tagName.toLowerCase();
+        if (!STRICT_TAGS.has(tag)) {
+            el.replaceWith(...Array.from(el.childNodes));
+            continue;
+        }
+        const allowed = STRICT_TAG_ATTRS[tag] ?? [];
+        for (const attr of Array.from(el.attributes)) {
+            const name = attr.name.toLowerCase();
+            if (!STRICT_GLOBAL_ATTRS.has(name) && !allowed.includes(name))
+                el.removeAttribute(attr.name);
+        }
+        if (tag === 'a' && el.getAttribute('target') === '_blank')
+            el.setAttribute('rel', 'noopener noreferrer');
+    }
+}
+function sanitizeHtml(html, options = {}) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
     doc.querySelectorAll('script, style, iframe, frame, frameset, object, embed, applet, base, meta, link, animate, set').forEach((el) => el.remove());
@@ -72,6 +145,8 @@ function sanitizeHtml(html) {
             }
         }
     });
+    if (options.strict)
+        applyStrict(doc.body);
     return doc.body.innerHTML;
 }
 export { utils, escapeHtml, escapeAttr, isSafeUrl, sanitizeHtml };

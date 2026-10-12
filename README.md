@@ -1,4 +1,4 @@
-# Basix 1.5.7
+# Basix 1.6.0
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -7,11 +7,24 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 
 ---
 
+## Security notes
+
+Basix renders strings you pass in. What each kind of option does with them:
+
+- **Text options** — labels, titles, names, captions, table cells, chart labels, `Toast` content, … — are escaped. Pass plain text; HTML is shown literally.
+- **HTML options** — `Modal`/`BottomSheet`/`Popover` content, header and footer, `Tooltip` with `isHtml`, `FlyoutMenu.footerText`, the `Editor` output — are passed through `sanitizeHtml`. It removes scripts, event handlers, `srcdoc`, and any URL that is not http(s)/mailto/tel/relative (plus raster `data:image` on `<img>`). It is a convenience for markup you mostly trust, not a substitute for escaping on your server. For untrusted rich text use `sanitizeHtml(html, { strict: true })`, which reduces the result to text-level tags and a few attributes — or sanitize server-side.
+- **Not blocked by `sanitizeHtml`:** remote images and CSS `url()` (they can be used for tracking). Use a Content-Security-Policy (`img-src`, `style-src`) if that matters.
+- **Attributes:** when building markup yourself, use `escapeAttr` for values inside quoted attributes. `escapeHtml` is for element content only — it does not escape quotes.
+- **URLs from users** (links, images): check them with `isSafeUrl` before use.
+- `iconBasePath` and similar path options are developer configuration; they are escaped, but don't build them from user input.
+
+`make test` feeds hostile values to the components that render caller-supplied strings (`test/*-xss.test.mjs`); add a case there when you add a component or an option that accepts text.
+
 ## Migration Guide
 
-### 1.5.6 → 1.5.7
+### 1.5.6 → 1.6.0
 
-Security release. No API signatures changed, but several options that used to be inserted as raw HTML are now treated as text or sanitized (listed under **Behavior changes**). Upgrade if any of these components display user-supplied data.
+Security fixes plus new, backward-compatible Calendar options. Several options that used to be inserted as raw HTML are now text or sanitized (listed under **Behavior changes**; `FlyoutMenu.title` is the one most likely to need a change in your code). Upgrade if any of these components display user-supplied data.
 
 #### Security fixes
 
@@ -40,6 +53,14 @@ Security release. No API signatures changed, but several options that used to be
 
 #### Other changes
 
+- **`Calendar` — visible range** — `onChange` now receives a third argument `range: { from, to }` (the days the view covers; `from` is 00:00:00.000, `to` is 23:59:59.999), and `getVisibleRange()` returns the same for the current view. Existing two-argument handlers keep working. New exported types `CalendarRange` and `CalendarFormat`.
+- **`Calendar` — formatting** — new `dateLocale` (BCP 47 tag) and `hour12` options for dates and times. Defaults are unchanged (browser locale). `CalendarLogic.formatTime(date, format?)` takes an optional second argument.
+- **`Calendar` — localised accessible names** — `CalendarLocale` gained the optional `previous`, `next`, `viewSwitch` and `calendar` fields for the button and region `aria-label`s that were hard-coded German. Defaults are the previous texts.
+- **`Calendar` — keyboard and roles** — in month view the grid is a single tab stop. Arrow keys move between days, `Home`/`End` jump to the week's first/last day, `PageUp`/`PageDown` change the month, `Enter`/`Space` trigger `onDayClick`. Moving past the edge switches the month and fires `onChange`. The grid now has `row`/`columnheader`/`gridcell` roles, today carries `aria-current="date"`, and focused days get a focus ring. Because day cells are now focusable, `Tab` stops once on the grid instead of passing straight to the events; events remain separate tab stops. Multi-day bars are still direct children of the week `row`, which strict ARIA validators may flag.
+- **`Calendar` — daylight saving** — timed events are positioned by wall-clock time, so on a 23- or 25-hour day they line up with the hour rows (before, they were off by an hour after the switch).
+- **`sanitizeHtml(html, { strict: true })`** — optional stricter mode that keeps only text-level tags (`p`, `a`, `strong`, `ul`, `table`, `img`, …) and a few attributes (`class`, `title`, `lang`, `dir`, `href`, `src`, `alt`, …), unwraps everything else, and adds `rel="noopener noreferrer"` to `target="_blank"` links. The default behavior is unchanged. New exported type `SanitizeOptions`.
+- **Tests** — `make test` now runs in three time zones (UTC, Europe/Vienna, America/New_York) and includes cross-component XSS tests; new "Security notes" section above.
+- **`PushMenu`** — the toggle's pressed-state feedback is derived from `--primary-text`, so it is visible in dark mode too.
 - **Reduced motion** — `reset.scss` now honours `prefers-reduced-motion: reduce` globally: all transitions and animations jump straight to their end state (`transitionend`/`animationend` still fire), and smooth scrolling is turned off. Loading indicators (`.spinner`, `.is-loading`, indeterminate `.progress-bar.animated`) keep animating. Previously only 8 stylesheets handled this individually. If you need an animation to run regardless, exempt it with a more specific `!important` rule inside your own `@media (prefers-reduced-motion: reduce)` block.
 - **z-index tokens** — new `$z-sidebar-backdrop`, `$z-sidebar`, `$z-dropdown`, `$z-flyout-overlay`, `$z-flyout`, `$z-push-menu`, `$z-popover`, `$z-overlay`, `$z-modal`, `$z-toast`, `$z-menu` and `$z-tooltip` in `parameters.scss` (all `!default`, so configurable via `@use … with (…)`). The defaults equal the previous hard-coded numbers, so the compiled CSS is unchanged; component-internal values (1–11) stay as plain numbers.
 - **`Accordion`** — the content now has a small top padding (`$spacing * 0.25`) so it no longer sits tight under the header.
