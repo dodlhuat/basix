@@ -26,8 +26,8 @@
   --background: #F9F9FB;
   --primary-bg: #F9F9FB;
   --accent-color: #3D63DD;
-  --accent-color-lighten: #87A5EF;
-  --accent-color-tint: color-mix(in srgb, #3D63DD 12%, transparent);
+  --accent-color-lighten: color-mix(in oklab, var(--accent-color) 60%, white);
+  --accent-color-tint: color-mix(in srgb, var(--accent-color) 12%, transparent);
   --accent-color-text: #D8D9E0;
   --on-accent: #FFFFFF;
   --link-color: var(--accent-color);
@@ -54,8 +54,8 @@
   --primary-bg: #111113;
   --secondary-background: #19191B;
   --accent-color: #1B7BB4;
-  --accent-color-lighten: #175982;
-  --accent-color-tint: color-mix(in srgb, #1B7BB4 12%, transparent);
+  --accent-color-lighten: color-mix(in srgb, var(--accent-color) 73%, black);
+  --accent-color-tint: color-mix(in srgb, var(--accent-color) 12%, transparent);
   --accent-color-text: #B2B3BD;
   --link-color: #2B8CC4;
   --disabled: #303136;
@@ -85,8 +85,8 @@
     --primary-bg: #111113;
     --secondary-background: #19191B;
     --accent-color: #1B7BB4;
-    --accent-color-lighten: #175982;
-    --accent-color-tint: color-mix(in srgb, #1B7BB4 12%, transparent);
+    --accent-color-lighten: color-mix(in srgb, var(--accent-color) 73%, black);
+    --accent-color-tint: color-mix(in srgb, var(--accent-color) 12%, transparent);
     --accent-color-text: #B2B3BD;
     --link-color: #2B8CC4;
     --disabled: #303136;

@@ -12,6 +12,9 @@ lint:
 typecheck:
 	npx tsc --noEmit
 
+test: build
+	node --test --test-force-exit test/*.test.mjs
+
 build: css
 	npx tsc
 
@@ -29,4 +32,4 @@ deploy: ## rsync the whole repo (minus node_modules/.git) to world4you:web/basix
 		--exclude='/.claude/' \
 		$(CURDIR)/ $(DEPLOY_HOST):$(DEPLOY_DIR)
 
-.PHONY: css lint typecheck build up down deploy
+.PHONY: css lint typecheck test build up down deploy

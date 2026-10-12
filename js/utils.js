@@ -37,6 +37,9 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
+function escapeAttr(text) {
+    return String(text).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+}
 function sanitizeHtml(html) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -50,4 +53,4 @@ function sanitizeHtml(html) {
     });
     return doc.body.innerHTML;
 }
-export { utils, escapeHtml, sanitizeHtml };
+export { utils, escapeHtml, escapeAttr, sanitizeHtml };

@@ -8,5 +8,6 @@ interface Utils {
 }
 declare const utils: Utils;
 declare function escapeHtml(text: string): string;
+declare function escapeAttr(text: string): string;
 declare function sanitizeHtml(html: string): string;
-export { utils, escapeHtml, sanitizeHtml };
+export { utils, escapeHtml, escapeAttr, sanitizeHtml };

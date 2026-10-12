@@ -78,8 +78,8 @@ table {
   --background: #F9F9FB;
   --primary-bg: #F9F9FB;
   --accent-color: #3D63DD;
-  --accent-color-lighten: #87A5EF;
-  --accent-color-tint: color-mix(in srgb, #3D63DD 12%, transparent);
+  --accent-color-lighten: color-mix(in oklab, var(--accent-color) 60%, white);
+  --accent-color-tint: color-mix(in srgb, var(--accent-color) 12%, transparent);
   --accent-color-text: #D8D9E0;
   --on-accent: #FFFFFF;
   --link-color: var(--accent-color);
@@ -106,8 +106,8 @@ table {
   --primary-bg: #111113;
   --secondary-background: #19191B;
   --accent-color: #1B7BB4;
-  --accent-color-lighten: #175982;
-  --accent-color-tint: color-mix(in srgb, #1B7BB4 12%, transparent);
+  --accent-color-lighten: color-mix(in srgb, var(--accent-color) 73%, black);
+  --accent-color-tint: color-mix(in srgb, var(--accent-color) 12%, transparent);
   --accent-color-text: #B2B3BD;
   --link-color: #2B8CC4;
   --disabled: #303136;
@@ -134,8 +134,8 @@ table {
     --primary-bg: #111113;
     --secondary-background: #19191B;
     --accent-color: #1B7BB4;
-    --accent-color-lighten: #175982;
-    --accent-color-tint: color-mix(in srgb, #1B7BB4 12%, transparent);
+    --accent-color-lighten: color-mix(in srgb, var(--accent-color) 73%, black);
+    --accent-color-tint: color-mix(in srgb, var(--accent-color) 12%, transparent);
     --accent-color-text: #B2B3BD;
     --link-color: #2B8CC4;
     --disabled: #303136;
@@ -7682,6 +7682,32 @@ ul.tree li {
 
 .cal__week-row > .cal__span-bar {
   top: calc(36px + var(--span-lane) * var(--cal-span-lane-height, 20px));
+}
+
+.cal__event-badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: var(--radius-full);
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.5;
+  vertical-align: baseline;
+  white-space: nowrap;
+  background: var(--accent-color-tint);
+  color: var(--primary-text);
+}
+.cal__event-badge.badge-success {
+  background: var(--success-tint);
+  color: var(--success-text);
+}
+.cal__event-badge.badge-warning {
+  background: var(--warning-tint);
+  color: var(--warning-text);
+}
+.cal__event-badge.badge-error {
+  background: var(--error-tint);
+  color: var(--error-text);
 }
 
 .cal__event-time {

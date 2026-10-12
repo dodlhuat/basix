@@ -334,6 +334,24 @@
   top: calc(36px + var(--span-lane) * var(--cal-span-lane-height, 20px));
 }
 
+.cal__event-badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: var(--radius-full);
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.5;
+  vertical-align: baseline;
+  white-space: nowrap;
+  background: var(--accent-color-tint);
+  color: var(--primary-text);
+
+  &.badge-success { background: var(--success-tint); color: var(--success-text); }
+  &.badge-warning { background: var(--warning-tint); color: var(--warning-text); }
+  &.badge-error   { background: var(--error-tint);   color: var(--error-text); }
+}
+
 .cal__event-time {
   font-weight: 600;
   margin-right: 3px;

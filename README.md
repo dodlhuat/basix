@@ -1,4 +1,4 @@
-# Basix 1.5.5
+# Basix 1.5.6
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,16 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.5.5 → 1.5.6
+
+No breaking changes.
+
+- **Security: `Calendar` XSS fix** — event `title`, `id` and `className`, the locale strings and `iconBasePath` were inserted into `innerHTML` and attributes unescaped, so an event title like `<img src=x onerror=…>` executed script. All of them are now escaped in the month, week and agenda views. If you worked around this by escaping titles before `setEvents`, remove that workaround — titles would now be escaped twice. Upgrade if you show user-supplied event data.
+- **`escapeAttr`** — new export in `utils.ts` for values inside quoted HTML attributes. `escapeHtml` does not escape quotes and is not sufficient there.
+- **`CalendarEvent`** — new optional `badge` (short status text, e.g. "3 spots left") and `badgeClassName` (`badge-success`/`-warning`/`-error`) fields. The text is escaped and also added to the event's `aria-label`. `end` stays required.
+- **Accent tokens** — `--accent-color-lighten` and `--accent-color-tint` are now derived from `--accent-color` via `color-mix`, in light and dark mode, so overriding `--accent-color` alone re-colors them. Default colors differ by at most 3/255 per channel (`lighten`) or not at all (`tint`). Override `--accent-color` on `:root` and `[data-theme="dark"]` — the derived tokens resolve on `:root`, so an override on a child element does not update them. `--accent-color-text` is unchanged: it is the light text on `--primary-dark` surfaces (chart tooltip, flyout menu), not a contrast color for the accent.
+- **Tests** — new `make test` (`node:test` + `jsdom`), run in CI.
 
 ### 1.5.4 → 1.5.5
 

@@ -28,6 +28,9 @@ jobs:
       - name: Build (css + js)
         run: make build
 
+      - name: Test
+        run: make test
+
       - name: Check for uncommitted build output
         run: |
           if ! git diff --exit-code; then

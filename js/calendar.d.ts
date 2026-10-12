@@ -5,6 +5,8 @@ interface CalendarEvent {
     end: Date;
     allDay?: boolean;
     className?: string;
+    badge?: string;
+    badgeClassName?: string;
 }
 type CalendarView = 'month' | 'week' | 'agenda';
 interface CalendarLocale {
@@ -70,6 +72,8 @@ declare class CalendarRenderer {
     private locale;
     constructor(locale: CalendarLocale);
     renderWeekdayHeaders(): string;
+    renderBadge(event: CalendarEvent): string;
+    private ariaLabel;
     renderEvent(event: CalendarEvent, compact?: boolean): string;
     renderSpanBar(layout: SpanLayout): string;
     renderMonthDay(date: Date, currentMonth: number, currentYear: number, events: CalendarEvent[], showOutsideDays: boolean): string;

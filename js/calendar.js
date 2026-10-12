@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeAttr, escapeHtml } from './utils.js';
 const CalendarLogic = {
     getMonthGrid(year, month, firstDayOfWeek) {
         const firstOfMonth = new Date(year, month, 1);
@@ -180,16 +181,27 @@ class CalendarRenderer {
     renderWeekdayHeaders() {
         const { dayNamesShort, firstDayOfWeek } = this.locale;
         const ordered = [...dayNamesShort.slice(firstDayOfWeek), ...dayNamesShort.slice(0, firstDayOfWeek)];
-        return ordered.map((name) => `<div class="cal__weekday" aria-label="${name}">${name}</div>`).join('');
+        return ordered.map((name) => `<div class="cal__weekday" aria-label="${escapeAttr(name)}">${escapeHtml(name)}</div>`).join('');
+    }
+    renderBadge(event) {
+        if (!event.badge)
+            return '';
+        return ` <span class="cal__event-badge ${escapeAttr(event.badgeClassName ?? '')}">${escapeHtml(event.badge)}</span>`;
+    }
+    ariaLabel(event, suffix = '') {
+        return escapeAttr([event.title, event.badge].filter(Boolean).join(', ') + suffix);
     }
     renderEvent(event, compact = false) {
-        const cls = event.className ?? '';
+        const cls = escapeAttr(event.className ?? '');
+        const id = escapeAttr(event.id);
+        const titleAttr = escapeAttr(event.title);
+        const title = escapeHtml(event.title) + this.renderBadge(event);
         if (compact) {
-            return `<div class="cal__event-pill ${cls}" data-event-id="${event.id}" role="button" tabindex="0" aria-label="${event.title}" title="${event.title}">${event.title}</div>`;
+            return `<div class="cal__event-pill ${cls}" data-event-id="${id}" role="button" tabindex="0" aria-label="${this.ariaLabel(event)}" title="${this.ariaLabel(event)}">${title}</div>`;
         }
-        return `<div class="cal__event-pill ${cls}" data-event-id="${event.id}" role="button" tabindex="0" aria-label="${event.title}, ${CalendarLogic.formatTime(event.start)} – ${CalendarLogic.formatTime(event.end)}" title="${event.title}">
+        return `<div class="cal__event-pill ${cls}" data-event-id="${id}" role="button" tabindex="0" aria-label="${this.ariaLabel(event, `, ${CalendarLogic.formatTime(event.start)} – ${CalendarLogic.formatTime(event.end)}`)}" title="${titleAttr}">
       <span class="cal__event-time">${CalendarLogic.formatTime(event.start)}</span>
-      ${event.title}
+      ${title}
     </div>`;
     }
     renderSpanBar(layout) {
@@ -197,7 +209,7 @@ class CalendarRenderer {
         const colSpan = colEnd - colStart + 1;
         const cls = [
             'cal__span-bar',
-            event.className ?? '',
+            escapeAttr(event.className ?? ''),
             continuesBefore ? 'cal__span-bar--cont-before' : '',
             continuesAfter ? 'cal__span-bar--cont-after' : '',
         ]
@@ -205,10 +217,10 @@ class CalendarRenderer {
             .join(' ');
         return `<div class="${cls}"
         style="--span-col:${colStart};--span-len:${colSpan};--span-lane:${lane}"
-        data-event-id="${event.id}"
+        data-event-id="${escapeAttr(event.id)}"
         role="button" tabindex="0"
-        aria-label="${event.title}"
-        title="${event.title}">${event.title}</div>`;
+        aria-label="${this.ariaLabel(event)}"
+        title="${this.ariaLabel(event)}">${escapeHtml(event.title)}${this.renderBadge(event)}</div>`;
     }
     renderMonthDay(date, currentMonth, currentYear, events, showOutsideDays) {
         const isOutside = !CalendarLogic.isCurrentMonth(date, currentYear, currentMonth);
@@ -248,7 +260,7 @@ class CalendarRenderer {
         for (let i = 0; i < days.length; i += 7) {
             weekRows.push(this.renderWeekRow(days.slice(i, i + 7), month, year, events, showOutsideDays));
         }
-        return `<div class="cal__month-grid" role="grid" aria-label="${this.locale.monthNames[month]} ${year}">
+        return `<div class="cal__month-grid" role="grid" aria-label="${escapeAttr(this.locale.monthNames[month])} ${year}">
       <div class="cal__month-head">${this.renderWeekdayHeaders()}</div>
       ${weekRows.join('')}
     </div>`;
@@ -260,7 +272,7 @@ class CalendarRenderer {
             const isToday = CalendarLogic.isToday(d);
             const cls = ['cal__week-head-day', isToday ? 'is-today' : ''].filter(Boolean).join(' ');
             const dow = this.locale.dayNamesShort[(d.getDay() + 7) % 7];
-            return `<div class="${cls}">${dow}<span>${d.getDate()}</span></div>`;
+            return `<div class="${cls}">${escapeHtml(dow)}<span>${d.getDate()}</span></div>`;
         })
             .join('');
         const allDayEvents = events.filter((e) => e.allDay);
@@ -279,7 +291,7 @@ class CalendarRenderer {
             const layouts = CalendarLogic.computeTimedLayout(timedEvents, d);
             const eventOverlays = layouts
                 .map(({ event, top, height, col, cols }) => {
-                const cls = event.className ?? '';
+                const cls = escapeAttr(event.className ?? '');
                 let posStyle = `top:${top.toFixed(2)}%;height:${height.toFixed(2)}%`;
                 if (cols > 1) {
                     const l = ((col / cols) * 100).toFixed(2);
@@ -288,9 +300,9 @@ class CalendarRenderer {
                 }
                 return `<div class="cal__week-event ${cls}"
               style="${posStyle}"
-              data-event-id="${event.id}" role="button" tabindex="0" aria-label="${event.title}">
+              data-event-id="${escapeAttr(event.id)}" role="button" tabindex="0" aria-label="${this.ariaLabel(event)}">
               <span class="cal__event-time">${CalendarLogic.formatTime(event.start)}</span>
-              ${event.title}
+              ${escapeHtml(event.title)}${this.renderBadge(event)}
             </div>`;
             })
                 .join('');
@@ -304,7 +316,7 @@ class CalendarRenderer {
         ${headCols}
       </div>
       <div class="cal__allday">
-        <div class="cal__allday-label">${this.locale.allDay}</div>
+        <div class="cal__allday-label">${escapeHtml(this.locale.allDay)}</div>
         <div class="cal__allday-spans" style="--allday-lanes:${allDayLanes}">
           ${allDayCols}${allDayBars}
         </div>
@@ -339,7 +351,7 @@ class CalendarRenderer {
             const dow = this.locale.dayNamesFull[day.getDay()];
             html += `<div class="cal__agenda-day ${isToday ? 'is-today' : ''}">
         <div class="cal__agenda-date">
-          <span class="cal__agenda-dow">${dow}</span>
+          <span class="cal__agenda-dow">${escapeHtml(dow)}</span>
           <span class="cal__agenda-num ${isToday ? 'is-today' : ''}">${d}</span>
         </div>
         <div class="cal__agenda-events">
@@ -351,15 +363,15 @@ class CalendarRenderer {
                     timeLabel = `${e.start.toLocaleDateString()} – ${e.end.toLocaleDateString()}`;
                 }
                 else if (e.allDay) {
-                    timeLabel = this.locale.allDay;
+                    timeLabel = escapeHtml(this.locale.allDay);
                 }
                 else {
                     timeLabel = `${CalendarLogic.formatTime(e.start)} – ${CalendarLogic.formatTime(e.end)}`;
                 }
-                return `<div class="cal__agenda-event ${e.className ?? ''}"
-              data-event-id="${e.id}" role="button" tabindex="0">
+                return `<div class="cal__agenda-event ${escapeAttr(e.className ?? '')}"
+              data-event-id="${escapeAttr(e.id)}" role="button" tabindex="0">
               <span class="cal__agenda-event-time">${timeLabel}</span>
-              <span class="cal__agenda-event-title">${e.title}</span>
+              <span class="cal__agenda-event-title">${escapeHtml(e.title)}</span>${this.renderBadge(e).trim()}
             </div>`;
             })
                 .join('')}
@@ -367,7 +379,7 @@ class CalendarRenderer {
       </div>`;
         }
         if (!html)
-            html = `<div class="cal__agenda-empty">${this.locale.noEvents}</div>`;
+            html = `<div class="cal__agenda-empty">${escapeHtml(this.locale.noEvents)}</div>`;
         return `<div class="cal__agenda">${html}</div>`;
     }
 }
@@ -479,19 +491,19 @@ class Calendar {
         const v = this.currentView;
         return `<div class="cal__header">
       <div class="cal__nav">
-        <button class="cal__btn cal__btn--today" data-action="today" aria-label="${this.locale.today}">${this.locale.today}</button>
+        <button class="cal__btn cal__btn--today" data-action="today" aria-label="${escapeAttr(this.locale.today)}">${escapeHtml(this.locale.today)}</button>
         <button class="cal__btn" data-action="prev" aria-label="Zurück">
-          <svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#chevron_left"/></svg>
+          <svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath)}icons.svg#chevron_left"/></svg>
         </button>
         <button class="cal__btn" data-action="next" aria-label="Vor">
-          <svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#chevron_right"/></svg>
+          <svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath)}icons.svg#chevron_right"/></svg>
         </button>
       </div>
-      <h2 class="cal__title" aria-live="polite">${this.getTitle(weekDays)}</h2>
+      <h2 class="cal__title" aria-live="polite">${escapeHtml(this.getTitle(weekDays))}</h2>
       <div class="cal__view-toggle" role="group" aria-label="Ansicht wählen">
-        <button class="cal__btn ${v === 'month' ? 'cal__btn--active' : ''}" data-action="view-month"  aria-pressed="${v === 'month'}">${this.locale.month}</button>
-        <button class="cal__btn ${v === 'week' ? 'cal__btn--active' : ''}" data-action="view-week"   aria-pressed="${v === 'week'}">${this.locale.week}</button>
-        <button class="cal__btn ${v === 'agenda' ? 'cal__btn--active' : ''}" data-action="view-agenda" aria-pressed="${v === 'agenda'}">${this.locale.agenda}</button>
+        <button class="cal__btn ${v === 'month' ? 'cal__btn--active' : ''}" data-action="view-month"  aria-pressed="${v === 'month'}">${escapeHtml(this.locale.month)}</button>
+        <button class="cal__btn ${v === 'week' ? 'cal__btn--active' : ''}" data-action="view-week"   aria-pressed="${v === 'week'}">${escapeHtml(this.locale.week)}</button>
+        <button class="cal__btn ${v === 'agenda' ? 'cal__btn--active' : ''}" data-action="view-agenda" aria-pressed="${v === 'agenda'}">${escapeHtml(this.locale.agenda)}</button>
       </div>
     </div>`;
     }
@@ -515,7 +527,7 @@ class Calendar {
         const weekDays = this.currentView === 'week' ? CalendarLogic.getWeekDays(this.currentDate, this.locale.firstDayOfWeek) : null;
         const rootClass = ['cal', this.options.className].filter(Boolean).join(' ');
         this.container.setAttribute('data-cal', this.currentView);
-        this.container.innerHTML = `<div class="${rootClass}" role="application" aria-label="Kalender">
+        this.container.innerHTML = `<div class="${escapeAttr(rootClass)}" role="application" aria-label="Kalender">
       ${this.buildHeader(weekDays)}
       <div class="cal__body">${this.buildBody(weekDays)}</div>
     </div>`;

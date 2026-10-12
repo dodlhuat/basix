@@ -59,6 +59,15 @@ function escapeHtml(text: string): string {
 }
 
 /**
+ * Escape a string for safe use inside a quoted HTML attribute value.
+ * Unlike escapeHtml, this also escapes both quote characters, so the value
+ * cannot break out of `attr="..."` or `attr='...'`.
+ */
+function escapeAttr(text: string): string {
+    return String(text).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+}
+
+/**
  * Sanitize an HTML string by removing dangerous elements and attributes
  * (script, iframe, on* handlers, javascript: hrefs) while preserving safe markup.
  * Use this when a component intentionally accepts rich HTML from callers.
@@ -80,4 +89,4 @@ function sanitizeHtml(html: string): string {
     return doc.body.innerHTML;
 }
 
-export { utils, escapeHtml, sanitizeHtml };
+export { utils, escapeHtml, escapeAttr, sanitizeHtml };
