@@ -732,6 +732,11 @@
   flex-shrink: 0;
 }
 
+// Date + time range of a timed multi-day event is too long for one line.
+.cal__agenda-event-time--range {
+  white-space: normal;
+}
+
 .cal__agenda-event-title {
   font-size: 0.875rem;
   color: var(--cal-text);

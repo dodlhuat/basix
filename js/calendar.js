@@ -45,15 +45,18 @@ const CalendarLogic = {
         r.setHours(0, 0, 0, 0);
         return r;
     },
+    endOf(event) {
+        return event.end < event.start ? event.start : event.end;
+    },
     isMultiDay(event) {
-        return !CalendarLogic.isSameDay(event.start, event.end);
+        return !CalendarLogic.isSameDay(event.start, CalendarLogic.endOf(event));
     },
     getEventsForDay(events, day) {
         const dayStart = new Date(day);
         dayStart.setHours(0, 0, 0, 0);
         const dayEnd = new Date(day);
         dayEnd.setHours(23, 59, 59, 999);
-        return events.filter((e) => e.start <= dayEnd && e.end >= dayStart);
+        return events.filter((e) => e.start <= dayEnd && CalendarLogic.endOf(e) >= dayStart);
     },
     getAllDayEvents(events, day) {
         return CalendarLogic.getEventsForDay(events, day).filter((e) => e.allDay);
@@ -68,7 +71,7 @@ const CalendarLogic = {
         dayEnd.setHours(24, 0, 0, 0);
         const totalMs = 24 * 60 * 60 * 1000;
         const startMs = Math.max(event.start.getTime(), dayStart.getTime()) - dayStart.getTime();
-        const endMs = Math.min(event.end.getTime(), dayEnd.getTime()) - dayStart.getTime();
+        const endMs = Math.min(CalendarLogic.endOf(event).getTime(), dayEnd.getTime()) - dayStart.getTime();
         return {
             top: (startMs / totalMs) * 100,
             height: Math.max(((endMs - startMs) / totalMs) * 100, 2),
@@ -84,20 +87,20 @@ const CalendarLogic = {
         const weekEnd = CalendarLogic.startOfDay(weekDays[6]);
         const relevant = events.filter((e) => {
             const s = CalendarLogic.startOfDay(e.start);
-            const en = CalendarLogic.startOfDay(e.end);
+            const en = CalendarLogic.startOfDay(CalendarLogic.endOf(e));
             return s <= weekEnd && en >= weekStart;
         });
         relevant.sort((a, b) => {
             const diff = a.start.getTime() - b.start.getTime();
             if (diff !== 0)
                 return diff;
-            return b.end.getTime() - b.start.getTime() - (a.end.getTime() - a.start.getTime());
+            return CalendarLogic.endOf(b).getTime() - b.start.getTime() - (CalendarLogic.endOf(a).getTime() - a.start.getTime());
         });
         const laneEnds = [];
         const layouts = [];
         for (const event of relevant) {
             const eStart = CalendarLogic.startOfDay(event.start);
-            const eEnd = CalendarLogic.startOfDay(event.end);
+            const eEnd = CalendarLogic.startOfDay(CalendarLogic.endOf(event));
             const continuesBefore = eStart < weekStart;
             const continuesAfter = eEnd > weekEnd;
             let colStart = 0;
@@ -136,7 +139,7 @@ const CalendarLogic = {
             const diff = a.start.getTime() - b.start.getTime();
             if (diff !== 0)
                 return diff;
-            return b.end.getTime() - b.start.getTime() - (a.end.getTime() - a.start.getTime());
+            return CalendarLogic.endOf(b).getTime() - b.start.getTime() - (CalendarLogic.endOf(a).getTime() - a.start.getTime());
         });
         const colEnds = [];
         const assigns = [];
@@ -145,13 +148,15 @@ const CalendarLogic = {
             while (col < colEnds.length && colEnds[col] > event.start)
                 col++;
             if (col >= colEnds.length)
-                colEnds.push(event.end);
+                colEnds.push(CalendarLogic.endOf(event));
             else
-                colEnds[col] = event.end;
+                colEnds[col] = CalendarLogic.endOf(event);
             assigns.push({ event, col });
         }
         return assigns.map(({ event, col }) => {
-            const cols = assigns.filter((a) => a.event.start < event.end && a.event.end > event.start).reduce((max, a) => Math.max(max, a.col), 0) + 1;
+            const cols = assigns
+                .filter((a) => a.event.start < CalendarLogic.endOf(event) && CalendarLogic.endOf(a.event) > event.start)
+                .reduce((max, a) => Math.max(max, a.col), 0) + 1;
             const pos = CalendarLogic.getEventPosition(event, day);
             return { event, top: pos.top, height: pos.height, col, cols };
         });
@@ -199,7 +204,7 @@ class CalendarRenderer {
         if (compact) {
             return `<div class="cal__event-pill ${cls}" data-event-id="${id}" role="button" tabindex="0" aria-label="${this.ariaLabel(event)}" title="${this.ariaLabel(event)}">${title}</div>`;
         }
-        return `<div class="cal__event-pill ${cls}" data-event-id="${id}" role="button" tabindex="0" aria-label="${this.ariaLabel(event, `, ${CalendarLogic.formatTime(event.start)} – ${CalendarLogic.formatTime(event.end)}`)}" title="${titleAttr}">
+        return `<div class="cal__event-pill ${cls}" data-event-id="${id}" role="button" tabindex="0" aria-label="${this.ariaLabel(event, `, ${CalendarLogic.formatTime(event.start)} – ${CalendarLogic.formatTime(CalendarLogic.endOf(event))}`)}" title="${titleAttr}">
       <span class="cal__event-time">${CalendarLogic.formatTime(event.start)}</span>
       ${title}
     </div>`;
@@ -359,18 +364,23 @@ class CalendarRenderer {
                 .map((e) => {
                 const isMulti = CalendarLogic.isMultiDay(e);
                 let timeLabel;
-                if (isMulti) {
-                    timeLabel = `${e.start.toLocaleDateString()} – ${e.end.toLocaleDateString()}`;
+                const end = CalendarLogic.endOf(e);
+                if (isMulti && e.allDay) {
+                    timeLabel = `${e.start.toLocaleDateString()} – ${end.toLocaleDateString()}`;
+                }
+                else if (isMulti) {
+                    timeLabel = `${e.start.toLocaleDateString()} ${CalendarLogic.formatTime(e.start)} – ${end.toLocaleDateString()} ${CalendarLogic.formatTime(end)}`;
                 }
                 else if (e.allDay) {
                     timeLabel = escapeHtml(this.locale.allDay);
                 }
                 else {
-                    timeLabel = `${CalendarLogic.formatTime(e.start)} – ${CalendarLogic.formatTime(e.end)}`;
+                    timeLabel = `${CalendarLogic.formatTime(e.start)} – ${CalendarLogic.formatTime(end)}`;
                 }
+                const timeClass = isMulti && !e.allDay ? 'cal__agenda-event-time cal__agenda-event-time--range' : 'cal__agenda-event-time';
                 return `<div class="cal__agenda-event ${escapeAttr(e.className ?? '')}"
               data-event-id="${escapeAttr(e.id)}" role="button" tabindex="0">
-              <span class="cal__agenda-event-time">${timeLabel}</span>
+              <span class="${timeClass}">${timeLabel}</span>
               <span class="cal__agenda-event-title">${escapeHtml(e.title)}</span>${this.renderBadge(e).trim()}
             </div>`;
             })

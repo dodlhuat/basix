@@ -55,6 +55,7 @@ declare const CalendarLogic: {
     isToday(date: Date): boolean;
     isCurrentMonth(date: Date, year: number, month: number): boolean;
     startOfDay(d: Date): Date;
+    endOf(event: CalendarEvent): Date;
     isMultiDay(event: CalendarEvent): boolean;
     getEventsForDay(events: CalendarEvent[], day: Date): CalendarEvent[];
     getAllDayEvents(events: CalendarEvent[], day: Date): CalendarEvent[];

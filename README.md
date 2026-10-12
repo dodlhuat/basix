@@ -35,6 +35,7 @@ Security release. No API signatures changed, but several options that used to be
 - **`FlyoutMenu`** — `title` is now plain text, not HTML. Pass text instead of markup. `footerText` is still HTML (so `&copy;` keeps working) but is sanitized.
 - **`GroupPicker`** — `emptyLabel` is now plain text.
 - **`TimeSpanPicker`** — `fromString` and `toLabel` are now plain text.
+- **`Calendar`** — an event whose `end` lies before its `start` used to disappear in week and agenda view and rendered a zero-width bar in month view. It is now treated as a zero-length event at `start` (the event object itself is not modified). The agenda label of a timed event spanning several days now includes the clock times (`3/10/2026 10:00 PM – 3/11/2026 2:00 AM` instead of dates only); all-day events keep the date-only label.
 - **`CodeViewer`** (css) — `<`, `&` and quotes inside strings/comments now render as text, as they already did in `js` and `html` mode.
 
 #### Other changes

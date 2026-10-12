@@ -8092,6 +8092,10 @@ ul.tree li {
   flex-shrink: 0;
 }
 
+.cal__agenda-event-time--range {
+  white-space: normal;
+}
+
 .cal__agenda-event-title {
   font-size: 0.875rem;
   color: var(--cal-text);
