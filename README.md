@@ -37,6 +37,12 @@ Security release. No API signatures changed, but several options that used to be
 - **`TimeSpanPicker`** — `fromString` and `toLabel` are now plain text.
 - **`CodeViewer`** (css) — `<`, `&` and quotes inside strings/comments now render as text, as they already did in `js` and `html` mode.
 
+#### Other changes
+
+- **Reduced motion** — `reset.scss` now honours `prefers-reduced-motion: reduce` globally: all transitions and animations jump straight to their end state (`transitionend`/`animationend` still fire), and smooth scrolling is turned off. Loading indicators (`.spinner`, `.is-loading`, indeterminate `.progress-bar.animated`) keep animating. Previously only 8 stylesheets handled this individually. If you need an animation to run regardless, exempt it with a more specific `!important` rule inside your own `@media (prefers-reduced-motion: reduce)` block.
+- **z-index tokens** — new `$z-sidebar-backdrop`, `$z-sidebar`, `$z-dropdown`, `$z-flyout-overlay`, `$z-flyout`, `$z-push-menu`, `$z-popover`, `$z-overlay`, `$z-modal`, `$z-toast`, `$z-menu` and `$z-tooltip` in `parameters.scss` (all `!default`, so configurable via `@use … with (…)`). The defaults equal the previous hard-coded numbers, so the compiled CSS is unchanged; component-internal values (1–11) stay as plain numbers.
+- **`Accordion`** — the content now has a small top padding (`$spacing * 0.25`) so it no longer sits tight under the header.
+
 ### 1.5.5 → 1.5.6
 
 No breaking changes.

@@ -5,7 +5,7 @@
 .bottom-sheet-wrapper {
   position: fixed;
   inset: 0;
-  z-index: 999;
+  z-index: $z-overlay;
   pointer-events: none;
 
   &.is-visible {

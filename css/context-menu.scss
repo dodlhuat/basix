@@ -4,7 +4,7 @@
 
 .context-menu {
   position: fixed;
-  z-index: 9999;
+  z-index: $z-menu;
   min-width: 200px;
   padding: calc($spacing * 0.375) 0;
   @include float-panel;

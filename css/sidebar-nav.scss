@@ -15,7 +15,7 @@
   border-right: 1px solid var(--divider);
   display: flex;
   flex-direction: column;
-  z-index: 100;
+  z-index: $z-sidebar;
 
   .sidebar-scroll {
     flex: 1;
@@ -39,7 +39,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.3);
-  z-index: 99;
+  z-index: $z-sidebar-backdrop;
 
   &.is-visible { display: block; }
 }

@@ -197,7 +197,7 @@ nav li + li .push-menu-item {
     text-align: center;
     top: 0;
     left: 0;
-    z-index: 500;
+    z-index: $z-push-menu;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }

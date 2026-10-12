@@ -43,7 +43,7 @@
     pointer-events: none;
     transform: translateY(-8px);
     transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-    z-index: 100;
+    z-index: $z-dropdown;
 
     li {
       position: relative;

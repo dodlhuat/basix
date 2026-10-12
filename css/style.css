@@ -52,6 +52,24 @@ table {
   box-sizing: border-box;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+  *:not(.spinner, .spinner *, .is-loading, .progress-bar.animated),
+  *:not(.spinner, .spinner *, .is-loading, .progress-bar.animated)::before,
+  *:not(.spinner, .spinner *, .is-loading, .progress-bar.animated)::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+}
 :root {
   --spacing: 1rem;
   --border-radius: 0.4rem;
@@ -4963,7 +4981,7 @@ ul.tree li {
   overflow: hidden;
 }
 .accordion-body > * {
-  padding: 0 1.25rem 1.25rem;
+  padding: 0.25rem 1.25rem 1.25rem;
   color: var(--secondary-text);
   font-size: 0.9rem;
   line-height: 1.6;

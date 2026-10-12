@@ -4,7 +4,7 @@
 .tooltip {
   --tooltip-bg: var(--divider);
   position: fixed;
-  z-index: 10000;
+  z-index: $z-tooltip;
   background: var(--divider);
   color: var(--primary-text);
   border-radius: $border-radius;

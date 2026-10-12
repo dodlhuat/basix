@@ -6,7 +6,7 @@ $arrow: 6px;
 
 .popover {
   position: fixed;
-  z-index: 900;
+  z-index: $z-popover;
   @include float-panel;
   min-width: 160px;
   max-width: 320px;

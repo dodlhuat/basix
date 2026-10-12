@@ -88,7 +88,7 @@
   overflow: hidden;
 
   > * {
-    padding: 0 calc($spacing * 1.25) calc($spacing * 1.25);
+    padding: calc($spacing * 0.25) calc($spacing * 1.25) calc($spacing * 1.25);
     color: var(--secondary-text);
     font-size: 0.9rem;
     line-height: 1.6;

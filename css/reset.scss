@@ -48,3 +48,28 @@ table {
 *::after {
   box-sizing: border-box;
 }
+
+// Honour the OS "reduce motion" setting for every component at once. Transitions
+// and animations are collapsed to an instant jump to their end state (so
+// transitionend/animationend still fire and `forwards` animations still land).
+// Loading indicators are exempt: a spinner that stops moving reads as a hung UI.
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+
+  *:not(.spinner, .spinner *, .is-loading, .progress-bar.animated),
+  *:not(.spinner, .spinner *, .is-loading, .progress-bar.animated)::before,
+  *:not(.spinner, .spinner *, .is-loading, .progress-bar.animated)::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -14,7 +14,7 @@
   border-radius: $radius-lg;
   box-shadow: $shadow, 0 8px 24px rgba(0, 0, 0, 0.12);
   padding: calc($spacing * 0.75) $spacing;
-  z-index: 1000;
+  z-index: $z-toast;
   overflow: hidden;
   transform: translateY(calc(100% + $spacing * 2));
   opacity: 0;
