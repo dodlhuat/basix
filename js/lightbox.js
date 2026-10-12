@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeAttr } from './utils.js';
 class Lightbox {
     images;
     currentIndex;
@@ -235,7 +236,7 @@ class Lightbox {
         }, { signal: this.listeners.signal });
     }
     buildTemplate() {
-        const icon = (name) => `<svg class="icon-svg" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#${name}"/></svg>`;
+        const icon = (name) => `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.iconBasePath)}icons.svg#${name}"/></svg>`;
         return `
             ${this.closeable ? `<button class="lightbox-close" aria-label="Close lightbox">${icon('close')}</button>` : ''}
             <div class="lightbox" role="document">

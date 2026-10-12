@@ -1,4 +1,4 @@
-import { sanitizeHtml } from './utils.js';
+import { sanitizeHtml, escapeAttr } from './utils.js';
 import { ListenerGroup } from './listeners.js';
 
 /** Options for configuring a BottomSheet instance. */
@@ -168,7 +168,9 @@ class BottomSheet {
     private buildTemplate(): string {
         const snapClass = this.snapHeight !== 'auto' ? ` snap-${this.snapHeight}` : '';
 
-        const closeButton = this.closeable ? `<svg class="icon-svg close" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#close"/></svg>` : '';
+        const closeButton = this.closeable
+            ? `<svg class="icon-svg close" aria-hidden="true"><use href="${escapeAttr(this.iconBasePath)}icons.svg#close"/></svg>`
+            : '';
 
         const headerHtml =
             this.header !== undefined

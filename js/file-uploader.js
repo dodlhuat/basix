@@ -1,4 +1,4 @@
-import { escapeHtml } from './utils.js';
+import { escapeAttr, escapeHtml } from './utils.js';
 import { ListenerGroup } from './listeners.js';
 class FileUploader {
     container;
@@ -124,7 +124,7 @@ class FileUploader {
             </svg>
           </div>
           <div class="file-details">
-            <span class="file-name" title="${escapedFileName}">${escapedFileName}</span>
+            <span class="file-name" title="${escapeAttr(file.name)}">${escapedFileName}</span>
             <span class="file-size">${this.formatSize(file.size)}</span>
           </div>
         </div>

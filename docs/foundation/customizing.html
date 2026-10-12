@@ -109,9 +109,9 @@
                     <tr><td><code>--background</code> / <code>--primary-bg</code></td><td>Page background (two names, same value)</td><td><code>#F9F9FB</code></td><td><code>#111113</code></td></tr>
                     <tr><td><code>--secondary-background</code></td><td>Card / panel background</td><td><code>#E7E8EC</code></td><td><code>#19191B</code></td></tr>
                     <tr><td><code>--accent-color</code></td><td>Brand / accent colour</td><td><code>#3D63DD</code></td><td><code>#1B7BB4</code></td></tr>
-                    <tr><td><code>--accent-color-lighten</code></td><td>Lighter accent variant (gradients, hover)</td><td><code>#87A5EF</code></td><td><code>#175982</code></td></tr>
-                    <tr><td><code>--accent-color-tint</code></td><td>12% accent tint, for subtle backgrounds</td><td><code>color-mix(…)</code></td><td><code>color-mix(…)</code></td></tr>
-                    <tr><td><code>--accent-color-text</code></td><td>Muted tone for text/borders on accent-tinted surfaces</td><td><code>#D8D9E0</code></td><td><code>#B2B3BD</code></td></tr>
+                    <tr><td><code>--accent-color-lighten</code></td><td>Accent variant (gradients, hover). Derived from <code>--accent-color</code> — no need to override it</td><td><code>color-mix(in oklab, accent 60%, white)</code> (≈ <code>#86A4EF</code>)</td><td><code>color-mix(in srgb, accent 73%, black)</code> (≈ <code>#145A83</code>, darker than the accent)</td></tr>
+                    <tr><td><code>--accent-color-tint</code></td><td>12% accent tint, for subtle backgrounds. Derived from <code>--accent-color</code></td><td><code>color-mix(…)</code></td><td><code>color-mix(…)</code></td></tr>
+                    <tr><td><code>--accent-color-text</code></td><td>Light text/border tone on <code>--primary-dark</code> surfaces (chart tooltip, flyout menu). Not derived from the accent and not a contrast color for it — use <code>--on-accent</code> for text on accent fills</td><td><code>#D8D9E0</code></td><td><code>#B2B3BD</code></td></tr>
                     <tr><td><code>--on-accent</code></td><td>Text/icon colour on top of accent-coloured surfaces</td><td><code>#FFFFFF</code></td><td><em>not redefined — stays</em> <code>#FFFFFF</code></td></tr>
                     <tr><td><code>--link-color</code></td><td>Hyperlink colour</td><td><code>var(--accent-color)</code></td><td><code>#2B8CC4</code></td></tr>
                     <tr><td><code>--error</code></td><td>Error state colour</td><td><code>#D64545</code></td><td><code>#FF6B6B</code></td></tr>
@@ -153,7 +153,7 @@
             <div id="code-override-basic"></div>
 
             <h3>The dark-mode trap</h3>
-            <p>Basix ships its palette in three blocks: <code>:root</code>, <code>[data-theme="dark"]</code> (set by the theme toggle), and <code>@media (prefers-color-scheme: dark)</code> (the fallback before the toggle runs, or for pages that never wire it up). An override placed only on <code>:root</code> gets replaced again by whichever dark block applies — the accent color reverts to the default the moment dark mode activates. Cover all three:</p>
+            <p>Basix ships its palette in three blocks: <code>:root</code>, <code>[data-theme="dark"]</code> (set by the theme toggle), and <code>@media (prefers-color-scheme: dark)</code> (the fallback before the toggle runs, or for pages that never wire it up). An override placed only on <code>:root</code> gets replaced again by whichever dark block applies — the accent color reverts to the default the moment dark mode activates. Cover all three. <code>--accent-color-lighten</code> and <code>--accent-color-tint</code> follow <code>--accent-color</code> automatically, but they resolve on <code>:root</code>: set <code>--accent-color</code> on <code>:root</code> / <code>[data-theme="dark"]</code>, not on a child element, or they will keep the default accent.</p>
             <div id="code-override-dark"></div>
 
             <h2>Component tokens</h2>

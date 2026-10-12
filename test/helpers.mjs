@@ -5,6 +5,7 @@ globalThis.window = dom.window;
 globalThis.document = dom.window.document;
 globalThis.DOMParser = dom.window.DOMParser;
 globalThis.HTMLElement = dom.window.HTMLElement;
+globalThis.Node = dom.window.Node;
 globalThis.AbortController = dom.window.AbortController;
 
 export const root = () => {

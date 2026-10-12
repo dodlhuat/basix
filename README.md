@@ -1,4 +1,4 @@
-# Basix 1.5.6
+# Basix 1.5.7
 
 Basix is intended as a starter for the rapid development of a design. Each design element can be added individually to
 include only the data required. It is using plain javascript / typescript and therefore is not dependent on any plugin.
@@ -8,6 +8,34 @@ A demo can be found here: <a href="http://www.andibauer.at/basix/" target="_blan
 ---
 
 ## Migration Guide
+
+### 1.5.6 → 1.5.7
+
+Security release. No API signatures changed, but several options that used to be inserted as raw HTML are now treated as text or sanitized (listed under **Behavior changes**). Upgrade if any of these components display user-supplied data.
+
+#### Security fixes
+
+- **`VirtualDropdown`**, **`FileUploader`**, **`MasonryGallery`** — values placed into HTML attributes (`data-value`, `title`, `src`, `alt`) went through `escapeHtml`, which does not escape quotes, so a value like `x" onmouseover="…` injected an attribute. They now use `escapeAttr`.
+- **`CodeViewer`** — in `css` mode, strings and comments were re-inserted unescaped, so `a{content:"<img src=x onerror=…>"}` executed script. The `language` label is escaped too.
+- **`FlyoutMenu`** — a submenu's label was read via `textContent` and written back as HTML, which turned entity-encoded text (`&lt;img …&gt;`) into live markup. It is now inserted as a text node.
+- **`sanitizeHtml`** — could be bypassed with whitespace or control characters inside a scheme (`java&#9;script:`), and let `data:`/`vbscript:` URLs through. URL attributes (`href`, `src`, `action`, `formaction`, `xlink:href`, `poster`, `background`, `cite`, `data`, `ping`) are now checked against an allowlist (see below). This affects everything that calls it: `Modal`, `BottomSheet`, `Popover`, `FlyoutMenu` (footer), `Editor` and `Tooltip`.
+- **`GroupPicker`** — group ids are no longer interpolated into a CSS selector (a quote in an id threw or matched the wrong group).
+- **`iconBasePath`** is now attribute-escaped in every component that builds an icon `<use>` element.
+
+#### Behavior changes
+
+- **`sanitizeHtml`**
+  - URL attributes keep only `http:`, `https:`, `mailto:`, `tel:`, relative URLs and `#fragments`. Anything else (`data:`, `vbscript:`, `file:`, `javascript:` incl. obfuscated forms) is removed. `data:image/png|gif|jpeg|webp|avif` is still allowed on `<img src>`; `data:image/svg+xml` is not.
+  - Additionally removed: `<base>`, `<meta>`, `<link>`, `<frame>`, `<frameset>`, `<applet>`, SVG `<animate>`/`<set>`, and the `srcdoc` and `srcset` attributes. If you relied on `srcset`, set it from your own code instead.
+  - `<form>`, `class`, `style`, `id` and `data-*` are kept.
+  - Remote content (`<img src="https://…">`, CSS `url(//…)`) is **not** blocked, so sanitized HTML can still be used for tracking.
+- **New `isSafeUrl(url, allowDataImage?)`** export in `utils.ts`, the same check the sanitizer uses.
+- **`Editor`** — `createLink` silently ignores URLs that fail `isSafeUrl` (e.g. `javascript:`).
+- **`Tooltip`** with `isHtml: true` (and `data-tooltip-id` content) is now passed through `sanitizeHtml`. Inline handlers and unsafe URLs inside tooltip HTML are dropped.
+- **`FlyoutMenu`** — `title` is now plain text, not HTML. Pass text instead of markup. `footerText` is still HTML (so `&copy;` keeps working) but is sanitized.
+- **`GroupPicker`** — `emptyLabel` is now plain text.
+- **`TimeSpanPicker`** — `fromString` and `toLabel` are now plain text.
+- **`CodeViewer`** (css) — `<`, `&` and quotes inside strings/comments now render as text, as they already did in `js` and `html` mode.
 
 ### 1.5.5 → 1.5.6
 

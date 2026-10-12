@@ -9,5 +9,6 @@ interface Utils {
 declare const utils: Utils;
 declare function escapeHtml(text: string): string;
 declare function escapeAttr(text: string): string;
+declare function isSafeUrl(url: string, allowDataImage?: boolean): boolean;
 declare function sanitizeHtml(html: string): string;
-export { utils, escapeHtml, escapeAttr, sanitizeHtml };
+export { utils, escapeHtml, escapeAttr, isSafeUrl, sanitizeHtml };

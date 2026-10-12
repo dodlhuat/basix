@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeAttr } from './utils.js';
 
 /** DOM element references managed by the PushMenu static class. */
 interface PushMenuElements {
@@ -98,7 +99,7 @@ class PushMenu {
                 const backBtn = document.createElement('button');
                 backBtn.classList.add('push-menu-back');
                 backBtn.setAttribute('aria-label', 'Back');
-                backBtn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${PushMenu.iconBasePath}icons.svg#chevron_left"/></svg>`;
+                backBtn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(PushMenu.iconBasePath)}icons.svg#chevron_left"/></svg>`;
                 header.addEventListener('click', () => PushMenu.goBack());
 
                 const titleEl = document.createElement('span');
@@ -120,7 +121,7 @@ class PushMenu {
                 const chevron = document.createElement('span');
                 chevron.classList.add('push-menu-chevron');
                 chevron.setAttribute('aria-hidden', 'true');
-                chevron.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${PushMenu.iconBasePath}icons.svg#chevron_right"/></svg>`;
+                chevron.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(PushMenu.iconBasePath)}icons.svg#chevron_right"/></svg>`;
                 trigger.appendChild(chevron);
 
                 if (parentAnchor) {

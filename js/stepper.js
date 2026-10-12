@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeAttr } from './utils.js';
 class Stepper {
     container;
     steps;
@@ -43,7 +44,7 @@ class Stepper {
         return injected;
     }
     checkSvg() {
-        return `<svg class="icon-svg" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#check"/></svg>`;
+        return `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.iconBasePath)}icons.svg#check"/></svg>`;
     }
     render() {
         this.steps.forEach((step, i) => {

@@ -1,4 +1,4 @@
-import { escapeHtml } from './utils.js';
+import { escapeHtml, escapeAttr } from './utils.js';
 import { ListenerGroup } from './listeners.js';
 const MARGIN_XY = { top: 16, right: 24, bottom: 44, left: 52 };
 const MARGIN_BAR = { top: 8, right: 52, bottom: 24, left: 120 };
@@ -469,7 +469,7 @@ class Chart {
     renderEmptyState(canvas) {
         canvas.style.minHeight = `${this.opts.height}px`;
         const el = this.div('chart-empty');
-        el.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.opts.iconBasePath}icons.svg#bar_chart_off"/></svg><span>${escapeHtml(this.opts.emptyMessage)}</span>`;
+        el.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.opts.iconBasePath)}icons.svg#bar_chart_off"/></svg><span>${escapeHtml(this.opts.emptyMessage)}</span>`;
         canvas.appendChild(el);
     }
     renderHGrid(svg, m, w, h) {

@@ -1,4 +1,4 @@
-import { escapeHtml } from './utils.js';
+import { escapeAttr, escapeHtml } from './utils.js';
 import { ListenerGroup } from './listeners.js';
 
 /** A single selectable option for a VirtualDropdown. */
@@ -250,7 +250,7 @@ class VirtualDropdown {
                 const isSelected = this.selectedValues.has(opt.value);
                 return `
           <div class="dropdown-item ${isSelected ? 'selected' : ''}"
-               data-value="${escapeHtml(String(opt.value))}"
+               data-value="${escapeAttr(String(opt.value))}"
                data-idx="${realIdx}"
                role="option"
                aria-selected="${isSelected}"

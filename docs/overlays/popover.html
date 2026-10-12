@@ -172,7 +172,7 @@ Popover.closeAll();`, 'js');
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td><code>content</code></td><td>string</td><td>—</td><td>HTML string rendered inside the popover.</td></tr>
+                    <tr><td><code>content</code></td><td>string</td><td>—</td><td>HTML string rendered inside the popover. Sanitized (scripts, event handlers and unsafe URL schemes are removed).</td></tr>
                     <tr><td><code>placement</code></td><td>top | bottom | left | right</td><td><code>'bottom'</code></td><td>Preferred placement. Flips automatically on collision.</td></tr>
                     <tr><td><code>align</code></td><td>start | center | end</td><td><code>'center'</code></td><td>Cross-axis alignment relative to the trigger.</td></tr>
                     <tr><td><code>offset</code></td><td>number</td><td><code>8</code></td><td>Gap in px between trigger and popover.</td></tr>

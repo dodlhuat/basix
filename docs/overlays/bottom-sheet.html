@@ -65,7 +65,7 @@ new BottomSheet({
             <table class="docs-props-table">
                 <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
                 <tbody>
-                    <tr><td><code>content</code></td><td>string</td><td>—</td><td>HTML string for the sheet body.</td></tr>
+                    <tr><td><code>content</code></td><td>string</td><td>—</td><td>HTML string for the sheet body. Sanitized (scripts, event handlers and unsafe URL schemes are removed).</td></tr>
                     <tr><td><code>header</code></td><td>string</td><td>—</td><td>Optional header rendered above the content.</td></tr>
                     <tr><td><code>footer</code></td><td>string</td><td>—</td><td>Optional footer, typically for action buttons.</td></tr>
                     <tr><td><code>closeable</code></td><td>boolean</td><td><code>true</code></td><td>Enables backdrop click, Escape key, and drag-to-dismiss.</td></tr>

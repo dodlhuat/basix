@@ -1,4 +1,4 @@
-import { sanitizeHtml } from './utils.js';
+import { sanitizeHtml, escapeAttr } from './utils.js';
 import { ListenerGroup } from './listeners.js';
 class BottomSheet {
     content;
@@ -126,7 +126,9 @@ class BottomSheet {
     }
     buildTemplate() {
         const snapClass = this.snapHeight !== 'auto' ? ` snap-${this.snapHeight}` : '';
-        const closeButton = this.closeable ? `<svg class="icon-svg close" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#close"/></svg>` : '';
+        const closeButton = this.closeable
+            ? `<svg class="icon-svg close" aria-hidden="true"><use href="${escapeAttr(this.iconBasePath)}icons.svg#close"/></svg>`
+            : '';
         const headerHtml = this.header !== undefined
             ? `<div class="bottom-sheet-header has-divider">
                 <span class="title">${sanitizeHtml(this.header)}</span>

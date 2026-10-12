@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeAttr } from './utils.js';
 
 /** A single image entry for the Lightbox gallery. */
 interface LightboxImage {
@@ -289,7 +290,7 @@ class Lightbox {
     }
 
     private buildTemplate(): string {
-        const icon = (name: string): string => `<svg class="icon-svg" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#${name}"/></svg>`;
+        const icon = (name: string): string => `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.iconBasePath)}icons.svg#${name}"/></svg>`;
 
         return `
             ${this.closeable ? `<button class="lightbox-close" aria-label="Close lightbox">${icon('close')}</button>` : ''}

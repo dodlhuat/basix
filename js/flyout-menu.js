@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeHtml, sanitizeHtml } from './utils.js';
 class FlyoutMenu {
     options;
     menuTrigger;
@@ -65,12 +66,12 @@ class FlyoutMenu {
                 const button = document.createElement('button');
                 button.className = 'submenu-toggle';
                 button.style.setProperty('--delay', `${(index + 1) * 0.1}s`);
-                button.innerHTML = `
-                    ${text}
+                button.append(document.createTextNode(text));
+                button.insertAdjacentHTML('beforeend', `
                     <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
-                `;
+                `);
                 li.insertBefore(button, nestedUl);
                 this.processListItems(nestedUl);
             }
@@ -88,7 +89,7 @@ class FlyoutMenu {
         const header = document.createElement('div');
         header.className = 'flyout-header';
         header.innerHTML = `
-            <span class="flyout-title">${this.options.title}</span>
+            <span class="flyout-title">${escapeHtml(this.options.title)}</span>
             <button class="close-menu" aria-label="Close Menu">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
@@ -105,7 +106,7 @@ class FlyoutMenu {
         const footer = document.createElement('div');
         footer.className = 'flyout-footer';
         footer.style.setProperty('--delay', '0.6s');
-        footer.innerHTML = `<p>${this.options.footerText}</p>`;
+        footer.innerHTML = `<p>${sanitizeHtml(this.options.footerText)}</p>`;
         this.flyoutMenu.append(footer);
     }
     bindEvents() {

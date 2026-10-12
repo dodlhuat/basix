@@ -1,4 +1,4 @@
-import { escapeHtml } from './utils.js';
+import { escapeAttr, escapeHtml } from './utils.js';
 import { Lightbox } from './lightbox.js';
 import { ListenerGroup } from './listeners.js';
 
@@ -241,7 +241,7 @@ class MasonryGallery {
         div.className = 'masonry-item';
 
         div.innerHTML = `
-            <img src="${escapeHtml(data.src)}" alt="${escapeHtml(data.title)}" loading="lazy">
+            <img src="${escapeAttr(data.src)}" alt="${escapeAttr(data.title)}" loading="lazy">
             <div class="masonry-item-info">
                 <h3 class="masonry-item-title">${escapeHtml(data.title)}</h3>
                 <p class="masonry-item-desc">${escapeHtml(data.desc)}</p>

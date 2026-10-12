@@ -1,5 +1,6 @@
 import { computePosition } from './position.js';
 import { ListenerGroup } from './listeners.js';
+import { sanitizeHtml } from './utils.js';
 
 /** Configuration options for a Tooltip instance. */
 interface TooltipOptions {
@@ -121,7 +122,7 @@ class Tooltip {
         const tooltipContent = document.createElement('div');
         tooltipContent.className = 'tooltip-content';
         if (this.options.isHtml) {
-            tooltipContent.innerHTML = this.content;
+            tooltipContent.innerHTML = sanitizeHtml(this.content);
         } else {
             tooltipContent.textContent = this.content;
         }

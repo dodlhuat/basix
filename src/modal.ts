@@ -1,4 +1,4 @@
-import { sanitizeHtml } from './utils.js';
+import { sanitizeHtml, escapeAttr } from './utils.js';
 import { ListenerGroup } from './listeners.js';
 
 type ModalType = 'default' | 'success' | 'error' | 'warning' | 'info';
@@ -105,7 +105,7 @@ class Modal {
         const parts: string[] = [`<div class="modal modal-${this.type}">`];
 
         if (this.closeable) {
-            parts.push(`<svg class="icon-svg close" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#close"/></svg>`);
+            parts.push(`<svg class="icon-svg close" aria-hidden="true"><use href="${escapeAttr(this.iconBasePath)}icons.svg#close"/></svg>`);
         }
 
         if (this.header !== undefined) {

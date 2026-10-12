@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeAttr } from './utils.js';
 class Carousel {
     root;
     options;
@@ -54,11 +55,11 @@ class Carousel {
         this.root.appendChild(container);
         this.prevButton = document.createElement('button');
         this.prevButton.classList.add('carousel-button', 'carousel-button--left');
-        this.prevButton.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#chevron_left"/></svg>`;
+        this.prevButton.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath ?? 'svg-icons/')}icons.svg#chevron_left"/></svg>`;
         this.prevButton.setAttribute('aria-label', 'Previous Slide');
         this.nextButton = document.createElement('button');
         this.nextButton.classList.add('carousel-button', 'carousel-button--right');
-        this.nextButton.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#chevron_right"/></svg>`;
+        this.nextButton.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath ?? 'svg-icons/')}icons.svg#chevron_right"/></svg>`;
         this.nextButton.setAttribute('aria-label', 'Next Slide');
         this.root.appendChild(this.prevButton);
         this.root.appendChild(this.nextButton);

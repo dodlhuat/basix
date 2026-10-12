@@ -1,4 +1,4 @@
-import { escapeHtml } from './utils.js';
+import { escapeHtml, escapeAttr } from './utils.js';
 import { ListenerGroup } from './listeners.js';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
@@ -42,7 +42,7 @@ class Toast {
             this.iconBasePath = 'svg-icons/';
         }
 
-        this.closureIcon = `<svg class="icon-svg close" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#close"/></svg>`;
+        this.closureIcon = `<svg class="icon-svg close" aria-hidden="true"><use href="${escapeAttr(this.iconBasePath)}icons.svg#close"/></svg>`;
         this.template = this.buildTemplate();
     }
 

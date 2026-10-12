@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeHtml } from './utils.js';
 class CodeViewer {
     container;
     code;
@@ -100,10 +101,10 @@ class CodeViewer {
         code = code.replace(/([a-z-]+)(\s*):/gi, '<span class="property">$1</span>$2:');
         code = code.replace(/:\s*([0-9.]+(?:px|em|rem|%|vh|vw|s|ms)?)/g, ': <span class="number">$1</span>');
         strings.forEach((str, i) => {
-            code = code.replace(`###STRING${i}###`, '<span class="string">' + str + '</span>');
+            code = code.replace(`###STRING${i}###`, '<span class="string">' + this.escape(str) + '</span>');
         });
         comments.forEach((comment, i) => {
-            code = code.replace(`###COMMENT${i}###`, '<span class="comment">' + comment + '</span>');
+            code = code.replace(`###COMMENT${i}###`, '<span class="comment">' + this.escape(comment) + '</span>');
         });
         return code;
     }
@@ -129,7 +130,7 @@ class CodeViewer {
         this.container.innerHTML = `
                     <div class="code-display">
                         <div class="code-header">
-                            <span class="code-language">${this.language}</span>
+                            <span class="code-language">${escapeHtml(this.language)}</span>
                             <button class="copy-button">Copy</button>
                         </div>
                         <div class="code-content">

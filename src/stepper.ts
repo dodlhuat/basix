@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeAttr } from './utils.js';
 
 interface StepperOptions {
     defaultStep?: number;
@@ -59,7 +60,7 @@ class Stepper {
     }
 
     private checkSvg(): string {
-        return `<svg class="icon-svg" aria-hidden="true"><use href="${this.iconBasePath}icons.svg#check"/></svg>`;
+        return `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.iconBasePath)}icons.svg#check"/></svg>`;
     }
 
     private render(): void {

@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeHtml } from './utils.js';
 class TimeSpanPicker {
     container;
     startTimeInput;
@@ -55,7 +56,7 @@ class TimeSpanPicker {
         this.container.innerHTML = `
       <div class="timespan-picker">
         <div class="timespan-field timespan-field-start">
-          <label for="${startId}">${this.fromString}</label>
+          <label for="${startId}">${escapeHtml(this.fromString)}</label>
           <input type="time" class="timespan-start" id="${startId}"/>
         </div>
 
@@ -65,7 +66,7 @@ class TimeSpanPicker {
         </div>
 
         <div class="timespan-field timespan-field-end">
-          <label for="${endId}">${this.toLabel}</label>
+          <label for="${endId}">${escapeHtml(this.toLabel)}</label>
           <input type="time" class="timespan-end" id="${endId}"/>
         </div>
       </div>

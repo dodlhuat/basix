@@ -1,4 +1,4 @@
-import { sanitizeHtml } from './utils.js';
+import { isSafeUrl, sanitizeHtml } from './utils.js';
 import { ListenerGroup } from './listeners.js';
 
 interface EditorOptions {
@@ -416,6 +416,7 @@ class Editor {
     }
 
     private createLink(url: string): void {
+        if (!isSafeUrl(url)) return;
         const sel = window.getSelection();
         if (!sel || sel.rangeCount === 0) return;
 

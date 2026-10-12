@@ -1,4 +1,5 @@
 import { ListenerGroup } from './listeners.js';
+import { escapeAttr } from './utils.js';
 
 /** Configuration options for a SidebarNav instance. */
 interface SidebarNavOptions {
@@ -86,7 +87,7 @@ class SidebarNav {
         this.closeBtn = document.createElement('button');
         this.closeBtn.className = 'sidebar-close';
         this.closeBtn.setAttribute('aria-label', 'Close navigation');
-        this.closeBtn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.opts.iconBasePath}icons.svg#close"/></svg>`;
+        this.closeBtn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.opts.iconBasePath)}icons.svg#close"/></svg>`;
         this.closeBtn.addEventListener('click', () => this.close(), sig);
         this.nav?.append(this.closeBtn);
     }

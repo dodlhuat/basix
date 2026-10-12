@@ -1,5 +1,6 @@
 import { computePosition } from './position.js';
 import { ListenerGroup } from './listeners.js';
+import { sanitizeHtml } from './utils.js';
 class Tooltip {
     static activeTooltip = null;
     static idCounter = 0;
@@ -91,7 +92,7 @@ class Tooltip {
         const tooltipContent = document.createElement('div');
         tooltipContent.className = 'tooltip-content';
         if (this.options.isHtml) {
-            tooltipContent.innerHTML = this.content;
+            tooltipContent.innerHTML = sanitizeHtml(this.content);
         }
         else {
             tooltipContent.textContent = this.content;

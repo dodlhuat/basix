@@ -1,4 +1,4 @@
-import { escapeHtml } from './utils.js';
+import { escapeHtml, escapeAttr } from './utils.js';
 import { ListenerGroup } from './listeners.js';
 
 /** A single subgroup item within a GroupPicker group. */
@@ -84,7 +84,7 @@ class GroupPicker {
         const searchWrap = document.createElement('div');
         searchWrap.className = 'group-picker__search';
         searchWrap.innerHTML = `
-            <svg class="icon-svg group-picker__search-icon" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#search"/></svg>
+            <svg class="icon-svg group-picker__search-icon" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath)}icons.svg#search"/></svg>
             <input type="text" />
         `;
         this.searchInput = searchWrap.querySelector('input')!;
@@ -119,8 +119,8 @@ class GroupPicker {
             const empty = document.createElement('div');
             empty.className = 'group-picker__empty';
             empty.innerHTML = `
-                <svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#search"/></svg>
-                <span>${this.options.emptyLabel}</span>
+                <svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath)}icons.svg#search"/></svg>
+                <span>${escapeHtml(this.options.emptyLabel)}</span>
             `;
             this.listEl.appendChild(empty);
         }
@@ -153,7 +153,7 @@ class GroupPicker {
             const chevron = document.createElement('span');
             chevron.className = 'group-picker__chevron';
             chevron.setAttribute('aria-hidden', 'true');
-            chevron.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#chevron_right"/></svg>`;
+            chevron.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath)}icons.svg#chevron_right"/></svg>`;
 
             const count = document.createElement('span');
             count.className = 'badge badge-sm';
@@ -238,7 +238,7 @@ class GroupPicker {
             const checkEl = document.createElement('span');
             checkEl.className = 'group-picker__leaf-check';
             checkEl.setAttribute('aria-hidden', 'true');
-            checkEl.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#check"/></svg>`;
+            checkEl.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath)}icons.svg#check"/></svg>`;
 
             header.append(label, checkEl);
 
@@ -282,7 +282,7 @@ class GroupPicker {
 
         const btn = document.createElement('button');
         btn.setAttribute('aria-label', `${label} entfernen`);
-        btn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${this.options.iconBasePath}icons.svg#close"/></svg>`;
+        btn.innerHTML = `<svg class="icon-svg" aria-hidden="true"><use href="${escapeAttr(this.options.iconBasePath)}icons.svg#close"/></svg>`;
         btn.addEventListener(
             'click',
             (e) => {
@@ -331,7 +331,7 @@ class GroupPicker {
     }
 
     private toggleExpand(groupId: string): void {
-        const groupEl = this.listEl.querySelector(`[data-group-id="${groupId}"]`) as HTMLElement | null;
+        const groupEl = Array.from(this.listEl.querySelectorAll<HTMLElement>('[data-group-id]')).find((el) => el.dataset.groupId === groupId) ?? null;
         const subsEl = groupEl?.querySelector('.group-picker__subgroups') as HTMLElement | null;
 
         if (this.expandedGroups.has(groupId)) {
